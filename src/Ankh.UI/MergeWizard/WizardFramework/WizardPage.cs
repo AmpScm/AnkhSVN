@@ -42,28 +42,28 @@ namespace Ankh.UI.WizardFramework
         {
         }
 
-		[Browsable(false)]
-		public new string Name
-		{
-			get
-			{
-				string name = base.Name;
+        [Browsable(false)]
+        public new string Name
+        {
+            get
+            {
+                string name = base.Name;
 
-				if (!string.IsNullOrEmpty(name))
-					return name;
-				else
-					return GetType().FullName;
-			}
-			set
-			{
-				base.Name = value;
-			}
-		}
+                if (!string.IsNullOrEmpty(name))
+                    return name;
+                else
+                    return GetType().FullName;
+            }
+            set
+            {
+                base.Name = value;
+            }
+        }
 
-		protected bool ShouldSerializeName()
-		{
-			return Name != GetType().FullName;
-		}
+        protected bool ShouldSerializeName()
+        {
+            return Name != GetType().FullName;
+        }
 
         /// <summary>
         /// Create a named page with a non-default page image.
@@ -91,22 +91,22 @@ namespace Ankh.UI.WizardFramework
             }
         }
 
-		private IAnkhServiceProvider FindContext()
-		{
-			IAnkhServiceProvider context = null;
+        private IAnkhServiceProvider FindContext()
+        {
+            IAnkhServiceProvider context = null;
 
-			if (Wizard != null)
-				context = Wizard.Context;
+            if (Wizard != null)
+                context = Wizard.Context;
 
-			if (context != null)
-				Context = context;
+            if (context != null)
+                Context = context;
 
-			return context;
-		}
+            return context;
+        }
 
         protected virtual void OnContextChanged(EventArgs e)
         {
-        } 
+        }
         #region IWizardPage Members
 
         /// <see cref="WizardFramework.IWizardPage.CanFlipToNextPage" />
@@ -128,7 +128,7 @@ namespace Ankh.UI.WizardFramework
                 if (Wizard != null)
                     Wizard.UpdateButtons();
             }
-        }  
+        }
 
         /// <see cref="WizardFramework.IWizardPage.NextPage" />
         public virtual WizardPage NextPage
@@ -150,15 +150,15 @@ namespace Ankh.UI.WizardFramework
                     return _prevPage;
 
                 if (Wizard != null)
-					return Wizard.GetPreviousPage(this);
-					
-				return null;
+                    return Wizard.GetPreviousPage(this);
+
+                return null;
             }
             set { _prevPage = value; }
         }
 
         /// <see cref="WizardFramework.IWizardPage.Description" />
-		[DefaultValue("")]
+        [DefaultValue("")]
         public virtual string Description
         {
             get { return _description ?? ""; }
@@ -172,38 +172,38 @@ namespace Ankh.UI.WizardFramework
         }
 
         /// <see cref="WizardFramework.IWizardPage.Message" />
-		[Browsable(false)]
+        [Browsable(false)]
         public virtual WizardMessage Message
         {
             get { return new WizardMessage(MessageText, MessageType); }
-            set 
+            set
             {
-				if (value == null)
-				{
-					MessageText = "";
-					MessageType = WizardMessage.MessageType.None;
-				}
-				else
-				{
-					MessageText = value.Message;
-					MessageType = value.Type;
-				}
+                if (value == null)
+                {
+                    MessageText = "";
+                    MessageType = WizardMessage.MessageType.None;
+                }
+                else
+                {
+                    MessageText = value.Message;
+                    MessageType = value.Type;
+                }
             }
         }
 
-		[DefaultValue("")]
-		public string MessageText
-		{
-			get { return _message ?? ""; }
-			set { _message = value; }
-		}
+        [DefaultValue("")]
+        public string MessageText
+        {
+            get { return _message ?? ""; }
+            set { _message = value; }
+        }
 
-		[DefaultValue(WizardMessage.MessageType.None)]
-		public WizardMessage.MessageType MessageType
-		{
-			get { return _messageType; }
-			set { _messageType = value; }
-		}
+        [DefaultValue(WizardMessage.MessageType.None)]
+        public WizardMessage.MessageType MessageType
+        {
+            get { return _messageType; }
+            set { _messageType = value; }
+        }
 
         /// <see cref="WizardFramework.IWizardPage.Image" />
         /// <para>If the page hasn't explicitly created an image
@@ -212,51 +212,51 @@ namespace Ankh.UI.WizardFramework
         {
             get
             {
-				if (_image != null)
-					return _image;
-				else if (Wizard != null)
-					return Wizard.DefaultPageImage;
+                if (_image != null)
+                    return _image;
+                else if (Wizard != null)
+                    return Wizard.DefaultPageImage;
 
-				return null;
+                return null;
             }
 
             set { _image = value; }
         }
 
-		bool ShouldSerializeImage()
-		{
-			return _image != null;
-		}
+        bool ShouldSerializeImage()
+        {
+            return _image != null;
+        }
 
         /// <see cref="WizardFramework.IWizardPage.Title" />
-		[Obsolete("Please use .Text")]
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Obsolete("Please use .Text")]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual string Title
         {
             get { return Text; }
             set { Text = value; }
         }
 
-		[Bindable(true)]
-		[EditorBrowsable(EditorBrowsableState.Always)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-		public override string Text
-		{
-			get { return base.Text; }
-			set { base.Text = value; }
-		}
+        [Bindable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public override string Text
+        {
+            get { return base.Text; }
+            set { base.Text = value; }
+        }
 
-		public new Wizard Container
-		{
-			get
-			{
-				if (_collection != null)
-					return _collection.Wizard;
-				else
-					return null;
-			}
-		}
+        public new Wizard Container
+        {
+            get
+            {
+                if (_collection != null)
+                    return _collection.Wizard;
+                else
+                    return null;
+            }
+        }
 
         /// <summary>
         /// Returns whether or not this page is the current page
@@ -266,52 +266,52 @@ namespace Ankh.UI.WizardFramework
         {
             get
             {
-				if (Wizard != null)
-					return Wizard.CurrentPage == this;
-				else
-					return false;
+                if (Wizard != null)
+                    return Wizard.CurrentPage == this;
+                else
+                    return false;
             }
         }
-        
+
         #endregion
 
         bool _removing;
         WizardPageCollection _collection;
 
-		protected internal virtual void OnBeforeAdd(WizardPageCollection collection)
-		{
-			if (!_removing && _collection != null)
-				throw new InvalidOperationException("Can be part of only one wizard at once");
-		}
+        protected internal virtual void OnBeforeAdd(WizardPageCollection collection)
+        {
+            if (!_removing && _collection != null)
+                throw new InvalidOperationException("Can be part of only one wizard at once");
+        }
 
-		protected internal virtual void OnAfterAdd(WizardPageCollection collection)
-		{
-			_collection = collection;
-		}
+        protected internal virtual void OnAfterAdd(WizardPageCollection collection)
+        {
+            _collection = collection;
+        }
 
-		protected internal virtual void OnBeforeRemove(WizardPageCollection collection)
-		{
-			_removing = true;
-		}
+        protected internal virtual void OnBeforeRemove(WizardPageCollection collection)
+        {
+            _removing = true;
+        }
 
-		protected internal virtual void OnAfterRemove(WizardPageCollection wizardPageCollection)
-		{
-			_removing = false;
-			_collection = null;
-		}
+        protected internal virtual void OnAfterRemove(WizardPageCollection wizardPageCollection)
+        {
+            _removing = false;
+            _collection = null;
+        }
 
-		/// <summary>
-		/// Gets the Wizard containing this page
-		/// </summary>
-		public Wizard Wizard
-		{
-			get
-			{
-				if (_collection != null)
-					return _collection.Wizard;
+        /// <summary>
+        /// Gets the Wizard containing this page
+        /// </summary>
+        public Wizard Wizard
+        {
+            get
+            {
+                if (_collection != null)
+                    return _collection.Wizard;
 
-				return null;
-			}
-		}
-	}
+                return null;
+            }
+        }
+    }
 }

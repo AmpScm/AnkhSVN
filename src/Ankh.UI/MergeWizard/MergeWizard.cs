@@ -62,7 +62,6 @@ namespace Ankh.UI.MergeWizard
             ManuallyRemove
         }
 
-		IAnkhServiceProvider _context;
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -71,13 +70,12 @@ namespace Ankh.UI.MergeWizard
         {
             InitializeComponent();
 
-            Icon = MergeStrings.MergeWizardIcon;
+            DefaultPageImage = MergeStrings.MergeWizardHeaderImage;
 
-            _context = context;
-			MergeUtils = new MergeUtils(context);
+            MergeUtils = new MergeUtils(context);
             MergeTarget = mergeTarget;
 
-			Text = MergeStrings.MergeWizardTitle;
+            Text = MergeStrings.MergeWizardTitle;
 
             mergeTypePage = new MergeTypePage();
             bestPracticesPage = new MergeBestPracticesPage();
@@ -112,7 +110,7 @@ namespace Ankh.UI.MergeWizard
             if (page is MergeTypePage)
             {
                 // Handle displaying the best practices page
-                if (((MergeTypePage)page).ShowBestPracticesPage 
+                if (((MergeTypePage)page).ShowBestPracticesPage
                     && ((MergeBestPracticesPage)bestPracticesPage).DisplayBestPracticesPage)
                     return bestPracticesPage;
                 else
@@ -136,7 +134,7 @@ namespace Ankh.UI.MergeWizard
             // Handle the best practices page
             if (page is MergeBestPracticesPage)
                 return null; // For now, if you see the best practices page,
-                             // you have to fix the issue and then reattempt to merge.
+            // you have to fix the issue and then reattempt to merge.
 
             // Handle the range of revisions page
             if (page is MergeSourceRangeOfRevisionsPage)
@@ -173,7 +171,7 @@ namespace Ankh.UI.MergeWizard
             {
                 if (!(CurrentPage is MergeSummaryPage))
                     return false;
-                
+
                 return CurrentPage.IsPageComplete;
             }
         }
@@ -199,20 +197,20 @@ namespace Ankh.UI.MergeWizard
                         dialog.ShowDialog(Context);
                     }
 
-					e.Cancel = true;
+                    e.Cancel = true;
                 }
                 else
                 {
                     PerformMerge();
 
-                    this.Form.DialogResult = DialogResult.OK;
+                    this.DialogResult = DialogResult.OK;
                 }
             }
             catch (Exception ex)
             {
                 CurrentPage.Message = new WizardMessage(ex.InnerException.Message, WizardMessage.MessageType.Error);
 
-				e.Cancel = false;
+                e.Cancel = false;
             }
             finally
             {
@@ -314,7 +312,7 @@ namespace Ankh.UI.MergeWizard
                             // Set whether or not this is a dry run
                             args.DryRun = PerformDryRun;
 
-                            
+
 
                             //no need to continue with the merge operation since there are no revisions to merge
                             if (MergeRevisions != null && EnumTools.GetFirst(MergeRevisions) == null)
@@ -327,7 +325,7 @@ namespace Ankh.UI.MergeWizard
                                 // Merge all eligible
                                 ee.Client.Merge(
                                     MergeTarget.FullPath,
-                                    MergeSource.Target, 
+                                    MergeSource.Target,
                                     new SvnRevisionRange(SvnRevision.Zero, SvnRevision.Head),
                                     args);
                             }
@@ -335,9 +333,9 @@ namespace Ankh.UI.MergeWizard
                             {
                                 // Cherrypicking
                                 ee.Client.Merge(
-                                    MergeTarget.FullPath, 
+                                    MergeTarget.FullPath,
                                     MergeSource.Target,
-                                    new List<SvnRevisionRange>(MergeRevisions), 
+                                    new List<SvnRevisionRange>(MergeRevisions),
                                     args);
                             }
                         }
@@ -544,7 +542,7 @@ namespace Ankh.UI.MergeWizard
         public Dictionary<string, List<SvnConflictType>> ResolvedMergeConflicts
         {
             get { return _resolvedMergeConflicts; }
-        }        
+        }
     }
 
     // Makes sure there is no cross-thread call during interactive merge handling
