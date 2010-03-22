@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns="http://schemas.studioturtle.net/2007/01/gui/"
-                xmlns:gui="http://schemas.studioturtle.net/2007/01/gui/"
+                xmlns="http://schemas.ankhsvn.net/2010/03/gui/"
+                xmlns:gui="http://schemas.ankhsvn.net/2010/03/gui/"
                 xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:me="local-script">
   <xsl:include href="Gui-Common.xsl"/>
   <xsl:output method="text" />

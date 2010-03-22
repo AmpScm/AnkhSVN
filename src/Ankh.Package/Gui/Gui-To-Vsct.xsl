@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable"
-                xmlns:gui="http://schemas.studioturtle.net/2007/01/gui/"
+                xmlns:gui="http://schemas.ankhsvn.net/2010/03/gui/"
                 xmlns:me="local-script"
                 xmlns:msxsl="urn:schemas-microsoft-com:xslt"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema" 
