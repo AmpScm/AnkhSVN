@@ -221,7 +221,7 @@ namespace Ankh.UI.MergeWizard
             this.Controls.Add(this.mergeOptionsGroupBox);
             this.Controls.Add(this.mergeDetailsGroupBox);
             this.Name = "MergeSummaryPageControl";
-            this.Load += new System.EventHandler(this.MergeSummaryPageControl_Load);
+            this.Load += new System.EventHandler(this.MergeSummaryPage_Load);
             this.mergeDetailsGroupBox.ResumeLayout(false);
             this.mergeDetailsGroupBox.PerformLayout();
             this.mergeOptionsGroupBox.ResumeLayout(false);

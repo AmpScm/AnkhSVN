@@ -237,7 +237,7 @@ namespace Ankh.UI.MergeWizard
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.fromGroupBox);
 			this.Name = "MergeSourceTwoDifferentTreesPage";
-			this.Load += new System.EventHandler(this.MergeSourceTwoDifferentTreesPageControl_Load);
+			this.Load += new System.EventHandler(this.MergeSourceTwoDifferentTreesPage_Load);
 			this.fromGroupBox.ResumeLayout(false);
 			this.fromGroupBox.PerformLayout();
 			this.groupBox1.ResumeLayout(false);

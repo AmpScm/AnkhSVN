@@ -217,7 +217,7 @@ namespace Ankh.UI.MergeWizard
             this.Controls.Add(this.mergeOptionsGroupBox);
             this.Controls.Add(this.conflictsGroupBox);
             this.Name = "MergeOptionsPageControl";
-            this.Load += new System.EventHandler(this.MergeOptionsPageControl_Load);
+            this.Load += new System.EventHandler(this.MergeOptionsPage_Load);
             this.conflictsGroupBox.ResumeLayout(false);
             this.binaryConflictsGroupBox.ResumeLayout(false);
             this.binaryConflictsGroupBox.PerformLayout();

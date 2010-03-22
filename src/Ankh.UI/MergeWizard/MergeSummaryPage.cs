@@ -128,7 +128,7 @@ namespace Ankh.UI.MergeWizard
         }
 
         #region UI Events
-        private void MergeSummaryPageControl_Load(object sender, EventArgs e)
+        private void MergeSummaryPage_Load(object sender, EventArgs e)
         {
             PopulateUI();
 
