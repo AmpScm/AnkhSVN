@@ -136,7 +136,7 @@ namespace Ankh.UI.MergeWizard.Commands
 
             using (DocumentLock lck = tracker.LockDocuments(selectedFiles, DocumentLockType.ReadOnly))
             using (lck.MonitorChangesForReload())
-            using (MergeWizardDialog dialog = new MergeWizardDialog(e.Context, new MergeUtils(e.Context), svnItems[0]))
+            using (MergeWizard dialog = new MergeWizard(e.Context, svnItems[0]))
             {
                 DialogResult result = dialog.ShowDialog(e.Context);
                 //result = uiService.ShowDialog(dialog);
@@ -145,8 +145,8 @@ namespace Ankh.UI.MergeWizard.Commands
                 {
                     using (MergeResultsDialog mrd = new MergeResultsDialog())
                     {
-                        mrd.MergeActions = dialog.Wizard.MergeActions;
-                        mrd.ResolvedMergeConflicts = dialog.Wizard.ResolvedMergeConflicts;
+                        mrd.MergeActions = dialog.MergeActions;
+                        mrd.ResolvedMergeConflicts = dialog.ResolvedMergeConflicts;
 
                         mrd.ShowDialog(e.Context);
                     }

@@ -52,8 +52,8 @@ namespace Ankh.UI.MergeWizard
 			{
 				_needsNextPage = value;
 
-				if (Wizard != null && Wizard.Form != null)
-					Wizard.Form.UpdateButtons();
+				if (Wizard != null)
+					Wizard.UpdateButtons();
 			}
 		}
 

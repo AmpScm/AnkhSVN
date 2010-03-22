@@ -24,26 +24,15 @@ namespace Ankh.UI.WizardFramework
 {
     public sealed class WizardPageChangingEventArgs : CancelEventArgs
     {
+		readonly WizardPage _targetPage;
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="currentPage">The current page displayed in the wizard.</param>
         /// <param name="targetPage">The target page attempting to be switched to.</param>
-        internal WizardPageChangingEventArgs(WizardPage currentPage, WizardPage targetPage)
+        internal WizardPageChangingEventArgs(WizardPage targetPage)
         {
-            currPage_prop = currentPage;
-            tarPage_prop = targetPage;
-        }
-
-        readonly WizardPage currPage_prop;
-        readonly WizardPage tarPage_prop;
-
-        /// <summary>
-        /// Returns the page currently being displayed.
-        /// </summary>
-        public WizardPage CurrentPage
-        {
-            get { return currPage_prop; }
+            _targetPage = targetPage;
         }
 
         /// <summary>
@@ -51,7 +40,7 @@ namespace Ankh.UI.WizardFramework
         /// </summary>
         public WizardPage TargetPage
         {
-            get { return tarPage_prop; }
+            get { return _targetPage; }
         }
     }
 }

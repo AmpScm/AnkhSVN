@@ -29,7 +29,7 @@ namespace Ankh.UI.MergeWizard
 			IsPageComplete = true;
 
 			Text = MergeStrings.MergeTypePageHeaderTitle;
-			this.Description = MergeStrings.MergeTypePageHeaderMessage;
+			Description = MergeStrings.MergeTypePageHeaderMessage;
 			InitializeComponent();
 		}
 

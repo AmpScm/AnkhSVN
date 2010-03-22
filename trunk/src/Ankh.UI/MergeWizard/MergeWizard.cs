@@ -30,7 +30,7 @@ namespace Ankh.UI.MergeWizard
     /// <summary>
     /// This is the wizard implementation for AnkhSVN's merge capability.
     /// </summary>
-    public class MergeWizard : Wizard
+    public partial class MergeWizard : Wizard
     {
         private WizardPage mergeTypePage;
         private WizardPage bestPracticesPage;
@@ -62,13 +62,22 @@ namespace Ankh.UI.MergeWizard
             ManuallyRemove
         }
 
+		IAnkhServiceProvider _context;
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MergeWizard(IAnkhServiceProvider context, WizardDialog dialog)
-            : base(context)
+        /// <param name="utils"></param>
+        public MergeWizard(IAnkhServiceProvider context, SvnItem mergeTarget)
         {
-            Text = MergeStrings.MergeWizardTitle;
+            InitializeComponent();
+
+            Icon = MergeStrings.MergeWizardIcon;
+
+            _context = context;
+			MergeUtils = new MergeUtils(context);
+            MergeTarget = mergeTarget;
+
+			Text = MergeStrings.MergeWizardTitle;
 
             mergeTypePage = new MergeTypePage();
             bestPracticesPage = new MergeBestPracticesPage();
@@ -162,10 +171,10 @@ namespace Ankh.UI.MergeWizard
         {
             get
             {
-                if (!(Form.CurrentPage is MergeSummaryPage))
+                if (!(CurrentPage is MergeSummaryPage))
                     return false;
                 
-                return Form.CurrentPage.IsPageComplete;
+                return CurrentPage.IsPageComplete;
             }
         }
 
@@ -174,7 +183,7 @@ namespace Ankh.UI.MergeWizard
         {
             try
             {
-                ((WizardDialog)Form).EnablePageAndButtons(false);
+                EnablePageAndButtons(false);
 
                 if (PerformDryRun)
                 {
@@ -201,13 +210,13 @@ namespace Ankh.UI.MergeWizard
             }
             catch (Exception ex)
             {
-                ((WizardDialog)Form).CurrentPage.Message = new WizardMessage(ex.InnerException.Message, WizardMessage.MessageType.Error);
+                CurrentPage.Message = new WizardMessage(ex.InnerException.Message, WizardMessage.MessageType.Error);
 
 				e.Cancel = false;
             }
             finally
             {
-                ((WizardDialog)Form).EnablePageAndButtons(true);
+                EnablePageAndButtons(true);
             }
         }
 
@@ -510,12 +519,6 @@ namespace Ankh.UI.MergeWizard
                     break;
             }
             return choice;
-        }
-
-        internal MergeWizardDialog WizardDialog
-        {
-            get { return (MergeWizardDialog)Form; }
-            //set { Form = value; }
         }
 
         /// <summary>

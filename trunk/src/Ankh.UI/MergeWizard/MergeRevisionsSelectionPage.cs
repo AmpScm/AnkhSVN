@@ -105,7 +105,7 @@ namespace Ankh.UI.MergeWizard
 				((MergeWizard)Wizard).MergeRevisions = null;
 		}
 
-		protected override void OnPageChanged(WizardPageChangedEventArgs e)
+		protected override void OnPageChanged(EventArgs e)
 		{
 			base.OnPageChanged(e);
 		}
@@ -168,9 +168,9 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
-        private void WizardDialog_PageChangeEvent(object sender, WizardPageChangedEventArgs e)
+        private void WizardDialog_PageChangeEvent(object sender, EventArgs e)
         {
-            if (e.CurrentPage == this)
+            if (Wizard.CurrentPage == this)
             {
                 PopulateUI();
             }
@@ -180,7 +180,7 @@ namespace Ankh.UI.MergeWizard
         {
             base.OnLoad(e);
 
-            ((MergeWizard)Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangedEventArgs>(WizardDialog_PageChangeEvent);
+            ((MergeWizard)Wizard).PageChanged += new EventHandler(WizardDialog_PageChangeEvent);
         }
 
         private void logToolControl1_BatchFinished(object sender, BatchFinishedEventArgs e)
