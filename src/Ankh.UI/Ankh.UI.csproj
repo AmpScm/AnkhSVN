@@ -428,6 +428,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceBasePageControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceBasePageControl.Designer.cs">
       <DependentUpon>MergeSourceBasePageControl.cs</DependentUpon>

@@ -274,7 +274,7 @@
     <value>Top, Right</value>
   </data>
   <data name="wcHistoryBtn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>433, 14</value>
+    <value>423, 14</value>
   </data>
   <data name="wcHistoryBtn.Size" type="System.Drawing.Size, System.Drawing">
     <value>61, 23</value>
@@ -346,10 +346,10 @@
     <value>4</value>
   </data>
   <data name="wcBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 335</value>
+    <value>5, 330</value>
   </data>
   <data name="wcBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>500, 70</value>
+    <value>490, 70</value>
   </data>
   <data name="wcBox.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -385,6 +385,6 @@
     <value>MergeSourceBasePage</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.MergeWizard.BasePage, Ankh.UI, Version=2.1.3733.19812, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.MergeWizard.BasePage, Ankh.UI, Version=2.1.3733.22168, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>
