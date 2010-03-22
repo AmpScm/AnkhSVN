@@ -22,7 +22,7 @@ using Ankh;
  * limitations under the License.
  * 
  **/
-namespace WizardFramework
+namespace Ankh.UI.WizardFramework
 {
     /// <summary>
     /// Interface for a wizard page.

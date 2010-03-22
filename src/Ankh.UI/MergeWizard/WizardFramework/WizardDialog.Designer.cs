@@ -15,7 +15,7 @@
  * limitations under the License.
  * 
  **/
-namespace WizardFramework
+namespace Ankh.UI.WizardFramework
 {
     partial class WizardDialog
     {

@@ -21,7 +21,7 @@ using System.Windows.Forms;
  * limitations under the License.
  * 
  **/
-namespace WizardFramework
+namespace Ankh.UI.WizardFramework
 {
     /// <summary>
     /// Interface for a wizard.  A wizard maintains a list of wizard pages

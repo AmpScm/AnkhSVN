@@ -44,40 +44,90 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceBasePage));
-            this.mergeFromComboBox = new System.Windows.Forms.ComboBox();
-            this.selectButton = new System.Windows.Forms.Button();
-            this.mergeFromLabel = new System.Windows.Forms.Label();
-            this.SuspendLayout();
-            // 
-            // mergeFromComboBox
-            // 
-            resources.ApplyResources(this.mergeFromComboBox, "mergeFromComboBox");
-            this.mergeFromComboBox.FormattingEnabled = true;
-            this.mergeFromComboBox.Name = "mergeFromComboBox";
-            // 
-            // selectButton
-            // 
-            resources.ApplyResources(this.selectButton, "selectButton");
-            this.selectButton.Name = "selectButton";
-            this.selectButton.UseVisualStyleBackColor = true;
-            this.selectButton.Click += new System.EventHandler(this.selectButton_Click);
-            // 
-            // mergeFromLabel
-            // 
-            resources.ApplyResources(this.mergeFromLabel, "mergeFromLabel");
-            this.mergeFromLabel.Name = "mergeFromLabel";
-            // 
-            // MergeSourceBasePageControl
-            // 
-            resources.ApplyResources(this, "$this");
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.mergeFromComboBox);
-            this.Controls.Add(this.selectButton);
-            this.Controls.Add(this.mergeFromLabel);
-            this.Name = "MergeSourceBasePageControl";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceBasePage));
+			this.mergeFromComboBox = new System.Windows.Forms.ComboBox();
+			this.selectButton = new System.Windows.Forms.Button();
+			this.mergeFromLabel = new System.Windows.Forms.Label();
+			this.wcBox = new System.Windows.Forms.GroupBox();
+			this.wcUri = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.wcHistoryBtn = new System.Windows.Forms.Button();
+			this.wcPath = new System.Windows.Forms.TextBox();
+			this.dirLabel = new System.Windows.Forms.Label();
+			this.wcBox.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// mergeFromComboBox
+			// 
+			resources.ApplyResources(this.mergeFromComboBox, "mergeFromComboBox");
+			this.mergeFromComboBox.FormattingEnabled = true;
+			this.mergeFromComboBox.Name = "mergeFromComboBox";
+			// 
+			// selectButton
+			// 
+			resources.ApplyResources(this.selectButton, "selectButton");
+			this.selectButton.Name = "selectButton";
+			this.selectButton.UseVisualStyleBackColor = true;
+			this.selectButton.Click += new System.EventHandler(this.selectButton_Click);
+			// 
+			// mergeFromLabel
+			// 
+			resources.ApplyResources(this.mergeFromLabel, "mergeFromLabel");
+			this.mergeFromLabel.Name = "mergeFromLabel";
+			// 
+			// wcBox
+			// 
+			resources.ApplyResources(this.wcBox, "wcBox");
+			this.wcBox.Controls.Add(this.wcUri);
+			this.wcBox.Controls.Add(this.label1);
+			this.wcBox.Controls.Add(this.wcHistoryBtn);
+			this.wcBox.Controls.Add(this.wcPath);
+			this.wcBox.Controls.Add(this.dirLabel);
+			this.wcBox.Name = "wcBox";
+			this.wcBox.TabStop = false;
+			// 
+			// wcUri
+			// 
+			resources.ApplyResources(this.wcUri, "wcUri");
+			this.wcUri.Name = "wcUri";
+			this.wcUri.ReadOnly = true;
+			// 
+			// label1
+			// 
+			resources.ApplyResources(this.label1, "label1");
+			this.label1.Name = "label1";
+			// 
+			// wcHistoryBtn
+			// 
+			resources.ApplyResources(this.wcHistoryBtn, "wcHistoryBtn");
+			this.wcHistoryBtn.Name = "wcHistoryBtn";
+			this.wcHistoryBtn.UseVisualStyleBackColor = true;
+			this.wcHistoryBtn.Click += new System.EventHandler(this.wcHistoryBtn_Click);
+			// 
+			// wcPath
+			// 
+			resources.ApplyResources(this.wcPath, "wcPath");
+			this.wcPath.Name = "wcPath";
+			this.wcPath.ReadOnly = true;
+			// 
+			// dirLabel
+			// 
+			resources.ApplyResources(this.dirLabel, "dirLabel");
+			this.dirLabel.Name = "dirLabel";
+			// 
+			// MergeSourceBasePage
+			// 
+			resources.ApplyResources(this, "$this");
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.wcBox);
+			this.Controls.Add(this.mergeFromComboBox);
+			this.Controls.Add(this.selectButton);
+			this.Controls.Add(this.mergeFromLabel);
+			this.Name = "MergeSourceBasePage";
+			this.wcBox.ResumeLayout(false);
+			this.wcBox.PerformLayout();
+			this.ResumeLayout(false);
+			this.PerformLayout();
 
         }
 
@@ -86,5 +136,11 @@ namespace Ankh.UI.MergeWizard
         protected System.Windows.Forms.ComboBox mergeFromComboBox;
         private System.Windows.Forms.Button selectButton;
         private System.Windows.Forms.Label mergeFromLabel;
+		private System.Windows.Forms.GroupBox wcBox;
+		private System.Windows.Forms.Button wcHistoryBtn;
+		private System.Windows.Forms.TextBox wcPath;
+		private System.Windows.Forms.Label dirLabel;
+		private System.Windows.Forms.TextBox wcUri;
+		private System.Windows.Forms.Label label1;
     }
 }

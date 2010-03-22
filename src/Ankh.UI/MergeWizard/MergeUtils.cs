@@ -16,10 +16,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using SharpSvn;
-using WizardFramework;
-using Ankh.VS;
+using Ankh.UI.WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {

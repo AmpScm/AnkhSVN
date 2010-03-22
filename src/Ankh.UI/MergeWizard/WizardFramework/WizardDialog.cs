@@ -24,7 +24,7 @@ using Ankh.UI;
  * limitations under the License.
  * 
  **/
-namespace WizardFramework
+namespace Ankh.UI.WizardFramework
 {
     /// <summary>
     /// A dialog to display a wizard to the end user.

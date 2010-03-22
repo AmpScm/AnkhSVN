@@ -123,7 +123,7 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="mergeFromComboBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 6</value>
+    <value>63, 6</value>
   </data>
   <data name="mergeFromComboBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -133,7 +133,7 @@
     <value>10</value>
   </data>
   <data name="mergeFromComboBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>384, 21</value>
+    <value>404, 21</value>
   </data>
   <data name="mergeFromComboBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -148,7 +148,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;mergeFromComboBox.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="selectButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -181,7 +181,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;selectButton.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="mergeFromLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -190,7 +190,7 @@
     <value>NoControl</value>
   </data>
   <data name="mergeFromLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 9</value>
+    <value>0, 10</value>
   </data>
   <data name="mergeFromLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -199,7 +199,7 @@
     <value>63, 13</value>
   </data>
   <data name="mergeFromLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>0</value>
   </data>
   <data name="mergeFromLabel.Text" xml:space="preserve">
     <value>&amp;Merge from:</value>
@@ -214,7 +214,160 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;mergeFromLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="wcBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left, Right</value>
+  </data>
+  <data name="wcUri.Location" type="System.Drawing.Point, System.Drawing">
+    <value>44, 38</value>
+  </data>
+  <data name="wcUri.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 20</value>
+  </data>
+  <data name="wcUri.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;wcUri.Name" xml:space="preserve">
+    <value>wcUri</value>
+  </data>
+  <data name="&gt;&gt;wcUri.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;wcUri.Parent" xml:space="preserve">
+    <value>wcBox</value>
+  </data>
+  <data name="&gt;&gt;wcUri.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 41</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 13</value>
+  </data>
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Url:</value>
+  </data>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
+  </data>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
+    <value>wcBox</value>
+  </data>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="wcHistoryBtn.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="wcHistoryBtn.Location" type="System.Drawing.Point, System.Drawing">
+    <value>433, 14</value>
+  </data>
+  <data name="wcHistoryBtn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 23</value>
+  </data>
+  <data name="wcHistoryBtn.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
+  </data>
+  <data name="wcHistoryBtn.Text" xml:space="preserve">
+    <value>&amp;History</value>
+  </data>
+  <data name="&gt;&gt;wcHistoryBtn.Name" xml:space="preserve">
+    <value>wcHistoryBtn</value>
+  </data>
+  <data name="&gt;&gt;wcHistoryBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;wcHistoryBtn.Parent" xml:space="preserve">
+    <value>wcBox</value>
+  </data>
+  <data name="&gt;&gt;wcHistoryBtn.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="wcPath.Location" type="System.Drawing.Point, System.Drawing">
+    <value>44, 16</value>
+  </data>
+  <data name="wcPath.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 20</value>
+  </data>
+  <data name="wcPath.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;wcPath.Name" xml:space="preserve">
+    <value>wcPath</value>
+  </data>
+  <data name="&gt;&gt;wcPath.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;wcPath.Parent" xml:space="preserve">
+    <value>wcBox</value>
+  </data>
+  <data name="&gt;&gt;wcPath.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="dirLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="dirLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 19</value>
+  </data>
+  <data name="dirLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>32, 13</value>
+  </data>
+  <data name="dirLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="dirLabel.Text" xml:space="preserve">
+    <value>&amp;Path:</value>
+  </data>
+  <data name="&gt;&gt;dirLabel.Name" xml:space="preserve">
+    <value>dirLabel</value>
+  </data>
+  <data name="&gt;&gt;dirLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dirLabel.Parent" xml:space="preserve">
+    <value>wcBox</value>
+  </data>
+  <data name="&gt;&gt;dirLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="wcBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 335</value>
+  </data>
+  <data name="wcBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>500, 70</value>
+  </data>
+  <data name="wcBox.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="wcBox.Text" xml:space="preserve">
+    <value>Working Copy</value>
+  </data>
+  <data name="&gt;&gt;wcBox.Name" xml:space="preserve">
+    <value>wcBox</value>
+  </data>
+  <data name="&gt;&gt;wcBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;wcBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;wcBox.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -229,9 +382,9 @@
     <value>500, 405</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>MergeSourceBasePageControl</value>
+    <value>MergeSourceBasePage</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3404.27275, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.MergeWizard.BasePage, Ankh.UI, Version=2.1.3733.19812, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>

@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using WizardFramework;
+using Ankh.UI.WizardFramework;
 using System.Windows.Forms;
 using SharpSvn;
 using Ankh.UI.SvnLog;

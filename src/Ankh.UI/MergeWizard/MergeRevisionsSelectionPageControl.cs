@@ -16,16 +16,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
-using WizardFramework;
-using SharpSvn;
-using Ankh.UI.SvnLog;
+
 using Ankh.Scc;
 using Ankh.Scc.UI;
+using Ankh.UI.SvnLog;
+using Ankh.UI.WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {

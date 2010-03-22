@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Resources;
 using System.Text;
 using System.Windows.Forms;
-using WizardFramework;
+using Ankh.UI.WizardFramework;
 using Ankh.Scc;
 using SharpSvn;
 

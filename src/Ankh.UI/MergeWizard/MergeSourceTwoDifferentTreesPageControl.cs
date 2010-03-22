@@ -17,8 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Ankh.UI.SvnLog;
+
 using Ankh.Scc;
+using Ankh.UI.SvnLog;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -55,7 +56,7 @@ namespace Ankh.UI.MergeWizard
 
                 return;
             }
-            
+
             fromRevisionSelectButton.Enabled = true;
 
             // Conditionally validate the To Url
@@ -67,7 +68,7 @@ namespace Ankh.UI.MergeWizard
 
                 return;
             }
-            
+
             toRevisionSelectButton.Enabled = true;
 
             // Do not validate the revisions if To and From are using HEAD.
@@ -111,7 +112,7 @@ namespace Ankh.UI.MergeWizard
             string target;
             if (sender == fromRevisionSelectButton || (sender == toRevisionSelectButton && useFromURLCheckBox.Checked))
             {
-                target = fromURLTextBox.Text;   
+                target = fromURLTextBox.Text;
             }
             else if (sender == toRevisionSelectButton)
             {
@@ -231,7 +232,7 @@ namespace Ankh.UI.MergeWizard
         private void fromRevisionTextBox_TextChanged(object sender, EventArgs e)
         {
             TogglePageComplete();
-            
+
             long rev;
             if (long.TryParse(fromRevisionTextBox.Text, out rev))
                 MergeFromRevision = rev;
@@ -305,5 +306,20 @@ namespace Ankh.UI.MergeWizard
                 toURLTextBox.Text = uri.ToString();
         }
         #endregion
+
+        SvnItem MergeTarget
+        {
+            get { return ((MergeWizard)Wizard).MergeTarget; }
+        }
+
+        private void wcHistoryBtn_Click(object sender, EventArgs e)
+        {
+            using (LogViewerDialog dialog = new LogViewerDialog(new SvnOrigin(MergeTarget)))
+            {
+                dialog.LogControl.StrictNodeHistory = true;
+
+                dialog.ShowDialog(Context);
+            }
+        }
     }
 }

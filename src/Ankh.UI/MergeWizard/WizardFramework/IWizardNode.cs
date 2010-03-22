@@ -19,7 +19,7 @@ using System.Text;
  * limitations under the License.
  * 
  **/
-namespace WizardFramework
+namespace Ankh.UI.WizardFramework
 {
     /// <summary>
     /// A wizard node is a placeholder for a wizard for use in a
