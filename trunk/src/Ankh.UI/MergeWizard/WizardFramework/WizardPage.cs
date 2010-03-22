@@ -220,12 +220,15 @@ namespace WizardFramework
         /// <see cref="WizardFramework.IWizardPage.Image" />
         /// <para>If the page hasn't explicitly created an image
         /// for this page, return the wizard's default page image.</para>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual Image Image
         {
             get
             {
-                if (image_prop == null) return wizard_prop.DefaultPageImage;
-                else return image_prop;
+                if (image_prop == null && wizard_prop != null)
+                    return wizard_prop.DefaultPageImage;
+                else 
+                    return image_prop;
             }
 
             set { image_prop = value; }
