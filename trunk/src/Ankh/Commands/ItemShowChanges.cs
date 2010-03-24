@@ -176,15 +176,6 @@ namespace Ankh.Commands
             IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
             foreach (SvnItem item in selectedFiles)
             {
-                if (!item.IsLocalDiffAvailable
-                    && (revRange.StartRevision.RequiresWorkingCopy
-                        || revRange.EndRevision.RequiresWorkingCopy)
-                    )
-                {
-                    // skip the items that don't have local diff available, and either rev type is workingcopy.
-                    // maybe show some feedback ???
-                    continue;
-                }
                 AnkhDiffArgs da = new AnkhDiffArgs();
 
                 if ((item.Status.IsCopied || item.IsReplaced) &&
