@@ -140,6 +140,16 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\ExamDiff\\ExamDiff.exe",
                 "'$(Base)' '$(Mine)'", true));
 
+            tools.Add(new DiffTool(this, "CompareIt", "Compare It!",
+                RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Compare It!_is1", "DisplayIcon")
+                    ?? "$(ProgramFiles)\\Compare It!\\wincmp.exe",
+                "'$(Base)' '/=$(BaseName)' '$(Mine)' '/=$(MineName)'", true));
+
+            tools.Add(new DiffTool(this, "SlickEdit", "SlickEdit",
+                RelativePath(RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\vs.exe", ""), "VSDiff.exe")
+                    ?? "$(ProgramFiles)\\SlickEdit\\win\\VSDiff.exe",
+                "-r1 $(ReadOnly?'-r2 ')'$(Base)' '$(Mine)'", true));
+
             LoadRegistryTools(DiffToolMode.Diff, tools);
 
             SortTools(tools);
@@ -208,6 +218,11 @@ namespace Ankh.Services
                 "--title0='$(BaseName)' --title1='$(MineName)' --title2='$(TheirsName)' " +
                 "--to-title='$(MergedName)'", true));
 
+            tools.Add(new DiffTool(this, "SlickEdit", "SlickEdit",
+                RelativePath(RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\vs.exe", ""), "VSMerge.exe")
+                    ?? "$(ProgramFiles)\\SlickEdit\\win\\vsmerge.exe",
+                "-smart '$(Base)' '$(Mine)' '$(Theirs)' '$(Merged)'", true));
+
             LoadRegistryTools(DiffToolMode.Merge, tools);
 
             SortTools(tools);
@@ -233,6 +248,11 @@ namespace Ankh.Services
 
         static string RegistrySearch(string key, string value)
         {
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException("key");
+            else if (value == null) // Allow ""
+                throw new ArgumentNullException("value");
+
             using (RegistryKey k = Registry.LocalMachine.OpenSubKey(key, false))
             {
                 if (k == null)
@@ -421,7 +441,37 @@ namespace Ankh.Services
 
         private void LoadRegistryTools(DiffToolMode diffToolMode, List<AnkhDiffTool> tools)
         {
-            //throw new NotImplementedException();
+            using (RegistryKey rk = Registry.LocalMachine.OpenSubKey("SOFTWARE\\AnkhSVN\\AnkhSVN\\CurrentVersion\\Tools\\" + diffToolMode.ToString(), false))
+            {
+                if (rk == null)
+                    return;
+
+                foreach (string name in rk.GetSubKeyNames())
+                {
+                    using(RegistryKey sk = rk.OpenSubKey(name, false))
+                    {
+                        string title = sk.GetValue("") as string ?? name;
+                        string program = sk.GetValue("Program") as string;
+                        string arguments = sk.GetValue("Arguments") as string;
+
+                        if (!string.IsNullOrEmpty(title) && !string.IsNullOrEmpty(program) && !string.IsNullOrEmpty(arguments))
+                        {
+                            bool found = false;
+                            foreach (AnkhDiffTool dt in tools)
+                            {
+                                if (dt.Name == name)
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found)
+                                tools.Add(new DiffTool(Context, name, title, program, arguments));
+                        }
+                    }
+                }
+            }
         }
 
         sealed class DiffTool : AnkhDiffTool
