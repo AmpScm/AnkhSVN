@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.8009</title>
+          AnkhSVN-Daily Update - 2.1.8011</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,25 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3229/AnkhSvn-Daily-2.1.8009.460.msi">AnkhSVN 2.1.8009</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3232/AnkhSvn-Daily-2.1.8011.461.msi">AnkhSVN 2.1.8011</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8009">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8011">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-03-26</td></tr>
+<tr><td> </td><td class="r"><a id="8011" href="http://ankhsvn.net/rev/?r=8011">
+            [r8011]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> AnkhDiff.Tools.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add SlickEdit (Diff+Merge) and Compare It! (Diff) templates and enable
+loading additional templates from the registry.</td></tr>
 <tr class="d"><td colspan="4">2010-03-24</td></tr>
 <tr><td> </td><td class="r"><a id="8008" href="http://ankhsvn.net/rev/?r=8008">
             [r8008]
@@ -312,30 +317,6 @@ It looks like retrieving an EnvDTE reference before Visual Studio is ready
 has some side effects we really don't like.<br>
 The extenders are now provided via static registration on the Ankh.Trigger
 package and are forwared to AnkhSVN when AnkhSVN is fully loaded.</td></tr>
-<tr class="d"><td colspan="4">2010-02-26</td></tr>
-<tr><td> </td><td class="r"><a id="7840" href="http://ankhsvn.net/rev/?r=7840">
-            [r7840]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Trigger/TriggerPackage.cs, Ankh.Ids/AnkhId.cs, Ankh.Package/Attributes/ProvideUIVersion.cs, Ankh.Package/AnkhSvnPackage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Clean up a bit of info in the registration attributes.</td></tr>
-<tr><td> </td><td class="r"><a id="7839" href="http://ankhsvn.net/rev/?r=7839">
-            [r7839]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Properties/AssemblyInfo.cs, Ankh.UI/Properties/AssemblyInfo.cs, Ankh.Ids/Properties/AssemblyInfo.cs, Ankh/Properties/AssemblyInfo.cs, Ankh.Services/Properties/AssemblyInfo.cs, Ankh.Trigger/Properties/AssemblyInfo.cs, Ankh.Diff/Properties/AssemblyInfo.cs, Ankh.Scc/Properties/AssemblyInfo.cs, Ankh.ExtensionPoints/Properties/AssemblyInfo.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Set the neutral language setting in all of our assemblies to the culture
-used by the English version of Visual Studio.<br>
-(Visual Studio sets the UICulture during initialization to match its
-installed language to make packages use the same language. Using "en-US"
-instead of "en" avoids useless tests on resource assemblies)</td></tr>
-<tr><td> </td><td class="r"><a id="7838" href="http://ankhsvn.net/rev/?r=7838">
-            [r7838]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Ankh.Package.csproj, Ankh.Trigger/Ankh.Trigger.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Avoid resource load exception when starting Visual Studio by explicitly
-naming the resources. (This exception was handled inside Visual Studio,
-so nobody but other VS-Package developers will notice)</td></tr>
-<tr><td> </td><td class="r"><a id="7837" href="http://ankhsvn.net/rev/?r=7837">
-            [r7837]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> LICENSE.rtf</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update copyright year in license</td></tr>
-<tr class="d"><td colspan="4">2010-02-25</td></tr>
-<tr><td> </td><td class="r"><a id="7833" href="http://ankhsvn.net/rev/?r=7833">
-            [r7833]
-          </a></td><td class="a">rhuijben</td><td class="f">WindowsFormsApplication1/Properties/AssemblyInfo.cs, WindowsFormsApplication1/Properties, WindowsFormsApplication1, src/Ankh.Ids/AnkhId.cs, src/Ankh.Migrate/Properties/AssemblyInfo.cs, src/Ankh.ExtensionPoints/Properties/AssemblyInfo.cs, src/tools/Ankh.GenPkgDef/Properties/AssemblyInfo.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update copyright and version info and set resource settings that weren't
-configured to use the global settings.</td></tr>
 
 </table>
 <!--/Recent changes-->
