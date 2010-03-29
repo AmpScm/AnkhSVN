@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.8011</title>
+          AnkhSVN-Daily Update - 2.1.8012</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3232/AnkhSvn-Daily-2.1.8011.461.msi">AnkhSVN 2.1.8011</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3234/AnkhSvn-Daily-2.1.8012.462.msi">AnkhSVN 2.1.8012</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8011">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8012">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -305,18 +305,6 @@ fix a few UNC issues reported as <a href="http://ankhsvn.net/issues/?id=618">iss
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Package:</strong> AnkhSvnPackage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Instead of relying on PostExecCommand to load the AnkhSVN package from the
 trigger package, force loading directly when AnkhSVN is the active SCC
 Provider. This in an attempt to fix the devenv automation.</td></tr>
-<tr class="d"><td colspan="4">2010-02-28</td></tr>
-<tr><td> </td><td class="r"><a id="7854" href="http://ankhsvn.net/rev/?r=7854">
-            [r7854]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/Extenders/ExtenderProvider.cs, Ankh.Services/AnkhRuntime.cs, Ankh.Scc/AnkhSccProvider.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Correctness: Promoted service definitions should be ComVisible</td></tr>
-<tr><td> </td><td class="r"><a id="7851" href="http://ankhsvn.net/rev/?r=7851">
-            [r7851]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Trigger/TriggerPackage.cs, Ankh.VS/Extenders/ExtenderProvider.cs, Ankh.Ids/AnkhCatId.cs, Ankh.VS/Extenders/SvnProjectExtender.cs, Ankh.Ids/Ankh.Ids.csproj, Ankh.VS/Extenders/SvnSolutionExtender.cs, Ankh.VS/VsActivatorCommand.cs, Ankh.Ids/AnkhId.cs, Ankh.VS/Extenders/SvnItemExtender.cs, Ankh.Trigger/TriggerPackage.Extender.cs, Ankh.Trigger/Ankh.Trigger.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Rewrote the Solution explorer property extender code in a way that the
-initiative for loading the extension infrastructure moves to Visual Studio.
-It looks like retrieving an EnvDTE reference before Visual Studio is ready
-has some side effects we really don't like.<br>
-The extenders are now provided via static registration on the Ankh.Trigger
-package and are forwared to AnkhSVN when AnkhSVN is fully loaded.</td></tr>
 
 </table>
 <!--/Recent changes-->
