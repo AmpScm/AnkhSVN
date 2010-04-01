@@ -103,7 +103,7 @@ namespace Ankh.UI.MergeWizard
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            ((MergeWizard)Wizard).PageChanged += new EventHandler(WizardDialog_PageChangeEvent);
+            Wizard.PageChanged += new EventHandler(WizardDialog_PageChangeEvent);
         }
 
         #region UI Events
@@ -112,7 +112,7 @@ namespace Ankh.UI.MergeWizard
             if (!DesignMode)
             {
                 // Moved from Constructor to _Load for timing reasons.
-                mergeDepths = ((MergeWizard)Wizard).MergeUtils.MergeDepths;
+                mergeDepths = Wizard.MergeUtils.MergeDepths;
 
                 // Decided against using BindingSource due to rendering time
                 // and the requirement of threading to keep the UI from 

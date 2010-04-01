@@ -97,9 +97,9 @@ namespace Ankh.UI.MergeWizard
             IsPageComplete = SelectedRevisions.Count > 0;
 
             if (IsPageComplete)
-                ((MergeWizard)Wizard).MergeRevisions = MergeRevisions;
+                Wizard.MergeRevisions = MergeRevisions;
             else
-                ((MergeWizard)Wizard).MergeRevisions = null;
+                Wizard.MergeRevisions = null;
         }
 
         protected override void OnPageChanged(EventArgs e)
@@ -139,17 +139,17 @@ namespace Ankh.UI.MergeWizard
         /// <value>The merge source.</value>
         public SvnOrigin MergeSource
         {
-            get { return ((MergeWizard)Wizard).MergeSource; }
+            get { return Wizard.MergeSource; }
         }
 
         public SvnOrigin MergeTarget
         {
-            get { return new SvnOrigin(((MergeWizard)Wizard).MergeTarget); }
+            get { return new SvnOrigin(Wizard.MergeTarget); }
         }
 
         protected void PopulateUI()
         {
-            switch (((MergeWizard)Wizard).LogMode)
+            switch (Wizard.LogMode)
             {
                 case LogMode.MergesEligible:
                     logToolControl1.IncludeMergedRevisions = false;
@@ -177,7 +177,7 @@ namespace Ankh.UI.MergeWizard
         {
             base.OnLoad(e);
 
-            ((MergeWizard)Wizard).PageChanged += new EventHandler(WizardDialog_PageChangeEvent);
+            Wizard.PageChanged += new EventHandler(WizardDialog_PageChangeEvent);
         }
 
         private void logToolControl1_BatchFinished(object sender, BatchFinishedEventArgs e)

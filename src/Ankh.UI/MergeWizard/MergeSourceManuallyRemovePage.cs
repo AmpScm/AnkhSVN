@@ -46,12 +46,12 @@ namespace Ankh.UI.MergeWizard
         {
             base.OnPageChanging(e);
 
-            ((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesMerged;
+            Wizard.LogMode = Ankh.UI.SvnLog.LogMode.MergesMerged;
         }
 
         internal override ICollection<Uri> GetMergeSources(SvnItem target)
         {
-            SvnMergeItemCollection items = ((MergeWizard)Wizard).MergeUtils.GetAppliedMerges(target);
+            SvnMergeItemCollection items = Wizard.MergeUtils.GetAppliedMerges(target);
 
             List<Uri> rslt = new List<Uri>(items == null ? 0 : items.Count);
 

@@ -326,7 +326,7 @@ namespace Ankh.UI.MergeWizard
         {
             if (!DesignMode)
             {
-                fromURLTextBox.Text = ((MergeWizard)Wizard).MergeTarget.Status.Uri.ToString();
+                fromURLTextBox.Text = Wizard.MergeTarget.Status.Uri.ToString();
                 fromURLTextBox.SelectAll();
 
                 TogglePageComplete();
@@ -346,7 +346,7 @@ namespace Ankh.UI.MergeWizard
         private void fromURLSelectButton_Click(object sender, EventArgs e)
         {
             Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(this,
-                ((MergeWizard)Wizard).MergeTarget,
+                Wizard.MergeTarget,
                 fromURLTextBox.Text);
 
             if (uri != null)
@@ -356,7 +356,7 @@ namespace Ankh.UI.MergeWizard
         private void toURLSelectButton_Click(object sender, EventArgs e)
         {
             Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(this,
-                ((MergeWizard)Wizard).MergeTarget,
+                Wizard.MergeTarget,
                 toURLTextBox.Text);
 
             if (uri != null)
@@ -366,7 +366,7 @@ namespace Ankh.UI.MergeWizard
 
         SvnItem MergeTarget
         {
-            get { return ((MergeWizard)Wizard).MergeTarget; }
+            get { return Wizard.MergeTarget; }
         }
 
         private void wcHistoryBtn_Click(object sender, EventArgs e)

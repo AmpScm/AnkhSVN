@@ -46,7 +46,7 @@ namespace Ankh.UI.MergeWizard
             base.OnPageChanging(e);
 
             // Set the MergeSource before the page changes
-            ((MergeWizard)Wizard).MergeSource = MergeSource;
+            Wizard.MergeSource = MergeSource;
 
             // Do not validate since this field isn't editable and its contents are
             // retrieved directly from mergeinfo.
@@ -83,7 +83,7 @@ namespace Ankh.UI.MergeWizard
 
         internal virtual ICollection<Uri> GetMergeSources(SvnItem target)
         {
-            SvnMergeSourcesCollection sources = ((MergeWizard)Wizard).MergeUtils.GetSuggestedMergeSources(target);
+            SvnMergeSourcesCollection sources = Wizard.MergeUtils.GetSuggestedMergeSources(target);
 
             List<Uri> rslt = new List<Uri>(sources.Count);
             foreach (SvnMergeSource s in sources)
