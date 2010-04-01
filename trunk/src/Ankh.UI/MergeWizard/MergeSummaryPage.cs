@@ -22,15 +22,15 @@ namespace Ankh.UI.MergeWizard
 {
     public partial class MergeSummaryPage : BaseWizardPage
     {
-		public const string PAGE_NAME = "Merge Summary Page";
+        public const string PAGE_NAME = "Merge Summary Page";
 
-		public MergeSummaryPage()
-		{
-			Name = PAGE_NAME;
-			IsPageComplete = true;
+        public MergeSummaryPage()
+        {
+            Name = PAGE_NAME;
+            IsPageComplete = true;
 
-			Text = MergeStrings.MergeSummaryPageHeaderTitle;
-			this.Description = MergeStrings.MergeSummaryPageHeaderMessage;
+            Text = MergeStrings.MergeSummaryPageHeaderTitle;
+            this.Description = MergeStrings.MergeSummaryPageHeaderMessage;
             InitializeComponent();
         }
 
@@ -49,30 +49,30 @@ namespace Ankh.UI.MergeWizard
             if (!DesignMode)
             {
                 MergeWizard mergeWizard = ((MergeWizard)Wizard);
-                MergeWizard.MergeType mergeType = ((MergeTypePage)mergeWizard.GetPage(MergeTypePage.PAGE_NAME)).SelectedMergeType;
-                MergeOptionsPage mergeOptions = (MergeOptionsPage)mergeWizard.GetPage(MergeOptionsPage.PAGE_NAME);
+                MergeWizard.MergeType mergeType = mergeWizard.GetPage<MergeTypePage>().SelectedMergeType;
+                MergeOptionsPage mergeOptions = mergeWizard.GetPage<MergeOptionsPage>();
 
                 // Populate Merge Target
                 mergeTargetTextBox.Text = mergeWizard.MergeTarget.FullPath;
                 // Populate Merge Source 1
                 if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
-                    mergeSource1TextBox.Text = ((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME)).MergeSourceOne;
+                    mergeSource1TextBox.Text = mergeWizard.GetPage<MergeSourceTwoDifferentTreesPage>().MergeSourceOne;
                 else
                     mergeSource1TextBox.Text = mergeWizard.MergeSource.Target.ToString();
 
                 // Populate Merge Source 2
                 if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
-                    if (((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME)).HasSecondMergeSourceUrl)
-                        mergeSource2TextBox.Text = ((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME)).MergeSourceTwo;
+                    if (mergeWizard.GetPage<MergeSourceTwoDifferentTreesPage>().HasSecondMergeSourceUrl)
+                        mergeSource2TextBox.Text = mergeWizard.GetPage<MergeSourceTwoDifferentTreesPage>().MergeSourceTwo;
                     else
-                        mergeSource2TextBox.Text = ((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME)).MergeSourceOne;
+                        mergeSource2TextBox.Text = mergeWizard.GetPage<MergeSourceTwoDifferentTreesPage>().MergeSourceOne;
                 else
                     mergeSource2TextBox.Text = MergeStrings.NotApplicableShort;
 
                 // Populate Revisions
                 if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
                 {
-                    MergeSourceTwoDifferentTreesPage tdtPage = ((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME));
+                    MergeSourceTwoDifferentTreesPage tdtPage = mergeWizard.GetPage<MergeSourceTwoDifferentTreesPage>();
 
                     revisionsTextBox.Text = (tdtPage.MergeFromRevision != -1 ? tdtPage.MergeFromRevision.ToString() : MergeStrings.HEAD) + "-" +
                         (tdtPage.MergeToRevision != -1 ? tdtPage.MergeToRevision.ToString() : MergeStrings.HEAD);

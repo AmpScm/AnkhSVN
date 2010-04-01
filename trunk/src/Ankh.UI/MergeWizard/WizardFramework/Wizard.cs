@@ -425,6 +425,24 @@ namespace Ankh.UI.WizardFramework
             return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T GetPage<T>() where T : WizardPage
+        {
+            foreach (WizardPage wp in Pages)
+            {
+                T twp = wp as T;
+
+                if (twp != null)
+                    return twp;
+            }
+
+            return null;
+        }
+
         /// <see cref="WizardFramework.IWizard.PageCount" />
         public virtual int PageCount
         {
@@ -447,7 +465,8 @@ namespace Ankh.UI.WizardFramework
         {
             get
             {
-                if (Pages.Count == 0) return null;
+                if (Pages.Count == 0)
+                    return null;
 
                 return Pages[0];
             }
