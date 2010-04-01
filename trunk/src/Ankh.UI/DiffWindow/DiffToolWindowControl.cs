@@ -108,8 +108,8 @@ namespace Ankh.UI.DiffWindow
 
         private void GetFileLines(string strA, string strB, out Collection<string> A, out Collection<string> B)
         {
-            A = Functions.GetFileTextLines(strA);
-            B = Functions.GetFileTextLines(strB);
+            A = File.Exists(strA) ? Functions.GetFileTextLines(strA) : Functions.GetStringTextLines(string.Empty);
+            B = File.Exists(strB) ? Functions.GetFileTextLines(strB) : Functions.GetStringTextLines(string.Empty);
         }
 
         public void Reset(int n, AnkhDiffArgs args)
