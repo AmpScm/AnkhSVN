@@ -16,47 +16,39 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using Ankh.UI.WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
     public partial class MergeSourceReintegratePage : MergeSourceBasePage
     {
-		public const string PAGE_NAME = "Merge Source Reintegrate";
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public MergeSourceReintegratePage()
+        {
+            IsPageComplete = false;
+            Text = MergeStrings.MergeSourceHeaderTitle;
+            Description = MergeStrings.MergeSourceReintegratePageHeaderMessage;
+            InitializeComponent();
+        }
 
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		public MergeSourceReintegratePage()
-		{
-			Name = PAGE_NAME;
-			IsPageComplete = false;
-			Text = MergeStrings.MergeSourceHeaderTitle;
-			Description = MergeStrings.MergeSourceReintegratePageHeaderMessage;
-			InitializeComponent();
-		}
+        /// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
+        internal override MergeWizard.MergeType MergeType
+        {
+            get { return MergeWizard.MergeType.Reintegrate; }
+        }
 
-		/// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
-		internal override MergeWizard.MergeType MergeType
-		{
-			get { return MergeWizard.MergeType.Reintegrate; }
-		}
+        protected override void OnPageChanging(WizardPageChangingEventArgs e)
+        {
+            base.OnPageChanging(e);
 
-		protected override void OnPageChanging(WizardPageChangingEventArgs e)
-		{
-			base.OnPageChanging(e);
+            ((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesEligible;
+        }
 
-			((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesEligible;
-		}
-
-		internal override ICollection<Uri> GetMergeSources(SvnItem target)
-		{
-			return new List<Uri>();
-		}
+        internal override ICollection<Uri> GetMergeSources(SvnItem target)
+        {
+            return new List<Uri>();
+        }
     }
 }

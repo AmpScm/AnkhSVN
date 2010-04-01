@@ -15,57 +15,53 @@
 //  limitations under the License.
 
 using System;
-using Ankh.UI.WizardFramework;
 using System.Collections.Generic;
 using SharpSvn;
+using Ankh.UI.WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
     public partial class MergeSourceManuallyRemovePage : MergeSourceBasePage
     {
-		public const string PAGE_NAME = "Merge Source Manually Remove";
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public MergeSourceManuallyRemovePage()
+        {
+            IsPageComplete = false;
+            Text = MergeStrings.MergeSourceHeaderTitle;
+            Description = MergeStrings.MergeSourceManuallyRemovePageHeaderMessage;
 
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		public MergeSourceManuallyRemovePage()
-		{
-			Name = PAGE_NAME;
+            EnableSelectButton(false);
+            InitializeComponent();
+        }
 
-			IsPageComplete = false;
-			Text = MergeStrings.MergeSourceHeaderTitle;
-			Description = MergeStrings.MergeSourceManuallyRemovePageHeaderMessage;
+        /// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
+        internal override MergeWizard.MergeType MergeType
+        {
+            get { return MergeWizard.MergeType.ManuallyRemove; }
+        }
 
-			EnableSelectButton(false);
-			InitializeComponent();
-		}
+        protected override void OnPageChanging(WizardPageChangingEventArgs e)
+        {
+            base.OnPageChanging(e);
 
-		/// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
-		internal override MergeWizard.MergeType MergeType
-		{
-			get { return MergeWizard.MergeType.ManuallyRemove; }
-		}
+            ((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesMerged;
+        }
 
-		protected override void OnPageChanging(WizardPageChangingEventArgs e)
-		{
-			base.OnPageChanging(e);
+        internal override ICollection<Uri> GetMergeSources(SvnItem target)
+        {
+            SvnMergeItemCollection items = ((MergeWizard)Wizard).MergeUtils.GetAppliedMerges(target);
 
-			((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesMerged;
-		}
+            List<Uri> rslt = new List<Uri>(items == null ? 0 : items.Count);
 
-		internal override ICollection<Uri> GetMergeSources(SvnItem target)
-		{
-			SvnMergeItemCollection items = ((MergeWizard)Wizard).MergeUtils.GetAppliedMerges(target);
+            if (items != null)
+            {
+                foreach (SvnMergeItem i in items)
+                    rslt.Add(i.Uri);
+            }
 
-			List<Uri> rslt = new List<Uri>(items == null ? 0 : items.Count);
-
-			if (items != null)
-			{
-				foreach (SvnMergeItem i in items)
-					rslt.Add(i.Uri);
-			}
-
-			return rslt;
-		}
+            return rslt;
+        }
     }
 }

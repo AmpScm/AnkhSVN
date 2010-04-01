@@ -21,40 +21,37 @@ namespace Ankh.UI.MergeWizard
 {
     public partial class MergeTypePage : BaseWizardPage
     {
-		public const string PAGE_NAME = "Merge Type Page";
+        public MergeTypePage()
+        {
+            IsPageComplete = true;
 
-		public MergeTypePage()
-		{
-			Name = PAGE_NAME;
-			IsPageComplete = true;
+            Text = MergeStrings.MergeTypePageHeaderTitle;
+            Description = MergeStrings.MergeTypePageHeaderMessage;
+            InitializeComponent();
+        }
 
-			Text = MergeStrings.MergeTypePageHeaderTitle;
-			Description = MergeStrings.MergeTypePageHeaderMessage;
-			InitializeComponent();
-		}
+        /// <summary>
+        /// Returns whether or not to show the best practices page.
+        /// </summary>
+        public bool ShowBestPracticesPage
+        {
+            get { return IsPerformBestPracticesChecked; }
+        }
 
-		/// <summary>
-		/// Returns whether or not to show the best practices page.
-		/// </summary>
-		public bool ShowBestPracticesPage
-		{
-			get { return IsPerformBestPracticesChecked; }
-		}
+        public MergeWizard.MergeType SelectedMergeType
+        {
+            get
+            {
+                return mergeType_prop;
+            }
 
-		public MergeWizard.MergeType SelectedMergeType
-		{
-			get
-			{
-				return mergeType_prop;
-			}
+            set
+            {
+                mergeType_prop = value;
+            }
+        }
 
-			set
-			{
-				mergeType_prop = value;
-			}
-		}
-
-		private MergeWizard.MergeType mergeType_prop = MergeWizard.MergeType.RangeOfRevisions;
+        private MergeWizard.MergeType mergeType_prop = MergeWizard.MergeType.RangeOfRevisions;
 
         #region UI Events
         private void rangeofRevisionsRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -92,7 +89,7 @@ namespace Ankh.UI.MergeWizard
             get { return showBestPracticesPageCheckbox.Checked; }
         }
 
- 
+
         /// <summary>
         /// Handles toggling the image and label contents based on the
         /// currently selected merge type radio button.

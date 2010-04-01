@@ -25,71 +25,68 @@ namespace Ankh.UI.MergeWizard
 {
     partial class MergeSourceTwoDifferentTreesPage : BaseWizardPage
     {
-		public const string PAGE_NAME = "Merge Source Two Different Trees";
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public MergeSourceTwoDifferentTreesPage()
+        {
+            IsPageComplete = false;
+            Text = MergeStrings.MergeSourceHeaderTitle;
+            Description = MergeStrings.MergeSourceTwoDifferentTreesPageHeaderMessage;
+            InitializeComponent();
+        }
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		public MergeSourceTwoDifferentTreesPage()
-		{
-			IsPageComplete = false;
-			Name = PAGE_NAME;
-			Text = MergeStrings.MergeSourceHeaderTitle;
-			Description = MergeStrings.MergeSourceTwoDifferentTreesPageHeaderMessage;
-			InitializeComponent();
-		}
+        /// <summary>
+        /// Gets/Sets the first merge source.
+        /// </summary>
+        public string MergeSourceOne
+        {
+            get { return _mergeSourceOne; }
+            set { _mergeSourceOne = value; }
+        }
 
-		/// <summary>
-		/// Gets/Sets the first merge source.
-		/// </summary>
-		public string MergeSourceOne
-		{
-			get { return _mergeSourceOne; }
-			set { _mergeSourceOne = value; }
-		}
+        /// <summary>
+        /// Gets/Sets the second merge source.
+        /// </summary>
+        public string MergeSourceTwo
+        {
+            get { return _mergeSourceTwo; }
+            set { _mergeSourceTwo = value; }
+        }
 
-		/// <summary>
-		/// Gets/Sets the second merge source.
-		/// </summary>
-		public string MergeSourceTwo
-		{
-			get { return _mergeSourceTwo; }
-			set { _mergeSourceTwo = value; }
-		}
+        /// <summary>
+        /// Gets/Sets whether or not merge source one and
+        /// merge source two have the same url.
+        /// </summary>
+        public bool HasSecondMergeSourceUrl
+        {
+            get { return _hasSecondMergeSourceUrl; }
+            set { _hasSecondMergeSourceUrl = value; }
+        }
 
-		/// <summary>
-		/// Gets/Sets whether or not merge source one and
-		/// merge source two have the same url.
-		/// </summary>
-		public bool HasSecondMergeSourceUrl
-		{
-			get { return _hasSecondMergeSourceUrl; }
-			set { _hasSecondMergeSourceUrl = value; }
-		}
+        /// <summary>
+        /// Gets/Sets the 'From' merge revision.
+        /// </summary>
+        public long MergeFromRevision
+        {
+            get { return _mergeFromRevision; }
+            set { _mergeFromRevision = value; }
+        }
 
-		/// <summary>
-		/// Gets/Sets the 'From' merge revision.
-		/// </summary>
-		public long MergeFromRevision
-		{
-			get { return _mergeFromRevision; }
-			set { _mergeFromRevision = value; }
-		}
+        /// <summary>
+        /// Gets/Sets the 'To' merge revision.
+        /// </summary>
+        public long MergeToRevision
+        {
+            get { return _mergeToRevision; }
+            set { _mergeToRevision = value; }
+        }
 
-		/// <summary>
-		/// Gets/Sets the 'To' merge revision.
-		/// </summary>
-		public long MergeToRevision
-		{
-			get { return _mergeToRevision; }
-			set { _mergeToRevision = value; }
-		}
-
-		private long _mergeFromRevision;
-		private long _mergeToRevision;
-		private bool _hasSecondMergeSourceUrl = false;
-		private string _mergeSourceOne;
-		private string _mergeSourceTwo;
+        private long _mergeFromRevision;
+        private long _mergeToRevision;
+        private bool _hasSecondMergeSourceUrl = false;
+        private string _mergeSourceOne;
+        private string _mergeSourceTwo;
 
         /// <summary>
         /// Sets the IsPageComplete based on the UI state.
