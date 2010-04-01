@@ -40,8 +40,8 @@ namespace Ankh.UI.MergeWizard
         {
             InitializeComponent();
 
-			bindingSource = new BindingSource(suggestedSources, "");
-			mergeFromComboBox.DataSource = bindingSource;
+            bindingSource = new BindingSource(suggestedSources, "");
+            mergeFromComboBox.DataSource = bindingSource;
         }
 
         /// <summary>

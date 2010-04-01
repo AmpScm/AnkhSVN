@@ -22,11 +22,8 @@ namespace Ankh.UI.MergeWizard
 {
     public partial class MergeSummaryPage : BaseWizardPage
     {
-        public const string PAGE_NAME = "Merge Summary Page";
-
         public MergeSummaryPage()
         {
-            Name = PAGE_NAME;
             IsPageComplete = true;
 
             Text = MergeStrings.MergeSummaryPageHeaderTitle;

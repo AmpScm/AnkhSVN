@@ -16,43 +16,34 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using Ankh.UI.WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
     public partial class MergeSourceManuallyRecordPage : MergeSourceBasePage
     {
-		public const string PAGE_NAME = "Merge Source Manually Record";
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public MergeSourceManuallyRecordPage()
+        {
+            IsPageComplete = false;
+            Text = MergeStrings.MergeSourceHeaderTitle;
+            Description = MergeStrings.MergeSourceManuallyRecordPageHeaderMessage;
+            InitializeComponent();
+        }
 
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		public MergeSourceManuallyRecordPage()
-		{
-			Name = PAGE_NAME;
+        /// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
+        internal override MergeWizard.MergeType MergeType
+        {
+            get { return MergeWizard.MergeType.ManuallyRecord; }
+        }
 
-			IsPageComplete = false;
-			Text = MergeStrings.MergeSourceHeaderTitle;
-			Description = MergeStrings.MergeSourceManuallyRecordPageHeaderMessage;
-			InitializeComponent();
-		}
+        protected override void OnPageChanging(WizardPageChangingEventArgs e)
+        {
+            base.OnPageChanging(e);
 
-		/// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
-		internal override MergeWizard.MergeType MergeType
-		{
-			get { return MergeWizard.MergeType.ManuallyRecord; }
-		}
-
-		protected override void OnPageChanging(WizardPageChangingEventArgs e)
-		{
-			base.OnPageChanging(e);
-
-			((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesEligible;
-		}
+            ((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesEligible;
+        }
     }
 }
