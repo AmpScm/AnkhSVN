@@ -220,7 +220,7 @@ namespace Ankh.UI.MergeWizard
 
         public void PerformMerge()
         {
-            MergeType mergeType = ((MergeTypePage)GetPage(MergeTypePage.PAGE_NAME)).SelectedMergeType;
+            MergeType mergeType = GetPage<MergeTypePage>().SelectedMergeType;
 
             ProgressRunnerArgs runnerArgs = new ProgressRunnerArgs();
             runnerArgs.CreateLog = !PerformDryRun;
