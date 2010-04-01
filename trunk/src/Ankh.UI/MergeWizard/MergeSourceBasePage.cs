@@ -111,8 +111,6 @@ namespace Ankh.UI.MergeWizard
                 BeginInvoke(c, new object[] { mergeSources });
                 return;
             }
-            MergeWizard wizard = (MergeWizard)Wizard;
-
             bool containsAtLeastOne = false;
 
             foreach (Uri u in mergeSources)
@@ -144,7 +142,7 @@ namespace Ankh.UI.MergeWizard
 
         SvnItem MergeTarget
         {
-            get { return ((MergeWizard)Wizard).MergeTarget; }
+            get { return Wizard.MergeTarget; }
         }
 
         void MergesRetrieved(IAsyncResult result)

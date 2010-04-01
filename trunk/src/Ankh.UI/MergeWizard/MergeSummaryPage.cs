@@ -45,40 +45,39 @@ namespace Ankh.UI.MergeWizard
         {
             if (!DesignMode)
             {
-                MergeWizard mergeWizard = ((MergeWizard)Wizard);
-                MergeWizard.MergeType mergeType = mergeWizard.GetPage<MergeTypePage>().SelectedMergeType;
-                MergeOptionsPage mergeOptions = mergeWizard.GetPage<MergeOptionsPage>();
+                MergeWizard.MergeType mergeType = Wizard.GetPage<MergeTypePage>().SelectedMergeType;
+                MergeOptionsPage mergeOptions = Wizard.GetPage<MergeOptionsPage>();
 
                 // Populate Merge Target
-                mergeTargetTextBox.Text = mergeWizard.MergeTarget.FullPath;
+                mergeTargetTextBox.Text = Wizard.MergeTarget.FullPath;
                 // Populate Merge Source 1
                 if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
-                    mergeSource1TextBox.Text = mergeWizard.GetPage<MergeSourceTwoDifferentTreesPage>().MergeSourceOne;
+                    mergeSource1TextBox.Text = Wizard.GetPage<MergeSourceTwoDifferentTreesPage>().MergeSourceOne;
                 else
-                    mergeSource1TextBox.Text = mergeWizard.MergeSource.Target.ToString();
+                    mergeSource1TextBox.Text = Wizard.MergeSource.Target.ToString();
 
                 // Populate Merge Source 2
                 if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
-                    if (mergeWizard.GetPage<MergeSourceTwoDifferentTreesPage>().HasSecondMergeSourceUrl)
-                        mergeSource2TextBox.Text = mergeWizard.GetPage<MergeSourceTwoDifferentTreesPage>().MergeSourceTwo;
+                    if (Wizard.GetPage<MergeSourceTwoDifferentTreesPage>().HasSecondMergeSourceUrl)
+                        mergeSource2TextBox.Text = Wizard.GetPage<MergeSourceTwoDifferentTreesPage>().MergeSourceTwo;
                     else
-                        mergeSource2TextBox.Text = mergeWizard.GetPage<MergeSourceTwoDifferentTreesPage>().MergeSourceOne;
+                        mergeSource2TextBox.Text = Wizard.GetPage<MergeSourceTwoDifferentTreesPage>().MergeSourceOne;
                 else
                     mergeSource2TextBox.Text = MergeStrings.NotApplicableShort;
 
                 // Populate Revisions
                 if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
                 {
-                    MergeSourceTwoDifferentTreesPage tdtPage = mergeWizard.GetPage<MergeSourceTwoDifferentTreesPage>();
+                    MergeSourceTwoDifferentTreesPage tdtPage = Wizard.GetPage<MergeSourceTwoDifferentTreesPage>();
 
                     revisionsTextBox.Text = (tdtPage.MergeFromRevision != -1 ? tdtPage.MergeFromRevision.ToString() : MergeStrings.HEAD) + "-" +
                         (tdtPage.MergeToRevision != -1 ? tdtPage.MergeToRevision.ToString() : MergeStrings.HEAD);
                 }
                 else
-                    if (mergeWizard.MergeRevisions == null)
+                    if (Wizard.MergeRevisions == null)
                         revisionsTextBox.Text = MergeStrings.All;
                     else
-                        revisionsTextBox.Text = MergeWizard.MergeRevisionsAsString(mergeWizard.MergeRevisions);
+                        revisionsTextBox.Text = MergeWizard.MergeRevisionsAsString(Wizard.MergeRevisions);
 
                 // Populate Binary Conflicts
                 if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.MARK)
@@ -135,12 +134,12 @@ namespace Ankh.UI.MergeWizard
         {
             PopulateUI();
 
-            ((MergeWizard)Wizard).PageChanged += new EventHandler(WizardDialog_PageChangeEvent);
+            Wizard.PageChanged += new EventHandler(WizardDialog_PageChangeEvent);
         }
 
         private void performDryRunCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeWizard)Wizard).PerformDryRun = performDryRunCheckBox.Checked;
+            Wizard.PerformDryRun = performDryRunCheckBox.Checked;
         }
         #endregion
     }

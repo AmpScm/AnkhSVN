@@ -43,7 +43,7 @@ namespace Ankh.UI.MergeWizard
         {
             base.OnPageChanging(e);
 
-            ((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesEligible;
+            Wizard.LogMode = Ankh.UI.SvnLog.LogMode.MergesEligible;
         }
     }
 }
