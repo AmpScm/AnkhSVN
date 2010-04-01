@@ -31,6 +31,7 @@ namespace Ankh.UI.PathSelector
         DisplaySingleRevision,
         DisplayRevisionRange
     }
+
     /// <summary>
     /// Summary description for PathSelector.
     /// </summary>
@@ -109,6 +110,22 @@ namespace Ankh.UI.PathSelector
                 Options = PathSelectorOptions.DisplayRevisionRange;
             }
             pathSelectionTreeView.CheckedFilter += _info.EvaluateChecked;
+            if (fromPanel.Visible)
+            {
+                this.revisionPickerStart.Changed += new EventHandler(RevisionChanged);
+            }
+            else
+            {
+                this.revisionPickerStart.Changed -= new EventHandler(RevisionChanged);
+            }
+            if (toPanel.Visible)
+            {
+                this.revisionPickerEnd.Changed += new EventHandler(RevisionChanged);
+            }
+            else
+            {
+                this.revisionPickerEnd.Changed -= new EventHandler(RevisionChanged);
+            }
         }
 
         protected override void OnContextChanged(EventArgs e)
@@ -345,6 +362,53 @@ namespace Ankh.UI.PathSelector
         private void RecursiveCheckedChanged(object sender, System.EventArgs e)
         {
             this.pathSelectionTreeView.Recursive = this.recursiveCheckBox.Checked;
-        }        
+        }
+
+        /// <summary>
+        /// Evaluates the item to see if item is selectable with the current RevisionStart and RevisionEnd,
+        /// Cancels the action if the filter evaluates to false.
+        /// For example: do not allow checking a deleted item if start revision OR end revision is SvnRevision.Working
+        /// </summary>
+        void BeforePathCheck(object sender, System.Windows.Forms.TreeViewCancelEventArgs e)
+        {
+            if (_info != null)
+            {
+                TreeNode node = e.Node;
+                SvnItem si = node == null ? null : node.Tag as SvnItem;
+                if (si != null
+                    && !node.Checked
+                    && !_info.EvaluateCheckable(si, RevisionStart, RevisionEnd)
+                    )
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        void RevisionChanged(object sender, EventArgs e)
+        {
+            if (_info != null)
+            {
+                EvaluateCheckedNodes(pathSelectionTreeView.Nodes);
+            }
+        }
+
+        /// <summary>
+        /// Make sure all the checked items are valid for the new selection of revisions.
+        /// </summary>
+        private void EvaluateCheckedNodes(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Checked)
+                {
+                    if (!_info.EvaluateCheckable(node.Tag as SvnItem, RevisionStart, RevisionEnd))
+                    {
+                        node.Checked = false;
+                    }
+                }
+                EvaluateCheckedNodes(node.Nodes);
+            }
+        }
     }
 }

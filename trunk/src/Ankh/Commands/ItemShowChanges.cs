@@ -87,6 +87,7 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             List<SvnItem> selectedFiles = new List<SvnItem>();
+            bool selectionHasDeleted = false;
 
             if (e.Command == AnkhCommand.DocumentShowChanges)
             {
@@ -109,6 +110,11 @@ namespace Ankh.Commands
                             || !item.IsLocalDiffAvailable // exclude if local diff is not available
                             )
                             continue;
+                    }
+
+                    if (e.Command == AnkhCommand.DiffLocalItem)
+                    {
+                        selectionHasDeleted |= !SvnItemFilters.NotDeletedFilter(item);
                     }
 
                     selectedFiles.Add(item);
@@ -141,7 +147,22 @@ namespace Ankh.Commands
                 info.SingleSelection = false;
                 info.RevisionStart = revRange == null ? SvnRevision.Base : revRange.StartRevision;
                 info.RevisionEnd = revRange == null ? SvnRevision.Working : revRange.EndRevision;
-
+                if (selectionHasDeleted)
+                {
+                    // do not allow selecting deleted items if the revision combination includes SvnRevision.Working
+                    info.CheckableFilter += new PathSelectorInfo.SelectableFilter(delegate(SvnItem item, SvnRevision from, SvnRevision to)
+                    {
+                        if (item != null
+                            && (from == SvnRevision.Working
+                                || to == SvnRevision.Working
+                                )
+                            )
+                        {
+                            return SvnItemFilters.NotDeletedFilter(item);
+                        }
+                        return true;
+                    });
+                }
                 info.EnableRecursive = false;
                 info.Depth = SvnDepth.Infinity;
 

@@ -41,6 +41,8 @@ namespace Ankh
         SvnRevision _revisionEnd;
         Predicate<SvnItem> _checkedFilter;
         Predicate<SvnItem> _visibleFilter;
+        SelectableFilter _checkableFilter;
+
         bool _evaluated;
 
         public PathSelectorInfo(string caption, IEnumerable<SvnItem> items)
@@ -52,11 +54,6 @@ namespace Ankh
 
             _caption = caption;
             _items = new List<SvnItem>(items);
-        }
-
-        public bool EvaluateChecked(SvnItem item)
-        {
-            return SvnItemFilters.Evaluate(item, _checkedFilter);
         }
 
         public event Predicate<SvnItem> CheckedFilter
@@ -87,6 +84,38 @@ namespace Ankh
             }
         }
 
+        public event SelectableFilter CheckableFilter
+        {
+            add
+            {
+                _evaluated = false;
+                _checkableFilter += value;
+            }
+            remove
+            {
+                _evaluated = false;
+                _checkableFilter -= value;
+            }
+        }
+
+        public bool EvaluateChecked(SvnItem item)
+        {
+            return SvnItemFilters.Evaluate(item, _checkedFilter);
+        }
+
+        public bool EvaluateCheckable(SvnItem item, SvnRevision from, SvnRevision to)
+        {
+            if (_checkableFilter == null)
+                return true;
+
+            foreach (SelectableFilter i in _checkableFilter.GetInvocationList())
+            {
+                if (!i(item, from, to))
+                    return false;
+            }
+            return true;
+        }
+
         void EnsureFiltered()
         {
             if (!_evaluated)
@@ -101,7 +130,9 @@ namespace Ankh
                         if (!_visibleItems.ContainsKey(i.FullPath))
                             _visibleItems.Add(i.FullPath, i);
 
-                        if (Ankh.Scc.SvnItemFilters.Evaluate(i, _checkedFilter))
+                        if (Ankh.Scc.SvnItemFilters.Evaluate(i, _checkedFilter)
+                            // make sure all the checked items are suitable for the revisions
+                            && EvaluateCheckable(i, RevisionStart, RevisionEnd))
                         {
                             if (!_checkedItems.ContainsKey(i.FullPath))
                                 _checkedItems.Add(i.FullPath, i);
@@ -177,5 +208,7 @@ namespace Ankh
                 return result;
             }
         }
+
+        public delegate bool SelectableFilter(SvnItem item, SvnRevision from, SvnRevision to);
     }
 }

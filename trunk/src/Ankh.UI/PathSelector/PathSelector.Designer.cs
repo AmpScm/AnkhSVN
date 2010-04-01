@@ -184,6 +184,7 @@ namespace Ankh.UI.PathSelector
             this.pathSelectionTreeView.SingleCheck = false;
             this.pathSelectionTreeView.Size = new System.Drawing.Size(396, 214);
             this.pathSelectionTreeView.TabIndex = 0;
+            this.pathSelectionTreeView.BeforeCheck += new System.Windows.Forms.TreeViewCancelEventHandler(BeforePathCheck);
             // 
             // PathSelector
             // 
@@ -209,6 +210,7 @@ namespace Ankh.UI.PathSelector
             this.ResumeLayout(false);
 
         }
+
         #endregion
 
         internal PathSelectionTreeView pathSelectionTreeView;
