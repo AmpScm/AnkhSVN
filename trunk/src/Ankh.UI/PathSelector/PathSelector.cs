@@ -380,6 +380,7 @@ namespace Ankh.UI.PathSelector
                     && !_info.EvaluateCheckable(si, RevisionStart, RevisionEnd)
                     )
                 {
+                    // TODO: Show an indicator why check attempt is rejected ???
                     e.Cancel = true;
                 }
             }
