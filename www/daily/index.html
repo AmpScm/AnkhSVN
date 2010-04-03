@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.8023</title>
+          AnkhSVN-Daily Update - 2.1.8024</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3250/AnkhSvn-Daily-2.1.8023.467.msi">AnkhSVN 2.1.8023</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3252/AnkhSvn-Daily-2.1.8024.468.msi">AnkhSVN 2.1.8024</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8023">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8024">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -299,21 +299,6 @@ for the enlarging that happens when using the VS rendering</td></tr>
           </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh.UI/Ankh.UI.csproj, Ankh.Scc/AnkhSccProvider.QueryEditSave.cs, Ankh.UI/EditReadonlyFileDialog.resx, Ankh/Ankh.csproj, Ankh.Ids/AnkhCommand.cs, Ankh.UI/EditReadonlyFileDialog.Designer.cs, Ankh.UI/EditReadonlyFileDialog.cs, Ankh/Commands/MakeNonSccFileWriteableCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add new QueryEditFiles handling for readonly non-scc files. According to the spec we should warn about
 them being readonly  offer to make them writeable when an option for this has been set.
 This solves <a href="http://ankhsvn.net/issues/?id=619">issue #619</a>.</td></tr>
-<tr class="d"><td colspan="4">2010-03-05</td></tr>
-<tr><td> </td><td class="r"><a id="7881" href="http://ankhsvn.net/rev/?r=7881">
-            [r7881]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> PendingCommitsPage.Designer.cs, PendingCommitsPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Handle enter key, and treat it the same way as the double click. Note that it works on multiple
-items, but it's not very deterministic what file is active when ItemOpenVisualStudio is the
-command we execute.</td></tr>
-<tr><td> </td><td class="r"><a id="7880" href="http://ankhsvn.net/rev/?r=7880">
-            [r7880]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/PendingChanges/PendingCommitsPage.cs, Ankh.UI/OptionsPages/EnvironmentSettingsControl.Designer.cs, Ankh.UI/OptionsPages/EnvironmentSettingsControl.cs, Ankh.Services/Configuration/AnkhConfig.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add option to configure what happens when double clicking a pending change. You
-can now configure it to either show change or open the file in Visual Studio. The
-control double click combination is now removed, it didn't work because Ctrl-Click
-is already a standard listview action (for multi select).</td></tr>
-<tr><td> </td><td class="r"><a id="7878" href="http://ankhsvn.net/rev/?r=7878">
-            [r7878]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Package:</strong> AnkhSvnPackage.ToolWindows.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Revert <a href="http://ankhsvn.net/rev/?r=7860">r7860</a>.</td></tr>
 
 </table>
 <!--/Recent changes-->
