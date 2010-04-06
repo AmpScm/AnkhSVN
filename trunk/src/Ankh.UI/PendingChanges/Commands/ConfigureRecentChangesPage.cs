@@ -37,7 +37,6 @@ namespace Ankh.UI.PendingChanges.Commands
                     dlg.RefreshInterval = seconds / 60;
                     if (dlg.ShowDialog(e.Context) == System.Windows.Forms.DialogResult.OK)
                     {
-                        double mins = dlg.RefreshInterval;
                         cfg.RecentChangesRefreshInterval = Math.Max(dlg.RefreshInterval * 60, 0);
 
                         configSvc.SaveConfig(cfg);
