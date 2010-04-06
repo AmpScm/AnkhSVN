@@ -252,8 +252,15 @@
     <Compile Include="PendingChanges\AnkhToolWindowControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="PendingChanges\Commands\ConfigureRecentChangesPage.cs" />
     <Compile Include="PendingChanges\Commands\CreatePatch.cs" />
     <Compile Include="PendingChanges\Commands\OpenIssue.cs" />
+    <Compile Include="PendingChanges\ConfigureRecentChangesPageDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PendingChanges\ConfigureRecentChangesPageDialog.Designer.cs">
+      <DependentUpon>ConfigureRecentChangesPageDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="PendingChanges\Conflicts\ConflictListItem.cs" />
     <Compile Include="PendingChanges\Conflicts\ConflictListView.cs">
       <SubType>Component</SubType>
@@ -1225,6 +1232,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeWizard.resx">
       <DependentUpon>MergeWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PendingChanges\ConfigureRecentChangesPageDialog.resx">
+      <DependentUpon>ConfigureRecentChangesPageDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PendingChanges\PendingActivationPage.resx">
       <DependentUpon>PendingActivationPage.cs</DependentUpon>
