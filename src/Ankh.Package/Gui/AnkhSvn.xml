@@ -837,6 +837,8 @@
           </Menu-->
           <Button id="Cmd_RefreshPendingChanges" name="RefreshPendingChanges" priority="0x200"
               text="Refresh Pending Changes" menuText="&amp;Refresh" iconFile="PendingChanges/Refresh.png"/>
+          <Button id="Cmd_PendingChangesConfigureRecentChangesPage" name="PendingChangesConfigureRecentChangesPage" priority="0x300"
+              text="&amp;Configure..." toolTip="Recent Changes page options" textOnly="true" dynamicVisibility="true"/>
         </Group>
         <Group id="Grp_PendingChangesSwitch" priority="0x500">
           <ComboBox id="Cmd_SolutionSwitchCombo" type="DropDownCombo" width="100" priority="0x100"

@@ -292,6 +292,8 @@ namespace Ankh
 
         FolderUpdateSpecific,
         FolderUpdateLatest,
-        MakeNonSccFileWriteable
+        MakeNonSccFileWriteable,
+
+        PendingChangesConfigureRecentChangesPage
     }
 }
