@@ -34,7 +34,7 @@ namespace Ankh.UI.PendingChanges.Commands
                 using (ConfigureRecentChangesPageDialog dlg = new ConfigureRecentChangesPageDialog())
                 {
                     int seconds = Math.Max(0, cfg.RecentChangesRefreshInterval);
-                    dlg.RefreshInterval = seconds;
+                    dlg.RefreshInterval = seconds / 60;
                     if (dlg.ShowDialog(e.Context) == System.Windows.Forms.DialogResult.OK)
                     {
                         double mins = dlg.RefreshInterval;
