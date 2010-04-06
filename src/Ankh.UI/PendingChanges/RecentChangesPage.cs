@@ -339,7 +339,7 @@ namespace Ankh.UI.PendingChanges
             bool result = false;
 #if DEBUG
             Ankh.Configuration.AnkhConfig config = Config;
-            double newInterval = config == null ? 0 : config.RecentChangesRefreshInterval;
+            double newInterval = config.RecentChangesRefreshInterval * 1000.0;
             newInterval = Math.Max(0, newInterval);
             if (newInterval == _refreshInterval)
             {

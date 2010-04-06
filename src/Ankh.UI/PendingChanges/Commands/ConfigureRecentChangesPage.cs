@@ -31,25 +31,19 @@ namespace Ankh.UI.PendingChanges.Commands
             if (configSvc != null)
             {
                 AnkhConfig cfg = configSvc.Instance;
-                bool save = false;
                 using (ConfigureRecentChangesPageDialog dlg = new ConfigureRecentChangesPageDialog())
                 {
-                    double miliseconds = cfg.RecentChangesRefreshInterval;
-                    dlg.RefreshInterval = (int) (miliseconds < 0 ? 0 : TimeSpan.FromMilliseconds(miliseconds).TotalMinutes);
+                    int seconds = Math.Max(0, cfg.RecentChangesRefreshInterval);
+                    dlg.RefreshInterval = seconds;
                     if (dlg.ShowDialog(e.Context) == System.Windows.Forms.DialogResult.OK)
                     {
                         double mins = dlg.RefreshInterval;
-                        cfg.RecentChangesRefreshInterval = mins < 0 ? 0 : TimeSpan.FromMinutes(mins).TotalMilliseconds;
-                        save = true;
-                    }
-                }
-                if (save)
-                {
-                    configSvc.SaveConfig(cfg);
-                    RecentChangesPage rcPage = e.Context.GetService<RecentChangesPage>();
-                    if (rcPage != null)
-                    {
-                        rcPage.ResetRefreshSchedule();
+                        cfg.RecentChangesRefreshInterval = Math.Max(dlg.RefreshInterval * 60, 0);
+
+                        configSvc.SaveConfig(cfg);
+                        RecentChangesPage rcPage = e.GetService<RecentChangesPage>();
+                        if (rcPage != null)
+                            rcPage.ResetRefreshSchedule();
                     }
                 }
             }

@@ -36,7 +36,7 @@ namespace Ankh.Configuration
         bool _autoLockEnabled;
         bool _noDashComment;
         bool _pcDoubleClickShowsChanges;
-        double _recentChangesRefreshInterval;
+        int _recentChangesRefreshInterval;
 
         /// <summary>
         /// Gets or sets the merge exe path.
@@ -114,10 +114,10 @@ namespace Ankh.Configuration
         }
 
         /// <summary>
-        /// Gets or Sets the Recent Changes auto-refresh interval in miliseconds
+        /// Gets or sets the Recent Changes auto-refresh interval in seconds
         /// </summary>
         [DefaultValue(0)]
-        public double RecentChangesRefreshInterval
+        public int RecentChangesRefreshInterval
         {
             get { return _recentChangesRefreshInterval; }
             set { _recentChangesRefreshInterval = value; }
