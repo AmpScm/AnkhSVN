@@ -69,13 +69,13 @@
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0" />
     <Reference Include="$(MsVsShellAssembly)" />
     <Reference Include="$(MsVsLangAssembly)" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="'$(VsSdkVersion)' != '8.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="'$(UseVsSdkVersion)' != '8.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="'$(VsSdkVersion)' == '10.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="'$(UseVsSdkVersion)' == '10.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(VsSdkVersion)' == '10.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' == '10.0'">
       <Visible>false</Visible>
     </Reference>
     <Reference Include="SharpSvn">
@@ -106,11 +106,11 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Only edit this block if you really know what you are doing; part of the command compilation -->
-    <CtcFile Include="$(IntermediateOutputPath)AnkhSvn.ctc" Condition="'$(VsSdkVersion)' == '8.0'">
+    <CtcFile Include="$(IntermediateOutputPath)AnkhSvn.ctc" Condition="'$(UseVsSdkVersion)' == '8.0'">
       <ResourceName>1000.ctmenu</ResourceName>
       <Visible>false</Visible>
     </CtcFile>
-    <VSCTCompile Include="$(IntermediateOutputPath)..\AnkhSvn.vsct" Condition="'$(VsSdkVersion)' != '8.0'">
+    <VSCTCompile Include="$(IntermediateOutputPath)..\AnkhSvn.vsct" Condition="'$(UseVsSdkVersion)' != '8.0'">
       <ResourceName>1000.ctmenu</ResourceName>
       <Visible>false</Visible>
     </VSCTCompile>
@@ -125,10 +125,10 @@
   <ItemGroup>
     <!-- Xml based ctc generation; also generates Gui\Ctc\AnkhSvn.bmp -->
     <XslSource Include="Gui\AnkhSvn.xml">
-      <Transform Condition="'$(VsSdkVersion)' == '8.0'">Gui\Gui-To-Ctc.xsl</Transform>
-      <To Condition="'$(VsSdkVersion)' == '8.0'">$(IntermediateOutputPath)AnkhSvn.ctc</To>
-      <Transform Condition="'$(VsSdkVersion)' != '8.0'">Gui\Gui-To-Vsct.xsl</Transform>
-      <To Condition="'$(VsSdkVersion)' != '8.0'">$(IntermediateOutputPath)..\AnkhSvn.vsct</To>
+      <Transform Condition="'$(UseVsSdkVersion)' == '8.0'">Gui\Gui-To-Ctc.xsl</Transform>
+      <To Condition="'$(UseVsSdkVersion)' == '8.0'">$(IntermediateOutputPath)AnkhSvn.ctc</To>
+      <Transform Condition="'$(UseVsSdkVersion)' != '8.0'">Gui\Gui-To-Vsct.xsl</Transform>
+      <To Condition="'$(UseVsSdkVersion)' != '8.0'">$(IntermediateOutputPath)..\AnkhSvn.vsct</To>
       <Debug>true</Debug>
     </XslSource>
     <None Include="Ankh.Package.snk" />

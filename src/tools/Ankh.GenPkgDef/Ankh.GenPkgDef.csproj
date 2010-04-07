@@ -35,10 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <AnkhPkgDefContextFile Condition="'$(VsSdkVersion)' == '8.0'">PkgDefContext.VS2005.cs</AnkhPkgDefContextFile>
-    <AnkhPkgDefContextFile Condition="'$(VsSdkVersion)' != '8.0'">PkgDefContext.VS2008.cs</AnkhPkgDefContextFile>
-    <AnkhOtherPkgDefContextFile Condition="'$(VsSdkVersion)' == '8.0'">PkgDefContext.VS2008.cs</AnkhOtherPkgDefContextFile>
-    <AnkhOtherPkgDefContextFile Condition="'$(VsSdkVersion)' != '8.0'">PkgDefContext.VS2005.cs</AnkhOtherPkgDefContextFile>
+    <AnkhPkgDefContextFile Condition="'$(UseVsSdkVersion)' == '8.0'">PkgDefContext.VS2005.cs</AnkhPkgDefContextFile>
+    <AnkhPkgDefContextFile Condition="'$(UseVsSdkVersion)' != '8.0'">PkgDefContext.VS2008.cs</AnkhPkgDefContextFile>
+    <AnkhOtherPkgDefContextFile Condition="'$(UseVsSdkVersion)' == '8.0'">PkgDefContext.VS2008.cs</AnkhOtherPkgDefContextFile>
+    <AnkhOtherPkgDefContextFile Condition="'$(UseVsSdkVersion)' != '8.0'">PkgDefContext.VS2005.cs</AnkhOtherPkgDefContextFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
