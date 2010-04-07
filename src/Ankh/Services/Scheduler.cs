@@ -26,10 +26,23 @@ namespace Ankh.Services
     [GlobalService(typeof(IAnkhScheduler))]
     sealed class AnkhScheduler : AnkhService, IAnkhScheduler
     {
+		struct ActionItem
+		{
+			public readonly int Id;
+			public readonly AnkhAction Action;
+
+			public ActionItem(int id, AnkhAction action)
+			{
+				Id = id;
+				Action = action;
+			}
+		}
+
         readonly Timer _timer;
         IAnkhCommandService _commands;
-        readonly SortedList<DateTime, AnkhAction> _actions = new SortedList<DateTime, AnkhAction>();
+        readonly SortedList<DateTime, ActionItem> _actions = new SortedList<DateTime, ActionItem>();
         Guid _grp = AnkhId.CommandSetGuid;
+		int _nextActionId;
 
         public AnkhScheduler(IAnkhServiceProvider context)
             : base(context)
@@ -52,7 +65,7 @@ namespace Ankh.Services
                 DateTime now = DateTime.Now;
                 while (true)
                 {
-                    AnkhAction action;
+                    ActionItem action;
                     lock (_actions)
                     {
                         if (_actions.Count == 0)
@@ -66,7 +79,7 @@ namespace Ankh.Services
                         _actions.RemoveAt(0);
                     }
 
-                    action();
+                    action.Action();
                 }
             }
             catch
@@ -96,24 +109,30 @@ namespace Ankh.Services
 
         #region IAnkhScheduler Members
 
-        public void ScheduleAt(DateTime time, AnkhCommand command)
+        public int ScheduleAt(DateTime time, AnkhCommand command)
         {
-            ScheduleAt(time, CreateHandler(command));
+            return ScheduleAt(time, CreateHandler(command));
         }
 
-        public void ScheduleAt(DateTime time, AnkhAction action)
+        public int ScheduleAt(DateTime time, AnkhAction action)
         {
             if (action == null)
                 throw new ArgumentNullException("action");
+
+			if (time.Kind == DateTimeKind.Utc)
+				time = time.ToLocalTime();
 
             lock (_actions)
             {
                 while (_actions.ContainsKey(time))
                     time = time.Add(TimeSpan.FromMilliseconds(1));
 
-                _actions.Add(time, action);
+				ActionItem ai = new ActionItem(unchecked(++_nextActionId), action);
+
+                _actions.Add(time, ai);
 
                 Reschedule();
+				return ai.Id;
             }
         }
 
@@ -125,16 +144,37 @@ namespace Ankh.Services
             };
         }
 
-        public void Schedule(TimeSpan timeSpan, AnkhCommand command)
+        public int Schedule(TimeSpan timeSpan, AnkhCommand command)
         {
-            ScheduleAt(DateTime.Now + timeSpan, CreateHandler(command));
+            return ScheduleAt(DateTime.Now + timeSpan, CreateHandler(command));
         }
 
-        public void Schedule(TimeSpan timeSpan, AnkhAction action)
+        public int Schedule(TimeSpan timeSpan, AnkhAction action)
         {
-            ScheduleAt(DateTime.Now + timeSpan, action);
+            return ScheduleAt(DateTime.Now + timeSpan, action);
         }
 
         #endregion
-    }
+
+		#region IAnkhScheduler Members
+
+
+		public bool RemoveTask(int taskId)
+		{
+			lock (_actions)
+			{
+				foreach (KeyValuePair<DateTime, ActionItem> i in _actions)
+				{
+					if (i.Value.Id == taskId)
+					{
+						_actions.Remove(i.Key);
+						return true;
+					}
+				}
+			}
+				return false;
+		}
+
+		#endregion
+	}
 }
