@@ -29,25 +29,31 @@ namespace Ankh
         /// </summary>
         /// <param name="time"></param>
         /// <param name="command"></param>
-        void ScheduleAt(DateTime time, AnkhCommand command);
+        int ScheduleAt(DateTime time, AnkhCommand command);
         /// <summary>
         /// Schedules the specified command at or after the specified time
         /// </summary>
         /// <param name="time"></param>
         /// <param name="dlg"></param>
         /// <param name="args"></param>
-        void ScheduleAt(DateTime time, AnkhAction action);
+        int ScheduleAt(DateTime time, AnkhAction action);
         /// <summary>
         /// Schedules the specified command at or after the specified interval
         /// </summary>
         /// <param name="timeSpan"></param>
         /// <param name="command"></param>
-        void Schedule(TimeSpan timeSpan, AnkhCommand command);
+        int Schedule(TimeSpan timeSpan, AnkhCommand command);
         /// <summary>
         /// Schedules the specified command at or after the specified interval
         /// </summary>
         /// <param name="timeSpan"></param>
         /// <param name="command"></param>
-        void Schedule(TimeSpan timeSpan, AnkhAction action);
+        int Schedule(TimeSpan timeSpan, AnkhAction action);
+
+        /// <summary>
+        /// Removes the specified task from the scheduler
+        /// </summary>
+        /// <param name="taskId"></param>
+        bool RemoveTask(int taskId);
     }
 }
