@@ -135,8 +135,7 @@
     <None Include="source.extension.VsixManifest" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
-      <SubType>
-      </SubType>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Gui\Gui.xsx">
       <DependentUpon>Gui.xsd</DependentUpon>
@@ -227,6 +226,7 @@
     <Content Include="Gui\PendingChanges\CreatePatch.png" />
     <Content Include="Gui\PendingChanges\Delete.png" />
     <Content Include="Gui\PendingChanges\EditConflict.png" />
+    <Content Include="Gui\PendingChanges\FetchAll.png" />
     <Content Include="Gui\PendingChanges\FilterOnSolution.png" />
     <Content Include="Gui\PendingChanges\FindInSolution.png" />
     <Content Include="Gui\PendingChanges\FlatView.png" />
@@ -245,6 +245,7 @@
     <Content Include="Gui\PendingChanges\Revert.png" />
     <Content Include="Gui\PendingChanges\RevisionGraph.png" />
     <Content Include="Gui\PendingChanges\ShowAll.png" />
+    <Content Include="Gui\PendingChanges\ShowChangedPaths.png" />
     <Content Include="Gui\PendingChanges\ShowComment.png" />
     <Content Include="Gui\PendingChanges\SolutionExplorer.png" />
     <Content Include="Gui\PendingChanges\SortAscending.png" />
