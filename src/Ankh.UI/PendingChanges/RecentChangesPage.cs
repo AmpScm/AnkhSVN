@@ -16,24 +16,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using SharpSvn;
 using Ankh.Scc;
 using Ankh.UI.PendingChanges.Synchronize;
-using Ankh.VS;
 using Ankh.UI.RepositoryExplorer;
 using Ankh.Commands;
-using Ankh.Configuration;
 
 namespace Ankh.UI.PendingChanges
 {
     partial class RecentChangesPage : PendingChangesPage
     {
-        System.Timers.Timer _timer;
         AnkhAction _recentChangesAction;
         bool _solutionExists;
         BusyOverlay _busyOverlay;
@@ -43,9 +36,6 @@ namespace Ankh.UI.PendingChanges
         public RecentChangesPage()
         {
             InitializeComponent();
-            _timer = new System.Timers.Timer();
-            _timer.Enabled = false;
-            _timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimerElapsed);
         }
 
         #region PendingChangePage overrides
@@ -65,7 +55,7 @@ namespace Ankh.UI.PendingChanges
 
             _recentChangesAction = new AnkhAction(DoRefresh);
 
-            // if solution is not open, disable the timer
+            // if solution is not open, don't auto-refresh
             IAnkhCommandStates commandState = Context.GetService<IAnkhCommandStates>();
             _solutionExists = (commandState != null && commandState.SolutionExists);
             ResetRefreshSchedule();
@@ -112,7 +102,6 @@ namespace Ankh.UI.PendingChanges
 
         void DoRefresh(bool showProgressDialog)
         {
-            ScheduleRefresh(0); // disable timer
             IAnkhProjectLayoutService pls = Context.GetService<IAnkhProjectLayoutService>();
             List<SvnStatusEventArgs> resultList = new List<SvnStatusEventArgs>();
             List<string> roots = new List<string>(SvnItem.GetPaths(pls.GetUpdateRoots(null)));
@@ -253,37 +242,48 @@ namespace Ankh.UI.PendingChanges
 
         /// <summary>
         /// Re-reads the refresh interval setting,
-        /// Sets the timer if a sol is open and new setting is greater than 0,
-        /// Unsets otherwise.
+        /// Schedules a refresh if a sol is open and new setting is greater than 0,
+        /// Unschedules otherwise.
         /// </summary>
         internal void ResetRefreshSchedule()
         {
             ReadRecentChangesRefreshInterval();
             double nextRefreshInterval = 0;
-            if (_solutionExists && _refreshInterval > 0)
+            if (_solutionExists // if a solution is not open, don't auto-refresh
+                && _refreshInterval > 0
+                )
             {
-                nextRefreshInterval = _timer.Enabled
+                nextRefreshInterval = _scheduledActionId > 0
                     ? _refreshInterval // cancel the scheduled refresh and reschedule
                     : _initialRefreshInterval; // refresh is enabled, schedule initial refresh
             }
             ScheduleRefresh(nextRefreshInterval);
         }
 
+        int _scheduledActionId;
+
         /// <summary>
-        /// Re-enables the timer if auto-refresh is enabled (i.e. the given <paramref name="interval"/> is greater than 0).
-        /// Disable the timer otherwise.
+        /// Reschedules the refresh if auto-refresh is enabled (i.e. the given <paramref name="interval"/> is greater than 0).
         /// </summary>
         void ScheduleRefresh(double interval)
         {
-            if (_timer.Enabled)
+            if (_scheduledActionId > 0)
             {
-                _timer.Enabled = false;
+                Scheduler.RemoveTask(_scheduledActionId);
+                _scheduledActionId = -1;
             }
             if (interval > 0)
             {
-                _timer.Interval = interval;
-                _timer.Enabled = true;
+                _scheduledActionId = Scheduler.Schedule(TimeSpan.FromMilliseconds(interval), new AnkhAction(DoDoRefresh));
             }
+        }
+
+        /// <summary>
+        /// Asynch refresh action execution
+        /// </summary>
+        void DoDoRefresh()
+        {
+            _recentChangesAction.BeginInvoke(null, null);
         }
 
         void OnRecentChangesFetched(List<SvnStatusEventArgs> resultList)
@@ -328,12 +328,6 @@ namespace Ankh.UI.PendingChanges
             ResetRefreshSchedule();
         }
 
-        void OnTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            ScheduleRefresh(0); // disable timer
-            BeginInvoke(_recentChangesAction);
-        }
-
         bool ReadRecentChangesRefreshInterval()
         {
             bool result = false;
@@ -352,6 +346,12 @@ namespace Ankh.UI.PendingChanges
             }
 #endif
             return result;
+        }
+
+        private IAnkhScheduler _scheduler;
+        IAnkhScheduler Scheduler
+        {
+            get { return _scheduler ?? (_scheduler = Context.GetService<IAnkhScheduler>()); }
         }
 
         private IAnkhConfigurationService _configSvc;
