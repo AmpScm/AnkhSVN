@@ -398,23 +398,27 @@ namespace Ankh.Scc
                 return;
 
             string oldLocation = data.ProjectLocation;
-
             try
             {
                 using (SccProjectData newData = new SccProjectData(Context, project))
                 {
-                    SccStore.OnProjectRenamed(oldLocation, newData.ProjectLocation);
+                    string newLocation = newData.ProjectLocation;
+
+                    if (newLocation == null && oldLocation == null)
+                        return; // No need to do anything for this case (e.g. solution folders)
+
+                    SccStore.OnProjectRenamed(oldLocation, newLocation);
 
                     if (string.Equals(newData.ProjectFile, data.ProjectFile, StringComparison.OrdinalIgnoreCase))
                         return; // Project rename, without renaming the project file (C++ project for instance)
-
-                    // Mark the sln file edited, so it shows up in Pending Changes/Commit
-                    if (!string.IsNullOrEmpty(SolutionFilename))
-                        DocumentTracker.SetDirty(SolutionFilename, true);
                 }
             }
             finally
             {
+                // Mark the sln file edited, so it shows up in Pending Changes/Commit
+                if (!string.IsNullOrEmpty(SolutionFilename))
+                    DocumentTracker.CheckDirty(SolutionFilename);
+
                 data.Reload(); // Reload project name, etc.
             }
         }
@@ -439,19 +443,25 @@ namespace Ankh.Scc
                         data.SetManaged(true);
                 }
 
-                // Solution folders are projects without Scc state                
+                // Solution folders are projects without Scc state
                 data.SccProject.SccGlyphChanged(0, null, null, null);
             }
+
+            _syncMap = true;
+
+            // Don't take the focus from naming the folder. The rename will perform the .Load()
+            // and dirty check
+            if (added && data.IsSolutionFolder)
+                return;
 
             bool isReload = (_reloading == data.ProjectLocation);
             _reloading = null;
             if (added && !isReload)
             {
                 if (!string.IsNullOrEmpty(SolutionFilename))
-                    DocumentTracker.SetDirty(SolutionFilename, true);
+                    DocumentTracker.CheckDirty(SolutionFilename);
             }
 
-            _syncMap = true;
             RegisterForSccCleanup();
         }
 
@@ -492,6 +502,10 @@ namespace Ankh.Scc
             if (project != null && _projectMap.TryGetValue(project, out data))
             {
                 trackCopies = true;
+
+                if (_syncMap)
+                    data.Load();
+
                 if (data.IsWebSite)
                 {
                     int busy;
@@ -527,14 +541,14 @@ namespace Ankh.Scc
                 data.OnClose();
                 _projectMap.Remove(project);
 
-                if(data.Unloading)
+                if (data.Unloading)
                     _reloading = data.ProjectLocation;
             }
 
             if (removed && _reloading == null)
             {
                 if (!string.IsNullOrEmpty(SolutionFilename))
-                    DocumentTracker.SetDirty(SolutionFilename, true);
+                    DocumentTracker.CheckDirty(SolutionFilename);
             }
         }
 
@@ -647,8 +661,8 @@ namespace Ankh.Scc
                         if (project.RequiresForcedRefresh() && !string.IsNullOrEmpty(project.ProjectDirectory))
                         {
                             string dir = project.ProjectDirectory;
-                            
-                            if(!dir.EndsWith("\\"))
+
+                            if (!dir.EndsWith("\\"))
                                 dir += "\\";
 
                             foreach (SvnClientAction action in sccRefreshItems)
