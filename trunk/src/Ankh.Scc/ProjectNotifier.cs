@@ -237,7 +237,7 @@ namespace Ankh.Scc
             if (dirtyCheck != null)
                 foreach (string file in dirtyCheck)
                 {
-                    DocumentTracker.SetDirty(file, false);
+                    DocumentTracker.CheckDirty(file);
                 }
 
             if (dirtyProjects != null)
