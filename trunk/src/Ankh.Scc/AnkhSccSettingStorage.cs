@@ -104,7 +104,7 @@ namespace Ankh.Scc
 
             string np = SvnTools.GetTruePath(path, true);
 
-            if(path[path.Length -1] == '\\' && np[np.Length-1] != '\\')
+            if (path[path.Length - 1] == '\\' && np[np.Length - 1] != '\\')
                 np += '\\';
 
             return np;
@@ -372,7 +372,7 @@ namespace Ankh.Scc
 
             foreach (SccCategorySettings cat in _categories.Values)
             {
-                string key = string.Format("Category.{0}", cat.CategoryId);                
+                string key = string.Format("Category.{0}", cat.CategoryId);
 
                 if (map.TryGetQuoted(key, out value))
                     cat.Name = value;
@@ -411,7 +411,7 @@ namespace Ankh.Scc
                     continue;
 
                 Guid gv;
-                if(!TryParseGuid(value, out gv))
+                if (!TryParseGuid(value, out gv))
                     continue;
 
                 prj.Categories[key] = value;
@@ -428,7 +428,9 @@ namespace Ankh.Scc
         internal void OnProjectRenamed(string oldLocation, string newLocation)
         {
             SccProjectSettings sps;
-            if (_actualToProject.TryGetValue(oldLocation, out sps))
+            // oldLocation can be null if the project was not stored before or is stored in
+            // the .sln (e.g. Solution Folders)
+            if (oldLocation != null && _actualToProject.TryGetValue(oldLocation, out sps))
             {
                 sps.ActualProjectReference = newLocation;
                 sps.SolutionProjectReference = newLocation;
@@ -446,7 +448,7 @@ namespace Ankh.Scc
             {
                 string name = ix.Trim();
 
-                if(string.IsNullOrEmpty(name))
+                if (string.IsNullOrEmpty(name))
                     continue;
 
                 bool skip = false;
