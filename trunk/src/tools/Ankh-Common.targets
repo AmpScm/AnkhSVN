@@ -3,6 +3,7 @@
   <PropertyGroup Condition="'$(MSBuildToolsVersion)' == ''">
     <VisualStudioVersion>8.0</VisualStudioVersion>
     <UseVsSdkVersion>8.0</UseVsSdkVersion>
+    <UseCtcInsteadOfVsct>true</UseCtcInsteadOfVsct>
   </PropertyGroup>
   <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
     <VisualStudioVersion>9.0</VisualStudioVersion>
