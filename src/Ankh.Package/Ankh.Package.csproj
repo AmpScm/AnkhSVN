@@ -125,10 +125,10 @@
   <ItemGroup>
     <!-- Xml based ctc generation; also generates Gui\Ctc\AnkhSvn.bmp -->
     <XslSource Include="Gui\AnkhSvn.xml">
-      <Transform Condition="'$(UseVsSdkVersion)' == '8.0'">Gui\Gui-To-Ctc.xsl</Transform>
-      <To Condition="'$(UseVsSdkVersion)' == '8.0'">$(IntermediateOutputPath)AnkhSvn.ctc</To>
-      <Transform Condition="'$(UseVsSdkVersion)' != '8.0'">Gui\Gui-To-Vsct.xsl</Transform>
-      <To Condition="'$(UseVsSdkVersion)' != '8.0'">$(IntermediateOutputPath)..\AnkhSvn.vsct</To>
+      <Transform Condition="'$(UseCtcInsteadOfVsct)' == 'true'">Gui\Gui-To-Ctc.xsl</Transform>
+      <To Condition="'$(UseCtcInsteadOfVsct)' == 'true'">$(IntermediateOutputPath)AnkhSvn.ctc</To>
+      <Transform Condition="'$(UseCtcInsteadOfVsct)' != 'true'">Gui\Gui-To-Vsct.xsl</Transform>
+      <To Condition="'$(UseCtcInsteadOfVsct)' != 'true'">$(IntermediateOutputPath)..\AnkhSvn.vsct</To>
       <Debug>true</Debug>
     </XslSource>
     <None Include="Ankh.Package.snk" />
