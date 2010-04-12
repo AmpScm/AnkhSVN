@@ -14,13 +14,16 @@
                     url: '/servlets/WebFeed?artifact=news',
                     success: function(feed) {
                         $.each(feed.items, function(index, item) {
+                            var div = $('<div/>').addClass('h3');
+                            
                             var title = $('<h3/>')
-                                .text(item.title)
-                                .addClass('h3');
-                            newsDiv.append(title);
+                                .text(item.title);
+                            div.append(title);
                             
                             var description = $('<p/>').html(item.description);
-                            newsDiv.append(description);
+                            div.append(description);
+                            
+                            newsDiv.append(div);
                         });
                     }
                 });
