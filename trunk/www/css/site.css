@@ -50,6 +50,8 @@ table.#main {
   }
 
   #site-banner {
+    text-align: left;
+    font-size: 14pt;
   }
 }
 
