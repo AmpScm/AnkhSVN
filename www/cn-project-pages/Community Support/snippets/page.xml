@@ -25,6 +25,10 @@
       <title localize="false">Direct Feedback</title>
       <filename>HtmlSnippet6.html</filename>
     </component>
+    <component visibility="2" type="ActivityPanel" order="7">
+      <title localize="false">Act</title>
+      <filename>HtmlSnippet7.html</filename>
+    </component>
   </component_list>
 </page>
 
