@@ -1,3 +1,9 @@
 table.#main {
   font-family: Segoe UI, Segoe, Arial, Verdana, Sans-Serif; 
 }
+
+@media screen {
+  #site-nav-root {
+    margin-left: -30px;
+  }
+}
