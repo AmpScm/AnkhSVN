@@ -34,7 +34,14 @@ table.#main {
     height: 300px;
     width: 100%;
     text-align:center;
+    margin-top: 200px;
   }
+
+  #site-banner {
+    margin-left: 160px;
+    height: 100px;
+  }
+[A
 }
 
 @media print {
