@@ -51,7 +51,9 @@ table.#main {
 
   #site-banner {
     text-align: left;
-    font-size: 14pt;
+    font-size: 10pt;
+    font-weight: normal;
+    background-color: #FFFFFF;
   }
 }
 
