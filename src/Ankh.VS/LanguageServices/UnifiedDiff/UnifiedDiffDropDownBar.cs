@@ -39,10 +39,10 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
             }
         }
 
-        protected override void OnInitialize()
+        protected internal override void Initialize()
         {
             _shouldParse = true;
-            base.OnInitialize();
+            base.Initialize();
         }
 
         protected override void OnClose()
