@@ -48,6 +48,7 @@ table.#main {
     max-width: 988px;
     display: inline-block;
     margin-left: 140px;
+
   }
 
   #site-banner {
@@ -63,10 +64,6 @@ table.#main {
   #site-banner, #site-banner-host, #site-left-bar {
     display: none;
   }
-}
-
-#site-banner, #site-banner-host {
-  display: none;
 }
 
 /* From Related Projects Box */
