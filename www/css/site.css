@@ -8,16 +8,16 @@ table.#main {
     font-size: 130%;
   }
 
-  #site-nav-root ul {
+  #site-nav ul {
     list-style: none;
     padding-left: 0;
   }
 
-  #site-nav-root li {
+  #site-nav li {
     line-height: 1.4em;
   }
 
-  #site-nav-root ul ul {
+  #site-nav ul ul {
     padding-left: 2em;
     padding-bottom: 12px;
   }
