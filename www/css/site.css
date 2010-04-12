@@ -2,6 +2,11 @@ table.#main {
   font-family: Segoe UI, Segoe, Arial, Verdana, Sans-Serif; 
 }
 
+#site-banner img { float: left; width: 64px; height: 64px; padding: 8px; border: 0; }
+#site-banner h1 { font-weight: normal; font-size: 24pt; margin: 0; padding: 0; }
+#site-banner h1 span { font-weight: bold; }
+#site-banner a { color: black; text-decoration: none; }
+
 @media screen {
   #site-nav {
     margin-left: -30px;
@@ -40,11 +45,9 @@ table.#main {
   #site-banner-bg {
     height: 100px;
     max-width: 988px;
-    text-align: center;
   }
 
   #site-banner {
-    text-align: left;
   }
 }
 
