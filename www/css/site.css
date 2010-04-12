@@ -33,7 +33,7 @@ table.#main {
     font-weight: normal;
   }
 
-  #site-banner-host {
+/*  #site-banner-host {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -41,7 +41,7 @@ table.#main {
     width: 100%;
     text-align:center;
     margin-top: 120px;
-  }
+  }*/
 
   #site-banner-bg {
     height: 76px;
