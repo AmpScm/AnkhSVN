@@ -17,7 +17,7 @@
                             var title = $('<h3/>').text(item.title);
                             newsDiv.append(title);
                             
-                            var description = $('<p/>').text(item.description);
+                            var description = $('<p/>').html(item.description);
                             newsDiv.append(description);
                         });
                     }
