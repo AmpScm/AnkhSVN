@@ -38,7 +38,7 @@ table.#main {
   }
 
   #site-banner-bg {
-    margin-left: 200px;
+    padding-left: 200px;
     height: 100px;
     max-width: 988px;
   }
