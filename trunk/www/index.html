@@ -14,8 +14,11 @@
                     url: '/servlets/WebFeed?artifact=news',
                     success: function(feed) {
                         $.each(feed.items, function(index, item) {
-                            var p = $('<p/>').text(item.title);
-                            newsDiv.append(p);
+                            var title = $('<h3/>').text(item.title);
+                            newsDiv.append(title);
+                            
+                            var description = $('<p/>').text(item.description);
+                            newsDiv.append(description);
                         });
                     }
                 });
