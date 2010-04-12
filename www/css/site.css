@@ -3,7 +3,7 @@ table.#main {
 }
 
 @media screen {
-  #site-nav-root {
+  #site-nav {
     margin-left: -30px;
     font-size: 130%;
   }
