@@ -66,6 +66,10 @@ table.#main {
   top: -30px;
 }
 
+#welcome-table td {
+  font-size: 150%;
+}
+
 #welcome-table {
   border: 2px solid #9598D7;
 }
