@@ -37,10 +37,14 @@ table.#main {
     margin-top: 120px;
   }
 
-  #site-banner {
+  #site-bg {
     margin-left: 200px;
     height: 100px;
     max-height: 100px;
+  }
+
+  #site-banner {
+
     text-align: left;
   }
 [A
