@@ -64,6 +64,7 @@ table.#main {
   font-size: 150%
   position: relative;
   top: -30px;
+  border: 2px solid #9598D7;
 }
 
 #welcome-table td {
@@ -72,11 +73,11 @@ table.#main {
 }
 
 #welcome-text {
-  padding: 5px;
+  padding: 10px 10px;
 }
 
-#welcome-table {
-  border: 2px solid #9598D7;
+#welcome-table img {
+ border: 0;
 }
 
 /* From Related Projects Box */
