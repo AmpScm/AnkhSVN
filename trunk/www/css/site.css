@@ -88,6 +88,11 @@
   font-size: 110%;
 }
 
+#welcome-table ul li {
+  background: url(/images/bullet.gif no-repeat 0.1em 0.3em;
+  padding-left: 1.2em;
+}
+
 /* From Related Projects Box */
 
 #box2 ul {list-style-type: none;margin: 0;padding: 0 0 5px 8px;}
