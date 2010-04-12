@@ -41,6 +41,7 @@ table.#main {
     padding-left: 200px;
     height: 100px;
     max-width: 988px;
+    text-align: center;
   }
 
   #site-banner {
