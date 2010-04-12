@@ -14,10 +14,13 @@
                     url: '/servlets/WebFeed?artifact=news',
                     success: function(feed) {
                         $.each(feed.items, function(index, item) {
+                            
+                            var d = new Date(Date.parse(item.updated));
+                            var updated = d.toLocaleDateString();
                             var div = $('<div/>').addClass('h3');
                             
                             var title = $('<h3/>')
-                                .text(item.updated + ' - ' + item.title);
+                                .text(updated + ' - ' + item.title);
                             div.append(title);
                             
                             var description = $('<p/>').html(item.description);
