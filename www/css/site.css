@@ -46,6 +46,7 @@ table.#main {
     height: 100px;
     max-width: 988px;
     display: inline-block;
+    margin-left: 140px;
   }
 
   #site-banner {
