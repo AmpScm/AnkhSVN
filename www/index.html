@@ -14,7 +14,9 @@
                     url: '/servlets/WebFeed?artifact=news',
                     success: function(feed) {
                         $.each(feed.items, function(index, item) {
-                            var title = $('<h3/>').text(item.title);
+                            var title = $('<h3/>')
+                                .text(item.title)
+                                .addClass('h3');
                             newsDiv.append(title);
                             
                             var description = $('<p/>').html(item.description);
