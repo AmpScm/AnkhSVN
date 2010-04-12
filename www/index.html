@@ -13,9 +13,10 @@
                 $.getFeed({
                     url: '/servlets/WebFeed?artifact=news',
                     success: function(feed) {
-                        $.each(feed.items, function(index, item) {
-                            
+                        $.each(feed.items.slice(0, 3), function(index, item) {
                             var d = new Date(Date.parse(item.updated));
+                            if(d.getYear() < 2009)
+                                return;
                             var updated = d.toLocaleDateString();
                             var div = $('<div/>').addClass('h3');
                             
