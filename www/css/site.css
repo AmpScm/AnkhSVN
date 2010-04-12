@@ -36,24 +36,24 @@ table.#main {
     position: absolute;
     top: 0px;
     left: 0px;
-    height: 100px;
+    height: 76px;
     width: 100%;
     text-align:center;
     margin-top: 120px;
   }
 
   #site-banner-bg {
-    height: 100px;
+    height: 76px;
     max-width: 988px;
     display: inline-block;
     margin-left: 140px;
+    background-color: #FFFFFF;
   }
 
   #site-banner {
     text-align: left;
     font-size: 10pt;
     font-weight: normal;
-    background-color: #FFFFFF;
   }
 }
 
