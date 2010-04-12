@@ -26,6 +26,20 @@ table.#main {
   #site-nav a {
     font-weight: normal;
   }
+
+  #site-banner {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100px;
+    width: 100%;
+  }
+}
+
+@media print {
+  #site-banner, #site-left-bar {
+    display: none;
+  }
 }
 
 /* From Related Projects Box */
