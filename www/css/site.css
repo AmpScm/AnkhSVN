@@ -2,9 +2,6 @@ table.#main {
   font-family: Segoe UI, Segoe, Arial, Verdana, Sans-Serif; 
 }
 
-body {
-  font-family: Segoe UI, Segoe, Arial, Verdana, Sans-Serif; 
-}
 #site-banner img { float: left; width: 64px; height: 64px; padding: 4px; border: 0; }
 #site-banner span { padding: 6px; }
 #site-banner h1 { font-weight: normal; font-size: 22pt; margin: 0; padding: 12px 6px; }
