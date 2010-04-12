@@ -45,6 +45,7 @@ table.#main {
   #site-banner-bg {
     height: 100px;
     max-width: 988px;
+    display: inline-block;
   }
 
   #site-banner {
