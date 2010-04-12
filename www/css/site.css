@@ -67,7 +67,12 @@ table.#main {
 }
 
 #welcome-table td {
-  font-size: 150%;
+  padding: 0;
+  marging: 0;
+}
+
+#welcome-text {
+  padding: 5px;
 }
 
 #welcome-table {
