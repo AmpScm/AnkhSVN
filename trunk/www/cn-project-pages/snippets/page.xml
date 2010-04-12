@@ -21,6 +21,10 @@
       <title localize="false" />
       <filename>HtmlSnippet6.html</filename>
     </component>
+    <component visibility="2" type="Html" order="6">
+      <title localize="false" />
+      <filename>HtmlSnippet2.html</filename>
+    </component>
   </component_list>
 </page>
 
