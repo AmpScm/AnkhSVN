@@ -22,10 +22,6 @@
       <filename>HtmlSnippet3.html</filename>
     </component>
     <component visibility="1" type="Html" order="6">
-      <title localize="false">About AnkhSVN</title>
-      <filename>HtmlSnippet5.html</filename>
-    </component>
-    <component visibility="1" type="Html" order="7">
       <title localize="false" />
       <filename>HtmlSnippet6.html</filename>
     </component>
