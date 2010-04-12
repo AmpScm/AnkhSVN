@@ -5,5 +5,20 @@ table.#main {
 @media screen {
   #site-nav-root {
     margin-left: -30px;
+    font-size: 130%;
+  }
+
+  #site-nav-root ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  #site-nav-root li {
+    line-height: 1.4em;
+  }
+
+  #site-nav-root ul ul {
+    padding-left: 2em;
+    padding-bottom: 12px;
   }
 }
