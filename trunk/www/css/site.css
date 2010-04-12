@@ -34,12 +34,14 @@ table.#main {
     height: 300px;
     width: 100%;
     text-align:center;
-    margin-top: 200px;
+    margin-top: 120px;
   }
 
   #site-banner {
-    margin-left: 160px;
+    margin-left: 200px;
     height: 100px;
+    max-height: 100px;
+    text-align: left;
   }
 [A
 }
