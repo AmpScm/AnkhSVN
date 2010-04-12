@@ -83,6 +83,11 @@
  border: 0;
 }
 
+#welcome-table p {
+  margin-left: 10px;
+  font-size: 150%;
+}
+
 /* From Related Projects Box */
 
 #box2 ul {list-style-type: none;margin: 0;padding: 0 0 5px 8px;}
