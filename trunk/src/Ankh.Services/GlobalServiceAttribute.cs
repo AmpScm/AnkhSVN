@@ -67,7 +67,7 @@ namespace Ankh
         public bool PublicService
         {
             get { return _publicService; }
-            set { _publicService = value; }
+            private set { _publicService = value; }
         }
 
         /// <summary>

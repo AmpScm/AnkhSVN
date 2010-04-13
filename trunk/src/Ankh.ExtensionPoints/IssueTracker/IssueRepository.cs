@@ -14,6 +14,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System;
 using System.Windows.Forms;
 
 namespace Ankh.ExtensionPoints.IssueTracker
@@ -50,6 +51,9 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// </summary>
         public virtual void PreCommit(PreCommitArgs args)
         {
+            if (args == null)
+                throw new ArgumentNullException("args");
+
             args.Cancel = false;
         }
 

@@ -767,10 +767,10 @@ namespace Ankh.Scc.StatusCache
             else
                 update = this["c:\\windows"]; // Just give me a SvnItem instance to access the interface
 
-            List<SvnItem> updates = update.GetUpdateQueueAndClearScheduled();
+            IList<SvnItem> updates = update.GetUpdateQueueAndClearScheduled();
 
             if(updates != null)
-                OnSvnItemsChanged(new SvnItemsEventArgs(updates));            
+                OnSvnItemsChanged(new SvnItemsEventArgs(updates));
         }
 
         static T GetFirst<T>(IEnumerable<T> valueCollection)
