@@ -25,7 +25,7 @@ namespace Ankh
 {
     public interface ISvnItemStateUpdate
     {
-        List<SvnItem> GetUpdateQueueAndClearScheduled();
+        IList<SvnItem> GetUpdateQueueAndClearScheduled();
 
         void SetDocumentDirty(bool value);
         void SetSolutionContained(bool value);
@@ -139,7 +139,7 @@ namespace Ankh
             return _currentState & flagsToGet;
         }
 
-        List<SvnItem> ISvnItemStateUpdate.GetUpdateQueueAndClearScheduled()
+        IList<SvnItem> ISvnItemStateUpdate.GetUpdateQueueAndClearScheduled()
         {
             lock (_stateChanged)
             {

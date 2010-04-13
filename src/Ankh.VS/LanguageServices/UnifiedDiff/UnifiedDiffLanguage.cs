@@ -27,7 +27,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 namespace Ankh.VS.LanguageServices.UnifiedDiff
 {
     [Guid(AnkhId.UnifiedDiffLanguageServiceId), ComVisible(true), CLSCompliant(false)]
-    [GlobalService(typeof(UnifiedDiffLanguage), PublicService = true)]
+    [GlobalService(typeof(UnifiedDiffLanguage), true)]
     public class UnifiedDiffLanguage : AnkhLanguage
     {
         public const string ServiceName = AnkhId.UnifiedDiffServiceName;

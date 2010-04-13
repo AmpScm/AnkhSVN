@@ -106,6 +106,8 @@ namespace Ankh.Scc
 
             public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
             {
+                if (destinationType == null)
+                    throw new ArgumentNullException("destinationType");
                 if (destinationType.IsAssignableFrom(typeof(string)) || destinationType == typeof(SvnChangeList))
                     return true;
 
@@ -114,6 +116,9 @@ namespace Ankh.Scc
 
             public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
             {
+                if (destinationType == null)
+                    throw new ArgumentNullException("destinationType");
+
                 SvnChangeList chl = value as SvnChangeList;
                 string listName = chl != null ? chl.List : null;
 
@@ -129,15 +134,18 @@ namespace Ankh.Scc
             {
                 List<SvnChangeList> names = new List<SvnChangeList>();
 
-                IAnkhPackage package = context.GetService(typeof(IAnkhPackage)) as IAnkhPackage;
-
-                if (package != null)
+                if (context != null)
                 {
-                    IPendingChangesManager pcm = package.GetService<IPendingChangesManager>();
+                    IAnkhPackage package = context.GetService(typeof(IAnkhPackage)) as IAnkhPackage;
 
-                    foreach (string cl in pcm.GetSuggestedChangeLists())
+                    if (package != null)
                     {
-                        names.Add(cl);
+                        IPendingChangesManager pcm = package.GetService<IPendingChangesManager>();
+
+                        foreach (string cl in pcm.GetSuggestedChangeLists())
+                        {
+                            names.Add(cl);
+                        }
                     }
                 }
 
