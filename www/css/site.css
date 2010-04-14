@@ -114,3 +114,9 @@
 {
   z-index:1000;
 }
+
+#lightbox-overlay-text-about
+{
+  display:none;
+}
+}
