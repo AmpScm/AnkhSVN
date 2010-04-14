@@ -109,3 +109,8 @@
 .tpaln {vertical-align: top;}
 .btmaln {vertical-align: bottom;}
 .cnaln {text-align: center;}
+
+#lightbox
+{
+  z-index:1000;
+}
