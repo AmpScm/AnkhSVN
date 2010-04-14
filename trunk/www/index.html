@@ -4,37 +4,6 @@
     <meta name="google-site-verification" content="UEXvwHxMY0HJnr3vATWSyVmsxVUz71QciilFfr9ZOm8" />
     <link rel="stylesheet" href="/css/site.css" />
     <link rel="alternate" href="/servlets/WebFeed?artifact=news" type="application/rss+xml" title="AnkhSVN Announcements" />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
-    <script src="/js/jquery.jfeed.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        $(function() {
-            var newsDiv = $('#news');
-            if(newsDiv.length) {
-                $.getFeed({
-                    url: '/servlets/WebFeed?artifact=news',
-                    success: function(feed) {
-                        $.each(feed.items.slice(0, 3), function(index, item) {
-                            var d = new Date(Date.parse(item.updated));
-                            if(d.getFullYear() < 2009)
-                                return;
-                            var updated = d.toLocaleDateString();
-                            var div = $('<div/>').addClass('h3');
-                            
-                            var title = $('<h3/>')
-                                .text(item.title);
-                            title.append($('<span style="margin-left: 15px; font-weight:normal"/>').text('(' + updated + ')'));
-                            div.append(title);
-                            
-                            var description = $('<p/>').html(item.description);
-                            div.append(description);
-                            
-                            newsDiv.append(div);
-                        });
-                    }
-                });
-            }
-        });
-    </script>
   </head>
   <body>
     This is ignored.
