@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <title>AnkhSVN 2.1 Changelog</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="canonical" href="http://ankhsvn.open.collab.net/ankhsvn/changelog" />
+  </head>
+  <body>
+    <div class="h1"><h1>AnkhSVN 2.1 Changelog</h1></div>
+    
+      <div class="h2"><h2>AnkhSVN 2.1.7819</h2></div>
+      <p><a href="http://ankhsvn.net/downloads/2.1/">Download now</a></p>
+      
+      <h3>Changes:</h3>
+     
+      <ul>
+        <li>Resolved problem when working with working copies on FAT/FAT32 or network shares (issue <a href="http://ankhsvn.net/issues?id=615" target="_blank">#615</a>)</li>
+        <li>Prevent committing conflicted files</li>
+        <li>Warn instead of error when committing outdated files</li>
+      </ul>
+     
+      <div class="h2"><h2>AnkhSVN 2.1.7756</h2></div>
+      <h3>Changes:</h3>
+     
+      <ul>
+        <li>Neon 0.29.3. This fixes a slowdown on some HTTPS servers, codeplex being one of them</li>
+        <li>Now depends on the 2008 C++ Runtime</li>
+        <li>Files are automatically reloaded after merge operations</li>
+        <li>A workaround for Subversion <a href="http://subversion.tigris.org/issues/show_bug.cgi?id=" target="_blank">issue 3569</a> was added</li>
+        <li>A possible NullReferenceException when automatically locking files was solved</li>
+        <li>Enabled 1.6 resolve features (mine-conflict and theirs-conflict)</li>
+        <li>p4merge merge template was fixed</li>
+        <li>Fixed several casing problems that showed while adding/renaming files</li>
+        <li>Lock now offers to steal locks when they files are locked by others</li>
+        <li>Support for Visual Studio 2010 Release Candidate was improved by implementing our own language service from scratch.</li>
+        <li>Now linked against Subversion 1.6.9</li>
+        <li>In some cases temporary files weren't removed properly, this has been fixed</li>
+        <li>New files are now correctly added to Web Sites without manual refresh</li>
+      </ul>
+     
+      <div class="h2"><h2>AnkhSVN 2.1.7444</h2></div>
+      <h3>Changes:</h3>
+      <ul>
+        <li>Fix several crashes in the Merge Wizard</li>
+        <li>Subversion 1.6.6</li>
+        <li>Fix annotate when used in Visual Studio 2010 beta2</li>
+        <li>Extensibility support for issue trackers</li>
+        <li>Block case-only renames, because those aren't supported by Subversion</li>
+        <li>Help is now shown in the browser when opening it in Visual Studio fails.</li>
+        <li>New diff tool template for PrestoSoft ExamDiff</li>
+      </ul>
+     
+      <div class="h2"><h2>AnkhSVN2.1.7141</h2></div>
+      <h3>Changes:</h3>
+
+      <ul>
+        <li>Update Subversion Support to 1.6.4 level to resolve <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-2411" target="_blank">CVE-2009-2411</a>.
+        <li>No other changes since previous release
+      </ul>
+      Note: This version was first released as 2.1.7115, but that release had a few bugs in its setup.
+
+      <div class="h2"><h2>AnkhSVN 2.1.6941</h2></div>
+      <h3>Changes:</h3>
+      <ul>
+        <li>Subversion 1.6 support
+        <li>Annotate(blame) now shows log messages
+        <li>Enable relocating when switching can't work
+        <li>New feature to auto-add newly created files
+        <li>Multiple working copy explorer and repository explorer fixes
+        <li>Fixed multiple merge wizard problems
+        <li>Files that are/have been marked as binary can now be annotated
+        <li>Better support for customizing AnkhSVN context menus
+        <li>Visual Studio 2010 beta1 support
+        <li>Fixed svn export command
+        <li>Better detection of edited (not yet saved) project files
+     </ul>
+  </body>
+</html>
