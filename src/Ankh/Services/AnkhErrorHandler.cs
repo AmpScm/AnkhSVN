@@ -38,7 +38,7 @@ namespace Ankh.Services
     [GlobalService(typeof(IAnkhErrorHandler), AllowPreRegistered = true)]
     class AnkhErrorHandler : AnkhService, IAnkhErrorHandler
     {
-        const string _errorReportMailAddress = "error@ankhsvn.tigris.org";
+        const string _errorReportMailAddress = "error@support.ankhsvn.net";
         const string _errorReportSubject = "Exception";
         readonly HandlerDelegator Handler;
 
