@@ -263,7 +263,7 @@ namespace Ankh.Scc
         {
             tagVSQueryEditFlags queryFlags = (tagVSQueryEditFlags)rgfQueryEdit;
             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
-            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_InMemoryEdit | tagVSQueryEditResultFlags.QER_MaybeChanged);
+            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags)0; // Must be 0 when verdict is QER_EditOK or you see failures like issue #624
 
             bool allowUI = (queryFlags & (tagVSQueryEditFlags.QEF_SilentMode | tagVSQueryEditFlags.QEF_ReportOnly | tagVSQueryEditFlags.QEF_ForceEdit_NoPrompting)) == 0;
 
