@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.8223</title>
+          AnkhSVN-Daily Update - 2.1.8227</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,33 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3273/AnkhSvn-Daily-2.1.8223.478.msi">AnkhSVN 2.1.8223</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3275/AnkhSvn-Daily-2.1.8227.479.msi">AnkhSVN 2.1.8227</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8223">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8227">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-04-16</td></tr>
+<tr><td> </td><td class="r"><a id="8227" href="http://ankhsvn.net/rev/?r=8227">
+            [r8227]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.QueryEditSave.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix <a href="http://ankhsvn.net/issues/?id=624">issue #624</a> by making QueryEdit return 0 as more info when the result is
+successfull. (It looks like this is a bug in the caller which should first
+check the verdict. But it is unlikely that they are going to fix this for
+us).</td></tr>
+<tr><td> </td><td class="r"><a id="8226" href="http://ankhsvn.net/rev/?r=8226">
+            [r8226]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Diff/Ankh.Diff.csproj, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Include Ankh-Common.targets, to fix the VS2010 build</td></tr>
+<tr><td> </td><td class="r"><a id="8225" href="http://ankhsvn.net/rev/?r=8225">
+            [r8225]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> AnkhErrorHandler.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Change exception email to error@support.ankhsvn.net</td></tr>
 <tr class="d"><td colspan="4">2010-04-13</td></tr>
 <tr><td> </td><td class="r"><a id="8161" href="http://ankhsvn.net/rev/?r=8161">
             [r8161]
@@ -168,15 +181,6 @@ designer.</td></tr>
 "Retry" brings back the dialog to allow users modify the path, otherwise op gets cancelled.<br>
 
 <a href="http://ankhsvn.net/issues/?id=607">Issue #607</a>: Branch to existing location causes exception</td></tr>
-<tr><td> </td><td class="r"><a id="7988" href="http://ankhsvn.net/rev/?r=7988">
-            [r7988]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc/ProjectMap:</strong> SccDocumentData.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Don't retrieve RawDocument multiple times and avoid using a null reference
-if for some strange reason RawDocument is null.</td></tr>
-<tr class="d"><td colspan="4">2010-03-18</td></tr>
-<tr><td> </td><td class="r"><a id="7986" href="http://ankhsvn.net/rev/?r=7986">
-            [r7986]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> VSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Filter all the normal command keys that are handled via VS commands to
-fix <a href="http://ankhsvn.net/issues/?id=621">issue #621</a> and similar cases.</td></tr>
 
 </table>
 <!--/Recent changes-->
