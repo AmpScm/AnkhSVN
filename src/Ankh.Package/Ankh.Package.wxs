@@ -31,6 +31,12 @@
           <RegistryValue Name="CurrentVersion" Value="$(var.ankhVersion)" Type="string"/>
           <RegistryValue Name="InstallLocation" Value="[APP_bin]" Type="string"/>
         </RegistryKey>
+        <!-- This allows detecting AnkhSVN with conditional comments in Internet Explorer -->
+        <RegistryKey Root="HKLM" Key="Software\Microsoft\Internet Explorer\Version Vector">
+          <RegistryValue Name="AnkhSVN" Value="$(var.ankhVersion)" Type="string" />
+          <RegistryValue Name="AnkhSVN2" Value="$(var.ankhVersion)" Type="string" />
+          <RegistryValue Name="AnkhSVN2_1" Value="$(var.ankhVersion)" Type="string" />
+        </RegistryKey>
       </Component>
       <Component Id="CR_Pkg_2005" Guid="ADF3EF9B-1DF7-4238-93F1-4D47A964F59F">
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Pkg-VS2005" Value="1" Type="integer" KeyPath="yes" />
