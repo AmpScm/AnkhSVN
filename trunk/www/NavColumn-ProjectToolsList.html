@@ -72,17 +72,22 @@ function _loadUserVoice() {
 _loadSuper = window.onload;
 window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); };
 </script>
-  <script type="text/javascript">    
-  <!--
-     var _gaq = _gaq || []; 
-     _gaq.push(['_setAccount', 'UA-15818662-1']); 
-     _gaq.push(['_trackPageview']); 
-     
-     (function() { 
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; 
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; 
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); 
-     })(); 
-  // -->
-  </script>
+<script type="text/javascript">
+<!--
+  var _gaq = _gaq || []; 
+  _gaq.push(['_setAccount', 'UA-15818662-1']); 
+  _gaq.push(['_trackPageview']);
+// -->
+</script>
+<!--[if AnkhSVN]><script type="text/javascript">_gaq.push(['_setCustomVar',1,'HasAnkhSVN','true',1]);</script><![endif]-->
+<!--[if !AnkhSVN]><script type="text/javascript">_gaq.push(['_setCustomVar',1,'HasAnkhSVN','false',1]);</script><![endif]-->
+<script type="text/javascript">
+<!--
+ (function() { 
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; 
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; 
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); 
+ })(); 
+// -->
+</script>
 </div>
