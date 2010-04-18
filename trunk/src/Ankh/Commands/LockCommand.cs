@@ -20,6 +20,9 @@ using Ankh.UI;
 using System.Windows.Forms;
 using Ankh.Scc;
 using Ankh.Configuration;
+using System;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Ankh.Commands
 {
@@ -117,7 +120,7 @@ namespace Ankh.Commands
                 return;
 
 
-            List<string> alreadyLockedFiles = new List<string>();
+            SortedList<string, string> alreadyLockedFiles = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
             e.GetService<IProgressRunner>().RunModal(
                 "Locking",
                  delegate(object sender, ProgressWorkerArgs ee)
@@ -130,7 +133,7 @@ namespace Ankh.Commands
                                       {
                                           if (notifyArgs.Action == SvnNotifyAction.LockFailedLock)
                                           {
-                                              alreadyLockedFiles.Add(notifyArgs.FullPath);
+                                              alreadyLockedFiles.Add(notifyArgs.FullPath, GuessUserFromError(notifyArgs.Error.Message));
                                           }
                                       };
                      ee.Client.Lock(files, la);
@@ -139,19 +142,31 @@ namespace Ankh.Commands
             if (alreadyLockedFiles.Count == 0)
                 return;
 
+            StringBuilder msg = new StringBuilder();
+            msg.AppendLine(CommandStrings.ItemsAlreadyLocked);
+            msg.AppendLine();
+
+            foreach (KeyValuePair<string, string> kv in alreadyLockedFiles)
+            {
+                if (!string.IsNullOrEmpty(kv.Value))
+                    msg.AppendFormat(CommandStrings.ItemFileLocked, kv.Key, kv.Value);
+                else
+                    msg.Append(kv.Key);
+                msg.AppendLine();
+            }
+
             // TODO: Create a dialog where the user can select what locks to steal, and also what files are already locked.
             AnkhMessageBox box = new AnkhMessageBox(e.Context);
             DialogResult rslt = box.Show(
-                "The following items could not be locked, because they were already locked. Do you want to steal the locks on these files? \r\n\r\n" +
-                string.Join("\r\n", alreadyLockedFiles.ToArray()),
-                "Already locked",
+                msg.ToString().TrimEnd(),
+                "",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
             if (rslt == DialogResult.Yes)
             {
                 e.GetService<IProgressRunner>().RunModal(
-                    "Locking",
+                    CommandStrings.LockingTitle,
                      delegate(object sender, ProgressWorkerArgs ee)
                      {
                          SvnLockArgs la = new SvnLockArgs();
@@ -160,6 +175,27 @@ namespace Ankh.Commands
                          ee.Client.Lock(files, la);
                      });
             }
-        } // OnExecute
+        }
+
+        Regex _guessRx;
+        private string GuessUserFromError(string message)
+        {
+            // Parses errors in the formats:
+            // "Path '%s' is already locked by user '%s' in filesystem '%s'" (Used by most languages)
+            // "Pfad »%s« ist bereits vom Benutzer »%s« im Dateisystem »%s« gesperrt" (German)
+            //
+            // Ordering is used in both FS backends and unlikely to change over versions
+            // but additional fields might be added later
+            if (_guessRx == null)
+                _guessRx = new Regex("^[^']+ ['»](?<path>.*?)['«][^']+ ['»](?<user>.*?)['«][^']+( ['»].*?['«][^']*)*$", RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Singleline);
+
+            Match m = _guessRx.Match(message);
+
+            string user = null;
+            if (m.Success)
+                user = m.Groups["user"].Value;
+
+            return user ?? "";
+        }
     }
 }
