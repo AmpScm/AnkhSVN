@@ -1,0 +1,8 @@
+User-agent: CEE
+Disallow: 
+
+User-agent: *
+Disallow: /source/
+Disallow: /search/
+Disallow: /issues/
+Disallow: /servlets/ProjectProcess?pageID=3794
