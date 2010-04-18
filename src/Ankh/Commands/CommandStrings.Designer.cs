@@ -196,6 +196,33 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} (locked by &apos;{1}&apos;).
+        /// </summary>
+        internal static string ItemFileLocked {
+            get {
+                return ResourceManager.GetString("ItemFileLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following items could not be locked, because they were already locked. Do you want to try to steal the locks on these files?.
+        /// </summary>
+        internal static string ItemsAlreadyLocked {
+            get {
+                return ResourceManager.GetString("ItemsAlreadyLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locking.
+        /// </summary>
+        internal static string LockingTitle {
+            get {
+                return ResourceManager.GetString("LockingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Renaming.
         /// </summary>
         internal static string RenamingNodes {

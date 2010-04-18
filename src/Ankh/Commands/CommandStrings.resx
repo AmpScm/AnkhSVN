@@ -201,4 +201,13 @@
   <data name="RevertDialogTitle" xml:space="preserve">
     <value>Select Items to Revert</value>
   </data>
+  <data name="ItemFileLocked" xml:space="preserve">
+    <value>{0} (locked by '{1}')</value>
+  </data>
+  <data name="ItemsAlreadyLocked" xml:space="preserve">
+    <value>The following items could not be locked, because they were already locked. Do you want to try to steal the locks on these files?</value>
+  </data>
+  <data name="LockingTitle" xml:space="preserve">
+    <value>Locking</value>
+  </data>
 </root>
