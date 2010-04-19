@@ -177,7 +177,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="ProjectFile">The project file.</param>
         /// <param name="sure">if sure set to <c>true</c>.. <c>false</c> if the editory should be queried.</param>
-        public void SetDirty(string path, bool sure)
+        public void ForceDirty(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
@@ -186,10 +186,7 @@ namespace Ankh.Scc
 
             if (_docMap.TryGetValue(path, out data))
             {
-                if (sure)
-                    data.SetDirty(true);
-                else
-                    data.CheckDirty();
+                data.SetDirty(true);
             }
         }
 
