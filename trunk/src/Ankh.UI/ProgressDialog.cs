@@ -112,7 +112,7 @@ namespace Ankh.UI
                 item.SubItems.Add(type.ToString());
                 item.ForeColor = Color.Gray;
 
-                if (actionList.Items.Count == 1)
+                if (actionList.Items.Count == 1 && _toAdd.Count == 0)
                     actionList.Items.Clear();
                 actionList.Items.Add(item);
             });
@@ -217,9 +217,7 @@ namespace Ankh.UI
                 }
 
                 if (item != null)
-                {
-                    actionList.Items.Add(item);
-                }
+                    _toAdd.Add(actionList.Items.Add(item));
             });
         }
 
@@ -360,8 +358,9 @@ namespace Ankh.UI
                     // Don't kill svn on a failed begin invoke
                 }
             }
-        }              
+        }
 
+		readonly List<ListViewItem> _toAdd = new List<ListViewItem>();
         void RunQueue()
         {
             AnkhAction[] actions;
@@ -377,6 +376,12 @@ namespace Ankh.UI
             foreach (AnkhAction ds in actions)
             {
                 ds();
+            }
+
+            if (_toAdd.Count > 0)
+            {
+                actionList.Items.AddRange(_toAdd.ToArray());
+                _toAdd.Clear();
             }
 
             if (actionList.Items.Count != n)
