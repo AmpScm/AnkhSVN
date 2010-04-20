@@ -84,7 +84,7 @@ namespace Ankh.UI.PendingChanges
             set
             {
                 _wordWrapMode = value;
-                if(_nativeWindow != null)
+                if (_nativeWindow != null)
                 {
                     _nativeWindow.SetWordWrapMode(value);
                 }
@@ -179,7 +179,7 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        
+
 
         public event EventHandler<TextViewScrollEventArgs> Scroll;
 
@@ -361,6 +361,18 @@ namespace Ankh.UI.PendingChanges
         public IOleCommandTarget CommandTarget
         {
             get { return _nativeWindow; }
+        }
+
+        [CLSCompliant(false)]
+        public IOleCommandTarget EditorCommandTarget
+        {
+            get
+            {
+                if (_nativeWindow != null)
+                    return _nativeWindow.EditorCommandTarget;
+                else
+                    return null;
+            }
         }
 
         protected override CreateParams CreateParams
@@ -1114,7 +1126,7 @@ namespace Ankh.UI.PendingChanges
             if (HasFocus)
                 return commandTarget.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
             else
-                return (int) OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
         }
 
 
@@ -1131,7 +1143,12 @@ namespace Ankh.UI.PendingChanges
             if (HasFocus)
                 return commandTarget.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
             else
-                return (int) OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+        }
+
+        public IOleCommandTarget EditorCommandTarget
+        {
+            get { return commandTarget; }
         }
 
         public bool HasFocus
