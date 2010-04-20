@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.8248</title>
+          AnkhSVN-Daily Update - 2.1.8258</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,25 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3283/AnkhSvn-Daily-2.1.8248.483.msi">AnkhSVN 2.1.8248</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3285/AnkhSvn-Daily-2.1.8258.484.msi">AnkhSVN 2.1.8258</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8248">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8258">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-04-19</td></tr>
+<tr><td> </td><td class="r"><a id="8251" href="http://ankhsvn.net/rev/?r=8251">
+            [r8251]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> ProgressDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use .AddRange() to update the progress view dialog to handle larger
+update/checkout operations better.</td></tr>
 <tr class="d"><td colspan="4">2010-04-18</td></tr>
 <tr><td> </td><td class="r"><a id="8238" href="http://ankhsvn.net/rev/?r=8238">
             [r8238]
@@ -156,34 +161,6 @@ against other revisions when there are no local changes.</td></tr>
             [r8003]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Package/Gui:</strong> AnkhSvn.xml, Gui-Common.xsl, Gui-To-Ctc.xsl, Gui-To-Vsct.xsl</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update namespace of our Gui files to stop using studioturtle.net,
 as that domain has expired.</td></tr>
-<tr><td> </td><td class="r"><a id="8001" href="http://ankhsvn.net/rev/?r=8001">
-            [r8001]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/MergeWizard:</strong> MergeStrings.resx, MergeStrings.Designer.cs, WizardFramework/WizardPage.cs, WizardFramework/Wizard.cs, MergeWizard.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix the merge wizard header image and text updating. Also remove an unused
-icon resource.</td></tr>
-<tr><td> </td><td class="r"><a id="7999" href="http://ankhsvn.net/rev/?r=7999">
-            [r7999]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> MergeWizard/WizardFramework/WizardPageCollection.cs, MergeWizard/BaseWizardPage.cs, MergeWizard/WizardFramework/WizardPageChangingEventArgs.cs, MergeWizard/WizardFramework/Wizard.resx, MergeWizard/MergeWizard.resx, MergeWizard/WizardFramework/WizardDialog.Designer.cs, MergeWizard/MergeTypePage.cs, MergeWizard/WizardFramework/WizardDialog.cs, MergeWizard/Commands/Merge.cs, MergeWizard/MergeWizardDialog.cs, MergeWizard/MergeRevisionsSelectionPage.cs, MergeWizard/WizardFramework/WizardPageChangedEventArgs.cs, MergeWizard/MergeOptionsPage.cs, MergeWizard/MergeSourceBasePage.cs (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix handling of titles and make serviceprovider initialization
-automatic.</td></tr>
-<tr><td> </td><td class="r"><a id="7998" href="http://ankhsvn.net/rev/?r=7998">
-            [r7998]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> MergeWizard/BaseWizardPage.Designer.cs, MergeWizard/BaseWizardPage.cs, MergeWizard/WizardFramework/IWizardContainer.cs, MergeWizard/WizardFramework/WizardDialog.cs, MergeWizard/MergeSourceTwoDifferentTreesPage.Designer.cs, MergeWizard/WizardFramework/IWizardPageChangeProvider.cs, MergeWizard/MergeSourceReintegratePageControl.Wizard.cs, MergeWizard/BasePageControl.Designer.cs, MergeWizard/BasePageControl.Wizard.cs, MergeWizard/MergeOptionsPage.Designer.cs, MergeWizard/MergeSourceReintegratePage.cs, MergeWizard/BasePageControl.cs, MergeWizard/MergeOptionsPage.cs, MergeWizard/MergeOptionsPageControl.Designer.cs (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Bring more of the Wizard framework and its usages to the .Net world.
-We don't need multiple dialog handlers at once inside AnkhSVN.</td></tr>
-<tr><td> </td><td class="r"><a id="7997" href="http://ankhsvn.net/rev/?r=7997">
-            [r7997]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> MergeWizard/MergeBestPracticesPageControl.resx, MergeWizard/MergeSourceManuallyRemovePageControl.cs, MergeWizard/MergeConflictHandlerDialog.cs, MergeWizard/MergeRevisionsSelectionPageControl.cs, MergeWizard/MergeSourceReintegratePageControl.Designer.cs, Ankh.UI.csproj, MergeWizard/MergeOptionsPageControl.Designer.cs, MergeWizard/MergeBestPracticesPageControl.cs, MergeWizard/MergeSourceManuallyRemovePage.resx, MergeWizard/MergeSourceManuallyRecordPage.Designer.cs, MergeWizard/MergeSourceRangeOfRevisionsPageControl.Designer.cs, MergeWizard/MergeSourceRangeOfRevisionsPageControl.cs, MergeWizard/MergeSourceBasePage.resx, MergeWizard/MergeSourceManuallyRecordPageControl.resx (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Standardize file naming withing the merge wizard (s/PageControl$/Page/)</td></tr>
-<tr><td> </td><td class="r"><a id="7996" href="http://ankhsvn.net/rev/?r=7996">
-            [r7996]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> MergeWizard/MergeSourceBasePageControl.resx, Ankh.UI.csproj, MergeWizard/MergeSourceTwoDifferentTreesPageControl.resx</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix positioning of Working Copy box.</td></tr>
-<tr><td> </td><td class="r"><a id="7995" href="http://ankhsvn.net/rev/?r=7995">
-            [r7995]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> MergeWizard/MergeSourceBasePageControl.resx, MergeWizard/WizardFramework/IWizardContainer.cs, MergeWizard/WizardFramework/WizardDialog.Designer.cs, MergeWizard/WizardFramework/WizardDialog.cs, MergeWizard/UIUtils.cs, MergeWizard/MergeSourceManuallyRemovePageControl.cs, MergeWizard/MergeTypePageControl.cs, MergeWizard/MergeWizardDialog.cs, MergeWizard/WizardFramework/IWizardPageChangeProvider.cs, MergeWizard/MergeRevisionsSelectionPageControl.cs, MergeWizard/BasePageControl.Wizard.cs, MergeWizard/MergeSourceReintegratePageControl.Wizard.cs, MergeWizard/BasePageControl.cs, Ankh.UI.csproj (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Show the target of the merge operation on the Select Merge Source page
-in the merge wizard, to reduce the number of surprises on merging on
-a solution when users check out the repository root (or something like that).<br>
-Also apply a namespace rename on the Wizard code.</td></tr>
-<tr><td> </td><td class="r"><a id="7994" href="http://ankhsvn.net/rev/?r=7994">
-            [r7994]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/MergeWizard/WizardFramework:</strong> WizardPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make .Image property more robust to allow using the
-designer.</td></tr>
 
 </table>
 <!--/Recent changes-->
