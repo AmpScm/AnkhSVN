@@ -58,7 +58,7 @@ namespace Ankh.UI
             set
             {
                 _caption = value;
-                Text = string.Format(_title, _caption).TrimStart().TrimStart('-',' ');
+                Text = string.Format(_title, _caption).TrimStart().TrimStart('-', ' ');
             }
         }
 
@@ -66,16 +66,16 @@ namespace Ankh.UI
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         class ProgressState
@@ -90,7 +90,7 @@ namespace Ankh.UI
         bool _queued;
         DateTime _start;
         long _bytesReceived;
-        
+
         readonly SortedList<long, ProgressState> _progressCalc = new SortedList<long, ProgressState>();
 
         public void OnClientProcessing(object sender, SvnProcessingEventArgs e)
@@ -150,13 +150,13 @@ namespace Ankh.UI
         {
             base.OnSizeChanged(e);
 
-            if(!DesignMode)
+            if (!DesignMode)
                 ResizeToFit();
         }
 
-        protected override void  OnLoad(EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
- 	        base.OnLoad(e);
+            base.OnLoad(e);
 
             if (!DesignMode)
                 ResizeToFit();
@@ -193,7 +193,7 @@ namespace Ankh.UI
         }
 
         public void OnClientNotify(object sender, SvnNotifyEventArgs e)
-        {            
+        {
             //e.Detach();
 
             string path = e.FullPath;
@@ -202,7 +202,7 @@ namespace Ankh.UI
             Enqueue(delegate()
             {
                 ListViewItem item = null;
-                if(!string.IsNullOrEmpty(path))
+                if (!string.IsNullOrEmpty(path))
                 {
                     item = new ListViewItem(GetActionText(action));
 
@@ -217,7 +217,7 @@ namespace Ankh.UI
                 }
 
                 if (item != null)
-                    _toAdd.Add(actionList.Items.Add(item));
+                    _toAdd.Add(item);
             });
         }
 
@@ -274,12 +274,12 @@ namespace Ankh.UI
             if (_curBuck < 3)
                 calcBuckets = 0;
             else
-                calcBuckets = Math.Min(5,  _curBuck - 1);
+                calcBuckets = Math.Min(5, _curBuck - 1);
 
             if (calcBuckets > 0)
             {
                 long tot = 0;
-                for (int n = _curBuck - 1; n > (_curBuck - calcBuckets-1); n--)
+                for (int n = _curBuck - 1; n > (_curBuck - calcBuckets - 1); n--)
                 {
                     tot += _buckets[n % _bucketCount];
                 }
@@ -289,7 +289,7 @@ namespace Ankh.UI
 
             Enqueue(delegate()
             {
-                string text= string.Format("{0} transferred", SizeStr(_bytesReceived));
+                string text = string.Format("{0} transferred", SizeStr(_bytesReceived));
 
                 if (avg > 0)
                     text += string.Format(" at {0}/s.", SizeStr(avg));
@@ -327,7 +327,7 @@ namespace Ankh.UI
         volatile bool _canceling; // Updated from UI thread, read from command thread
         void OnClientCancel(object sender, SvnCancelEventArgs e)
         {
-            if(_canceling)
+            if (_canceling)
                 e.Cancel = true;
         }
 
@@ -341,10 +341,10 @@ namespace Ankh.UI
             if (task == null)
                 return;
 
-            lock(_todo)
+            lock (_todo)
             {
                 _todo.Add(task);
-                
+
                 try
                 {
                     if (!_queued && IsHandleCreated)
@@ -354,17 +354,17 @@ namespace Ankh.UI
                     }
                 }
                 catch
-                { 
+                {
                     // Don't kill svn on a failed begin invoke
                 }
             }
         }
 
-		readonly List<ListViewItem> _toAdd = new List<ListViewItem>();
+        readonly List<ListViewItem> _toAdd = new List<ListViewItem>();
         void RunQueue()
         {
             AnkhAction[] actions;
-            lock(_todo)
+            lock (_todo)
             {
                 _queued = false;
                 actions = _todo.ToArray();
@@ -380,8 +380,9 @@ namespace Ankh.UI
 
             if (_toAdd.Count > 0)
             {
-                actionList.Items.AddRange(_toAdd.ToArray());
+                ListViewItem[] items = _toAdd.ToArray();
                 _toAdd.Clear();
+                actionList.Items.AddRange(items);
             }
 
             if (actionList.Items.Count != n)
@@ -396,7 +397,7 @@ namespace Ankh.UI
             if (client == null)
                 throw new ArgumentNullException("client");
             client.Processing += new EventHandler<SvnProcessingEventArgs>(OnClientProcessing);
-            client.Notify += new EventHandler<SvnNotifyEventArgs>(OnClientNotify);            
+            client.Notify += new EventHandler<SvnNotifyEventArgs>(OnClientNotify);
             client.Progress += new EventHandler<SvnProgressEventArgs>(OnClientProgress);
             client.Cancel += new EventHandler<SvnCancelEventArgs>(OnClientCancel);
 
@@ -442,12 +443,12 @@ namespace Ankh.UI
 
             if (Cancel != null)
                 Cancel(this, EventArgs.Empty);
-            this.args.SetCancelled( true );
+            this.args.SetCancelled(true);
             this.cancelButton.Text = "Cancelling...";
             this.cancelButton.Enabled = false;
         }
-        
-        private ProgressStatusEventArgs args = new ProgressStatusEventArgs();        
+
+        private ProgressStatusEventArgs args = new ProgressStatusEventArgs();
     }
 
     /// <summary>
@@ -460,8 +461,8 @@ namespace Ankh.UI
         /// </summary>
         public bool Done
         {
-            get{ return this.done; }
-            set{ this.done = value; }
+            get { return this.done; }
+            set { this.done = value; }
         }
 
         /// <summary>
@@ -471,12 +472,12 @@ namespace Ankh.UI
         /// </summary>
         public bool Cancelled
         {
-            get{ return this.cancelled; }
+            get { return this.cancelled; }
         }
-        
-        internal void SetCancelled( bool val )
+
+        internal void SetCancelled(bool val)
         {
-            this.cancelled = val; 
+            this.cancelled = val;
         }
 
         private bool done;
