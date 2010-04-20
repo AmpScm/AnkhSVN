@@ -20,13 +20,16 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Forms;
 
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
+
 using SharpSvn;
 
+using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.Scc.UI;
 using Ankh.UI.PendingChanges;
 using Ankh.UI.VSSelectionControls;
-
 
 namespace Ankh.UI.Annotate
 {
@@ -202,6 +205,40 @@ namespace Ankh.UI.Annotate
                 SelectionChanged(this, EventArgs.Empty);
 
             _map.NotifySelectionUpdated();
+        }
+
+        bool _disabledOutlining;
+        protected override void OnFrameLoaded(EventArgs e)
+        {
+            base.OnFrameLoaded(e);
+
+            editor.Select(); // This should enable the first OnIdle to disable the outlining
+            DisableOutliningOnIdle();
+        }
+
+        void DisableOutliningOnIdle()
+        {
+            Context.GetService<IAnkhCommandService>().PostIdleAction(DisableOutlining);
+        }
+
+        void DisableOutlining()
+        {
+            if (!IsDisposed && !_disabledOutlining)
+            {
+                Guid vs2kcmds = VSConstants.VSStd2K;
+                if (editor.ContainsFocus)
+                {
+                    int n = editor.EditorCommandTarget.Exec(ref vs2kcmds, (uint)VSConstants.VSStd2KCmdID.OUTLN_STOP_HIDING_ALL, (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
+
+                    if (n == 0)
+                    {
+                        _disabledOutlining = true;
+                        return;
+                    }
+                }
+
+                DisableOutliningOnIdle();
+            }
         }
 
         #region ISelectionMapOwner<IAnnotateSection> Members
