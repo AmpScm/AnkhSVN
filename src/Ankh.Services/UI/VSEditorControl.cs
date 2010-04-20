@@ -19,18 +19,27 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
-using Ankh.VS;
-using Microsoft.VisualStudio.Shell.Interop;
 using System.Runtime.InteropServices;
+
 using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using IOleConnectionPoint = Microsoft.VisualStudio.OLE.Interop.IConnectionPoint;
+using IOleConnectionPointContainer = Microsoft.VisualStudio.OLE.Interop.IConnectionPointContainer;
+
+using Ankh.VS;
+using Ankh.Scc.UI;
+using System.Drawing;
+
 
 namespace Ankh.UI
 {
-    public class VSEditorControl : UserControl, IVSEditorControlInit
+    public class VSEditorControl : UserControl, IVSEditorControlInit, IVsWindowFrameNotify, IVsWindowFrameNotify2, IVsWindowFrameNotify3
     {
         IAnkhServiceProvider _context;
         IAnkhEditorPane _pane;
         IVsWindowFrame _frame;
+        uint _frameNotifyCookie;
 
         public VSEditorControl()
         {
@@ -89,7 +98,7 @@ namespace Ankh.UI
             Marshal.ThrowExceptionForHR((_frame.SetGuidProperty((int)propId, ref value)));
         }
 
-        [Browsable(false),DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Guid KeyboardContext
         {
             get { return GetGuid(__VSFPROPID.VSFPROPID_InheritKeyBindings); }
@@ -170,7 +179,132 @@ namespace Ankh.UI
             if (_targets != null && pane != null)
                 foreach (IOleCommandTarget t in _targets)
                     _pane.AddCommandTarget(t);
+
+            IVsWindowFrame2 frame2 = _frame as IVsWindowFrame2;
+
+            if (frame2 != null)
+            {
+                if (frame2.Advise(this, out _frameNotifyCookie) != 0)
+                    _frameNotifyCookie = 0;
+            }
+
+            OnFrameLoaded(EventArgs.Empty);
         }
+
+        protected virtual void OnFrameLoaded(EventArgs e)
+        {
+        }
+
+        protected virtual void OnFrameSize(FrameEventArgs e)
+        {
+        }
+
+        protected virtual void OnFrameDockableChanged(FrameEventArgs e)
+        {
+        }
+
+        protected virtual void OnFrameClose(EventArgs e)
+        {
+        }
+
+        protected virtual void OnFrameMove(FrameEventArgs e)
+        {
+        }
+
+        protected virtual void OnFrameShow(FrameEventArgs e)
+        {
+        }
+
+        #region IVsWindowFrameNotify* Members
+
+        int IVsWindowFrameNotify2.OnClose(ref uint pgrfSaveOptions)
+        {
+            if (_frameNotifyCookie != 0)
+                try
+                {
+                    IVsWindowFrame2 frame2 = _frame as IVsWindowFrame2;
+
+                    if (frame2 != null)
+                        frame2.Unadvise(_frameNotifyCookie);
+                }
+                finally
+                {
+                    _frameNotifyCookie = 0;
+                }
+
+            OnFrameClose(EventArgs.Empty);
+
+            return 0;
+        }
+
+        int IVsWindowFrameNotify3.OnDockableChange(int fDockable, int x, int y, int w, int h)
+        {
+            OnFrameDockableChanged(new FrameEventArgs(fDockable != 0, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
+
+            return 0;
+        }
+
+        int IVsWindowFrameNotify3.OnMove(int x, int y, int w, int h)
+        {
+            OnFrameMove(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
+
+            return 0;
+        }
+
+        int IVsWindowFrameNotify.OnShow(int fShow)
+        {
+            OnFrameShow(new FrameEventArgs(false, Rectangle.Empty, (__FRAMESHOW)fShow));
+
+            return 0;
+        }
+
+        int IVsWindowFrameNotify3.OnShow(int fShow)
+        {
+            OnFrameShow(new FrameEventArgs(false, Rectangle.Empty, (__FRAMESHOW)fShow));
+
+            return 0;
+        }
+
+        int IVsWindowFrameNotify3.OnSize(int x, int y, int w, int h)
+        {
+            OnFrameSize(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
+
+            return 0;
+        }
+
+        #endregion
+
+        #region IVsWindowFrameNotify Members
+
+        int IVsWindowFrameNotify.OnDockableChange(int fDockable)
+        {
+            OnFrameDockableChanged(new FrameEventArgs(fDockable != 0, new Rectangle(0, 0, 0, 0), (__FRAMESHOW)0));
+            return 0;
+        }
+
+        int IVsWindowFrameNotify.OnMove()
+        {
+            OnFrameMove(new FrameEventArgs(false, new Rectangle(0, 0, 0, 0), (__FRAMESHOW)0));
+            return 0;
+        }
+
+        int IVsWindowFrameNotify.OnSize()
+        {
+            OnFrameSize(new FrameEventArgs(false, new Rectangle(0, 0, 0, 0), (__FRAMESHOW)0));
+            return 0;
+        }
+
+        #endregion
+
+        #region IVsWindowFrameNotify3 Members
+
+        int IVsWindowFrameNotify3.OnClose(ref uint pgrfSaveOptions)
+        {
+            OnFrameClose(EventArgs.Empty);
+            return 0;
+        }
+
+        #endregion
     }
 
     [CLSCompliant(false)]
