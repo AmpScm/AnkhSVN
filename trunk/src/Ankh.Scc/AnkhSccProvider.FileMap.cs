@@ -42,11 +42,17 @@ namespace Ankh.Scc
         //
         readonly Dictionary<string, SccProjectFile> _fileMap = new Dictionary<string, SccProjectFile>(StringComparer.OrdinalIgnoreCase);
         IAnkhSolutionSettings _solutionSettings;
+        IPendingChangesManager _pendingChanges;
         bool _syncMap;
 
         IAnkhSolutionSettings SolutionSettings
         {
             get { return _solutionSettings ?? (_solutionSettings = GetService<IAnkhSolutionSettings>()); }
+        }
+
+        IPendingChangesManager PendingChanges
+        {
+            get { return _pendingChanges ?? (_pendingChanges = GetService<IPendingChangesManager>()); }
         }
 
         /// <summary>
@@ -418,6 +424,7 @@ namespace Ankh.Scc
             Debug.Assert(_fileMap[file.FullPath] == file);
 
             _fileMap.Remove(file.FullPath);
+            PendingChanges.Refresh(file.FullPath);
         }
         #endregion
 
