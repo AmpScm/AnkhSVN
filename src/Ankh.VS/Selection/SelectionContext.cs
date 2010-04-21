@@ -217,7 +217,8 @@ namespace Ankh.VS.Selection
                         string solutionDir, solutionFile, solutionUserFile;
                         if (ErrorHandler.Succeeded(Solution.GetSolutionInfo(out solutionDir, out solutionFile, out solutionUserFile)))
                         {
-                            _solutionFilename = SvnItem.IsValidPath(solutionFile) ? SvnTools.GetTruePath(solutionFile, true) : solutionFile;
+                            if (!string.IsNullOrEmpty(solutionFile))
+                                _solutionFilename = SvnItem.IsValidPath(solutionFile) ? SvnTools.GetTruePath(solutionFile, true) : solutionFile;
                         }
                     }
                 }
