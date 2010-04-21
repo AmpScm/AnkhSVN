@@ -94,7 +94,9 @@ namespace Ankh.Commands.RepositoryExplorer
                             e.GetService<IProgressRunner>().RunModal("Copying",
                                 delegate(object sender, ProgressWorkerArgs a)
                                 {
-                                    a.Client.Delete(copyTo);
+                                    SvnDeleteArgs da = new SvnDeleteArgs();
+                                    da.Force = true;
+                                    a.Client.Delete(copyTo, da);
                                 });
                         else
                             File.Delete(copyTo);
