@@ -775,8 +775,7 @@ namespace Ankh.UI.RepositoryExplorer
                     CancelEventArgs c = new CancelEventArgs();
                     OnAfterEdit(_editItem, e.Label, c);
 
-                    if (c.Cancel)
-                        e.CancelEdit = true;
+                    e.CancelEdit = true;
                 }
             }
             finally
@@ -804,7 +803,7 @@ namespace Ankh.UI.RepositoryExplorer
                 return;
             }
 
-            Context.GetService<IAnkhCommandService>().DirectlyExecCommand(AnkhCommand.RenameRepositoryItem, new string[] { newName });
+            CommandResult cr = Context.GetService<IAnkhCommandService>().DirectlyExecCommand(AnkhCommand.RenameRepositoryItem, new string[] { newName });
         }
 
         internal void DoCreateDirectory()
