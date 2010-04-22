@@ -1,0 +1,18 @@
+﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+		<ComponentGroup Id="Ankh.Diff">
+      <ComponentGroupRef Id="Ankh.Ids"/>
+      <ComponentGroupRef Id="Ankh.Services"/>
+      <ComponentRef Id="C_Ankh.Diff.dll"/>
+    </ComponentGroup>
+		<DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.UI.TargetDir)">
+			<Component Id="C_Ankh.Diff.dll" Guid="344ECAA1-5D4B-423E-B05A-F906805110AB">
+				<File Id="CF_Ankh.Diff.dll" Name="Ankh.Diff.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
+				<?ifdef Ankh_Pdb?>
+				<File Id="CF_Ankh.Diff.pdb" Name="Ankh.Diff.pdb" Checksum="yes" Vital="yes" />
+				<?endif?>
+			</Component>
+			<!-- TODO: Add localized resource dll's -->
+		</DirectoryRef>
+	</Fragment>
+</Wix>

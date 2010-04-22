@@ -1,0 +1,15 @@
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+		<ComponentGroup Id="Ankh.Migrate">
+			<ComponentRef Id="C_Ankh.Migrate.dll"/>
+		</ComponentGroup>
+		<DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Migrate.TargetDir)">
+			<Component Id="C_Ankh.Migrate.dll" DiskId="1" Guid="B53EECB4-16D8-4E9F-93F6-346C34307822">
+				<File Id="CF_Ankh.Migrate.dll" Name="Ankh.Migrate.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
+				<?ifdef Ankh_Pdb?>
+				<File Id="CF_Ankh.Migrate.pdb" Name="Ankh.Migrate.pdb" Checksum="yes" Vital="yes" />
+				<?endif?>
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+</Wix>

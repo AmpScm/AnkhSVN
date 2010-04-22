@@ -1,0 +1,17 @@
+﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+		<ComponentGroup Id="Ankh.VS">
+      <ComponentGroupRef Id="Ankh.Ids"/>
+      <ComponentGroupRef Id="Ankh.Services"/>
+			<ComponentRef Id="C_Ankh.VS.dll"/>
+		</ComponentGroup>
+		<DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.VS.TargetDir)">
+			<Component Id="C_Ankh.VS.dll" Guid="409EE57D-F691-426B-B265-95693BACE22C">
+				<File Id="CF_Ankh.VS.dll" Name="Ankh.VS.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
+				<?ifdef Ankh_Pdb?>
+				<File Id="CF_Ankh.VS.dll" Name="Ankh.VS.pdb" Checksum="yes" Vital="yes" />
+				<?endif?>
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+</Wix>
