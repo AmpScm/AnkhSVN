@@ -49,6 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Definitions", "Definitions"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
+		tools\Ankh-Common.targets = tools\Ankh-Common.targets
 		BUILD.txt = BUILD.txt
 		CHANGES.txt = CHANGES.txt
 		CONTRIBUTORS.txt = CONTRIBUTORS.txt
@@ -303,7 +304,7 @@ Global
 		{D81A44B8-57A9-4296-832C-7D29019D989B} = {7207B9A7-E4B0-49D4-9F09-16CF29D38835}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 EndGlobal
