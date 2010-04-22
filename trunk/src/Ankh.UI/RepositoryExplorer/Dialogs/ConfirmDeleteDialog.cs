@@ -67,7 +67,7 @@ namespace Ankh.UI.RepositoryExplorer.Dialogs
             foreach (SvnOrigin o in d.Values)
             {
                 deleteList.Items.Add(o.Uri);
-                newUris.Add(SvnTools.GetNormalizedUri(o.Uri));                
+                newUris.Add(SvnTools.GetNormalizedUri(o.Uri));
             }
             _uris = newUris.ToArray();
         }
