@@ -217,14 +217,14 @@ namespace Ankh.VS.Selection
                         string solutionDir, solutionFile, solutionUserFile;
                         if (ErrorHandler.Succeeded(Solution.GetSolutionInfo(out solutionDir, out solutionFile, out solutionUserFile)))
                         {
-                            if (solutionFile == null)
+                            if (string.IsNullOrEmpty(solutionFile))
                                 _solutionFilename = "";
                             else
                                 _solutionFilename = SvnItem.IsValidPath(solutionFile) ? SvnTools.GetTruePath(solutionFile, true) : solutionFile;
                         }
                     }
                 }
-                return _solutionFilename;
+                return string.IsNullOrEmpty(_solutionFilename) ? null : _solutionFilename;
             }
         }
 
