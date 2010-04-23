@@ -82,7 +82,7 @@ namespace Ankh.Commands.RepositoryExplorer
                     if (DialogResult.OK != sfd.ShowDialog(e.Context.DialogOwner))
                         return;
 
-                    copyTo = Path.GetFullPath(sfd.FileName);
+                    copyTo = SvnTools.GetNormalizedFullPath(sfd.FileName);
 
                     SvnItem fileItem = cache[copyTo];
 

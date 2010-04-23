@@ -309,7 +309,7 @@ namespace Ankh.Commands
                     IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
                     IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
 
-                    settings.ProjectRoot = Path.GetFullPath(dialog.WorkingCopyDir);
+                    settings.ProjectRoot = SvnTools.GetNormalizedFullPath(dialog.WorkingCopyDir);
 
                     if (monitor != null && mapper != null)
                     {
