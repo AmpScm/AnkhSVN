@@ -169,7 +169,7 @@ namespace Ankh.Scc
                 return; // Not managed by us
 
             // Add a directory like a folder but with an ending '\'
-            data.AddPath(Path.GetFullPath(directoryname).TrimEnd('\\') + '\\');
+            data.AddPath(SvnTools.GetNormalizedFullPath(directoryname).TrimEnd('\\') + '\\');
 
             if (!IsActive)
                 return;
