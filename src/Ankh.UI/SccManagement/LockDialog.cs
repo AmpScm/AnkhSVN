@@ -25,7 +25,7 @@ using Microsoft.VisualStudio;
 using Ankh.Commands;
 using Ankh.UI.PathSelector;
 
-namespace Ankh.UI
+namespace Ankh.UI.SccManagement
 {
     /// <summary>
     /// The dialog to lock SVN items.

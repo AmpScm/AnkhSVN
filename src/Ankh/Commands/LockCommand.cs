@@ -14,15 +14,17 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using SharpSvn;
-using System.Collections.Generic;
-using Ankh.UI;
-using System.Windows.Forms;
-using Ankh.Scc;
-using Ankh.Configuration;
 using System;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+
+using SharpSvn;
+
+using Ankh.Configuration;
+using Ankh.UI;
+using Ankh.UI.SccManagement;
 
 namespace Ankh.Commands
 {
