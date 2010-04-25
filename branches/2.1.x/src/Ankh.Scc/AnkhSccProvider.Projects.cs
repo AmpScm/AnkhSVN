@@ -503,9 +503,6 @@ namespace Ankh.Scc
             {
                 trackCopies = true;
 
-                if (_syncMap)
-                    data.Load();
-
                 if (data.IsWebSite)
                 {
                     int busy;
@@ -516,6 +513,9 @@ namespace Ankh.Scc
                         trackCopies = false;
                     }
                 }
+                else if (_syncMap)
+                    data.Load();
+
 
                 return data.TrackProjectChanges(); // Allows temporary disabling changes
             }
