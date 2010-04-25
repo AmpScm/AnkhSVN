@@ -574,14 +574,15 @@ namespace Ankh.UI.PendingChanges
         [Browsable(true)]
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [DefaultValue("")]
         public override string Text
         {
             get
             {
                 if (_nativeWindow != null)
-                    return _text = _nativeWindow.Text;
+                    return (_text = _nativeWindow.Text) ?? "";
                 else
-                    return _text;
+                    return _text ?? "";
             }
             set
             {
