@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI
+namespace Ankh.UI.SccManagement
 {
     partial class LockDialog
     {
@@ -29,15 +29,16 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.suppressLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.stealLocksCheckBox = new System.Windows.Forms.CheckBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.pathSelectionTreeView = new Ankh.UI.PathSelector.PathSelectionTreeView();
-            this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor();
             this.label2 = new System.Windows.Forms.Label();
+            this.pathSelectionTreeView = new Ankh.UI.PathSelector.PathSelectionTreeView();
+            this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -70,7 +71,7 @@ namespace Ankh.UI
             this.btnCancel.Location = new System.Drawing.Point(289, 362);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 24);
-            this.btnCancel.TabIndex = 4;
+            this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "Cancel";
             // 
             // okButton
@@ -81,7 +82,7 @@ namespace Ankh.UI
             this.okButton.Location = new System.Drawing.Point(208, 362);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 24);
-            this.okButton.TabIndex = 3;
+            this.okButton.TabIndex = 2;
             this.okButton.Text = "OK";
             // 
             // stealLocksCheckBox
@@ -91,7 +92,7 @@ namespace Ankh.UI
             this.stealLocksCheckBox.Location = new System.Drawing.Point(12, 362);
             this.stealLocksCheckBox.Name = "stealLocksCheckBox";
             this.stealLocksCheckBox.Size = new System.Drawing.Size(82, 17);
-            this.stealLocksCheckBox.TabIndex = 2;
+            this.stealLocksCheckBox.TabIndex = 1;
             this.stealLocksCheckBox.Text = "&Steal Locks";
             // 
             // splitContainer1
@@ -117,6 +118,15 @@ namespace Ankh.UI
             this.splitContainer1.SplitterDistance = 156;
             this.splitContainer1.TabIndex = 0;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(0, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "&File Paths:";
+            // 
             // pathSelectionTreeView
             // 
             this.pathSelectionTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -129,7 +139,7 @@ namespace Ankh.UI
             this.pathSelectionTreeView.Recursive = false;
             this.pathSelectionTreeView.SingleCheck = false;
             this.pathSelectionTreeView.Size = new System.Drawing.Size(355, 137);
-            this.pathSelectionTreeView.TabIndex = 0;
+            this.pathSelectionTreeView.TabIndex = 1;
             this.pathSelectionTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.pathSelectionTreeView_AfterCheck);
             // 
             // logMessageEditor
@@ -142,16 +152,6 @@ namespace Ankh.UI
             this.logMessageEditor.Name = "logMessageEditor";
             this.logMessageEditor.Size = new System.Drawing.Size(355, 139);
             this.logMessageEditor.TabIndex = 1;
-            this.logMessageEditor.Text = null;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(0, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "&File Paths:";
             // 
             // LockDialog
             // 
@@ -165,7 +165,7 @@ namespace Ankh.UI
             this.Controls.Add(this.stealLocksCheckBox);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.btnCancel);
-            this.MinimumSize = new System.Drawing.Size(100, 36);
+            this.MinimumSize = new System.Drawing.Size(100, 38);
             this.Name = "LockDialog";
             this.Text = "Lock";
             this.splitContainer1.Panel1.ResumeLayout(false);
