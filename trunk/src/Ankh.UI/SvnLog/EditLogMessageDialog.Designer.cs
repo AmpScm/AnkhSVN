@@ -82,7 +82,6 @@ namespace Ankh.UI.SvnLog
             this.logMessageEditor.Name = "logMessageEditor";
             this.logMessageEditor.Size = new System.Drawing.Size(472, 240);
             this.logMessageEditor.TabIndex = 0;
-            this.logMessageEditor.Text = null;
             // 
             // EditLogMessageDialog
             // 

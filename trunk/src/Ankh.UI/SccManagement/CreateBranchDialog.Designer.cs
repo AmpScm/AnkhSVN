@@ -293,7 +293,6 @@ namespace Ankh.UI.SccManagement
             this.logMessage.Name = "logMessage";
             this.logMessage.Size = new System.Drawing.Size(397, 155);
             this.logMessage.TabIndex = 3;
-            this.logMessage.Text = null;
             // 
             // CreateBranchDialog
             // 

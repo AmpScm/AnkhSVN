@@ -154,7 +154,6 @@ namespace Ankh.UI.PendingChanges
             this.logMessageEditor.Name = "logMessageEditor";
             this.logMessageEditor.Size = new System.Drawing.Size(766, 61);
             this.logMessageEditor.TabIndex = 4;
-            this.logMessageEditor.Text = null;
             // 
             // issueNumberBox
             // 

@@ -128,7 +128,6 @@ namespace Ankh.UI.SccManagement
             this.logMessage.Name = "logMessage";
             this.logMessage.Size = new System.Drawing.Size(413, 177);
             this.logMessage.TabIndex = 4;
-            this.logMessage.Text = null;
             // 
             // CopyToDialog
             // 
