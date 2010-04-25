@@ -16,13 +16,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+using System.ComponentModel.Design;
 using System.Windows.Forms;
+
+using Microsoft.VisualStudio;
+
+using Ankh.Commands;
 using Ankh.Scc;
-using Ankh.UI.PendingChanges;
 using Ankh.UI.PendingChanges.Commits;
 using Ankh.VS;
 
@@ -72,6 +72,8 @@ namespace Ankh.UI.SccManagement
                 issueNumberBox.Enabled = issueNumberBox.Visible =
                     issueLabel.Enabled = issueLabel.Visible = true;
             }
+
+            VSCommandHandler.Install(Context, logMessage, new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.OPENLINEABOVE), new EventHandler<CommandEventArgs>(OnCommit));
         }
 
         private void Reload()
@@ -104,22 +106,9 @@ namespace Ankh.UI.SccManagement
             }
         }
 
-        /// <summary>
-        /// Processes a command key.
-        /// </summary>
-        /// <param name="msg">A <see cref="T:System.Windows.Forms.Message"/>, passed by reference, that represents the Win32 message to process.</param>
-        /// <param name="keyData">One of the <see cref="T:System.Windows.Forms.Keys"/> values that represents the key to process.</param>
-        /// <returns>
-        /// true if the keystroke was processed and consumed by the control; otherwise, false to allow further processing.
-        /// </returns>
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        void OnCommit(object sender, CommandEventArgs e)
         {
-            if (keyData == (Keys.Return | Keys.Control))
-            {
-                DialogResult = DialogResult.OK;
-                return true;
-            }
-            return base.ProcessCmdKey(ref msg, keyData);
+            DialogResult = DialogResult.OK;
         }
 
         public IEnumerable<PendingChange> GetSelection()
