@@ -96,7 +96,6 @@ namespace Ankh.UI.RepositoryExplorer.Dialogs
             this.logMessage.Name = "logMessage";
             this.logMessage.Size = new System.Drawing.Size(483, 191);
             this.logMessage.TabIndex = 3;
-            this.logMessage.Text = null;
             // 
             // label1
             // 

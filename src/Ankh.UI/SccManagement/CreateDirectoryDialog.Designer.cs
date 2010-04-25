@@ -95,7 +95,6 @@ namespace Ankh.UI.SccManagement
             this.logMessage.PasteSource = null;
             this.logMessage.Size = new System.Drawing.Size(380, 125);
             this.logMessage.TabIndex = 3;
-            this.logMessage.Text = null;
             // 
             // label1
             // 

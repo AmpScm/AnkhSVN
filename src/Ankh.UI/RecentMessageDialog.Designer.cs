@@ -98,7 +98,6 @@ namespace Ankh.UI
             this.previewBox.ReadOnly = true;
             this.previewBox.Size = new System.Drawing.Size(498, 34);
             this.previewBox.TabIndex = 0;
-            this.previewBox.Text = null;
             // 
             // okButton
             // 

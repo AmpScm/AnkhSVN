@@ -131,7 +131,6 @@ namespace Ankh.UI.SccManagement
             this.logMessage.PasteSource = this.pendingList;
             this.logMessage.Size = new System.Drawing.Size(600, 124);
             this.logMessage.TabIndex = 1;
-            this.logMessage.Text = null;
             // 
             // label1
             // 
