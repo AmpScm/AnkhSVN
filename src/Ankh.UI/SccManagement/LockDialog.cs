@@ -15,9 +15,14 @@
 //  limitations under the License.
 
 using System;
-using System.ComponentModel;
-using System.Windows.Forms;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Windows.Forms;
+
+using Microsoft.VisualStudio;
+
+using Ankh.Commands;
 using Ankh.UI.PathSelector;
 
 namespace Ankh.UI
@@ -50,6 +55,13 @@ namespace Ankh.UI
                 EnsureSelection();
             }
             Message = _originalText;
+
+            VSCommandHandler.Install(Context, logMessageEditor, new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.OPENLINEABOVE), new EventHandler<CommandEventArgs>(OnLock));
+        }
+
+        void OnLock(object sender, CommandEventArgs e)
+        {
+            DialogResult = DialogResult.OK;
         }
 
         void EnsureSelection()
