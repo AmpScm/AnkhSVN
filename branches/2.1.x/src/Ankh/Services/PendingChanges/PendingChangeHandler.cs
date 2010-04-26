@@ -456,9 +456,19 @@ namespace Ankh.Services.PendingChanges
                 if (item.IsNewAddition)
                 {
                     SvnItem parent = item.Parent;
-                    string wc = item.WorkingCopy.FullPath;
+                    SvnWorkingCopy wc = item.WorkingCopy;
 
-                    while (parent != null && !string.Equals(parent.FullPath, wc, StringComparison.OrdinalIgnoreCase)
+                    if (wc == null)
+                    {
+                        // This should be impossible. A node can't be added and not in a WC
+                        item.MarkDirty();
+                        continue;
+                    }
+
+                    string wcPath = wc.FullPath;
+
+                    while (parent != null && 
+                           !string.Equals(parent.FullPath, wcPath, StringComparison.OrdinalIgnoreCase)
                            && parent.IsNewAddition)
                     {
                         if (!state.CommitPaths.Contains(parent.FullPath))
