@@ -6,18 +6,14 @@
       <filename>HtmlSnippet4.html</filename>
     </component>
     <component visibility="1" type="Html" order="2">
-      <title localize="false">Project Documentation</title>
-      <filename>HtmlSnippet5.html</filename>
-    </component>
-    <component visibility="1" type="Html" order="3">
       <title localize="false">Direct Feedback</title>
       <filename>HtmlSnippet6.html</filename>
     </component>
-    <component visibility="1" type="Html" order="4">
+    <component visibility="1" type="Html" order="3">
       <title localize="false">Project Wiki</title>
       <filename>HtmlSnippet3.html</filename>
     </component>
-    <component visibility="1" type="Html" order="5">
+    <component visibility="1" type="Html" order="4">
       <title localize="false">Reporting bugs</title>
       <filename>HtmlSnippet1.html</filename>
     </component>
