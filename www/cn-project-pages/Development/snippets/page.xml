@@ -13,10 +13,6 @@
       <title localize="false">Development documents</title>
       <filename>HtmlSnippet1.html</filename>
     </component>
-    <component visibility="1" type="Html" order="4">
-      <title localize="false">Development Forums / Mailing Lists</title>
-      <filename>HtmlSnippet4.html</filename>
-    </component>
   </component_list>
 </page>
 
