@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Definitions", "Definitions"
 		LICENSE.rtf = LICENSE.rtf
 		NOTICE.txt = NOTICE.txt
 		..\README.txt = ..\README.txt
+		Release-Checklist.txt = Release-Checklist.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementation", "Implementation", "{9B380404-6594-4737-8518-291DEDEF3496}"
