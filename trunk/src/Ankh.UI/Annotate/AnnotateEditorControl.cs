@@ -86,9 +86,6 @@ namespace Ankh.UI.Annotate
 
         internal int GetLineHeight()
         {
-            if (VSVersion.VS2010Beta2)
-                return editor.LineHeight + 4;
-
             return editor.LineHeight;
         }
 

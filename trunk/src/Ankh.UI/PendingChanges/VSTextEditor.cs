@@ -317,7 +317,9 @@ namespace Ankh.UI.PendingChanges
                 // Set init only values
                 _nativeWindow.EnableSplitter = EnableSplitter;
                 _nativeWindow.EnableNavigationBar = EnableNavigationBar;
+
                 _nativeWindow.Init(allowModal, ForceLanguageService);
+
                 _nativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
                 _nativeWindow.SetWordWrapMode(WordWrapMode);
                 _nativeWindow.Size = ClientSize;
@@ -1216,17 +1218,8 @@ namespace Ankh.UI.PendingChanges
 
         internal void LoadFile(string path)
         {
-            if (VSVersion.VS2010Beta2)
-            {
-                // Work around issue with splitter with black top appearing in beta2
-                string content = System.IO.File.ReadAllText(path);
-                _textBuffer.InitializeContent(content, content.Length);
-            }
-            else
-            {
-                IVsPersistDocData2 docData = (IVsPersistDocData2)_textBuffer;
-                ErrorHandler.ThrowOnFailure(docData.LoadDocData(path));
-            }
+            IVsPersistDocData2 docData = (IVsPersistDocData2)_textBuffer;
+            ErrorHandler.ThrowOnFailure(docData.LoadDocData(path));
         }
 
         internal void IgnoreFileChanges(bool ignore)
@@ -1310,9 +1303,6 @@ namespace Ankh.UI.PendingChanges
         {
             if (_textBuffer == null)
                 throw new InvalidOperationException();
-
-            if (VSVersion.VS2010Beta2)
-                return; // Setting the languageservice causes an acces violation exception (cpp files)
 
             SetLanguageServiceInternal(languageService);
         }
