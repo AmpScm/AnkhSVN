@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.2.8338</title>
+          AnkhSVN-Daily Update - 2.2.8346</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,24 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3337/AnkhSvn-Daily-2.2.8338.502.msi">AnkhSVN 2.2.8338</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3339/AnkhSvn-Daily-2.2.8346.503.msi">AnkhSVN 2.2.8346</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8338">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8346">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-04-29</td></tr>
+<tr><td> </td><td class="r"><a id="8345" href="http://ankhsvn.net/rev/?r=8345">
+            [r8345]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PathSelector:</strong> PendingChangeSelector.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix resizability of the generic selection dialog used for revert and add.</td></tr>
 <tr class="d"><td colspan="4">2010-04-28</td></tr>
 <tr><td> </td><td class="r"><a id="8338" href="http://ankhsvn.net/rev/?r=8338">
             [r8338]
@@ -173,25 +177,6 @@ global "RecentChangesRefreshInterval" setting,
             [r8023]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/MergeWizard:</strong> MergeSourceReintegratePage.cs, BaseWizardPage.cs, MergeOptionsPage.cs, MergeSourceBasePage.cs, MergeSourceBasePageControl.Wizard.cs, MergeSummaryPage.cs, MergeSourceManuallyRemovePage.cs, MergeSourceManuallyRecordPage.cs, MergeSourceRangeOfRevisionsPage.cs, MergeSourceTwoDifferentTreesPage.cs, MergeRevisionsSelectionPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove a large number of casts to MergeWizard by overriding the .Wizard
 property on the base class of all the wizard dialog pages.</td></tr>
-<tr><td> </td><td class="r"><a id="8022" href="http://ankhsvn.net/rev/?r=8022">
-            [r8022]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/MergeWizard:</strong> MergeSourceReintegratePage.cs, MergeBestPracticesPage.cs, MergeOptionsPage.cs, MergeSourceBasePage.cs, MergeSummaryPage.cs, MergeSourceManuallyRemovePage.cs, MergeTypePage.cs, MergeSourceManuallyRecordPage.cs, MergeSourceRangeOfRevisionsPage.cs, MergeSourceTwoDifferentTreesPage.cs, MergeRevisionsSelectionPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove all explicit page names from the merge wizard. All pages can be
-identified by their type.</td></tr>
-<tr><td> </td><td class="r"><a id="8020" href="http://ankhsvn.net/rev/?r=8020">
-            [r8020]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/MergeWizard:</strong> MergeSummaryPage.cs, WizardFramework/Wizard.cs, MergeWizard.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Replace calls to lookup wizard pages by name, with a call to look them up by
-type. This works nicer for the MergeWizard and makes it less likely to fail on
-a missing name.</td></tr>
-<tr><td> </td><td class="r"><a id="8019" href="http://ankhsvn.net/rev/?r=8019">
-            [r8019]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/PathSelector:</strong> PathSelector.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">todo to show an indicator why check is rejected in path selector</td></tr>
-<tr><td> </td><td class="r"><a id="8018" href="http://ankhsvn.net/rev/?r=8018">
-            [r8018]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/PathSelector/PathSelector.Designer.cs, Ankh.UI/PathSelector/PathSelector.cs, Ankh.Services/UI/PathSelectorInfo.cs, Ankh/Commands/ItemShowChanges.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Don't allow checking "deleted" items in the path selector if any of revisions is SvnRevision.Working.<br>
-<a href="http://ankhsvn.net/issues/?id=584">Issue #584</a>: Show Changes tries to open diff viewer on deleted files</td></tr>
-<tr><td> </td><td class="r"><a id="8017" href="http://ankhsvn.net/rev/?r=8017">
-            [r8017]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/DiffWindow:</strong> DiffToolWindowControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">[internal diff window] show empty content for the files missing in the system</td></tr>
 
 </table>
 <!--/Recent changes-->
