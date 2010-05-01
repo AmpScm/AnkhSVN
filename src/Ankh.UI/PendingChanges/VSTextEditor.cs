@@ -1236,7 +1236,7 @@ namespace Ankh.UI.PendingChanges
             {
                 IOleUndoManager mgr;
 
-                if (ErrorHandler.Succeeded(_textBuffer.GetUndoManager(out mgr)))
+                if (ErrorHandler.Succeeded(_textBuffer.GetUndoManager(out mgr)) && mgr != null)
                 {
                     mgr.DiscardFrom(null);
                 }
