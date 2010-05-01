@@ -23,24 +23,29 @@ using EnvDTE;
 
 namespace Ankh.Trigger
 {
-    [ProvideExtender(AnkhCatId.CscFileBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.CscFolderBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.CscProjectBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.VbFileBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.VbFolderBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.VbProjectBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.VjFileBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.VjFolderBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.VjProjectBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.SolutionBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.CppFileBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.CppProjectBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.GenericProject, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.ExtProjectBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
-    [ProvideExtender(AnkhCatId.ExtFileBrowse, AnkhId.TriggerExtenderGuid, AnkhId.TriggerExtenderName)]
+    [ProvideExtender(AnkhCatId.CscFileBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.FileExtender)]
+    [ProvideExtender(AnkhCatId.CscFolderBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.FolderExtender)]
+    [ProvideExtender(AnkhCatId.CscProjectBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.ProjectExtender)]
+    [ProvideExtender(AnkhCatId.VbFileBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.FileExtender)]
+    [ProvideExtender(AnkhCatId.VbFolderBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.FolderExtender)]
+    [ProvideExtender(AnkhCatId.VbProjectBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.ProjectExtender)]
+    [ProvideExtender(AnkhCatId.VjFileBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.FileExtender)]
+    [ProvideExtender(AnkhCatId.VjFolderBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.FolderExtender)]
+    [ProvideExtender(AnkhCatId.VjProjectBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.ProjectExtender)]
+    [ProvideExtender(AnkhCatId.SolutionBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.SolutionExtender)]
+    [ProvideExtender(AnkhCatId.CppFileBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.FileExtender)]
+    [ProvideExtender(AnkhCatId.CppProjectBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.ProjectExtender)]
+    [ProvideExtender(AnkhCatId.GenericProject, AnkhId.TriggerExtenderGuid, TriggerPackage.ProjectExtender)]
+    [ProvideExtender(AnkhCatId.ExtProjectBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.ProjectExtender)]
+    [ProvideExtender(AnkhCatId.ExtFileBrowse, AnkhId.TriggerExtenderGuid, TriggerPackage.FileExtender)]
     [ProvideObject(typeof(TriggerExtenderHandler))]
     partial class TriggerPackage
     {
+        const string FileExtender = AnkhId.TriggerExtenderName + "-File";
+        const string FolderExtender = AnkhId.TriggerExtenderName + "-Folder";
+        const string ProjectExtender = AnkhId.TriggerExtenderName + "-Project";
+        const string SolutionExtender = AnkhId.TriggerExtenderName + "-Solution";
+
         readonly Dictionary<IDisposable, IDisposable> _disposers = new Dictionary<IDisposable, IDisposable>();
 
         internal void RemoveDispose(IDisposable value)
@@ -66,7 +71,7 @@ namespace Ankh.Trigger
     }
 
     // This class must be ComVisible, as it is created via its guid
-    [Guid(AnkhId.TriggerExtenderGuid)]
+    [Guid(AnkhId.TriggerExtenderGuid), ComVisible(true)]
     sealed class TriggerExtenderHandler : EnvDTE.IExtenderProviderUnk
     {
         public TriggerExtenderHandler()

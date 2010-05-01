@@ -133,13 +133,7 @@ namespace Ankh.VS.Extenders
                 }
 
                 if (!string.IsNullOrEmpty(path) && SvnItem.IsValidPath(path))
-                {
-                    SvnItem i = FileStatusCache[path];
-                    if (!i.IsVersioned && !i.IsVersionable)
-                        return null;
-                    else
-                        return i;
-                }
+                    return FileStatusCache[path];
             }
             catch
             {
