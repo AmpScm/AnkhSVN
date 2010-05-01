@@ -347,13 +347,17 @@ namespace Ankh.UI.RepositoryOpen
                 SvnRemoteCommonArgs ca = new SvnRemoteCommonArgs();
                 ca.ThrowOnError = false;
 
-
-
                 SvnRemoteStatArgs sa = new SvnRemoteStatArgs();
                 sa.ThrowOnError = false;
                 SvnNodeKind kind;
 
-                string path = Uri.UnescapeDataString(session.SessionUri.MakeRelativeUri(combined).ToString());
+                string path;
+
+                // Avoid Exception in SharpSvn 1.6011.1539
+                if (SvnTools.GetNormalizedUri(combined) == SvnTools.GetNormalizedUri(session.SessionUri))
+                    path = ""; 
+                else
+                    path = session.MakeRelativePath(combined);
 
                 if (session.GetNodeKind(path, ca, out kind))
                     Invoke((AnkhAction)delegate
@@ -362,13 +366,13 @@ namespace Ankh.UI.RepositoryOpen
                         {
                             case SvnNodeKind.Directory:
                                 {
-                                    Uri parentUri = new Uri(combined, "../");
+                                    Uri parentUri = new Uri(combined, combined.PathAndQuery.EndsWith("/", StringComparison.Ordinal) ? "../" : "./");
 
                                     if (!forceLoad && parentUri.ToString() != urlBox.Text)
                                         return; // The user selected something else while we where busy
 
                                     // The user typed a directory Url without ending '/'
-                                    fileNameBox.Text = combined.ToString();
+                                    fileNameBox.Text = combined.ToString().TrimEnd('/') + '/';
                                     UpdateDirectories();
                                     return;
                                 }
