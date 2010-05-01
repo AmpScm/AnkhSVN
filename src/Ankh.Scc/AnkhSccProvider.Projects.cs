@@ -132,7 +132,7 @@ namespace Ankh.Scc
                             p.SetManaged(managed);
 
                             if (managed)
-                                p.SccProject.SccGlyphChanged(0, null, null, null);
+                                p.NotifyGlyphsChanged();
                         }
                     }
                 }
@@ -258,7 +258,7 @@ namespace Ankh.Scc
                 {
                     // Flush the glyph cache of solution folders
                     // (Well known VS bug: Initially clear)
-                    data.SccProject.SccGlyphChanged(0, null, null, null);
+                    data.NotifyGlyphsChanged();
                 }
             }
 
@@ -444,7 +444,7 @@ namespace Ankh.Scc
                 }
 
                 // Solution folders are projects without Scc state
-                data.SccProject.SccGlyphChanged(0, null, null, null);
+                data.NotifyGlyphsChanged();
             }
 
             _syncMap = true;

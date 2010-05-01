@@ -781,5 +781,15 @@ namespace Ankh.Scc.ProjectMap
             get { return _unloading; }
             set { _unloading = value; }
         }
+
+        [DebuggerNonUserCode]
+        public void NotifyGlyphsChanged()
+        {
+            try
+            {
+                SccProject.SccGlyphChanged(0, null, null, null);
+            }
+            catch { }
+        }
     }
 }
