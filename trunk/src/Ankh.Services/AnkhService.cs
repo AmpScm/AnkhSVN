@@ -403,5 +403,186 @@ namespace Ankh
         }
 
         #endregion
+
+        public delegate int HR_Func();
+        public delegate int HR_Func<T>(T a1);
+        public delegate int HR_Func<T1, T2>(T1 a1, T2 a2);
+        public delegate int HR_Func<T1, T2, T3>(T1 a1, T2 a2, T3 a3);
+        public delegate int HR_Func<T1, T2, T3, T4>(T1 a1, T2 a2, T3 a3, T4 a4);
+        public delegate int HR_Func_O<T>(out T a1);
+        public delegate int HR_Func_O<T1, T2>(T1 a1, out T2 a2);
+
+        /// <summary>
+        /// Call <paramref name="func"/>, returning false on exceptions
+        /// </summary>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        [DebuggerNonUserCode]
+        public static bool SafeSucceeded(HR_Func func)
+        {
+            if (func == null)
+                throw new ArgumentNullException("func");
+
+            try
+            {
+                return (func() >= 0);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Call <paramref name="func"/> with the specified argument, returning false on exceptions
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="func"></param>
+        /// <param name="a1"></param>
+        /// <returns></returns>
+        [DebuggerNonUserCode]
+        public static bool SafeSucceeded<T>(HR_Func<T> func, T a1)
+        {
+            if (func == null)
+                throw new ArgumentNullException("func");
+
+            try
+            {
+                return (func(a1) >= 0);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Call <paramref name="func"/> with the specified argument, returning false on exceptions
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="func"></param>
+        /// <param name="a1"></param>
+        /// <returns></returns>
+        [DebuggerNonUserCode]
+        public static bool SafeSucceeded<T>(HR_Func_O<T> func, out T a1)
+        {
+            if (func == null)
+                throw new ArgumentNullException("func");
+
+            try
+            {
+                return (func(out a1) >= 0);
+            }
+            catch
+            {
+                a1 = default(T);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Call <paramref name="func"/> with the specified arguments, returning false on exceptions
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="func"></param>
+        /// <param name="a1"></param>
+        /// <param name="a2"></param>
+        /// <returns></returns>
+        [DebuggerNonUserCode]
+        public static bool SafeSucceeded<T1, T2>(HR_Func<T1, T2> func, T1 a1, T2 a2)
+        {
+            if (func == null)
+                throw new ArgumentNullException("func");
+
+            try
+            {
+                return (func(a1, a2) >= 0);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Call <paramref name="func"/> with the specified arguments, returning false on exceptions
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="func"></param>
+        /// <param name="a1"></param>
+        /// <returns></returns>
+        [DebuggerNonUserCode]
+        public static bool SafeSucceeded<T1,T2>(HR_Func_O<T1, T2> func, T1 a1, out T2 a2)
+        {
+            if (func == null)
+                throw new ArgumentNullException("func");
+
+            try
+            {
+                return (func(a1, out a2) >= 0);
+            }
+            catch
+            {
+                a2 = default(T2);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Call <paramref name="func"/> with the specified arguments, returning false on exceptions
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <param name="func"></param>
+        /// <param name="a1"></param>
+        /// <param name="a2"></param>
+        /// <param name="a3"></param>
+        /// <returns></returns>
+        [DebuggerNonUserCode]
+        public static bool SafeSucceeded<T1, T2, T3>(HR_Func<T1, T2, T3> func, T1 a1, T2 a2, T3 a3)
+        {
+            if (func == null)
+                throw new ArgumentNullException("func");
+
+            try
+            {
+                return (func(a1, a2, a3) >= 0);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Call <paramref name="func"/> with the specified arguments, returning false on exceptions
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <param name="func"></param>
+        /// <param name="a1"></param>
+        /// <param name="a2"></param>
+        /// <param name="a3"></param>
+        /// <param name="a4"></param>
+        /// <returns></returns>
+        [DebuggerNonUserCode]
+        public static bool SafeSucceeded<T1, T2, T3, T4>(HR_Func<T1, T2, T3, T4> func, T1 a1, T2 a2, T3 a3, T4 a4)
+        {
+            if (func == null)
+                throw new ArgumentNullException("func");
+
+            try
+            {
+                return (func(a1, a2, a3, a4) >= 0);
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
