@@ -191,7 +191,7 @@ namespace Ankh.Scc
                 // Remove all glyphs currently set
                 foreach (SccProjectData pd in _projectMap.Values)
                 {
-                    pd.SccProject.SccGlyphChanged(0, null, null, null);
+                    pd.NotifyGlyphsChanged();
                 }
 
                 ClearSolutionGlyph();

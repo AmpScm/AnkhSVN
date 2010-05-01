@@ -252,7 +252,11 @@ namespace Ankh.Scc
                         continue; // All IVsSccProjects have a RawHandle
                     }
 
-                    project.RawHandle.SccGlyphChanged(0, null, null, null);
+                    try
+                    {
+                        project.RawHandle.SccGlyphChanged(0, null, null, null);
+                    }
+                    catch { }
                 }
             }
 
