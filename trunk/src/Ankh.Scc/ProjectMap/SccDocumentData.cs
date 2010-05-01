@@ -112,7 +112,7 @@ namespace Ankh.Scc.ProjectMap
         private object FetchDocument()
         {
             // Normally when a document is open we get a handle via the opendocument tracker; but we might be to soon
-            IVsRunningDocumentTable rd = GetService< IVsRunningDocumentTable>(typeof(SVsRunningDocumentTable));
+            IVsRunningDocumentTable rd = GetService<IVsRunningDocumentTable>(typeof(SVsRunningDocumentTable));
 
             if (rd == null)
                 return null;
@@ -339,10 +339,10 @@ namespace Ankh.Scc.ProjectMap
 
             if (vsPersistHierarchyItem2 != null &&
                 SafeSucceeded(vsPersistHierarchyItem2.ReloadItem, ItemId, (uint)0))
-                {
-                    // Our parent reloaded us
-                    return true;
-                }
+            {
+                // Our parent reloaded us
+                return true;
+            }
 
             return false; // We can't be reloaded by ourselves.. Let our caller reload our parent instead
         }
