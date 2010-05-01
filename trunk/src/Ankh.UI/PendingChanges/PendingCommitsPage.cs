@@ -424,7 +424,7 @@ namespace Ankh.UI.PendingChanges
 
             if (pch.Commit(changes, a))
             {
-                logMessageEditor.Text = "";
+                logMessageEditor.Clear(true);
                 issueNumberBox.Text = "";
             }
         }

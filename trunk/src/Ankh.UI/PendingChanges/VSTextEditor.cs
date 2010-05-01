@@ -179,7 +179,13 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-
+        public void Clear(bool clearUndoBuffer)
+        {
+            if (_nativeWindow != null)
+                _nativeWindow.Clear(clearUndoBuffer);
+            else
+                Text = "";
+        }
 
         public event EventHandler<TextViewScrollEventArgs> Scroll;
 
@@ -1220,6 +1226,21 @@ namespace Ankh.UI.PendingChanges
         {
             IVsPersistDocData2 docData = (IVsPersistDocData2)_textBuffer;
             ErrorHandler.ThrowOnFailure(docData.LoadDocData(path));
+        }
+
+        internal void Clear(bool clearUndoBuffer)
+        {
+            Text = "";
+
+            if (clearUndoBuffer)
+            {
+                IOleUndoManager mgr;
+
+                if (ErrorHandler.Succeeded(_textBuffer.GetUndoManager(out mgr)))
+                {
+                    mgr.DiscardFrom(null);
+                }
+            }
         }
 
         internal void IgnoreFileChanges(bool ignore)
