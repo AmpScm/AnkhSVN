@@ -114,7 +114,7 @@ namespace Ankh.Commands
 
                     if (e.Command == AnkhCommand.DiffLocalItem)
                     {
-                        selectionHasDeleted |= !SvnItemFilters.NotDeletedFilter(item);
+                        selectionHasDeleted |= !NotDeletedFilter(item);
                     }
 
                     selectedFiles.Add(item);
@@ -158,7 +158,7 @@ namespace Ankh.Commands
                                 )
                             )
                         {
-                            return SvnItemFilters.NotDeletedFilter(item);
+                            return NotDeletedFilter(item);
                         }
                         return true;
                     });
@@ -249,6 +249,14 @@ namespace Ankh.Commands
 
                 diff.RunDiff(da);
             }
+        }
+
+        static bool NotDeletedFilter(SvnItem item)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            return !item.IsDeleteScheduled && item.Exists;
         }
     }
 }
