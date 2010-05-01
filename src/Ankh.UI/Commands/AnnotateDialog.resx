@@ -217,7 +217,7 @@
     <value>startRevision</value>
   </data>
   <data name="&gt;&gt;startRevision.Type" xml:space="preserve">
-    <value>Ankh.UI.PathSelector.VersionSelector, Ankh.UI, Version=2.1.3722.27547, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.PathSelector.VersionSelector, Ankh.UI, Version=2.2.3773.32831, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;startRevision.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -235,7 +235,7 @@
     <value>3</value>
   </data>
   <data name="groupBox1.Text" xml:space="preserve">
-    <value>&amp;From Revision:</value>
+    <value>&amp;From Version:</value>
   </data>
   <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
     <value>groupBox1</value>
@@ -268,7 +268,7 @@
     <value>toRevision</value>
   </data>
   <data name="&gt;&gt;toRevision.Type" xml:space="preserve">
-    <value>Ankh.UI.PathSelector.VersionSelector, Ankh.UI, Version=2.1.3722.27547, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.PathSelector.VersionSelector, Ankh.UI, Version=2.2.3773.32831, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;toRevision.Parent" xml:space="preserve">
     <value>groupBox2</value>
@@ -286,7 +286,7 @@
     <value>4</value>
   </data>
   <data name="groupBox2.Text" xml:space="preserve">
-    <value>&amp;To Revision:</value>
+    <value>&amp;To Version:</value>
   </data>
   <data name="&gt;&gt;groupBox2.Name" xml:space="preserve">
     <value>groupBox2</value>
@@ -472,6 +472,6 @@
     <value>AnnotateDialog</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.VSDialogForm, Ankh.Services, Version=2.1.3722.24809, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
+    <value>Ankh.UI.VSDialogForm, Ankh.Services, Version=2.2.3773.32545, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
   </data>
 </root>
