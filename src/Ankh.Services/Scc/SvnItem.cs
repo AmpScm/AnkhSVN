@@ -861,6 +861,9 @@ namespace Ankh
         /// <returns></returns>
         public static ICollection<string> GetPaths(IEnumerable<SvnItem> items)
         {
+            if (items == null)
+                throw new ArgumentNullException("items");
+
             List<String> paths = new List<string>();
             foreach (SvnItem item in items)
             {
@@ -1062,28 +1065,6 @@ namespace Ankh
             public const uint FILE_ATTRIBUTE_DIRECTORY = 0x10;
             public const uint FILE_ATTRIBUTE_READONLY = 0x1;
         }
-
-        public bool NewFullPathOk(string fullPath, AnkhStatus status)
-        {
-            if (fullPath == FullPath)
-                return true;
-
-            switch (status.LocalContentStatus)
-            {
-                case SvnStatus.Added:
-                case SvnStatus.Conflicted:
-                case SvnStatus.Merged:
-                case SvnStatus.Modified:
-                case SvnStatus.Normal:
-                case SvnStatus.Replaced:
-                case SvnStatus.Deleted:
-                case SvnStatus.Incomplete:
-                    return false;
-                default:
-                    return true;
-            }
-        }
-
 
         /// <summary>
         /// Checks if the node is somehow added. In this case its parents are

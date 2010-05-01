@@ -532,6 +532,32 @@ namespace Ankh.Scc.StatusCache
             }
         }
 
+        static bool NewFullPathOk(SvnItem item, string fullPath, AnkhStatus status)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+            else if (status == null)
+                throw new ArgumentNullException("status");
+
+            if (fullPath == item.FullPath)
+                return true;
+
+            switch (status.LocalContentStatus)
+            {
+                case SvnStatus.Added:
+                case SvnStatus.Conflicted:
+                case SvnStatus.Merged:
+                case SvnStatus.Modified:
+                case SvnStatus.Normal:
+                case SvnStatus.Replaced:
+                case SvnStatus.Deleted:
+                case SvnStatus.Incomplete:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
         /// <summary>
         /// Called from RefreshPath's call to <see cref="SvnClient::Status"/>
         /// </summary>
@@ -549,7 +575,7 @@ namespace Ankh.Scc.StatusCache
             string path = e.FullPath; // Fully normalized
 
             SvnItem item;
-            if (!_map.TryGetValue(path, out item) || !item.NewFullPathOk(path, status))
+            if (!_map.TryGetValue(path, out item) || !NewFullPathOk(item, path, status))
             {
                 // We only create an item if we don't have an existing
                 // with a valid path. (No casing changes allowed!)
