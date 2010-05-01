@@ -32,9 +32,8 @@ namespace Ankh.Scc.ProjectMap
     ///
     /// </summary>
     [DebuggerDisplay("Name={Name}, Dirty={IsDirty}")]
-    sealed class SccDocumentData : IVsFileChangeEvents, IDisposable
+    sealed class SccDocumentData : AnkhService, IVsFileChangeEvents, IDisposable
     {
-        readonly IAnkhServiceProvider _context;
         readonly string _name;
         readonly bool _isFileDocument;
         uint _cookie;
@@ -47,13 +46,11 @@ namespace Ankh.Scc.ProjectMap
         int _reloadTick;
 
         internal SccDocumentData(IAnkhServiceProvider context, string name)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-            else if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("name");
 
-            _context = context;
             _name = name;
 
             if (SvnItem.IsValidPath(name))
@@ -62,20 +59,6 @@ namespace Ankh.Scc.ProjectMap
 
                 HookFileChanges(true);
             }
-        }
-
-        [DebuggerStepThrough]
-        T GetService<T>()
-            where T : class
-        {
-            return _context.GetService<T>();
-        }
-
-        [DebuggerStepThrough]
-        T GetService<T>(Type serviceType)
-            where T : class
-        {
-            return _context.GetService<T>(serviceType);
         }
 
         /// <summary>
@@ -129,7 +112,7 @@ namespace Ankh.Scc.ProjectMap
         private object FetchDocument()
         {
             // Normally when a document is open we get a handle via the opendocument tracker; but we might be to soon
-            IVsRunningDocumentTable rd = (IVsRunningDocumentTable)_context.GetService(typeof(SVsRunningDocumentTable));
+            IVsRunningDocumentTable rd = GetService< IVsRunningDocumentTable>(typeof(SVsRunningDocumentTable));
 
             if (rd == null)
                 return null;
@@ -202,7 +185,7 @@ namespace Ankh.Scc.ProjectMap
                 _reloadTick++;
                 if (_initialUpdateCompleted && _isFileDocument)
                 {
-                    IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
+                    IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
 
                     if (monitor != null)
                     {
@@ -275,7 +258,7 @@ namespace Ankh.Scc.ProjectMap
 
             GetService<ISelectionContextEx>(typeof(ISelectionContext)).MaybeInstallDelayHandler();
 
-            IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
+            IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
 
             if (monitor != null)
                 monitor.ScheduleGlyphUpdate(Name);
@@ -284,7 +267,7 @@ namespace Ankh.Scc.ProjectMap
         public void Dispose()
         {
             _disposed = true;
-            OpenDocumentTracker tracker = (OpenDocumentTracker)_context.GetService<IAnkhOpenDocumentTracker>();
+            OpenDocumentTracker tracker = GetService<OpenDocumentTracker>(typeof(IAnkhOpenDocumentTracker));
 
             if (tracker != null)
                 tracker.DoDispose(this);
@@ -322,59 +305,44 @@ namespace Ankh.Scc.ProjectMap
             {
                 // This method is valid on all text editors and probably many other editors
 
-                try
+                uint flags = 0;
+                if (clearUndo)
+                    flags |= (uint)_VSRELOADDOCDATA.RDD_RemoveUndoStack;
+                if (ignoreNextChange)
+                    flags |= (uint)_VSRELOADDOCDATA.RDD_IgnoreNextFileChange;
+
+                if (ignoreNextChange)
+                    IgnoreFileChanges(true);
+
+                if (SafeSucceeded(vsPersistDocData.ReloadDocData, flags))
                 {
-                    uint flags = 0;
-                    if (clearUndo)
-                        flags |= (uint)_VSRELOADDOCDATA.RDD_RemoveUndoStack;
-                    if (ignoreNextChange)
-                        flags |= (uint)_VSRELOADDOCDATA.RDD_IgnoreNextFileChange;
-
-                    if (ignoreNextChange)
-                        IgnoreFileChanges(true);
-
-                    if (ErrorHandler.Succeeded(vsPersistDocData.ReloadDocData(flags)))
-                    {
-                        if (_disposed || (reloadCookie != _reloadTick) || (wasDirty != IsDirty))
-                            return true;
-                    }
+                    if (_disposed || (reloadCookie != _reloadTick) || (wasDirty != IsDirty))
+                        return true;
                 }
-                catch
-                { }
             }
 
             IVsPersistHierarchyItem2 vsPersistHierarchyItem2 = RawDocument as IVsPersistHierarchyItem2;
             if (vsPersistHierarchyItem2 != null)
             {
                 // This route works for some project types and at least the solution
-                try
-                {
-                    bool assumeOk = (_rawDocument is IVsSolution);
+                bool assumeOk = (_rawDocument is IVsSolution);
 
-                    if (ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(VSConstants.VSITEMID_ROOT, 0)))
-                    {
-                        if (assumeOk || _disposed || reloadCookie != _reloadTick)
-                            return true;
-                    }
+                if (SafeSucceeded(vsPersistHierarchyItem2.ReloadItem, VSConstants.VSITEMID_ROOT, (uint)0))
+                {
+                    if (assumeOk || _disposed || reloadCookie != _reloadTick)
+                        return true;
                 }
-                catch
-                { }
             }
 
 
             vsPersistHierarchyItem2 = Hierarchy as IVsPersistHierarchyItem2;
 
-            try
-            {
-                if (vsPersistHierarchyItem2 != null &&
-                    ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(ItemId, 0)))
+            if (vsPersistHierarchyItem2 != null &&
+                SafeSucceeded(vsPersistHierarchyItem2.ReloadItem, ItemId, (uint)0))
                 {
                     // Our parent reloaded us
                     return true;
                 }
-            }
-            catch
-            { }
 
             return false; // We can't be reloaded by ourselves.. Let our caller reload our parent instead
         }
@@ -393,7 +361,7 @@ namespace Ankh.Scc.ProjectMap
                 return false;
 
             int reloadable;
-            return ErrorHandler.Succeeded(pdd.IsDocDataReloadable(out reloadable)) && (reloadable != 0);
+            return SafeSucceeded(pdd.IsDocDataReloadable, out reloadable) && (reloadable != 0);
         }
 
         static readonly Guid ProjectPropertyPageHostGuid = new Guid("{b270807c-d8c6-49eb-8ebe-8e8d566637a1}");
@@ -407,7 +375,7 @@ namespace Ankh.Scc.ProjectMap
 
                     IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
                     Guid editorType;
-                    if (pdd != null && ErrorHandler.Succeeded(pdd.GetGuidEditorType(out editorType)))
+                    if (pdd != null && SafeSucceeded(pdd.GetGuidEditorType, out editorType))
                     {
                         if (editorType == ProjectPropertyPageHostGuid)
                             _isPropertyDesigner = true;
@@ -430,7 +398,7 @@ namespace Ankh.Scc.ProjectMap
             if (pdd2 == null)
                 return false;
 
-            return ErrorHandler.Succeeded(pdd2.SetDocDataReadOnly(readOnly ? 1 : 0));
+            return SafeSucceeded(pdd2.SetDocDataReadOnly, readOnly ? 1 : 0);
         }
 
         /// <summary>
@@ -460,43 +428,29 @@ namespace Ankh.Scc.ProjectMap
                 // Implemented by most editors
                 if (null != (pdd = rawDoc as IVsPersistDocData))
                 {
-                    try
+                    if (SafeSucceeded(pdd.IsDocDataDirty, out dirty))
                     {
-                        if (ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)))
-                        {
-                            if (dirty != 0)
-                                return true;
+                        if (dirty != 0)
+                            return true;
 
-                            done = true;
-                        }
-                    }
-                    catch
-                    {
-                        /* Some stupid implementations throw an exception from IsDocDataDirty */
+                        done = true;
                     }
                 }
 
                 // Implemented by the common project types (Microsoft Project Base)
                 if (!done && null != (pff = rawDoc as IPersistFileFormat))
                 {
-                    try
+                    if (SafeSucceeded(pff.IsDirty, out dirty))
                     {
-                        if (ErrorHandler.Succeeded(pff.IsDirty(out dirty)))
-                        {
-                            if (dirty != 0)
-                                return true;
+                        if (dirty != 0)
+                            return true;
 
-                            done = true;
-                        }
-                    }
-                    catch
-                    {
-                        /* Some stupid implementations may throw an exception from IsDirty */
+                        done = true;
                     }
                 }
 
                 // Project based documents will probably handle this
-                if (!done && null != (phi = Hierarchy as IVsPersistHierarchyItem))
+                if (!done && null != (phi = Hierarchy as IVsPersistHierarchyItem) && RawDocument != null)
                 {
                     IntPtr docHandle = Marshal.GetIUnknownForObject(RawDocument);
                     try
@@ -522,7 +476,7 @@ namespace Ankh.Scc.ProjectMap
             }
 
             // Literally look if the frame window has a modified *
-            if (!done && TryGetOpenDocumentFrame(out wf))
+            if (!done && TryGetOpenDocumentFrame(out wf) && wf != null)
             {
                 object ok;
                 if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
@@ -581,7 +535,7 @@ namespace Ankh.Scc.ProjectMap
                 return false;
 
             int readOnly;
-            return ErrorHandler.Succeeded(pdd2.IsDocDataReadOnly(out readOnly)) && (readOnly != 0);
+            return SafeSucceeded(pdd2.IsDocDataReadOnly, out readOnly) && (readOnly != 0);
         }
 
         int _ignored;
@@ -616,7 +570,7 @@ namespace Ankh.Scc.ProjectMap
                     return false; // We were not ignoring (Are we 100% reloaded?)
             }
 
-            if (ErrorHandler.Succeeded(ddfcc.IgnoreFileChanges(ignore ? 1 : 0)))
+            if (SafeSucceeded(ddfcc.IgnoreFileChanges, ignore ? 1 : 0))
             {
                 if (ignore)
                     _ignored++;
@@ -650,7 +604,7 @@ namespace Ankh.Scc.ProjectMap
             if (pdd3 == null)
                 return false;
 
-            return ErrorHandler.Succeeded(pdd3.HandsOffDocDataStorage());
+            return SafeSucceeded(pdd3.HandsOffDocDataStorage);
         }
 
         /// <summary>
@@ -663,7 +617,7 @@ namespace Ankh.Scc.ProjectMap
             if (pdd3 == null)
                 return false;
 
-            return ErrorHandler.Succeeded(pdd3.HandsOnDocDataStorage());
+            return SafeSucceeded(pdd3.HandsOnDocDataStorage);
         }
 
         internal bool SaveDocument(IVsRunningDocumentTable rdt)
