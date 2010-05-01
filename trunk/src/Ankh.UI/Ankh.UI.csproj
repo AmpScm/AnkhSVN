@@ -347,6 +347,18 @@
     <Compile Include="PathSelector\PendingChangeSelector.Designer.cs">
       <DependentUpon>PendingChangeSelector.cs</DependentUpon>
     </Compile>
+    <Compile Include="SccManagement\ItemUpdateDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SccManagement\ItemUpdateDialog.Designer.cs">
+      <DependentUpon>ItemUpdateDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SccManagement\ItemCompareDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SccManagement\ItemCompareDialog.Designer.cs">
+      <DependentUpon>ItemCompareDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="SccManagement\MultiWorkingCopyCommit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1238,6 +1250,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PendingChanges\PendingActivationPage.resx">
       <DependentUpon>PendingActivationPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccManagement\ItemUpdateDialog.resx">
+      <DependentUpon>ItemUpdateDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccManagement\ItemCompareDialog.resx">
+      <DependentUpon>ItemCompareDialog.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Controls\Status.Suggestion.png" />
     <Content Include="Controls\Status.Exclamation.png" />
