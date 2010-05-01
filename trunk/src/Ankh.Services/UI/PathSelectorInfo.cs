@@ -100,7 +100,7 @@ namespace Ankh
 
         public bool EvaluateChecked(SvnItem item)
         {
-            return SvnItemFilters.Evaluate(item, _checkedFilter);
+            return EvaluateFilter(item, _checkedFilter);
         }
 
         public bool EvaluateCheckable(SvnItem item, SvnRevision from, SvnRevision to)
@@ -125,12 +125,12 @@ namespace Ankh
 
                 foreach (SvnItem i in _items)
                 {
-                    if (Ankh.Scc.SvnItemFilters.Evaluate(i, _visibleFilter))
+                    if (EvaluateFilter(i, _visibleFilter))
                     {
                         if (!_visibleItems.ContainsKey(i.FullPath))
                             _visibleItems.Add(i.FullPath, i);
 
-                        if (Ankh.Scc.SvnItemFilters.Evaluate(i, _checkedFilter)
+                        if (EvaluateFilter(i, _checkedFilter)
                             // make sure all the checked items are suitable for the revisions
                             && EvaluateCheckable(i, RevisionStart, RevisionEnd))
                         {
@@ -210,5 +210,20 @@ namespace Ankh
         }
 
         public delegate bool SelectableFilter(SvnItem item, SvnRevision from, SvnRevision to);
+
+        public static bool EvaluateFilter(SvnItem item, Predicate<SvnItem> filter)
+        {
+            if (item == null)
+                return false;
+            if (filter == null)
+                return true;
+
+            foreach (Predicate<SvnItem> i in filter.GetInvocationList())
+            {
+                if (!i(item))
+                    return false;
+            }
+            return true;
+        }
     }
 }

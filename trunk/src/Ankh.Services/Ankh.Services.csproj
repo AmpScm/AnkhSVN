@@ -158,7 +158,6 @@
     <Compile Include="Scc\SvnItem.State.cs">
       <DependentUpon>SvnItem.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scc\SvnItemFilters.cs" />
     <Compile Include="Selection\ISelectionContext.cs" />
     <Compile Include="Selection\SvnProject.cs" />
     <Compile Include="UI\IAnkhConfigurationService.cs" />

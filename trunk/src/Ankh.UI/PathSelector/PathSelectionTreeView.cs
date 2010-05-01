@@ -223,7 +223,7 @@ namespace Ankh.UI.PathSelector
         {
             foreach (TreeNode node in nodes)
             {
-                node.Checked = SvnItemFilters.Evaluate((SvnItem)node.Tag, _checkedFilter);
+                node.Checked = PathSelectorInfo.EvaluateFilter((SvnItem)node.Tag, _checkedFilter);
 
                 this.SetCheckedItems(node.Nodes);
             }
