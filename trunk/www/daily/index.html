@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.2.8347</title>
+          AnkhSVN-Daily Update - 2.2.8362</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,56 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3342/AnkhSvn-Daily-2.2.8347.504.msi">AnkhSVN 2.2.8347</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3344/AnkhSvn-Daily-2.2.8362.505.msi">AnkhSVN 2.2.8362</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8347">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8362">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-05-01</td></tr>
+<tr><td> </td><td class="r"><a id="8361" href="http://ankhsvn.net/rev/?r=8361">
+            [r8361]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> SccManagement/ItemUpdateDialog.Designer.cs, SccManagement/ItemCompareDialog.resx, SccManagement/ItemUpdateDialog.cs, Ankh.UI.csproj, SccManagement/ItemCompareDialog.Designer.cs, SccManagement/ItemCompareDialog.cs, SccManagement/ItemUpdateDialog.resx</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Prepare two new dialogs: Update and Compare items.</td></tr>
+<tr><td> </td><td class="r"><a id="8360" href="http://ankhsvn.net/rev/?r=8360">
+            [r8360]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS.UnitTest:</strong> Ankh.VS.UnitTest.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix compilation of the unit tests in VS2010.</td></tr>
+<tr><td> </td><td class="r"><a id="8359" href="http://ankhsvn.net/rev/?r=8359">
+            [r8359]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/PathSelector/PathSelectionTreeView.cs, Ankh.Services/Scc/SvnItemFilters.cs, Ankh.Services/UI/PathSelectorInfo.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove the SvnItemFilter framework used by the old path selector. Move the
+code to its remaining users (which will disappear soon).</td></tr>
+<tr><td> </td><td class="r"><a id="8358" href="http://ankhsvn.net/rev/?r=8358">
+            [r8358]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh.Services/Scc/SvnItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Move status cache specific code from SvnItem to the statuscache.</td></tr>
+<tr><td> </td><td class="r"><a id="8353" href="http://ankhsvn.net/rev/?r=8353">
+            [r8353]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc/ProjectMap:</strong> SccDocumentData.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Catch .Net exceptions thrown from third party document implementations that
+should have been returned as HResult by wrapping the calls via a delegate
+helper.</td></tr>
+<tr><td> </td><td class="r"><a id="8352" href="http://ankhsvn.net/rev/?r=8352">
+            [r8352]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> PendingCommitsPage.cs, VSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Clear the text *and* the undo stack of the pending changes after a successful
+commit.</td></tr>
+<tr><td> </td><td class="r"><a id="8351" href="http://ankhsvn.net/rev/?r=8351">
+            [r8351]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.Projects.cs, ProjectMap/SccProjectData.cs, AnkhSccProvider.cs, ProjectNotifier.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Catch exceptions in project implementations of .SccGlyphChanged() by
+moving the calling code to one place and catch all exceptions there.</td></tr>
+<tr><td> </td><td class="r"><a id="8350" href="http://ankhsvn.net/rev/?r=8350">
+            [r8350]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> AnkhService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add .SafeSucceeded helper that is similar to ErrorHandler.Succeeded() but
+also handles exceptions from managed implementations as returning false.</td></tr>
+<tr><td> </td><td class="r"><a id="8349" href="http://ankhsvn.net/rev/?r=8349">
+            [r8349]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/Extenders/ExtenderProvider.cs, Ankh.Trigger/TriggerPackage.Extender.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Also return an extender for files that are not versionable yet to make sure
+all objects of the same type provide the same properties. (To hopefully avoid
+exceptions in third party code).</td></tr>
 <tr class="d"><td colspan="4">2010-04-29</td></tr>
 <tr><td> </td><td class="r"><a id="8345" href="http://ankhsvn.net/rev/?r=8345">
             [r8345]
