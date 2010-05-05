@@ -60,11 +60,6 @@ namespace Ankh.UI.PendingChanges
             get { return _pasteSrc; }
             set { _pasteSrc = value; }
         }
-
-        protected override void Init(IAnkhServiceProvider context, bool allowModal)
-        {
-            base.Init(context, allowModal);
-        }
-    }    
+    }
 }
 

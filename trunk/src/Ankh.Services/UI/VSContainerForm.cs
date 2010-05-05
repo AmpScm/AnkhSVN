@@ -52,7 +52,7 @@ namespace Ankh.UI
     /// .Net form which when shown modal let's the VS command routing continue
     /// </summary>
     /// <remarks>If the IAnkhDialogOwner service is not available this form behaves like any other form</remarks>
-    public class VSContainerForm : VSDialogForm, IAnkhVSContainerForm, IAnkhCommandHookAccessor
+    public class VSContainerForm : VSDialogForm, IAnkhVSContainerForm, IAnkhCommandHookAccessor, IContextControl
     {
         AnkhToolBar _toolbarId;
         VSContainerMode _mode;

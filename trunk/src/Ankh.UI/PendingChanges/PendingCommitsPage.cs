@@ -32,7 +32,7 @@ namespace Ankh.UI.PendingChanges
         public PendingCommitsPage()
         {
             InitializeComponent();
-            logMessageEditor.ShowHorizontalScrollBar = false;
+            logMessageEditor.HideHorizontalScrollBar = true;
             logMessageEditor.PasteSource = pendingCommits;
         }
 
@@ -561,7 +561,28 @@ namespace Ankh.UI.PendingChanges
 
         internal Microsoft.VisualStudio.TextManager.Interop.IVsTextView TextView
         {
-            get { return logMessageEditor.TextView; }
+            get
+            {
+                IAnkhHasVsTextView tv = logMessageEditor.ActiveControl as IAnkhHasVsTextView;
+
+                if (tv != null)
+                    return tv.TextView;
+
+                return null; 
+            }
+        }
+
+        internal Microsoft.VisualStudio.TextManager.Interop.IVsFindTarget FindTarget
+        {
+            get
+            {
+                IAnkhHasVsTextView tv = logMessageEditor.ActiveControl as IAnkhHasVsTextView;
+
+                if (tv != null)
+                    return tv.FindTarget;
+
+                return null;
+            }
         }
     }
 }

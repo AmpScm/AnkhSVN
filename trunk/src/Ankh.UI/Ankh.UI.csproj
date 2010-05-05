@@ -644,9 +644,6 @@
     <Compile Include="PendingChanges\Commands\PendingChangeLocationCombo.cs" />
     <Compile Include="PendingChanges\Commands\ViewLogMessage.cs" />
     <Compile Include="PendingChanges\Commands\RefreshPendingChanges.cs" />
-    <Compile Include="PendingChanges\VSTextEditor.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="PendingChanges\Commits\PendingCommitItem.cs" />
     <Compile Include="PendingChanges\PendingCommitsPage.cs">
       <SubType>UserControl</SubType>
