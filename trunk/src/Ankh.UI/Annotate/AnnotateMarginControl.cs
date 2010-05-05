@@ -454,11 +454,8 @@ namespace Ankh.UI.Annotate
             return false;
         }
 
-        internal void NotifyScroll(TextViewScrollEventArgs scrollInfo)
+        internal void NotifyVerticalScroll(VSTextEditorScrollEventArgs scrollInfo)
         {
-            if (scrollInfo.Orientation != ScrollOrientation.VerticalScroll)
-                return;
-
             int dy = (_firstLine - scrollInfo.FirstVisibleUnit) * LineHeight;
             _firstLine = scrollInfo.FirstVisibleUnit;
             _lastLine = scrollInfo.VisibleUnits + scrollInfo.FirstVisibleUnit;
