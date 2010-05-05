@@ -44,7 +44,7 @@ namespace Ankh.UI
     /// .Net form which when shown modal let's the VS command routing continue
     /// </summary>
     /// <remarks>If the IAnkhDialogOwner service is not available this form behaves like any other form</remarks>
-    public class VSDialogForm : System.Windows.Forms.Form, IAnkhServiceProvider
+    public class VSDialogForm : System.Windows.Forms.Form, IAnkhServiceProvider, IContextControl
     {
         IAnkhServiceProvider _context;
         IAnkhDialogOwner _dlgOwner;

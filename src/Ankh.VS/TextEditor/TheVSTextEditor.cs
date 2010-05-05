@@ -30,27 +30,24 @@ using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System.Security.Permissions;
 using Ankh.Scc.UI;
 
-namespace Ankh.UI.PendingChanges
+namespace Ankh.UI.VS.TextEditor
 {
     /// <summary>
     /// This class is used to implement CodeEditorUserControl
     /// </summary>
     /// <seealso cref="UserControl"/>
-    public partial class VSTextEditor : Control, IAnkhPreFilterMessage
+    partial class TheVSTextEditor : Control, IAnkhPreFilterMessage, IAnkhHasVsTextView, IVSTextEditorImplementation
     {
         CodeEditorWindow _nativeWindow;
         IAnkhServiceProvider _context;
-        BorderStyle _borderStyle;
         Guid? _forceLanguageService;
-        readonly bool _containsWpfEditor;
 
-        public VSTextEditor()
+        public TheVSTextEditor()
         {
             BackColor = SystemColors.Window;
-            _containsWpfEditor = VSVersion.VS2010OrLater;
         }
 
-        public VSTextEditor(IContainer container)
+        public TheVSTextEditor(IContainer container)
             : this()
         {
             container.Add(this);
@@ -78,7 +75,7 @@ namespace Ankh.UI.PendingChanges
 
         private InheritBool _wordWrapMode;
         [Localizable(false), DefaultValue(InheritBool.Inherit)]
-        public InheritBool WordWrapMode
+        public InheritBool WordWrap
         {
             get { return _wordWrapMode; }
             set
@@ -94,15 +91,15 @@ namespace Ankh.UI.PendingChanges
         bool _showHorizontalScrollBar;
 
         [Localizable(false), DefaultValue(false)]
-        public bool ShowHorizontalScrollBar
+        public bool HideHorizontalScrollBar
         {
-            get { return _showHorizontalScrollBar; }
+            get { return !_showHorizontalScrollBar; }
             set
             {
-                _showHorizontalScrollBar = value;
+                _showHorizontalScrollBar = !value;
                 if (_nativeWindow != null)
                 {
-                    _nativeWindow.ShowHorizontalScrollBar = value;
+                    _nativeWindow.ShowHorizontalScrollBar = !value;
                     UpdateSize();
                 }
             }
@@ -185,32 +182,6 @@ namespace Ankh.UI.PendingChanges
                 _nativeWindow.Clear(clearUndoBuffer);
             else
                 Text = "";
-        }
-
-        public event EventHandler<TextViewScrollEventArgs> Scroll;
-
-        public void OpenFile(string path)
-        {
-            if (_nativeWindow == null)
-                throw new InvalidOperationException("Code editor not initialized");
-
-            _nativeWindow.LoadFile(path);
-        }
-
-        internal void IgnoreFileChanges(bool ignore)
-        {
-            if (_nativeWindow == null)
-                throw new InvalidOperationException("Code editor not initialized");
-
-            _nativeWindow.IgnoreFileChanges(ignore);
-        }
-
-        public void ReplaceContents(string pathToReplaceWith)
-        {
-            if (_nativeWindow == null)
-                throw new InvalidOperationException("Code editor not initialized");
-
-            _nativeWindow.ReplaceContents(pathToReplaceWith);
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
@@ -326,24 +297,16 @@ namespace Ankh.UI.PendingChanges
 
                 _nativeWindow.Init(allowModal, ForceLanguageService);
 
-                _nativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
-                _nativeWindow.SetWordWrapMode(WordWrapMode);
+                _nativeWindow.ShowHorizontalScrollBar = !HideHorizontalScrollBar;
+                _nativeWindow.SetWordWrapMode(WordWrap);
                 _nativeWindow.Size = ClientSize;
                 _nativeWindow.SetReadOnly(_readOnly);
-
-                _nativeWindow.Scroll += new EventHandler<TextViewScrollEventArgs>(codeEditorNativeWindow_Scroll);
             }
             catch
             {
                 _nativeWindow = null;
                 throw;
             }
-        }
-
-        void codeEditorNativeWindow_Scroll(object sender, TextViewScrollEventArgs e)
-        {
-            if (Scroll != null)
-                Scroll(sender, e);
         }
 
         void UpdateSize()
@@ -365,13 +328,12 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IOleCommandTarget CommandTarget
         {
             get { return _nativeWindow; }
         }
 
-        [CLSCompliant(false)]
         public IOleCommandTarget EditorCommandTarget
         {
             get
@@ -383,67 +345,19 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        protected override CreateParams CreateParams
-        {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-            get
-            {
-                CreateParams createParams = base.CreateParams;
-                // style = 0x56010000 = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_TABSTOP
-                // exstyle = 0x10000 = WS_EX_CONTROLPARENT
-
-                // Remove border settings
-                createParams.ExStyle &= ~0x00000200; // WS_EX_CLIENTEDGE
-                createParams.Style &= ~0x00800000; // WS_BORDER
-                switch (_borderStyle)
-                {
-                    case BorderStyle.FixedSingle:
-                        createParams.Style |= 0x00800000; // WS_BORDER
-                        return createParams;
-
-                    case BorderStyle.Fixed3D:
-                        createParams.ExStyle |= 0x00000200; // WS_EX_CLIENTEDGE
-                        return createParams;
-                }
-                return createParams;
-            }
-        }
-
-        public Point EditorClientTop
+        public Point EditorClientTopLeft
         {
             get
             {
                 if (_nativeWindow == null)
-                    return Point.Empty;
+                    return PointToScreen(new Point(0,0));
 
-                Point? p = _nativeWindow.EditorClientTop;
+                Point? p = _nativeWindow.EditorClientTopLeft;
 
                 if (p.HasValue)
-                    return PointToClient(p.Value);
+                    return p.Value;
                 else
-                    return Point.Empty;
-            }
-        }
-
-        [Category("Appearance"), DefaultValue(BorderStyle.None)]
-        public BorderStyle BorderStyle
-        {
-            get
-            {
-                return _borderStyle;
-            }
-            set
-            {
-                if (_borderStyle != value)
-                {
-                    if (!Enum.IsDefined(typeof(BorderStyle), _borderStyle))
-                    {
-                        throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
-                    }
-                    _borderStyle = value;
-                    if (!DesignMode)
-                        base.UpdateStyles();
-                }
+                    return PointToScreen(new Point(0,0));
             }
         }
 
@@ -613,7 +527,7 @@ namespace Ankh.UI.PendingChanges
         /// Gets the find target.
         /// </summary>
         /// <value>The find target.</value>
-        [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IVsFindTarget FindTarget
         {
             get
@@ -625,7 +539,6 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        [CLSCompliant(false)]
         public IVsTextView TextView
         {
             get { return _nativeWindow.TextView; }
@@ -659,6 +572,38 @@ namespace Ankh.UI.PendingChanges
 
             return false;
         }
+
+        #region IVSTextEditorImplementation Members
+
+        public void SetInitialText(string text)
+        {
+            Text = text;
+        }
+
+        public event EventHandler<VSTextEditorScrollEventArgs> HorizontalTextScroll
+        {
+            add { _nativeWindow.HorizontalTextScroll += value; }
+            remove { _nativeWindow.HorizontalTextScroll -= value; }
+        }
+
+        public event EventHandler<VSTextEditorScrollEventArgs> VerticalTextScroll
+        {
+            add { _nativeWindow.VerticalTextScroll += value; }
+            remove { _nativeWindow.VerticalTextScroll -= value; }
+        }
+
+        public void LoadFile(string path, bool monitorChanges)
+        {
+            if (_nativeWindow == null)
+                throw new InvalidOperationException();
+
+            _nativeWindow.LoadFile(path);
+
+            if (!monitorChanges)
+                _nativeWindow.IgnoreFileChanges(true);
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -1250,7 +1195,7 @@ namespace Ankh.UI.PendingChanges
             ErrorHandler.ThrowOnFailure(dfc.IgnoreFileChanges(ignore ? 1 : 0));
         }
 
-        public Point? EditorClientTop
+        public Point? EditorClientTopLeft
         {
             get
             {
@@ -1283,16 +1228,30 @@ namespace Ankh.UI.PendingChanges
         /// <summary>
         /// Occurs when the text view scrolled
         /// </summary>
-        public event EventHandler<TextViewScrollEventArgs> Scroll;
         void IVsTextViewEvents.OnChangeScrollInfo(IVsTextView pView, int iBar, int iMinUnit, int iMaxUnits, int iVisibleUnits, int iFirstVisibleUnit)
         {
-            if (Scroll != null)
-            {
-                ScrollOrientation orientation = iBar == 1 ? ScrollOrientation.VerticalScroll : ScrollOrientation.HorizontalScroll;
-                TextViewScrollEventArgs ea = new TextViewScrollEventArgs(orientation, iMinUnit, iMaxUnits, iVisibleUnits, iFirstVisibleUnit);
+            bool vertical = (iBar == 1);
+            VSTextEditorScrollEventArgs ea = new VSTextEditorScrollEventArgs(iMinUnit, iMaxUnits, iVisibleUnits, iFirstVisibleUnit);
 
-                Scroll(this, ea);
-            }
+            if (vertical)
+                OnVerticalTextScroll(ea);
+            else
+                OnHorizontalTextScroll(ea);
+        }
+
+        public event EventHandler<VSTextEditorScrollEventArgs> HorizontalTextScroll;
+
+        private void OnHorizontalTextScroll(VSTextEditorScrollEventArgs ea)
+        {
+            if (HorizontalTextScroll != null)
+                HorizontalTextScroll(this, ea);
+        }
+
+        public event EventHandler<VSTextEditorScrollEventArgs> VerticalTextScroll;
+        private void OnVerticalTextScroll(VSTextEditorScrollEventArgs ea)
+        {
+            if (VerticalTextScroll != null)
+                VerticalTextScroll(this, ea);
         }
 
         void IVsTextViewEvents.OnKillFocus(IVsTextView pView)
@@ -1429,58 +1388,6 @@ namespace Ankh.UI.PendingChanges
             else
                 return new Point(-1, -1); // Not represented in view
         }
-    }
-
-    public class TextViewScrollEventArgs : EventArgs
-    {
-
-        readonly ScrollOrientation _orientation;
-        readonly int _iMinUnit;
-        readonly int _iMaxUnits;
-        readonly int _iVisibleUnits;
-        readonly int _iFirstVisibleUnit;
-
-        public TextViewScrollEventArgs(ScrollOrientation orientiation, int iMinUnit, int iMaxUnits, int iVisibleUnits, int iFirstVisibleUnit)
-        {
-            _orientation = orientiation;
-
-            _iMinUnit = iMinUnit;
-            _iMaxUnits = iMaxUnits;
-            _iVisibleUnits = iVisibleUnits;
-            _iFirstVisibleUnit = iFirstVisibleUnit;
-        }
-
-        public ScrollOrientation Orientation
-        {
-            get { return _orientation; }
-        }
-
-        public int MinUnit
-        {
-            get { return _iMinUnit; }
-        }
-
-        public int MaxUnit
-        {
-            get { return _iMaxUnits; }
-        }
-
-        public int VisibleUnits
-        {
-            get { return _iVisibleUnits; }
-        }
-
-        public int FirstVisibleUnit
-        {
-            get { return _iFirstVisibleUnit; }
-        }
-    }
-
-    public enum InheritBool
-    {
-        Inherit,
-        True,
-        False
     }
 }
 

@@ -24,7 +24,7 @@ using Ankh.UI;
 namespace Ankh.Scc.UI
 {
     [CLSCompliant(false)]
-    public interface IAnkhToolWindowControl
+    public interface IAnkhToolWindowControl : IContextControl
     {
         IAnkhToolWindowHost ToolWindowHost { get; set; }
 
