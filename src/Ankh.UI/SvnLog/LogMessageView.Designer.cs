@@ -58,7 +58,6 @@ namespace Ankh.UI.SvnLog
             resources.ApplyResources(this.logMessageEditor, "logMessageEditor");
             this.logMessageEditor.Name = "logMessageEditor";
             this.logMessageEditor.ReadOnly = true;
-            this.logMessageEditor.WordWrap = InheritBool.True;
             // 
             // label1
             // 
