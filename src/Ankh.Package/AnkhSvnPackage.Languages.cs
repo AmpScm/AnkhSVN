@@ -15,17 +15,12 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Microsoft.VisualStudio.Shell;
 
-using Ankh.Selection;
-using Ankh.UI.PendingChanges;
-using Ankh.VS.LanguageServices;
+using Ankh.VS.LanguageServices.Core;
 using Ankh.VS.LanguageServices.LogMessages;
-using Ankh.VSPackage.Attributes;
 using Ankh.VS.LanguageServices.UnifiedDiff;
+using Ankh.VSPackage.Attributes;
 
 namespace Ankh.VSPackage
 {
@@ -66,10 +61,10 @@ namespace Ankh.VSPackage
 
                 if (ps != null && name == ps.Name)
                 {
-                    IObjectWithAutomation automationParent = GetService<IObjectWithAutomation>(ps.Type);
+                    AnkhLanguage language = GetService<AnkhLanguage>(ps.Type);
 
-                    if (automationParent != null)
-                        obj = automationParent.AutomationObject;
+                    if (language != null)
+                        obj = language.LanguagePreferences;
 
                     if (obj != null)
                         return obj;
