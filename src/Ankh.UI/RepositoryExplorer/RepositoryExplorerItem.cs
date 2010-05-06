@@ -123,7 +123,8 @@ namespace Ankh.UI.RepositoryExplorer
         }
 
         [Category("Subversion"), DisplayName("Last Author")]
-        public string LastAuthor
+        [Description("Author of the Last Commit")]
+        public string LastCommittedAuthor
         {
             get
             {
@@ -136,7 +137,8 @@ namespace Ankh.UI.RepositoryExplorer
         }  
 
         [Category("Subversion"), DisplayName("Last Revision")]
-        public long LastRevision
+        [Description("Revision number of the Last Commit")]
+        public long LastCommittedRevision
         {
             get
             {
@@ -149,7 +151,8 @@ namespace Ankh.UI.RepositoryExplorer
         }
 
         [Category("Subversion"), DisplayName("Last Committed")]
-        public DateTime LastCommitted
+        [Description("Time of the Last Commit")]
+        public DateTime LastCommittedDate
         {
             get
             {
