@@ -185,6 +185,7 @@ namespace Ankh.Commands
             SvnRevision rev;
             bool allowUnversionedObstructions = false;
             bool updateExternals = true;
+            bool setDepthInfinity = true;
 
             IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
             IFileStatusCache cache = e.GetService<IFileStatusCache>();
@@ -210,6 +211,7 @@ namespace Ankh.Commands
                     rev = ud.Revision;
                     allowUnversionedObstructions = ud.AllowUnversionedObstructions;
                     updateExternals = ud.UpdateExternals;
+                    setDepthInfinity = ud.SetDepthInfinty;
                 }
             }
             else if (IsFolderCommand(e.Command))
@@ -231,6 +233,7 @@ namespace Ankh.Commands
                     rev = ud.Revision;
                     allowUnversionedObstructions = ud.AllowUnversionedObstructions;
                     updateExternals = ud.UpdateExternals;
+                    setDepthInfinity = ud.SetDepthInfinty;
                 }
             }
             else
@@ -298,6 +301,7 @@ namespace Ankh.Commands
                     rev = ud.Revision;
                     allowUnversionedObstructions = ud.AllowUnversionedObstructions;
                     updateExternals = ud.UpdateExternals;
+                    setDepthInfinity = ud.SetDepthInfinty;
                 }
             }
 
@@ -347,18 +351,69 @@ namespace Ankh.Commands
             using (DocumentLock lck = documentTracker.LockDocuments(lockPaths, DocumentLockType.NoReload))
             using (lck.MonitorChangesForReload())
             {
-                UpdateRunner ur = new UpdateRunner(groups.Values, rev, updateExternals, allowUnversionedObstructions);
+                SvnUpdateResult updateResult = null;
+
                 ProgressRunnerArgs pa = new ProgressRunnerArgs();
                 pa.CreateLog = true;
 
-                e.GetService<IProgressRunner>().RunModal(
-                    string.Format(IsSolutionCommand(e.Command) ? CommandStrings.UpdatingSolution :
-                    (IsFolderCommand(e.Command) ? CommandStrings.UpdatingFolder : CommandStrings.UpdatingProject)),
-                    pa, ur.Work);
+                string title;
 
-                if (ci != null && ur.LastResult != null && IsSolutionCommand(e.Command))
+                if (IsSolutionCommand(e.Command))
+                    title = CommandStrings.UpdatingSolution;
+                else if (IsFolderCommand(e.Command))
+                    title = CommandStrings.UpdatingFolder;
+                else
+                    title = CommandStrings.UpdatingProject;
+
+                e.GetService<IProgressRunner>().RunModal(title, pa,
+                    delegate(object sender, ProgressWorkerArgs a)
+                    {
+                        PerformUpdate(e, a, rev, allowUnversionedObstructions, updateExternals, setDepthInfinity, groups.Values, out updateResult);
+                    });
+
+                if (ci != null && updateResult != null && IsSolutionCommand(e.Command))
                 {
-                    ci.SetLastChange("Updated to:", ur.LastResult.Revision.ToString());
+                    ci.SetLastChange("Updated to:", updateResult.Revision.ToString());
+                }
+            }
+        }
+
+        private static void PerformUpdate(CommandEventArgs e, ProgressWorkerArgs wa, SvnRevision rev, bool allowUnversionedObstructions, bool updateExternals, bool setDepthInfinity, IEnumerable<List<string>> groups, out SvnUpdateResult updateResult)
+        {
+            SvnUpdateArgs ua = new SvnUpdateArgs();
+            ua.Revision = rev;
+            ua.AllowObstructions = allowUnversionedObstructions;
+            ua.IgnoreExternals = !updateExternals;
+            ua.KeepDepth = setDepthInfinity;
+			updateResult = null;
+
+            HybridCollection<string> handledExternals = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+            ua.Notify += delegate(object ss, SvnNotifyEventArgs ee)
+            {
+                if (ee.Action == SvnNotifyAction.UpdateExternal)
+                {
+                    if (!handledExternals.Contains(ee.FullPath))
+                        handledExternals.Add(ee.FullPath);
+                }
+            };
+            e.Context.GetService<IConflictHandler>().RegisterConflictHandler(ua, wa.Synchronizer);
+
+            foreach (List<string> group in groups)
+            {
+                // Currently Subversion runs update per item passed and in
+                // Subversion 1.6 passing each item separately is actually 
+                // a tiny bit faster than passing them all at once. 
+                // (sleep_for_timestamp fails its fast route)
+                foreach (string path in group)
+                {
+                    if (handledExternals.Contains(path))
+                        continue;
+
+                    SvnUpdateResult result;
+                    wa.Client.Update(path, ua, out result);
+
+                    if (updateResult == null)
+                        updateResult = result; // Return the primary update as version for output
                 }
             }
         }
@@ -386,74 +441,6 @@ namespace Ankh.Commands
                         yield return item;
                     }
                 }
-        }
-
-        sealed class UpdateRunner
-        {
-            readonly SvnRevision _rev;
-            readonly IEnumerable<List<string>> _groups;
-            SvnUpdateResult _result;
-            readonly bool _updateExternals;
-            readonly bool _allowUnversionedObstructions;
-
-            public UpdateRunner(IEnumerable<List<string>> groups, SvnRevision rev, bool updateExternals, bool allowUnversionedObstructions)
-            {
-                if (groups == null)
-                    throw new ArgumentNullException("groups");
-                if (rev == null)
-                    throw new ArgumentNullException("rev");
-
-                _groups = groups;
-                _rev = rev;
-                _updateExternals = updateExternals;
-                _allowUnversionedObstructions = allowUnversionedObstructions;
-            }
-
-            public SvnUpdateResult LastResult
-            {
-                get { return _result; }
-            }
-
-            #region IProgressWorker Members
-
-            public void Work(object sender, ProgressWorkerArgs e)
-            {
-                SvnUpdateArgs ua = new SvnUpdateArgs();
-                ua.Revision = _rev;
-                ua.AllowObstructions = _allowUnversionedObstructions;
-                ua.IgnoreExternals = !_updateExternals;
-                HybridCollection<string> handledExternals = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-                ua.Notify += delegate(object ss, SvnNotifyEventArgs ee)
-                {
-                    if (ee.Action == SvnNotifyAction.UpdateExternal)
-                    {
-                        if (!handledExternals.Contains(ee.FullPath))
-                            handledExternals.Add(ee.FullPath);
-                    }
-                };
-                e.Context.GetService<IConflictHandler>().RegisterConflictHandler(ua, e.Synchronizer);
-                _result = null;
-
-                foreach (List<string> group in _groups)
-                {
-                    // Currently Subversion runs update per item passed and in
-                    // Subversion 1.6 passing each item separately is actually 
-                    // a tiny bit faster than passing them all at once. 
-                    // (sleep_for_timestamp fails its fast route)
-                    foreach (string path in group)
-                    {
-                        if (handledExternals.Contains(path))
-                            continue;
-
-                        SvnUpdateResult result;
-                        e.Client.Update(path, ua, out result);
-
-                        if (_result == null)
-                            _result = result; // Return the primary update as version for output
-                    }
-                }
-            }
-            #endregion
         }
     }
 }
