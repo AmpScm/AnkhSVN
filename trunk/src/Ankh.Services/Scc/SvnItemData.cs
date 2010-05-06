@@ -100,7 +100,7 @@ namespace Ankh.Scc
         [DisplayName("Project"), Category("Visual Studio")]
         public string Project
         {
-            get 
+            get
             {
                 IProjectFileMapper mapper = _context.GetService<IProjectFileMapper>();
 
@@ -127,7 +127,7 @@ namespace Ankh.Scc
 
                     return sb.ToString();
                 }
-                return ""; 
+                return "";
             }
         }
 
@@ -135,7 +135,7 @@ namespace Ankh.Scc
         [DisplayName("Change"), Category("Subversion")]
         public string Change
         {
-            get 
+            get
             {
                 AnkhStatus status = _item.Status;
                 PendingChangeKind kind = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, SvnItem.IsTreeConflicted, SvnItem);
@@ -153,25 +153,33 @@ namespace Ankh.Scc
         [Category("Subversion"), Description("Current Revision")]
         public long? Revision
         {
-            get 
+            get
             {
                 if (SvnItem.IsVersioned)
                     return SvnItem.Status.Revision;
                 else
-                    return null;            
+                    return null;
             }
         }
 
-        [Category("Subversion"), Description("Last committed author"), DisplayName("Last Author")]
+        [Category("Subversion"), DisplayName("Last Author")]
+        [Description("Author of the Last Commit")]
         public string LastCommittedAuthor
         {
-            get { return SvnItem.Status.LastChangeAuthor; }
+            get
+            {
+                if (SvnItem.IsVersioned)
+                    return SvnItem.Status.LastChangeAuthor;
+                else
+                    return null;
+            }
         }
 
-        [Category("Subversion"), Description("Last committed revision"), DisplayName("Last Revision")]
+        [Category("Subversion"), DisplayName("Last Revision")]
+        [Description("Revision number of the Last Commit")]
         public long? LastCommittedRevision
         {
-            get 
+            get
             {
                 if (SvnItem.IsVersioned)
                     return SvnItem.Status.LastChangeRevision;
@@ -180,13 +188,8 @@ namespace Ankh.Scc
             }
         }
 
-        [DisplayName("Url"), Category("Subversion")]
-        public Uri Uri
-        {
-            get { return SvnItem.Status.Uri; }
-        }
-
-        [Category("Subversion"), Description("Last committed date"), DisplayName("Last Committed")]
+        [Category("Subversion"), DisplayName("Last Committed")]
+        [Description("Time of the Last Commit")]
         public DateTime LastCommittedDate
         {
             get
@@ -197,6 +200,12 @@ namespace Ankh.Scc
                 else
                     return DateTime.MinValue;
             }
+        }
+
+        [DisplayName("Url"), Category("Subversion")]
+        public Uri Uri
+        {
+            get { return SvnItem.Status.Uri; }
         }
 
         protected override string ComponentName

@@ -67,7 +67,7 @@ namespace Ankh.UI.SvnLog
                 });
 
             SortColumns.Add(path);
-            FinalSortColumn = path;            
+            FinalSortColumn = path;
         }
 
         protected override void OnRetrieveSelection(RetrieveSelectionEventArgs e)
@@ -93,7 +93,7 @@ namespace Ankh.UI.SvnLog
         public PathListViewItem(LogChangedPathsView view, ISvnLogItem logItem, SvnChangeItem change, Uri reposRoot, bool isInSelection)
             : base(view)
         {
-            if(logItem == null)
+            if (logItem == null)
                 throw new ArgumentNullException("logItem");
             if (change == null)
                 throw new ArgumentNullException("change");
@@ -183,7 +183,7 @@ namespace Ankh.UI.SvnLog
 
         internal ISvnLogItem LogItem
         {
-            get { return _logItem;}
+            get { return _logItem; }
         }
 
         internal SvnNodeKind NodeKind
@@ -239,7 +239,7 @@ namespace Ankh.UI.SvnLog
         {
             get { return _lvi.Origin.Target.FileName; }
         }
-        
+
         [DisplayName("Path")]
         public string Path
         {
@@ -255,13 +255,15 @@ namespace Ankh.UI.SvnLog
 
         [Category("Subversion")]
         [DisplayName("Last Revision")]
+        [Description("Revision number of the Last Commit")]
         public long Revision
         {
             get { return _lvi.LogItem.Revision; }
         }
-        
+
         [Category("Subversion")]
         [DisplayName("Last Author")]
+        [Description("Author of the Last Commit")]
         public string Author
         {
             get { return _lvi.LogItem.Author; }
@@ -269,6 +271,7 @@ namespace Ankh.UI.SvnLog
 
         [Category("Subversion")]
         [DisplayName("Last Committed")]
+        [Description("Time of the Last Commit")]
         public DateTime LastCommitted
         {
             get { return _lvi.LogItem.CommitDate.ToLocalTime(); }

@@ -121,7 +121,8 @@ namespace Ankh.VS.Extenders
             }
         }
 
-        [Category("Subversion"), DisplayName("Change List"), Description("Change List")]
+        [Category("Subversion"), DisplayName("Change List")]
+        [Description("Change List")]
         public SvnItemData.SvnChangeList ChangeList
         {
             get
@@ -175,7 +176,8 @@ namespace Ankh.VS.Extenders
             return false; // Keep changelist non-bold
         }
 
-        [Category("Subversion"), Description("Last committed author"), DisplayName("Last Author")]
+        [Category("Subversion"), DisplayName("Last Author")]
+        [Description("Author of the Last Commit")]
         public string LastCommittedAuthor
         {
             get
@@ -206,7 +208,8 @@ namespace Ankh.VS.Extenders
             }
         }
 
-        [Category("Subversion"), Description("Last committed date"), DisplayName("Last Committed")]
+        [Category("Subversion"), DisplayName("Last Committed")]
+        [Description("Time of the Last Commit")]
         public DateTime LastCommittedDate
         {
             get
@@ -224,7 +227,8 @@ namespace Ankh.VS.Extenders
             }
         }
 
-        [Category("Subversion"), Description("Last committed revision"), DisplayName("Last Revision")]
+        [Category("Subversion"), DisplayName("Last Revision")]
+        [Description("Revision number of the Last Commit")]
         public long? LastCommittedRevision
         {
             get
