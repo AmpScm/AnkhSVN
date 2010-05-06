@@ -65,9 +65,11 @@ namespace Ankh.Trigger
         }
     }
 
-    // This class must be ComVisible, as it is created via its guid
-    [Guid(AnkhId.TriggerExtenderGuid)]
-    sealed class TriggerExtenderHandler : EnvDTE.IExtenderProviderUnk
+    // This class is created via its guid
+    [Guid(AnkhId.TriggerExtenderGuid), ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.None)]
+    [ComDefaultInterface(typeof(EnvDTE.IExtenderProviderUnk))]
+    sealed class TriggerExtenderHandler : EnvDTE.IExtenderProviderUnk, EnvDTE.IExtenderProvider
     {
         public TriggerExtenderHandler()
         {

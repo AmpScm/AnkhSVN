@@ -25,6 +25,7 @@ namespace Ankh.VS.Extenders
     /// 
     /// </summary>
     [ComVisible(true)] // This class must be public or the extender won't accept it.
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public sealed class SvnSolutionExtender : SvnItemExtender
     {
         /// <summary>

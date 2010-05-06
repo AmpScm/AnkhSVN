@@ -22,6 +22,7 @@ using System.Runtime.InteropServices;
 namespace Ankh.VS.Extenders
 {
     [ComVisible(true)] // This class must be public or the extender won't accept it.
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public sealed class SvnProjectExtender : SvnItemExtender
     {
         /// <summary>
