@@ -73,17 +73,17 @@ namespace Ankh.UI.VS.TextEditor
             }
         }
 
-        private InheritBool _wordWrapMode;
-        [Localizable(false), DefaultValue(InheritBool.Inherit)]
-        public InheritBool WordWrap
+        private bool _disableWordwrap;
+        [Localizable(false), DefaultValue(false)]
+        public bool DisableWordWrap
         {
-            get { return _wordWrapMode; }
+            get { return _disableWordwrap; }
             set
             {
-                _wordWrapMode = value;
+                _disableWordwrap = value;
                 if (_nativeWindow != null)
                 {
-                    _nativeWindow.SetWordWrapMode(value);
+                    _nativeWindow.SetWordWrapDisabling(value);
                 }
             }
         }
@@ -248,15 +248,15 @@ namespace Ankh.UI.VS.TextEditor
 
         void InitializeForm(VSContainerForm ownerForm)
         {
-            if (CommandTarget == null)
+            if (_nativeWindow == null)
             {
                 Init(ownerForm.Context, true);
             }
 
             IAnkhVSContainerForm cf = ownerForm;
 
-            cf.AddCommandTarget(CommandTarget);
-            cf.AddWindowPane(WindowPane);
+            cf.AddCommandTarget(_nativeWindow);
+            cf.AddWindowPane(_nativeWindow.WindowPane);
             cf.ContainerMode |= VSContainerMode.TranslateKeys | VSContainerMode.UseTextEditorScope;
         }
 
@@ -265,7 +265,7 @@ namespace Ankh.UI.VS.TextEditor
         {
             _inToolWindow = true;
             Init(toolWindow.ToolWindowHost, false);
-            toolWindow.ToolWindowHost.AddCommandTarget(CommandTarget);
+            toolWindow.ToolWindowHost.AddCommandTarget(_nativeWindow);
         }
 
         bool _inDocumentForm;
@@ -273,7 +273,7 @@ namespace Ankh.UI.VS.TextEditor
         {
             _inDocumentForm = true;
             Init(documentForm.Context, false);
-            documentForm.AddCommandTarget(CommandTarget);
+            documentForm.AddCommandTarget(_nativeWindow);
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace Ankh.UI.VS.TextEditor
                 _nativeWindow.Init(allowModal, ForceLanguageService);
 
                 _nativeWindow.ShowHorizontalScrollBar = !HideHorizontalScrollBar;
-                _nativeWindow.SetWordWrapMode(WordWrap);
+                _nativeWindow.SetWordWrapDisabling(DisableWordWrap);
                 _nativeWindow.Size = ClientSize;
                 _nativeWindow.SetReadOnly(_readOnly);
             }
@@ -328,12 +328,6 @@ namespace Ankh.UI.VS.TextEditor
             }
         }
 
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IOleCommandTarget CommandTarget
-        {
-            get { return _nativeWindow; }
-        }
-
         public IOleCommandTarget EditorCommandTarget
         {
             get
@@ -350,30 +344,14 @@ namespace Ankh.UI.VS.TextEditor
             get
             {
                 if (_nativeWindow == null)
-                    return PointToScreen(new Point(0,0));
+                    return PointToScreen(new Point(0, 0));
 
                 Point? p = _nativeWindow.EditorClientTopLeft;
 
                 if (p.HasValue)
                     return p.Value;
                 else
-                    return PointToScreen(new Point(0,0));
-            }
-        }
-
-        /// <summary>
-        /// Gets the window pane.
-        /// </summary>
-        /// <value>The window pane.</value>
-        [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IVsWindowPane WindowPane
-        {
-            get
-            {
-                if (_nativeWindow != null)
-                    return _nativeWindow.WindowPane;
-                else
-                    return null;
+                    return PointToScreen(new Point(0, 0));
             }
         }
 
@@ -1343,22 +1321,15 @@ namespace Ankh.UI.VS.TextEditor
             }
         }
 
-        internal void SetWordWrapMode(InheritBool mode)
+        internal void SetWordWrapDisabling(bool disable)
         {
             if (EditorPropertyContainer == null)
                 return;
 
-            switch (mode)
-            {
-                case InheritBool.Inherit:
-                    break;
-                case InheritBool.True:
-                    EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, true);
-                    break;
-                case InheritBool.False:
-                    EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, false);
-                    break;
-            }
+            if (disable)
+                EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, false);
+            else
+                EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, true);
         }
 
         internal Point ViewToBuffer(Point p)

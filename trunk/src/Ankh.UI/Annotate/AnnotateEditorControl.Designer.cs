@@ -93,7 +93,7 @@ namespace Ankh.UI.Annotate
             this.editor.Name = "editor";
             this.editor.Size = new System.Drawing.Size(183, 300);
             this.editor.TabIndex = 2;
-            this.editor.WordWrap = Ankh.UI.InheritBool.False;
+            this.editor.DisableWordWrap = true;
             this.editor.VerticalTextScroll += new System.EventHandler<Ankh.UI.VSTextEditorScrollEventArgs>(this.logMessageEditor1_VerticalScroll);
             // 
             // AnnotateEditorControl
