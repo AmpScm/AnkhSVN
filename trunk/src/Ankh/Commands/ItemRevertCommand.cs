@@ -36,7 +36,7 @@ namespace Ankh.Commands
         {
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                if (item.IsModified || (item.IsVersioned && item.IsDocumentDirty))
+                if (item.IsModified || (item.IsVersioned && item.IsDocumentDirty) || item.IsConflicted)
                     return;
             }
             e.Enabled = false;
@@ -55,7 +55,7 @@ namespace Ankh.Commands
 
                 contained.Add(i.FullPath);
 
-                if (i.IsModified || (i.IsVersioned && i.IsDocumentDirty))
+                if (i.IsModified || (i.IsVersioned && i.IsDocumentDirty) || i.IsConflicted)
                     toRevert.Add(i);
             }
 
@@ -106,16 +106,18 @@ namespace Ankh.Commands
             using (DocumentLock dl = documentTracker.LockDocuments(revertPaths, DocumentLockType.NoReload))
             using (dl.MonitorChangesForReload())
             {
-                SvnRevertArgs args = new SvnRevertArgs();
-                args.Depth = SvnDepth.Empty;
-
-                using (SvnClient client = e.Context.GetService<ISvnClientPool>().GetNoUIClient())
+                e.GetService<IProgressRunner>().RunModal(CommandStrings.Reverting,
+                delegate(object sender, ProgressWorkerArgs a)
                 {
+                    SvnRevertArgs ra = new SvnRevertArgs();
+                    ra.Depth = SvnDepth.Empty;
+                    ra.AddExpectedError(SvnErrorCode.SVN_ERR_WC_NOT_DIRECTORY); // Parent revert invalidated this change
+
                     foreach (SvnItem item in toRevert)
                     {
-                        client.Revert(item.FullPath, args);
+                        a.Client.Revert(item.FullPath, ra);
                     }
-                }
+                });
             }
         }
     }
