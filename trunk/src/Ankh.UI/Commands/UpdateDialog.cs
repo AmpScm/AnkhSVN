@@ -88,8 +88,14 @@ namespace Ankh.UI.Commands
 
         public bool UpdateExternals
         {
-            get { return updateExternals.Checked; }
-            set { updateExternals.Checked = value; }
+            get { return !ignoreExternals.Checked; }
+            set { ignoreExternals.Checked = !value; }
+        }
+
+        public bool SetDepthInfinty
+        {
+            get { return makeDepthInfinity.Checked; }
+            set { makeDepthInfinity.Checked = value; }
         }
 
         protected override void OnLoad(EventArgs e)
