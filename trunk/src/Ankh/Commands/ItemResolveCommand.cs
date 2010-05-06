@@ -44,10 +44,26 @@ namespace Ankh.Commands
 
                 foundOne = true;
 
+                if (item.IsTreeConflicted)
+                    switch (e.Command)
+                    {
+                        case AnkhCommand.ItemResolveMerge:
+                        case AnkhCommand.ItemResolveMergeTool:
+                        case AnkhCommand.ItemResolveMineFull:
+                        case AnkhCommand.ItemResolveTheirsFull:
+                        case AnkhCommand.ItemResolveMineConflict:
+                        case AnkhCommand.ItemResolveTheirsConflict:
+                        case AnkhCommand.ItemResolveBase:
+                            e.Enabled = false; // Subversion can't handle these and neither can we.
+                            return;
+                        case AnkhCommand.ItemResolveWorking:
+                        default:
+                            break;
+                    }
+
                 if (!item.IsTextFile)
                 {
                     canDiff = false;
-                    break;
                 }
             }
 
