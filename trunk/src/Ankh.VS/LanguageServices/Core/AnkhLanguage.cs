@@ -11,7 +11,7 @@ using Ankh.Selection;
 
 namespace Ankh.VS.LanguageServices.Core
 {
-    public abstract partial class AnkhLanguage : AnkhService, IVsLanguageInfo, IObjectWithAutomation
+    public abstract partial class AnkhLanguage : AnkhService, IVsLanguageInfo
     {
         protected AnkhLanguage(IAnkhServiceProvider context)
             : base(context)
