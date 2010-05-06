@@ -32,6 +32,7 @@ namespace Ankh.VS.Extenders
     /// Extends <see cref="SvnItem"/> in the property grid
     /// </summary>
     [ComVisible(true)] // This class must be public or the extender won't accept it.
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class SvnItemExtender : IDisposable
     {
         readonly AnkhExtenderProvider _provider;
@@ -54,6 +55,10 @@ namespace Ankh.VS.Extenders
             _provider = provider;
             _disposer = disposer;
             _catId = catId;
+#if DEBUG
+            if (!Marshal.IsTypeVisibleFromCom(GetType()))
+                throw new InvalidOperationException("Descendants of SvnItemExtender mist be visible from COM");
+#endif
         }
 
         public void Dispose()
@@ -126,7 +131,7 @@ namespace Ankh.VS.Extenders
                 if (item == null)
                     return null;
                 if (item.IsVersioned && item.IsFile)
-                    return item.Status.ChangeList ?? "";
+                    return new SvnItemData.SvnChangeList(item.Status.ChangeList ?? "");
                 else
                     return null;
             }
