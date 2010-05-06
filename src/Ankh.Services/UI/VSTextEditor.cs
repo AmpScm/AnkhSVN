@@ -340,7 +340,7 @@ namespace Ankh.UI
             if (text == null)
                 throw new ArgumentNullException("text");
 
-            if (_implementation == null)
+            if (_implementation != null)
                 _implementation.PasteText(text);
         }
 
