@@ -34,7 +34,7 @@ using System.Drawing;
 
 namespace Ankh.UI
 {
-    public class VSEditorControl : UserControl, IVSEditorControlInit, IVsWindowFrameNotify, IVsWindowFrameNotify2, IVsWindowFrameNotify3
+    public class VSEditorControl : UserControl, IVSEditorControlInit, IVsWindowFrameNotify, IVsWindowFrameNotify2, IVsWindowFrameNotify3, IContextControl
     {
         IAnkhServiceProvider _context;
         IAnkhEditorPane _pane;

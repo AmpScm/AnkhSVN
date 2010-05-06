@@ -9,5 +9,6 @@ namespace Ankh.UI
     public interface IAnkhHasVsTextView
     {
         IVsTextView TextView { get; }
+        IVsFindTarget FindTarget { get; }
     }
 }

@@ -119,6 +119,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SolutionExplorerStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="TextEditor\TextEditorFactory.cs" />
+    <Compile Include="TextEditor\TheVSTextEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">

@@ -261,6 +261,11 @@ namespace Ankh.UI.PendingChanges
             get { return _commitsPage.TextView; }
         }
 
+        Microsoft.VisualStudio.TextManager.Interop.IVsFindTarget IAnkhHasVsTextView.FindTarget
+        {
+            get { return _commitsPage.FindTarget; }
+        }
+
         #endregion
     }
 }

@@ -49,7 +49,7 @@ namespace Ankh.UI.Annotate
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.blameMarginControl1 = new Ankh.UI.Annotate.AnnotateMarginControl();
-            this.editor = new Ankh.UI.PendingChanges.VSTextEditor(this.components);
+            this.editor = new Ankh.UI.VSTextEditor(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -87,15 +87,14 @@ namespace Ankh.UI.Annotate
             // 
             // editor
             // 
-            this.editor.WordWrapMode = InheritBool.False;
+            this.editor.BackColor = System.Drawing.SystemColors.Window;
             this.editor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.editor.Location = new System.Drawing.Point(0, 0);
             this.editor.Name = "editor";
-            this.editor.ShowHorizontalScrollBar = true;
             this.editor.Size = new System.Drawing.Size(183, 300);
             this.editor.TabIndex = 2;
-            this.editor.Text = "";
-            this.editor.Scroll += new System.EventHandler<Ankh.UI.PendingChanges.TextViewScrollEventArgs>(this.logMessageEditor1_Scroll);
+            this.editor.DisableWordWrap = true;
+            this.editor.VerticalTextScroll += new System.EventHandler<Ankh.UI.VSTextEditorScrollEventArgs>(this.logMessageEditor1_VerticalScroll);
             // 
             // AnnotateEditorControl
             // 
@@ -115,7 +114,7 @@ namespace Ankh.UI.Annotate
         #endregion
 
         private AnnotateMarginControl blameMarginControl1;
-        private Ankh.UI.PendingChanges.VSTextEditor editor;
+        private VSTextEditor editor;
         private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
