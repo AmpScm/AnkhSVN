@@ -30,6 +30,7 @@ using Ankh.Scc;
 using Ankh.Scc.UI;
 using Ankh.UI.PendingChanges;
 using Ankh.UI.VSSelectionControls;
+using System.Drawing;
 
 namespace Ankh.UI.Annotate
 {
@@ -75,8 +76,7 @@ namespace Ankh.UI.Annotate
             // Does this anything?
             this.Text = Path.GetFileName(annotateFile) + " (Annotated)";
 
-            editor.OpenFile(annotateFile);
-            editor.IgnoreFileChanges(true);
+            editor.LoadFile(annotateFile, false);
         }
 
         public void SetLanguageService(Guid language)
@@ -98,7 +98,8 @@ namespace Ankh.UI.Annotate
             if (VSVersion.VS2010)
                 return 0;
 
-            return editor.EditorClientTop.Y;
+            Point p = editor.EditorClientTopLeft;
+            return PointToClient(p).Y;
         }
 
         public void AddLines(SvnOrigin origin, Collection<SharpSvn.SvnBlameEventArgs> blameResult, Dictionary<long, string> logMessages)
@@ -179,12 +180,9 @@ namespace Ankh.UI.Annotate
             aa.BeginInvoke(null, null); // Start retrieving logs
         }
 
-        private void logMessageEditor1_Scroll(object sender, TextViewScrollEventArgs e)
+        private void logMessageEditor1_VerticalScroll(object sender, VSTextEditorScrollEventArgs e)
         {
-            if (e.Orientation == ScrollOrientation.HorizontalScroll)
-                return; // No need to update margin
-
-            blameMarginControl1.NotifyScroll(e);
+            blameMarginControl1.NotifyVerticalScroll(e);
         }
 
         AnnotateSource _selected;

@@ -91,6 +91,7 @@
     <Compile Include="Scc\SvnOrigin.cs" />
     <Compile Include="UI\IAnkhHasVsTextView.cs" />
     <Compile Include="UI\IAnkhPreFilterMessage.cs" />
+    <Compile Include="UI\IContextControl.cs" />
     <Compile Include="UI\VSDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,6 +135,9 @@
     <Compile Include="UI\VSCommandHandler.cs" />
     <Compile Include="UI\VSEditorControl.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\VSTextEditor.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="VSVersion.cs" />
     <Compile Include="VS\ComStreamWrapper.cs" />

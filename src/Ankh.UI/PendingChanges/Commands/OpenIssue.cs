@@ -58,7 +58,7 @@ namespace Ankh.UI.PendingChanges.Commands
                 if (editor == null)
                     return false;
 
-                tv = editor.TextView;
+                tv = ((IAnkhHasVsTextView)editor).TextView;
             }
 
             int x, y;
