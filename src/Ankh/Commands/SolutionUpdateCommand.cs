@@ -385,7 +385,7 @@ namespace Ankh.Commands
             ua.AllowObstructions = allowUnversionedObstructions;
             ua.IgnoreExternals = !updateExternals;
             ua.KeepDepth = setDepthInfinity;
-			updateResult = null;
+            updateResult = null;
 
             HybridCollection<string> handledExternals = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             ua.Notify += delegate(object ss, SvnNotifyEventArgs ee)
