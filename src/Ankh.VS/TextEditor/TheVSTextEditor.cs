@@ -1,4 +1,4 @@
-﻿// $Id: TheVSTextEditor.cs 8368 2010-05-05 13:49:44Z rhuijben $
+﻿// $Id$
 //
 // Copyright 2008-2009 The AnkhSVN Project
 //
@@ -1329,7 +1329,7 @@ namespace Ankh.UI.VS.TextEditor
             if (disable)
                 EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, false);
             else
-                EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, true);
+                EditorPropertyContainer.RemoveProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap);
         }
 
         internal Point ViewToBuffer(Point p)
