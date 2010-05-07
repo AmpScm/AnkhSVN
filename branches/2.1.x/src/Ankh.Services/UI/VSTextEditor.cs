@@ -10,18 +10,11 @@ using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Ankh.UI
 {
-    public enum InheritBool
-    {
-        Inherit,
-        True,
-        False
-    }
-
     public partial class VSTextEditor : ContainerControl, IVSTextEditorImplementation, IAnkhHasVsTextView
     {
         Guid? _forceLanguageService;
         IVSTextEditorImplementation _implementation;
-        InheritBool _wordwrap;
+        bool _disableWordWrap;
         bool _hideHorizontalScrollBar;
         bool _enableSplitter;
         bool _enableNavBar;
@@ -113,16 +106,16 @@ namespace Ankh.UI
             }
         }
 
-        [DefaultValue(InheritBool.Inherit), Localizable(false)]
-        public InheritBool WordWrap
+        [DefaultValue(false), Localizable(false)]
+        public bool DisableWordWrap
         {
-            get { return _wordwrap; }
+            get { return _disableWordWrap; }
             set
             {
-                _wordwrap = value;
+                _disableWordWrap = value;
 
                 if (_implementation != null)
-                    _implementation.WordWrap = value;
+                    _implementation.DisableWordWrap = true;
             }
         }
 
@@ -390,7 +383,7 @@ namespace Ankh.UI
     public interface IVSTextEditorImplementation
     {
         Guid? ForceLanguageService { get; set; }
-        InheritBool WordWrap { get; set; }
+        bool DisableWordWrap { get; set; }
         bool HideHorizontalScrollBar { get; set; }
         bool EnableSplitter { get; set; }
         bool EnableNavigationBar { get; set; }
