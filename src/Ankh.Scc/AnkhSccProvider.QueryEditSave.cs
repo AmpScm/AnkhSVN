@@ -302,9 +302,7 @@ namespace Ankh.Scc
                         if (!allowUI)
                         {
                             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout
-                                                   | tagVSQueryEditResultFlags.QER_EditNotPossible
-                                                   | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc
+                            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc
                                                    | tagVSQueryEditResultFlags.QER_NoisyCheckoutRequired);
 
                             return VSConstants.S_OK;
@@ -332,8 +330,7 @@ namespace Ankh.Scc
                             if (!allowUI)
                             {
                                 pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                                prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_EditNotPossible
-                                                       | tagVSQueryEditResultFlags.QER_InMemoryEditNotAllowed
+                                prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_InMemoryEditNotAllowed
                                                        | tagVSQueryEditResultFlags.QER_ReadOnlyNotUnderScc
                                                        | tagVSQueryEditResultFlags.QER_NoisyPromptRequired);
 
@@ -382,7 +379,6 @@ namespace Ankh.Scc
                             // User has probably canceled the lock operation, or it failed.
                             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
                             prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_CheckoutCanceledOrFailed
-                                | tagVSQueryEditResultFlags.QER_EditNotPossible
                                 | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
                             break;
                         }
@@ -400,8 +396,7 @@ namespace Ankh.Scc
                     if (!allowed)
                     {
                         pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                        prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_EditNotPossible
-                                               | tagVSQueryEditResultFlags.QER_InMemoryEditNotAllowed
+                        prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_InMemoryEditNotAllowed
                                                | tagVSQueryEditResultFlags.QER_ReadOnlyNotUnderScc // TODO: Specialize to SCC?
                                                );
                     }
