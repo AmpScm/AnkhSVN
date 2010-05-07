@@ -1327,9 +1327,9 @@ namespace Ankh.UI.VS.TextEditor
                 return;
 
             if (disable)
-                EditorPropertyContainer.RemoveProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap);
+                EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, false);
             else
-                EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, true);
+                EditorPropertyContainer.RemoveProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap);
         }
 
         internal Point ViewToBuffer(Point p)
