@@ -210,4 +210,7 @@
   <data name="LockingTitle" xml:space="preserve">
     <value>Locking</value>
   </data>
+  <data name="Reverting" xml:space="preserve">
+    <value>Reverting</value>
+  </data>
 </root>
