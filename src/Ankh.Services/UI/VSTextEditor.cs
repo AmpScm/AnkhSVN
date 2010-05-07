@@ -231,6 +231,7 @@ namespace Ankh.UI
             _implementation.LoadFile(path, monitorChanges);
         }
 
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Point EditorClientTopLeft
         {
             get
