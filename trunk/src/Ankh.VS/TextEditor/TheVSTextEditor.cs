@@ -1327,7 +1327,7 @@ namespace Ankh.UI.VS.TextEditor
                 return;
 
             if (disable)
-                EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, false);
+                EditorPropertyContainer.RemoveProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap);
             else
                 EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, true);
         }
