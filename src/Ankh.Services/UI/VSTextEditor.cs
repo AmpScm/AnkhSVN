@@ -45,6 +45,13 @@ namespace Ankh.UI
             set { base.BackColor = value; }
         }
 
+        [Localizable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new Color ForeColor
+        {
+            get { return base.ForeColor; }
+            set { base.ForeColor = value; }
+        }
+
         [Category("Appearance"), DefaultValue(BorderStyle.None)]
         public BorderStyle BorderStyle
         {
