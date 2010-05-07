@@ -149,9 +149,11 @@ namespace Ankh.UI.PendingChanges
             // 
             this.topLayoutPanel.SetColumnSpan(this.logMessageEditor, 5);
             this.logMessageEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logMessageEditor.HideHorizontalScrollBar = true;
             this.logMessageEditor.Location = new System.Drawing.Point(0, 20);
             this.logMessageEditor.Margin = new System.Windows.Forms.Padding(0);
             this.logMessageEditor.Name = "logMessageEditor";
+            this.logMessageEditor.PasteSource = this.pendingCommits;
             this.logMessageEditor.Size = new System.Drawing.Size(766, 61);
             this.logMessageEditor.TabIndex = 4;
             // 
