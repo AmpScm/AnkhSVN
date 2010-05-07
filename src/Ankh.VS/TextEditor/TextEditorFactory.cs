@@ -24,7 +24,7 @@ namespace Ankh.VS.TextEditor
             implementation = edit;
 
             implementation.ForceLanguageService = editor.ForceLanguageService;
-            implementation.WordWrap = editor.WordWrap;
+            implementation.DisableWordWrap = editor.DisableWordWrap;
             implementation.HideHorizontalScrollBar = editor.HideHorizontalScrollBar;
             implementation.EnableSplitter = editor.EnableSplitter;
             implementation.EnableNavigationBar = editor.EnableNavigationBar;
