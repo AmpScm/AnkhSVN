@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.8375</title>
+          AnkhSVN-Daily Update - 2.1.8385</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,21 +14,31 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3363/AnkhSvn-Daily-2.1.8375.3.msi">AnkhSVN 2.1.8375</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3367/AnkhSvn-Daily-2.1.8385.4.msi">AnkhSVN 2.1.8385</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8375">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8385">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-05-07</td></tr>
+<tr><td> </td><td class="r"><a id="8385" href="http://ankhsvn.net/rev/?r=8385">
+            [r8385]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">:</strong> Ankh.Services/UI/VSTextEditor.cs, Ankh.VS/TextEditor/TextEditorFactory.cs, Ankh.VS/TextEditor/TheVSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix the merge of <a href="http://ankhsvn.net/rev/?r=8377">r8377</a> from ^/trunk</td></tr>
 <tr class="d"><td colspan="4">2010-05-06</td></tr>
+<tr><td> </td><td class="r"><a id="8380" href="http://ankhsvn.net/rev/?r=8380">
+            [r8380]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">:</strong> VSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Partially merge <a href="http://ankhsvn.net/rev/?r=8372">r8372</a> from ^/trunk</td></tr>
+<tr><td> </td><td class="r"><a id="8379" href="http://ankhsvn.net/rev/?r=8379">
+            [r8379]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">:</strong> 2.1.x/src/Ankh.Scc/Ankh.Scc.csproj, 2.1.x/src/Ankh.VS/Ankh.VS.csproj, 2.1.x/src/Ankh.Services/UI/VSDialogForm.cs, 2.1.x/src/Ankh.UI/PendingChanges/VSTextEditor.cs, 2.1.x/src/Ankh.UI/Annotate/AnnotateMarginControl.cs, 2.1.x/src/Ankh.Services/UI/IContextControl.cs, 2.1.x/src/Ankh.Services/UI/IAnkhHasVsTextView.cs, 2.1.x/src/Ankh.Services/UI/VSEditorControl.cs, 2.1.x/src/Ankh.Services/UI/VSTextEditor.cs, 2.1.x/src/Ankh.UI/SvnLog/LogMessageView.Designer.cs, 2.1.x/src/Ankh.UI/Ankh.UI.csproj, 2.1.x/src/Ankh.UI/PendingChanges/Commands/OpenIssue.cs, 2.1.x/src/Ankh.VS/TextEditor/TextEditorFactory.cs, 2.1.x/src/Ankh.UI/Annotate/AnnotateEditorControl.Designer.cs (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Merge <a href="http://ankhsvn.net/rev/?r=8368">r8368</a>-<a href="http://ankhsvn.net/rev/?r=8369">r8369</a>,<a href="http://ankhsvn.net/rev/?r=8377">r8377</a> from ^/trunk</td></tr>
 <tr><td> </td><td class="r"><a id="8375" href="http://ankhsvn.net/rev/?r=8375">
             [r8375]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">:</strong> 2.1.x/src/Ankh.VS/Extenders/SvnSolutionExtender.cs, 2.1.x/src/Ankh.VS/Extenders/SvnItemExtender.cs, 2.1.x/src/Ankh.Trigger/TriggerPackage.Extender.cs, 2.1.x, 2.1.x/src/Ankh.VS/Extenders/SvnProjectExtender.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Merge <a href="http://ankhsvn.net/rev/?r=8374">r8374</a> from trunk: Make the COM interop of the extender provider support
@@ -121,17 +131,6 @@ that aren't modified on opening.</td></tr>
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.Projects.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Instead of assuming that the solution changed on project name changes, just
 ask the solution. Also resolve some cases where we steal the focus from the
 solution explorer when creating a new solution folder.</td></tr>
-<tr><td> </td><td class="r"><a id="8040" href="http://ankhsvn.net/rev/?r=8040">
-            [r8040]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccSettingStorage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Resolve internal exception on renaming a solution folder. The solution
-folder project ignored this exception for us.</td></tr>
-<tr><td> </td><td class="r"><a id="8039" href="http://ankhsvn.net/rev/?r=8039">
-            [r8039]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> tools/Ankh-Common.targets, Ankh.Package/Ankh.Package.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Always generate a .vsct when using the 2008 SDK. Even when in 2005 mode.</td></tr>
-<tr class="d"><td colspan="4">2010-04-07</td></tr>
-<tr><td> </td><td class="r"><a id="8037" href="http://ankhsvn.net/rev/?r=8037">
-            [r8037]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Package:</strong> Gui/AnkhSvn.xml, Gui/PendingChanges/ShowChangedPaths.png, Gui/PendingChanges/FetchAll.png, Ankh.Package.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add icons for two of the history viewer commands.</td></tr>
 
 </table>
 <!--/Recent changes-->
