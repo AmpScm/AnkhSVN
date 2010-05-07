@@ -241,6 +241,15 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reverting.
+        /// </summary>
+        internal static string Reverting {
+            get {
+                return ResourceManager.GetString("Reverting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The conflict in &apos;{0}&apos; is already resolved..
         /// </summary>
         internal static string TheConflictInXIsAlreadyResolved {
