@@ -115,10 +115,10 @@ namespace Ankh.UI.Commands
                 {
                     SvnItem file = GetService<IFileStatusCache>()[((SvnPathTarget)from.Target).FullPath];
 
-                    if (file.Status.Uri == null)
+                    if (file.Uri == null)
                         dlg.SelectedUri = from.RepositoryRoot;
                     else
-                        dlg.SelectedUri = file.Status.Uri;
+                        dlg.SelectedUri = file.Uri;
                 }
 
                 if (dlg.ShowDialog(Context) == DialogResult.OK)

@@ -97,7 +97,7 @@ namespace Ankh.UI.MergeWizard
 
                 args.ThrowOnError = false;
 
-                if (!client.GetAppliedMergeInfo(target.Status.Uri, args, out mergeInfo))
+                if (!client.GetAppliedMergeInfo(target.Uri, args, out mergeInfo))
                     return null;
 
                 return mergeInfo.AppliedMerges;

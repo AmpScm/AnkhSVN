@@ -201,7 +201,7 @@ namespace Ankh.Settings
                 if (parent != null)
                 {
                     cache.ProjectRoot = parent.FullPath;
-                    cache.ProjectRootUri = parent.Status.Uri;
+                    cache.ProjectRootUri = parent.Uri;
                     cache.ProjectRootItem = parent;
                 }
 
@@ -278,7 +278,7 @@ namespace Ankh.Settings
             if (dir.Length == 0)
             {
                 cache.ProjectRoot = directory.FullPath;
-                cache.ProjectRootUri = directory.Status.Uri;
+                cache.ProjectRootUri = directory.Uri;
             }
         }
 

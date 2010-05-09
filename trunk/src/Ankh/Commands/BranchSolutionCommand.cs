@@ -33,7 +33,7 @@ namespace Ankh.Commands
         {
             SvnItem item = GetRoot(e);
 
-            if(item == null || !item.IsVersioned || item.IsDeleteScheduled || item.Status.LocalContentStatus == SvnStatus.Added || item.Status.Uri == null)
+            if(item == null || !item.IsVersioned || item.IsDeleteScheduled || item.Status.LocalContentStatus == SvnStatus.Added || item.Uri == null)
                 e.Enabled = false;
         }
 
@@ -84,13 +84,13 @@ namespace Ankh.Commands
                     dlg.Text = CommandStrings.BranchProject;
 
                 dlg.SrcFolder = root.FullPath;
-                dlg.SrcUri = root.Status.Uri;
+                dlg.SrcUri = root.Uri;
                 dlg.EditSource = false;
 
                 dlg.Revision = root.Status.Revision;
 
                 RepositoryLayoutInfo info;
-                if (RepositoryUrlUtils.TryGuessLayout(e.Context, root.Status.Uri, out info))
+                if (RepositoryUrlUtils.TryGuessLayout(e.Context, root.Uri, out info))
                     dlg.NewDirectoryName = new Uri(info.BranchesRoot, ".");
 
                 while (true)

@@ -45,10 +45,10 @@ namespace Ankh.Scc.SccUI
             SvnItem slnDirItem = cache[settings.SolutionFilename].Parent;
             SvnWorkingCopy wc = slnDirItem.WorkingCopy;
 
-            if (wc != null && slnDirItem.Status.Uri != null)
+            if (wc != null && slnDirItem.Uri != null)
             {
                 SvnItem dirItem = slnDirItem;
-                Uri cur = dirItem.Status.Uri;
+                Uri cur = dirItem.Uri;
                 Uri setUri = settings.ProjectRootUri;
 
                 while (dirItem != null && dirItem.IsBelowPath(wc.FullPath))

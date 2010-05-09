@@ -37,7 +37,7 @@ namespace Ankh.Commands
             if (node == null)
                 enable = false;
             else if (e.Command == AnkhCommand.ItemSelectInRepositoryExplorer)
-                enable = node.Status.Uri != null;
+                enable = node.Uri != null;
             else if (e.Command == AnkhCommand.ItemSelectInWorkingCopyExplorer)
                 enable = node.Exists;
             else if (e.Command == AnkhCommand.ItemSelectInSolutionExplorer)
@@ -60,7 +60,7 @@ namespace Ankh.Commands
             switch (e.Command)
             {
                 case AnkhCommand.ItemSelectInRepositoryExplorer:
-                    if (node == null || node.Status.Uri == null)
+                    if (node == null || node.Uri == null)
                         return;
 
                     if (cmd != null)

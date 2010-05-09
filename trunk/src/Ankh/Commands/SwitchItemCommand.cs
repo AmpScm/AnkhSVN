@@ -142,7 +142,7 @@ namespace Ankh.Commands
             IFileStatusCache statusCache = e.GetService<IFileStatusCache>();
 
             SvnItem pathItem = statusCache[path];
-            Uri uri = pathItem.Status.Uri;
+            Uri uri = pathItem.Uri;
 
             if (uri == null)
                 return; // Should never happen on a real workingcopy

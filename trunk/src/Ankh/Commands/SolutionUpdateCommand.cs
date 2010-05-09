@@ -263,7 +263,7 @@ namespace Ankh.Commands
                     {
                         si = null;
                         string urlPath1 = origin.Uri.AbsolutePath;
-                        string urlPath2 = item.Status.Uri.AbsolutePath;
+                        string urlPath2 = item.Uri.AbsolutePath;
 
                         int i = 0;
                         while (i < urlPath1.Length && i < urlPath2.Length

@@ -45,7 +45,7 @@ namespace Ankh.Commands.RepositoryExplorer
             foreach(SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 n++;
-                if(n > 1 || item.Status.Uri == null)
+                if(n > 1 || item.Uri == null)
                 {
                     e.Enabled = false;
                     return;
@@ -68,8 +68,8 @@ namespace Ankh.Commands.RepositoryExplorer
 
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
-                if (item.Status.Uri != null)
-                    Clipboard.SetText(item.Status.Uri.AbsoluteUri);
+                if (item.Uri != null)
+                    Clipboard.SetText(item.Uri.AbsoluteUri);
 
                 return;
             }

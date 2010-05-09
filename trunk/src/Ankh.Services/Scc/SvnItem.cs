@@ -1240,5 +1240,18 @@ namespace Ankh
         {
             return StringComparer.OrdinalIgnoreCase.GetHashCode(FullPath);
         }
+
+        /// <summary>
+        /// Gets the Uri of the node
+        /// </summary>
+        public Uri Uri
+        {
+            get
+            {
+                AnkhStatus status = Status;
+
+                return status.Uri;
+            }
+        }
     }
 }

@@ -200,12 +200,12 @@ namespace Ankh
             get { return _localLocked; }
         }
 
-        public Uri Uri
+        internal Uri Uri
         {
             get { return _uri; }
         }
 
-        public bool HasTreeConflict
+        internal bool HasTreeConflict
         {
             get { return _treeConflict != null; }
         }

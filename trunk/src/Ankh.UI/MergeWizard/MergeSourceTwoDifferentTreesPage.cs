@@ -326,7 +326,7 @@ namespace Ankh.UI.MergeWizard
         {
             if (!DesignMode)
             {
-                fromURLTextBox.Text = Wizard.MergeTarget.Status.Uri.ToString();
+                fromURLTextBox.Text = Wizard.MergeTarget.Uri.ToString();
                 fromURLTextBox.SelectAll();
 
                 TogglePageComplete();
