@@ -90,14 +90,14 @@ namespace Ankh.UI.MergeWizard
             if (DesignMode)
                 return;
 
-            mergeFromComboBox.Text = MergeTarget.Status.Uri.ToString();
+            mergeFromComboBox.Text = MergeTarget.Uri.ToString();
 
             MergeSources retrieveMergeSources = new MergeSources(RetrieveMergeSources);
 
             IAsyncResult mergeRetrieveResult = retrieveMergeSources.BeginInvoke(new AsyncCallback(MergesRetrieved), retrieveMergeSources);
 
             wcPath.Text = MergeTarget.FullPath;
-            wcUri.Text = MergeTarget.Status.Uri.ToString();
+            wcUri.Text = MergeTarget.Uri.ToString();
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace Ankh.UI.MergeWizard
             Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(
                 this,
                 MergeTarget,
-                MergeTarget.Status.Uri);
+                MergeTarget.Uri);
 
             if (uri != null)
                 mergeFromComboBox.Text = uri.ToString();

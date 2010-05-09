@@ -145,7 +145,7 @@ namespace Ankh.Scc.SccUI
                     else
                         item = SolutionSettings.ProjectRootSvnItem;
 
-                    if (item != null && item.Status.Uri != null)
+                    if (item != null && item.Uri != null)
                         enableConnect = true;
                 }
 
@@ -321,7 +321,7 @@ namespace Ankh.Scc.SccUI
                     SvnItem pi = StatusCache[pBase];
 
                     if (pi != null)
-                        pUri = pi.Status.Uri;
+                        pUri = pi.Uri;
                 }
 
                 KeepOneIgnoreCase(ref projectBase, pBase, first);

@@ -50,7 +50,7 @@ namespace Ankh.UI.Commands
                 if (value != null)
                 {
                     projectRootBox.Text = value.FullPath;
-                    urlBox.Text = _item.Status.Uri.ToString();
+                    urlBox.Text = _item.Uri.ToString();
                     versionBox.SvnOrigin = new Ankh.Scc.SvnOrigin(value);
                 }
             }

@@ -197,7 +197,7 @@ namespace Ankh.Scc.SccUI
 
         string SafeRepositoryPath(SvnItem item)
         {
-            if (item == null || item.Status.Uri == null)
+            if (item == null || item.Uri == null)
                 return "";
 
             SvnWorkingCopy wc = item.WorkingCopy;
@@ -207,7 +207,7 @@ namespace Ankh.Scc.SccUI
 
                 if (root != null)
                 {
-                    Uri relative = root.MakeRelativeUri(item.Status.Uri);
+                    Uri relative = root.MakeRelativeUri(item.Uri);
 
                     if (!relative.IsAbsoluteUri)
                     {
@@ -219,7 +219,7 @@ namespace Ankh.Scc.SccUI
                 }
             }
 
-            return item.Status.Uri.ToString();
+            return item.Uri.ToString();
         }
 
         string SafeRepositoryRoot(SvnItem item)

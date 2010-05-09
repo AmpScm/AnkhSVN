@@ -185,7 +185,7 @@ namespace Ankh.UI.SvnLog.Commands
             {
                 foreach (string s in changedPaths)
                 {
-                    if (i.Status.Uri.ToString().EndsWith(s))
+                    if (i.Uri.ToString().EndsWith(s))
                     {
                         yield return i;
                         break;

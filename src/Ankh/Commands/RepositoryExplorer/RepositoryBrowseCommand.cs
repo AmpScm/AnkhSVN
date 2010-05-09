@@ -45,7 +45,7 @@ namespace Ankh.Commands.RepositoryExplorer
 
                     if (item.IsVersioned)
                     {
-                        info = item.Status.Uri;
+                        info = item.Uri;
 
                         if (item.IsFile)
                             info = new Uri(info, "./");

@@ -110,8 +110,8 @@ namespace Ankh.Scc.ProjectMap
                 {
                     SvnItem dirItem = GetService<IFileStatusCache>()[SccBaseDirectory];
 
-                    if (dirItem != null && dirItem.Status.Uri != null)
-                        return dirItem.Status.Uri;
+                    if (dirItem != null && dirItem.Uri != null)
+                        return dirItem.Uri;
                 }
 
                 return null;

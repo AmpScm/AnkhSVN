@@ -117,7 +117,7 @@ namespace Ankh.VS.Extenders
 
                 if (item == null)
                     return null;
-                return item.Status.Uri;
+                return item.Uri;
             }
         }
 
@@ -257,7 +257,7 @@ namespace Ankh.VS.Extenders
                     return null;
 
                 AnkhStatus status = item.Status;
-                PendingChangeKind kind = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, status.HasTreeConflict, item);
+                PendingChangeKind kind = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, item.IsTreeConflicted, item);
 
                 if (kind == PendingChangeKind.None)
                     return "";
