@@ -122,8 +122,6 @@ namespace Ankh.Trigger
         {
             AnkhCatId.IAnkhInternalExtenderProvider extender = Extender;
 
-            IDisposable disposer = new ExtenderDisposer(TriggerPackage, ExtenderSite, Cookie);
-
             if (extender != null)
                 return extender.GetExtender(ExtendeeObject, ExtenderCATID, new ExtenderDisposer(TriggerPackage, ExtenderSite, Cookie));
 
@@ -132,12 +130,17 @@ namespace Ankh.Trigger
 
         sealed class ExtenderDisposer : IDisposable
         {
-            TriggerPackage _package;
+            readonly TriggerPackage _package;
             IExtenderSite _site;
             int? _cookie;
 
             public ExtenderDisposer(TriggerPackage package, IExtenderSite site, int cookie)
             {
+                if (package == null)
+                    throw new ArgumentNullException("package");
+                else if (site == null)
+                    throw new ArgumentNullException("site");
+
                 _package = package;
                 _site = site;
                 _cookie = cookie;
