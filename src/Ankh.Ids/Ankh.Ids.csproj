@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnkhCatId.cs" />
     <Compile Include="AnkhCommand.cs" />
     <Compile Include="AnkhCommandBitmap.cs" />
     <Compile Include="AnkhCommandContext.cs" />

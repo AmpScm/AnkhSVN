@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Ankh.Commands;
-using Ankh.VS.Extenders;
 using Ankh.VS.SolutionExplorer;
 
 namespace Ankh.VS

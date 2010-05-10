@@ -129,7 +129,6 @@ namespace Ankh.Trigger
             try
             {
                 ReleaseShellHook();
-                DisposeComHandles();
             }
             finally
             {
