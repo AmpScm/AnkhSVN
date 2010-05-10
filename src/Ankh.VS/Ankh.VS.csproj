@@ -63,8 +63,6 @@
   <ItemGroup>
     <Compile Include="TempDirManager.cs" />
     <Compile Include="VsActivatorCommand.cs" />
-    <Compile Include="Extenders\ExtenderProvider.cs" />
-    <Compile Include="Extenders\SvnItemExtender.cs" />
     <Compile Include="TempFileManager.cs" />
     <Compile Include="AnkhVSColor.cs" />
     <Compile Include="Dialogs\AnkhDialogOwner.cs" />
@@ -90,8 +88,6 @@
     <Compile Include="Dialogs\VSCommandInstaller.cs" />
     <Compile Include="Dialogs\VSDocumentFormPane.cs">
     </Compile>
-    <Compile Include="Extenders\SvnProjectExtender.cs" />
-    <Compile Include="Extenders\SvnSolutionExtender.cs" />
     <Compile Include="LanguageServices\AnkhEditorResolver.cs" />
     <Compile Include="LanguageServices\Core\AnkhLanguageDropDownBar.cs" />
     <Compile Include="LanguageServices\Core\AnkhLanguage.cs" />
