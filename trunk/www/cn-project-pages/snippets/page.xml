@@ -9,19 +9,15 @@
       <title localize="false" />
       <filename>HtmlSnippet2.html</filename>
     </component>
-    <component visibility="3" type="Html" order="3">
-      <title localize="false" />
-      <filename>HtmlSnippet7.html</filename>
-    </component>
-    <component visibility="1" type="Html" order="4">
+    <component visibility="1" type="Html" order="3">
       <title localize="false">News</title>
       <filename>HtmlSnippet4.html</filename>
     </component>
-    <component visibility="3" type="Html" order="5">
+    <component visibility="3" type="Html" order="4">
       <title localize="false">Features</title>
       <filename>HtmlSnippet3.html</filename>
     </component>
-    <component visibility="1" type="Html" order="6">
+    <component visibility="1" type="Html" order="5">
       <title localize="false">About AnkhSVN</title>
       <filename>HtmlSnippet6.html</filename>
     </component>
