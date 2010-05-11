@@ -4,26 +4,26 @@
   <?define ankhVersion=2.0.0.1 ?>
   <?endif?>
   <Product Id="*" Name="AnkhSVN $(var.ankhVersion)" Language="1033"
-			   Version="$(var.ankhVersion)" Manufacturer="AnkhSVN Team" UpgradeCode="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
+         Version="$(var.ankhVersion)" Manufacturer="AnkhSVN Team" UpgradeCode="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
     <Package InstallerVersion="300" Compressed="yes" InstallPrivileges="elevated"
-				 Platform="x86" Languages="1033" />
+         Platform="x86" Languages="1033" />
 
     <!-- AnkhSVN 2.0 daily builds before 2008-06-18 -->
     <Upgrade Id="40880177-2453-4EC7-8EEF-744EC101B688">
       <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0.0" Maximum="2.9999.0.0"
-							IncludeMinimum="yes" IncludeMaximum="yes" MigrateFeatures="no" />
+              IncludeMinimum="yes" IncludeMaximum="yes" MigrateFeatures="no" />
     </Upgrade>
 
     <!-- AnkhSVN 0.5-1.0.3 and Ankh 2.0 and higher -->
     <Upgrade Id="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
       <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="0.5.0" Maximum="2.0.0"
-							IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="no" />
+              IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="no" />
       <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0" Maximum="$(var.ankhVersion)"
-							IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="yes" />
+              IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="yes" />
       <UpgradeVersion Property="EXACTVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="$(var.ankhVersion)"
-							IncludeMinimum="yes" IncludeMaximum="yes" />
+              IncludeMinimum="yes" IncludeMaximum="yes" />
       <UpgradeVersion Property="NEWERVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="99.0.0.0"
-							IncludeMinimum="no" IncludeMaximum="yes" />
+              IncludeMinimum="no" IncludeMaximum="yes" />
     </Upgrade>
 
     <Property Id="ShortProductName" Value="AnkhSVN" />
@@ -97,13 +97,12 @@
     <WixVariable Id="WixUIDialogBmp" Value="Ankh.Votive/SetupPage.bmp"/>
     <WixVariable Id="WixUIBannerBmp" Value="Ankh.Votive/SetupHeader.bmp"/>
     <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
-    
+
     <WixVariable Id="WixUISupportPerUser" Value="0" />
     <UIRef Id="WixUI_Advanced"/>
 
     <Feature Id="ProductFeature" Title="AnkhSVN $(var.ankhVersion)" Level="1" ConfigurableDirectory="APPLICATIONFOLDER" AllowAdvertise="no" Display="expand">
       <ComponentGroupRef Id="Ankh.Package"/>
-      <ComponentGroupRef Id="Ankh.Trigger"/>
       <ComponentRef Id="C_CONTRIBUTORS"/>
       <ComponentRef Id="C_LICENSE" />
       <ComponentRef Id="C_NOTICE" />
@@ -111,24 +110,21 @@
       <ComponentGroupRef Id="SharpSvn_LICENSES"/>
       <MergeRef Id="CRT"/>
       <MergeRef Id="CRT_Policy"/>
-      <Feature Id="RegVS8" Title="Register in Microsoft Visual Studio 2005" 
+      <Feature Id="RegVS8" Title="Register in Microsoft Visual Studio 2005"
                Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2005" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg2005"/>
-        <ComponentGroupRef Id="TriggerReg2005"/>
         <ComponentGroupRef Id="Extension2005"/>
       </Feature>
-      <Feature Id="RegVS9" Title="Register in Microsoft Visual Studio 2008" 
+      <Feature Id="RegVS9" Title="Register in Microsoft Visual Studio 2008"
                Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2008" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg2008"/>
-        <ComponentGroupRef Id="TriggerReg2008"/>
         <ComponentGroupRef Id="Extension2008"/>
       </Feature>
-      <Feature Id="RegVS10" Title="Register in Microsoft Visual Studio 2010" 
+      <Feature Id="RegVS10" Title="Register in Microsoft Visual Studio 2010"
                Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2010" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg2010"/>
-        <ComponentGroupRef Id="TriggerReg2010"/>
         <ComponentGroupRef Id="Extension2010"/>
       </Feature>
-    </Feature>    
+    </Feature>
   </Product>
 </Wix>
