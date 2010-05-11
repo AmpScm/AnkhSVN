@@ -76,6 +76,7 @@
     <Compile Include="Commands\IAnkhCommandService.cs" />
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
+    <Compile Include="VS\IAnkhMigrationService.cs" />
     <Compile Include="IAnkhServiceImplementation.cs" />
     <Compile Include="IssueTracker\IAnkhIssueService.cs" />
     <Compile Include="IssueTracker\IIssueTrackerSettings.cs" />

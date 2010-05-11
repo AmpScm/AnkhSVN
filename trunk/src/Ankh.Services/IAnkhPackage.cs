@@ -56,5 +56,10 @@ namespace Ankh.UI
         // Returns:
         //     The root Microsoft.Win32.RegistryKey of the Visual Studio registry hive.
         RegistryKey ApplicationRegistryRoot { get; }
+
+		/// <summary>
+		/// Gets a registry key that can be used to store user data. 
+		/// </summary>
+		RegistryKey UserRegistryRoot { get; }
     }
 }

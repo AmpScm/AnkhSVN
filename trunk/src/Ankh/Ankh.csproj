@@ -98,6 +98,7 @@
     <Compile Include="Services\IssueTracker\AnkhIssueService.cs" />
     <Compile Include="Services\IssueTracker\IssueRepositoryConnectorProxy.cs" />
     <Compile Include="Services\IssueTracker\IssueRepositorySettingsProxy.cs" />
+    <Compile Include="Services\MigrationService.cs" />
     <Compile Include="Services\PendingChanges\PccStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
