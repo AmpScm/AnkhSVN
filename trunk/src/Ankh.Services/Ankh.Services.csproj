@@ -76,6 +76,9 @@
     <Compile Include="Commands\IAnkhCommandService.cs" />
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
+    <Compile Include="UI\AnkhToolWindowControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="VS\IAnkhMigrationService.cs" />
     <Compile Include="IAnkhServiceImplementation.cs" />
     <Compile Include="IssueTracker\IAnkhIssueService.cs" />

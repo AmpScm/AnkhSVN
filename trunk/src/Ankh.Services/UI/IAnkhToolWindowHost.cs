@@ -38,5 +38,10 @@ namespace Ankh.UI
         /// Gets or sets the command context of the frame window
         /// </summary>
         Guid CommandContext { get; set; }
-    }
+
+		/// <summary>
+		/// Gets a boolean indicating whether the toolwindow is on screen
+		/// </summary>
+		bool IsOnScreen { get; }
+	}
 }

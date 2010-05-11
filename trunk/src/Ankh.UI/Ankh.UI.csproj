@@ -143,15 +143,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StatusPanelResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="DiffWindow\DiffToolWindowControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="DiffWindow\DiffToolWindowControl.cs" />
     <Compile Include="DiffWindow\DiffToolWindowControl.Designer.cs">
       <DependentUpon>DiffToolWindowControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="DiffWindow\MergeToolWindowControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="DiffWindow\MergeToolWindowControl.cs" />
     <Compile Include="DiffWindow\MergeToolWindowControl.Designer.cs">
       <DependentUpon>MergeToolWindowControl.cs</DependentUpon>
     </Compile>
@@ -248,9 +244,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>VersionStrings.resx</DependentUpon>
-    </Compile>
-    <Compile Include="PendingChanges\AnkhToolWindowControl.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PendingChanges\Commands\ConfigureRecentChangesPage.cs" />
     <Compile Include="PendingChanges\Commands\CreatePatch.cs" />
@@ -550,9 +543,7 @@
     <Compile Include="SvnLog\LogChangedPathsView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SvnLog\LogToolWindowControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="SvnLog\LogToolWindowControl.cs" />
     <Compile Include="SvnLog\LogToolWindowControl.Designer.cs">
       <DependentUpon>LogToolWindowControl.cs</DependentUpon>
     </Compile>
@@ -571,6 +562,10 @@
     </Compile>
     <Compile Include="SvnLog\LogRevisionView.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SvnPropertyGrid\SvnPropertyGridControl.cs" />
+    <Compile Include="SvnPropertyGrid\SvnPropertyGridControl.Designer.cs">
+      <DependentUpon>SvnPropertyGridControl.cs</DependentUpon>
     </Compile>
     <Compile Include="VSSelectionControls\Commands\ListViewCommandBase.cs" />
     <Compile Include="VSSelectionControls\Commands\ListViewGroup.cs" />
@@ -672,9 +667,7 @@
     <Compile Include="PendingChanges\PendingChangesPage.Designer.cs">
       <DependentUpon>PendingChangesPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="PendingChanges\PendingChangesToolControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="PendingChanges\PendingChangesToolControl.cs" />
     <Compile Include="PendingChanges\PendingChangesToolControl.Designer.cs">
       <DependentUpon>PendingChangesToolControl.cs</DependentUpon>
     </Compile>
@@ -742,9 +735,7 @@
     <Compile Include="PropertyEditors\PlainPropertyEditor.Designer.cs">
       <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="RepositoryExplorer\RepositoryExplorerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="RepositoryExplorer\RepositoryExplorerControl.cs" />
     <Compile Include="RepositoryExplorer\RepositoryExplorerControl.Designer.cs">
       <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
     </Compile>
@@ -823,9 +814,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>WCStrings.resx</DependentUpon>
     </Compile>
-    <Compile Include="WorkingCopyExplorer\WorkingCopyExplorerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="WorkingCopyExplorer\WorkingCopyExplorerControl.cs" />
     <Compile Include="WorkingCopyExplorer\WorkingCopyExplorerControl.Designer.cs">
       <DependentUpon>WorkingCopyExplorerControl.cs</DependentUpon>
     </Compile>
