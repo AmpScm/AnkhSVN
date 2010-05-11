@@ -28,49 +28,49 @@ namespace Ankh.Scc
     {
         bool _tryRegisteredBefore;
         bool _wasZombieWhenActivated;
-		public void TryRegisterSccProvider()
-		{
-			IAnkhCommandStates states;
+        internal void TryRegisterSccProvider()
+        {
+            IAnkhCommandStates states;
 
-			if (IsActive)
-			{
-				if (_wasZombieWhenActivated)
-				{
-					states = GetService<IAnkhCommandStates>();
+            if (IsActive)
+            {
+                if (_wasZombieWhenActivated)
+                {
+                    states = GetService<IAnkhCommandStates>();
 
-					if (states != null && states.UIShellAvailable)
-					{
-						_wasZombieWhenActivated = false;
+                    if (states != null && states.UIShellAvailable)
+                    {
+                        _wasZombieWhenActivated = false;
 
-						GetService<IAnkhServiceEvents>().OnSccShellActivate(EventArgs.Empty);
-					}
+                        GetService<IAnkhServiceEvents>().OnSccShellActivate(EventArgs.Empty);
+                    }
 
-					//IAnkhMigrationService migrate = GetService<IAnkhMigrationService>();
+                    //IAnkhMigrationService migrate = GetService<IAnkhMigrationService>();
 
-					//if (migrate != null)
-					//	migrate.MaybeMigrate();
-				}
+                    //if (migrate != null)
+                    //	migrate.MaybeMigrate();
+                }
 
-				return;
-			}
-			if (_tryRegisteredBefore)
-				return;
+                return;
+            }
+            if (_tryRegisteredBefore)
+                return;
 
-			states = GetService<IAnkhCommandStates>();
+            states = GetService<IAnkhCommandStates>();
 
-			if (states == null || !states.SccProviderActive)
-				return;
+            if (states == null || !states.SccProviderActive)
+                return;
 
-			// Ok, Visual Studio decided to activate the user context with our GUID
-			// This tells us VS wants us to be the active SCC
-			//
-			// This is not documented directly. But it is documented that we should
-			// enable our commands on that context
+            // Ok, Visual Studio decided to activate the user context with our GUID
+            // This tells us VS wants us to be the active SCC
+            //
+            // This is not documented directly. But it is documented that we should
+            // enable our commands on that context
 
-			// Set us active; this makes VS initialize the provider
-			RegisterAsPrimarySccProvider();
+            // Set us active; this makes VS initialize the provider
+            RegisterAsPrimarySccProvider();
 
-			_tryRegisteredBefore = true;
-		}
+            _tryRegisteredBefore = true;
+        }
     }
 }

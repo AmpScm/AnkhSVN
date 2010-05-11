@@ -126,9 +126,7 @@ namespace Ankh.Scc
         IDisposable DisableSvnUpdates();
 
         bool SvnUpdatesDisabled { get; }
-
-		void TryRegisterSccProvider();
-	}
+    }
 
     /// <summary>
     /// 
