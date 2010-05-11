@@ -157,6 +157,13 @@ namespace Ankh.Scc
 
             if (states == null || !states.UIShellAvailable)
                 _wasZombieWhenActivated = true;
+            //else
+            //{
+            //    IAnkhMigrationService migrate = GetService<IAnkhMigrationService>();
+
+            //    if (migrate != null)
+            //        migrate.MaybeMigrate();
+            //}
 
             GetService<IAnkhServiceEvents>().OnSccProviderActivated(EventArgs.Empty);
 

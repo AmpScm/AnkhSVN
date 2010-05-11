@@ -40,20 +40,6 @@ namespace Ankh
         public const string PlkCompany = "AnkhSVN Core Team";
         //**********************************************************************************
 
-        //************ The Package Load Key Registration ***********************************
-        /// <summary>
-        /// The guid the Ankh Trigger package is registered with inside Visual Studio
-        /// </summary>
-        public const string TriggerPackageId = "2340124C-5DAE-4D72-84AA-4DEF3EFDFA1D";
-        public const string TriggerPackageDescription = "AnkhSVN Trigger Package";
-
-        /// <summary>The product version as used in the PLK for the trigger package</summary>
-        public const string TriggerPlkVersion = PlkVersion;
-        /// <summary>The product name as used in the PLK for the trigger package</summary>
-        public const string TriggerPlkProduct = "AnkhSVN Trigger";
-        /// <summary>The company name as used in the PLK</summary>
-        public const string TriggerPlkCompany = PlkCompany;
-
         public const string AssemblyCopyright = "Copyright © AnkhSVN Team 2003-2010";
         public const string AssemblyProduct = "AnkhSVN - Subversion Support for Visual Studio";
         public const string AssemblyCompany = "AnkhSVN Team";

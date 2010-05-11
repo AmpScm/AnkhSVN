@@ -62,7 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TempDirManager.cs" />
-    <Compile Include="VsActivatorCommand.cs" />
     <Compile Include="TempFileManager.cs" />
     <Compile Include="AnkhVSColor.cs" />
     <Compile Include="Dialogs\AnkhDialogOwner.cs" />

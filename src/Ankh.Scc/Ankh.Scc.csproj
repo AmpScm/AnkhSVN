@@ -105,8 +105,6 @@
       <DependentUpon>AnkhSccSettingStorage.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\PendingChangeTicker.cs" />
-    <Compile Include="Commands\ActivateSccProvider.cs">
-    </Compile>
     <Compile Include="Commands\ProjectFileFilter.cs" />
     <Compile Include="Commands\UnsupportedWcVersion.cs" />
     <Compile Include="Native\ICOMPropertyBag.cs" />
