@@ -65,7 +65,6 @@
     <Compile Include="Ankh.Scc\Ankh.Scc.wxs" />
     <Compile Include="Ankh.Migrate\Ankh.Migrate.wxs" />
     <Compile Include="Ankh.Services\Ankh.Services.wxs" />
-    <Compile Include="Ankh.Trigger\Ankh.Trigger.wxs" />
     <Compile Include="Ankh.UI\Ankh.UI.wxs" />
     <Compile Include="Ankh.VS\Ankh.VS.wxs" />
     <Compile Include="Ankh\Ankh.wxs" />
@@ -82,7 +81,6 @@
     <Folder Include="Ankh.Scc\" />
     <Folder Include="Ankh.Migrate\" />
     <Folder Include="Ankh.Services\" />
-    <Folder Include="Ankh.Trigger\" />
     <Folder Include="Ankh.UI\" />
     <Folder Include="Ankh.VS\" />
     <Folder Include="Ankh\" />
@@ -123,11 +121,6 @@
     <ProjectReference Include="Ankh.Services\Ankh.Services.csproj">
       <Name>Ankh.Services</Name>
       <Project>{d90a8e89-66b2-451e-8b31-3d86f0cd4afb}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="Ankh.Trigger\Ankh.Trigger.csproj">
-      <Name>Ankh.Trigger</Name>
-      <Project>{d81a44b8-57a9-4296-832c-7d29019d989b}</Project>
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="Ankh.UI\Ankh.UI.csproj">
@@ -185,7 +178,7 @@
     <CreateProperty Value="$(ProjectDefineConstants);AnkhExtensionPointsVersion=%(MyVersionAssembly.Version)">
       <Output TaskParameter="Value" PropertyName="ProjectDefineConstants" />
     </CreateProperty>
-    <Exec Command="tools\Ankh.GenPkgDef\bin\$(Configuration)\Ankh.GenPkgDef.exe Ankh.pkgdef Ankh.Package\bin\$(Configuration)\Ankh.Package.dll Ankh.Trigger\bin\$(Configuration)\Ankh.Trigger.dll" />
+    <Exec Command="tools\Ankh.GenPkgDef\bin\$(Configuration)\Ankh.GenPkgDef.exe Ankh.pkgdef Ankh.Package\bin\$(Configuration)\Ankh.Package.dll" />
   </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
