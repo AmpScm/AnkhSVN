@@ -102,7 +102,7 @@ namespace Ankh.UI.PendingChanges
             {
                 if (!states.UIShellAvailable)
                 {
-                    ev.SccShellActivate += new EventHandler(OnSccShellActivate);
+                    ev.UIShellActivate += new EventHandler(OnSccShellActivate);
                     shouldActivate = false;
                 }
                 else

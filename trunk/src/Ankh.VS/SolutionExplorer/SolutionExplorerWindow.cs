@@ -63,7 +63,7 @@ namespace Ankh.VS.SolutionExplorer
             {
                 if (!states.UIShellAvailable)
                 {
-                    ev.SccShellActivate += new EventHandler(OnSccShellActivate);
+                    ev.UIShellActivate += new EventHandler(OnUIShellActivate);
                     shouldActivate = false;
                 }
                 else
@@ -80,9 +80,12 @@ namespace Ankh.VS.SolutionExplorer
                 _manager.Ensure(this);
         }
 
-        void OnSccShellActivate(object sender, EventArgs e)
+        void OnUIShellActivate(object sender, EventArgs e)
         {
-            MaybeEnsure();
+            IAnkhCommandStates states = Context.GetService<IAnkhCommandStates>();
+
+            if (states != null && states.SccProviderActive)
+                MaybeEnsure();
         }
 
         public void Dispose()
