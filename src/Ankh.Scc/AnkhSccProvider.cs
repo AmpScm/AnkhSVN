@@ -60,23 +60,31 @@ namespace Ankh.Scc
             GetService<AnkhServiceEvents>().RuntimeStarted
                 += delegate
                 {
-                    TryRegisterSccProvider();
+                    IAnkhCommandStates states;
+
+                    states = GetService<IAnkhCommandStates>();
+
+                    if (states == null || !states.SccProviderActive)
+                        return;
+
+                    // Ok, Visual Studio decided to activate the user context with our GUID
+                    // This tells us VS wants us to be the active SCC
+                    //
+                    // This is not documented directly. But it is documented that we should
+                    // enable our commands on that context
+
+                    // Set us active; this makes VS initialize the provider
+                    RegisterAsPrimarySccProvider();
                 };
         }
 
-        public void RegisterAsSccProvider()
+        public void RegisterAsPrimarySccProvider()
         {
-            _tryRegisteredBefore = true;
             IVsRegisterScciProvider rscp = GetService<IVsRegisterScciProvider>();
             if (rscp != null)
             {
                 ErrorHandler.ThrowOnFailure(rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid));
             }
-        }
-
-        public void RegisterAsPrimarySccProvider()
-        {
-            RegisterAsSccProvider();
         }
 
         /// <summary>
@@ -155,12 +163,10 @@ namespace Ankh.Scc
 
             IAnkhCommandStates states = GetService<IAnkhCommandStates>();
 
-            if (states == null || !states.UIShellAvailable)
-                _wasZombieWhenActivated = true;
-            //else
+            //if (states.UIShellAvailable)
             //{
             //    IAnkhMigrationService migrate = GetService<IAnkhMigrationService>();
-
+            //
             //    if (migrate != null)
             //        migrate.MaybeMigrate();
             //}

@@ -28,9 +28,11 @@ using Ankh.Selection;
 namespace Ankh.VS.Selection
 {
     [GlobalService(typeof(IAnkhCommandStates))]
-    sealed class CommandState : AnkhService, IAnkhCommandStates
+    sealed class CommandState : AnkhService, IAnkhCommandStates, IVsShellPropertyEvents
     {
         IVsMonitorSelection _monitor;
+        uint _shellPropsCookie;
+        bool _zombie;
 
         public CommandState(IAnkhServiceProvider context)
             : base(context)
@@ -42,6 +44,41 @@ namespace Ankh.VS.Selection
             base.OnInitialize();
 
             GetService<SelectionContext>(typeof(ISelectionContext)).CmdUIContextChanged += new EventHandler(OnCmdUIContextChanged);
+
+            IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
+
+            if (shell != null)
+            {
+                object v;
+
+                if (!ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_Zombie, out v)))
+                    _zombie = false;
+                else
+                    _zombie = (v is bool) && ((bool)v);
+
+                if (!ErrorHandler.Succeeded(shell.AdviseShellPropertyChanges(this, out _shellPropsCookie)))
+                    _shellPropsCookie = 0;
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (_shellPropsCookie != 0)
+                {
+                    uint ck = _shellPropsCookie;
+                    _shellPropsCookie = 0;
+
+                    IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
+                    if (shell != null)
+                        shell.UnadviseShellPropertyChanges(ck);
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
         }
 
         IVsMonitorSelection Monitor
@@ -316,19 +353,29 @@ namespace Ankh.VS.Selection
 
         public bool UIShellAvailable
         {
-            get
+            get { return !_zombie; }
+        }
+
+        #endregion
+
+        #region IVsShellPropertyEvents Members
+
+        public int OnShellPropertyChange(int propid, object var)
+        {
+            switch ((__VSSPROPID)propid)
             {
-                IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
+                case __VSSPROPID.VSSPROPID_Zombie:
+                    if (var is bool)
+                    {
+                        _zombie = (bool)var;
 
-                if (shell == null)
-                    return false;
-
-                object v;
-                if (!ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_Zombie, out v)))
-                    return false;
-
-                return (v is bool) && !((bool)v);
+                        if (!_zombie)
+                            GetService<IAnkhServiceEvents>().OnUIShellActivate(EventArgs.Empty);
+                    }
+                    break;
             }
+
+            return VSConstants.S_OK;
         }
 
         #endregion
