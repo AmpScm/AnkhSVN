@@ -11,7 +11,7 @@ using Ankh.UI;
 namespace Ankh.Services
 {
 	[GlobalService(typeof(IAnkhMigrationService))]
-	class MigrationService : AnkhService
+	class MigrationService : AnkhService, IAnkhMigrationService
 	{
 		public MigrationService(IAnkhServiceProvider context)
 			: base(context)
