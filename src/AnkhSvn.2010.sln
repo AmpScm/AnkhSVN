@@ -27,7 +27,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BED3AA50-17ED-4A23-9104-72E31091B216}"
 	ProjectSection(SolutionItems) = preProject
 		AllTests.testrunconfig = AllTests.testrunconfig
-		AnkhSvn.2008.vsmdi = AnkhSvn.2008.vsmdi
+		AnkhSvn.2010.vsmdi = AnkhSvn.2010.vsmdi
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh", "Ankh\Ankh.csproj", "{CE58AAC8-2271-4223-882F-0CD1A7105A52}"
@@ -75,6 +75,9 @@ Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
 		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = AnkhSvn.2010.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
