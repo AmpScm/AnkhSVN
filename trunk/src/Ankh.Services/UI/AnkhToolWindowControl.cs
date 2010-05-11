@@ -17,6 +17,7 @@
 using System;
 using System.Windows.Forms;
 using Ankh.Scc.UI;
+using System.ComponentModel;
 
 namespace Ankh.UI
 {
@@ -49,7 +50,7 @@ namespace Ankh.UI
         /// Gets the UI site.
         /// </summary>
         /// <value>The UI site.</value>
-        [CLSCompliant(false)]
+        [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IAnkhToolWindowHost ToolWindowHost
         {
             get { return _host; }
@@ -71,6 +72,7 @@ namespace Ankh.UI
         /// Gets the context.
         /// </summary>
         /// <value>The context.</value>
+        [Browsable(false)]
         public IAnkhServiceProvider Context
         {
             get { return _host; }
@@ -198,6 +200,7 @@ namespace Ankh.UI
 
         public event EventHandler ToolWindowVisibileChanged;
 
+        [Browsable(false)]
         public bool ToolWindowVisible
         {
             get
@@ -205,7 +208,7 @@ namespace Ankh.UI
                 if (!IsHandleCreated || ToolWindowHost == null)
                     return false;
 
-				return ToolWindowHost.IsOnScreen;
+                return ToolWindowHost.IsOnScreen;
             }
         }
     }
