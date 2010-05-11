@@ -27,6 +27,10 @@
     line-height: 1.4em;
   }
 
+  #site-nav > li {
+    line-height: 1em;
+  }
+
   #site-nav ul ul {
     padding-left: 1.6em;
     padding-bottom: 12px;
