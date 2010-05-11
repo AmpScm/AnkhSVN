@@ -71,6 +71,7 @@ namespace Ankh.VS.Selection
 
         IVsHierarchy _filterHierarchy;
         uint _filterItem;
+        uint _sccContext;
 
         public SelectionContext(IAnkhServiceProvider context)
             : base(context)
@@ -85,21 +86,32 @@ namespace Ankh.VS.Selection
             IVsMonitorSelection monitor = GetService<IVsMonitorSelection>();
 
             if (monitor != null)
+            {
+                Guid ankhSccId = AnkhId.SccProviderGuid;
+
+                if (!ErrorHandler.Succeeded(monitor.GetCmdUIContextCookie(ref ankhSccId, out _sccContext)))
+                    _sccContext = 0;
+
                 Marshal.ThrowExceptionForHR(monitor.AdviseSelectionEvents(this, out _cookie));
+            }
         }
 
         protected override void Dispose(bool disposing)
         {
             try
             {
+                ClearCache();
                 if (!_disposed)
                 {
                     _disposed = true;
-                    IVsMonitorSelection monitor = (IVsMonitorSelection)Context.GetService(typeof(IVsMonitorSelection));
 
                     if (_cookie != 0)
-                        Marshal.ThrowExceptionForHR(monitor.UnadviseSelectionEvents(_cookie));
-                    ClearCache();
+                    {
+                        IVsMonitorSelection monitor = GetService<IVsMonitorSelection>();
+
+                        if (monitor != null)
+                            monitor.UnadviseSelectionEvents(_cookie);
+                    }
                 }
             }
             finally
@@ -116,6 +128,11 @@ namespace Ankh.VS.Selection
         {
             if (CmdUIContextChanged != null)
                 CmdUIContextChanged(this, EventArgs.Empty);
+
+            if (_sccContext != 0 && dwCmdUICookie == _sccContext)
+            {
+                GetService<IAnkhSccService>().TryRegisterSccProvider();
+            }
             /// Some global state change which might change UI cueues
             return VSConstants.S_OK;
         }
@@ -165,7 +182,7 @@ namespace Ankh.VS.Selection
             _selectedProjectsRecursive = null;
             _ownerProjects = null;
 
-            _isSolutionExplorer = null;            
+            _isSolutionExplorer = null;
             _miscFiles = null;
             _checkedMisc = false;
             _selectedItemsMap = null;
@@ -228,7 +245,7 @@ namespace Ankh.VS.Selection
             }
         }
 
-        #endregion        
+        #endregion
 
         protected bool MightBeSolutionExplorerSelection
         {
