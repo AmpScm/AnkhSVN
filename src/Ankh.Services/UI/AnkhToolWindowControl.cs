@@ -15,14 +15,8 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
-using Ankh.UI.Services;
-using System.ComponentModel;
 using Ankh.Scc.UI;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio;
 
 namespace Ankh.UI
 {
@@ -31,8 +25,6 @@ namespace Ankh.UI
         IAnkhToolWindowHost _host;
         protected AnkhToolWindowControl()
         {
-            // ShowInTaskBar = false;
-            //base.FormBorderStyle = FormBorderStyle.None;
         }
 
         public override string Text
@@ -213,16 +205,7 @@ namespace Ankh.UI
                 if (!IsHandleCreated || ToolWindowHost == null)
                     return false;
 
-                IVsWindowFrame frame = ToolWindowHost.Frame;
-                if (frame != null)
-                {
-                    int onScreen;
-
-                    if (ErrorHandler.Succeeded(frame.IsOnScreen(out onScreen)) && onScreen != 0)
-                        return true;
-                }
-                
-                return false;
+				return ToolWindowHost.IsOnScreen;
             }
         }
     }

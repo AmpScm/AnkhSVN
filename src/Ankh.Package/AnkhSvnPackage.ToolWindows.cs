@@ -333,6 +333,28 @@ namespace Ankh.VSPackage
         }
 
         #endregion
+
+        #region IAnkhToolWindowHost Members
+
+
+        public bool IsOnScreen
+        {
+            get
+            {
+                IVsWindowFrame frame = Frame;
+                if (frame != null)
+                {
+                    int onScreen;
+
+                    if (ErrorHandler.Succeeded(frame.IsOnScreen(out onScreen)) && onScreen != 0)
+                        return true;
+                }
+
+                return false;
+            }
+        }
+
+        #endregion
     }
 
     class AnkhToolWindowPane : ToolWindowPane, IOleCommandTarget, IVsWindowFrameNotify3, IVsWindowFrameNotify2, IVsWindowFrameNotify
