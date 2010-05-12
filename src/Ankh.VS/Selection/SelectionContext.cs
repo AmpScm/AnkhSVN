@@ -114,12 +114,13 @@ namespace Ankh.VS.Selection
 
         #region IVsSelectionEvents Members
 
-        public event EventHandler CmdUIContextChanged;
+        public event EventHandler<CmdUIContextChangeEventArgs> CmdUIContextChanged;
 
         public int OnCmdUIContextChanged(uint dwCmdUICookie, int fActive)
         {
             if (CmdUIContextChanged != null)
-                CmdUIContextChanged(this, EventArgs.Empty);
+                CmdUIContextChanged(this, new CmdUIContextChangeEventArgs(dwCmdUICookie, fActive != 0));
+
             /// Some global state change which might change UI cueues
             return VSConstants.S_OK;
         }
@@ -853,4 +854,26 @@ namespace Ankh.VS.Selection
         }
         #endregion
     }
+
+	class CmdUIContextChangeEventArgs : EventArgs
+	{
+		readonly uint _cookie;
+		readonly bool _active;
+
+		public CmdUIContextChangeEventArgs(uint cookie, bool active)
+		{
+			_cookie = cookie;
+			_active = active;
+		}
+
+		public uint Cookie
+		{
+			get { return _cookie; }
+		}
+
+		public bool Active
+		{
+			get { return _active; }
+		}
+	}
 }
