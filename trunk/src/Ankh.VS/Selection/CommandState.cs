@@ -30,6 +30,7 @@ namespace Ankh.VS.Selection
     [GlobalService(typeof(IAnkhCommandStates))]
     sealed class CommandState : AnkhService, IAnkhCommandStates, IVsShellPropertyEvents
     {
+        readonly Dictionary<uint, CmdStateCacheItem> _cookieMap = new Dictionary<uint, CmdStateCacheItem>();
         IVsMonitorSelection _monitor;
         uint _shellPropsCookie;
         bool _zombie;
@@ -43,7 +44,7 @@ namespace Ankh.VS.Selection
         {
             base.OnInitialize();
 
-            GetService<SelectionContext>(typeof(ISelectionContext)).CmdUIContextChanged += new EventHandler(OnCmdUIContextChanged);
+            GetService<SelectionContext>(typeof(ISelectionContext)).CmdUIContextChanged += OnCmdUIContextChanged;
 
             IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
 
@@ -86,138 +87,130 @@ namespace Ankh.VS.Selection
             get { return _monitor ?? (_monitor = GetService<IVsMonitorSelection>()); }
         }
 
-        void OnCmdUIContextChanged(object sender, EventArgs e)
+        void OnCmdUIContextChanged(object sender, CmdUIContextChangeEventArgs e)
         {
+            CmdStateCacheItem item;
+            if (_cookieMap.TryGetValue(e.Cookie, out item))
+                item.Active = e.Active;
+
             ClearState();
         }
 
         void ClearState()
         {
             // Clear all caching properties
-            _codeWindow = null;
-            _debugging = null;
-            _designMode = null;
-            _dragging = null;
-            _emptySolution = null;
-            _fullScreenMode = null;
-            _noSolution = null;
-            _solutionBuilding = null;
-            _solutionExists = null;
-            _solutionHasMultipleProjects = null;
-            _solutionHasSingleProject = null;
-            _ankhActiveScc = null;
             _otherSccProviderActive = null;
         }
 
-        uint _codeWindowId;
-        bool? _codeWindow;
+        CmdStateCacheItem _codeWindow;
         public bool CodeWindow
         {
-            get { return (bool)(_codeWindow ?? (_codeWindow = GetState(ref _codeWindowId, delegate() { return VSConstants.UICONTEXT_CodeWindow.ToString(); }))); }
+            get { return (_codeWindow ?? (_codeWindow = GetCache(VSConstants.UICONTEXT_CodeWindow))).Active; }
         }
 
-
-        uint _debuggingId;
-        bool? _debugging;
-        public bool Debugging
+        private CmdStateCacheItem GetCache(Guid cmdContextId)
         {
-            get { return (bool)(_debugging ?? (_debugging = GetState(ref _debuggingId, delegate() { return VSConstants.UICONTEXT_Debugging.ToString(); }))); }
-        }
+            uint cookie;
 
-        uint _designModeId;
-        bool? _designMode;
-        public bool DesignMode
-        {
-            get { return (bool)(_designMode ?? (_designMode = GetState(ref _designModeId, delegate() { return VSConstants.UICONTEXT_DesignMode.ToString(); }))); }
-        }
+            if (!ErrorHandler.Succeeded(Monitor.GetCmdUIContextCookie(ref cmdContextId, out cookie)))
+                return new CmdStateCacheItem(Monitor, 0);
 
-        uint _draggingId;
-        bool? _dragging;
-        public bool Dragging
-        {
-            get { return (bool)(_dragging ?? (_dragging = GetState(ref _draggingId, delegate() { return VSConstants.UICONTEXT_Dragging.ToString(); }))); }
-        }
+            CmdStateCacheItem item;
 
-        uint _emptySolutionId;
-        bool? _emptySolution;
-        public bool EmptySolution
-        {
-            get { return (bool)(_emptySolution ?? (_emptySolution = GetState(ref _emptySolutionId, delegate() { return VSConstants.UICONTEXT_EmptySolution.ToString(); }))); }
-        }
-
-        uint _fullScreenModeId;
-        bool? _fullScreenMode;
-        public bool FullScreenMode
-        {
-            get { return (bool)(_fullScreenMode ?? (_fullScreenMode = GetState(ref _fullScreenModeId, delegate() { return VSConstants.UICONTEXT_FullScreenMode.ToString(); }))); }
-        }
-
-        uint _noSolutionId;
-        bool? _noSolution;
-        public bool NoSolution
-        {
-            get { return (bool)(_noSolution ?? (_noSolution = GetState(ref _noSolutionId, delegate() { return VSConstants.UICONTEXT_NoSolution.ToString(); }))); }
-        }
-
-        uint _solutionBuildingId;
-        bool? _solutionBuilding;
-        public bool SolutionBuilding
-        {
-            get { return (bool)(_solutionBuilding ?? (_solutionBuilding = GetState(ref _solutionBuildingId, delegate() { return VSConstants.UICONTEXT_SolutionBuilding.ToString(); }))); }
-        }
-
-        uint _solutionExistsId;
-        bool? _solutionExists;
-        public bool SolutionExists
-        {
-            get { return (bool)(_solutionExists ?? (_solutionExists = GetState(ref _solutionExistsId, delegate() { return VSConstants.UICONTEXT_SolutionExists.ToString(); }))); }
-        }
-
-        uint _solutionHasMultipleProjectsId;
-        bool? _solutionHasMultipleProjects;
-        public bool SolutionHasMultipleProjects
-        {
-            get { return (bool)(_solutionHasMultipleProjects ?? (_solutionHasMultipleProjects = GetState(ref _solutionHasMultipleProjectsId, delegate() { return VSConstants.UICONTEXT_SolutionHasMultipleProjects.ToString(); }))); }
-        }
-
-        uint _solutionHasSingleProjectId;
-        bool? _solutionHasSingleProject;
-        public bool SolutionHasSingleProject
-        {
-            get { return (bool)(_solutionHasSingleProject ?? (_solutionHasSingleProject = GetState(ref _solutionHasSingleProjectId, delegate() { return VSConstants.UICONTEXT_SolutionHasSingleProject.ToString(); }))); }
-        }
-
-        uint _ankhActiveSccId;
-        bool? _ankhActiveScc;
-        public bool SccProviderActive
-        {
-            get { return (bool)(_ankhActiveScc ?? (_ankhActiveScc = GetState(ref _ankhActiveSccId, AnkhId.SccProviderId))); }
-        }
-
-        private bool GetState(ref uint contextId, string guid)
-        {
-            if (contextId == 0)
+            if (!_cookieMap.TryGetValue(cookie, out item))
             {
-                Guid g = new Guid(guid);
-                if (!ErrorHandler.Succeeded(Monitor.GetCmdUIContextCookie(ref g, out contextId)))
-                {
-                    contextId = 0;
-                    return false;
-                }
+                _cookieMap[cookie] = item = new CmdStateCacheItem(Monitor, cookie);
             }
 
-            int active;
-            return ErrorHandler.Succeeded(Monitor.IsCmdUIContextActive(contextId, out active)) && active != 0;
+            return item;
         }
 
-        delegate string GetGuid();
-        private bool GetState(ref uint contextId, GetGuid getGuid)
+        CmdStateCacheItem _debugging;
+        public bool Debugging
         {
-            string value = null;
-            if (contextId == 0)
-                value = getGuid();
+            get { return (_debugging ?? (_debugging = GetCache(VSConstants.UICONTEXT_Debugging))).Active; }
+        }
 
-            return GetState(ref contextId, value);
+        CmdStateCacheItem _designMode;
+        public bool DesignMode
+        {
+            get { return (_designMode ?? (_designMode = GetCache(VSConstants.UICONTEXT_DesignMode))).Active; }
+        }
+
+        CmdStateCacheItem _dragging;
+        public bool Dragging
+        {
+            get { return (_dragging ?? (_dragging = GetCache(VSConstants.UICONTEXT_Dragging))).Active; }
+        }
+
+        CmdStateCacheItem _emptySolution;
+        public bool EmptySolution
+        {
+            get { return (_emptySolution ?? (_emptySolution = GetCache(VSConstants.UICONTEXT_EmptySolution))).Active; }
+        }
+
+        CmdStateCacheItem _fullScreenMode;
+        public bool FullScreenMode
+        {
+            get { return (_fullScreenMode ?? (_fullScreenMode = GetCache(VSConstants.UICONTEXT_FullScreenMode))).Active; }
+        }
+
+        CmdStateCacheItem _noSolution;
+        public bool NoSolution
+        {
+            get { return (_noSolution ?? (_noSolution = GetCache(VSConstants.UICONTEXT_NoSolution))).Active; }
+        }
+
+        CmdStateCacheItem _solutionBuilding;
+        public bool SolutionBuilding
+        {
+            get { return (_solutionBuilding ?? (_solutionBuilding = GetCache(VSConstants.UICONTEXT_SolutionBuilding))).Active; }
+        }
+
+        CmdStateCacheItem _solutionExists;
+        public bool SolutionExists
+        {
+            get { return (_solutionExists ?? (_solutionExists = GetCache(VSConstants.UICONTEXT_SolutionExists))).Active; }
+        }
+
+        CmdStateCacheItem _solutionHasMultipleProjects;
+        public bool SolutionHasMultipleProjects
+        {
+            get { return (_solutionHasMultipleProjects ?? (_solutionHasMultipleProjects = GetCache(VSConstants.UICONTEXT_SolutionHasMultipleProjects))).Active; }
+        }
+
+        CmdStateCacheItem _solutionHasSingleProject;
+        public bool SolutionHasSingleProject
+        {
+            get { return (_solutionHasSingleProject ?? (_solutionHasSingleProject = GetCache(VSConstants.UICONTEXT_SolutionHasSingleProject))).Active; }
+        }
+
+        CmdStateCacheItem _ankhActiveScc;
+        public bool SccProviderActive
+        {
+            get { return (_ankhActiveScc ?? (_ankhActiveScc = GetCache(new Guid(AnkhId.SccProviderId)))).Active; }
+        }
+
+        sealed class CmdStateCacheItem
+        {
+            readonly uint _cookie;
+            bool _active;
+            public CmdStateCacheItem(IVsMonitorSelection monitor, uint cookie)
+            {
+                if (monitor == null)
+                    throw new ArgumentNullException("monitor");
+
+                _cookie = cookie;
+
+                int active;
+                _active = ErrorHandler.Succeeded(monitor.IsCmdUIContextActive(_cookie, out active)) && active != 0;
+            }
+
+            public bool Active
+            {
+                get { return _active; }
+                set { _active = value; }
+            }
         }
 
         #region IAnkhCommandStates Members
@@ -230,13 +223,23 @@ namespace Ankh.VS.Selection
 
         class SccData
         {
-            public readonly uint _id;
+            public readonly CmdStateCacheItem _cache;
             public readonly string _service;
 
-            public SccData(uint id, string service)
+            public SccData(CmdStateCacheItem cache, string service)
             {
-                _id = id;
+                if (cache == null)
+                    throw new ArgumentNullException("cache");
+                else if (service == null)
+                    throw new ArgumentNullException("service");
+
+                _cache = cache;
                 _service = new Guid(service).ToString();
+            }
+
+            public bool Active
+            {
+                get { return _cache.Active; }
             }
         }
 
@@ -250,8 +253,7 @@ namespace Ankh.VS.Selection
             {
                 foreach (SccData scc in _otherSccProviderContexts)
                 {
-                    int active;
-                    if (ErrorHandler.Succeeded(Monitor.IsCmdUIContextActive(scc._id, out active)) && active != 0)
+                    if (scc.Active)
                     {
                         // Ok, let's ask the service if it has any files under source control?
 
@@ -307,11 +309,15 @@ namespace Ankh.VS.Selection
                                     {
                                         using (RegistryKey rks = rk.OpenSubKey(name, RegistryKeyPermissionCheck.ReadSubTree))
                                         {
-                                            Guid sccGuid = new Guid(name);
-                                            uint id;
+                                            string service = rks.GetValue("Service") as string;
 
-                                            if (ErrorHandler.Succeeded(Monitor.GetCmdUIContextCookie(ref sccGuid, out id)))
-                                                sccs.Add(new SccData(id, (string)rks.GetValue("Service")));
+                                            if (!string.IsNullOrEmpty(service))
+                                            {
+                                                Guid sccGuid = new Guid(name);
+                                                CmdStateCacheItem cache = GetCache(new Guid(name));
+
+                                                sccs.Add(new SccData(cache, service));
+                                            }
                                         }
                                     }
                                     catch { }
@@ -340,7 +346,7 @@ namespace Ankh.VS.Selection
             if (manager == null)
                 return false;
 
-            // If the active manager is not installed, it is not active            
+            // If the active manager is not installed, it is not active
             int installed = 0;
             if (!ErrorHandler.Succeeded(manager.IsInstalled(out installed)) || (installed == 0))
                 return false;
