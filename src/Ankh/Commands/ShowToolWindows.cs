@@ -25,6 +25,7 @@ namespace Ankh.Commands
     /// </summary>
     [Command(AnkhCommand.ShowPendingChanges)]
     [Command(AnkhCommand.ShowWorkingCopyExplorer)]
+    [Command(AnkhCommand.ShowSubversionInfo)]
     [Command(AnkhCommand.ShowRepositoryExplorer, AlwaysAvailable=true)]
     class ShowToolWindows : CommandBase
     {
@@ -53,6 +54,9 @@ namespace Ankh.Commands
                     break;
                 case AnkhCommand.ShowRepositoryExplorer:
                     toolWindow = AnkhToolWindow.RepositoryExplorer;
+                    break;
+                case AnkhCommand.ShowSubversionInfo:
+                    toolWindow = AnkhToolWindow.SvnInfo;
                     break;
                 default:
                     return;

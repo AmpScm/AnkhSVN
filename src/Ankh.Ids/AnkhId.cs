@@ -105,7 +105,7 @@ namespace Ankh
         public const string BlameToolWindowId = "A543EA62-696C-4C7C-AB42-78BD7267DA92";
         public const string LogToolWindowId = "2FAC1EBF-6B37-4BE3-9A44-F9ED32D561CD";
         public const string DiffToolWindowId = "8B17630D-72A5-43AE-8105-DB31004D08AD";
-        public const string MergeToolWindowId = "C3630016-F162-4AF5-B165-9F468A642E9A";
+        public const string SvnInfoToolWindowId = "C3630016-F162-4AF5-B165-9F468A642E9A";
 
         public const string PendingChangeViewContext = "A02C6D65-1F8B-46AC-8DB3-511AE5DBA374";
         public const string DiffMergeViewContext = "6E66DFC4-CB72-4023-BDF5-6B139DF2F19B";

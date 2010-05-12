@@ -149,12 +149,6 @@
     <Compile Include="DiffWindow\DiffToolWindowControl.Designer.cs">
       <DependentUpon>DiffToolWindowControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="DiffWindow\MergeToolWindowControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DiffWindow\MergeToolWindowControl.Designer.cs">
-      <DependentUpon>MergeToolWindowControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="IssueTracker\IssueSelector.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -375,6 +369,9 @@
     <Compile Include="SccManagement\UpdateAvailableDialog.Designer.cs">
       <DependentUpon>UpdateAvailableDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SvnInfoGrid\InfoPropertyGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SvnLog\Commands\CompareWithWorkingCopy.cs" />
     <Compile Include="SvnLog\Commands\RevertChanges.cs" />
     <Compile Include="SvnLog\Commands\ShowRevisionProperties.cs" />
@@ -569,11 +566,11 @@
     <Compile Include="SvnLog\LogRevisionView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SvnPropertyGrid\SvnPropertyGridControl.cs">
+    <Compile Include="SvnInfoGrid\SvnInfoGridControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SvnPropertyGrid\SvnPropertyGridControl.Designer.cs">
-      <DependentUpon>SvnPropertyGridControl.cs</DependentUpon>
+    <Compile Include="SvnInfoGrid\SvnInfoGridControl.Designer.cs">
+      <DependentUpon>SvnInfoGridControl.cs</DependentUpon>
     </Compile>
     <Compile Include="VSSelectionControls\Commands\ListViewCommandBase.cs" />
     <Compile Include="VSSelectionControls\Commands\ListViewGroup.cs" />
@@ -1256,6 +1253,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\ItemCompareDialog.resx">
       <DependentUpon>ItemCompareDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SvnInfoGrid\SvnInfoGridControl.resx">
+      <DependentUpon>SvnInfoGridControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Controls\Status.Suggestion.png" />
     <Content Include="Controls\Status.Exclamation.png" />

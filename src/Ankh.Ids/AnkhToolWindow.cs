@@ -29,6 +29,6 @@ namespace Ankh
         PendingChanges,
         Log,
         Diff,
-        Merge,
+        SvnInfo
     }
 }

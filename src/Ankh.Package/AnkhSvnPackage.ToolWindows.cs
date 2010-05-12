@@ -33,10 +33,11 @@ using ShellPackage = Microsoft.VisualStudio.Shell.Package;
 using Ankh.Commands;
 using Ankh.Scc.UI;
 using Ankh.UI;
-using Ankh.UI.SvnLog;
-using Ankh.UI.RepositoryExplorer;
-using Ankh.UI.WorkingCopyExplorer;
 using Ankh.UI.DiffWindow;
+using Ankh.UI.RepositoryExplorer;
+using Ankh.UI.SvnInfoGrid;
+using Ankh.UI.SvnLog;
+using Ankh.UI.WorkingCopyExplorer;
 
 namespace Ankh.VSPackage
 {
@@ -48,8 +49,9 @@ namespace Ankh.VSPackage
     [ProvideToolWindow(typeof(PendingChangesToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false, Window = ToolWindowGuids80.Outputwindow)]
     [ProvideToolWindow(typeof(LogToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = true)]
     [ProvideToolWindow(typeof(DiffToolWindow), Style = VsDockStyle.Float, Transient = true)]
-    [ProvideToolWindow(typeof(MergeToolWindow), Style = VsDockStyle.Float, Transient = true)]
+    [ProvideToolWindow(typeof(SvnInfoToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Right, Transient = false, Window = ToolWindowGuids80.PropertiesWindow)]
     [ProvideToolWindowVisibility(typeof(PendingChangesToolWindow), AnkhId.SccProviderId)]
+    [ProvideToolWindowVisibility(typeof(SvnInfoToolWindow), AnkhId.SccProviderId)]
     public partial class AnkhSvnPackage
     {
         public void ShowToolWindow(AnkhToolWindow window)
@@ -71,8 +73,8 @@ namespace Ankh.VSPackage
                     return typeof(LogToolWindow);
                 case AnkhToolWindow.Diff:
                     return typeof(DiffToolWindow);
-                case AnkhToolWindow.Merge:
-                    return typeof(MergeToolWindow);
+                case AnkhToolWindow.SvnInfo:
+                    return typeof(SvnInfoToolWindow);
                 default:
                     throw new ArgumentOutOfRangeException("toolWindow");
             }
@@ -523,15 +525,13 @@ namespace Ankh.VSPackage
     {
         public WorkingCopyExplorerToolWindow()
         {
-            this.Caption = "Working Copy Explorer";
+            Caption = Resources.WorkingCopyExplorerToolWindowTitle;
+            Control = new WorkingCopyExplorerControl();
 
             AnkhToolWindow = AnkhToolWindow.WorkingCopyExplorer;
 
-            this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.WorkingCopyExplorerToolBar);
-            this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
-
-            // Creating the user control that will be displayed in the window
-            Control = new WorkingCopyExplorerControl();
+            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.WorkingCopyExplorerToolBar);
+            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
     }
 
@@ -543,14 +543,13 @@ namespace Ankh.VSPackage
     {
         public RepositoryExplorerToolWindow()
         {
-            this.Caption = "Repository Explorer";
+            Caption = Resources.RepositoryExplorerToolWindowTitle;
+            Control = new RepositoryExplorerControl();
 
             AnkhToolWindow = AnkhToolWindow.RepositoryExplorer;
 
-            this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.RepositoryExplorerToolBar);
-            this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
-
-            Control = new RepositoryExplorerControl();
+            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.RepositoryExplorerToolBar);
+            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
     }
 
@@ -562,14 +561,13 @@ namespace Ankh.VSPackage
     {
         public PendingChangesToolWindow()
         {
-            this.Caption = "Pending Changes";
+            Caption = Resources.PendingChangesToolWindowTitle;
+            Control = new Ankh.UI.PendingChanges.PendingChangesToolControl();
 
             AnkhToolWindow = AnkhToolWindow.PendingChanges;
 
-            this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.PendingChanges);
-            this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
-
-            Control = new Ankh.UI.PendingChanges.PendingChangesToolControl();
+            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.PendingChanges);
+            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
     }
 
@@ -578,8 +576,8 @@ namespace Ankh.VSPackage
     {
         public LogToolWindow()
         {
+            Caption = Resources.LogToolWindowTitle;
             Control = new LogToolWindowControl();
-            Caption = "History Viewer";
 
             AnkhToolWindow = AnkhToolWindow.Log;
 
@@ -593,25 +591,25 @@ namespace Ankh.VSPackage
     {
         public DiffToolWindow()
         {
+            Caption = Resources.DiffToolWindowTitle;
             Control = new DiffToolWindowControl();
-            Caption = "Diff";
 
             AnkhToolWindow = AnkhToolWindow.Diff;
-
-            //ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
-            //ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
     }
 
-    [Guid(AnkhId.MergeToolWindowId)]
-    class MergeToolWindow : AnkhToolWindowPane
+    [Guid(AnkhId.SvnInfoToolWindowId)]
+    class SvnInfoToolWindow : AnkhToolWindowPane
     {
-        public MergeToolWindow()
+        public SvnInfoToolWindow()
         {
-            Control = new MergeToolWindowControl();
-            Caption = "Diff";
+            Caption = Resources.SubversionInfoToolWindowTitle;
+            Control = new SvnInfoGridControl();
 
-            AnkhToolWindow = AnkhToolWindow.Merge;
+            AnkhToolWindow = AnkhToolWindow.SvnInfo;
+
+            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.SvnInfo);
+            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
     }
 }
