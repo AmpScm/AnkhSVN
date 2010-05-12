@@ -293,6 +293,7 @@ namespace Ankh
         FolderUpdateLatest,
         MakeNonSccFileWriteable,
 
-        PendingChangesConfigureRecentChangesPage
+        PendingChangesConfigureRecentChangesPage,
+        ShowSubversionInfo,
     }
 }

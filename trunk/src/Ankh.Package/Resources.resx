@@ -143,7 +143,25 @@
   <data name="AddToSubversionCommandName" xml:space="preserve">
     <value>Add to Sub&amp;version</value>
   </data>
+  <data name="DiffToolWindowTitle" xml:space="preserve">
+    <value>Diff</value>
+  </data>
   <data name="DotNetTracingFails" xml:space="preserve">
     <value>The .Net Trace handling fails. Please check your .Net machine and enterprise configuration</value>
+  </data>
+  <data name="LogToolWindowTitle" xml:space="preserve">
+    <value>History Viewer</value>
+  </data>
+  <data name="PendingChangesToolWindowTitle" xml:space="preserve">
+    <value>Pending Changes</value>
+  </data>
+  <data name="RepositoryExplorerToolWindowTitle" xml:space="preserve">
+    <value>Repository Explorer</value>
+  </data>
+  <data name="SubversionInfoToolWindowTitle" xml:space="preserve">
+    <value>Subversion Info</value>
+  </data>
+  <data name="WorkingCopyExplorerToolWindowTitle" xml:space="preserve">
+    <value>Working Copy Explorer</value>
   </data>
 </root>

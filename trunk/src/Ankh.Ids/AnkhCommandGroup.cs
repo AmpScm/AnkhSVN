@@ -183,5 +183,11 @@ namespace Ankh
         PendingChangesLogEditor3,
         MdiDocumentScc,
         DocumentPending,
+
+        SvnInfoTBOperations,
+        SvnInfoTBCommands,
+        SvnInfoTB3,
+        SvnInfoTB4,
+        SvnInfoTB5,
     }
 }
