@@ -561,13 +561,23 @@ namespace Ankh.UI.VS.TextEditor
         public event EventHandler<VSTextEditorScrollEventArgs> HorizontalTextScroll
         {
             add { _nativeWindow.HorizontalTextScroll += value; }
-            remove { _nativeWindow.HorizontalTextScroll -= value; }
+            remove 
+            {
+                // Allow unhooking to succeed after disposing
+                if (_nativeWindow != null)
+                    _nativeWindow.HorizontalTextScroll -= value; 
+            }
         }
 
         public event EventHandler<VSTextEditorScrollEventArgs> VerticalTextScroll
         {
             add { _nativeWindow.VerticalTextScroll += value; }
-            remove { _nativeWindow.VerticalTextScroll -= value; }
+            remove 
+            {
+                // Allow unhooking to succeed after disposing
+                if (_nativeWindow != null)
+                    _nativeWindow.VerticalTextScroll -= value;
+            }
         }
 
         public void LoadFile(string path, bool monitorChanges)
