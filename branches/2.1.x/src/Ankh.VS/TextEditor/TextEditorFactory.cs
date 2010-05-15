@@ -32,7 +32,6 @@ namespace Ankh.VS.TextEditor
             implementation.Text = editor.Text;
 
             editor.Controls.Add(edit);
-            editor.ActiveControl = edit;
 
             return true;
         }
