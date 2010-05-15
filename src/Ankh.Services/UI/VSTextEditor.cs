@@ -280,10 +280,12 @@ namespace Ankh.UI
 
             IVSTextEditorFactory factory = context.GetService<IVSTextEditorFactory>();
 
-            if (factory != null && factory.TryInstantiateIn(this, out _implementation))
+            IVSTextEditorImplementation implementation;
+            if (factory != null && factory.TryInstantiateIn(this, out implementation))
             {
-                _implementation.HorizontalTextScroll += ImplementOnHorizontalTextScroll;
-                _implementation.VerticalTextScroll += ImplementOnVerticalTextScroll;
+                implementation.HorizontalTextScroll += ImplementOnHorizontalTextScroll;
+                implementation.VerticalTextScroll += ImplementOnVerticalTextScroll;
+                _implementation = implementation;
             }
         }
 
