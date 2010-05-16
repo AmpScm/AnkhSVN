@@ -162,6 +162,8 @@ namespace Ankh
                         {
                             dialog.ShowDialog(_context);
                         }
+                        else
+                            Application.DoEvents();
 
                         // Show the dialog again if the thread join times out
                         // Do this to handle the acase where the service wants to
@@ -244,7 +246,7 @@ namespace Ankh
                     EventHandler eh = new EventHandler(OnDone);
                     try
                     {
-                        si.Invoke(eh, new object[] { sender, e });
+                        si.BeginInvoke(eh, new object[] { sender, e });
                     }
                     catch(Exception ex)
                     { 
