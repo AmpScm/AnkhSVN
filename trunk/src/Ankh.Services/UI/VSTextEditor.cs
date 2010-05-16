@@ -353,9 +353,8 @@ namespace Ankh.UI
         {
             get 
             {
-                IAnkhHasVsTextView v = ActiveControl as IAnkhHasVsTextView;
-                if (v != null)
-                    return v.TextView;
+                if (_implementation != null)
+                    return _implementation.TextView;
                 else
                     return null;
             }
@@ -364,11 +363,10 @@ namespace Ankh.UI
         [CLSCompliant(false), Browsable(false)]
         public Microsoft.VisualStudio.TextManager.Interop.IVsFindTarget FindTarget
         {
-            get 
+            get
             {
-                IAnkhHasVsTextView v = ActiveControl as IAnkhHasVsTextView;
-                if (v != null)
-                    return v.FindTarget;
+                if (_implementation != null)
+                    return _implementation.FindTarget;
                 else
                     return null;
             }
@@ -390,7 +388,7 @@ namespace Ankh.UI
     }
 
     [CLSCompliant(false)]
-    public interface IVSTextEditorImplementation
+    public interface IVSTextEditorImplementation : IAnkhHasVsTextView
     {
         Guid? ForceLanguageService { get; set; }
         bool DisableWordWrap { get; set; }
