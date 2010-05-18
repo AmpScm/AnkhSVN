@@ -130,6 +130,7 @@
       <Transform Condition="'$(UseCtcInsteadOfVsct)' != 'true'">Gui\Gui-To-Vsct.xsl</Transform>
       <To Condition="'$(UseCtcInsteadOfVsct)' != 'true'">$(IntermediateOutputPath)..\AnkhSvn.vsct</To>
       <Debug>true</Debug>
+      <SubType>Designer</SubType>
     </XslSource>
     <None Include="Ankh.Package.snk" />
     <None Include="source.extension.VsixManifest" />

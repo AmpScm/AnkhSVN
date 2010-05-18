@@ -58,6 +58,9 @@ namespace Ankh.VSPackage.Attributes
             context.RemoveKey(string.Format(CultureInfo.InvariantCulture, "{0}\\{1}", "SolutionPersistence", PropName));
         }
 
-        public string PropName { get { return _propName; } }
+        public string PropName
+        {
+            get { return _propName; }
+        }
     }
 }
