@@ -44,93 +44,65 @@ namespace Ankh.UI.SccManagement
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.directoryNameBox = new System.Windows.Forms.TextBox();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnOk = new System.Windows.Forms.Button();
-            this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.SuspendLayout();
-            // 
-            // directoryNameBox
-            // 
-            this.directoryNameBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.directoryNameBox.Location = new System.Drawing.Point(12, 25);
-            this.directoryNameBox.Name = "directoryNameBox";
-            this.directoryNameBox.Size = new System.Drawing.Size(380, 20);
-            this.directoryNameBox.TabIndex = 1;
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(317, 198);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 6;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            // 
-            // btnOk
-            // 
-            this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Location = new System.Drawing.Point(236, 198);
-            this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(75, 23);
-            this.btnOk.TabIndex = 5;
-            this.btnOk.Text = "OK";
-            this.btnOk.UseVisualStyleBackColor = true;
-            // 
-            // logMessage
-            // 
-            this.logMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.logMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.logMessage.Location = new System.Drawing.Point(12, 67);
-            this.logMessage.Name = "logMessage";
-            this.logMessage.PasteSource = null;
-            this.logMessage.Size = new System.Drawing.Size(380, 125);
-            this.logMessage.TabIndex = 3;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "&New Directory:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 51);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(74, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Log &Message:";
-            // 
-            // CreateDirectoryDialog
-            // 
-            this.AcceptButton = this.btnOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(404, 233);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.logMessage);
-            this.Controls.Add(this.directoryNameBox);
-            this.Controls.Add(this.btnOk);
-            this.Controls.Add(this.btnCancel);
-            this.Name = "CreateDirectoryDialog";
-            this.Text = "Create Directory";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CreateDirectoryDialog));
+			this.directoryNameBox = new System.Windows.Forms.TextBox();
+			this.btnCancel = new System.Windows.Forms.Button();
+			this.btnOk = new System.Windows.Forms.Button();
+			this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.SuspendLayout();
+			// 
+			// directoryNameBox
+			// 
+			resources.ApplyResources(this.directoryNameBox, "directoryNameBox");
+			this.directoryNameBox.Name = "directoryNameBox";
+			// 
+			// btnCancel
+			// 
+			resources.ApplyResources(this.btnCancel, "btnCancel");
+			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.btnCancel.Name = "btnCancel";
+			this.btnCancel.UseVisualStyleBackColor = true;
+			// 
+			// btnOk
+			// 
+			resources.ApplyResources(this.btnOk, "btnOk");
+			this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.btnOk.Name = "btnOk";
+			this.btnOk.UseVisualStyleBackColor = true;
+			// 
+			// logMessage
+			// 
+			resources.ApplyResources(this.logMessage, "logMessage");
+			this.logMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.logMessage.Name = "logMessage";
+			// 
+			// label1
+			// 
+			resources.ApplyResources(this.label1, "label1");
+			this.label1.Name = "label1";
+			// 
+			// label2
+			// 
+			resources.ApplyResources(this.label2, "label2");
+			this.label2.Name = "label2";
+			// 
+			// CreateDirectoryDialog
+			// 
+			this.AcceptButton = this.btnOk;
+			resources.ApplyResources(this, "$this");
+			this.CancelButton = this.btnCancel;
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.logMessage);
+			this.Controls.Add(this.directoryNameBox);
+			this.Controls.Add(this.btnOk);
+			this.Controls.Add(this.btnCancel);
+			this.Name = "CreateDirectoryDialog";
+			this.ResumeLayout(false);
+			this.PerformLayout();
 
         }
 

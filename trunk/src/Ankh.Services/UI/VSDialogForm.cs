@@ -59,6 +59,8 @@ namespace Ankh.UI
             MaximizeBox = false;
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
+            base.AutoScaleMode = AutoScaleMode.Font;
+			base.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         }
 
         /// <summary>
@@ -69,6 +71,22 @@ namespace Ankh.UI
             : this()
         {
             container.Add(this);
+        }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false), DefaultValue(AutoScaleMode.Font)]
+        public new AutoScaleMode AutoScaleMode
+        {
+            get { return base.AutoScaleMode; }
+            set { base.AutoScaleMode = value; }
+        }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        public new System.Drawing.SizeF AutoScaleDimensions
+        {
+            get { return base.AutoScaleDimensions; }
+            set { base.AutoScaleDimensions = value; }
         }
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

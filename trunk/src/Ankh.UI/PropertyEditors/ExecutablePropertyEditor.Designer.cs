@@ -30,28 +30,24 @@ namespace Ankh.UI.PropertyEditors
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.executableTextBox = new System.Windows.Forms.TextBox();
-            this.SuspendLayout();
-            // 
-            // executableTextBox
-            // 
-            this.executableTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.executableTextBox.Location = new System.Drawing.Point(0, 0);
-            this.executableTextBox.Multiline = true;
-            this.executableTextBox.Name = "executableTextBox";
-            this.executableTextBox.ReadOnly = true;
-            this.executableTextBox.Size = new System.Drawing.Size(348, 196);
-            this.executableTextBox.TabIndex = 0;
-            this.executableTextBox.Text = "File is executable.";
-            // 
-            // ExecutablePropertyEditor
-            // 
-            this.Controls.Add(this.executableTextBox);
-            this.Name = "ExecutablePropertyEditor";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExecutablePropertyEditor));
+			this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.executableTextBox = new System.Windows.Forms.TextBox();
+			this.SuspendLayout();
+			// 
+			// executableTextBox
+			// 
+			resources.ApplyResources(this.executableTextBox, "executableTextBox");
+			this.executableTextBox.Name = "executableTextBox";
+			this.executableTextBox.ReadOnly = true;
+			// 
+			// ExecutablePropertyEditor
+			// 
+			this.Controls.Add(this.executableTextBox);
+			this.Name = "ExecutablePropertyEditor";
+			this.ResumeLayout(false);
+			this.PerformLayout();
 
         }
         #endregion

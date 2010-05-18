@@ -44,186 +44,124 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.issueLabel = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
-            this.issueNumberBox = new System.Windows.Forms.TextBox();
-            this.lastRevLabel = new System.Windows.Forms.Label();
-            this.lastRevBox = new System.Windows.Forms.TextBox();
-            this.pendingCommits = new Ankh.UI.PendingChanges.Commits.PendingCommitsView(this.components);
-            this.pathColumn = new System.Windows.Forms.ColumnHeader();
-            this.projectColumn = new System.Windows.Forms.ColumnHeader();
-            this.changeColumn = new System.Windows.Forms.ColumnHeader();
-            this.fullPathColumn = new System.Windows.Forms.ColumnHeader();
-            this.splitContainer.Panel1.SuspendLayout();
-            this.splitContainer.Panel2.SuspendLayout();
-            this.splitContainer.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.topLayoutPanel.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // splitContainer
-            // 
-            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer.Margin = new System.Windows.Forms.Padding(0);
-            this.splitContainer.Name = "splitContainer";
-            this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer.Panel1
-            // 
-            this.splitContainer.Panel1.Controls.Add(this.panel1);
-            this.splitContainer.Panel1MinSize = 23;
-            // 
-            // splitContainer.Panel2
-            // 
-            this.splitContainer.Panel2.Controls.Add(this.pendingCommits);
-            this.splitContainer.Panel2MinSize = 10;
-            this.splitContainer.Size = new System.Drawing.Size(768, 300);
-            this.splitContainer.SplitterDistance = 83;
-            this.splitContainer.SplitterWidth = 2;
-            this.splitContainer.TabIndex = 0;
-            // 
-            // panel1
-            // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.topLayoutPanel);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(768, 83);
-            this.panel1.TabIndex = 1;
-            // 
-            // topLayoutPanel
-            // 
-            this.topLayoutPanel.ColumnCount = 5;
-            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
-            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.topLayoutPanel.Controls.Add(this.issueLabel, 3, 0);
-            this.topLayoutPanel.Controls.Add(this.label1, 0, 0);
-            this.topLayoutPanel.Controls.Add(this.logMessageEditor, 0, 1);
-            this.topLayoutPanel.Controls.Add(this.issueNumberBox, 4, 0);
-            this.topLayoutPanel.Controls.Add(this.lastRevLabel, 1, 0);
-            this.topLayoutPanel.Controls.Add(this.lastRevBox, 2, 0);
-            this.topLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.topLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this.topLayoutPanel.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.topLayoutPanel.Name = "topLayoutPanel";
-            this.topLayoutPanel.RowCount = 2;
-            this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.topLayoutPanel.Size = new System.Drawing.Size(766, 81);
-            this.topLayoutPanel.TabIndex = 0;
-            // 
-            // issueLabel
-            // 
-            this.issueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.issueLabel.AutoSize = true;
-            this.issueLabel.Enabled = false;
-            this.issueLabel.Location = new System.Drawing.Point(583, 2);
-            this.issueLabel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
-            this.issueLabel.Name = "issueLabel";
-            this.issueLabel.Size = new System.Drawing.Size(35, 13);
-            this.issueLabel.TabIndex = 3;
-            this.issueLabel.Text = "&Issue:";
-            this.issueLabel.Visible = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(2, 2);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 2, 0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Message:";
-            // 
-            // logMessageEditor
-            // 
-            this.topLayoutPanel.SetColumnSpan(this.logMessageEditor, 5);
-            this.logMessageEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logMessageEditor.HideHorizontalScrollBar = true;
-            this.logMessageEditor.Location = new System.Drawing.Point(0, 20);
-            this.logMessageEditor.Margin = new System.Windows.Forms.Padding(0);
-            this.logMessageEditor.Name = "logMessageEditor";
-            this.logMessageEditor.PasteSource = this.pendingCommits;
-            this.logMessageEditor.Size = new System.Drawing.Size(766, 61);
-            this.logMessageEditor.TabIndex = 4;
-            // 
-            // issueNumberBox
-            // 
-            this.issueNumberBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.issueNumberBox.Enabled = false;
-            this.issueNumberBox.Location = new System.Drawing.Point(621, 0);
-            this.issueNumberBox.Margin = new System.Windows.Forms.Padding(0);
-            this.issueNumberBox.Name = "issueNumberBox";
-            this.issueNumberBox.Size = new System.Drawing.Size(144, 20);
-            this.issueNumberBox.TabIndex = 0;
-            this.issueNumberBox.Visible = false;
-            this.issueNumberBox.TextChanged += new System.EventHandler(this.issueNumberBox_TextChanged);
-            this.issueNumberBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.issueNumberBox_KeyPress);
-            // 
-            // lastRevLabel
-            // 
-            this.lastRevLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lastRevLabel.AutoSize = true;
-            this.lastRevLabel.Location = new System.Drawing.Point(237, 2);
-            this.lastRevLabel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
-            this.lastRevLabel.Name = "lastRevLabel";
-            this.lastRevLabel.Size = new System.Drawing.Size(69, 13);
-            this.lastRevLabel.TabIndex = 5;
-            this.lastRevLabel.Text = "Last revision:";
-            this.lastRevLabel.Visible = false;
-            // 
-            // lastRevBox
-            // 
-            this.lastRevBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.lastRevBox.Enabled = false;
-            this.lastRevBox.Location = new System.Drawing.Point(311, 2);
-            this.lastRevBox.Margin = new System.Windows.Forms.Padding(2);
-            this.lastRevBox.Name = "lastRevBox";
-            this.lastRevBox.ReadOnly = true;
-            this.lastRevBox.Size = new System.Drawing.Size(74, 13);
-            this.lastRevBox.TabIndex = 6;
-            this.lastRevBox.Visible = false;
-            // 
-            // pendingCommits
-            // 
-            this.pendingCommits.AllowColumnReorder = true;
-            this.pendingCommits.CheckBoxes = true;
-            this.pendingCommits.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pendingCommits.HideSelection = false;
-            this.pendingCommits.Location = new System.Drawing.Point(0, 0);
-            this.pendingCommits.Name = "pendingCommits";
-            this.pendingCommits.ShowItemToolTips = true;
-            this.pendingCommits.ShowSelectAllCheckBox = true;
-            this.pendingCommits.Size = new System.Drawing.Size(768, 215);
-            this.pendingCommits.TabIndex = 0;
-            this.pendingCommits.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pendingCommits_MouseDoubleClick);
-            this.pendingCommits.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pendingCommits_KeyUp);
-            this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.Commits.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
-            // 
-            // PendingCommitsPage
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.splitContainer);
-            this.Name = "PendingCommitsPage";
-            this.Text = "Source Files";
-            this.splitContainer.Panel1.ResumeLayout(false);
-            this.splitContainer.Panel2.ResumeLayout(false);
-            this.splitContainer.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.topLayoutPanel.ResumeLayout(false);
-            this.topLayoutPanel.PerformLayout();
-            this.ResumeLayout(false);
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PendingCommitsPage));
+			this.splitContainer = new System.Windows.Forms.SplitContainer();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+			this.issueLabel = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
+			this.pendingCommits = new Ankh.UI.PendingChanges.Commits.PendingCommitsView(this.components);
+			this.issueNumberBox = new System.Windows.Forms.TextBox();
+			this.lastRevLabel = new System.Windows.Forms.Label();
+			this.lastRevBox = new System.Windows.Forms.TextBox();
+			this.pathColumn = new System.Windows.Forms.ColumnHeader();
+			this.projectColumn = new System.Windows.Forms.ColumnHeader();
+			this.changeColumn = new System.Windows.Forms.ColumnHeader();
+			this.fullPathColumn = new System.Windows.Forms.ColumnHeader();
+			this.splitContainer.Panel1.SuspendLayout();
+			this.splitContainer.Panel2.SuspendLayout();
+			this.splitContainer.SuspendLayout();
+			this.panel1.SuspendLayout();
+			this.topLayoutPanel.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// splitContainer
+			// 
+			resources.ApplyResources(this.splitContainer, "splitContainer");
+			this.splitContainer.Name = "splitContainer";
+			// 
+			// splitContainer.Panel1
+			// 
+			this.splitContainer.Panel1.Controls.Add(this.panel1);
+			// 
+			// splitContainer.Panel2
+			// 
+			this.splitContainer.Panel2.Controls.Add(this.pendingCommits);
+			// 
+			// panel1
+			// 
+			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel1.Controls.Add(this.topLayoutPanel);
+			resources.ApplyResources(this.panel1, "panel1");
+			this.panel1.Name = "panel1";
+			// 
+			// topLayoutPanel
+			// 
+			resources.ApplyResources(this.topLayoutPanel, "topLayoutPanel");
+			this.topLayoutPanel.Controls.Add(this.issueLabel, 3, 0);
+			this.topLayoutPanel.Controls.Add(this.label1, 0, 0);
+			this.topLayoutPanel.Controls.Add(this.logMessageEditor, 0, 1);
+			this.topLayoutPanel.Controls.Add(this.issueNumberBox, 4, 0);
+			this.topLayoutPanel.Controls.Add(this.lastRevLabel, 1, 0);
+			this.topLayoutPanel.Controls.Add(this.lastRevBox, 2, 0);
+			this.topLayoutPanel.Name = "topLayoutPanel";
+			// 
+			// issueLabel
+			// 
+			resources.ApplyResources(this.issueLabel, "issueLabel");
+			this.issueLabel.Name = "issueLabel";
+			// 
+			// label1
+			// 
+			resources.ApplyResources(this.label1, "label1");
+			this.label1.Name = "label1";
+			// 
+			// logMessageEditor
+			// 
+			this.topLayoutPanel.SetColumnSpan(this.logMessageEditor, 5);
+			resources.ApplyResources(this.logMessageEditor, "logMessageEditor");
+			this.logMessageEditor.HideHorizontalScrollBar = true;
+			this.logMessageEditor.Name = "logMessageEditor";
+			this.logMessageEditor.PasteSource = this.pendingCommits;
+			// 
+			// pendingCommits
+			// 
+			this.pendingCommits.AllowColumnReorder = true;
+			this.pendingCommits.CheckBoxes = true;
+			resources.ApplyResources(this.pendingCommits, "pendingCommits");
+			this.pendingCommits.HideSelection = false;
+			this.pendingCommits.Name = "pendingCommits";
+			this.pendingCommits.ShowItemToolTips = true;
+			this.pendingCommits.ShowSelectAllCheckBox = true;
+			this.pendingCommits.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pendingCommits_MouseDoubleClick);
+			this.pendingCommits.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pendingCommits_KeyUp);
+			this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.Commits.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
+			// 
+			// issueNumberBox
+			// 
+			this.issueNumberBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			resources.ApplyResources(this.issueNumberBox, "issueNumberBox");
+			this.issueNumberBox.Name = "issueNumberBox";
+			this.issueNumberBox.TextChanged += new System.EventHandler(this.issueNumberBox_TextChanged);
+			this.issueNumberBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.issueNumberBox_KeyPress);
+			// 
+			// lastRevLabel
+			// 
+			resources.ApplyResources(this.lastRevLabel, "lastRevLabel");
+			this.lastRevLabel.Name = "lastRevLabel";
+			// 
+			// lastRevBox
+			// 
+			this.lastRevBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			resources.ApplyResources(this.lastRevBox, "lastRevBox");
+			this.lastRevBox.Name = "lastRevBox";
+			this.lastRevBox.ReadOnly = true;
+			// 
+			// PendingCommitsPage
+			// 
+			resources.ApplyResources(this, "$this");
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.splitContainer);
+			this.Name = "PendingCommitsPage";
+			this.splitContainer.Panel1.ResumeLayout(false);
+			this.splitContainer.Panel2.ResumeLayout(false);
+			this.splitContainer.ResumeLayout(false);
+			this.panel1.ResumeLayout(false);
+			this.topLayoutPanel.ResumeLayout(false);
+			this.topLayoutPanel.PerformLayout();
+			this.ResumeLayout(false);
 
         }
 

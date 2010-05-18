@@ -28,24 +28,24 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.grid = new Ankh.UI.SvnInfoGrid.InfoPropertyGrid();
-            this.SuspendLayout();
-            // 
-            // grid
-            // 
-            this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grid.Location = new System.Drawing.Point(0, 0);
-            this.grid.Name = "grid";
-            this.grid.Size = new System.Drawing.Size(150, 150);
-            this.grid.TabIndex = 0;
-            // 
-            // SvnPropertyGridControl
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.grid);
-            this.Name = "SvnPropertyGridControl";
-            this.ResumeLayout(false);
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SvnInfoGridControl));
+			System.Windows.Forms.ToolStripSystemRenderer toolStripSystemRenderer1 = new System.Windows.Forms.ToolStripSystemRenderer();
+			this.grid = new Ankh.UI.SvnInfoGrid.InfoPropertyGrid();
+			this.SuspendLayout();
+			// 
+			// grid
+			// 
+			resources.ApplyResources(this.grid, "grid");
+			this.grid.Name = "grid";
+			this.grid.ToolStripRenderer = toolStripSystemRenderer1;
+			// 
+			// SvnInfoGridControl
+			// 
+			resources.ApplyResources(this, "$this");
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.grid);
+			this.Name = "SvnInfoGridControl";
+			this.ResumeLayout(false);
 
 		}
 

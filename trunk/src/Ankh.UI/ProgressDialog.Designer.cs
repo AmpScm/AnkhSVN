@@ -32,77 +32,54 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.actionList = new Ankh.UI.VSSelectionControls.SmartListView();
-            this.actionColumn = new System.Windows.Forms.ColumnHeader();
-            this.pathColumn = new System.Windows.Forms.ColumnHeader();
-            this.progressLabel = new System.Windows.Forms.Label();
-            this.SuspendLayout();
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(360, 166);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 1;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.Click += new System.EventHandler(this.CancelClick);
-            // 
-            // actionList
-            // 
-            this.actionList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.actionList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProgressDialog));
+			this.cancelButton = new System.Windows.Forms.Button();
+			this.actionList = new Ankh.UI.VSSelectionControls.SmartListView();
+			this.actionColumn = new System.Windows.Forms.ColumnHeader();
+			this.pathColumn = new System.Windows.Forms.ColumnHeader();
+			this.progressLabel = new System.Windows.Forms.Label();
+			this.SuspendLayout();
+			// 
+			// cancelButton
+			// 
+			resources.ApplyResources(this.cancelButton, "cancelButton");
+			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.cancelButton.Name = "cancelButton";
+			this.cancelButton.Click += new System.EventHandler(this.CancelClick);
+			// 
+			// actionList
+			// 
+			resources.ApplyResources(this.actionList, "actionList");
+			this.actionList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.actionColumn,
             this.pathColumn});
-            this.actionList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.actionList.Location = new System.Drawing.Point(12, 16);
-            this.actionList.Name = "actionList";
-            this.actionList.Size = new System.Drawing.Size(423, 132);
-            this.actionList.TabIndex = 2;
-            this.actionList.UseCompatibleStateImageBehavior = false;
-            this.actionList.View = System.Windows.Forms.View.Details;
-            // 
-            // actionColumn
-            // 
-            this.actionColumn.Text = "Action";
-            this.actionColumn.Width = 74;
-            // 
-            // pathColumn
-            // 
-            this.pathColumn.Text = "Path";
-            this.pathColumn.Width = 329;
-            // 
-            // progressLabel
-            // 
-            this.progressLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.progressLabel.AutoSize = true;
-            this.progressLabel.Location = new System.Drawing.Point(12, 166);
-            this.progressLabel.Name = "progressLabel";
-            this.progressLabel.Size = new System.Drawing.Size(0, 13);
-            this.progressLabel.TabIndex = 3;
-            // 
-            // ProgressDialog
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(447, 201);
-            this.ControlBox = false;
-            this.Controls.Add(this.progressLabel);
-            this.Controls.Add(this.actionList);
-            this.Controls.Add(this.cancelButton);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "ProgressDialog";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "{0} - Please wait...";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+			this.actionList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+			this.actionList.Name = "actionList";
+			// 
+			// actionColumn
+			// 
+			resources.ApplyResources(this.actionColumn, "actionColumn");
+			// 
+			// pathColumn
+			// 
+			resources.ApplyResources(this.pathColumn, "pathColumn");
+			// 
+			// progressLabel
+			// 
+			resources.ApplyResources(this.progressLabel, "progressLabel");
+			this.progressLabel.Name = "progressLabel";
+			// 
+			// ProgressDialog
+			// 
+			resources.ApplyResources(this, "$this");
+			this.CancelButton = this.cancelButton;
+			this.ControlBox = false;
+			this.Controls.Add(this.progressLabel);
+			this.Controls.Add(this.actionList);
+			this.Controls.Add(this.cancelButton);
+			this.Name = "ProgressDialog";
+			this.ResumeLayout(false);
+			this.PerformLayout();
 
         }
         #endregion

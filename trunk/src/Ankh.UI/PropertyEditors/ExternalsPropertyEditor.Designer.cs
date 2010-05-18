@@ -30,90 +30,79 @@ namespace Ankh.UI.PropertyEditors
         /// </summary>
         private void InitializeComponent()
         {
-            this.externalGrid = new System.Windows.Forms.DataGridView();
-            this.urlColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.revisionColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.buttonColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.revButtonColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.externalGrid)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // externalGrid
-            // 
-            this.externalGrid.AllowUserToResizeRows = false;
-            this.externalGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.externalGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.externalGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            this.externalGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.externalGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExternalsPropertyEditor));
+			this.externalGrid = new System.Windows.Forms.DataGridView();
+			this.urlColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.buttonColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.revisionColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.revButtonColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.nameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			((System.ComponentModel.ISupportInitialize)(this.externalGrid)).BeginInit();
+			this.SuspendLayout();
+			// 
+			// externalGrid
+			// 
+			this.externalGrid.AllowUserToResizeRows = false;
+			this.externalGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+			this.externalGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+			this.externalGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+			this.externalGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.externalGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.urlColumn,
             this.buttonColumn,
             this.revisionColumn,
             this.revButtonColumn,
-            this.nameColumn
-            });
-            this.externalGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.externalGrid.Location = new System.Drawing.Point(0, 0);
-            this.externalGrid.MultiSelect = false;
-            this.externalGrid.Name = "externalGrid";
-            this.externalGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.externalGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.externalGrid.Size = new System.Drawing.Size(348, 196);
-            this.externalGrid.TabIndex = 0;
-            this.externalGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(externalGrid_CellContentClick);
-            this.externalGrid.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.externalGrid_RowValidating);
-            this.externalGrid.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.externalGrid_RowValidated);
-            // 
-            // urlColumn
-            // 
-            this.urlColumn.HeaderText = "Url";
-            this.urlColumn.Name = "urlColumn";
-            this.urlColumn.Width = 45;
-            // 
-            // revisionColumn
-            // 
-            this.revisionColumn.FillWeight = 1F;
-            this.revisionColumn.HeaderText = "Revision";
-            this.revisionColumn.Name = "revisionColumn";
-            this.revisionColumn.Width = 73;
-            // 
-            // nameColumn
-            // 
-            this.nameColumn.FillWeight = 30F;
-            this.nameColumn.HeaderText = "Name";
-            this.nameColumn.Name = "nameColumn";
-            this.nameColumn.Width = 60;
-            // 
-            // buttonColumn
-            // 
-            this.buttonColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
-            this.buttonColumn.FillWeight = 30F;
-            this.buttonColumn.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
-            this.buttonColumn.HeaderText = System.String.Empty;
-            this.buttonColumn.Name = "buttonColumn";
-            this.buttonColumn.Text = "...";
-            this.buttonColumn.UseColumnTextForButtonValue = true;
-            this.buttonColumn.Width = 60;
-            // 
-            // revButtonColumn
-            // 
-            this.revButtonColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
-            this.revButtonColumn.FillWeight = 30F;
-            this.revButtonColumn.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
-            this.revButtonColumn.HeaderText = System.String.Empty;
-            this.revButtonColumn.Name = "revButtonColumn";
-            this.revButtonColumn.Text = "...";
-            this.revButtonColumn.UseColumnTextForButtonValue = true;
-            this.revButtonColumn.Width = 60;
-
-            // 
-            // ExternalsPropertyEditor
-            // 
-            this.Controls.Add(this.externalGrid);
-            this.Name = "ExternalsPropertyEditor";
-            ((System.ComponentModel.ISupportInitialize)(this.externalGrid)).EndInit();
-            this.ResumeLayout(false);
+            this.nameColumn});
+			resources.ApplyResources(this.externalGrid, "externalGrid");
+			this.externalGrid.MultiSelect = false;
+			this.externalGrid.Name = "externalGrid";
+			this.externalGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+			this.externalGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+			this.externalGrid.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.externalGrid_RowValidating);
+			this.externalGrid.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.externalGrid_RowValidated);
+			this.externalGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.externalGrid_CellContentClick);
+			// 
+			// urlColumn
+			// 
+			resources.ApplyResources(this.urlColumn, "urlColumn");
+			this.urlColumn.Name = "urlColumn";
+			// 
+			// buttonColumn
+			// 
+			this.buttonColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
+			this.buttonColumn.FillWeight = 30F;
+			resources.ApplyResources(this.buttonColumn, "buttonColumn");
+			this.buttonColumn.Name = "buttonColumn";
+			this.buttonColumn.Text = "...";
+			this.buttonColumn.UseColumnTextForButtonValue = true;
+			// 
+			// revisionColumn
+			// 
+			this.revisionColumn.FillWeight = 1F;
+			resources.ApplyResources(this.revisionColumn, "revisionColumn");
+			this.revisionColumn.Name = "revisionColumn";
+			// 
+			// revButtonColumn
+			// 
+			this.revButtonColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
+			this.revButtonColumn.FillWeight = 30F;
+			resources.ApplyResources(this.revButtonColumn, "revButtonColumn");
+			this.revButtonColumn.Name = "revButtonColumn";
+			this.revButtonColumn.Text = "...";
+			this.revButtonColumn.UseColumnTextForButtonValue = true;
+			// 
+			// nameColumn
+			// 
+			this.nameColumn.FillWeight = 30F;
+			resources.ApplyResources(this.nameColumn, "nameColumn");
+			this.nameColumn.Name = "nameColumn";
+			// 
+			// ExternalsPropertyEditor
+			// 
+			this.Controls.Add(this.externalGrid);
+			this.Name = "ExternalsPropertyEditor";
+			((System.ComponentModel.ISupportInitialize)(this.externalGrid)).EndInit();
+			this.ResumeLayout(false);
 
         }
 

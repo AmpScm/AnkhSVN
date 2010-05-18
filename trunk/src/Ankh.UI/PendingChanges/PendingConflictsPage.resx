@@ -117,4 +117,634 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="splitContainer1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="splitContainer1.IsSplitterFixed" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="splitContainer1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="splitContainer1.Orientation" type="System.Windows.Forms.Orientation, System.Windows.Forms">
+    <value>Horizontal</value>
+  </data>
+  <data name="conflictHeader.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="conflictHeader.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="conflictHeader.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 3, 0</value>
+  </data>
+  <data name="conflictHeader.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 0, 0</value>
+  </data>
+  <data name="conflictHeader.Size" type="System.Drawing.Size, System.Drawing">
+    <value>766, 21</value>
+  </data>
+  <data name="conflictHeader.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="conflictHeader.Text" xml:space="preserve">
+    <value>0 Conflicts: 0 Version, 0 Tree Conflicts; 0 Automatic merges.</value>
+  </data>
+  <data name="conflictHeader.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;conflictHeader.Name" xml:space="preserve">
+    <value>conflictHeader</value>
+  </data>
+  <data name="&gt;&gt;conflictHeader.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;conflictHeader.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;conflictHeader.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="panel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="panel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>768, 23</value>
+  </data>
+  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
+    <value>splitContainer1.Panel1</value>
+  </data>
+  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel1.Name" xml:space="preserve">
+    <value>splitContainer1.Panel1</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel1.Parent" xml:space="preserve">
+    <value>splitContainer1</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="splitContainer1.Panel1MinSize" type="System.Int32, mscorlib">
+    <value>23</value>
+  </data>
+  <data name="conflictEditSplitter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="conflictEditSplitter.IsSplitterFixed" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="conflictEditSplitter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="conflictEditSplitter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="conflictEditSplitter.Orientation" type="System.Windows.Forms.Orientation, System.Windows.Forms">
+    <value>Horizontal</value>
+  </data>
+  <data name="conflictView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="conflictView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="conflictView.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="conflictView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>768, 240</value>
+  </data>
+  <data name="conflictView.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;conflictView.Name" xml:space="preserve">
+    <value>conflictView</value>
+  </data>
+  <data name="&gt;&gt;conflictView.Type" xml:space="preserve">
+    <value>Ankh.UI.PendingChanges.Conflicts.ConflictListView, Ankh.UI, Version=2.2.3790.25393, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  </data>
+  <data name="&gt;&gt;conflictView.Parent" xml:space="preserve">
+    <value>conflictEditSplitter.Panel1</value>
+  </data>
+  <data name="&gt;&gt;conflictView.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;conflictEditSplitter.Panel1.Name" xml:space="preserve">
+    <value>conflictEditSplitter.Panel1</value>
+  </data>
+  <data name="&gt;&gt;conflictEditSplitter.Panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;conflictEditSplitter.Panel1.Parent" xml:space="preserve">
+    <value>conflictEditSplitter</value>
+  </data>
+  <data name="&gt;&gt;conflictEditSplitter.Panel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="resolvePannel.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="resolveButton0.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="resolveButton0.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="resolveButton0.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="resolveButton0.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 1</value>
+  </data>
+  <data name="resolveButton0.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 3, 1</value>
+  </data>
+  <data name="resolveButton0.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="resolveButton0.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="resolveButton0.Text" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="&gt;&gt;resolveButton0.Name" xml:space="preserve">
+    <value>resolveButton0</value>
+  </data>
+  <data name="&gt;&gt;resolveButton0.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;resolveButton0.Parent" xml:space="preserve">
+    <value>resolvePannel</value>
+  </data>
+  <data name="&gt;&gt;resolveButton0.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="resolveButton1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="resolveButton1.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="resolveButton1.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="resolveButton1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>84, 1</value>
+  </data>
+  <data name="resolveButton1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 3, 1</value>
+  </data>
+  <data name="resolveButton1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="resolveButton1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="resolveButton1.Text" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="&gt;&gt;resolveButton1.Name" xml:space="preserve">
+    <value>resolveButton1</value>
+  </data>
+  <data name="&gt;&gt;resolveButton1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;resolveButton1.Parent" xml:space="preserve">
+    <value>resolvePannel</value>
+  </data>
+  <data name="&gt;&gt;resolveButton1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="resolveButton2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="resolveButton2.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="resolveButton2.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="resolveButton2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>165, 1</value>
+  </data>
+  <data name="resolveButton2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 3, 1</value>
+  </data>
+  <data name="resolveButton2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="resolveButton2.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="resolveButton2.Text" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="&gt;&gt;resolveButton2.Name" xml:space="preserve">
+    <value>resolveButton2</value>
+  </data>
+  <data name="&gt;&gt;resolveButton2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;resolveButton2.Parent" xml:space="preserve">
+    <value>resolvePannel</value>
+  </data>
+  <data name="&gt;&gt;resolveButton2.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="resolveButton3.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="resolveButton3.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="resolveButton3.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="resolveButton3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>246, 1</value>
+  </data>
+  <data name="resolveButton3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 3, 1</value>
+  </data>
+  <data name="resolveButton3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="resolveButton3.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="resolveButton3.Text" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="&gt;&gt;resolveButton3.Name" xml:space="preserve">
+    <value>resolveButton3</value>
+  </data>
+  <data name="&gt;&gt;resolveButton3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;resolveButton3.Parent" xml:space="preserve">
+    <value>resolvePannel</value>
+  </data>
+  <data name="&gt;&gt;resolveButton3.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="resolveButton4.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="resolveButton4.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="resolveButton4.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="resolveButton4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>327, 1</value>
+  </data>
+  <data name="resolveButton4.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 3, 1</value>
+  </data>
+  <data name="resolveButton4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="resolveButton4.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="resolveButton4.Text" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="&gt;&gt;resolveButton4.Name" xml:space="preserve">
+    <value>resolveButton4</value>
+  </data>
+  <data name="&gt;&gt;resolveButton4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;resolveButton4.Parent" xml:space="preserve">
+    <value>resolvePannel</value>
+  </data>
+  <data name="&gt;&gt;resolveButton4.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="resolveButton5.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="resolveButton5.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="resolveButton5.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="resolveButton5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>408, 1</value>
+  </data>
+  <data name="resolveButton5.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 3, 1</value>
+  </data>
+  <data name="resolveButton5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="resolveButton5.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="resolveButton5.Text" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="&gt;&gt;resolveButton5.Name" xml:space="preserve">
+    <value>resolveButton5</value>
+  </data>
+  <data name="&gt;&gt;resolveButton5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;resolveButton5.Parent" xml:space="preserve">
+    <value>resolvePannel</value>
+  </data>
+  <data name="&gt;&gt;resolveButton5.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="resolveButton6.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="resolveButton6.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="resolveButton6.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="resolveButton6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>489, 1</value>
+  </data>
+  <data name="resolveButton6.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 3, 1</value>
+  </data>
+  <data name="resolveButton6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="resolveButton6.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="resolveButton6.Text" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="&gt;&gt;resolveButton6.Name" xml:space="preserve">
+    <value>resolveButton6</value>
+  </data>
+  <data name="&gt;&gt;resolveButton6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;resolveButton6.Parent" xml:space="preserve">
+    <value>resolvePannel</value>
+  </data>
+  <data name="&gt;&gt;resolveButton6.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="resolveButton7.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="resolveButton7.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="resolveButton7.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="resolveButton7.Location" type="System.Drawing.Point, System.Drawing">
+    <value>570, 1</value>
+  </data>
+  <data name="resolveButton7.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 3, 1</value>
+  </data>
+  <data name="resolveButton7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="resolveButton7.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="resolveButton7.Text" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="&gt;&gt;resolveButton7.Name" xml:space="preserve">
+    <value>resolveButton7</value>
+  </data>
+  <data name="&gt;&gt;resolveButton7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;resolveButton7.Parent" xml:space="preserve">
+    <value>resolvePannel</value>
+  </data>
+  <data name="&gt;&gt;resolveButton7.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="resolveTopLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="resolveTopLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 25</value>
+  </data>
+  <data name="resolveTopLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>86, 13</value>
+  </data>
+  <data name="resolveTopLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="resolveTopLabel.Text" xml:space="preserve">
+    <value>resolveTopLabel</value>
+  </data>
+  <data name="&gt;&gt;resolveTopLabel.Name" xml:space="preserve">
+    <value>resolveTopLabel</value>
+  </data>
+  <data name="&gt;&gt;resolveTopLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;resolveTopLabel.Parent" xml:space="preserve">
+    <value>resolvePannel</value>
+  </data>
+  <data name="&gt;&gt;resolveTopLabel.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="resolveBottomLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="resolveBottomLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 38</value>
+  </data>
+  <data name="resolveBottomLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 13</value>
+  </data>
+  <data name="resolveBottomLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="resolveBottomLabel.Text" xml:space="preserve">
+    <value>label3</value>
+  </data>
+  <data name="&gt;&gt;resolveBottomLabel.Name" xml:space="preserve">
+    <value>resolveBottomLabel</value>
+  </data>
+  <data name="&gt;&gt;resolveBottomLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;resolveBottomLabel.Parent" xml:space="preserve">
+    <value>resolvePannel</value>
+  </data>
+  <data name="&gt;&gt;resolveBottomLabel.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="resolveLinkLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="resolveLinkLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>44, 38</value>
+  </data>
+  <data name="resolveLinkLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>0, 13</value>
+  </data>
+  <data name="resolveLinkLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;resolveLinkLabel.Name" xml:space="preserve">
+    <value>resolveLinkLabel</value>
+  </data>
+  <data name="&gt;&gt;resolveLinkLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;resolveLinkLabel.Parent" xml:space="preserve">
+    <value>resolvePannel</value>
+  </data>
+  <data name="&gt;&gt;resolveLinkLabel.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="resolvePannel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="resolvePannel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="resolvePannel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>768, 34</value>
+  </data>
+  <data name="resolvePannel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;resolvePannel.Name" xml:space="preserve">
+    <value>resolvePannel</value>
+  </data>
+  <data name="&gt;&gt;resolvePannel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;resolvePannel.Parent" xml:space="preserve">
+    <value>conflictEditSplitter.Panel2</value>
+  </data>
+  <data name="&gt;&gt;resolvePannel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;conflictEditSplitter.Panel2.Name" xml:space="preserve">
+    <value>conflictEditSplitter.Panel2</value>
+  </data>
+  <data name="&gt;&gt;conflictEditSplitter.Panel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;conflictEditSplitter.Panel2.Parent" xml:space="preserve">
+    <value>conflictEditSplitter</value>
+  </data>
+  <data name="&gt;&gt;conflictEditSplitter.Panel2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="conflictEditSplitter.Panel2MinSize" type="System.Int32, mscorlib">
+    <value>32</value>
+  </data>
+  <data name="conflictEditSplitter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>768, 276</value>
+  </data>
+  <data name="conflictEditSplitter.SplitterDistance" type="System.Int32, mscorlib">
+    <value>240</value>
+  </data>
+  <data name="conflictEditSplitter.SplitterWidth" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="conflictEditSplitter.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;conflictEditSplitter.Name" xml:space="preserve">
+    <value>conflictEditSplitter</value>
+  </data>
+  <data name="&gt;&gt;conflictEditSplitter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;conflictEditSplitter.Parent" xml:space="preserve">
+    <value>splitContainer1.Panel2</value>
+  </data>
+  <data name="&gt;&gt;conflictEditSplitter.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel2.Name" xml:space="preserve">
+    <value>splitContainer1.Panel2</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel2.Parent" xml:space="preserve">
+    <value>splitContainer1</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="splitContainer1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>768, 300</value>
+  </data>
+  <data name="splitContainer1.SplitterDistance" type="System.Int32, mscorlib">
+    <value>23</value>
+  </data>
+  <data name="splitContainer1.SplitterWidth" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="splitContainer1.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Name" xml:space="preserve">
+    <value>splitContainer1</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Conflicts and Merges</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>PendingConflictsPage</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>Ankh.UI.PendingChanges.PendingChangesPage, Ankh.UI, Version=2.2.3790.25393, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  </data>
 </root>

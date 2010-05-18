@@ -117,4 +117,388 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="projectBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="appendBranch.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="appendBranch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>71, 98</value>
+  </data>
+  <data name="appendBranch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>269, 17</value>
+  </data>
+  <data name="appendBranch.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="appendBranch.Text" xml:space="preserve">
+    <value>Append Branch or Tag Name to the Local Directory</value>
+  </data>
+  <data name="&gt;&gt;appendBranch.Name" xml:space="preserve">
+    <value>appendBranch</value>
+  </data>
+  <data name="&gt;&gt;appendBranch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;appendBranch.Parent" xml:space="preserve">
+    <value>projectBox</value>
+  </data>
+  <data name="&gt;&gt;appendBranch.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="version.Location" type="System.Drawing.Point, System.Drawing">
+    <value>71, 63</value>
+  </data>
+  <data name="version.Size" type="System.Drawing.Size, System.Drawing">
+    <value>449, 29</value>
+  </data>
+  <data name="version.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;version.Name" xml:space="preserve">
+    <value>version</value>
+  </data>
+  <data name="&gt;&gt;version.Type" xml:space="preserve">
+    <value>Ankh.UI.PathSelector.VersionSelector, Ankh.UI, Version=2.2.3790.25434, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  </data>
+  <data name="&gt;&gt;version.Parent" xml:space="preserve">
+    <value>projectBox</value>
+  </data>
+  <data name="&gt;&gt;version.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="checkOutFrom.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="checkOutFrom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>71, 36</value>
+  </data>
+  <data name="checkOutFrom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>448, 21</value>
+  </data>
+  <data name="checkOutFrom.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;checkOutFrom.Name" xml:space="preserve">
+    <value>checkOutFrom</value>
+  </data>
+  <data name="&gt;&gt;checkOutFrom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkOutFrom.Parent" xml:space="preserve">
+    <value>projectBox</value>
+  </data>
+  <data name="&gt;&gt;checkOutFrom.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="projectRootLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="projectRootLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 39</value>
+  </data>
+  <data name="projectRootLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>33, 13</value>
+  </data>
+  <data name="projectRootLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="projectRootLabel.Text" xml:space="preserve">
+    <value>&amp;From:</value>
+  </data>
+  <data name="&gt;&gt;projectRootLabel.Name" xml:space="preserve">
+    <value>projectRootLabel</value>
+  </data>
+  <data name="&gt;&gt;projectRootLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;projectRootLabel.Parent" xml:space="preserve">
+    <value>projectBox</value>
+  </data>
+  <data name="&gt;&gt;projectRootLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="projectLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="projectLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 18</value>
+  </data>
+  <data name="projectLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>43, 13</value>
+  </data>
+  <data name="projectLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="projectLabel.Text" xml:space="preserve">
+    <value>Project:</value>
+  </data>
+  <data name="&gt;&gt;projectLabel.Name" xml:space="preserve">
+    <value>projectLabel</value>
+  </data>
+  <data name="&gt;&gt;projectLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;projectLabel.Parent" xml:space="preserve">
+    <value>projectBox</value>
+  </data>
+  <data name="&gt;&gt;projectLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="projectUrl.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="projectUrl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>93, 16</value>
+  </data>
+  <data name="projectUrl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>426, 13</value>
+  </data>
+  <data name="projectUrl.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="projectUrl.Text" xml:space="preserve">
+    <value>http://ankhsvn.open.collab.net/svn/ankhsvn/trunk/AnkhSvn.2008.sln</value>
+  </data>
+  <data name="&gt;&gt;projectUrl.Name" xml:space="preserve">
+    <value>projectUrl</value>
+  </data>
+  <data name="&gt;&gt;projectUrl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;projectUrl.Parent" xml:space="preserve">
+    <value>projectBox</value>
+  </data>
+  <data name="&gt;&gt;projectUrl.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="projectIcon.Location" type="System.Drawing.Point, System.Drawing">
+    <value>71, 15</value>
+  </data>
+  <data name="projectIcon.Size" type="System.Drawing.Size, System.Drawing">
+    <value>16, 16</value>
+  </data>
+  <data name="projectIcon.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;projectIcon.Name" xml:space="preserve">
+    <value>projectIcon</value>
+  </data>
+  <data name="&gt;&gt;projectIcon.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;projectIcon.Parent" xml:space="preserve">
+    <value>projectBox</value>
+  </data>
+  <data name="&gt;&gt;projectIcon.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="projectBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 12</value>
+  </data>
+  <data name="projectBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>525, 125</value>
+  </data>
+  <data name="projectBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="projectBox.Text" xml:space="preserve">
+    <value>&amp;Project:</value>
+  </data>
+  <data name="&gt;&gt;projectBox.Name" xml:space="preserve">
+    <value>projectBox</value>
+  </data>
+  <data name="&gt;&gt;projectBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;projectBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;projectBox.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="locationBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="directory.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="directory.Location" type="System.Drawing.Point, System.Drawing">
+    <value>71, 19</value>
+  </data>
+  <data name="directory.Size" type="System.Drawing.Size, System.Drawing">
+    <value>417, 20</value>
+  </data>
+  <data name="directory.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="directory.Text" xml:space="preserve">
+    <value>C:\Users\SomeOne\My Visual Studio Projects\AnkhSvn</value>
+  </data>
+  <data name="&gt;&gt;directory.Name" xml:space="preserve">
+    <value>directory</value>
+  </data>
+  <data name="&gt;&gt;directory.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;directory.Parent" xml:space="preserve">
+    <value>locationBox</value>
+  </data>
+  <data name="&gt;&gt;directory.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="browseDirectoryButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="browseDirectoryButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>493, 16</value>
+  </data>
+  <data name="browseDirectoryButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>27, 25</value>
+  </data>
+  <data name="browseDirectoryButton.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="browseDirectoryButton.Text" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="&gt;&gt;browseDirectoryButton.Name" xml:space="preserve">
+    <value>browseDirectoryButton</value>
+  </data>
+  <data name="&gt;&gt;browseDirectoryButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;browseDirectoryButton.Parent" xml:space="preserve">
+    <value>locationBox</value>
+  </data>
+  <data name="&gt;&gt;browseDirectoryButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 22</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>52, 13</value>
+  </data>
+  <data name="label2.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>Directory:</value>
+  </data>
+  <data name="&gt;&gt;label2.Name" xml:space="preserve">
+    <value>label2</value>
+  </data>
+  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+    <value>locationBox</value>
+  </data>
+  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="locationBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 143</value>
+  </data>
+  <data name="locationBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>525, 50</value>
+  </data>
+  <data name="locationBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="locationBox.Text" xml:space="preserve">
+    <value>&amp;Local Directory:</value>
+  </data>
+  <data name="&gt;&gt;locationBox.Name" xml:space="preserve">
+    <value>locationBox</value>
+  </data>
+  <data name="&gt;&gt;locationBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;locationBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;locationBox.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="cancelButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="cancelButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>462, 201</value>
+  </data>
+  <data name="cancelButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="cancelButton.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="cancelButton.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.Name" xml:space="preserve">
+    <value>cancelButton</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="okButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="okButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>381, 201</value>
+  </data>
+  <data name="okButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="okButton.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="okButton.Text" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="&gt;&gt;okButton.Name" xml:space="preserve">
+    <value>okButton</value>
+  </data>
+  <data name="&gt;&gt;okButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;okButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;okButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>549, 236</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Open Project from Subversion</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>CheckoutProject</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>Ankh.UI.VSDialogForm, Ankh.Services, Version=2.2.3790.25433, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
+  </data>
 </root>
