@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.PendingChanges
 {
-    public partial class ConfigureRecentChangesPageDialog : VSContainerForm
+    public partial class ConfigureRecentChangesPageDialog : VSDialogForm
     {
         int _currentSetting;
 

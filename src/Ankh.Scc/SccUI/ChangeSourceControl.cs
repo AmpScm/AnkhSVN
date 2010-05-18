@@ -31,7 +31,7 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Scc.SccUI
 {
-    public partial class ChangeSourceControl : VSContainerForm
+    public partial class ChangeSourceControl : VSDialogForm
     {
         public ChangeSourceControl()
         {

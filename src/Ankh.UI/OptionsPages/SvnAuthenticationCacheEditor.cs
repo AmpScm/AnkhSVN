@@ -27,7 +27,7 @@ using SharpSvn.Security;
 
 namespace Ankh.UI.OptionsPages
 {
-    public partial class SvnAuthenticationCacheEditor : VSContainerForm
+    public partial class SvnAuthenticationCacheEditor : VSDialogForm
     {
         public SvnAuthenticationCacheEditor()
         {

@@ -28,7 +28,7 @@ using SharpSvn;
 
 namespace Ankh.Scc.SccUI
 {
-    public partial class ChangeSolutionRoot : VSContainerForm
+    public partial class ChangeSolutionRoot : VSDialogForm
     {
         public ChangeSolutionRoot()
         {

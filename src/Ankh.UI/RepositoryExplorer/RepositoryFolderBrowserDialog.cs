@@ -27,7 +27,7 @@ using Ankh.Scc;
 
 namespace Ankh.UI.RepositoryExplorer
 {
-    public partial class RepositoryFolderBrowserDialog : VSContainerForm
+    public partial class RepositoryFolderBrowserDialog : VSDialogForm
     {
         public RepositoryFolderBrowserDialog()
         {
