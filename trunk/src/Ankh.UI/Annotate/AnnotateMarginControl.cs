@@ -79,17 +79,17 @@ namespace Ankh.UI.Annotate
             {
                 AnnotateSource src = region.Source;
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("Revision: {0}", src.Revision);
+                sb.AppendFormat(AnnotateResources.RevisonHead, src.Revision);
                 sb.AppendLine();
-                sb.AppendFormat("Author: {0}", src.Author);
+                sb.AppendFormat(AnnotateResources.AuthorHead, src.Author);
                 sb.AppendLine();
-                sb.AppendFormat("Time: {0}", src.Time.ToLocalTime());
+                sb.AppendFormat(AnnotateResources.TimeHead, src.Time.ToLocalTime());
                 sb.AppendLine();
 
                 string msg = src.LogMessage;
 
                 if (msg == null)
-                    sb.Append("<loading logmessages>");
+                    sb.Append(AnnotateResources.LoadingMessage);
                 else
                     sb.AppendLine(msg);
 
