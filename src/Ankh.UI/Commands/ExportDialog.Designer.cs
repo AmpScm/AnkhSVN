@@ -29,161 +29,114 @@ namespace Ankh.UI.Commands
         /// </summary>
         private void InitializeComponent()
         {
-            this.localDirGroupBox = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.toDirBrowseButton = new System.Windows.Forms.Button();
-            this.toBox = new System.Windows.Forms.TextBox();
-            this.nonRecursiveCheckBox = new System.Windows.Forms.CheckBox();
-            this.okButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.radioButtonGroupbox = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.originBox = new System.Windows.Forms.TextBox();
-            this.revisionPicker = new Ankh.UI.PathSelector.VersionSelector();
-            this.localDirGroupBox.SuspendLayout();
-            this.radioButtonGroupbox.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // localDirGroupBox
-            // 
-            this.localDirGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.localDirGroupBox.Controls.Add(this.label2);
-            this.localDirGroupBox.Controls.Add(this.toDirBrowseButton);
-            this.localDirGroupBox.Controls.Add(this.toBox);
-            this.localDirGroupBox.Location = new System.Drawing.Point(8, 96);
-            this.localDirGroupBox.Name = "localDirGroupBox";
-            this.localDirGroupBox.Size = new System.Drawing.Size(508, 56);
-            this.localDirGroupBox.TabIndex = 1;
-            this.localDirGroupBox.TabStop = false;
-            this.localDirGroupBox.Text = "Export &To:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 23);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(32, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Pa&th:";
-            // 
-            // toDirBrowseButton
-            // 
-            this.toDirBrowseButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.toDirBrowseButton.Location = new System.Drawing.Point(474, 18);
-            this.toDirBrowseButton.Name = "toDirBrowseButton";
-            this.toDirBrowseButton.Size = new System.Drawing.Size(24, 23);
-            this.toDirBrowseButton.TabIndex = 2;
-            this.toDirBrowseButton.Text = "&...";
-            this.toDirBrowseButton.Click += new System.EventHandler(this.BrowseClicked);
-            // 
-            // toBox
-            // 
-            this.toBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.toBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.toBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
-            this.toBox.Location = new System.Drawing.Point(51, 20);
-            this.toBox.Name = "toBox";
-            this.toBox.Size = new System.Drawing.Size(417, 20);
-            this.toBox.TabIndex = 1;
-            this.toBox.TextChanged += new System.EventHandler(this.ControlsChanged);
-            // 
-            // nonRecursiveCheckBox
-            // 
-            this.nonRecursiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.nonRecursiveCheckBox.Location = new System.Drawing.Point(24, 165);
-            this.nonRecursiveCheckBox.Name = "nonRecursiveCheckBox";
-            this.nonRecursiveCheckBox.Size = new System.Drawing.Size(104, 24);
-            this.nonRecursiveCheckBox.TabIndex = 2;
-            this.nonRecursiveCheckBox.Text = "&Non-recursive";
-            // 
-            // okButton
-            // 
-            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Enabled = false;
-            this.okButton.Location = new System.Drawing.Point(360, 166);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 3;
-            this.okButton.Text = "OK";
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(441, 166);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 4;
-            this.cancelButton.Text = "Cancel";
-            // 
-            // radioButtonGroupbox
-            // 
-            this.radioButtonGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.radioButtonGroupbox.Controls.Add(this.label1);
-            this.radioButtonGroupbox.Controls.Add(this.revisionPicker);
-            this.radioButtonGroupbox.Controls.Add(this.originBox);
-            this.radioButtonGroupbox.Location = new System.Drawing.Point(8, 12);
-            this.radioButtonGroupbox.Name = "radioButtonGroupbox";
-            this.radioButtonGroupbox.Size = new System.Drawing.Size(508, 78);
-            this.radioButtonGroupbox.TabIndex = 0;
-            this.radioButtonGroupbox.TabStop = false;
-            this.radioButtonGroupbox.Text = "&From:";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 19);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "&Path:";
-            // 
-            // originBox
-            // 
-            this.originBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.originBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.originBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
-            this.originBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.originBox.Location = new System.Drawing.Point(51, 19);
-            this.originBox.Name = "originBox";
-            this.originBox.ReadOnly = true;
-            this.originBox.Size = new System.Drawing.Size(447, 13);
-            this.originBox.TabIndex = 1;
-            this.originBox.TextChanged += new System.EventHandler(this.ControlsChanged);
-            // 
-            // revisionPicker
-            // 
-            this.revisionPicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.revisionPicker.Location = new System.Drawing.Point(9, 41);
-            this.revisionPicker.Name = "revisionPicker";
-            this.revisionPicker.Size = new System.Drawing.Size(493, 29);
-            this.revisionPicker.SvnOrigin = null;
-            this.revisionPicker.TabIndex = 3;
-            this.revisionPicker.Changed += new System.EventHandler(this.ControlsChanged);
-            // 
-            // ExportDialog
-            // 
-            this.AcceptButton = this.okButton;
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(526, 201);
-            this.Controls.Add(this.radioButtonGroupbox);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.okButton);
-            this.Controls.Add(this.nonRecursiveCheckBox);
-            this.Controls.Add(this.localDirGroupBox);
-            this.Name = "ExportDialog";
-            this.Text = "Export";
-            this.localDirGroupBox.ResumeLayout(false);
-            this.localDirGroupBox.PerformLayout();
-            this.radioButtonGroupbox.ResumeLayout(false);
-            this.radioButtonGroupbox.PerformLayout();
-            this.ResumeLayout(false);
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportDialog));
+			this.localDirGroupBox = new System.Windows.Forms.GroupBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.toDirBrowseButton = new System.Windows.Forms.Button();
+			this.toBox = new System.Windows.Forms.TextBox();
+			this.nonRecursiveCheckBox = new System.Windows.Forms.CheckBox();
+			this.okButton = new System.Windows.Forms.Button();
+			this.cancelButton = new System.Windows.Forms.Button();
+			this.radioButtonGroupbox = new System.Windows.Forms.GroupBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.revisionPicker = new Ankh.UI.PathSelector.VersionSelector();
+			this.originBox = new System.Windows.Forms.TextBox();
+			this.localDirGroupBox.SuspendLayout();
+			this.radioButtonGroupbox.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// localDirGroupBox
+			// 
+			resources.ApplyResources(this.localDirGroupBox, "localDirGroupBox");
+			this.localDirGroupBox.Controls.Add(this.label2);
+			this.localDirGroupBox.Controls.Add(this.toDirBrowseButton);
+			this.localDirGroupBox.Controls.Add(this.toBox);
+			this.localDirGroupBox.Name = "localDirGroupBox";
+			this.localDirGroupBox.TabStop = false;
+			// 
+			// label2
+			// 
+			resources.ApplyResources(this.label2, "label2");
+			this.label2.Name = "label2";
+			// 
+			// toDirBrowseButton
+			// 
+			resources.ApplyResources(this.toDirBrowseButton, "toDirBrowseButton");
+			this.toDirBrowseButton.Name = "toDirBrowseButton";
+			this.toDirBrowseButton.Click += new System.EventHandler(this.BrowseClicked);
+			// 
+			// toBox
+			// 
+			resources.ApplyResources(this.toBox, "toBox");
+			this.toBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+			this.toBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
+			this.toBox.Name = "toBox";
+			this.toBox.TextChanged += new System.EventHandler(this.ControlsChanged);
+			// 
+			// nonRecursiveCheckBox
+			// 
+			resources.ApplyResources(this.nonRecursiveCheckBox, "nonRecursiveCheckBox");
+			this.nonRecursiveCheckBox.Name = "nonRecursiveCheckBox";
+			// 
+			// okButton
+			// 
+			resources.ApplyResources(this.okButton, "okButton");
+			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.okButton.Name = "okButton";
+			// 
+			// cancelButton
+			// 
+			resources.ApplyResources(this.cancelButton, "cancelButton");
+			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.cancelButton.Name = "cancelButton";
+			// 
+			// radioButtonGroupbox
+			// 
+			resources.ApplyResources(this.radioButtonGroupbox, "radioButtonGroupbox");
+			this.radioButtonGroupbox.Controls.Add(this.label1);
+			this.radioButtonGroupbox.Controls.Add(this.revisionPicker);
+			this.radioButtonGroupbox.Controls.Add(this.originBox);
+			this.radioButtonGroupbox.Name = "radioButtonGroupbox";
+			this.radioButtonGroupbox.TabStop = false;
+			// 
+			// label1
+			// 
+			resources.ApplyResources(this.label1, "label1");
+			this.label1.Name = "label1";
+			// 
+			// revisionPicker
+			// 
+			resources.ApplyResources(this.revisionPicker, "revisionPicker");
+			this.revisionPicker.Name = "revisionPicker";
+			this.revisionPicker.SvnOrigin = null;
+			this.revisionPicker.Changed += new System.EventHandler(this.ControlsChanged);
+			// 
+			// originBox
+			// 
+			resources.ApplyResources(this.originBox, "originBox");
+			this.originBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+			this.originBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
+			this.originBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.originBox.Name = "originBox";
+			this.originBox.ReadOnly = true;
+			this.originBox.TextChanged += new System.EventHandler(this.ControlsChanged);
+			// 
+			// ExportDialog
+			// 
+			this.AcceptButton = this.okButton;
+			resources.ApplyResources(this, "$this");
+			this.CancelButton = this.cancelButton;
+			this.Controls.Add(this.radioButtonGroupbox);
+			this.Controls.Add(this.cancelButton);
+			this.Controls.Add(this.okButton);
+			this.Controls.Add(this.nonRecursiveCheckBox);
+			this.Controls.Add(this.localDirGroupBox);
+			this.Name = "ExportDialog";
+			this.localDirGroupBox.ResumeLayout(false);
+			this.localDirGroupBox.PerformLayout();
+			this.radioButtonGroupbox.ResumeLayout(false);
+			this.radioButtonGroupbox.PerformLayout();
+			this.ResumeLayout(false);
 
         }
         #endregion

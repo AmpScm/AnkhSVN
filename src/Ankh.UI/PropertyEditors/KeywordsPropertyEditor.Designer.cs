@@ -29,28 +29,26 @@ namespace Ankh.UI.PropertyEditors
         /// </summary>
         private void InitializeComponent()
         {
-            this.keywordList = new System.Windows.Forms.CheckedListBox();
-            this.SuspendLayout();
-            // 
-            // keywordList
-            // 
-            this.keywordList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.keywordList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.keywordList.FormattingEnabled = true;
-            this.keywordList.Items.AddRange(new object[] {
-            "Id"});
-            this.keywordList.Location = new System.Drawing.Point(0, 0);
-            this.keywordList.Name = "keywordList";
-            this.keywordList.Size = new System.Drawing.Size(348, 182);
-            this.keywordList.Sorted = true;
-            this.keywordList.TabIndex = 1;
-            this.keywordList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
-            // 
-            // KeywordsPropertyEditor
-            // 
-            this.Controls.Add(this.keywordList);
-            this.Name = "KeywordsPropertyEditor";
-            this.ResumeLayout(false);
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(KeywordsPropertyEditor));
+			this.keywordList = new System.Windows.Forms.CheckedListBox();
+			this.SuspendLayout();
+			// 
+			// keywordList
+			// 
+			this.keywordList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			resources.ApplyResources(this.keywordList, "keywordList");
+			this.keywordList.FormattingEnabled = true;
+			this.keywordList.Items.AddRange(new object[] {
+            resources.GetString("keywordList.Items")});
+			this.keywordList.Name = "keywordList";
+			this.keywordList.Sorted = true;
+			this.keywordList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
+			// 
+			// KeywordsPropertyEditor
+			// 
+			this.Controls.Add(this.keywordList);
+			this.Name = "KeywordsPropertyEditor";
+			this.ResumeLayout(false);
 
         }
         #endregion

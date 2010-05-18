@@ -118,31 +118,207 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="lblFile.Location" type="System.Drawing.Point, System.Drawing">
+    <value>48, 12</value>
+  </data>
+  <data name="lblFile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>431, 13</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="lblFile.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;lblFile.Name" xml:space="preserve">
+    <value>lblFile</value>
+  </data>
+  <data name="&gt;&gt;lblFile.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblFile.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lblFile.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="label1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>48, 31</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>431, 50</value>
+  </data>
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>You can either save the file in a different location or Microsoft Visual Studio can attempt to remove the write-protection and overwrite the file in its current location.</value>
+  </data>
+  <data name="label1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
+  </data>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="btnSaveAs.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="btnSaveAs.Location" type="System.Drawing.Point, System.Drawing">
+    <value>119, 119</value>
+  </data>
+  <data name="btnSaveAs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnSaveAs.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="btnSaveAs.Text" xml:space="preserve">
+    <value>Save &amp;As...</value>
+  </data>
+  <data name="&gt;&gt;btnSaveAs.Name" xml:space="preserve">
+    <value>btnSaveAs</value>
+  </data>
+  <data name="&gt;&gt;btnSaveAs.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnSaveAs.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnSaveAs.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="btnOverwrite.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="btnOverwrite.Location" type="System.Drawing.Point, System.Drawing">
+    <value>208, 119</value>
+  </data>
+  <data name="btnOverwrite.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnOverwrite.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="btnOverwrite.Text" xml:space="preserve">
+    <value>&amp;Overwrite</value>
+  </data>
+  <data name="&gt;&gt;btnOverwrite.Name" xml:space="preserve">
+    <value>btnOverwrite</value>
+  </data>
+  <data name="&gt;&gt;btnOverwrite.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnOverwrite.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnOverwrite.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="btnCancel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="btnCancel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>297, 119</value>
+  </data>
+  <data name="btnCancel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnCancel.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="btnCancel.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Name" xml:space="preserve">
+    <value>btnCancel</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="pWarning.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
   <data name="pWarning.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAehFoBAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAALEQAA
-        CxEBf2RfkQAABJxJREFUWEftmG1sU1UYx48fTFyCxmAMWZgSA2hsjZoOjWMYh5AU2UzGNFHUBYgviYkf
-        yTD6AYyL7AUFwmCZWyeC6wobtsCErXO00k4drg58WUG/rAslhkGMMTgNyN/zP6fXdRXXtztlSZf8c+69
-        p/fud/73eZ7ztDcAEDPqj8AzSTMKVkXDTHI3B/xfvK1cSEy3y9PicPjbQck9PeVyWoDb93jg6fDC6w2Z
-        Dm46cMteJzydLQj420Bws502FTjoC8Dh8OBg29PodQvpstt0aFOBHa1OOFodGPIJjIYFDn1og9sdBBdi
-        ltOmAbs9XjidXrhainFF5ht16rB0+cAOdf26A2a8trl24IeAhjXU1XiXSj4uyAxoUxxu3+NUUAyBeFjD
-        5f6jNSo0rhtgwvQe2qjcrd9cgHXPP6j0ymsPIBoS8O2eg25fSJW6bKGzdpihEAgG0Ld/HnBZ4JnnylG+
-        6lWlFSvX4dP9Aj/1CfS5XlLQ/ytw0NeDUGgU3ceqlJMEXvOiHeUVa6WehX1luSpv+E3g+PZbEYlEsnY5
-        K4f5igl9skcnGcHWrnlMgZYsW4GiJUUaeEy77H+/DBejl7IqcxkDMxT4z/v2lWL8nIYlGGN38SNLYXto
-        MQpthfhShgRGpIbossCZgY+zCo2MgVkVuP3+eCwGGwNe/dS9mG8pxHyrVem7fXL+e/kGTgpc6BToaixU
-        C+09klkCZgTsbPfgQnRMlTHl7PmYpMOrygow7477sOAeK2wPTwBf/VyAOr1VYKB9A44PhDNKwLSB6QwT
-        zdtdo90lbFSLLj5elIe8m27B7NvzYbUswIkP5JzcqnFEa7xDwF01Sy04kzKXNjC3Wfa7/maLBpWx+edX
-        Wr9+JrDIKvhDh1QerNY7laNgHEv9sVuOcgG85m96ISOX0wJm9xU+NYrDzWUKzoDkMUUHl9yvgWfdlo+l
-        j1oQbpqAJTB1eZeA9w2B/l532i6nBawac9nrDrfqeIwHJSyvlRZp4Py5C/HEcts/gAlLRasFDlQvQo8v
-        nFaZSxnY6Be6dhUrJw1HLx2diE9e5+t2Vwn0bNTHPzdqwHhdkeWN51+sl1Wj6fW0+oyUgNnPsl9wfrRJ
-        JZEBG59ITCbGKSFrKwU2VGhwxqwBS1Dql3e16LL7zQLVOKWagCkBszFnKetqtKosTwQ1YAn8sl2HxM2z
-        F6LCbsHZ9yYDG7AGPF3u2FKZsstJgZlobXILdjVXYmSv/Lg/pliZMkqVUQmW2XSF4OZhLy3BmbrJLieG
-        BxfAMkeHU/kOmBSY7rpaG3QZkzsWTsQUlKPU1X49GgptEyi2zUHJ8iJsXX83fucb+USKPcW1JOe4qM6a
-        J1P6ZjIlcLy7gzsFKAJ9XX9tcZ5zwc03qrLF0TjnOPTO5Pviz7vfnouD7c6kLk8JzMrAhBuS/W68TocG
-        QYW/GcbZ8DAujkTUzmVo/PwYqL+vnYuo1pLiPcb9HBOfnazHSOpw3ZYG1NfU4a3qeqVNtXXq3BDnqdrt
-        Ddi57d/FeeOz8ffzOP6ZfMZUTX7SGM72G4LZ9+eAzXY08Xk5h3MOJ/zOnAuJXEgkhMRfvXGAV+Bh70oA
-        AAAASUVORK5CYII=
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAALEAAA
+        CxABrSO9dQAABJhJREFUWEftmG1sU1UYx88XE5egMRhDFqbEABpbo6YD4xjGISRFNpMxTXxdgKAmJn4k
+        w+gHMC6yFxQIg2VunQiuLWzYAhO2ztHKOnW4OvBlBf2yLpQYBjHG4DQgf8//nF7XVVjf7iJL+uGf03tP
+        7+3v/O/zPOe5FQDETNKMgqWxOeDpDq+cwzmHE6pYLiQYEuHvB+UwPfV9Whx27fXC2+6DzxcyHdx04JZ9
+        Tng7WtAXaAPBzXbaVOCgvw8OhxeH2p5Fj0dIlz2mQ5sK7Gh1wtHqwJBfYDQscPhjGzyeILgQs5w2Ddjj
+        9cHp9MHdUoyrMt+o00ekywd3qvM3HTDjtc29Ez/1aVhDnY33quTjgsyANsVh116ngmIIxMMaLvcfq1Gh
+        cdMAE6bn8Cblbv2WAqx76RGl1954GNGQgH/PHHT5Q6rUZQudtcMMhb5gH3oPzAOuCDz3YjnKV7+utHLV
+        Onx+QOCXXoFe9ysK+n8FDvq7EQqNout4lXKSwGvW21FesVbqedhXlavyhj8ETuy4A5FIJGuXs3KYj5jQ
+        p7p1khFs7ZonFGjJ8pUoWlqkgce0y4EPy3ApejmrMpcxMEOBP967vxTj5zUswRi7Sx5bBtviJSi0FeJr
+        GRIYkRqiywJnBz7NKjQyBmZV4Pb78/EYbAz4hWcewHxLIeZbrUo/7JfzP8oncErgYodAZ2OhWmjP0cwS
+        MCNgp8uLi9ExVcaUsxdikg6vLivAvLsfxIL7rbA9OgF87UsB6sw2gQHXRpwYCGeUgGkD0xkmmq+rRrtL
+        2KgWXXyyKA95t96O2Xflw2pZgJMfyTm5VeOo1ni7gKdqllpwJmUubWBus+x3A80WDSpj8+9vtH7/QmCR
+        Vch3cSoPVus9ylEwjqX+2iNHuQCeCzS9nJHLaQGz+wqfHsWR5jIFZ0DyM0UHlz6kgWfdmY9lj1sQbpqA
+        JTB1ZbeA7y2B/h5P2i6nBawac9nrDrfqeIwHJSzPlRZp4Py5C/HUCtt/gAlLRasFDlYvQrc/nFaZSxnY
+        6Bc6dxcrJw1HLx+biE+e5+P2VAl0b9Kff23UgPG6Kssbj7/aIKtG05tp9RkpAbOfZb/g/GSzSiIDNj6R
+        mEyMU0LWVgpsrNDgjFkDlqDUb+9r0WXP2wWqcUo1AVMCZmPOUtbZaFVZnghqwBL4VbsOidtmL0SF3YJz
+        H0wGNmANeLrcvrUyZZeTAjPR2uQW7G6uxMg++fVATLEyZZQqoxIst+kKwc3DXlqCs3WTXU4MDy6AZY4O
+        p/IOmBSY7rpbG3QZkzsWTsYUlKPUtX49GgptFyi2zUHJiiJs23Af/uQT+UyKPcX1JOe4qI6ap1N6M5kS
+        ON7dwV0CFIG+rb++OM+54JZbVNniaBxzHHpv8nXxx13vzsUhlzOpy1MCszIw4YZkvxuvM6FBUOHvhnEu
+        PIxLIxG1cxkavzAG6t9z5yOqtaR4jXE9x8R7J+sxkjpct7UB9TV1eKe6XmlzbZ06NsR5qnZHA3Ztv7E4
+        b3w3/np+jr8n7zFVk580hrN9QzD7+hyw2Y4m3i/ncM7h3D/w0/RP+41Ca8Yl3T9sagDk2yFDxgAAAABJ
+        RU5ErkJggg==
 </value>
+  </data>
+  <data name="pWarning.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1, 31</value>
+  </data>
+  <data name="pWarning.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 50</value>
+  </data>
+  <data name="pWarning.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;pWarning.Name" xml:space="preserve">
+    <value>pWarning</value>
+  </data>
+  <data name="&gt;&gt;pWarning.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pWarning.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;pWarning.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>491, 154</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Save of Read-Only File</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>SccQuerySaveReadonlyDialog</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>Ankh.UI.VSDialogForm, Ankh.Services, Version=2.2.3790.25433, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
   </data>
 </root>

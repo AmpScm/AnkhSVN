@@ -44,27 +44,24 @@ namespace Ankh.UI.SvnLog
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.logControl = new Ankh.UI.SvnLog.LogControl(this.components);
-            this.SuspendLayout();
-            // 
-            // logControl
-            // 
-            this.logControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logControl.Location = new System.Drawing.Point(0, 0);
-            this.logControl.Mode = Ankh.UI.SvnLog.LogMode.Log;
-            this.logControl.Name = "logControl";
-            this.logControl.Size = new System.Drawing.Size(482, 254);
-            this.logControl.TabIndex = 0;
-            // 
-            // LogToolWindowControl
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.logControl);
-            this.Name = "LogToolWindowControl";
-            this.Size = new System.Drawing.Size(482, 254);
-            this.ResumeLayout(false);
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogToolWindowControl));
+			this.logControl = new Ankh.UI.SvnLog.LogControl(this.components);
+			this.SuspendLayout();
+			// 
+			// logControl
+			// 
+			resources.ApplyResources(this.logControl, "logControl");
+			this.logControl.Mode = Ankh.UI.SvnLog.LogMode.Log;
+			this.logControl.Name = "logControl";
+			// 
+			// LogToolWindowControl
+			// 
+			resources.ApplyResources(this, "$this");
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.logControl);
+			this.Name = "LogToolWindowControl";
+			this.ResumeLayout(false);
 
         }
 

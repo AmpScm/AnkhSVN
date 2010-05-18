@@ -29,46 +29,36 @@ namespace Ankh.UI.PropertyEditors
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.valueTextBox = new System.Windows.Forms.TextBox();
-            this.plainGroupBox = new System.Windows.Forms.GroupBox();
-            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.plainGroupBox.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // valueTextBox
-            // 
-            this.valueTextBox.AcceptsReturn = true;
-            this.valueTextBox.AcceptsTab = true;
-            this.valueTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.valueTextBox.Location = new System.Drawing.Point(6, 19);
-            this.valueTextBox.Multiline = true;
-            this.valueTextBox.Name = "valueTextBox";
-            this.valueTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.valueTextBox.Size = new System.Drawing.Size(336, 174);
-            this.valueTextBox.TabIndex = 0;
-            this.valueTextBox.TextChanged += new System.EventHandler(this.valueTextBox_TextChanged);
-            // 
-            // plainGroupBox
-            // 
-            this.plainGroupBox.Controls.Add(this.valueTextBox);
-            this.plainGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plainGroupBox.Location = new System.Drawing.Point(0, 0);
-            this.plainGroupBox.Name = "plainGroupBox";
-            this.plainGroupBox.Size = new System.Drawing.Size(348, 196);
-            this.plainGroupBox.TabIndex = 2;
-            this.plainGroupBox.TabStop = false;
-            this.plainGroupBox.Text = "Enter values";
-            // 
-            // PlainPropertyEditor
-            // 
-            this.Controls.Add(this.plainGroupBox);
-            this.Name = "PlainPropertyEditor";
-            this.plainGroupBox.ResumeLayout(false);
-            this.plainGroupBox.PerformLayout();
-            this.ResumeLayout(false);
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlainPropertyEditor));
+			this.valueTextBox = new System.Windows.Forms.TextBox();
+			this.plainGroupBox = new System.Windows.Forms.GroupBox();
+			this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.plainGroupBox.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// valueTextBox
+			// 
+			this.valueTextBox.AcceptsReturn = true;
+			this.valueTextBox.AcceptsTab = true;
+			resources.ApplyResources(this.valueTextBox, "valueTextBox");
+			this.valueTextBox.Name = "valueTextBox";
+			this.valueTextBox.TextChanged += new System.EventHandler(this.valueTextBox_TextChanged);
+			// 
+			// plainGroupBox
+			// 
+			this.plainGroupBox.Controls.Add(this.valueTextBox);
+			resources.ApplyResources(this.plainGroupBox, "plainGroupBox");
+			this.plainGroupBox.Name = "plainGroupBox";
+			this.plainGroupBox.TabStop = false;
+			// 
+			// PlainPropertyEditor
+			// 
+			this.Controls.Add(this.plainGroupBox);
+			this.Name = "PlainPropertyEditor";
+			this.plainGroupBox.ResumeLayout(false);
+			this.plainGroupBox.PerformLayout();
+			this.ResumeLayout(false);
 
         }
         #endregion

@@ -30,27 +30,24 @@ namespace Ankh.UI.PropertyEditors
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.needsLockToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.needsLockTextBox = new System.Windows.Forms.TextBox();
-            this.SuspendLayout();
-            // 
-            // needsLockTextBox
-            // 
-            this.needsLockTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.needsLockTextBox.Location = new System.Drawing.Point(0, 0);
-            this.needsLockTextBox.Multiline = true;
-            this.needsLockTextBox.Name = "needsLockTextBox";
-            this.needsLockTextBox.ReadOnly = true;
-            this.needsLockTextBox.Size = new System.Drawing.Size(348, 196);
-            this.needsLockTextBox.TabIndex = 0;
-            // 
-            // NeedsLockPropertyEditor
-            // 
-            this.Controls.Add(this.needsLockTextBox);
-            this.Name = "NeedsLockPropertyEditor";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NeedsLockPropertyEditor));
+			this.needsLockToolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.needsLockTextBox = new System.Windows.Forms.TextBox();
+			this.SuspendLayout();
+			// 
+			// needsLockTextBox
+			// 
+			resources.ApplyResources(this.needsLockTextBox, "needsLockTextBox");
+			this.needsLockTextBox.Name = "needsLockTextBox";
+			this.needsLockTextBox.ReadOnly = true;
+			// 
+			// NeedsLockPropertyEditor
+			// 
+			this.Controls.Add(this.needsLockTextBox);
+			this.Name = "NeedsLockPropertyEditor";
+			this.ResumeLayout(false);
+			this.PerformLayout();
 
         }
         #endregion

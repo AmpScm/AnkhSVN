@@ -44,127 +44,91 @@ namespace Ankh.UI.SccManagement
         /// </summary>
         private void InitializeComponent()
         {
-            this.projectLocationGroup = new System.Windows.Forms.GroupBox();
-            this.projectLocationBrowse = new System.Windows.Forms.Button();
-            this.projectLocationBox = new System.Windows.Forms.TextBox();
-            this.debugLocationGroup = new System.Windows.Forms.GroupBox();
-            this.debugLocationBrowse = new System.Windows.Forms.Button();
-            this.debugLocationBox = new System.Windows.Forms.TextBox();
-            this.okButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.projectLocationGroup.SuspendLayout();
-            this.debugLocationGroup.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // projectLocationGroup
-            // 
-            this.projectLocationGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.projectLocationGroup.Controls.Add(this.projectLocationBrowse);
-            this.projectLocationGroup.Controls.Add(this.projectLocationBox);
-            this.projectLocationGroup.Location = new System.Drawing.Point(12, 12);
-            this.projectLocationGroup.Name = "projectLocationGroup";
-            this.projectLocationGroup.Size = new System.Drawing.Size(339, 48);
-            this.projectLocationGroup.TabIndex = 0;
-            this.projectLocationGroup.TabStop = false;
-            this.projectLocationGroup.Text = "&Project Location:";
-            // 
-            // projectLocationBrowse
-            // 
-            this.projectLocationBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.projectLocationBrowse.Location = new System.Drawing.Point(301, 17);
-            this.projectLocationBrowse.Name = "projectLocationBrowse";
-            this.projectLocationBrowse.Size = new System.Drawing.Size(32, 23);
-            this.projectLocationBrowse.TabIndex = 1;
-            this.projectLocationBrowse.Text = "...";
-            this.projectLocationBrowse.UseVisualStyleBackColor = true;
-            this.projectLocationBrowse.Click += new System.EventHandler(this.projectLocationBrowse_Click);
-            // 
-            // projectLocationBox
-            // 
-            this.projectLocationBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.projectLocationBox.Location = new System.Drawing.Point(6, 19);
-            this.projectLocationBox.Name = "projectLocationBox";
-            this.projectLocationBox.Size = new System.Drawing.Size(289, 20);
-            this.projectLocationBox.TabIndex = 0;
-            this.projectLocationBox.TextChanged += new System.EventHandler(this.projectLocationBox_TextChanged);
-            this.projectLocationBox.Validating += new System.ComponentModel.CancelEventHandler(this.projectLocationBox_Validating);
-            // 
-            // debugLocationGroup
-            // 
-            this.debugLocationGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.debugLocationGroup.Controls.Add(this.debugLocationBrowse);
-            this.debugLocationGroup.Controls.Add(this.debugLocationBox);
-            this.debugLocationGroup.Location = new System.Drawing.Point(12, 66);
-            this.debugLocationGroup.Name = "debugLocationGroup";
-            this.debugLocationGroup.Size = new System.Drawing.Size(339, 48);
-            this.debugLocationGroup.TabIndex = 2;
-            this.debugLocationGroup.TabStop = false;
-            this.debugLocationGroup.Text = "&Debug Location:";
-            // 
-            // debugLocationBrowse
-            // 
-            this.debugLocationBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.debugLocationBrowse.Location = new System.Drawing.Point(301, 17);
-            this.debugLocationBrowse.Name = "debugLocationBrowse";
-            this.debugLocationBrowse.Size = new System.Drawing.Size(32, 23);
-            this.debugLocationBrowse.TabIndex = 1;
-            this.debugLocationBrowse.Text = "...";
-            this.debugLocationBrowse.UseVisualStyleBackColor = true;
-            this.debugLocationBrowse.Click += new System.EventHandler(this.debugLocationBrowse_Click);
-            // 
-            // debugLocationBox
-            // 
-            this.debugLocationBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.debugLocationBox.Location = new System.Drawing.Point(6, 19);
-            this.debugLocationBox.Name = "debugLocationBox";
-            this.debugLocationBox.Size = new System.Drawing.Size(289, 20);
-            this.debugLocationBox.TabIndex = 0;
-            this.debugLocationBox.TextChanged += new System.EventHandler(this.debugLocationBox_TextChanged);
-            this.debugLocationBox.Validating += new System.ComponentModel.CancelEventHandler(this.debugLocationBox_Validating);
-            // 
-            // okButton
-            // 
-            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(189, 132);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 3;
-            this.okButton.Text = "OK";
-            this.okButton.UseVisualStyleBackColor = true;
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(270, 132);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 4;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            // 
-            // SccEditEnlistment
-            // 
-            this.AcceptButton = this.okButton;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(363, 167);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.okButton);
-            this.Controls.Add(this.debugLocationGroup);
-            this.Controls.Add(this.projectLocationGroup);
-            this.Name = "SccEditEnlistment";
-            this.Text = "Select Project Location";
-            this.projectLocationGroup.ResumeLayout(false);
-            this.projectLocationGroup.PerformLayout();
-            this.debugLocationGroup.ResumeLayout(false);
-            this.debugLocationGroup.PerformLayout();
-            this.ResumeLayout(false);
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SccEditEnlistment));
+			this.projectLocationGroup = new System.Windows.Forms.GroupBox();
+			this.projectLocationBrowse = new System.Windows.Forms.Button();
+			this.projectLocationBox = new System.Windows.Forms.TextBox();
+			this.debugLocationGroup = new System.Windows.Forms.GroupBox();
+			this.debugLocationBrowse = new System.Windows.Forms.Button();
+			this.debugLocationBox = new System.Windows.Forms.TextBox();
+			this.okButton = new System.Windows.Forms.Button();
+			this.cancelButton = new System.Windows.Forms.Button();
+			this.projectLocationGroup.SuspendLayout();
+			this.debugLocationGroup.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// projectLocationGroup
+			// 
+			resources.ApplyResources(this.projectLocationGroup, "projectLocationGroup");
+			this.projectLocationGroup.Controls.Add(this.projectLocationBrowse);
+			this.projectLocationGroup.Controls.Add(this.projectLocationBox);
+			this.projectLocationGroup.Name = "projectLocationGroup";
+			this.projectLocationGroup.TabStop = false;
+			// 
+			// projectLocationBrowse
+			// 
+			resources.ApplyResources(this.projectLocationBrowse, "projectLocationBrowse");
+			this.projectLocationBrowse.Name = "projectLocationBrowse";
+			this.projectLocationBrowse.UseVisualStyleBackColor = true;
+			this.projectLocationBrowse.Click += new System.EventHandler(this.projectLocationBrowse_Click);
+			// 
+			// projectLocationBox
+			// 
+			resources.ApplyResources(this.projectLocationBox, "projectLocationBox");
+			this.projectLocationBox.Name = "projectLocationBox";
+			this.projectLocationBox.TextChanged += new System.EventHandler(this.projectLocationBox_TextChanged);
+			this.projectLocationBox.Validating += new System.ComponentModel.CancelEventHandler(this.projectLocationBox_Validating);
+			// 
+			// debugLocationGroup
+			// 
+			resources.ApplyResources(this.debugLocationGroup, "debugLocationGroup");
+			this.debugLocationGroup.Controls.Add(this.debugLocationBrowse);
+			this.debugLocationGroup.Controls.Add(this.debugLocationBox);
+			this.debugLocationGroup.Name = "debugLocationGroup";
+			this.debugLocationGroup.TabStop = false;
+			// 
+			// debugLocationBrowse
+			// 
+			resources.ApplyResources(this.debugLocationBrowse, "debugLocationBrowse");
+			this.debugLocationBrowse.Name = "debugLocationBrowse";
+			this.debugLocationBrowse.UseVisualStyleBackColor = true;
+			this.debugLocationBrowse.Click += new System.EventHandler(this.debugLocationBrowse_Click);
+			// 
+			// debugLocationBox
+			// 
+			resources.ApplyResources(this.debugLocationBox, "debugLocationBox");
+			this.debugLocationBox.Name = "debugLocationBox";
+			this.debugLocationBox.TextChanged += new System.EventHandler(this.debugLocationBox_TextChanged);
+			this.debugLocationBox.Validating += new System.ComponentModel.CancelEventHandler(this.debugLocationBox_Validating);
+			// 
+			// okButton
+			// 
+			resources.ApplyResources(this.okButton, "okButton");
+			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.okButton.Name = "okButton";
+			this.okButton.UseVisualStyleBackColor = true;
+			// 
+			// cancelButton
+			// 
+			resources.ApplyResources(this.cancelButton, "cancelButton");
+			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.cancelButton.Name = "cancelButton";
+			this.cancelButton.UseVisualStyleBackColor = true;
+			// 
+			// SccEditEnlistment
+			// 
+			this.AcceptButton = this.okButton;
+			resources.ApplyResources(this, "$this");
+			this.Controls.Add(this.cancelButton);
+			this.Controls.Add(this.okButton);
+			this.Controls.Add(this.debugLocationGroup);
+			this.Controls.Add(this.projectLocationGroup);
+			this.Name = "SccEditEnlistment";
+			this.projectLocationGroup.ResumeLayout(false);
+			this.projectLocationGroup.PerformLayout();
+			this.debugLocationGroup.ResumeLayout(false);
+			this.debugLocationGroup.PerformLayout();
+			this.ResumeLayout(false);
 
         }
 

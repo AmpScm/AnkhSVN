@@ -1248,6 +1248,9 @@
     <EmbeddedResource Include="IssueTracker\IssueTrackerConfigDialog.resx">
       <DependentUpon>IssueTrackerConfigDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MergeWizard\BaseWizardPage.resx">
+      <DependentUpon>BaseWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeWizard.resx">
       <DependentUpon>MergeWizard.cs</DependentUpon>
     </EmbeddedResource>

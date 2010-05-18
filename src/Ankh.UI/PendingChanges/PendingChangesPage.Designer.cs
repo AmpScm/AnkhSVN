@@ -44,15 +44,15 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         private void InitializeComponent()
         {
-            this.SuspendLayout();
-            // 
-            // PendingChangesPage
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "PendingChangesPage";
-            this.Size = new System.Drawing.Size(768, 300);
-            this.ResumeLayout(false);
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PendingChangesPage));
+			this.SuspendLayout();
+			// 
+			// PendingChangesPage
+			// 
+			resources.ApplyResources(this, "$this");
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Name = "PendingChangesPage";
+			this.ResumeLayout(false);
 
         }
 
