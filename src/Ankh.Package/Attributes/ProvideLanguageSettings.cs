@@ -67,7 +67,7 @@ namespace Ankh.VSPackage.Attributes
 
         public override void Register(RegistrationAttribute.RegistrationContext context)
         {
-            using(Key key = context.CreateKey(GetKey(_key)))
+            using (Key key = context.CreateKey(GetKey(_key)))
             {
                 key.SetValue("", _exportName);
                 key.SetValue("Description", string.Format("#{0}", _desc));
@@ -76,7 +76,7 @@ namespace Ankh.VSPackage.Attributes
                 key.SetValue("ResourcePackage", UINamePkg.ToString("B").ToUpperInvariant());
                 key.SetValue("ProfileSave", 1);
                 //key.SetValue("ResourcePackage", UINamePkg.ToString("B").ToUpperInvariant());
-            }            
+            }
         }
 
         public override void Unregister(RegistrationAttribute.RegistrationContext context)
