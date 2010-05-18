@@ -26,7 +26,7 @@ using Ankh.Scc;
 
 namespace Ankh.UI.Commands
 {
-    public partial class UpdateDialog : VSContainerForm
+    public partial class UpdateDialog : VSDialogForm
     {
         public UpdateDialog()
         {

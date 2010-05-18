@@ -25,7 +25,7 @@ namespace Ankh.UI.IssueTracker
     /// <summary>
     /// Issue Tracker Configuration dialog
     /// </summary>
-    public partial class IssueTrackerConfigDialog : VSContainerForm
+    public partial class IssueTrackerConfigDialog : VSDialogForm
     {
         private IDictionary<string, IssueRepositoryConfigurationPage> _connectorPageMap;
         private IDictionary<string, Control> _connectorPageControlMap;

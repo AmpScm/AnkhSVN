@@ -9,7 +9,7 @@ using Ankh.VS;
 
 namespace Ankh.UI.IssueTracker
 {
-    public partial class IssueSelector : VSContainerForm
+    public partial class IssueSelector : VSDialogForm
     {
         IEnumerable<IssueMarker> _issueWalker;
 
