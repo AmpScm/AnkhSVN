@@ -14,10 +14,12 @@ namespace Ankh.UI.PendingChanges.Commands
         public void OnUpdate(CommandUpdateEventArgs e)
         {
             bool disable = true;
+            /*
 #if DEBUG
             RecentChangesPage rcPage = e.Context.GetService<RecentChangesPage>();
             disable = rcPage == null || !rcPage.Visible;
 #endif
+            */
             if (disable)
             {
                 e.Enabled = false;
@@ -42,7 +44,7 @@ namespace Ankh.UI.PendingChanges.Commands
                         configSvc.SaveConfig(cfg);
                         RecentChangesPage rcPage = e.GetService<RecentChangesPage>();
                         if (rcPage != null)
-                            rcPage.ResetRefreshSchedule();
+                            rcPage.RefreshIntervalConfigModified();
                     }
                 }
             }

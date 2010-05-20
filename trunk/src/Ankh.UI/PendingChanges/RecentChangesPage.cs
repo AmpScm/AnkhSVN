@@ -22,6 +22,7 @@ using Ankh.Scc;
 using Ankh.UI.PendingChanges.Synchronize;
 using Ankh.UI.RepositoryExplorer;
 using Ankh.Commands;
+using Ankh.Configuration;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -32,6 +33,19 @@ namespace Ankh.UI.PendingChanges
         BusyOverlay _busyOverlay;
         private double _initialRefreshInterval = TimeSpan.FromSeconds(5).TotalMilliseconds;
         private double _refreshInterval;
+
+        /// <summary>
+        /// supported refresh intervals
+        /// </summary>
+        private static readonly int[] _intervals = new int[] {
+            1, // 1 min
+            5, // 5 mins
+            10, // 10 mins
+            15, // 15 mins
+            30, // 30 mins
+            60, // 1 hr
+            120, // 2 hrs
+        };
 
         public RecentChangesPage()
         {
@@ -58,8 +72,45 @@ namespace Ankh.UI.PendingChanges
             // if solution is not open, don't auto-refresh
             IAnkhCommandStates commandState = Context.GetService<IAnkhCommandStates>();
             _solutionExists = (commandState != null && commandState.SolutionExists);
-            ResetRefreshSchedule();
+            RefreshIntervalConfigModified();
             HookHandlers();
+        }
+
+        /// <summary>
+        /// Populates Refresh checkbox and Refresh combo based on the settings
+        /// </summary>
+        private void ShowRecentChangeRefreshSettings()
+        {
+            checkBox1.CheckedChanged -= new EventHandler(OnRefreshIntervalModified);
+            refreshCombo.SelectedIndexChanged -= new EventHandler(OnRefreshIntervalModified);
+            // ensure current setting is read
+            if (ReadRecentChangesRefreshInterval())
+            {
+                checkBox1.Checked = _refreshInterval > 0;
+                if (_refreshInterval > 0)
+                {
+                    int ri_min = (int)TimeSpan.FromMilliseconds(_refreshInterval).TotalMinutes;
+                    int index = 0;
+                    int new_min = _intervals[index];
+                    for (int i = 0; i < _intervals.Length; i++)
+                    {
+                        if (_intervals[i] <= ri_min)
+                        {
+                            new_min = _intervals[i];
+                            index = i;
+                        }
+                    }
+                    refreshCombo.SelectedIndex = index;
+
+                    // if the current settings is not one of the offical settings, set it to the closest official setting
+                    if (ri_min != new_min)
+                    {
+                        SaveRecentChangesRefreshInterval(Math.Max(new_min * 60, 0));
+                    }
+                }
+            }
+            checkBox1.CheckedChanged += new EventHandler(OnRefreshIntervalModified);
+            refreshCombo.SelectedIndexChanged += new EventHandler(OnRefreshIntervalModified);
         }
 
         private void HookHandlers()
@@ -245,7 +296,7 @@ namespace Ankh.UI.PendingChanges
         /// Schedules a refresh if a sol is open and new setting is greater than 0,
         /// Unschedules otherwise.
         /// </summary>
-        internal void ResetRefreshSchedule()
+        void ResetRefreshSchedule()
         {
             ReadRecentChangesRefreshInterval();
             double nextRefreshInterval = 0;
@@ -328,10 +379,55 @@ namespace Ankh.UI.PendingChanges
             ResetRefreshSchedule();
         }
 
+        /// <summary>
+        /// Handles Refresh checkbox "checked" and Refresh combo "selection" events
+        /// </summary>
+        void OnRefreshIntervalModified(object sender, EventArgs e)
+        {
+            bool enabled = checkBox1.Checked;
+            int selectedIndex = refreshCombo.SelectedIndex;
+            enabled &= selectedIndex > -1;
+            bool resetSchedule = false;
+            if (enabled)
+            {
+                int selected = 60 * ((selectedIndex >= 0 && selectedIndex < _intervals.Length) ? _intervals[selectedIndex] : _intervals[_intervals.Length - 1]);
+                if ((selected * 1000) != _refreshInterval)
+                {
+                    SaveRecentChangesRefreshInterval(selected);
+                    resetSchedule = true;
+                }
+            }
+            else
+            {
+                if (_refreshInterval > 0)
+                {
+                    SaveRecentChangesRefreshInterval(0);
+                    resetSchedule = true;
+                }
+            }
+            if (resetSchedule)
+            {
+                ResetRefreshSchedule();
+            }
+        }
+
+        /// <summary>
+        /// Updates the Refresh interval UI with the current configuration and
+        /// resets the schedule
+        /// </summary>
+        internal void RefreshIntervalConfigModified()
+        {
+            ShowRecentChangeRefreshSettings();
+            ResetRefreshSchedule();
+        }
+
+        /// <summary>
+        /// Reads configuration setting into <code>_refreshInterval</code> member
+        /// </summary>
+        /// <returns>true if config is changed, false otherwise</returns>
         bool ReadRecentChangesRefreshInterval()
         {
             bool result = false;
-#if DEBUG
             Ankh.Configuration.AnkhConfig config = Config;
             double newInterval = config.RecentChangesRefreshInterval * 1000.0;
             newInterval = Math.Max(0, newInterval);
@@ -344,8 +440,18 @@ namespace Ankh.UI.PendingChanges
                 _refreshInterval = newInterval;
                 result = true;
             }
-#endif
             return result;
+        }
+
+        /// <summary>
+        /// saves the new setting into configuration
+        /// </summary>
+        /// <param name="seconds">new refresh interval in seconds</param>
+        private void SaveRecentChangesRefreshInterval(int seconds)
+        {
+            AnkhConfig cfg = Config;
+            cfg.RecentChangesRefreshInterval = seconds;
+            ConfigSvc.SaveConfig(cfg);
         }
 
         private IAnkhScheduler _scheduler;
@@ -364,6 +470,5 @@ namespace Ankh.UI.PendingChanges
         {
             get { return ConfigSvc.Instance; }
         }
-
     }
 }
