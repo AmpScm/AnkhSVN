@@ -325,7 +325,7 @@ namespace Ankh.UI.RepositoryOpen
 
             if (Uri.TryCreate(urlBox.Text, UriKind.Absolute, out dirUri) && Uri.TryCreate(fileText, UriKind.Relative, out fileUri))
             {
-                Uri combined = SvnTools.AppendPathSuffix(dirUri, fileText);
+                Uri combined = SvnTools.AppendPathSuffix(dirUri, SvnTools.UriPartToPath(fileText));
 
                 AnkhAction fill = delegate()
                 {
@@ -342,7 +342,7 @@ namespace Ankh.UI.RepositoryOpen
 
         private void CheckResult(Uri combined, bool forceLoad)
         {
-            using (SvnRemoteSession session = GetSession(combined))
+            using (SvnPoolRemoteSession session = GetSession(combined))
             {
                 SvnRemoteCommonArgs ca = new SvnRemoteCommonArgs();
                 ca.ThrowOnError = false;
@@ -351,13 +351,7 @@ namespace Ankh.UI.RepositoryOpen
                 sa.ThrowOnError = false;
                 SvnNodeKind kind;
 
-                string path;
-
-                // Avoid Exception in SharpSvn 1.6011.1539
-                if (SvnTools.GetNormalizedUri(combined) == SvnTools.GetNormalizedUri(session.SessionUri))
-                    path = ""; 
-                else
-                    path = session.MakeRelativePath(combined);
+                string path = session.MakeRelativePath(combined);
 
                 if (session.GetNodeKind(path, ca, out kind))
                     Invoke((AnkhAction)delegate
@@ -454,7 +448,10 @@ namespace Ankh.UI.RepositoryOpen
                             path = path.TrimStart('/'); // Fixup for UNC paths
 
                         Uri dir = new Uri(uriRoot, path);
-                        nameUri = dir.MakeRelativeUri(nameUri);
+                        if (dir != nameUri)
+                            nameUri = dir.MakeRelativeUri(nameUri);
+                        else
+                            nameUri = new Uri("", UriKind.Relative);
 
                         SetDirectory(dir);
                         fileNameBox.Text = nameUri.ToString();
@@ -586,9 +583,9 @@ namespace Ankh.UI.RepositoryOpen
 
             try
             {
-                using (SvnRemoteSession session = GetSession(uri))
+                using (SvnPoolRemoteSession session = GetSession(uri))
                 {
-                    string path = Uri.UnescapeDataString(session.SessionUri.MakeRelativeUri(uri).ToString());
+                    string path = session.MakeRelativePath(uri);
 
                     SvnRemoteListArgs la = new SvnRemoteListArgs();
                     la.ThrowOnError = false;
@@ -698,14 +695,14 @@ namespace Ankh.UI.RepositoryOpen
             }
         }
 
-        private SvnRemoteSession GetSession(Uri uri)
+        private SvnPoolRemoteSession GetSession(Uri uri)
         {
             ISvnClientPool pool = (Context != null) ? Context.GetService<ISvnClientPool>() : null;
 
             if (pool != null)
                 return pool.GetRemoteSession(uri, true);
-            else
-                return new SvnRemoteSession(uri);
+
+            throw new InvalidOperationException();
         }
 
         IList<ListViewItem> _currentItems;
