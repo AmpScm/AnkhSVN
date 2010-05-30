@@ -143,6 +143,7 @@ namespace Ankh.UI
                     break;
                 case SvnNotifyAction.BlameRevision:
                     actionText = "Annotating";
+                    break;
             }
 
             return actionText;
