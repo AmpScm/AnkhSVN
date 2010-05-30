@@ -141,6 +141,8 @@ namespace Ankh.UI
                 case SvnNotifyAction.CommitSendData:
                     actionText = "Sending";
                     break;
+                case SvnNotifyAction.BlameRevision:
+                    actionText = "Annotating";
             }
 
             return actionText;
@@ -197,23 +199,43 @@ namespace Ankh.UI
             //e.Detach();
 
             string path = e.FullPath;
+            Uri uri = e.Uri;
             SvnNotifyAction action = e.Action;
+            long rev = e.Revision;
 
             Enqueue(delegate()
             {
                 ListViewItem item = null;
-                if (!string.IsNullOrEmpty(path))
+                item = new ListViewItem(GetActionText(action));
+
+                switch (action)
                 {
-                    item = new ListViewItem(GetActionText(action));
+                    case SvnNotifyAction.BlameRevision:
+                        {
+                            string file;
+                            if (uri != null)
+                                file = SvnTools.GetFileName(uri);
+                            else
+                                file = Path.GetFileName(path);
 
-                    string sr = SplitRoot;
-                    if (!string.IsNullOrEmpty(sr))
-                    {
-                        if (path.StartsWith(sr, StringComparison.OrdinalIgnoreCase))
-                            path = path.Substring(sr.Length).Replace(Path.DirectorySeparatorChar, '/');
-                    }
+                            item.SubItems.Add(string.Format("{0} - r{1}", file, rev));
+                            break;
+                        }
+                    default:
+                        if (uri != null)
+                            item.SubItems.Add(uri.ToString());
+                        else if (!string.IsNullOrEmpty(path))
+                        {
+                            string sr = SplitRoot;
+                            if (!string.IsNullOrEmpty(sr))
+                            {
+                                if (path.StartsWith(sr, StringComparison.OrdinalIgnoreCase))
+                                    path = path.Substring(sr.Length).Replace(Path.DirectorySeparatorChar, '/');
+                            }
 
-                    item.SubItems.Add(path);
+                            item.SubItems.Add(path);
+                        }
+                        break;
                 }
 
                 if (item != null)
