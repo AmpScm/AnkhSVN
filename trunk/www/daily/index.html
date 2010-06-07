@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.2.8481</title>
+          AnkhSVN-Daily Update - 2.2.9750</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3503/AnkhSvn-Daily-2.2.8481.544.msi">AnkhSVN 2.2.8481</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3515/AnkhSvn-Daily-2.2.9750.545.msi">AnkhSVN 2.2.9750</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=8481">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=9750">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -118,45 +118,6 @@ TriggerExtenderProvider.</td></tr>
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/SccUI/ChangeSourceControl.cs, Ankh/Commands/RepositoryExplorer/CopyReposExplorerUrl.cs, Ankh/Commands/BranchSolutionCommand.cs, Ankh.Scc/ProjectMap/SccTranslateData.cs, Ankh.UI/MergeWizard/MergeSourceTwoDifferentTreesPage.cs, Ankh.UI/SvnLog/Commands/ShowChanges.cs, Ankh/Commands/RepositoryExplorer/RepositoryBrowseCommand.cs, Ankh/Commands/OpenInXExplorer.cs, Ankh.Scc/SccUI/ChangeSolutionRoot.cs, Ankh.UI/MergeWizard/MergeSourceBasePage.cs, Ankh.UI/Commands/AnnotateDialog.cs, Ankh.VS/Extenders/SvnItemExtender.cs, Ankh.UI/MergeWizard/MergeUtils.cs, Ankh.Scc/SccUI/ChangeSourceControlRow.cs (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a .Uri property directly on SvnItem to avoid having to type .Status.Uri
 everywhere. Also switch the single public caller of .Status.HasTreeConflict
 to .IsTreeConflicted.</td></tr>
-<tr class="d"><td colspan="4">2010-05-07</td></tr>
-<tr><td> </td><td class="r"><a id="8399" href="http://ankhsvn.net/rev/?r=8399">
-            [r8399]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.QueryEditSave.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">More updates to QueryEdit. Don't return the QER_EditNotPossible flag on silent
-denieds as it stops smart callers from retrying with a non-silent operation.<br>
-Also stop returning QER_MaybeCheckedout, as we didn't checkout the file here.</td></tr>
-<tr class="d"><td colspan="4">2010-05-06</td></tr>
-<tr><td> </td><td class="r"><a id="8383" href="http://ankhsvn.net/rev/?r=8383">
-            [r8383]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Commands:</strong> ItemResolveCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Disable all resolve commands on tree conflicts that will
-give an error in Subversion 1.6 until we can resolve these
-cases ourselves.</td></tr>
-<tr><td> </td><td class="r"><a id="8382" href="http://ankhsvn.net/rev/?r=8382">
-            [r8382]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Commands:</strong> CommandStrings.resx, ItemRevertCommand.cs, CommandStrings.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Show a progress dialog while reverting items and handle a common
-error while Reverting children of a just reverted parent. Allow
-reverting all conflicts.</td></tr>
-<tr><td> </td><td class="r"><a id="8378" href="http://ankhsvn.net/rev/?r=8378">
-            [r8378]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/Scc/SvnItemData.cs, Ankh.UI/SvnLog/LogChangedPathsView.cs, Ankh.UI/RepositoryExplorer/RepositoryExplorerItem.cs, Ankh.VS/Extenders/SvnItemExtender.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Explain a few common node properties a bit better in the description
-pane of the Properties Window.</td></tr>
-<tr><td> </td><td class="r"><a id="8377" href="http://ankhsvn.net/rev/?r=8377">
-            [r8377]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/UI/VSTextEditor.cs, Ankh.UI/SvnLog/LogMessageView.Designer.cs, Ankh.UI/Annotate/AnnotateEditorControl.Designer.cs, Ankh.VS/TextEditor/TextEditorFactory.cs, Ankh.VS/TextEditor/TheVSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Reflect that we can disable wordwrap but can't enable it by renaming the
-WordWrap property on the VSTextEditor to DisableWordWrap and making it
-a normal boolean.</td></tr>
-<tr><td> </td><td class="r"><a id="8374" href="http://ankhsvn.net/rev/?r=8374">
-            [r8374]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/Extenders/SvnProjectExtender.cs, Ankh.VS/Extenders/SvnSolutionExtender.cs, Ankh.VS/Extenders/SvnItemExtender.cs, Ankh.Trigger/TriggerPackage.Extender.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make COM interop on the extender provider more explicit by strictly
-defining the behavior via attributes. This should have no functional
-changes, but might help in debugging extender issues.</td></tr>
-<tr><td> </td><td class="r"><a id="8372" href="http://ankhsvn.net/rev/?r=8372">
-            [r8372]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/UI/VSTextEditor.cs, Ankh/Commands/SolutionUpdateCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix pasting text from code in the text editor to re-enable the paste filename
-list function, that failed after <a href="http://ankhsvn.net/rev/?r=8368">r8368</a> changed the editor infrastructure.</td></tr>
-<tr><td> </td><td class="r"><a id="8371" href="http://ankhsvn.net/rev/?r=8371">
-            [r8371]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/Commands/UpdateDialog.resx, Ankh.UI/Commands/UpdateDialog.Designer.cs, Ankh/Commands/SolutionUpdateCommand.cs, Ankh.UI/Commands/UpdateDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow retrieving excluded folders/files from the update Solution/Project/Folder
-dialogs.</td></tr>
 
 </table>
 <!--/Recent changes-->
