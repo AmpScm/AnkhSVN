@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.2.9751</title>
+          AnkhSVN-Daily Update - 2.2.9752</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3522/AnkhSvn-Daily-2.2.9751.546.msi">AnkhSVN 2.2.9751</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3525/AnkhSvn-Daily-2.2.9752.547.msi">AnkhSVN 2.2.9752</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=9751">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=9752">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -76,34 +76,6 @@ localizable.</td></tr>
             [r8438]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.ActivateMonitor.cs, Ankh.UI/PendingChanges/PendingChangesToolControl.cs, Ankh.Services/AnkhServiceEvents.cs, Ankh.VS/SolutionExplorer/SolutionExplorerWindow.cs, Ankh.Scc/Ankh.Scc.csproj, Ankh.VS/Selection/CommandState.cs, Ankh.Scc/AnkhSccProvider.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Detect the zombie/loaded state from the global commandstate service and trigger
 the UIShellActivate event from here.</td></tr>
-<tr><td> </td><td class="r"><a id="8435" href="http://ankhsvn.net/rev/?r=8435">
-            [r8435]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> AnkhSvn.2005.sln</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove Ankh.Trigger project from VS2005 solution</td></tr>
-<tr><td> </td><td class="r"><a id="8432" href="http://ankhsvn.net/rev/?r=8432">
-            [r8432]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Votive/Ankh.Votive.wxs, Ankh.UI/Ankh.UI.csproj, Ankh.Votive.wixproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove Ankh.Trigger from the setup</td></tr>
-<tr><td> </td><td class="r"><a id="8431" href="http://ankhsvn.net/rev/?r=8431">
-            [r8431]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.ActivateMonitor.cs, Ankh.VS/Selection/SelectionContext.cs, Ankh.Ids/AnkhCommand.cs, Ankh.Services/Scc/IAnkhSccService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Partially revert <a href="http://ankhsvn.net/rev/?r=8429">r8429</a> as we don't need this hack any more after removing
-the delayed Scc provider loading.</td></tr>
-<tr><td> </td><td class="r"><a id="8430" href="http://ankhsvn.net/rev/?r=8430">
-            [r8430]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> MigrationService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Following up on <a href="http://ankhsvn.net/rev/?r=8427">r8427</a>, <a href="http://ankhsvn.net/rev/?r=8429">r8429</a> implement IAnkhMigrationService correctly.</td></tr>
-<tr><td> </td><td class="r"><a id="8429" href="http://ankhsvn.net/rev/?r=8429">
-            [r8429]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/Selection:</strong> SelectionContext.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Following up on <a href="http://ankhsvn.net/rev/?r=8427">r8427</a>, force Scc provider registration like we did before
-on the scc context change.</td></tr>
-<tr><td> </td><td class="r"><a id="8428" href="http://ankhsvn.net/rev/?r=8428">
-            [r8428]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/PendingChanges/AnkhToolWindowControl.cs, Ankh.UI/Ankh.UI.csproj, Ankh.Package/AnkhSvnPackage.ToolWindows.cs, Ankh.Services/UI/AnkhToolWindowControl.cs, Ankh.UI/SvnPropertyGrid, Ankh.Services/UI/IAnkhToolWindowHost.cs, Ankh.UI/SvnPropertyGrid/SvnPropertyGridControl.Designer.cs, Ankh.UI/SvnPropertyGrid/SvnPropertyGridControl.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">To prepare adding a new toolwindow move the AnkhToolWindowControl class
-to Ankh.Services.</td></tr>
-<tr><td> </td><td class="r"><a id="8427" href="http://ankhsvn.net/rev/?r=8427">
-            [r8427]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh.Services/IAnkhPackage.cs, Ankh.VS/Ankh.VS.csproj, Ankh.Scc/Ankh.Scc.csproj, Ankh.VS/VsActivatorCommand.cs, Ankh.Scc/AnkhSccProvider.cs, Ankh/Services/MigrationService.cs, Ankh.Services/Scc/IAnkhSccService.cs, Ankh.Ids/AnkhCommand.cs, Ankh.Trigger, AnkhSvn.2010.sln, Ankh.Services/VS/IAnkhMigrationService.cs, Ankh.Scc/AnkhSccProvider.ActivateMonitor.cs, AnkhSvn.2008.sln (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Cleanup the registration of our Scc provider by removing the now virtually
-unused trigger package. Temporarily disable migrate from 1.X helper code.</td></tr>
-<tr><td> </td><td class="r"><a id="8426" href="http://ankhsvn.net/rev/?r=8426">
-            [r8426]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> AnkhSvn.2010.vsmdi, AnkhSvn.2010.sln</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add VS2010 version of .vsmdi file</td></tr>
 
 </table>
 <!--/Recent changes-->
