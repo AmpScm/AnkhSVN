@@ -4,4 +4,3 @@ Disallow:
 User-agent: *
 Disallow: /source/
 Disallow: /search/
-Disallow: /issues/
