@@ -150,6 +150,11 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\SlickEdit\\win\\VSDiff.exe",
                 "-r1 $(ReadOnly?'-r2 ')'$(Base)' '$(Mine)'", true));
 
+            tools.Add(new DiffTool(this, "DevArtCodeCompare", "DevArt CodeCompare",
+                SubPath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "ExecutablePath"), "CodeComp.exe")
+                    ?? "$(ProgramFiles)\\Devart\\CodeCompare\\CodeComp.exe",
+                "/WAIT /SC=SVN /t1='$(BaseName)' /t2='$(MineName)' '$(Base)' '$(Mine)'", true));
+
             LoadRegistryTools(DiffToolMode.Diff, tools);
 
             SortTools(tools);
@@ -222,6 +227,12 @@ namespace Ankh.Services
                 RelativePath(RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\vs.exe", ""), "VSMerge.exe")
                     ?? "$(ProgramFiles)\\SlickEdit\\win\\vsmerge.exe",
                 "-smart '$(Base)' '$(Mine)' '$(Theirs)' '$(Merged)'", true));
+
+            tools.Add(new DiffTool(this, "DevArtCodeCompare", "DevArt CodeCompare",
+                SubPath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "ExecutablePath"), "CodeMerge.exe")
+                    ?? "$(ProgramFiles)\\Devart\\CodeCompare\\CodeMerge.exe",
+                "/WAIT /SC=SVN /REMOVEFILES '/BF=$(Base)' '/MF=$(Mine)' '/MT=$(MineName)' " +
+                "'/TF=$(Theirs)' '/TT=$(TheirsName)' '/RF=$(Merged)'", true));
 
             LoadRegistryTools(DiffToolMode.Merge, tools);
 
@@ -371,6 +382,21 @@ namespace Ankh.Services
                 return origin;
 
             string r = SvnTools.GetNormalizedFullPath(Path.Combine(Path.Combine(origin, ".."), relativePath));
+
+            if (File.Exists(r))
+                return r;
+            else
+                return null;
+        }
+
+        static string SubPath(string origin, string relativePath)
+        {
+            if (string.IsNullOrEmpty(origin))
+                return null;
+            else if (string.IsNullOrEmpty(relativePath))
+                return origin;
+
+            string r = SvnTools.GetNormalizedFullPath(Path.Combine(origin, relativePath));
 
             if (File.Exists(r))
                 return r;
