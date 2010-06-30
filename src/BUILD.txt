@@ -40,6 +40,10 @@ debug command of the AnkhSvn project by performing the following:
 
 Experimental Hive Options
 
+VS2010:
+   Default path to devenv: "%programfiles%\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe"
+   Default arguments: /rootSuffix Exp
+
 VS2008: 
 	Default path to devenv: "%programfiles%\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe"
 	Default arguments: /rootSuffix Exp /RANU
