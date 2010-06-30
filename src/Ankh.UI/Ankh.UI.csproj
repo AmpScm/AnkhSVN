@@ -1153,34 +1153,34 @@
       <DependentUpon>PendingIssuesPage.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="PropertyEditors\EolStylePropertyEditor.resx">
+    <EmbeddedResource Include="PropertyEditors\EolStylePropertyEditor.resx">
       <DependentUpon>EolStylePropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </None>
-    <None Include="PropertyEditors\ExecutablePropertyEditor.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\ExecutablePropertyEditor.resx">
       <DependentUpon>ExecutablePropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </None>
-    <None Include="PropertyEditors\ExternalsPropertyEditor.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\ExternalsPropertyEditor.resx">
       <DependentUpon>ExternalsPropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </None>
-    <None Include="PropertyEditors\IgnorePropertyEditor.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\IgnorePropertyEditor.resx">
       <DependentUpon>IgnorePropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </None>
-    <None Include="PropertyEditors\KeywordsPropertyEditor.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\KeywordsPropertyEditor.resx">
       <DependentUpon>KeywordsPropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </None>
-    <None Include="PropertyEditors\MimeTypePropertyEditor.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\MimeTypePropertyEditor.resx">
       <DependentUpon>MimeTypePropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </None>
-    <None Include="PropertyEditors\PlainPropertyEditor.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\PlainPropertyEditor.resx">
       <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <EmbeddedResource Include="RepositoryExplorer\RepositoryExplorerControl.resx">
       <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
       <SubType>Designer</SubType>
