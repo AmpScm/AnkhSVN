@@ -52,6 +52,10 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" />
     <Reference Include="Microsoft.VisualStudio.Shell.9.0" />
+    <Reference Include="SharpSvn, Version=1.6011.1539.9366, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -69,6 +73,7 @@
     <Compile Include="IntegrationTest-Library\DialogboxPurger.cs" />
     <Compile Include="IntegrationTest-Library\NativeMethods.cs" />
     <Compile Include="IntegrationTest-Library\Utils.cs" />
+    <Compile Include="SignOff-Tests\VBProjectTestsWithReload.cs" />
     <Compile Include="SignOff-Tests\CPPProjectTests.cs" />
     <Compile Include="SignOff-Tests\CSharpProjectTests.cs" />
     <Compile Include="SignOff-Tests\SolutionTests.cs" />
