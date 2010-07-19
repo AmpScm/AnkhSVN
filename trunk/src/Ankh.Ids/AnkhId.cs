@@ -49,6 +49,8 @@ namespace Ankh
         public const string SubversionSccName = "SubversionScc";
         public const string SccStructureName = "SccStructure";
 
+        public const string InfoDescription = "Open Source Subversion SCC Provider for Visual Studio 2005, 2008 and 2010.";
+
         /// <summary>
         /// The guid used for registering the commands registered by the AnkhSvn package
         /// </summary>
