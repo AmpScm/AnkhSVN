@@ -66,7 +66,37 @@
             <Component Id="C_PKGDEF" Guid="E1ABF0EB-ADDA-4158-95A0-46B3B977768E">
               <File Id="Ankh.pkgdef" Name="Ankh.Pkgdef" Vital="yes" />
             </Component>
+            <Component Id="C_VSIXMANIFEST" Guid="F88724B3-9B13-4BF7-9AD6-E6FBFF4E725E">
+              <File Id="CF_VSIXMANIFEST" Name="extension.VsixManifest" Vital="yes" />
+            </Component>
+            <Component Id="C_VSIXICO" Guid="62E7DE1D-4516-4742-B1E7-A867D41C164F">
+              <File Id="CF_VSIXICO" Name="AnkhSVN-Icon.png" Vital="yes" Source="Ankh.Votive\AnkhSVN-Icon.png"/>
+            </Component>
+            <Component Id="C_VSIXPREVIEW" Guid="1F77F7F1-9CF0-4A75-B924-B81D191652DE">
+              <File Id="CF_VSIXPREVIEW" Name="AnkhSVN-Preview.png" Vital="yes" Source="Ankh.Votive\AnkhSVN-Preview.png"/>
+            </Component>
             <!-- All assemblies are placed here -->
+          </Directory>
+        </Directory>
+      </Directory>
+      <Directory Id="VS100_ROOT_FOLDER">
+        <Directory Name="Common7" Id="Common7_2010">
+          <Directory Name="IDE" Id="VSIDE_2010">
+            <Directory Name="Extensions" Id="EXTENSIONS_2010">
+              <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_2010">
+                <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_ANKH_2010">
+                  <Directory Name="2.0" Id="ANKHSVN_EXTENSION_2010">
+                    <Component Id="C_Reg2010" Guid="2AF423CF-2FA7-4232-9A4E-F701022DCAF8">
+                      <Condition>VS100DEVENV</Condition>
+                      <CopyFile Id="Vsix_Mnf2010" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
+                      <CopyFile Id="Vsix_Lic2010" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
+                      <CopyFile Id="Vsix_Ico2010" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
+                      <CopyFile Id="Vsix_Pvw2010" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
+                    </Component>
+                  </Directory>
+                </Directory>
+              </Directory>
+            </Directory>
           </Directory>
         </Directory>
       </Directory>
@@ -108,6 +138,9 @@
       <ComponentRef Id="C_LICENSE" />
       <ComponentRef Id="C_NOTICE" />
       <ComponentRef Id="C_PKGDEF" />
+      <ComponentRef Id="C_VSIXMANIFEST" />
+      <ComponentRef Id="C_VSIXICO" />
+      <ComponentRef Id="C_VSIXPREVIEW" />
       <ComponentGroupRef Id="SharpSvn_LICENSES"/>
       <MergeRef Id="CRT"/>
       <MergeRef Id="CRT_Policy"/>
@@ -128,6 +161,7 @@
         <ComponentGroupRef Id="PkgReg2010"/>
         <ComponentGroupRef Id="TriggerReg2010"/>
         <ComponentGroupRef Id="Extension2010"/>
+        <ComponentRef Id="C_Reg2010"/>
       </Feature>
     </Feature>    
   </Product>

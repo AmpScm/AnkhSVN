@@ -63,6 +63,13 @@ namespace Ankh
         public const string SubversionSccName = "SubversionScc";
         public const string SccStructureName = "SccStructure";
 
+        // Items for the VS 2010 Extension registration
+        public const string ExtensionTitle = AnkhId.AssemblyProduct;
+        public const string ExtensionAuthor = AnkhId.AssemblyCompany;
+        public const string ExtensionDescription = "Open Source Subversion SCC Provider for Visual Studio 2005, 2008 and 2010.";
+        public const string ExtensionMoreInfoUrl = "http://www.ankhsvn.net/";
+        public const string ExtensionGettingStartedUrl = "http://www.ankhsvn.net/";
+
         /// <summary>
         /// The guid used for registering the commands registered by the AnkhSvn package
         /// </summary>
