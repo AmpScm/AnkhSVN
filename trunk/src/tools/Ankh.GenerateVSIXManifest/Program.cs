@@ -26,18 +26,21 @@ namespace Ankh.GenerateVSIXManifest
                 xw.WriteStartElement("Identifier", vsix2010);
                 xw.WriteAttributeString("Id", string.Format("{0}.{1}.{2}", AnkhId.PlkProduct, AnkhId.PlkVersion, AnkhId.PackageId));
 
-                xw.WriteElementString("Name", AnkhId.AssemblyProduct);
-                xw.WriteElementString("InstalledByMsi", "true");
+                xw.WriteElementString("Name", AnkhId.ExtensionTitle);
                 xw.WriteElementString("Author", AnkhId.AssemblyCompany);
                 xw.WriteElementString("Version", infoAsm.Version.ToString());
-                xw.WriteElementString("Description", AnkhId.InfoDescription);
+                xw.WriteElementString("Description", AnkhId.ExtensionDescription);
                 xw.WriteElementString("Locale", "1033");
+                xw.WriteElementString("MoreInfoUrl", AnkhId.ExtensionMoreInfoUrl);
                 xw.WriteElementString("License", "License.rtf");
+                xw.WriteElementString("GettingStartedGuide", AnkhId.ExtensionGettingStartedUrl);
                 xw.WriteElementString("Icon", AnkhId.PlkProduct + "-Icon.png");
                 xw.WriteElementString("PreviewImage", AnkhId.PlkProduct + "-Preview.png");
+                xw.WriteElementString("InstalledByMsi", "true");
 
                 xw.WriteStartElement("SupportedProducts", vsix2010);
                 xw.WriteStartElement("VisualStudio", vsix2010);
+                xw.WriteAttributeString("Version", "10.0");
                 xw.WriteElementString("Edition", "Ultimate");
                 xw.WriteElementString("Edition", "Premium");
                 xw.WriteElementString("Edition", "Pro");
