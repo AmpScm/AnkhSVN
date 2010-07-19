@@ -89,7 +89,7 @@
                     <Component Id="C_Reg2010" Guid="2AF423CF-2FA7-4232-9A4E-F701022DCAF8">
                       <Condition>VS100DEVENV</Condition>
                       <CopyFile Id="Vsix_Mnf2010" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
-                      <CopyFile Id="Vsix_Lic2010" FileId="CF_LICENSE" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
+                      <CopyFile Id="Vsix_Lic2010" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
                       <CopyFile Id="Vsix_Ico2010" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
                       <CopyFile Id="Vsix_Pvw2010" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
                     </Component>
@@ -139,7 +139,7 @@
       <ComponentRef Id="C_PKGDEF" />
       <ComponentRef Id="C_VSIXMANIFEST" />
       <ComponentRef Id="C_VSIXICO" />
-      <ComponentRef Id="C_VSIXPreview" />
+      <ComponentRef Id="C_VSIXPREVIEW" />
       <ComponentGroupRef Id="SharpSvn_LICENSES"/>
       <MergeRef Id="CRT"/>
       <MergeRef Id="CRT_Policy"/>
