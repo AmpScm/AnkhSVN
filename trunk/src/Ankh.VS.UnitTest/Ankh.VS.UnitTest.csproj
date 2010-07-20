@@ -98,6 +98,7 @@
     <Compile Include="PackageTest.cs" />
     <!---->
     <Compile Include="MenuItemTests\MenuItemCallback.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FileIconMapperTest.cs" />
     <!---->
     <!---->
