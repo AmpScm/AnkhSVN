@@ -236,15 +236,13 @@ namespace Ankh.Services
                         subject = string.Format("Error handling {0}", info.CommandArgs.Command);
 
                     SvnException sx = ex as SvnException;
+                    SvnException ix;
 
-                    Exception e = ex;
-                    while (sx == null && e != null)
+                    while (sx != null
+                           && sx.SvnErrorCode == SvnErrorCode.SVN_ERR_BASE
+                           && (null != (ix = sx.InnerException as SvnException)))
                     {
-                        e = e.InnerException;
-                        sx = e as SvnException;
-
-                        if (sx != null && sx.SvnErrorCode == SvnErrorCode.SVN_ERR_BASE)
-                            sx = null; // "A problem occurred; see other errors for details"
+                        sx = ix;
                     }
 
                     if (sx != null)
