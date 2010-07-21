@@ -124,6 +124,10 @@ namespace Ankh.Commands
 
             int interval = 24 * 6; // 6 days
             IAnkhConfigurationService config = e.GetService<IAnkhConfigurationService>();
+
+            if (config.Instance.DisableUpdateCheck)
+                return;
+
             using (RegistryKey rk = config.OpenUserInstanceKey("UpdateCheck"))
             {
                 object value = rk.GetValue("Interval");

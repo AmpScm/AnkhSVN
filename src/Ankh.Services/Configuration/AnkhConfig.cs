@@ -37,6 +37,7 @@ namespace Ankh.Configuration
         bool _noDashComment;
         bool _pcDoubleClickShowsChanges;
         int _recentChangesRefreshInterval;
+        bool _disableUpdateCheck;
 
         /// <summary>
         /// Gets or sets the merge exe path.
@@ -121,6 +122,13 @@ namespace Ankh.Configuration
         {
             get { return _recentChangesRefreshInterval; }
             set { _recentChangesRefreshInterval = value; }
+        }
+
+        [DefaultValue(false)]
+        public bool DisableUpdateCheck
+        {
+            get { return _disableUpdateCheck; }
+            set { _disableUpdateCheck = value; }
         }
     }
 }
