@@ -390,15 +390,14 @@ namespace Ankh.UI.VS.TextEditor
                         if (_readOnly)
                             return false; // Allow using tab for dialog navigation
 
-                        Keys mods = keyData & Keys.Modifiers;
-                        if ((mods & (Keys.Control | Keys.Alt)) != 0)
+                        if ((keyData & (Keys.Control | Keys.Alt)) == Keys.Control)
                         {
-                            if ((mods & (Keys.Control | Keys.Alt)) == Keys.Control && TopLevelControl is Form)
+                            if (TopLevelControl is Form)
                             {
                                 Control c = this;
                                 bool found = false;
 
-                                bool forward = (mods & Keys.Shift) == 0;
+                                bool forward = (keyData & Keys.Shift) == 0;
 
                                 while (!found && c != null)
                                 {
@@ -406,6 +405,14 @@ namespace Ankh.UI.VS.TextEditor
 
                                     if (cc == null)
                                         break;
+                                    else if (cc == c)
+                                    {
+                                        c = c.Parent;
+                                        cc = c as ContainerControl;
+
+                                        if (cc == null)
+                                            continue;
+                                    }
 
                                     if (cc.SelectNextControl(this, forward, true, true, false))
                                     {
