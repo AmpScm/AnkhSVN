@@ -30,7 +30,6 @@ namespace Ankh.UI.SvnLog
         public LogRevisionView()
         {
             Sorting = SortOrder.None;
-            OwnerDraw = true;
             Init();
         }
         public LogRevisionView(IContainer container)
@@ -46,19 +45,22 @@ namespace Ankh.UI.SvnLog
             set { _dataSource = value; }
         }
 
+        SmartColumn _expand;
         SmartColumn _revisionColumn;
         SmartColumn _messageColumn;
         void Init()
         {
+            _expand = new SmartColumn(this, "\x02D9", "&Expand Merges", 12, HorizontalAlignment.Left);
             _revisionColumn = new SmartColumn(this, "&Revision", 64, HorizontalAlignment.Right);
             SmartColumn author = new SmartColumn(this, "&Author", 73);
             SmartColumn date = new SmartColumn(this, "&Date", 118);
             SmartColumn issue = new SmartColumn(this, "&Issue", 60);
             _messageColumn = new SmartColumn(this, "&Message", 300);
 
-            _revisionColumn.Sortable = author.Sortable = date.Sortable = issue.Sortable = _messageColumn.Sortable = false;
+            _expand.Hideable = false;
+            _expand.Sortable = _revisionColumn.Sortable = author.Sortable = date.Sortable = issue.Sortable = _messageColumn.Sortable = false;
 
-
+            AllColumns.Add(_expand);
             AllColumns.Add(_revisionColumn);
             AllColumns.Add(author);
 
@@ -67,10 +69,11 @@ namespace Ankh.UI.SvnLog
             AllColumns.Add(_messageColumn);
 
             // The listview can't align the first column right. We switch their display position
-            // to work around this            
+            // to work around this
             Columns.AddRange(
                 new ColumnHeader[]
                 {
+                    _expand,
                     _revisionColumn,
                     author,
                     date,
@@ -122,73 +125,6 @@ namespace Ankh.UI.SvnLog
 
             if (!DesignMode && _messageColumn != null)
                 ResizeColumnsToFit(_messageColumn);
-        }
-
-        protected override void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
-        {
-            e.DrawDefault = true;
-            base.OnDrawColumnHeader(e);
-        }
-
-        protected override void OnDrawItem(DrawListViewItemEventArgs e)
-        {
-            bool isSelected = SelectedIndices.Contains(e.ItemIndex);
-
-            if (!isSelected)
-                e.DrawBackground();
-            else
-            {
-                Rectangle b = e.Bounds;
-                b.X += 4;
-                b.Width -= 4;
-                if (Focused)
-                    e.Graphics.FillRectangle(SystemBrushes.Highlight, b);
-                else
-                    e.Graphics.FillRectangle(SystemBrushes.ButtonFace, b);
-            }
-
-
-            
-            if ((e.State & ListViewItemStates.Focused) != 0)
-                e.DrawFocusRectangle();
-            //    ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds);
-
-            // Draw the item text for views other than the Details view.
-            if (View != View.Details)
-            {
-                e.DrawText();
-            }
-        }
-
-        protected override void OnDrawSubItem(DrawListViewSubItemEventArgs e)
-        {
-            // Okay, bugs in .Net 2.0 ahead:
-            // * Using e.DrawText(flags) gives us a margin of one " " on left and right. (Confirmed via reflector)
-            // * We can't trust the selected flag in e.ItemState (???)
-            bool isSelected = SelectedIndices.Contains(e.ItemIndex);
-
-            string text = (e.ItemIndex == -1) ? e.Item.Text : e.SubItem.Text;
-
-            if (e.ColumnIndex == 0)
-            {
-                // TODO: Update bounds for indent levels
-                text = ((LogRevisionItem)e.Item).RevisionText;
-            }
-
-            Font fnt = e.Item.Font;
-            Color clr;
-
-            if (isSelected)
-                clr = Focused ? SystemColors.HighlightText : SystemColors.MenuText;
-            else
-                clr = e.Item.ForeColor;
-
-            HorizontalAlignment textAlign = e.Header.TextAlign;
-            TextFormatFlags flags = TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix |
-                ((textAlign == HorizontalAlignment.Left) ? TextFormatFlags.GlyphOverhangPadding : ((textAlign == HorizontalAlignment.Center) ? TextFormatFlags.HorizontalCenter : TextFormatFlags.Right));
-            flags |= TextFormatFlags.WordEllipsis;
-
-            TextRenderer.DrawText(e.Graphics, text, fnt, e.Bounds, clr, flags);
         }
     }
 }
