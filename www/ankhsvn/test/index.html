@@ -8,7 +8,7 @@
 $(document).ready(function() {
 
 	var frame = $('<iframe id="myId"/>');
-	frame.attr('src', 'http://www.open.collab.net/servlets/UserProfile');
+	frame.attr('src', 'http://ankhsvn.open.collab.net/servlets/UserProfile');
 	frame.load(function() {
 		alert(this.contentWindow.location);
 	});
