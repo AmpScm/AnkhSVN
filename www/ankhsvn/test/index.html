@@ -10,7 +10,11 @@ $(document).ready(function() {
 	var frame = $('<iframe id="myId"/>');
 	frame.attr('src', 'http://ankhsvn.open.collab.net/servlets/ProjectMembershipRequest');
 	frame.load(function() {
-		alert(this.contentWindow.location);
+		if(this.contentWindow.location.href == 'http://ankhsvn.open.collab.net/servlets/ProjectMembershipRequest')
+			$('#test').html('logged on');
+		else
+			$('#test').html('not logged on');
+		$(document.body).remove(frame);
 	});
 
 	$(document.body).append(frame);
