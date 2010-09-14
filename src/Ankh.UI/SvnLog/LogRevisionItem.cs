@@ -53,6 +53,7 @@ namespace Ankh.UI.SvnLog
         {
             SetValues(
                 "", // First column must be "" to work around owner draw issues!
+                RevisionText,
                 Author,
                 Date.ToString(CultureInfo.CurrentCulture),
                 GetIssueText(),
