@@ -222,10 +222,22 @@ namespace Ankh.VS.Selection
                         string solutionDir, solutionFile, solutionUserFile;
                         if (ErrorHandler.Succeeded(Solution.GetSolutionInfo(out solutionDir, out solutionFile, out solutionUserFile)))
                         {
+                            if (!string.IsNullOrEmpty(solutionFile))
+                            {
+                                _solutionFilename = SvnItem.IsValidPath(solutionFile) ? SvnTools.GetTruePath(solutionFile, true) : solutionFile;
+                            }
+                            // Assigning  _solutionFilename to "", created a race condition:
+                            // SolutionFilename is queried via SolutionSettings#RefreshIfDirty (triggered from AnkhServiceEvents#SolutionOpened/SolutionClosed events)
+                            // SelectionContext cache might not yet be cleared (and returns null even if a new solution is opened)
+                            //
+                            // Follow through AnkhIssueService#OnSolutionOpened
+                            // The following logic is disabled until a better solution is implemented.
+                            /*
                             if (string.IsNullOrEmpty(solutionFile))
                                 _solutionFilename = "";
                             else
                                 _solutionFilename = SvnItem.IsValidPath(solutionFile) ? SvnTools.GetTruePath(solutionFile, true) : solutionFile;
+                            */
                         }
                     }
                 }
