@@ -45,6 +45,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="$(MsVsShellAssembly)" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' == '10.0'">
+      <Visible>false</Visible>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PkgDefContext.cs" />
