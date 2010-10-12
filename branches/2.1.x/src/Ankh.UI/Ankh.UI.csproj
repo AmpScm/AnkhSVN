@@ -1211,6 +1211,7 @@
     <Content Include="MergeWizard\WizardFramework\README.txt" />
     <Content Include="PropertyEditors\Images\Properties.ico" />
     <Content Include="Resources\TabConflicts.png" />
+    <None Include="SvnLog\Plus.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
