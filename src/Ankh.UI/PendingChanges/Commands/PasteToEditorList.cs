@@ -77,7 +77,9 @@ namespace Ankh.UI.PendingChanges.Commands
                 if (DialogResult.OK != rmd.ShowDialog(e.Context))
                     return;
 
-                lme.PasteText(rmd.SelectedText);
+                string text = rmd.SelectedText;
+                if (!string.IsNullOrEmpty(text))
+                    lme.PasteText(text);
             }
         }
     }
