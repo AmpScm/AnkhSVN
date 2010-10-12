@@ -28,6 +28,7 @@ namespace AnkhSvn_UnitTestProject.Helpers
         static ServiceProviderHelper()
         {
             serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();
+            AddService(typeof(Ankh.UI.IAnkhPackage), AnkhSvn_UnitTestProject.Mocks.PackageMock.EmptyContext(serviceProvider));
         }
 
         Type type;
