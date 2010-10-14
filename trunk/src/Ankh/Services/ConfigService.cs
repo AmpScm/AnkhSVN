@@ -15,22 +15,11 @@
 //  limitations under the License.
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-
-using Ankh.Configuration;
 using Ankh.UI;
 using Microsoft.Win32;
 using System.ComponentModel;
 using Ankh.VS;
-using System.Globalization;
 
 
 namespace Ankh.Configuration
@@ -204,7 +193,7 @@ namespace Ankh.Configuration
         /// <summary>
         /// Opens or creates the HKCU key with the specified name
         /// </summary>
-        /// <param name="suffix"></param>
+        /// <param name="subKey"></param>
         /// <returns></returns>
         RegistryKey OpenHKCUKey(string subKey)
         {
@@ -251,26 +240,38 @@ namespace Ankh.Configuration
             return new RegistryLifoList(Context, "RecentRepositoryUrls", 32);
         }
 
-        public void SaveColumnsWidths(Type subKey, IDictionary<string, int> widths)
+        public void SaveColumnsWidths(Type controlType, IDictionary<string, int> widths)
         {
+            if(controlType == null)
+                throw new ArgumentNullException("controlType");
+
             if (widths == null || widths.Count == 0)
                 return;
 
-            SaveNumberValues("ColumnWidths", subKey.FullName, widths);
+            SaveNumberValues("ColumnWidths", controlType.FullName, widths);
         }
 
         public IDictionary<string, int> GetColumnWidths(Type controlType)
         {
+            if (controlType == null)
+                throw new ArgumentNullException("controlType");
+
             return GetNumberValues("ColumnWidths", controlType.FullName);
         }
 
         public void SaveWindowPlacement(Type controlType, IDictionary<string, int> placement)
         {
+            if (controlType == null)
+                throw new ArgumentNullException("controlType");
+
             SaveNumberValues("WindowPlacements", controlType.FullName, placement);
         }
 
         public IDictionary<string, int> GetWindowPlacement(Type controlType)
         {
+            if (controlType == null)
+                throw new ArgumentNullException("controlType");
+
             return GetNumberValues("WindowPlacements", controlType.FullName);
         }
 
@@ -335,12 +336,7 @@ namespace Ankh.Configuration
             return values;
         }
 
-        #endregion
-
-        #region IAnkhConfigurationService Members
-
-
-        public bool GetWarningBool(AnkhWarningBool ankhWarningBool)
+		public bool GetWarningBool(AnkhWarningBool ankhWarningBool)
         {
             using (RegistryKey rk = OpenHKCUKey("Warnings\\Bools"))
             {

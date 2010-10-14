@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Ankh.Configuration;
 using Microsoft.Win32;
 
@@ -31,7 +30,7 @@ namespace Ankh.UI
     /// </summary>
     public interface IAnkhConfigurationService
     {
-        Configuration.AnkhConfig Instance
+        AnkhConfig Instance
         {
             get;
         }
@@ -79,30 +78,30 @@ namespace Ankh.UI
         /// <summary>
         /// Save SmartColumns widths to registry
         /// </summary>
-        /// <param name="subKey">SubKey name</param>
+        /// <param name="controlType">The <see cref="Type"/> of control to save columns for</param>
         /// <param name="widths">Dictionary of column names and widths</param>
-        void SaveColumnsWidths(Type subKey, IDictionary<string, int> widths);
+        void SaveColumnsWidths(Type controlType, IDictionary<string, int> widths);
 
         /// <summary>
         /// Get SmartColumns widths from registry
         /// </summary>
-        /// <param name="subKey">SybKey name</param>
+        /// <param name="controlType">The <see cref="Type"/> of control to get columns for</param>
         /// <returns>Dictionary of column names and widths</returns>
-        IDictionary<string, int> GetColumnWidths(Type subKey);
+        IDictionary<string, int> GetColumnWidths(Type controlType);
 
         /// <summary>
         /// Save window size and position in registry
         /// </summary>
-        /// <param name="subKey">SubKey name</param>
+        /// <param name="controlType">The <see cref="Type"/> of control to save placement for</param>
         /// <param name="placement">Dictionary of window size and posiotion</param>
-        void SaveWindowPlacement(Type subKey, IDictionary<string, int> placement);
+        void SaveWindowPlacement(Type controlType, IDictionary<string, int> placement);
 
         /// <summary>
         /// Get window size and position from registry
         /// </summary>
-        /// <param name="subKey">SybKey name</param>
+        /// <param name="controlType">The <see cref="Type"/> of control to get placement for</param>
         /// <returns>Dictionary of window size and position</returns>
-        IDictionary<string, int> GetWindowPlacement(Type subKey);
+        IDictionary<string, int> GetWindowPlacement(Type controlType);
 
         bool GetWarningBool(AnkhWarningBool ankhWarningBool);
         void SetWarningBool(AnkhWarningBool ankhWarningBool, bool value);
