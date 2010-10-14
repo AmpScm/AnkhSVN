@@ -89,7 +89,7 @@ namespace Ankh.UI
             {
                 int nSize;
                 int nPos;
-                if (!TryGetIntValue(key, "_size", out nSize) || nSize < 1)
+                if (!RegistryUtils.TryGetIntValue(key, "_size", out nSize) || nSize < 1)
                 {
                     nSize = _defaultSize;
                     key.SetValue("_size", _defaultSize);
@@ -99,7 +99,7 @@ namespace Ankh.UI
                 // two VS instances.
                 // We ignore this as it is just UI helper code and a user can't edit
                 //  two windows at the same time
-                if (!TryGetIntValue(key, "_pos", out nPos) || (nPos < 0) || (nPos >= nSize))
+                if (!RegistryUtils.TryGetIntValue(key, "_pos", out nPos) || (nPos < 0) || (nPos >= nSize))
                 {
                     nPos = 0;
                 }
@@ -232,28 +232,7 @@ namespace Ankh.UI
 
         #endregion
 
-        bool TryGetIntValue(RegistryKey key, string name, out int value)
-        {
-            if (key == null)
-                throw new ArgumentNullException("key");
-
-            object val = key.GetValue(name);
-
-            value = -1;
-
-            if (val != null)
-            {
-                if (val is int)
-                {
-                    value = (int)val;
-                    return true;
-                }
-                else if (int.TryParse(value.ToString(), out value))
-                    return true;
-            }
-
-            return false;
-        }
+        
 
         #region IEnumerable<KeyValuePair<string,string>> Members
 
@@ -264,7 +243,7 @@ namespace Ankh.UI
                 int nSize;
                 int nPos;
 
-                if (!TryGetIntValue(key, "_size", out nSize) || nSize < 1)
+                if (!RegistryUtils.TryGetIntValue(key, "_size", out nSize) || nSize < 1)
                 {
                     nSize = _defaultSize;
                 }
@@ -273,7 +252,7 @@ namespace Ankh.UI
                 // two VS instances.
                 // We ignore this as it is just UI helper code and a user can't edit
                 //  two windows at the same time
-                if (!TryGetIntValue(key, "_pos", out nPos) || (nPos < 0) || (nPos >= nSize))
+                if (!RegistryUtils.TryGetIntValue(key, "_pos", out nPos) || (nPos < 0) || (nPos >= nSize))
                 {
                     nPos = 0;
                 }
@@ -301,5 +280,31 @@ namespace Ankh.UI
         }
 
         #endregion
+    }
+
+    public static class RegistryUtils
+    {
+        public static bool TryGetIntValue(RegistryKey key, string name, out int value)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+
+            object val = key.GetValue(name);
+
+            value = -1;
+
+            if (val != null)
+            {
+                if (val is int)
+                {
+                    value = (int)val;
+                    return true;
+                }
+                else if (int.TryParse(value.ToString(), out value))
+                    return true;
+            }
+
+            return false;
+        }
     }
 }
