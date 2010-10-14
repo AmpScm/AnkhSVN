@@ -436,20 +436,14 @@ namespace Ankh.UI.PendingChanges
         /// <returns>true if config is changed, false otherwise</returns>
         bool ReadRecentChangesRefreshInterval()
         {
-            bool result = false;
-            Ankh.Configuration.AnkhConfig config = Config;
-            double newInterval = config.RecentChangesRefreshInterval * 1000.0;
+            double newInterval = Config.RecentChangesRefreshInterval * 1000.0;
             newInterval = Math.Max(0, newInterval);
-            if (newInterval == _refreshInterval)
-            {
-                result = false;
-            }
-            else
+            if (newInterval != _refreshInterval)
             {
                 _refreshInterval = newInterval;
-                result = true;
+                return true;
             }
-            return result;
+            return false;
         }
 
         /// <summary>
