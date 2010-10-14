@@ -62,8 +62,18 @@ namespace Ankh.UI.PendingChanges
                 }
             }
 
+            conflictView.ColumnWidthChanged += new ColumnWidthChangedEventHandler(conflictView_ColumnWidthChanged);
+            IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
+            conflictView.SetColumnWidths(widths);
+
             ResizeToFit();
             _loaded = true;
+        }
+
+        protected void conflictView_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        {
+            IDictionary<string, int> widths = conflictView.GetColumnWidths();
+            ConfigurationService.SaveColumnsWidths(GetType(), widths);
         }
 
         protected override void OnSizeChanged(EventArgs e)

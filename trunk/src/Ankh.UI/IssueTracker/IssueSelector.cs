@@ -24,7 +24,16 @@ namespace Ankh.UI.IssueTracker
             if (issuesView1 != null)
             {
                 issuesView1.SelectionPublishServiceProvider = Context;
+                issuesView1.ColumnWidthChanged += new ColumnWidthChangedEventHandler(issuesView1_ColumnWidthChanged);
+                IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
+                issuesView1.SetColumnWidths(widths);
             }
+        }
+
+        protected void issuesView1_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        {
+            IDictionary<string, int> widths = issuesView1.GetColumnWidths();
+            ConfigurationService.SaveColumnsWidths(GetType(), widths);
         }
 
         public void LoadIssues(IEnumerable<IssueMarker> issueWalker)

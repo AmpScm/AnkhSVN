@@ -25,6 +25,7 @@ using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.UI.PendingChanges.Commits;
 using Ankh.VS;
+using System.ComponentModel;
 
 namespace Ankh.UI.SccManagement
 {
@@ -73,7 +74,17 @@ namespace Ankh.UI.SccManagement
                     issueLabel.Enabled = issueLabel.Visible = true;
             }
 
+            pendingList.ColumnWidthChanged += new ColumnWidthChangedEventHandler(pendingList_ColumnWidthChanged);
+            IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
+            pendingList.SetColumnWidths(widths);
+
             VSCommandHandler.Install(Context, logMessage, new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.OPENLINEABOVE), new EventHandler<CommandEventArgs>(OnCommit));
+        }
+
+        protected void pendingList_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        {
+            IDictionary<string, int> widths = pendingList.GetColumnWidths();
+            ConfigurationService.SaveColumnsWidths(GetType(), widths);
         }
 
         private void Reload()
@@ -147,7 +158,7 @@ namespace Ankh.UI.SccManagement
 
             IPendingChangesManager _pcm;
             readonly PendingChange.RefreshContext _rc;
-            public ItemLister(IAnkhServiceProvider context,  IEnumerable<SvnItem> items)
+            public ItemLister(IAnkhServiceProvider context, IEnumerable<SvnItem> items)
                 : base(context)
             {
                 if (items == null)
@@ -169,16 +180,16 @@ namespace Ankh.UI.SccManagement
             {
                 foreach (SvnItem item in _items)
                 {
-                    if(PendingChange.IsPending(item))
+                    if (PendingChange.IsPending(item))
                     {
                         PendingChange pc = Manager[item.FullPath];
 
-                        if(pc == null && !_pcs.TryGetValue(item.FullPath, out pc))
+                        if (pc == null && !_pcs.TryGetValue(item.FullPath, out pc))
                         {
                             PendingChange.CreateIfPending(_rc, item, out pc);
                         }
 
-                        if(pc == null)
+                        if (pc == null)
                             yield break; // Not a pending change
 
                         _pcs[item.FullPath] = pc;
@@ -208,7 +219,7 @@ namespace Ankh.UI.SccManagement
         private void pendingList_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
             okButton.Enabled = sender is ListView
-                && ((ListView) sender).CheckedItems.Count > 0;
+                && ((ListView)sender).CheckedItems.Count > 0;
         }
 
         bool _issueNummeric;

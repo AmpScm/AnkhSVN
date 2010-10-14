@@ -66,6 +66,9 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnLoad(e);
             syncView.Context = Context;
+            syncView.ColumnWidthChanged += new ColumnWidthChangedEventHandler(syncView_ColumnWidthChanged);
+            IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
+            syncView.SetColumnWidths(widths);
 
             _recentChangesAction = new AnkhAction(DoRefresh);
 
@@ -74,6 +77,12 @@ namespace Ankh.UI.PendingChanges
             _solutionExists = (commandState != null && commandState.SolutionExists);
             RefreshIntervalConfigModified();
             HookHandlers();
+        }
+
+        protected void syncView_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        {
+            IDictionary<string, int> widths = syncView.GetColumnWidths();
+            ConfigurationService.SaveColumnsWidths(GetType(), widths);
         }
 
         /// <summary>
@@ -205,8 +214,8 @@ namespace Ankh.UI.PendingChanges
 
         private void DoFetchRecentChanges(SvnClient client,
             SvnStatusArgs sa,
-            List<string> roots, 
-            List<SvnStatusEventArgs> resultList, 
+            List<string> roots,
+            List<SvnStatusEventArgs> resultList,
             Dictionary<string, string> found)
         {
             foreach (string path in roots)
@@ -255,7 +264,7 @@ namespace Ankh.UI.PendingChanges
 
         static bool IgnoreStatus(SvnStatusEventArgs stat)
         {
-            switch(stat.LocalContentStatus)
+            switch (stat.LocalContentStatus)
             {
                 case SvnStatus.NotVersioned:
                 case SvnStatus.Ignored:

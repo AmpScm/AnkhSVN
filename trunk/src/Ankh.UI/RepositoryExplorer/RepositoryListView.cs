@@ -38,13 +38,13 @@ namespace Ankh.UI.RepositoryExplorer
 
         private void InitializeColumns()
         {
-            SmartColumn name = new SmartColumn(this, RepositoryStrings.NameColumn, 120);
-            SmartColumn type = new SmartColumn(this, RepositoryStrings.TypeColumn, 100);
-            SmartColumn revision = new SmartColumn(this, RepositoryStrings.RevisionColumn, 60);
-            SmartColumn author = new SmartColumn(this, RepositoryStrings.AuthorColumn, 60);
-            SmartColumn size = new SmartColumn(this, RepositoryStrings.SizeColumn, 60);
-            SmartColumn date = new SmartColumn(this, RepositoryStrings.DateColumn, 100);
-            SmartColumn lockOwner = new SmartColumn(this, RepositoryStrings.LockOwnerColumn, 100);
+            SmartColumn name = new SmartColumn(this, RepositoryStrings.NameColumn, 120, "Name");
+            SmartColumn type = new SmartColumn(this, RepositoryStrings.TypeColumn, 100, "Type");
+            SmartColumn revision = new SmartColumn(this, RepositoryStrings.RevisionColumn, 60, "Revision");
+            SmartColumn author = new SmartColumn(this, RepositoryStrings.AuthorColumn, 60, "Author");
+            SmartColumn size = new SmartColumn(this, RepositoryStrings.SizeColumn, 60, "Size");
+            SmartColumn date = new SmartColumn(this, RepositoryStrings.DateColumn, 100, "Date");
+            SmartColumn lockOwner = new SmartColumn(this, RepositoryStrings.LockOwnerColumn, 100, "LockOwner");
 
             name.Sorter = new SortWrapper(
                 delegate(RepositoryListItem x, RepositoryListItem y)

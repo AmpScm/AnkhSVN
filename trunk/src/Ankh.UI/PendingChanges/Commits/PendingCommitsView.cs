@@ -59,19 +59,19 @@ namespace Ankh.UI.PendingChanges.Commits
 
         public void Initialize()
         {
-            SmartColumn path = new SmartColumn(this, PCStrings.PathColumn, 288);
-            SmartColumn project = new SmartColumn(this, PCStrings.ProjectColumn, 76);
-            SmartColumn change = new SmartColumn(this, PCStrings.ChangeColumn, 76);
-            SmartColumn fullPath = new SmartColumn(this, PCStrings.FullPathColumn, 327);
+            SmartColumn path = new SmartColumn(this, PCStrings.PathColumn, 288, "Path");
+            SmartColumn project = new SmartColumn(this, PCStrings.ProjectColumn, 76, "Project");
+            SmartColumn change = new SmartColumn(this, PCStrings.ChangeColumn, 76, "Change");
+            SmartColumn fullPath = new SmartColumn(this, PCStrings.FullPathColumn, 327, "FullPath");
 
-            SmartColumn changeList = new SmartColumn(this, PCStrings.ChangeListColumn, 76);
-            SmartColumn folder = new SmartColumn(this, PCStrings.FolderColumn, 196);
-            SmartColumn locked = new SmartColumn(this, PCStrings.LockedColumn, 38);
-            SmartColumn modified = new SmartColumn(this, PCStrings.ModifiedColumn, 76);
-            SmartColumn name = new SmartColumn(this, PCStrings.NameColumn, 76);
-            SmartColumn revision = new SmartColumn(this, PCStrings.RevisionColumn, 38);
-            SmartColumn type = new SmartColumn(this, PCStrings.TypeColumn, 76);
-            SmartColumn workingCopy = new SmartColumn(this, PCStrings.WorkingCopyColumn, 76);
+            SmartColumn changeList = new SmartColumn(this, PCStrings.ChangeListColumn, 76, "ChangeList");
+            SmartColumn folder = new SmartColumn(this, PCStrings.FolderColumn, 196, "Folder");
+            SmartColumn locked = new SmartColumn(this, PCStrings.LockedColumn, 38, "Locked");
+            SmartColumn modified = new SmartColumn(this, PCStrings.ModifiedColumn, 76, "Modified");
+            SmartColumn name = new SmartColumn(this, PCStrings.NameColumn, 76, "Name");
+            SmartColumn revision = new SmartColumn(this, PCStrings.RevisionColumn, 38, "Revision");
+            SmartColumn type = new SmartColumn(this, PCStrings.TypeColumn, 76, "Type");
+            SmartColumn workingCopy = new SmartColumn(this, PCStrings.WorkingCopyColumn, 76, "WorkingCopy");
 
             Columns.AddRange(new ColumnHeader[]
             {

@@ -60,7 +60,7 @@ namespace Ankh.UI
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
             base.AutoScaleMode = AutoScaleMode.Font;
-			base.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            base.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         }
 
         /// <summary>
@@ -111,6 +111,19 @@ namespace Ankh.UI
             set { base.ShowInTaskbar = value; }
         }
 
+        IAnkhConfigurationService _configurationService;
+        protected virtual IAnkhConfigurationService ConfigurationService
+        {
+            get { return _configurationService ?? (_configurationService = Context.GetService<IAnkhConfigurationService>()); }
+        }
+
+        private bool _preserveWindowPlacement;
+        public bool PreserveWindowPlacement
+        {
+            get { return _preserveWindowPlacement; }
+            set { _preserveWindowPlacement = value; }
+        }
+
         protected virtual void OnContextChanged(EventArgs e)
         {
         }
@@ -149,7 +162,7 @@ namespace Ankh.UI
             if (DesignMode)
                 return;
 
-            if (!this.HelpButton && this.ControlBox && !_addedHelp)
+            if (!HelpButton && ControlBox && !_addedHelp)
             {
                 IAnkhDialogHelpService helpService = GetService<IAnkhDialogHelpService>();
 
@@ -158,6 +171,50 @@ namespace Ankh.UI
                     _addedHelp = true;
                     HelpButton = true;
                 }
+            }
+
+            LoadPlacement();
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
+            SavePlacement();
+        }
+
+        private void LoadPlacement()
+        {
+            if (PreserveWindowPlacement)
+            {
+                IDictionary<string, int> placement = ConfigurationService.GetWindowPlacement(GetType());
+                if (placement != null)
+                {
+                    SetPlacementFromRegistry(delegate(int i) { Left = i; }, "Left", placement);
+                    SetPlacementFromRegistry(delegate(int i) { Top = i; }, "Top", placement);
+                    SetPlacementFromRegistry(delegate(int i) { Width = i; }, "Width", placement);
+                    SetPlacementFromRegistry(delegate(int i) { Height = i; }, "Height", placement);
+                }
+            }
+        }
+
+        private void SavePlacement()
+        {
+            if (PreserveWindowPlacement)
+            {
+                Dictionary<string, int> placement = new Dictionary<string, int>(4);
+                placement["Left"] = Left;
+                placement["Top"] = Top;
+                placement["Width"] = Width;
+                placement["Height"] = Height;
+                ConfigurationService.SaveWindowPlacement(GetType(), placement);
+            }
+        }
+
+        private void SetPlacementFromRegistry(Action<int> setter, string key, IDictionary<string, int> placement)
+        {
+            if (placement.ContainsKey(key) && placement[key] > 0)
+            {
+                setter(placement[key]);
             }
         }
 
@@ -284,7 +341,7 @@ namespace Ankh.UI
         protected virtual void OnAfterShowDialog(EventArgs e)
         {
 
-        }    
+        }
 
         #region IAnkhServiceProvider Members
 
@@ -311,7 +368,7 @@ namespace Ankh.UI
         protected T GetService<T>()
             where T : class
         {
-            return ((IAnkhServiceProvider)this).GetService<T>(typeof(T));            
+            return ((IAnkhServiceProvider)this).GetService<T>(typeof(T));
         }
 
         [DebuggerStepThrough]

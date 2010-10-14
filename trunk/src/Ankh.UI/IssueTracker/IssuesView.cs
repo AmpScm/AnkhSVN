@@ -8,7 +8,7 @@ using Ankh.Scc;
 
 namespace Ankh.UI.IssueTracker
 {
-    class IssuesView: ListViewWithSelection<IssuesViewItem>
+    class IssuesView : ListViewWithSelection<IssuesViewItem>
     {
         public IssuesView()
         {
@@ -24,7 +24,7 @@ namespace Ankh.UI.IssueTracker
 
         void Init()
         {
-            SmartColumn issueId = new SmartColumn(this, "&Issue Id", 100);
+            SmartColumn issueId = new SmartColumn(this, "&Issue Id", 100, "IssueId");
 
             AllColumns.Add(issueId);
 
@@ -35,7 +35,7 @@ namespace Ankh.UI.IssueTracker
                 });
 
             SortColumns.Add(issueId);
-            FinalSortColumn = issueId;            
+            FinalSortColumn = issueId;
         }
 
         protected override void OnRetrieveSelection(ListViewWithSelection<IssuesViewItem>.RetrieveSelectionEventArgs e)

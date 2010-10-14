@@ -36,7 +36,7 @@ namespace Ankh.UI.PendingChanges
 
         AnkhConfig Config
         {
-            get { return Context.GetService<IAnkhConfigurationService>().Instance; }
+            get { return ConfigurationService.Instance; }
         }
 
         IAnkhCommandService _commandService;
@@ -54,11 +54,20 @@ namespace Ankh.UI.PendingChanges
                 pendingCommits.SelectionPublishServiceProvider = Context;
                 pendingCommits.Context = Context;
                 pendingCommits.HookCommands();
+                pendingCommits.ColumnWidthChanged += new ColumnWidthChangedEventHandler(pendingCommits_ColumnWidthChanged);
+                IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
+                pendingCommits.SetColumnWidths(widths);
             }
 
             Context.GetService<IServiceContainer>().AddService(typeof(ILastChangeInfo), this);
 
             HookList();
+        }
+
+        protected void pendingCommits_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        {
+            IDictionary<string, int> widths = pendingCommits.GetColumnWidths();
+            ConfigurationService.SaveColumnsWidths(GetType(), widths);
         }
 
         IPendingChangesManager _manager;
@@ -330,7 +339,7 @@ namespace Ankh.UI.PendingChanges
         private void pendingCommits_KeyUp(object sender, KeyEventArgs e)
         {
             // TODO: Replace with VS command handling, instead of hooking it with Winforms
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 // TODO: We should probably open just the focused file instead of the selection in the ItemOpenVisualStudio case to make it more deterministic what file is active after opening
                 if (CommandService != null)
@@ -566,7 +575,7 @@ namespace Ankh.UI.PendingChanges
                 if (tv != null)
                     return tv.TextView;
 
-                return null; 
+                return null;
             }
         }
 

@@ -47,14 +47,15 @@ namespace Ankh.UI.VSSelectionControls
         bool _groupable;
         bool _notDragable;
         bool _reverseSort;
+        readonly int _defaultWidth;
 
         static SmartListView FindView(IContainer container)
         {
-            foreach(Component c in container.Components)
+            foreach (Component c in container.Components)
             {
                 SmartListView slv = c as SmartListView;
 
-                if(slv != null)
+                if (slv != null)
                     return slv;
             }
             return null;
@@ -109,7 +110,7 @@ namespace Ankh.UI.VSSelectionControls
             _view = view;
             Text = text;
             MenuText = menuText;
-            Width = width;
+            Width = _defaultWidth = width;
             TextAlign = align;
         }
 
@@ -122,6 +123,19 @@ namespace Ankh.UI.VSSelectionControls
         public SmartColumn(SmartListView view, string menuText, int width)
             : this(view, menuText, width, HorizontalAlignment.Left)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmartColumn"/> class.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <param name="menuText">The menu text.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="name">The name.</param>
+        public SmartColumn(SmartListView view, string menuText, int width, string name)
+            : this(view, menuText, width, HorizontalAlignment.Left)
+        {
+            this.Name = name;
         }
 
         /// <summary>
@@ -223,6 +237,14 @@ namespace Ankh.UI.VSSelectionControls
             set { _reverseSort = value; }
         }
 
+        /// <summary>
+        /// Default width of column - can be set only in constructor
+        /// </summary>
+        public int DefaultWidth
+        {
+            get { return this._defaultWidth; }
+        }
+
         int _allColumnsIndex = -1;
 
         /// <summary>
@@ -299,11 +321,11 @@ namespace Ankh.UI.VSSelectionControls
         /// <returns>
         /// Value Condition Less than zero<paramref name="x"/> is less than <paramref name="y"/>.Zero<paramref name="x"/> equals <paramref name="y"/>.Greater than zero<paramref name="x"/> is greater than <paramref name="y"/>.
         /// </returns>
-       public int Compare(ListViewItem x, ListViewItem y, bool reverseSort)
+        public int Compare(ListViewItem x, ListViewItem y, bool reverseSort)
         {
             int n = Compare(x, y);
 
-            if(reverseSort && ReverseSort)
+            if (reverseSort && ReverseSort)
                 return -n;
             else
                 return n;

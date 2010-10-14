@@ -36,10 +36,10 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            using(ProjectCommitDialog dlg = new ProjectCommitDialog())
+            using (ProjectCommitDialog dlg = new ProjectCommitDialog())
             {
                 dlg.Context = e.Context;
-
+                dlg.PreserveWindowPlacement = true;
                 dlg.LoadChanges(GetChanges(e));
 
                 dlg.LogMessageText = logMessage ?? "";

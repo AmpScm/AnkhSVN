@@ -30,6 +30,7 @@ using Ankh.UI;
 using Microsoft.Win32;
 using System.ComponentModel;
 using Ankh.VS;
+using System.Globalization;
 
 
 namespace Ankh.Configuration
@@ -85,7 +86,7 @@ namespace Ankh.Configuration
         /// <returns></returns>
         public void LoadDefaultConfig()
         {
-            lock (this._lock)
+            lock (_lock)
             {
                 _instance = new AnkhConfig();
                 SetDefaultsFromRegistry(_instance);
@@ -155,10 +156,10 @@ namespace Ankh.Configuration
         /// <param name="config"></param>
         public void SaveConfig(AnkhConfig config)
         {
-            if(config == null)
+            if (config == null)
                 throw new ArgumentNullException("config");
 
-            lock (this._lock)
+            lock (_lock)
             {
                 AnkhConfig defaultConfig = new AnkhConfig();
                 SetDefaultsFromRegistry(defaultConfig);
@@ -169,9 +170,9 @@ namespace Ankh.Configuration
                     foreach (PropertyDescriptor pd in pdc)
                     {
                         object value = pd.GetValue(config);
-                        
+
                         // Set the value only if it is already set previously, or if it's different from the default
-                        if(!pd.ShouldSerializeValue(config) && !pd.ShouldSerializeValue(defaultConfig))
+                        if (!pd.ShouldSerializeValue(config) && !pd.ShouldSerializeValue(defaultConfig))
                         {
                             reg.DeleteValue(pd.Name, false);
                         }
@@ -215,7 +216,7 @@ namespace Ankh.Configuration
         }
 
         #region IAnkhConfigurationService Members
-   
+
         RegistryKey IAnkhConfigurationService.OpenUserInstanceKey(string subKey)
         {
             return OpenHKCUKey(subKey);
@@ -250,6 +251,90 @@ namespace Ankh.Configuration
             return new RegistryLifoList(Context, "RecentRepositoryUrls", 32);
         }
 
+        public void SaveColumnsWidths(Type subKey, IDictionary<string, int> widths)
+        {
+            if (widths == null || widths.Count == 0)
+                return;
+
+            SaveNumberValues("ColumnWidths", subKey.FullName, widths);
+        }
+
+        public IDictionary<string, int> GetColumnWidths(Type controlType)
+        {
+            return GetNumberValues("ColumnWidths", controlType.FullName);
+        }
+
+        public void SaveWindowPlacement(Type controlType, IDictionary<string, int> placement)
+        {
+            SaveNumberValues("WindowPlacements", controlType.FullName, placement);
+        }
+
+        public IDictionary<string, int> GetWindowPlacement(Type controlType)
+        {
+            return GetNumberValues("WindowPlacements", controlType.FullName);
+        }
+
+        void SaveNumberValues(string regKey, string subKey, IDictionary<string, int> values)
+        {
+            if (string.IsNullOrEmpty(regKey))
+                throw new ArgumentNullException("regKey");
+            if (string.IsNullOrEmpty(subKey))
+                throw new ArgumentNullException("subKey");
+            if (values == null)
+                throw new ArgumentNullException("values");
+
+            lock (_lock)
+            {
+                subKey = regKey + "\\" + subKey;
+                using (RegistryKey reg = OpenHKCUKey(subKey))
+                {
+                    if (reg == null)
+                        return;
+                    foreach (KeyValuePair<string, int> item in values)
+                    {
+                        if (item.Value <= 0)
+                        {
+                            reg.DeleteValue(item.Key, false);
+                        }
+                        else
+                        {
+                            reg.SetValue(item.Key, item.Value, RegistryValueKind.DWord);
+                        }
+                    }
+                }
+            }
+        }
+
+        IDictionary<string, int> GetNumberValues(string regKey, string subKey)
+        {
+            if (string.IsNullOrEmpty(regKey))
+                throw new ArgumentNullException("regKey");
+            if (string.IsNullOrEmpty(subKey))
+                throw new ArgumentNullException("subKey");
+            IDictionary<string, int> values;
+            lock (_lock)
+            {
+                subKey = regKey + "\\" + subKey;
+                using (RegistryKey reg = OpenHKCUKey(subKey))
+                {
+                    if (reg == null)
+                        return null;
+                    HybridCollection<string> hs = new HybridCollection<string>();
+                    hs.AddRange(reg.GetValueNames());
+
+                    values = new Dictionary<string, int>(hs.Count);
+
+                    foreach (string item in hs)
+                    {
+                        int width;
+                        if (RegistryUtils.TryGetIntValue(reg, item, out width) && width > 0)
+                            values.Add(item, width);
+                    }
+                }
+            }
+            return values;
+        }
+
         #endregion
 
         #region IAnkhConfigurationService Members
@@ -257,7 +342,7 @@ namespace Ankh.Configuration
 
         public bool GetWarningBool(AnkhWarningBool ankhWarningBool)
         {
-            using(RegistryKey rk = OpenHKCUKey("Warnings\\Bools"))
+            using (RegistryKey rk = OpenHKCUKey("Warnings\\Bools"))
             {
                 if (rk == null)
                     return false;
