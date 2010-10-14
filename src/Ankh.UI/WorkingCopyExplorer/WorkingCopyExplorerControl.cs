@@ -15,6 +15,7 @@
 //  limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Windows.Forms;
 using Microsoft.VisualStudio;
@@ -31,6 +32,12 @@ namespace Ankh.UI.WorkingCopyExplorer
 {
     public partial class WorkingCopyExplorerControl : AnkhToolWindowControl
     {
+        IAnkhConfigurationService _configurationService;
+        protected virtual IAnkhConfigurationService ConfigurationService
+        {
+            get { return _configurationService ?? (_configurationService = Context.GetService<IAnkhConfigurationService>()); }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkingCopyExplorerControl"/> class.
         /// </summary>
@@ -79,6 +86,21 @@ namespace Ankh.UI.WorkingCopyExplorer
                 if (renderer != null)
                     foldersStrip.Renderer = renderer;
             }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+			fileList.ColumnWidthChanged += new ColumnWidthChangedEventHandler(fileList_ColumnWidthChanged);
+            IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
+            fileList.SetColumnWidths(widths);
+        }
+
+		protected void fileList_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        {
+            IDictionary<string, int> widths = fileList.GetColumnWidths();
+            ConfigurationService.SaveColumnsWidths(GetType(), widths);
         }
 
         void OnSolutionOpened(object sender, EventArgs e)

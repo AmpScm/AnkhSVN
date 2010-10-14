@@ -72,6 +72,12 @@ namespace Ankh.UI.PendingChanges
             set { _toolControl = value; }
         }
 
+        IAnkhConfigurationService _configurationService;
+        protected virtual IAnkhConfigurationService ConfigurationService
+        {
+            get { return _configurationService ?? (_configurationService = Context.GetService<IAnkhConfigurationService>()); }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);

@@ -86,6 +86,9 @@ namespace Ankh.Commands
                 using (PendingChangeSelector pcs = new PendingChangeSelector())
                 {
                     pcs.Text = CommandStrings.RevertDialogTitle;
+
+                    pcs.PreserveWindowPlacement = true;
+
                     pcs.LoadItems(toRevert, null, initialCheckedFilter);
 
                     if (pcs.ShowDialog(e.Context) != DialogResult.OK)

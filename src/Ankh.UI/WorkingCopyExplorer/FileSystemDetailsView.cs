@@ -181,20 +181,20 @@ namespace Ankh.UI.WorkingCopyExplorer
             AllColumns.Clear();
             SortColumns.Clear();
             Columns.Clear();
-            _nameColumn = new SmartColumn(this, "&Name", characterWidth * NameColumnNumberOfCharacters);
-            SmartColumn modified = new SmartColumn(this, "&Modified", characterWidth * 15);
-            SmartColumn type = new SmartColumn(this, "&Type", characterWidth * 20);
-            SmartColumn change = new SmartColumn(this, "&Change", characterWidth * 15);
-            SmartColumn locked = new SmartColumn(this, "&Locked", characterWidth * 8);
-            SmartColumn revision = new SmartColumn(this, "&Revision", characterWidth * 8);
-            SmartColumn lastChangeTime = new SmartColumn(this, "Last C&hange", characterWidth * 20);
-            SmartColumn lastRev = new SmartColumn(this, "Last Re&vision", characterWidth * 8);
-            SmartColumn lastAuthor = new SmartColumn(this, "Last &Author", characterWidth * 8);
-            SmartColumn contStatus = new SmartColumn(this, "&Content Status", characterWidth * 15);
-            SmartColumn propStatus = new SmartColumn(this, "&Property Status", characterWidth * 15);
-            SmartColumn isCopied = new SmartColumn(this, "C&opied", characterWidth * 6);
-            SmartColumn isConficted = new SmartColumn(this, "Co&nflicted", characterWidth * 6);
-            SmartColumn fullPath = new SmartColumn(this, "Fu&ll Path", characterWidth * 60);
+            _nameColumn = new SmartColumn(this, "&Name", characterWidth * NameColumnNumberOfCharacters, "Name");
+            SmartColumn modified = new SmartColumn(this, "&Modified", characterWidth * 15, "Modified");
+            SmartColumn type = new SmartColumn(this, "&Type", characterWidth * 20, "Type");
+            SmartColumn change = new SmartColumn(this, "&Change", characterWidth * 15, "Change");
+            SmartColumn locked = new SmartColumn(this, "&Locked", characterWidth * 8, "Locked");
+            SmartColumn revision = new SmartColumn(this, "&Revision", characterWidth * 8, "Revision");
+            SmartColumn lastChangeTime = new SmartColumn(this, "Last C&hange", characterWidth * 20, "LastChange");
+            SmartColumn lastRev = new SmartColumn(this, "Last Re&vision", characterWidth * 8, "LastRevision");
+            SmartColumn lastAuthor = new SmartColumn(this, "Last &Author", characterWidth * 8, "LastAuthor");
+            SmartColumn contStatus = new SmartColumn(this, "&Content Status", characterWidth * 15, "ContentStatus");
+            SmartColumn propStatus = new SmartColumn(this, "&Property Status", characterWidth * 15, "PropertyStatus");
+            SmartColumn isCopied = new SmartColumn(this, "C&opied", characterWidth * 6, "Copied");
+            SmartColumn isConficted = new SmartColumn(this, "Co&nflicted", characterWidth * 6, "Conflicted");
+            SmartColumn fullPath = new SmartColumn(this, "Fu&ll Path", characterWidth * 60, "FullPath");
 
             _nameColumn.Sorter = new SortWrapper(
                 delegate(FileSystemListViewItem x, FileSystemListViewItem y)

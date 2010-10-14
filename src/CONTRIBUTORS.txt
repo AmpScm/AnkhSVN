@@ -32,3 +32,4 @@ Patches:
 * Luc Morin
 * Stefano Mioli
 * Samuel Ford
+* Beniamin Bronisz

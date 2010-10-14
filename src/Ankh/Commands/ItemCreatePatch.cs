@@ -85,6 +85,9 @@ namespace Ankh.Commands
             {
                 pcs.Context = e.Context;
                 pcs.Text = CommandStrings.CreatePatchTitle;
+
+                pcs.PreserveWindowPlacement = true;
+
                 pcs.LoadItems(e.Selection.GetSelectedSvnItems(true));
 
                 DialogResult dr = pcs.ShowDialog(e.Context);
@@ -106,7 +109,7 @@ namespace Ankh.Commands
 
                 List<PendingChange> patchChanges = new List<PendingChange>(pcs.GetSelection());
                 e.GetService<IPendingChangeHandler>().CreatePatch(patchChanges, pca);
-            }            
+            }
         }
 
         private static string GetFileName(IWin32Window dialogOwner)

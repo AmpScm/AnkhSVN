@@ -24,7 +24,7 @@ using Ankh.Commands;
 using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges.Synchronize
-{    
+{
     class SynchronizeListView : ListViewWithSelection<SynchronizeListItem>
     {
         IAnkhServiceProvider _context;
@@ -41,9 +41,9 @@ namespace Ankh.UI.PendingChanges.Synchronize
         public IAnkhServiceProvider Context
         {
             get { return _context; }
-            set 
-            { 
-                _context = value; 
+            set
+            {
+                _context = value;
                 SelectionPublishServiceProvider = value;
 
                 if (value != null && SmallImageList == null)
@@ -67,19 +67,19 @@ namespace Ankh.UI.PendingChanges.Synchronize
 
         void Initialize()
         {
-            SmartColumn path = new SmartColumn(this, PCStrings.PathColumn, 288);
-            SmartColumn project = new SmartColumn(this, PCStrings.ProjectColumn, 76);
-            SmartColumn localChange = new SmartColumn(this, PCStrings.LocalChangeColumn, 102);
-            SmartColumn remoteChange = new SmartColumn(this, PCStrings.RemoteChangeColumn, 102);
-            SmartColumn fullPath = new SmartColumn(this, PCStrings.FullPathColumn, 327);
+            SmartColumn path = new SmartColumn(this, PCStrings.PathColumn, 288, "Path");
+            SmartColumn project = new SmartColumn(this, PCStrings.ProjectColumn, 76, "Project");
+            SmartColumn localChange = new SmartColumn(this, PCStrings.LocalChangeColumn, 102, "LocalChange");
+            SmartColumn remoteChange = new SmartColumn(this, PCStrings.RemoteChangeColumn, 102, "RemoteChange");
+            SmartColumn fullPath = new SmartColumn(this, PCStrings.FullPathColumn, 327, "FullPath");
 
-            SmartColumn changeList = new SmartColumn(this, PCStrings.ChangeListColumn, 76);
-            SmartColumn folder = new SmartColumn(this, PCStrings.FolderColumn, 196);
-            SmartColumn locked = new SmartColumn(this, PCStrings.LockedColumn, 38);
-            SmartColumn modified = new SmartColumn(this, PCStrings.ModifiedColumn, 76);
-            SmartColumn name = new SmartColumn(this, PCStrings.NameColumn, 76);
-            SmartColumn type = new SmartColumn(this, PCStrings.TypeColumn, 76);
-            SmartColumn workingCopy = new SmartColumn(this, PCStrings.WorkingCopyColumn, 76);
+            SmartColumn changeList = new SmartColumn(this, PCStrings.ChangeListColumn, 76, "ChangeList");
+            SmartColumn folder = new SmartColumn(this, PCStrings.FolderColumn, 196, "Folder");
+            SmartColumn locked = new SmartColumn(this, PCStrings.LockedColumn, 38, "Locked");
+            SmartColumn modified = new SmartColumn(this, PCStrings.ModifiedColumn, 76, "Modified");
+            SmartColumn name = new SmartColumn(this, PCStrings.NameColumn, 76, "Name");
+            SmartColumn type = new SmartColumn(this, PCStrings.TypeColumn, 76, "Type");
+            SmartColumn workingCopy = new SmartColumn(this, PCStrings.WorkingCopyColumn, 76, "WorkingCopy");
 
             Columns.AddRange(new ColumnHeader[]
             {
@@ -107,11 +107,11 @@ namespace Ankh.UI.PendingChanges.Synchronize
                 {
                     return x.SvnItem.Modified.CompareTo(y.SvnItem.Modified);
                 });
-            
+
             AllColumns.Add(changeList);
             AllColumns.Add(folder);
             AllColumns.Add(fullPath);
-            AllColumns.Add(localChange);            
+            AllColumns.Add(localChange);
             AllColumns.Add(locked);
             AllColumns.Add(modified);
             AllColumns.Add(name);

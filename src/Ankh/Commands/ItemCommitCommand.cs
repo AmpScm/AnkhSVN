@@ -43,18 +43,20 @@ namespace Ankh.Commands
                     continue;
                 else if (i.InSolution && i.IsVersionable)
                     return; // The file is 'to be added'
-            }          
+            }
 
             e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
-        {            
+        {
             using (ProjectCommitDialog pcd = new ProjectCommitDialog())
             {
                 pcd.Context = e.Context;
                 pcd.LogMessageText = storedLogMessage;
                 pcd.IssueNumberText = storedIssueNumber;
+
+                pcd.PreserveWindowPlacement = true;
 
                 pcd.LoadItems(e.Selection.GetSelectedSvnItems(true));
 
@@ -73,7 +75,7 @@ namespace Ankh.Commands
                 pcd.FillArgs(pca);
 
                 e.GetService<IPendingChangeHandler>().Commit(toCommit, pca);
-            }            
+            }
 
             // not in the finally, because we want to preserve the message for a 
             // non-successful commit

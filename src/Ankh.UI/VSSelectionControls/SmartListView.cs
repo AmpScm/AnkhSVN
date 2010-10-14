@@ -789,6 +789,35 @@ namespace Ankh.UI.VSSelectionControls
             base.WndProc(ref m);
         }
 
+        public IDictionary<string, int> GetColumnWidths()
+        {
+            IDictionary<string, int> widths = new Dictionary<string, int>(_allColumns.Count);
+
+            foreach (SmartColumn item in _allColumns)
+            {
+                if (!string.IsNullOrEmpty(item.Name))
+                {
+                    widths.Add(item.Name, item.DefaultWidth == item.Width ? -1 : item.Width);
+                }
+            }
+
+            return widths;
+        }
+
+        public void SetColumnWidths(IDictionary<string, int> widths)
+        {
+            if (widths == null || widths.Count == 0)
+                return;
+
+            foreach (SmartColumn item in _allColumns)
+            {
+                if (!string.IsNullOrEmpty(item.Name) && widths.ContainsKey(item.Name))
+                {
+                    item.Width = widths[item.Name];
+                }
+            }
+        }
+
         private void PerformSelectAllCheckedChange(CancelEventArgs ce)
         {
             OnSelectAllCheckedChanging(ce);

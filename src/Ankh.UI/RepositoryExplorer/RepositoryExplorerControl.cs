@@ -15,6 +15,7 @@
 //  limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -37,6 +38,12 @@ namespace Ankh.UI.RepositoryExplorer
     /// </summary>
     public partial class RepositoryExplorerControl : AnkhToolWindowControl
     {
+        IAnkhConfigurationService _configurationService;
+        protected IAnkhConfigurationService ConfigurationService
+        {
+            get { return _configurationService ?? (_configurationService = Context.GetService<IAnkhConfigurationService>()); }
+        }
+
         public RepositoryExplorerControl()
         {
             // This call is required by the Windows.Forms Form Designer.
@@ -80,6 +87,16 @@ namespace Ankh.UI.RepositoryExplorer
             fileView.Context = Context;
             treeView.SelectionPublishServiceProvider = Context;
             fileView.SelectionPublishServiceProvider = Context;
+
+            fileView.ColumnWidthChanged += new ColumnWidthChangedEventHandler(fileView_ColumnWidthChanged);
+            IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
+            fileView.SetColumnWidths(widths);
+        }
+
+        protected void fileView_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        {
+            IDictionary<string, int> widths = fileView.GetColumnWidths();
+            ConfigurationService.SaveColumnsWidths(GetType(), widths);
         }
 
         /// <summary>

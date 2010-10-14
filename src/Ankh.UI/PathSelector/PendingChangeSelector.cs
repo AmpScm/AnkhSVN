@@ -56,7 +56,17 @@ namespace Ankh.UI.PathSelector
                 pendingList.SelectionPublishServiceProvider = Context;
             }
 
+            pendingList.ColumnWidthChanged += new ColumnWidthChangedEventHandler(pendingList_ColumnWidthChanged);
+            IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
+            pendingList.SetColumnWidths(widths);
+
             Reload();
+        }
+
+        protected void pendingList_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        {
+            IDictionary<string, int> widths = pendingList.GetColumnWidths();
+            ConfigurationService.SaveColumnsWidths(GetType(), widths);
         }
 
         IEnumerable<SvnItem> _allItems;
