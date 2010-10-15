@@ -50,14 +50,14 @@
         if ((g = m.Groups["issue"]).Success && !string.IsNullOrEmpty(g.Value))
         {
           XmlElement a = doc.CreateElement("a", html);
-          a.SetAttribute("href", "http://ankhsvn.net/issues/?id=" + g.Value);
+          a.SetAttribute("href", "http://ankhsvn.net/issues/" + g.Value);
           a.InnerText = m.Value;
           el.AppendChild(a);
         }
         else if ((g = m.Groups["rev"]).Success && !string.IsNullOrEmpty(g.Value))
         {
           XmlElement a = doc.CreateElement("a", html);
-          a.SetAttribute("href", "http://ankhsvn.net/rev/?r=" + g.Value);
+          a.SetAttribute("href", "http://ankhsvn.net/rev/" + g.Value);
           a.InnerText = m.Value;
           el.AppendChild(a);
         }
@@ -167,7 +167,7 @@
           <xsl:value-of select="' '"/>
         </td>
         <td class="r">
-          <a id="{@revision}" href="http://ankhsvn.net/rev/?r={@revision}">
+          <a id="{@revision}" href="http://ankhsvn.net/rev/{@revision}">
             [r<xsl:value-of select="@revision"/>]
           </a>
         </td>
