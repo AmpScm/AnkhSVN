@@ -99,7 +99,8 @@
 }
 
 /* From Related Projects Box */
-#related-projects { padding-top:15px; }
+#related-projects,
+#collabnet-products { padding-top:15px; }
 
 #box2 ul {list-style-type: none;margin: 0;padding: 0 0 5px 8px;}
 #box2 ul li {width: 145px;background: url(http://www.collab.net/branding/cn_images/bullet_bluearrows_s.gif) no-repeat 0.1em 0.3em;font-size:10px;line-height:15px;font-weight:normal;padding-top: 0;padding-left: 1.20em;margin-bottom: 8px;}
