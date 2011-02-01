@@ -121,6 +121,8 @@
       <RemoveExistingProducts After="InstallInitialize">PREVIOUSVERSIONINSTALLED&lt;&gt;"" OR EXACTVERSIONINSTALLED&lt;&gt;""</RemoveExistingProducts>
     </InstallExecuteSequence>
 
+    <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
+
     <Property Id="ApplicationFolderName" Value="AnkhSVN 2" />
     <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
 
