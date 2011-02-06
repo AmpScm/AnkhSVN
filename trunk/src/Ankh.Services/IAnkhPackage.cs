@@ -43,6 +43,8 @@ namespace Ankh.UI
         void ShowToolWindow(AnkhToolWindow window);
         void ShowToolWindow(AnkhToolWindow window, int id, bool create);
 
+        void CloseToolWindow(AnkhToolWindow toolWindow, int id, Microsoft.VisualStudio.Shell.Interop.__FRAMECLOSE frameClose);
+
         void RegisterIdleProcessor(IAnkhIdleProcessor processor);
         void UnregisterIdleProcessor(IAnkhIdleProcessor processor);
 

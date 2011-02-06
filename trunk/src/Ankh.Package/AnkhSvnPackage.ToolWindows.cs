@@ -83,7 +83,7 @@ namespace Ankh.VSPackage
         public void ShowToolWindow(AnkhToolWindow toolWindow, int id, bool create)
         {
             ToolWindowPane pane = FindToolWindow(GetPaneType(toolWindow), id, create);
-
+            
             IVsWindowFrame frame = pane.Frame as IVsWindowFrame;
             if (frame == null)
             {
@@ -91,6 +91,17 @@ namespace Ankh.VSPackage
             }
             // Bring the tool window to the front and give it focus
             Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(frame.Show());
+        }
+
+        public void CloseToolWindow(AnkhToolWindow toolWindow, int id, __FRAMECLOSE frameClose)
+        {
+            ToolWindowPane pane = FindToolWindow(GetPaneType(toolWindow), id, false);
+            
+            IVsWindowFrame frame = pane.Frame as IVsWindowFrame;
+            if (frame == null)
+                return;
+
+            ErrorHandler.ThrowOnFailure(frame.CloseFrame((uint) frameClose));
         }
 
         AmbientProperties _ambientProperties;
