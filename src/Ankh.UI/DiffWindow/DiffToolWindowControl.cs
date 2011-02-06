@@ -40,6 +40,11 @@ namespace Ankh.UI.DiffWindow
             InitializeComponent();
         }
 
+        IAnkhPackage Package
+        {
+            get { return Context.GetService<IAnkhPackage>(); }
+        }
+
         /// <summary>
         /// Called when the frame is created
         /// </summary>
@@ -50,7 +55,7 @@ namespace Ankh.UI.DiffWindow
 
             ToolWindowHost.CommandContext = AnkhId.DiffMergeContextGuid;
             ToolWindowHost.KeyboardContext = AnkhId.DiffMergeContextGuid;
-
+            
         }
 
         protected override void OnLoad(EventArgs e)
@@ -104,6 +109,22 @@ namespace Ankh.UI.DiffWindow
         private void Clear()
         {
             //throw new NotImplementedException();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch(keyData)
+            {
+                case Keys.Escape:
+                    CloseToolWindow();
+                    return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void CloseToolWindow()
+        {
+            Package.CloseToolWindow(AnkhToolWindow.Diff, _nFrame, __FRAMECLOSE.FRAMECLOSE_NoSave);
         }
 
         private void GetFileLines(string strA, string strB, out Collection<string> A, out Collection<string> B)
