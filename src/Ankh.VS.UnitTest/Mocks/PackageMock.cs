@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ankh;
 using Ankh.UI;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace AnkhSvn_UnitTestProject.Mocks
 {
@@ -39,6 +41,11 @@ namespace AnkhSvn_UnitTestProject.Mocks
             }
 
             public void ShowToolWindow(Ankh.AnkhToolWindow window, int id, bool create)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void CloseToolWindow(AnkhToolWindow toolWindow, int id, __FRAMECLOSE frameClose)
             {
                 throw new NotImplementedException();
             }
