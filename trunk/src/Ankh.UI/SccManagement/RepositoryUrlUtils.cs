@@ -74,7 +74,17 @@ namespace Ankh.UI.SccManagement
 
             GC.KeepAlive(context); // Allow future external hints
 
-            string path = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
+            string path;
+            if (uri.IsUnc)
+            {
+                string p = uri.GetComponents(UriComponents.Host | UriComponents.Path, UriFormat.SafeUnescaped);
+                if(string.IsNullOrEmpty(p))
+                    return false;
+
+                path = "//" + p;
+            }
+            else
+                path = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
 
             if (string.IsNullOrEmpty(path))
                 return false;
