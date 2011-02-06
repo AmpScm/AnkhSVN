@@ -79,7 +79,7 @@ namespace Ankh.UI.SccManagement
             if (string.IsNullOrEmpty(path))
                 return false;
 
-            if (path[0] != '/')
+            if (path[0] != '/' && !uri.IsFile) // Don't do this for files, because it will cause duplicate drive roots
                 path = '/' + path;
             if (path[path.Length - 1] != '/')
                 path += '/';
