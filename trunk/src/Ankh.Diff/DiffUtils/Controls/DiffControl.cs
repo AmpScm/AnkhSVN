@@ -72,6 +72,27 @@ namespace Ankh.Diff.DiffUtils.Controls
             ViewLineDiff.GotFocus += EH;
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch(keyData)
+            {
+                case Keys.Up | Keys.Control | Keys.Shift:
+                    GoToFirstDiff();
+                    return true;
+                case Keys.Up|Keys.Control:
+                    GoToPreviousDiff();
+                    return true;
+                case Keys.Down | Keys.Control:
+                    GoToNextDiff();
+                    return true;
+                case Keys.Down | Keys.Control|Keys.Shift:
+                    GoToLastDiff();
+                    return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         public void SetData(IList<string> StringListA, IList<string> StringListB, EditScript Script)
         {
             SetData(StringListA, StringListB, Script, "", "");
