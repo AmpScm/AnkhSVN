@@ -97,26 +97,31 @@
       <Name>Ankh.Ids</Name>
       <Project>{61d343cf-77ba-4ef2-96f5-e0d4efd04844}</Project>
       <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
     <ProjectReference Include="Ankh.Migrate\Ankh.Migrate.csproj">
       <Name>Ankh.Migrate</Name>
       <Project>{1ad899a2-9283-4ab6-9426-e251e5772196}</Project>
       <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
     <ProjectReference Include="Ankh.Package\Ankh.Package.csproj">
       <Name>Ankh.Package</Name>
       <Project>{fa90174c-5763-46e8-9c95-328ca8451072}</Project>
       <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
     <ProjectReference Include="Ankh.Scc\Ankh.Scc.csproj">
       <Name>Ankh.Scc</Name>
       <Project>{ece36a69-dd85-4aab-b329-12bae4675056}</Project>
       <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
     <ProjectReference Include="Ankh.Services\Ankh.Services.csproj">
       <Name>Ankh.Services</Name>
       <Project>{d90a8e89-66b2-451e-8b31-3d86f0cd4afb}</Project>
       <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
     <ProjectReference Include="Ankh.Trigger\Ankh.Trigger.csproj">
       <Name>Ankh.Trigger</Name>
@@ -127,26 +132,31 @@
       <Name>Ankh.UI</Name>
       <Project>{ac32dd7a-4fc3-42c5-afa7-ade81f13a6de}</Project>
       <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
     <ProjectReference Include="Ankh.VS\Ankh.VS.csproj">
       <Name>Ankh.VS</Name>
       <Project>{906e3f01-cd79-4f80-bca7-1105224328c4}</Project>
       <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
     <ProjectReference Include="Ankh\Ankh.csproj">
       <Name>Ankh</Name>
       <Project>{ce58aac8-2271-4223-882f-0cd1a7105a52}</Project>
       <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
     <ProjectReference Include="Utils\Utils.csproj">
       <Name>Utils</Name>
       <Project>{a3248e1e-8272-4227-af02-bb86040fbed9}</Project>
       <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
