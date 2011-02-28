@@ -949,6 +949,15 @@ namespace Ankh.UI.VS.TextEditor
                 Guid roles = Vs2010TextBufferUserDataGuid.VsTextViewRoles_guid;
                 IVsUserData userData = _textBuffer as IVsUserData;
 
+                // The documentation says these context apply to the text buffer.
+                // Do it here just to be sure.
+                if (userData != null)
+                    userData.SetData(ref roles, "INTERACTIVE");
+
+                // But VS2010 requires it on the code window, in VS2008 this
+                // interface is not implemented here.
+                userData = codeWindow as IVsUserData;
+
                 if (userData != null)
                     userData.SetData(ref roles, "INTERACTIVE");
             }
