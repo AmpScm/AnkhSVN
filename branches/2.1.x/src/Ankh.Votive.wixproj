@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>3.0</ProductVersion>
+    <ProductVersion>3.5</ProductVersion>
     <ProjectGuid>{94f8e63f-0ade-40c1-ba57-2f50fe88ecd2}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>AnkhSVN</OutputName>
@@ -19,7 +19,8 @@
     <DefineConstants>Debug;SharpSvn_NoXml=yes</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
-    <OutputPath>Ankh.Votive\bin\Debug\</OutputPath>
+    <OutputPath>Ankh.Votive\bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>Ankh.Votive\obj\$(Configuration)\</IntermediateOutputPath>
     <SuppressPdbOutput>False</SuppressPdbOutput>
     <SuppressSpecificWarnings>1080</SuppressSpecificWarnings>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
@@ -40,7 +41,8 @@
     <DefineConstants>SharpSvn_NoXml=yes</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
-    <OutputPath>Ankh.Votive\bin\Release\</OutputPath>
+    <OutputPath>Ankh.Votive\bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>Ankh.Votive\obj\$(Configuration)\</IntermediateOutputPath>
     <SuppressPdbOutput>False</SuppressPdbOutput>
     <SuppressSpecificWarnings>1080</SuppressSpecificWarnings>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
@@ -197,7 +199,7 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <CompileDependsOn>$(AddCompilerDefineConstantsDependsOn);AddVersionDefines</CompileDependsOn>
+    <CompileDependsOn>$(CompileDependsOn);AddVersionDefines</CompileDependsOn>
   </PropertyGroup>
   <Target Name="AddVersionDefines" DependsOnTargets="AddProjectReferenceDefineConstants">
     <GetAssemblyIdentity AssemblyFiles="Ankh.ExtensionPoints\bin\$(Configuration)\Ankh.ExtensionPoints.dll">
