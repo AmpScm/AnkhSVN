@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -257,6 +258,7 @@ namespace Ankh.Scc
             }
 
             if (maybeAdd != null)
+            {
                 using (SvnClient cl = GetService<ISvnClientPool>().GetNoUIClient())
                 {
                     foreach (string file in maybeAdd)
@@ -277,10 +279,51 @@ namespace Ankh.Scc
                             aa.AddParents = true;
 
                             cl.Add(item.FullPath, aa);
+
+                            // Detect if we have a file that Subversion might detect as binary
+                            if (!item.IsTextFile)
+                            {
+                                // Only check small files, avoid checking big binary files
+                                FileInfo fi = new FileInfo(item.FullPath);
+                                if (fi.Length < 10)
+                                {
+                                    // We're sure it's at most 10 bytes here, so just read all
+                                    byte[] fileBytes = File.ReadAllBytes(item.FullPath);
+
+                                    // If the file starts with a BOM, we're sure enough it's a text file.
+                                    if (StartsWith(fileBytes, new byte[] {0xEF, 0xBB, 0xBF}) ||
+                                        StartsWith(fileBytes, new byte[] {0xFE, 0xFF}) ||
+                                        StartsWith(fileBytes, new byte[] {0xFF, 0xFE}) ||
+                                        StartsWith(fileBytes, new byte[] {0x00, 0x00, 0xFE, 0xFF}) ||
+                                        StartsWith(fileBytes, new byte[] {0xFF, 0xFE, 0x00, 0x00}))
+                                    {
+                                        // Delete the mime type property, so it's detected as a text file again
+                                        cl.DeleteProperty(item.FullPath, SvnPropertyNames.SvnMimeType);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+            }
+        }
 
+        static bool StartsWith(byte[] haystack, byte[] needle)
+        {
+            if (haystack == null)
+                return false;
+            if (needle == null)
+                return false;
+            if (needle.Length > haystack.Length)
+                return false;
+
+            for (int i = 0; i < needle.Length; i++)
+            {
+                if (haystack[i] != needle[i])
+                    return false;
+            }
+
+            return true;
         }
 
         public void ScheduleSvnStatus(string path)

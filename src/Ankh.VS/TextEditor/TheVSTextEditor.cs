@@ -105,6 +105,21 @@ namespace Ankh.UI.VS.TextEditor
             }
         }
 
+        bool _notInteractiveEditor;
+
+        [Localizable(false), DefaultValue(true), DesignOnly(true)]
+        public bool InteractiveEditor
+        {
+            get { return !_notInteractiveEditor; }
+            set
+            {
+                _notInteractiveEditor = ! value;
+
+                if (_nativeWindow != null)
+                    _nativeWindow.InteractiveEditor = value;
+            }
+        }
+
         public Point ViewToBuffer(Point p)
         {
             if (_nativeWindow == null)
@@ -294,6 +309,7 @@ namespace Ankh.UI.VS.TextEditor
                 // Set init only values
                 _nativeWindow.EnableSplitter = EnableSplitter;
                 _nativeWindow.EnableNavigationBar = EnableNavigationBar;
+                _nativeWindow.InteractiveEditor = InteractiveEditor;
 
                 _nativeWindow.Init(allowModal, ForceLanguageService);
 
@@ -863,6 +879,13 @@ namespace Ankh.UI.VS.TextEditor
             set { _enableDropDownBar = value; }
         }
 
+        bool _interactiveEditor;
+        public bool InteractiveEditor
+        {
+            get { return _interactiveEditor; }
+            set { _interactiveEditor = value; }
+        }
+
         #endregion
 
         #region Methods
@@ -919,6 +942,24 @@ namespace Ankh.UI.VS.TextEditor
                 Guid languageService = forceLanguageService.Value;
 
                 SetLanguageServiceInternal(languageService);
+            }
+
+            if (InteractiveEditor)
+            {
+                Guid roles = Vs2010TextBufferUserDataGuid.VsTextViewRoles_guid;
+                IVsUserData userData = _textBuffer as IVsUserData;
+
+                // The documentation says these context apply to the text buffer.
+                // Do it here just to be sure.
+                if (userData != null)
+                    userData.SetData(ref roles, "INTERACTIVE");
+
+                // But VS2010 requires it on the code window, in VS2008 this
+                // interface is not implemented here.
+                userData = codeWindow as IVsUserData;
+
+                if (userData != null)
+                    userData.SetData(ref roles, "INTERACTIVE");
             }
 
             ErrorHandler.ThrowOnFailure(codeWindow.SetBuffer((IVsTextLines)_textBuffer));
@@ -1376,6 +1417,128 @@ namespace Ankh.UI.VS.TextEditor
             else
                 return new Point(-1, -1); // Not represented in view
         }
+
+
+        #region From the VS2010 SDK: VSConstants.cs
+
+        /// <summary>
+        /// These are IVsUserData properties that are supported by the TextBuffer (DocData) object
+        /// of the Source Code (Text) Editor. The IVsUserData interface is retrieved by 
+        /// QueryInterface on the IVsTextLines object of the Text Editor.
+        /// </summary>
+        public static class Vs2010TextBufferUserDataGuid
+        {
+            /// <summary>string: Moniker of document loaded in the buffer. It will be the full path of file if the document is a file.</summary>
+            public const string VsBufferMoniker_string = "{978A8E17-4DF8-432A-9623-D530A26452BC}";
+            /// <summary>string: Moniker of document loaded in the TextBuffer. It will be the full path of file if the document is a file.</summary>
+            public static readonly Guid VsBufferMoniker_guid = new Guid(VsBufferMoniker_string);
+
+            /// <summary>bool: true if buffer is a file on disk</summary>
+            public const string VsBufferIsDiskFile_string = "{D9126592-1473-11D3-BEC6-0080C747D9A0}";
+            /// <summary>bool: true if buffer is a file on disk</summary>
+            public static readonly Guid VsBufferIsDiskFile_guid = new Guid(VsBufferIsDiskFile_string);
+
+            /// <summary>uint: VS Text File Format (VSTFF) for buffer. codepage = bufferVSTFF & __VSTFF.VSTFF_CPMASK; vstffFlags = bufferVSTFF & __VSTFF.VSTFF_FLAGSMASK;</summary>
+            public const string VsBufferEncodingVSTFF_string = "{16417F39-A6B7-4C90-89FA-770D2C60440B}";
+            /// <summary>uint: VS Text File Format (VSTFF) for buffer. codepage = bufferVSTFF & __VSTFF.VSTFF_CPMASK; vstffFlags = bufferVSTFF & __VSTFF.VSTFF_FLAGSMASK;</summary>
+            public static readonly Guid VsBufferEncodingVSTFF_guid = new Guid(VsBufferEncodingVSTFF_string);
+
+            /// <summary>uint: This should only be used by editor factories that want to specify a codepage on loading from the openwith dialog. 
+            /// This data is only for a set purpose.  You cannot get the value of this back.
+            /// </summary>
+            public const string VsBufferEncodingPromptOnLoad_string = "{99EC03F0-C843-4C09-BE74-CDCA5158D36C}";
+            /// <summary>uint: This should only be used by editor factories that want to specify a codepage on loading from the openwith dialog. 
+            /// This data is only for a set purpose.  You cannot get the value of this back.
+            /// </summary>
+            public static readonly Guid VsBufferEncodingPromptOnLoad_guid = new Guid(VsBufferEncodingPromptOnLoad_string);
+
+            /// <summary>bool: If true and the current BufferEncoding is CHARFMT_MBCS, the buffer will runs it's HTML charset tag detection code to determine a codepage to load and save the file. The detected codepage overrides any codepage set in CHARFMT_MBCS.
+            /// This is forced on in the buffer's IPersistFileFormat::LoadDocData when it sees an HTML type of file, according to the extension mapping in "$RootKey$\Languages\File Extensions".
+            /// </summary>
+            public const string VsBufferDetectCharSet_string = "{36358D1F-BF7E-11D1-B03A-00C04FB68006}";
+            /// <summary>bool: If true and the current BufferEncoding is CHARFMT_MBCS, the buffer will runs it's HTML charset tag detection code to determine a codepage to load and save the file. The detected codepage overrides any codepage set in CHARFMT_MBCS.
+            /// This is forced on in the buffer's IPersistFileFormat::LoadDocData when it sees an HTML type of file, according to the extension mapping in "$RootKey$\Languages\File Extensions".
+            /// </summary>
+            public static readonly Guid VsBufferDetectCharSet_guid = new Guid(VsBufferDetectCharSet_string);
+
+            /// <summary>bool: (default = true) If true then a change to the buffer's moniker will cause the buffer to change the language service 
+            /// based on the file extension of the moniker.
+            /// </summary>
+            public const string VsBufferDetectLangSID_string = "{17F375AC-C814-11D1-88AD-0000F87579D2}";
+            /// <summary>bool: (default = true) If true then a change to the buffer's moniker will cause the buffer to change the language service 
+            /// based on the file extension of the moniker.
+            /// </summary>
+            public static readonly Guid VsBufferDetectLangSID_guid = new Guid(VsBufferDetectLangSID_string);
+
+            /// <summary>string: This property will be used to set the SEID_PropertyBrowserSID element of the selection for text views.  
+            /// This is only used if you have a custom property browser. If this property is not set, the standard property browser 
+            /// will be associated with the view.
+            /// </summary>
+            public const string PropertyBrowserSID_string = "{CE6DDBBA-8D13-11D1-8889-0000F87579D2}";
+            /// <summary>string: This property will be used to set the SEID_PropertyBrowserSID element of the selection for text views.  
+            /// This is only used if you have a custom property browser. If this property is not set, the standard property browser 
+            /// will be associated with the view.
+            /// </summary>
+            public static readonly Guid PropertyBrowserSID_guid = new Guid(PropertyBrowserSID_string);
+
+            /// <summary>string: This property provides a specific error message for when the buffer originates the BUFFER_E_READONLY error.
+            /// Set this string to be the (localized) text you want displayed to the user.  Note that the buffer itself does not 
+            /// put up UI, but only calls IVsUIShell::SetErrorInfo. The caller can decide whether to show the message to the user.
+            /// </summary>
+            public const string UserReadOnlyErrorString_string = "{A3BCFE56-CF1B-11D1-88B1-0000F87579D2}";
+            /// <summary>string: This property provides a specific error message for when the buffer originates the BUFFER_E_READONLY error.
+            /// Set this string to be the (localized) text you want displayed to the user.  Note that the buffer itself does not 
+            /// put up UI, but only calls IVsUIShell::SetErrorInfo. The caller can decide whether to show the message to the user.
+            /// </summary>
+            public static readonly Guid UserReadOnlyErrorString_guid = new Guid(UserReadOnlyErrorString_string);
+
+            /// <summary>object: This property is used to get access to the buffer's storage object.
+            /// The returned pointer can be QI'd for IVsTextStorage and IVsPersistentTextImage.  
+            /// This is a get-only property. To set the storage, use the buffer's InitializeContentEx method.
+            /// </summary>
+            public const string BufferStorage_string = "{D97F167A-638E-11D2-88F6-0000F87579D2}";
+            /// <summary>object: This property is used to get access to the buffer's storage object.
+            /// The returned pointer can be QI'd for IVsTextStorage and IVsPersistentTextImage.  
+            /// This is a get-only property. To set the storage, use the buffer's InitializeContentEx method.
+            /// </summary>
+            public static readonly Guid BufferStorage_guid = new Guid(BufferStorage_string);
+
+            /// <summary>object: Use this property if the file opened in the buffer is associated with list of extra files under source code control (SCC).
+            /// Set this property with an implementation of IVsBufferExtraFiles in order to control how the buffer handles SCC operations.
+            /// The IVsBufferExtraFiles object set will determine what files are checked out from Source Code Control (SCC) when edits are made to the buffer.
+            /// This property controls the behavior of IVsTextManager2::AttemptToCheckOutBufferFromScc3 and GetBufferSccStatus3 as well as which
+            /// files are passed by the buffer when it calls IVsQueryEditQuerySave2 methods.
+            /// </summary>
+            public const string VsBufferExtraFiles_string = "{FD494BF6-1167-4635-A20C-5C24B2D7B33D}";
+            /// <summary>object: Use this property if the file opened in the buffer is associated with list of extra files under source code control (SCC).
+            /// Set this property with an implementation of IVsBufferExtraFiles in order to control how the buffer handles SCC operations.
+            /// The IVsBufferExtraFiles object set will determine what files are checked out from Source Code Control (SCC) when edits are made to the buffer.
+            /// This property controls the behavior of IVsTextManager2::AttemptToCheckOutBufferFromScc3 and GetBufferSccStatus3 as well as which
+            /// files are passed by the buffer when it calls IVsQueryEditQuerySave2 methods.
+            /// </summary>
+            public static readonly Guid VsBufferExtraFiles_guid = new Guid(VsBufferExtraFiles_string);
+
+            /// <summary>bool: </summary>
+            public const string VsBufferFileReload_string = "{80D2B881-81A3-4F0B-BCF0-70A0054E672F}";
+            /// <summary>bool: </summary>
+            public static readonly Guid VsBufferFileReload_guid = new Guid(VsBufferFileReload_string);
+
+            /// <summary>bool: </summary>
+            public const string VsInitEncodingDialogFromUserData_string = "{C2382D84-6650-4386-860F-248ECB222FC1}";
+            /// <summary>bool: </summary>
+            public static readonly Guid VsInitEncodingDialogFromUserData_guid = new Guid(VsInitEncodingDialogFromUserData_string);
+
+            /// <summary>string: The ContentType for the text buffer.</summary>
+            public const string VsBufferContentType_string = "{1BEB4195-98F4-4589-80E0-480CE32FF059}";
+            /// <summary>string: The ContentType for the text buffer.</summary>
+            public static readonly Guid VsBufferContentType_guid = new Guid(VsBufferContentType_string);
+
+            /// <summary>string: The comma-separated list of text view roles for the text view.</summary>
+            public const string VsTextViewRoles_string = "{297078FF-81A2-43D8-9CA3-4489C53C99BA}";
+            /// <summary>string: The comma-separated list of text view roles for the text view.</summary>
+            public static readonly Guid VsTextViewRoles_guid = new Guid(VsTextViewRoles_string);
+        }
+        #endregion
     }
 }
 

@@ -28,6 +28,7 @@ namespace Ankh.VS.TextEditor
             implementation.HideHorizontalScrollBar = editor.HideHorizontalScrollBar;
             implementation.EnableSplitter = editor.EnableSplitter;
             implementation.EnableNavigationBar = editor.EnableNavigationBar;
+            implementation.InteractiveEditor = editor.InteractiveEditor;
             implementation.ReadOnly = editor.ReadOnly;
             implementation.Text = editor.Text;
 

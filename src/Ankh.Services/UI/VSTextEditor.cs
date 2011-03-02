@@ -21,6 +21,7 @@ namespace Ankh.UI
         bool _readOnly;
         BorderStyle _borderStyle;
         string _text;
+        bool _notInteractive;
 
         public VSTextEditor()
         {
@@ -168,6 +169,13 @@ namespace Ankh.UI
                 if (_implementation != null)
                     _implementation.ReadOnly = value;
             }
+        }
+
+        [DefaultValue(true), DesignOnly(true)]
+        public bool InteractiveEditor
+        {
+            get { return !_notInteractive; }
+            set { _notInteractive = !value; }
         }
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -387,6 +395,7 @@ namespace Ankh.UI
         bool HideHorizontalScrollBar { get; set; }
         bool EnableSplitter { get; set; }
         bool EnableNavigationBar { get; set; }
+        bool InteractiveEditor { get; set; }
         bool ReadOnly { get; set; }
         string Text { get; set; }
 
