@@ -150,9 +150,9 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\SlickEdit\\win\\VSDiff.exe",
                 "-r1 $(ReadOnly?'-r2 ')'$(Base)' '$(Mine)'", true));
 
-            tools.Add(new DiffTool(this, "DevArtCodeCompare", "DevArt CodeCompare",
-                SubPath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "ExecutablePath"), "CodeComp.exe")
-                    ?? "$(ProgramFiles)\\Devart\\CodeCompare\\CodeComp.exe",
+            tools.Add(new DiffTool(this, "DevartCodeCompare", "Devart CodeCompare",
+                SubPath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "ExecutablePath"), "CodeCompare.exe")
+                    ?? "$(ProgramFiles)\\Devart\\CodeCompare\\CodeCompare.exe",
                 "/WAIT /SC=SVN /t1='$(BaseName)' /t2='$(MineName)' '$(Base)' '$(Mine)'", true));
 
             LoadRegistryTools(DiffToolMode.Diff, tools);
@@ -228,7 +228,7 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\SlickEdit\\win\\vsmerge.exe",
                 "-smart '$(Base)' '$(Mine)' '$(Theirs)' '$(Merged)'", true));
 
-            tools.Add(new DiffTool(this, "DevArtCodeCompare", "DevArt CodeCompare",
+            tools.Add(new DiffTool(this, "DevartCodeCompare", "Devart CodeCompare",
                 SubPath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "ExecutablePath"), "CodeMerge.exe")
                     ?? "$(ProgramFiles)\\Devart\\CodeCompare\\CodeMerge.exe",
                 "/WAIT /SC=SVN /REMOVEFILES '/BF=$(Base)' '/MF=$(Mine)' '/MT=$(MineName)' " +
