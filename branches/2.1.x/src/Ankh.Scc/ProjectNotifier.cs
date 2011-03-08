@@ -290,12 +290,8 @@ namespace Ankh.Scc
                                     // We're sure it's at most 10 bytes here, so just read all
                                     byte[] fileBytes = File.ReadAllBytes(item.FullPath);
 
-                                    // If the file starts with a BOM, we're sure enough it's a text file.
-                                    if (StartsWith(fileBytes, new byte[] {0xEF, 0xBB, 0xBF}) ||
-                                        StartsWith(fileBytes, new byte[] {0xFE, 0xFF}) ||
-                                        StartsWith(fileBytes, new byte[] {0xFF, 0xFE}) ||
-                                        StartsWith(fileBytes, new byte[] {0x00, 0x00, 0xFE, 0xFF}) ||
-                                        StartsWith(fileBytes, new byte[] {0xFF, 0xFE, 0x00, 0x00}))
+                                    // If the file starts with a UTF8 BOM, we're sure enough it's a text file, keep UTF16 & 32 binary
+                                    if (StartsWith(fileBytes, new byte[] {0xEF, 0xBB, 0xBF}))
                                     {
                                         // Delete the mime type property, so it's detected as a text file again
                                         cl.DeleteProperty(item.FullPath, SvnPropertyNames.SvnMimeType);
