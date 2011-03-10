@@ -137,6 +137,7 @@
       <Name>Ankh.Trigger</Name>
       <Project>{d81a44b8-57a9-4296-832c-7d29019d989b}</Project>
       <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
     <ProjectReference Include="Ankh.UI\Ankh.UI.csproj">
       <Name>Ankh.UI</Name>
