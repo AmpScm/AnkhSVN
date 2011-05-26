@@ -295,5 +295,8 @@ namespace Ankh
 
         PendingChangesConfigureRecentChangesPage,
         ShowSubversionInfo,
+
+        UpdateProjectFileSpecific,
+        CommitProjectFile,
     }
 }

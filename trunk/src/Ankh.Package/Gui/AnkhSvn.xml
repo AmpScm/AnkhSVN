@@ -294,8 +294,14 @@
       </Menu>
       <Menu id="Menu_ProjectFileScc" name="ProjectFile" priority="0x3000" text="Pro&amp;ject File">
         <Group id="Menu_ProjectFileScc" priority="0x100">
-          <ButtonRef id="Cmd_UpdateItemSpecific" priority="0x100" />
-          <ButtonRef id="Cmd_CommitItem" priority="0x200" />
+          <Button id="Cmd_UpdateProjectFileSpecific" name="UpdateItemSpecific" priority="0x100"
+                text="&amp;Update Project File to Specific Version..."
+                toolTip="Updates local items with changes from the Subversion repository."
+                iconFile="PendingChanges/UpdateSpecific.png" defaultInvisible="true"/>
+          <Button id="Cmd_CommitProjectFile" name="CommitItem" priority="0x200"
+                text="&amp;Commit..."
+                toolTip="Commit Project File to the Subversion repository."
+                iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
           <ButtonRef id="Cmd_ItemShowChanges" priority="0x300" />
           <ButtonRef id="Cmd_ItemShowPropertyChanges" priority="0x380" />
           <ButtonRef id="Cmd_Log" priority="0x400" />
