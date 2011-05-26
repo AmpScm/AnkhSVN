@@ -25,6 +25,7 @@ namespace Ankh.Commands
     /// Command to commit selected items to the Subversion repository.
     /// </summary>
     [Command(AnkhCommand.CommitItem)]
+    [Command(AnkhCommand.CommitProjectFile)]
     class ItemCommitCommand : CommandBase
     {
         string storedLogMessage;
@@ -32,7 +33,9 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
+            bool recursive = (e.Command != AnkhCommand.CommitProjectFile);
+
+            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(recursive))
             {
                 if (i.IsVersioned)
                 {

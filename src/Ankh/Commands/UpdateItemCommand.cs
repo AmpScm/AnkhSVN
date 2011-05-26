@@ -29,6 +29,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.UpdateItemSpecific)]
     [Command(AnkhCommand.UpdateItemLatest)]
     [Command(AnkhCommand.UpdateItemLatestRecursive)]
+    [Command(AnkhCommand.UpdateProjectFileSpecific)]
     class UpdateItem : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -53,11 +54,12 @@ namespace Ankh.Commands
                 return;
             }
 
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
-            {
-                if (item.IsVersioned)
-                    return;
-            }
+            if (e.Command != AnkhCommand.UpdateProjectFileSpecific)
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+                {
+                    if (item.IsVersioned)
+                        return;
+                }
             e.Enabled = false;
         }
 
@@ -66,7 +68,8 @@ namespace Ankh.Commands
             SvnRevision updateTo;
             SvnDepth depth;
             List<string> files = new List<string>();
-            if (e.Command == AnkhCommand.UpdateItemSpecific)
+            if (e.Command == AnkhCommand.UpdateItemSpecific
+                || e.Command ==  AnkhCommand.UpdateProjectFileSpecific)
             {
                 IUIShell uiShell = e.GetService<IUIShell>();
 
