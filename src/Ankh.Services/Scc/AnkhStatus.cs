@@ -46,28 +46,30 @@ namespace Ankh
         readonly long _lastChangeRevision;
         readonly long _revision;
 
-        public AnkhStatus(SvnStatusEventArgs args)
+        public AnkhStatus(SvnStatusEventArgs status)
         {
-            if (args == null)
-                throw new ArgumentNullException("args");
+            if (status == null)
+                throw new ArgumentNullException("status");
 
-            _nodeKind = args.NodeKind;
-            _localContentStatus = args.LocalContentStatus;
-            _localCopied = args.LocalCopied;
-            _localPropertyStatus = args.LocalPropertyStatus;
-            _uri = args.Uri;
+            _nodeKind = status.NodeKind;
+            _localContentStatus = status.LocalContentStatus;
+            _localCopied = status.LocalCopied;
+            _localPropertyStatus = status.LocalPropertyStatus;
+            _uri = status.Uri;
 
-            if (args.WorkingCopyInfo != null)
+            // ### This will be a very expensive check in 1.7!!!
+            // But all these properties will move to status anyway.
+            if (status.WorkingCopyInfo != null)
             {
-                _lastChangeTime = args.WorkingCopyInfo.LastChangeTime;
-                _lastChangeRevision = args.WorkingCopyInfo.LastChangeRevision;
-                _lastChangeAuthor = args.WorkingCopyInfo.LastChangeAuthor;
-                _revision = args.WorkingCopyInfo.Revision;
-                _changeList = args.WorkingCopyInfo.ChangeList;
-                _localLocked = args.WorkingCopyInfo.LockToken != null;
+                _lastChangeTime = status.WorkingCopyInfo.LastChangeTime;
+                _lastChangeRevision = status.WorkingCopyInfo.LastChangeRevision;
+                _lastChangeAuthor = status.WorkingCopyInfo.LastChangeAuthor;
+                _revision = status.WorkingCopyInfo.Revision;
+                _changeList = status.WorkingCopyInfo.ChangeList;
+                _localLocked = status.WorkingCopyInfo.LockToken != null;
             }
 
-            _treeConflict = args.TreeConflict;
+            _treeConflict = status.TreeConflict;
             if(_treeConflict != null)
                 _treeConflict.Detach();
         }
