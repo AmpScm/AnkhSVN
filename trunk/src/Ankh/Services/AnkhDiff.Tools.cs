@@ -98,8 +98,10 @@ namespace Ankh.Services
                 "/base:'$(Base)' /mine:'$(Mine)' /basename:'$(BaseName)' /minename:'$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
-                RelativePath(AppIdLocalServerSearch("Merge70.Application"), "Compare.exe")
-                    ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
+                RelativePath(
+                    AppIdLocalServerSearch("Merge7.SVNFS") ??
+                    AppIdLocalServerSearch("Merge70.Application"), "Compare.exe")
+                        ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
                 "/wait /2 /title1:'$(BaseName)' /title2:'$(MineName)' '$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
@@ -174,8 +176,10 @@ namespace Ankh.Services
                 "/mergedname:'$(MergedName)'", true));
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
-                RelativePath(AppIdLocalServerSearch("Merge70.Application"), "Compare.exe")
-                    ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
+                RelativePath(
+                    AppIdLocalServerSearch("Merge7.SVNFS") ??
+                    AppIdLocalServerSearch("Merge70.Application"), "Compare.exe")
+                        ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
                 "/wait /a2 /3 /title1:'$(MineName)' /title2:'$(MergedName)' " +
                     "/title3:'$(MineName)' '$(Mine)' '$(Base)' '$(Theirs)' '$(Merged)'", true));
 
@@ -305,24 +309,46 @@ namespace Ankh.Services
 
             using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("B") + "\\LocalServer32", false))
             {
-                if (rk == null)
-                    return null;
+                if (rk != null)
+                {
+                    string app = rk.GetValue("") as string;
 
-                string app = rk.GetValue("") as string;
-
-                if (!string.IsNullOrEmpty(app))
-                    return GetAppLocation(app);
+                    if (!string.IsNullOrEmpty(app))
+                        return GetAppLocation(app);
+                }
             }
 
             using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("B") + "\\InprocServer32", false))
             {
-                if (rk == null)
-                    return null;
+                if (rk != null)
+                {
+                    string app = rk.GetValue("") as string;
 
-                string app = rk.GetValue("") as string;
+                    if (!string.IsNullOrEmpty(app))
+                        return GetAppLocation(app);
+                }
+            }
 
-                if (!string.IsNullOrEmpty(app))
-                    return GetAppLocation(app);
+            using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("b")))
+            {
+                if (rk != null)
+                {
+                }
+            }
+
+            using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID"))
+            {
+                if (rk != null)
+                {
+                    foreach (string s in rk.GetSubKeyNames())
+                    {
+                        if (string.Equals(s, clsid.ToString("B")))
+                        {
+                            GC.KeepAlive(s);
+                        }
+                        
+                    }
+                }
             }
 
             return null;
