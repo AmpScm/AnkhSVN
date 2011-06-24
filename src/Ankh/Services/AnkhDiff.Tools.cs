@@ -329,28 +329,6 @@ namespace Ankh.Services
                 }
             }
 
-            using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("b")))
-            {
-                if (rk != null)
-                {
-                }
-            }
-
-            using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID"))
-            {
-                if (rk != null)
-                {
-                    foreach (string s in rk.GetSubKeyNames())
-                    {
-                        if (string.Equals(s, clsid.ToString("B")))
-                        {
-                            GC.KeepAlive(s);
-                        }
-                        
-                    }
-                }
-            }
-
             return null;
         }
 
