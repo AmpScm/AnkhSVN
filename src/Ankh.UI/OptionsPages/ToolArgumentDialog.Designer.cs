@@ -111,7 +111,7 @@ namespace Ankh.UI.OptionsPages
             this.macroView.Location = new System.Drawing.Point(12, 65);
             this.macroView.MultiSelect = false;
             this.macroView.Name = "macroView";
-            this.macroView.Size = new System.Drawing.Size(430, 137);
+            this.macroView.Size = new System.Drawing.Size(603, 137);
             this.macroView.TabIndex = 3;
             this.macroView.DoubleClick += new System.EventHandler(this.macroView_DoubleClick);
             // 
@@ -129,7 +129,6 @@ namespace Ankh.UI.OptionsPages
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(627, 243);
             this.Controls.Add(this.textBox);
