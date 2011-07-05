@@ -295,23 +295,5 @@ namespace Ankh
                 return _repositoryUri;
             }
         }
-
-        public string MakeRelativePath(Uri uri)
-        {
-            string uriNormalized = SvnTools.GetNormalizedUri(uri).AbsoluteUri;
-            string sessionNormalized = SvnTools.GetNormalizedUri(SessionUri).AbsoluteUri;
-
-            if (!uriNormalized.StartsWith(sessionNormalized, StringComparison.Ordinal))
-                throw new ArgumentException("Url not below session root");
-
-            if (uriNormalized.Length == sessionNormalized.Length)
-                return "";
-            else if (uriNormalized.Length < sessionNormalized.Length || uriNormalized[sessionNormalized.Length] != '/')
-                throw new ArgumentException("Url not below session root");
-
-            string rest = uriNormalized.Substring(sessionNormalized.Length + 1);
-
-            return Uri.UnescapeDataString(rest);
-        }
     }
 }
