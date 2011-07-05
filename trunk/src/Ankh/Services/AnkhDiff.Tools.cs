@@ -100,7 +100,8 @@ namespace Ankh.Services
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
                 RelativePath(
                     AppIdLocalServerSearch("Merge7.SVNFS") ??
-                    AppIdLocalServerSearch("Merge70.Application"), "Compare.exe")
+                    AppIdLocalServerSearch("Merge70.Application") ??
+                    ShellOpenSearch("Merge.Comparison.7"), "Compare.exe")
                         ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
                 "/wait /2 /title1:'$(BaseName)' /title2:'$(MineName)' '$(Base)' '$(Mine)'", true));
 
@@ -178,7 +179,8 @@ namespace Ankh.Services
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
                 RelativePath(
                     AppIdLocalServerSearch("Merge7.SVNFS") ??
-                    AppIdLocalServerSearch("Merge70.Application"), "Compare.exe")
+                    AppIdLocalServerSearch("Merge70.Application") ??
+                    ShellOpenSearch("Merge.Comparison.7"), "Compare.exe")
                         ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
                 "/wait /a2 /3 /title1:'$(MineName)' /title2:'$(MergedName)' " +
                     "/title3:'$(MineName)' '$(Mine)' '$(Base)' '$(Theirs)' '$(Merged)'", true));
