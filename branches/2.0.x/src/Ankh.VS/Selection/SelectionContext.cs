@@ -315,6 +315,9 @@ namespace Ankh.VS.Selection
                     IVsMultiItemSelect ms;
                     uint itemId;
 
+                    if (hw == null)
+                        return false;
+
                     if (!ErrorHandler.Succeeded(hw.GetCurrentSelection(out hierarchy, out itemId, out ms)))
                         return _isSolutionExplorer = false;
 
