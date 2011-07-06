@@ -47,7 +47,7 @@ namespace Ankh
         TickLast,
 
         // Delayed implementation commands
-        OldActivateSccProvider,
+        NotifyUpgradeRequired,
         NotifyWcToNew,
         ForceUIShow,
 
