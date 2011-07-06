@@ -124,7 +124,7 @@ namespace Ankh.UI.DiffWindow
 
         private void CloseToolWindow()
         {
-            Package.CloseToolWindow(AnkhToolWindow.Diff, _nFrame, __FRAMECLOSE.FRAMECLOSE_NoSave);
+            Package.CloseToolWindow(AnkhToolWindow.Diff, _nFrame, FrameCloseMode.NoSave);
         }
 
         private void GetFileLines(string strA, string strB, out Collection<string> A, out Collection<string> B)

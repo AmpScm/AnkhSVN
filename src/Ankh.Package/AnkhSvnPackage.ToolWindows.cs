@@ -93,15 +93,18 @@ namespace Ankh.VSPackage
             Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(frame.Show());
         }
 
-        public void CloseToolWindow(AnkhToolWindow toolWindow, int id, __FRAMECLOSE frameClose)
+        public void CloseToolWindow(AnkhToolWindow toolWindow, int id, FrameCloseMode close)
         {
             ToolWindowPane pane = FindToolWindow(GetPaneType(toolWindow), id, false);
-            
+
+            if (pane == null)
+                return;
+
             IVsWindowFrame frame = pane.Frame as IVsWindowFrame;
             if (frame == null)
                 return;
 
-            ErrorHandler.ThrowOnFailure(frame.CloseFrame((uint) frameClose));
+            ErrorHandler.ThrowOnFailure(frame.CloseFrame((uint) close));
         }
 
         AmbientProperties _ambientProperties;
