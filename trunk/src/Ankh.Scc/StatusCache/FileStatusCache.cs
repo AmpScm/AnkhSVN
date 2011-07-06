@@ -239,8 +239,6 @@ namespace Ankh.Scc.StatusCache
             }
         }
 
-        bool _notifiedToNew;
-
         /// <summary>
         /// Refreshes the specified path using the specified depth
         /// </summary>
@@ -260,8 +258,6 @@ namespace Ankh.Scc.StatusCache
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            const SvnDepth depth = SvnDepth.Children;
-
             string walkPath = path;
             bool walkingDirectory = false;
 
@@ -271,11 +267,8 @@ namespace Ankh.Scc.StatusCache
                     walkingDirectory = true;
                     break;
                 case SvnNodeKind.File:
-                    if (depth != SvnDepth.Empty)
-                    {
-                        walkPath = SvnTools.GetNormalizedDirectoryName(path);
-                        walkingDirectory = true;
-                    }
+                    walkPath = SvnTools.GetNormalizedDirectoryName(path);
+                    walkingDirectory = true;
                     break;
                 default:
                     try
@@ -292,7 +285,7 @@ namespace Ankh.Scc.StatusCache
             }
 
             SvnStatusArgs args = new SvnStatusArgs();
-            args.Depth = depth;
+            args.Depth = SvnDepth.Children;
             args.RetrieveAllEntries = true;
             args.RetrieveIgnoredEntries = true;
             args.ThrowOnError = false;
@@ -307,9 +300,7 @@ namespace Ankh.Scc.StatusCache
                 if (_dirMap.TryGetValue(walkPath, out directory))
                 {
                     updateDir = directory;
-
-                    if (depth >= SvnDepth.Children)
-                        updateDir.TickAll();
+                    updateDir.TickAll();
                 }
                 else
                 {
@@ -332,13 +323,17 @@ namespace Ankh.Scc.StatusCache
 
                 if (!ok)
                 {
-                    if (!_notifiedToNew &&
-                        args.LastException != null &&
+                    if (args.LastException != null &&
                         args.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_UNSUPPORTED_FORMAT)
                     {
-                        _notifiedToNew = true;
                         if (CommandService != null)
                             CommandService.PostExecCommand(AnkhCommand.NotifyWcToNew, walkPath);
+                    }
+                    else if (args.LastException != null &&
+                             args.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_UPGRADE_REQUIRED)
+                    {
+                        if (CommandService != null)
+                            CommandService.PostExecCommand(AnkhCommand.NotifyUpgradeRequired, walkPath);
                     }
                     statSelf = true;
                 }
@@ -358,7 +353,7 @@ namespace Ankh.Scc.StatusCache
                     // Svn did not stat the items for us.. Let's make something up
 
                     if (walkingDirectory)
-                        StatDirectory(walkPath, depth, directory);
+                        StatDirectory(walkPath, directory);
                     else
                     {
                         // Just stat the item passed and nothing else in the Depth.Empty case
@@ -422,7 +417,7 @@ namespace Ankh.Scc.StatusCache
             }
         }
 
-        private void StatDirectory(string walkPath, SvnDepth depth, SvnDirectory directory)
+        private void StatDirectory(string walkPath, SvnDirectory directory)
         {
             // Note: There is a lock(_lock) around this in our caller
 
@@ -430,9 +425,6 @@ namespace Ankh.Scc.StatusCache
             string adminName = SvnClient.AdministrativeDirectoryName;
             foreach (SccFileSystemNode node in SccFileSystemNode.GetDirectoryNodes(walkPath, out canRead))
             {
-                if (depth < SvnDepth.Files)
-                    break;
-
                 if (string.Equals(node.Name, adminName, StringComparison.OrdinalIgnoreCase) || node.IsHiddenOrSystem)
                     continue;
 

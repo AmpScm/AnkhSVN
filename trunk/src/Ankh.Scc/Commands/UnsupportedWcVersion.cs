@@ -23,6 +23,7 @@ using Ankh.UI;
 namespace Ankh.Scc.Commands
 {
     [Command(AnkhCommand.NotifyWcToNew, AlwaysAvailable=true)]
+    [Command(AnkhCommand.NotifyUpgradeRequired, AlwaysAvailable=true)]
     class UnsupportedWcVersion : ICommandHandler
     {
 
@@ -33,12 +34,18 @@ namespace Ankh.Scc.Commands
         bool _skip;
         public void OnExecute(CommandEventArgs e)
         {
-            if(_skip) // Only show this message once!
-                return;
+            if (e.Command == AnkhCommand.NotifyWcToNew)
+            {
+                if (_skip) // Only show this message once!
+                    return;
 
-            _skip = true;
-            AnkhMessageBox mb = new AnkhMessageBox(e.Context);
-            mb.Show(string.Format(Resources.UnsupportedWorkingCopyFound, e.Argument));
+                _skip = true;
+                AnkhMessageBox mb = new AnkhMessageBox(e.Context);
+                mb.Show(string.Format(Resources.UnsupportedWorkingCopyFound, e.Argument));
+            }
+            else
+            {
+            }
         }
     }
 }
