@@ -23,6 +23,12 @@ using Microsoft.Win32;
 
 namespace Ankh.UI
 {
+    public enum FrameCloseMode
+    {
+        NoSave = Microsoft.VisualStudio.Shell.Interop.__FRAMECLOSE.FRAMECLOSE_NoSave,
+        SaveIfDirty = Microsoft.VisualStudio.Shell.Interop.__FRAMECLOSE.FRAMECLOSE_SaveIfDirty,
+        PromptSave = Microsoft.VisualStudio.Shell.Interop.__FRAMECLOSE.FRAMECLOSE_PromptSave,
+    }
     /// <summary>
     /// Public api of the ankh package as used by other components
     /// </summary>
@@ -43,7 +49,7 @@ namespace Ankh.UI
         void ShowToolWindow(AnkhToolWindow window);
         void ShowToolWindow(AnkhToolWindow window, int id, bool create);
 
-        void CloseToolWindow(AnkhToolWindow toolWindow, int id, Microsoft.VisualStudio.Shell.Interop.__FRAMECLOSE frameClose);
+        void CloseToolWindow(AnkhToolWindow toolWindow, int id, FrameCloseMode close);
 
         void RegisterIdleProcessor(IAnkhIdleProcessor processor);
         void UnregisterIdleProcessor(IAnkhIdleProcessor processor);

@@ -45,7 +45,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 throw new NotImplementedException();
             }
 
-            public void CloseToolWindow(AnkhToolWindow toolWindow, int id, __FRAMECLOSE frameClose)
+            public void CloseToolWindow(AnkhToolWindow toolWindow, int id, FrameCloseMode close)
             {
                 throw new NotImplementedException();
             }
