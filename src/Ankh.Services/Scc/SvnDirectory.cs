@@ -25,7 +25,6 @@ namespace Ankh.Scc
     public interface ISvnDirectoryUpdate
     {
         void TickAll();
-        void TickFiles();
 
         void Store(SvnItem item);
 
@@ -118,20 +117,6 @@ namespace Ankh.Scc
             {
                 item.TickItem();
             }
-        }
-
-        /// <summary>
-        /// Tick all files and the directory itself
-        /// </summary>
-        void ISvnDirectoryUpdate.TickFiles()
-        {
-            foreach (SvnItem item in this)
-            {
-                if(item.IsFile || item == Directory)
-                    ((ISvnItemUpdate)item).TickItem();
-            }
-
-            ((ISvnItemUpdate)this.Directory).TickItem();
         }
 
         void ISvnDirectoryUpdate.Store(SvnItem item)
