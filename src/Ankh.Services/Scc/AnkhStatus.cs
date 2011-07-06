@@ -59,14 +59,14 @@ namespace Ankh
 
             // ### This will be a very expensive check in 1.7!!!
             // But all these properties will move to status anyway.
-            if (status.WorkingCopyInfo != null)
+            if (status.Versioned)
             {
-                _lastChangeTime = status.WorkingCopyInfo.LastChangeTime;
-                _lastChangeRevision = status.WorkingCopyInfo.LastChangeRevision;
-                _lastChangeAuthor = status.WorkingCopyInfo.LastChangeAuthor;
-                _revision = status.WorkingCopyInfo.Revision;
-                _changeList = status.WorkingCopyInfo.ChangeList;
-                _localLocked = status.WorkingCopyInfo.LockToken != null;
+                _lastChangeTime = status.LastChangeTime;
+                _lastChangeRevision = status.LastChangeRevision;
+                _lastChangeAuthor = status.LastChangeAuthor;
+                _revision = status.Revision;
+                _changeList = status.ChangeList;
+                _localLocked = status.LocalLock != null;
             }
 
             _treeConflict = status.TreeConflict;
