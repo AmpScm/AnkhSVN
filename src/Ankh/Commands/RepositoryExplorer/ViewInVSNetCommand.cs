@@ -36,8 +36,6 @@ namespace Ankh.Commands.RepositoryExplorer
     [Command(AnkhCommand.ViewInWindowsWith, AlwaysAvailable=true)]
     class ViewInVSNetCommand : ViewRepositoryFileCommand
     {
-        const int NOASSOCIATEDAPP = 1155;
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             base.OnUpdate(e);
@@ -113,7 +111,7 @@ namespace Ankh.Commands.RepositoryExplorer
                 catch (Win32Exception ex)
                 {
                     // no application is associated with the file type
-                    if (ex.NativeErrorCode == NOASSOCIATEDAPP)
+                    if (ex.NativeErrorCode == (int)SharpSvn.SvnWindowsErrorCode.ERROR_NO_ASSOCIATION)
                         e.GetService<IAnkhDialogOwner>()
                             .MessageBox.Show("Windows could not find an application associated with the file type",
                             "No associated application", MessageBoxButtons.OK);
