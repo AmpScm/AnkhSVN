@@ -57,8 +57,6 @@ namespace Ankh
             _localPropertyStatus = status.LocalPropertyStatus;
             _uri = status.Uri;
 
-            // ### This will be a very expensive check in 1.7!!!
-            // But all these properties will move to status anyway.
             if (status.Versioned)
             {
                 _lastChangeTime = status.LastChangeTime;
