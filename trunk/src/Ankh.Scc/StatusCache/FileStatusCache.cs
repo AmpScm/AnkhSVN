@@ -28,8 +28,8 @@ namespace Ankh.Scc.StatusCache
     /// <summary>
     /// Maintains path->SvnItem mappings.
     /// </summary>
-    [GlobalService(typeof(IFileStatusCache), AllowPreRegistered=true)]
-    [GlobalService(typeof(ISvnItemChange), AllowPreRegistered=true)]
+    [GlobalService(typeof(IFileStatusCache), AllowPreRegistered = true)]
+    [GlobalService(typeof(ISvnItemChange), AllowPreRegistered = true)]
     sealed partial class FileStatusCache : AnkhService, Ankh.Scc.IFileStatusCache, ISvnItemChange
     {
         readonly object _lock = new object();
@@ -55,7 +55,7 @@ namespace Ankh.Scc.StatusCache
         protected override void Dispose(bool disposing)
         {
             ReleaseShellMonitor(disposing);
-            
+
             base.Dispose(disposing);
         }
 
@@ -73,7 +73,7 @@ namespace Ankh.Scc.StatusCache
             if (item == null)
                 throw new ArgumentNullException("item");
 
-            RefreshPath(item.FullPath, nodeKind, SvnDepth.Files);
+            RefreshPath(item.FullPath, nodeKind);
 
             ISvnItemUpdate updateItem = (ISvnItemUpdate)item;
 
@@ -105,7 +105,7 @@ namespace Ankh.Scc.StatusCache
                 throw new ArgumentNullException("item");
 
             Debug.Assert(item.NodeKind == SvnNodeKind.Directory);
-            
+
             // We retrieve nesting information by walking the entry data of the parent directory
 
             SvnItem dir = item.Parent;
@@ -113,7 +113,7 @@ namespace Ankh.Scc.StatusCache
             if (dir == null)
             {
                 // A root directory can't be a nested working copy!
-                ((ISvnItemUpdate)item).SetState(SvnItemState.None, SvnItemState.IsNested); 
+                ((ISvnItemUpdate)item).SetState(SvnItemState.None, SvnItemState.IsNested);
                 return;
             }
 
@@ -149,7 +149,7 @@ namespace Ankh.Scc.StatusCache
 
             // Set not-nested on all items that are certainly not nested
             SvnItem item;
-            if(_map.TryGetValue(e.FullPath, out item))
+            if (_map.TryGetValue(e.FullPath, out item))
                 ((ISvnItemUpdate)item).SetState(SvnItemState.None, SvnItemState.IsNested);
         }
 
@@ -255,12 +255,12 @@ namespace Ankh.Scc.StatusCache
         /// an unspecified item
         /// </para>
         /// </remarks>
-        void RefreshPath(string path, SvnNodeKind pathKind, SvnDepth depth)
+        void RefreshPath(string path, SvnNodeKind pathKind)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
-            else if (depth < SvnDepth.Empty || depth > SvnDepth.Infinity)
-                throw new ArgumentNullException("depth"); // Make sure we fail on possible new depths
+
+            const SvnDepth depth = SvnDepth.Children;
 
             string walkPath = path;
             bool walkingDirectory = false;
@@ -303,32 +303,22 @@ namespace Ankh.Scc.StatusCache
                 ISvnDirectoryUpdate updateDir = null;
                 SvnItem walkItem;
 
-                if (depth > SvnDepth.Empty)
+                // We get more information for free, lets use that to update other items
+                if (_dirMap.TryGetValue(walkPath, out directory))
                 {
-                    // We get more information for free, lets use that to update other items
-                    if (_dirMap.TryGetValue(walkPath, out directory))
-                    {
-                        updateDir = directory;
+                    updateDir = directory;
 
-                        if (depth > SvnDepth.Children)
-                            updateDir.TickAll();
-                        else
-                            updateDir.TickFiles();
-                    }
-                    else
-                    {
-                        // No existing directory instance, let's create one
-                        updateDir = directory = new SvnDirectory(Context, walkPath);
-                        _dirMap[walkPath] = directory;
-                    }
-
-                    walkItem = directory.Directory;
+                    if (depth >= SvnDepth.Children)
+                        updateDir.TickAll();
                 }
                 else
                 {
-                    if (_map.TryGetValue(walkPath, out walkItem))
-                        ((ISvnItemUpdate)walkItem).TickItem();
+                    // No existing directory instance, let's create one
+                    updateDir = directory = new SvnDirectory(Context, walkPath);
+                    _dirMap[walkPath] = directory;
                 }
+
+                walkItem = directory.Directory;
 
                 bool ok;
                 bool statSelf = false;
@@ -342,8 +332,8 @@ namespace Ankh.Scc.StatusCache
 
                 if (!ok)
                 {
-                    if (!_notifiedToNew && 
-                        args.LastException != null && 
+                    if (!_notifiedToNew &&
+                        args.LastException != null &&
                         args.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_UNSUPPORTED_FORMAT)
                     {
                         _notifiedToNew = true;
@@ -482,7 +472,7 @@ namespace Ankh.Scc.StatusCache
                         updateItem.RefreshTo(NoSccStatus.NotVersioned, SvnNodeKind.Directory);
                 }
             }
-       
+
             // Note: There is a lock(_lock) around this in our caller
         }
 
@@ -579,13 +569,13 @@ namespace Ankh.Scc.StatusCache
             {
                 // We only create an item if we don't have an existing
                 // with a valid path. (No casing changes allowed!)
-                
-                SvnItem newItem = CreateItem(path, status); 
+
+                SvnItem newItem = CreateItem(path, status);
                 StoreItem(newItem);
 
                 if (item != null)
                 {
-                    ((ISvnItemUpdate)item).RefreshTo(newItem); 
+                    ((ISvnItemUpdate)item).RefreshTo(newItem);
                     item.Dispose();
                 }
 
@@ -623,7 +613,7 @@ namespace Ankh.Scc.StatusCache
         {
             if (path == null)
                 throw new ArgumentNullException("path");
-            
+
             lock (_lock)
             {
                 List<string> names = new List<string>();
@@ -643,14 +633,14 @@ namespace Ankh.Scc.StatusCache
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
-            
+
             lock (_lock)
             {
                 List<SvnItem> items = new List<SvnItem>();
 
                 foreach (SvnItem v in _map.Values)
                 {
-                    if(v.IsBelowPath(path))
+                    if (v.IsBelowPath(path))
                         items.Add(v);
                 }
 
@@ -788,14 +778,14 @@ namespace Ankh.Scc.StatusCache
         internal void BroadcastChanges()
         {
             ISvnItemStateUpdate update;
-            if(_map.Count > 0)
+            if (_map.Count > 0)
                 update = GetFirst(_map.Values);
             else
                 update = this["c:\\windows"]; // Just give me a SvnItem instance to access the interface
 
             IList<SvnItem> updates = update.GetUpdateQueueAndClearScheduled();
 
-            if(updates != null)
+            if (updates != null)
                 OnSvnItemsChanged(new SvnItemsEventArgs(updates));
         }
 
