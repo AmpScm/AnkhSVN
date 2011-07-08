@@ -46,7 +46,7 @@
       <Group id="Grp_FileMenuScc" priority="0x0800">
         <Menu id="Menu_FileScc" priority="0x0100" name="SvnMenu" text="Subve&amp;rsion">
           <Group id="Grp_FileSccMenuTasks" priority="0x0100">
-            <Button id="Cmd_MigrateSettings" text="Migrate AnkhSVN Settings from future versions" name="AnkhSVN.MigrateSettings" priority="0" commandWellOnly="true" allowParams="true" postExec="true"/>
+            <Button id="Cmd_MigrateSettings" text="Migrate AnkhSVN Settings from old versions" name="AnkhSVN.MigrateSettings" priority="0" commandWellOnly="true" allowParams="true" postExec="true"/>
             <ButtonRef id="Cmd_UpdateItemSpecific" priority="0x100" />
             <Button id="Cmd_CommitItem" name="CommitItem" priority="0x200"
                 text="&amp;Commit..."
@@ -399,7 +399,7 @@
         <Group id="Grp_SccAddIgnore" priority="0xD000">
           <Button id="Cmd_AddItem" name="AddItem" priority="0x100"
                   text="&amp;Add..." toolTip="Add selected items to the working copy."
-                  iconFile="menu/Add.png" defaultInvisible="true"/>
+                  iconFile="menu/Add.png" defaultInvisible="true" allowParams="true"/>
           <Menu id="Menu_ItemIgnore" priority="0x100" name="ItemIgnore" text="&amp;Ignore">
             <Group id="Menu_ItemIgnore" priority="0x100">
               <Button id="Cmd_ItemIgnoreFile" priority="0x1000" name="SvnIgnoreFile"
@@ -988,6 +988,7 @@
         <Button id="Cmd_CheckForUpdates" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_WorkingCopyBrowse" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_NotifyWcToNew" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" defaultInvisible="true" defaultDisabled="false" />
+        <Button id="Cmd_NotifyUpgradeRequired" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_ForceUIShow" text="&#160;" priority="0" noShowOnMenuController="true" noButtonCustomize ="true"
                 noCustomize="true" noKeyCustomize="true" defaultInvisible="true" textOnly="true" />
         <Button id="Cmd_MakeNonSccFileWriteable" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" postExec="false" defaultInvisible="true" defaultDisabled="false" />
