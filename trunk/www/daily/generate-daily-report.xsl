@@ -106,7 +106,7 @@
         <h1>AnkhSVN-Daily Update</h1>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
-        <h2 style="background: light-yellow; border: 1px solid black">
+        <h2 style="background: yellow; border: 1px solid black">
         AnkhSVN 2.3 uses the Subversion 1.7 pre release code.
         You need to upgrade your working copy to test this release</h2>
         <p>Please use <a href="/daily/2.2.x">AnkhSVN 2.2</a> for the latest daily build based
