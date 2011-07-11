@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.2.10280</title>
+          AnkhSVN-Daily Update - 2.3.10280</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,7 +14,7 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/4787/AnkhSvn-Daily-2.2.10280.1.msi">AnkhSVN 2.2.10280</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/4789/AnkhSvn-Daily-2.3.10280.943.msi">AnkhSVN 2.3.10280</a>.
         </h2>
 
 
@@ -28,10 +28,27 @@
 
 <h2>Recent changes</h2>
 <table>
-<tr class="d"><td colspan="4">2011-07-04</td></tr>
-<tr><td> </td><td class="r"><a id="10262" href="http://ankhsvn.net/rev/10262">
-            [r10262]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">:</strong> 2.2.x</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Created AnkhSVN 2.2 maintenance branch</td></tr>
+<tr class="d"><td colspan="4">2011-07-06</td></tr>
+<tr><td> </td><td class="r"><a id="10273" href="http://ankhsvn.net/rev/10273">
+            [r10273]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh.Ids/AnkhCommand.cs, Ankh.Scc/Commands/UnsupportedWcVersion.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">More cleanup of different depth stat calls and forward the knowledge that an
+upgrade is required.</td></tr>
+<tr><td> </td><td class="r"><a id="10271" href="http://ankhsvn.net/rev/10271">
+            [r10271]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh.Services/Scc/SvnDirectory.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Perform status updates on all children of a node instead of just with depth
+files. The performance penalty of opening subdirectories is gone with WC-NG.</td></tr>
+<tr><td> </td><td class="r"><a id="10270" href="http://ankhsvn.net/rev/10270">
+            [r10270]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/AnkhSvnPackage.ToolWindows.cs, Ankh.VS.UnitTest/Mocks/PackageMock.cs, Ankh.Services/IAnkhPackage.cs, Ankh.UI/DiffWindow/DiffToolWindowControl.cs, Ankh.VS.IntegrationTest/Properties/AssemblyInfo.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Resolve a few CLSCompliance warnings by defining our own closemode enum.</td></tr>
+<tr><td> </td><td class="r"><a id="10269" href="http://ankhsvn.net/rev/10269">
+            [r10269]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Scc/AnkhStatus.cs, Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Switch development to SharpSvn 1.7.x, to start testing with Subversion 1.7
+on trunk</td></tr>
+<tr class="d"><td colspan="4">2011-07-05</td></tr>
+<tr><td> </td><td class="r"><a id="10265" href="http://ankhsvn.net/rev/10265">
+            [r10265]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> AnkhDiff.Tools.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Locate Araxis Merge in yet another way if not found by the current code, to
+resolve some 64 bit vs 32 bit issues.</td></tr>
 <tr class="d"><td colspan="4">2011-07-01</td></tr>
 <tr><td> </td><td class="r"><a id="10258" href="http://ankhsvn.net/rev/10258">
             [r10258]
