@@ -209,11 +209,6 @@ namespace Ankh
         {
             get { return _treeConflict != null; }
         }
-
-        public SvnConflictData TreeConflict
-        {
-            get { return _treeConflict; }
-        }
     }
 
 }
