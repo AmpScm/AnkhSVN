@@ -313,13 +313,13 @@
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC">
       <!-- VS Predefined group for SCC commands on project items -->
-      <Button id="Cmd_FolderUpdateLatest" name="UpdateFolderLatest" priority="0xFF"
+      <Button id="Cmd_FolderUpdateLatest" name="UpdateFolderLatest" priority="0x1200"
                 text="&amp;Update Folder to Latest Version"
                 toolTip="Update all items in the folder with changes from the Subversion repository."  iconFile="PendingChanges/Update.png" defaultInvisible="true" />
-      <Button id="Cmd_UpdateItemLatest" name="UpdateItemLatest" priority="0x100"
+      <Button id="Cmd_UpdateItemLatest" name="UpdateItemLatest" priority="0x1400"
                 text="&amp;Update to Latest Version"
                 toolTip="Updates local items with changes from the Subversion repository." iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
-      <ButtonRef id="Cmd_CommitItem" priority="0x1600" />
+      <ButtonRef id="Cmd_CommitItem" priority="0x1500" />
       <Button id="Cmd_LockMustLock" name="LockMustLock" priority="0x1650" defaultInvisible="true"
               text="Loc&amp;k..."
               toolTip="Lock the selected item." iconFile="menu/Lock.png" />
