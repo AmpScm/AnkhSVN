@@ -76,6 +76,8 @@ namespace Ankh.Scc
         IList<SvnItem> GetCachedBelow(string path);
         IList<SvnItem> GetCachedBelow(IEnumerable<string> paths);
 
+        bool EnableUpgradeCommand { get; }
+
         void SetSolutionContained(string path, bool contained);
     }
 }
