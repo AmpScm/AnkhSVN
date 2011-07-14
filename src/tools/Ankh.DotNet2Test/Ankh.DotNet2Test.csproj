@@ -63,6 +63,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Ankh.Ids\Ankh.Ids.csproj">
+      <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
+      <Name>Ankh.Ids</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Ankh.Package\Ankh.Package.csproj">
       <Project>{FA90174C-5763-46E8-9C95-328CA8451072}</Project>
       <Name>Ankh.Package</Name>
