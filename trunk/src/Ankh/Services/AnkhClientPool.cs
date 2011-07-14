@@ -396,6 +396,9 @@ namespace Ankh.Services
             {
                 base.OnNotify(e);
 
+                if (e.Uri != null)
+                    return;
+
                 string path = e.FullPath;
 
                 if (string.IsNullOrEmpty(path))
@@ -410,6 +413,7 @@ namespace Ankh.Services
                     case SvnNotifyAction.CommitDeleted:
                     case SvnNotifyAction.Revert:
                     case SvnNotifyAction.TreeConflict:
+                    case SvnNotifyAction.UpgradedDirectory:
                         action.Recursive = true;
                         break;
                     case SvnNotifyAction.UpdateDelete:
