@@ -298,5 +298,7 @@ namespace Ankh
 
         UpdateProjectFileSpecific,
         CommitProjectFile,
+
+        UpgradeWorkingCopy,
     }
 }

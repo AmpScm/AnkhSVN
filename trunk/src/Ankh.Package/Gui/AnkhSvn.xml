@@ -47,6 +47,10 @@
         <Menu id="Menu_FileScc" priority="0x0100" name="SvnMenu" text="Subve&amp;rsion">
           <Group id="Grp_FileSccMenuTasks" priority="0x0100">
             <Button id="Cmd_MigrateSettings" text="Migrate AnkhSVN Settings from old versions" name="AnkhSVN.MigrateSettings" priority="0" commandWellOnly="true" allowParams="true" postExec="true"/>
+            <Button id="Cmd_UpgradeWorkingCopy" priority="0x050"
+                text="&amp;Upgrade Working Copy"
+                toolTip="Upgrade Working Copy to allow using it with the current AnkhSVN version."
+                iconFile="PendingChanges/Update.png" defaultInvisible="true" />
             <ButtonRef id="Cmd_UpdateItemSpecific" priority="0x100" />
             <Button id="Cmd_CommitItem" name="CommitItem" priority="0x200"
                 text="&amp;Commit..."
@@ -169,6 +173,7 @@
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_SOLUTION_SCC">
       <!-- VS Predefined group for SCC commands on the solution -->
+      <ButtonRef id="Cmd_UpgradeWorkingCopy" priority="0x1150" />
       <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1200" />
       <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1300" />
       <Button id="Cmd_SolutionIssueTrackerSetup" name="IssueTrackerSetup" priority="0x1400"
@@ -239,6 +244,7 @@
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_SCC">
       <!-- VS Predefined group for SCC commands on projects -->
+      <ButtonRef id="Cmd_UpgradeWorkingCopy" priority="0x1150" />
       <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1200" />
       <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1300" />
       <Button id="Cmd_ProjectUpdateLatest" priority="0x1400" name="ProjectUpdateLatest" text="U&amp;pdate Project to Latest Version"
@@ -313,6 +319,7 @@
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC">
       <!-- VS Predefined group for SCC commands on project items -->
+      <ButtonRef id="Cmd_UpgradeWorkingCopy" priority="0x1150" />
       <Button id="Cmd_FolderUpdateLatest" name="UpdateFolderLatest" priority="0x1200"
                 text="&amp;Update Folder to Latest Version"
                 toolTip="Update all items in the folder with changes from the Subversion repository."  iconFile="PendingChanges/Update.png" defaultInvisible="true" />
@@ -458,6 +465,7 @@
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_EDITFILE">
       <!-- The 'Edit Project' group on unloaded projects -->
+      <ButtonRef id="Cmd_UpgradeWorkingCopy" priority="0x7FFF" />
       <ButtonRef id="Cmd_ItemConflictEdit" priority="0x8000" />
     </GroupRef>
     <GroupRef id="Menu_RepositoryExplorerToolBar">
@@ -666,7 +674,7 @@
       <!-- The Subversion Properties ToolWindow Toolbar -->
       <Menu id="ToolBar_SvnInfo" name="SvnInfo" priority="0" type="ToolWindowToolbar">
         <Group id="Grp_SvnInfoTBOperations" priority="0x1000">
-          
+
         </Group>
         <Group id="Grp_SvnInfoTBCommands" priority="0x2000">
           <ButtonRef id="Cmd_DocumentHistory" priority="0x1000" />

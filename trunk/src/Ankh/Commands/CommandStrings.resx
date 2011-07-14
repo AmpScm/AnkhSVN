@@ -213,4 +213,7 @@
   <data name="Reverting" xml:space="preserve">
     <value>Reverting</value>
   </data>
+  <data name="UpgradingWorkingCopy" xml:space="preserve">
+    <value>Upgrading Working Copy</value>
+  </data>
 </root>

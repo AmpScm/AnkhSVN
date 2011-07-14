@@ -38,6 +38,7 @@ namespace Ankh.Scc.StatusCache
         readonly Dictionary<string, SvnItem> _map; // Maps from full-normalized paths to SvnItems
         readonly Dictionary<string, SvnDirectory> _dirMap;
         IAnkhCommandService _commandService;
+        bool _enableUpgrade;
 
         public FileStatusCache(IAnkhServiceProvider context)
             : base(context)
@@ -292,8 +293,8 @@ namespace Ankh.Scc.StatusCache
 
             lock (_lock)
             {
-                SvnDirectory directory = null;
-                ISvnDirectoryUpdate updateDir = null;
+                SvnDirectory directory;
+                ISvnDirectoryUpdate updateDir;
                 SvnItem walkItem;
 
                 // We get more information for free, lets use that to update other items
@@ -332,6 +333,11 @@ namespace Ankh.Scc.StatusCache
                     else if (args.LastException != null &&
                              args.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_UPGRADE_REQUIRED)
                     {
+                        _enableUpgrade = true;
+
+                        if (updateDir != null)
+                            updateDir.SetNeedsUpgrade();
+
                         if (CommandService != null)
                             CommandService.PostExecCommand(AnkhCommand.NotifyUpgradeRequired, walkPath);
                     }
@@ -395,7 +401,7 @@ namespace Ankh.Scc.StatusCache
 
                     if (directory != null)
                     {
-                        ((ISvnDirectoryUpdate)directory).Store(pathItem);
+                        updateDir.Store(pathItem);
                         ScheduleForCleanup(directory);
                     }
                 }
@@ -799,6 +805,11 @@ namespace Ankh.Scc.StatusCache
 
             if (SvnItemsChanged != null)
                 SvnItemsChanged(this, e);
+        }
+
+        public bool EnableUpgradeCommand
+        {
+            get { return _enableUpgrade; }
         }
     }
 }

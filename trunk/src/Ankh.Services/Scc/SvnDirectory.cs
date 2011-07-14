@@ -29,6 +29,8 @@ namespace Ankh.Scc
         void Store(SvnItem item);
 
         bool ScheduleForCleanup { get; }
+
+        void SetNeedsUpgrade();
     }
     /// <summary>
     /// Collection of <see cref="SvnItem"/> instances of a specific directory
@@ -42,6 +44,7 @@ namespace Ankh.Scc
     {
         readonly IAnkhServiceProvider _context;
         readonly string _fullPath;
+        bool _needsUpgrade;
 
         public SvnDirectory(IAnkhServiceProvider context, string fullPath)
             : base(StringComparer.OrdinalIgnoreCase)
@@ -109,10 +112,19 @@ namespace Ankh.Scc
         }
 
         /// <summary>
+        /// Gets a boolean indicating whether this directories working copy needs an explicit upgrade
+        /// </summary>
+        public bool NeedsWorkingCopyUpgrade
+        {
+            get { return _needsUpgrade; }
+        }
+
+        /// <summary>
         /// Tick all items
         /// </summary>
         void ISvnDirectoryUpdate.TickAll()
         {
+            _needsUpgrade = false;
             foreach (ISvnItemUpdate item in this)
             {
                 item.TickItem();
@@ -128,8 +140,6 @@ namespace Ankh.Scc
             Add(item);
         }
 
-        #region ISvnDirectoryUpdate Members
-
         bool ISvnDirectoryUpdate.ScheduleForCleanup
         {
             get
@@ -144,6 +154,9 @@ namespace Ankh.Scc
             }
         }
 
-        #endregion
+        void ISvnDirectoryUpdate.SetNeedsUpgrade()
+        {
+            _needsUpgrade = true;
+        }
     }
 }
