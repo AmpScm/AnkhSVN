@@ -225,6 +225,7 @@ namespace Ankh.UI.PendingChanges
             pendingCommits.ClearItems();
             try
             {
+                List<ListViewItem> newItems = new List<ListViewItem>();
                 foreach (PendingChange pc in manager.GetAll())
                 {
                     PendingCommitItem pi = new PendingCommitItem(pendingCommits, pc);
@@ -233,8 +234,11 @@ namespace Ankh.UI.PendingChanges
                     if (_checkedItems != null)
                         pi.Checked = _checkedItems.Contains(pc.FullPath);
 
-                    pendingCommits.Items.Add(pi);
+                    newItems.Add(pi);
                 }
+
+                if (newItems.Count > 0)
+                    pendingCommits.Items.AddRange(newItems.ToArray());
 
                 _checkedItems = null;
             }
