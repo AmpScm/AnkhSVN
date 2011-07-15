@@ -853,9 +853,54 @@ namespace Ankh.UI.VSSelectionControls
             return true;
         }
 
+        int _nInUpdates;
+        bool _updateAllBox = false;
+        public new void BeginUpdate()
+        {
+            try
+            {
+                base.BeginUpdate();
+            }
+            finally
+            {
+                _nInUpdates++;
+            }
+        }
+
+        public new void EndUpdate()
+        {
+            if (0 >= --_nInUpdates)
+            {
+                if (_updateAllBox)
+                {
+                    _updateAllBox = false;
+
+                    bool allChecked = true;
+                    foreach (ListViewItem i in Items)
+                    {
+                        if (!i.Checked && IsPartOfSelectAll(i))
+                        {
+                            allChecked = false;
+                            break;
+                        }
+                    }
+
+                    SelectAllChecked = allChecked;
+                    UpdateSortGlyphs();
+                }
+            }
+            base.EndUpdate();
+        }
+
         protected override void OnItemChecked(ItemCheckedEventArgs e)
         {
             base.OnItemChecked(e);
+
+            if (_nInUpdates > 0)
+            {
+                _updateAllBox = true;
+                return;
+            }
 
             if (CheckBoxes && ShowSelectAllCheckBox)
             {
@@ -870,7 +915,7 @@ namespace Ankh.UI.VSSelectionControls
                     bool allChecked = true;
                     foreach (ListViewItem i in Items)
                     {
-                        if (!i.Checked && IsPartOfSelectAll(e.Item))
+                        if (!i.Checked && IsPartOfSelectAll(i))
                         {
                             allChecked = false;
                             break;
