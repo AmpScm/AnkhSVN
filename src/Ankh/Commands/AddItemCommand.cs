@@ -35,11 +35,11 @@ namespace Ankh.Commands
             {
                 if (item.IsVersioned)
                     continue;
-                if (item.IsVersionable)
+                if (item.IsVersionable && !item.ParentDirectory.NeedsWorkingCopyUpgrade)
                     return; // We found an add item
             }
 
-            e.Visible = e.Enabled = false;
+            e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)

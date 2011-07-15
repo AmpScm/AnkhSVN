@@ -59,7 +59,7 @@ namespace Ankh.Commands
                         break;
                     case AnkhCommand.ItemIgnoreFolder:
                         parent = item.Parent;
-                        if (parent != null && parent.IsVersioned)
+                        if (parent != null && (parent.IsVersioned || item.ParentDirectory.NeedsWorkingCopyUpgrade))
                         {
                             e.Enabled = false;
                             return;

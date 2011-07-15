@@ -44,7 +44,7 @@ namespace Ankh.Commands
                 }
                 else if (i.IsIgnored)
                     continue;
-                else if (i.InSolution && i.IsVersionable)
+                else if (i.InSolution && i.IsVersionable && !i.ParentDirectory.NeedsWorkingCopyUpgrade)
                     return; // The file is 'to be added'
             }
 
