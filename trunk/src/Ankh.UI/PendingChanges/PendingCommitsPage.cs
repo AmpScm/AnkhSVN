@@ -239,11 +239,10 @@ namespace Ankh.UI.PendingChanges
 
                 if (newItems.Count > 0)
                     pendingCommits.Items.AddRange(newItems.ToArray());
-
-                _checkedItems = null;
             }
             finally
             {
+                _checkedItems = null;
                 pendingCommits.EndUpdate();
                 pendingCommits.Invalidate();
             }
