@@ -231,6 +231,7 @@ namespace Ankh.UI.PendingChanges
                     PendingCommitItem pi = new PendingCommitItem(pendingCommits, pc);
                     _listItems.Add(pc.FullPath, pi);
 
+                    /* Store the old checked state (checked or unchecked) in pi */
                     if (_checkedItems != null)
                         pi.Checked = _checkedItems.Contains(pc.FullPath);
 
