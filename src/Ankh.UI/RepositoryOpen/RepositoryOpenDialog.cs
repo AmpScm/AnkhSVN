@@ -347,13 +347,16 @@ namespace Ankh.UI.RepositoryOpen
                 SvnRemoteCommonArgs ca = new SvnRemoteCommonArgs();
                 ca.ThrowOnError = false;
 
+                SvnRemoteNodeKindArgs nka = new SvnRemoteNodeKindArgs();
+                nka.ThrowOnError = false;
+
                 SvnRemoteStatArgs sa = new SvnRemoteStatArgs();
                 sa.ThrowOnError = false;
                 SvnNodeKind kind;
 
                 string path = session.MakeRelativePath(combined);
 
-                if (session.GetNodeKind(path, ca, out kind))
+                if (session.GetNodeKind(path, nka, out kind))
                     Invoke((AnkhAction)delegate
                     {
                         switch (kind)
@@ -594,7 +597,7 @@ namespace Ankh.UI.RepositoryOpen
                     Uri repositoryRoot = null;
                     List<ListViewItem> items = new List<ListViewItem>();
 
-                    SvnRemoteCommonArgs commonArgs = new SvnRemoteCommonArgs();
+                    SvnRemoteNodeKindArgs commonArgs = new SvnRemoteNodeKindArgs();
                     commonArgs.ThrowOnError = false;
                     SvnNodeKind kind;
 
