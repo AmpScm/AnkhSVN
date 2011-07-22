@@ -92,6 +92,7 @@
     <Compile Include="Commands\RepositoryExplorer\DeleteRepositoryItemCommand.cs" />
     <Compile Include="Commands\RepositoryExplorer\RenameNode.cs" />
     <Compile Include="Commands\RepositoryExplorer\ShowRepositoryItemChanges.cs" />
+    <Compile Include="Commands\UpgradeWorkingCopy.cs" />
     <Compile Include="Services\AnkhHelpService.cs" />
     <Compile Include="Services\AnkhClientPool.cs" />
     <Compile Include="Services\AnkhErrorMessage.cs" />
