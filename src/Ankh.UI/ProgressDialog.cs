@@ -130,12 +130,23 @@ namespace Ankh.UI
                 case SvnNotifyAction.UpdateUpdate:
                 case SvnNotifyAction.UpdateCompleted:
                 case SvnNotifyAction.UpdateExternal:
+                case SvnNotifyAction.UpdateSkipWorkingOnly:
+                case SvnNotifyAction.UpdateSkipObstruction:
+                case SvnNotifyAction.UpdateSkipAccessDenied:
+                case SvnNotifyAction.UpdateShadowedAdd:
+                case SvnNotifyAction.UpdateShadowedDelete:
+                case SvnNotifyAction.UpdateShadowedUpdate:
                     actionText = actionText.Substring(6);
+                    break;
+                case SvnNotifyAction.UpgradedDirectory:
+                    actionText = "Upgraded";
                     break;
                 case SvnNotifyAction.CommitAdded:
                 case SvnNotifyAction.CommitDeleted:
                 case SvnNotifyAction.CommitModified:
                 case SvnNotifyAction.CommitReplaced:
+                case SvnNotifyAction.CommitAddCopy:
+                case SvnNotifyAction.CommitReplacedWithCopy:
                     actionText = actionText.Substring(6);
                     break;
                 case SvnNotifyAction.CommitSendData:
@@ -143,6 +154,11 @@ namespace Ankh.UI
                     break;
                 case SvnNotifyAction.BlameRevision:
                     actionText = "Annotating";
+                    break;
+                case SvnNotifyAction.UpdateStarted:
+                case SvnNotifyAction.RecordMergeInfoStarted:
+                case SvnNotifyAction.FollowUrlRedirect:
+                    actionText = null;
                     break;
             }
 
@@ -207,7 +223,12 @@ namespace Ankh.UI
             Enqueue(delegate()
             {
                 ListViewItem item = null;
-                item = new ListViewItem(GetActionText(action));
+                string text = GetActionText(action);
+
+                if (string.IsNullOrEmpty(text))
+                    return;
+
+                item = new ListViewItem(text);
 
                 switch (action)
                 {
