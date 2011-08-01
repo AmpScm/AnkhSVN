@@ -594,9 +594,12 @@ namespace Ankh.Services.PendingChanges
                     ca.KeepLocks = state.KeepLocks;
                     ca.KeepChangeLists = state.KeepChangeLists;
                     ca.LogMessage = state.LogMessage;
-                    ca.AddExpectedError(SvnErrorCode.SVN_ERR_RA_OUT_OF_DATE);
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_WC_NOT_UP_TO_DATE);
+                    ca.AddExpectedError(SvnErrorCode.SVN_ERR_CLIENT_FORBIDDEN_BY_SERVER);
+                    ca.AddExpectedError(SvnErrorCode.SVN_ERR_CLIENT_NO_LOCK_TOKEN);
+                    ca.AddExpectedError(SvnErrorCode.SVN_ERR_IO_INCONSISTENT_EOL);
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_FS_TXN_OUT_OF_DATE);
+                    ca.AddExpectedError(SvnErrorCode.SVN_ERR_RA_OUT_OF_DATE);
                     ca.RunTortoiseHooks = enableHooks;
 
                     ok = e.Client.Commit(
@@ -608,6 +611,9 @@ namespace Ankh.Services.PendingChanges
                         switch (ca.LastException.SvnErrorCode)
                         {
                             case SvnErrorCode.SVN_ERR_WC_NOT_UP_TO_DATE:
+                            case SvnErrorCode.SVN_ERR_CLIENT_FORBIDDEN_BY_SERVER:
+                            case SvnErrorCode.SVN_ERR_CLIENT_NO_LOCK_TOKEN:
+                            case SvnErrorCode.SVN_ERR_IO_INCONSISTENT_EOL:
                             case SvnErrorCode.SVN_ERR_RA_OUT_OF_DATE:
                             case SvnErrorCode.SVN_ERR_FS_TXN_OUT_OF_DATE:
                                 outOfDateMessage = new StringBuilder();
