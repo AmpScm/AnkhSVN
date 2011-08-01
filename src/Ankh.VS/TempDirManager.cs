@@ -16,8 +16,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using SharpSvn;
 
 namespace Ankh.VS
 {
@@ -38,7 +38,7 @@ namespace Ankh.VS
             {
                 name = Path.Combine(Path.GetTempPath(), "AnkhSVN\\" + Guid.NewGuid().ToString("N").Substring(0, i));
 
-                if (!Directory.Exists(name))
+                if (!SvnItem.PathExists(name))
                     break;
             }
             Directory.CreateDirectory(name);
@@ -78,78 +78,19 @@ namespace Ankh.VS
 
             void Delete()
             {
-                foreach (string dir in _directories.Keys)
+                foreach (KeyValuePair<string, bool> kv in _directories)
                 {
-                    if (!_directories[dir])
-                    {
-                        try
-                        {
-                            RecursiveDelete(new DirectoryInfo(dir));
-                        }
-                        catch 
-                        {
-                            // This code potentially runs in the finalizer thread, never throw from here
-                        }
-                    }
+                    if (!kv.Value)
+                        SvnItem.DeleteNode(kv.Key);
                 }
-            }
-
-            void RecursiveDelete(DirectoryInfo dir)
-            {
-                if (dir == null)
-                    throw new ArgumentNullException("dir");
-
-                if (!dir.Exists)
-                    return;
-
-                DirectoryInfo[] directories = null;
-                try
-                {
-                    directories = dir.GetDirectories();
-                }
-                catch
-                { }
-
-                if (directories != null)
-                {
-                    foreach (DirectoryInfo sd in directories)
-                    {
-                        RecursiveDelete(sd);
-                    }
-                }
-
-                FileInfo[] files = null;
-                try
-                {
-                    files = dir.GetFiles();
-                }
-                catch { }
-
-                if (files != null)
-                {
-                    foreach (FileInfo file in files)
-                    {
-                        try
-                        {
-                            file.Attributes = FileAttributes.Normal;
-                            file.Delete();
-                        }
-                        catch { }
-                    }
-                }
-
-                try
-                {
-                    dir.Attributes = FileAttributes.Normal; // .Net fixes up FileAttributes.Directory
-                    dir.Delete();
-                }
-                catch { }
             }
 
             public void AddDirectory(string name, bool keepDir)
             {
                 if (string.IsNullOrEmpty(name))
                     throw new ArgumentNullException("name");
+                else if (!SvnTools.IsNormalizedFullPath(name))
+                    throw new ArgumentException("Not a normalized full path", "name");
 
                 _directories.Add(name, keepDir);
             }

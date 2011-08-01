@@ -135,10 +135,8 @@ namespace Ankh.Scc
                 // Don't backup twice
                 string oldBackup = _backupMap[fullPath];
                 _backupMap.Remove(fullPath);
-                using (SvnSccContext svn = new SvnSccContext(this))
-                {
-                    svn.DeleteDirectory(oldBackup);
-                }
+
+                SvnItem.DeleteDirectory(oldBackup, true);
             }
             else
             {

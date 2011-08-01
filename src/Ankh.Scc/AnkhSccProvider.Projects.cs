@@ -634,7 +634,7 @@ namespace Ankh.Scc
                         if (Directory.Exists(originalDir))
                         {
                             // The original has not been deleted by visual studio, must be an exclude.
-                            svn.DeleteDirectory(backupDir);
+                            SvnItem.DeleteDirectory(backupDir, true);
                         }
                         else
                         {

@@ -1039,6 +1039,58 @@ namespace Ankh
             return NativeMethods.GetFileAttributes(path) != NativeMethods.INVALID_FILE_ATTRIBUTES;
         }
 
+        /// <summary>
+        /// Long path safe version of File.Delete(path)
+        /// </summary>
+        /// <param name="path"></param>
+        public static bool DeleteFile(string path)
+        {
+            return NativeMethods.DeleteFile(path);
+        }
+
+        /// <summary>
+        /// Long path safe version of Directory.Delete(path)
+        /// </summary>
+        /// <param name="fullPath"></param>
+        public static bool DeleteDirectory(string fullPath)
+        {
+            return NativeMethods.RemoveDirectory(fullPath);
+        }
+
+        public static bool DeleteDirectory(string fullPath, bool recursive)
+        {
+            if (recursive)
+            {
+                bool allOk = true;
+                foreach (SccFileSystemNode n in SccFileSystemNode.GetDirectoryNodes(fullPath))
+                {
+                    if (n.IsDirectory)
+                    {
+                        if (!DeleteDirectory(n.FullPath, true))
+                            allOk = false;
+                    }
+                    else if (!DeleteFile(n.FullPath))
+                        allOk = false;
+                }
+                if (!allOk)
+                    return false;
+            }
+
+            return DeleteDirectory(fullPath);
+        }
+
+        public static bool DeleteNode(string fullPath)
+        {
+            uint type = NativeMethods.GetFileAttributes(fullPath);
+
+            if (type == NativeMethods.INVALID_FILE_ATTRIBUTES)
+                return true;
+            else if ((type & NativeMethods.FILE_ATTRIBUTE_DIRECTORY) != 0)
+                return DeleteDirectory(fullPath, true);
+            else
+                return DeleteFile(fullPath);
+        }
+
         static class NativeMethods
         {
             /// <summary>
@@ -1058,12 +1110,48 @@ namespace Ankh
                     return GetFileAttributesW("\\\\?\\" + filename); // Documented method of allowing paths over 160 characters (APR+SharpSvn use this too!)
             }
 
+            public static bool DeleteFile(string filename)
+            {
+                if (string.IsNullOrEmpty(filename))
+                    throw new ArgumentNullException("filename");
+
+                if (filename.Length >= 160)
+                    filename = "\\\\?\\" + filename; // Documented method of allowing paths over 160 characters (APR+SharpSvn use this too!)
+
+                SetFileAttributesW(filename, FILE_ATTRIBUTE_NORMAL);
+                return DeleteFileW(filename);
+            }
+
+            public static bool RemoveDirectory(string pathname)
+            {
+                // This method assumes filename is an absolute and/or rooted path
+                if (string.IsNullOrEmpty(pathname))
+                    throw new ArgumentNullException("pathname");
+
+                if (pathname.Length < 160)
+                    return RemoveDirectoryW(pathname);
+                else
+                    return RemoveDirectoryW("\\\\?\\" + pathname); // Documented method of allowing paths over 160 characters (APR+SharpSvn use this too!)
+            }
+
+            [DllImport("kernel32.dll", ExactSpelling = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            extern static bool DeleteFileW([MarshalAs(UnmanagedType.LPWStr)]string lpFilename);
+
+            [DllImport("kernel32.dll", ExactSpelling = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            extern static bool RemoveDirectoryW([MarshalAs(UnmanagedType.LPWStr)]string lpFilename);
+
             [DllImport("kernel32.dll", ExactSpelling = true)]
             extern static uint GetFileAttributesW([MarshalAs(UnmanagedType.LPWStr)]string filename);
+
+            [DllImport("kernel32.dll", ExactSpelling = true)]
+            extern static bool SetFileAttributesW([MarshalAs(UnmanagedType.LPWStr)]string filename, [MarshalAs(UnmanagedType.U4)] uint fileAttributes);
 
             public const uint INVALID_FILE_ATTRIBUTES = 0xFFFFFFFF;
             public const uint FILE_ATTRIBUTE_DIRECTORY = 0x10;
             public const uint FILE_ATTRIBUTE_READONLY = 0x1;
+            const uint FILE_ATTRIBUTE_NORMAL = 0x80;
         }
 
         /// <summary>

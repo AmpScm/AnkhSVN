@@ -87,10 +87,10 @@ namespace Ankh.Commands
                             cl.Delete(item.FullPath, da);
                         }
                     }
-                    else if (item.IsFile)
-                        File.Delete(item.FullPath);
-                    else if (item.IsDirectory)
-                        Directory.Delete(item.FullPath, true); // Recursive delete!!
+                    else
+                    {
+                        SvnItem.DeleteNode(item.FullPath);
+                    }
                 }
                 finally
                 {

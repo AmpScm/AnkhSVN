@@ -746,14 +746,9 @@ namespace Ankh.Scc
             return new DelegateRunner(
                 delegate()
                 {
-                    if (isFile && File.Exists(path))
+                    if (SvnItem.PathExists(path))
                     {
-                        File.SetAttributes(path, FileAttributes.Normal);
-                        File.Delete(path);
-                    }
-                    else if (!isFile && Directory.Exists(path))
-                    {
-                        Directory.Delete(path, true);
+                        SvnItem.DeleteNode(path);
                     }
 
                     if (isFile)
@@ -959,16 +954,8 @@ namespace Ankh.Scc
 
             foreach (DirectoryInfo subDir in dir.GetDirectories(SvnClient.AdministrativeDirectoryName, SearchOption.AllDirectories))
             {
-                RecursiveDelete(subDir);
+                SvnItem.DeleteDirectory(subDir.FullName, true);
             }
-        }
-
-        public void DeleteDirectory(string path)
-        {
-            DirectoryInfo dir = new DirectoryInfo(path);
-
-            if (dir.Exists)
-                RecursiveDelete(dir);
         }
 
         internal string MakeBackup(string fullPath)
@@ -976,8 +963,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(fullPath))
                 throw new ArgumentNullException("fullPath");
 
-            DirectoryInfo source = new DirectoryInfo(fullPath);
-            if (source.Exists)
+            if (SvnItem.PathExists(fullPath))
             {
                 string tmp;
                 int n = 0;
@@ -986,8 +972,9 @@ namespace Ankh.Scc
                 {
                     tmp = string.Format("{0}.tmp{1}", fullPath, n++);
                 }
-                while (Directory.Exists(tmp));
+                while (SvnItem.PathExists(tmp));
 
+                DirectoryInfo source = new DirectoryInfo(fullPath);
                 DirectoryInfo dest = Directory.CreateDirectory(tmp);
 
                 RecursiveCopy(source, dest);
@@ -1014,36 +1001,10 @@ namespace Ankh.Scc
             }
         }
 
-        private void RecursiveDelete(DirectoryInfo dir)
-        {
-            if (dir == null)
-                throw new ArgumentNullException("dir");
-
-            if (!dir.Exists)
-                return;
-
-            foreach (DirectoryInfo sd in dir.GetDirectories())
-            {
-                RecursiveDelete(sd);
-            }
-
-            foreach (FileInfo file in dir.GetFiles())
-            {
-                file.Attributes = FileAttributes.Normal;
-                file.Delete();
-            }
-
-            dir.Attributes = FileAttributes.Normal; // .Net fixes up FileAttributes.Directory
-            dir.Delete();
-        }
-
         static class NativeMethods
         {
             [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
             internal static extern bool MoveFile(string src, string dst);
-
-
-
         }
     }
 }

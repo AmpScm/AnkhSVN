@@ -99,7 +99,7 @@ namespace Ankh.Commands.RepositoryExplorer
                                     a.Client.Delete(copyTo, da);
                                 });
                         else
-                            File.Delete(copyTo);
+                            SvnItem.DeleteNode(copyTo);
                     }
 
                     SvnItem dir = fileItem.Parent;
