@@ -38,6 +38,7 @@ namespace Ankh.Configuration
         bool _pcDoubleClickShowsChanges;
         int _recentChangesRefreshInterval;
         bool _disableUpdateCheck;
+        bool _enableTsvnHooks;
 
         /// <summary>
         /// Gets or sets the merge exe path.
@@ -129,6 +130,13 @@ namespace Ankh.Configuration
         {
             get { return _disableUpdateCheck; }
             set { _disableUpdateCheck = value; }
+        }
+
+        [DefaultValue(false)]
+        public bool EnableTortoiseSvnHooks
+        {
+            get { return _enableTsvnHooks; }
+            set { _enableTsvnHooks = value; }
         }
     }
 }
