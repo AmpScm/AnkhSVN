@@ -580,6 +580,7 @@ namespace Ankh.Services.PendingChanges
             SvnCommitResult rslt = null;
 
             SvnDepth depth = state.CalculateCommitDepth();
+            bool enableHooks = GetService<IAnkhConfigurationService>().Instance.EnableTortoiseSvnHooks;
 
             if (depth == SvnDepth.Unknown)
                 return false;
@@ -596,6 +597,7 @@ namespace Ankh.Services.PendingChanges
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_RA_OUT_OF_DATE);
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_WC_NOT_UP_TO_DATE);
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_FS_TXN_OUT_OF_DATE);
+                    ca.RunTortoiseHooks = enableHooks;
 
                     ok = e.Client.Commit(
                         state.CommitPaths,
