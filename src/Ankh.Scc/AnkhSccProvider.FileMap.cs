@@ -130,26 +130,13 @@ namespace Ankh.Scc
             else if (!IsActive)
                 return;
 
-            if (_backupMap.ContainsKey(fullPath))
-            {
-                // Don't backup twice
-                string oldBackup = _backupMap[fullPath];
-                _backupMap.Remove(fullPath);
+            SvnItem dir = StatusCache[fullPath];
 
-                SvnItem.DeleteDirectory(oldBackup, true);
-            }
-            else
-            {
-                SvnItem dir = StatusCache[fullPath];
+            if (!dir.IsVersioned)
+                return; // Nothing to do for us
 
-                if (!dir.IsVersioned)
-                    return; // Nothing to do for us
-            }
-
-            using (SvnSccContext svn = new SvnSccContext(this))
-            {
-                _backupMap.Add(fullPath, svn.MakeBackup(fullPath));
-            }
+            if (!_maybeDelete.Contains(dir.FullPath))
+                _maybeDelete.Add(dir.FullPath);
 
             RegisterForSccCleanup();
         }

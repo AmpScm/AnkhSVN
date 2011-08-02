@@ -34,7 +34,7 @@ namespace Ankh.Scc
     partial class AnkhSccProvider
     {
         readonly Dictionary<IVsSccProject2, SccProjectData> _projectMap = new Dictionary<IVsSccProject2, SccProjectData>();
-        readonly Dictionary<string, string> _backupMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        readonly HybridCollection<string> _maybeDelete = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
         bool _managedSolution;
         List<string> _delayedDelete;
         List<FixUp> _delayedMove;
@@ -619,32 +619,19 @@ namespace Ankh.Scc
                     }
                 }
             }
-            if (_backupMap.Count > 0)
+
+            while (_maybeDelete.Count > 0)
             {
-                using (SvnSccContext svn = new SvnSccContext(Context))
+                string dir = _maybeDelete[0];
+                _maybeDelete.RemoveAt(0);
+
+                if (!SvnItem.PathExists(dir))
                 {
-                    foreach (KeyValuePair<string, string> dir in _backupMap)
+                    using (SvnSccContext svn = new SvnSccContext(Context))
                     {
-                        string originalDir = dir.Key;
-                        string backupDir = dir.Value;
-
-                        if (!Directory.Exists(backupDir))
-                            continue; // No backupdir, we can't delete or move it
-
-                        if (Directory.Exists(originalDir))
-                        {
-                            // The original has not been deleted by visual studio, must be an exclude.
-                            SvnItem.DeleteDirectory(backupDir, true);
-                        }
-                        else
-                        {
-                            // Original is gone, must be a delete, put back backup so we can svn-delete it
-                            SvnSccContext.RetriedRename(backupDir, originalDir); // Use retried rename, to prevent virus-scanner locks
-                            svn.WcDelete(originalDir);
-                        }
+                        svn.WcDelete(dir);
                     }
                 }
-                _backupMap.Clear();
             }
         }
 
