@@ -216,4 +216,10 @@
   <data name="UpgradingWorkingCopy" xml:space="preserve">
     <value>Upgrading Working Copy</value>
   </data>
+  <data name="NotInWorkingCopyExportInstead" xml:space="preserve">
+    <value>The specified path is not in a working copy; would you like to export the file instead?</value>
+  </data>
+  <data name="NotInWorkingCopyTitle" xml:space="preserve">
+    <value>No Working Copy</value>
+  </data>
 </root>
