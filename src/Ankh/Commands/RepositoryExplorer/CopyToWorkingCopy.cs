@@ -126,8 +126,8 @@ namespace Ankh.Commands.RepositoryExplorer
             {
                 AnkhMessageBox mb = new AnkhMessageBox(e.Context);
 
-                if (DialogResult.Yes == mb.Show("The specified path is not in a workingcopy; would you like to export the file instead?",
-                    "No Working Copy", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+                if (DialogResult.Yes == mb.Show(CommandStrings.NotInWorkingCopyExportInstead,
+                    CommandStrings.NotInWorkingCopyTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Information))
                 {
                     e.GetService<IProgressRunner>().RunModal("Exporting",
                     delegate(object sender, ProgressWorkerArgs a)

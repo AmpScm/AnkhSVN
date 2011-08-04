@@ -223,6 +223,24 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The specified path is not in a working copy; would you like to export the file instead?.
+        /// </summary>
+        internal static string NotInWorkingCopyExportInstead {
+            get {
+                return ResourceManager.GetString("NotInWorkingCopyExportInstead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Working Copy.
+        /// </summary>
+        internal static string NotInWorkingCopyTitle {
+            get {
+                return ResourceManager.GetString("NotInWorkingCopyTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Renaming.
         /// </summary>
         internal static string RenamingNodes {
