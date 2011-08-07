@@ -23,7 +23,8 @@ namespace Ankh.Commands
             
             foreach(SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                if (item.ParentDirectory.NeedsWorkingCopyUpgrade)
+                SvnDirectory dir = item.ParentDirectory;
+                if (dir != null && dir.NeedsWorkingCopyUpgrade)
                     return;
             }
             e.Enabled = false;
