@@ -287,7 +287,7 @@ namespace Ankh.Scc
                                 item.MarkDirty();
 
                                 // Detect if we have a file that Subversion might detect as binary
-                                if (!item.IsTextFile)
+                                if (item.IsVersioned && !item.IsTextFile)
                                 {
                                     // Only check small files, avoid checking big binary files
                                     FileInfo fi = new FileInfo(item.FullPath);
