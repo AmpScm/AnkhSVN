@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("AnkhSVN")]
 [assembly: AssemblyProduct("AnkhSVN - Subversion Support for Visual Studio")]
-[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2009-2010")]
+[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2009-2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

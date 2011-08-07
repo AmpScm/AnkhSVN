@@ -27,7 +27,7 @@ using System;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("AnkhSVN")]
 [assembly: AssemblyProduct("AnkhSVN - Subversion Support for Visual Studio")]
-[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2008-2010")]
+[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2008-2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

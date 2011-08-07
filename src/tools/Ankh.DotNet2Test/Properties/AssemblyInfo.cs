@@ -1,7 +1,9 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System;
+using Ankh;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -10,11 +12,12 @@ using System;
 [assembly: AssemblyTitle("Ankh.DotNet2Test")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("Ankh.DotNet2Test")]
-[assembly: AssemblyCopyright("Copyright © AnkhSVN Project 2011")]
+[assembly: AssemblyCompany(AnkhId.AssemblyCompany)]
+[assembly: AssemblyProduct(AnkhId.AssemblyProduct)]
+[assembly: AssemblyCopyright(AnkhId.AssemblyCopyright)]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: NeutralResourcesLanguage("en-US")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
