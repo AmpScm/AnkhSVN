@@ -278,23 +278,28 @@ namespace Ankh.Scc
                             aa.ThrowOnError = false; // Just ignore errors here; make the user add them themselves
                             aa.AddParents = true;
 
-                            cl.Add(item.FullPath, aa);
-
-                            // Detect if we have a file that Subversion might detect as binary
-                            if (!item.IsTextFile)
+                            if (cl.Add(item.FullPath, aa))
                             {
-                                // Only check small files, avoid checking big binary files
-                                FileInfo fi = new FileInfo(item.FullPath);
-                                if (fi.Length < 10)
-                                {
-                                    // We're sure it's at most 10 bytes here, so just read all
-                                    byte[] fileBytes = File.ReadAllBytes(item.FullPath);
+                                item.MarkDirty();
 
-                                    // If the file starts with a UTF8 BOM, we're sure enough it's a text file, keep UTF16 & 32 binary
-                                    if (StartsWith(fileBytes, new byte[] {0xEF, 0xBB, 0xBF}))
+                                // Detect if we have a file that Subversion might detect as binary
+                                if (item.IsVersioned && !item.IsTextFile)
+                                {
+                                    // Only check small files, avoid checking big binary files
+                                    FileInfo fi = new FileInfo(item.FullPath);
+                                    if (fi.Length < 10)
                                     {
-                                        // Delete the mime type property, so it's detected as a text file again
-                                        cl.DeleteProperty(item.FullPath, SvnPropertyNames.SvnMimeType);
+                                        // We're sure it's at most 10 bytes here, so just read all
+                                        byte[] fileBytes = File.ReadAllBytes(item.FullPath);
+
+                                        // If the file starts with a UTF8 BOM, we're sure enough it's a text file, keep UTF16 & 32 binary
+                                        if (StartsWith(fileBytes, new byte[] { 0xEF, 0xBB, 0xBF }))
+                                        {
+                                            // Delete the mime type property, so it's detected as a text file again
+                                            SvnSetPropertyArgs pa = new SvnSetPropertyArgs();
+                                            pa.ThrowOnError = false;
+                                            cl.DeleteProperty(item.FullPath, SvnPropertyNames.SvnMimeType, pa);
+                                        }
                                     }
                                 }
                             }

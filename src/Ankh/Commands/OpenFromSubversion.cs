@@ -140,7 +140,7 @@ namespace Ankh.Commands
                 if (scc != null)
                     scc.RegisterAsPrimarySccProvider(); // Make us the current SCC provider!
 
-                CheckOutAndOpenSolution(e, dlg.ProjectTop, null, dlg.ProjectTop, dlg.SelectedPath, dlg.ProjectUri);
+                CheckOutAndOpenSolution(e, dlg.ProjectTop, dlg.Revision, dlg.ProjectTop, dlg.SelectedPath, dlg.ProjectUri);
 
                 sol = e.GetService<IVsSolution2>(typeof(SVsSolution));
 

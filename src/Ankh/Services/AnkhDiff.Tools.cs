@@ -103,7 +103,8 @@ namespace Ankh.Services
                 "/wait /2 /title1:'$(BaseName)' /title2:'$(MineName)' '$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
-                RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location")
+                RegistrySearch("SOFTWARE\\SourceGear\\Common\\DiffMerge\\Installer", "Location")
+                    ?? RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location")
                     ?? "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe",
                 "'$(Base)' '$(Mine)' /t1='$(BaseName)' /t2='$(MineName)' "
                 + "$(ReadOnly?'/ro2')"
@@ -180,7 +181,8 @@ namespace Ankh.Services
                     "/title3:'$(MineName)' '$(Mine)' '$(Base)' '$(Theirs)' '$(Merged)'", true));
 
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
-                RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location")
+                RegistrySearch("SOFTWARE\\SourceGear\\Common\\DiffMerge\\Installer", "Location")
+                    ?? RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location")
                     ?? "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe",
                 "/m /r='$(Merged)' '$(Mine)' '$(Base)' '$(Theirs)' " +
                     "/t1='$(MineName)' /t2='$(MergedName)' /t3='$(TheirName)'", true));
