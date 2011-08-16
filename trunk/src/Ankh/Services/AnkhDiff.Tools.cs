@@ -121,7 +121,7 @@ namespace Ankh.Services
             tools.Add(new DiffTool(this, "WinMerge", "WinMerge",
                 RegistrySearch("SOFTWARE\\Thingamahoochie\\WinMerge", "Executable")
                     ?? "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
-                "-e -x -u -wl $(ReadOnly?'-wr':'') -dl '$(BaseName)' -dr '$(MineName)' '$(base)' '$(mine)'", true));
+                "-e -u -wl $(ReadOnly?'-wr':'') -dl '$(BaseName)' -dr '$(MineName)' '$(base)' '$(mine)'", true));
 
             tools.Add(new DiffTool(this, "P4Merge", "Perforce Visual Merge",
                 Path.Combine((RegistrySearch("SOFTWARE\\Perforce\\Environment", "P4INSTROOT")
@@ -349,7 +349,7 @@ namespace Ankh.Services
                     return null;
 
                 string program, args;
-                if (!TrySplitPath(cmdLine, out program, out args))
+                if (!SvnTools.TrySplitCommandLine(cmdLine, SubstituteEmpty, out program, out args))
                     return null;
                 else
                     return program;
