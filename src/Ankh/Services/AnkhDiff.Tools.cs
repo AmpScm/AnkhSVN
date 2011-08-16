@@ -155,9 +155,14 @@ namespace Ankh.Services
                 "-r1 $(ReadOnly?'-r2 ')'$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "DevartCodeCompare", "Devart CodeCompare",
-                SubPath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "ExecutablePath"), "CodeCompare.exe")
+                RelativePath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "HelpFile"), "CodeCompare.exe")
                     ?? "$(ProgramFiles)\\Devart\\CodeCompare\\CodeCompare.exe",
                 "/WAIT /SC=SVN /t1='$(BaseName)' /t2='$(MineName)' '$(Base)' '$(Mine)'", true));
+
+            tools.Add(new DiffTool(this, "ComparePlusPlus", "Coodesoft Compare++",
+                RelativePath(AppIdLocalServerSearch("CompareEnter.Connect"), "Compare++.exe")
+                    ?? "$(HostProgramFiles)\\Coode Software\\Compare++\\Compare++.exe",
+                "'$(Base)' '$(Mine)'", true));
 
             LoadRegistryTools(DiffToolMode.Diff, tools);
 
