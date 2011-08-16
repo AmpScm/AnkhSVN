@@ -218,8 +218,16 @@ namespace Ankh.Commands
             catch
             { }
 
-            Uri updateUri = new Uri(sb.ToString());
-            WebRequest wr = WebRequest.Create(updateUri);
+            WebRequest wr;
+            try
+            {
+                wr = WebRequest.Create(new Uri(sb.ToString()));
+            }
+            catch (System.Configuration.ConfigurationException)
+            {
+                // The global .Net or Visual Studio configuration probably contains an invalid (proxy) configuration
+                return; // Not our problem
+            }
 
             HttpWebRequest hwr = wr as HttpWebRequest;
 
