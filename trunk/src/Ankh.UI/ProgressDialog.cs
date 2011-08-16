@@ -487,44 +487,8 @@ namespace Ankh.UI
 
             if (Cancel != null)
                 Cancel(this, EventArgs.Empty);
-            this.args.SetCancelled(true);
             this.cancelButton.Text = "Cancelling...";
             this.cancelButton.Enabled = false;
         }
-
-        private ProgressStatusEventArgs args = new ProgressStatusEventArgs();
-    }
-
-    /// <summary>
-    /// An event args class used by the ProgressDialog.ProgressStatus event.
-    /// </summary>
-    public class ProgressStatusEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Event handlers can set this to true if the operation is finished.
-        /// </summary>
-        public bool Done
-        {
-            get { return this.done; }
-            set { this.done = value; }
-        }
-
-        /// <summary>
-        /// The dialog uses this to indicate that the user has clicked 
-        /// Cancel. Event handlers should detect this and attempt to 
-        /// cancel the ongoing operation.
-        /// </summary>
-        public bool Cancelled
-        {
-            get { return this.cancelled; }
-        }
-
-        internal void SetCancelled(bool val)
-        {
-            this.cancelled = val;
-        }
-
-        private bool done;
-        private bool cancelled;
     }
 }
