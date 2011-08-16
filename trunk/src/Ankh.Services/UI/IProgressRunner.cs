@@ -33,6 +33,10 @@ namespace Ankh
         {
             if (context == null)
                 throw new ArgumentNullException("context");
+            else if (client == null)
+                throw new ArgumentNullException("client");
+            else if (sync == null)
+                throw new ArgumentNullException("sync");
 
             _context = context;
             _client = client;
