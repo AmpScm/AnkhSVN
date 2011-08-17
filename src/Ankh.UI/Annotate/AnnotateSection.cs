@@ -119,13 +119,8 @@ namespace Ankh.UI.Annotate
         {
             get
             {
-                lock (_args)
-                    return _logMessage;
-            }
-            internal set
-            {
-                lock (_args)
-                    _logMessage = value;
+                return _logMessage
+                    ?? (_logMessage = _args.RevisionProperties.Contains(SvnPropertyNames.SvnLog) ? _args.RevisionProperties[SvnPropertyNames.SvnLog].StringValue : "") ?? "";
             }
         }
 
