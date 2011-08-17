@@ -397,6 +397,11 @@ namespace Ankh.Services
             Patch
         }
 
+        string SubstituteEmpty(string from)
+        {
+            return SubstituteArguments(from, EmptyDiffArgs, DiffToolMode.None);
+        }
+
         private bool Substitute(string reference, AnkhDiffToolArgs args, DiffToolMode toolMode, out string program, out string arguments)
         {
             if (string.IsNullOrEmpty(reference))
@@ -428,7 +433,7 @@ namespace Ankh.Services
 
                 return !String.IsNullOrEmpty(program) && File.Exists(program);
             }
-            else if (!TrySplitPath(reference, out program, out arguments))
+            else if (!SvnTools.TrySplitCommandLine(reference, SubstituteEmpty, out program, out arguments))
                 return false;
 
             program = SubstituteArguments(program, args, toolMode);
@@ -438,68 +443,6 @@ namespace Ankh.Services
         }
 
         static readonly AnkhDiffArgs EmptyDiffArgs = new AnkhDiffArgs();
-        private bool TrySplitPath(string cmdline, out string program, out string arguments)
-        {
-            if(cmdline == null)
-                throw new ArgumentNullException("cmdline");
-
-            program = arguments = null;
-
-            cmdline = cmdline.TrimStart();
-
-            if (cmdline.StartsWith("\""))
-            {
-                // Ok: The easy way:
-                int nEnd = cmdline.IndexOf('\"', 1);
-
-                if (nEnd < 0)
-                    return false; // Invalid string!
-
-                program = cmdline.Substring(1, nEnd - 1);
-                arguments = cmdline.Substring(nEnd + 1).TrimStart();
-                return true;
-            }
-
-            // We use the algorithm as documented by CreateProcess() in MSDN
-            // http://msdn2.microsoft.com/en-us/library/ms682425(VS.85).aspx
-            char[] spacers = new char[] { ' ', '\t' };
-            int nFrom = 0;
-            int nTok = -1;
-
-            string file;
-            
-            while ((nFrom < cmdline.Length) &&
-                (0 <= (nTok = cmdline.IndexOfAny(spacers, nFrom))))
-            {
-                program = cmdline.Substring(0, nTok);
-
-                file = SubstituteArguments(program, EmptyDiffArgs, DiffToolMode.None);
-
-                if (!string.IsNullOrEmpty(file) && File.Exists(file))
-                {
-                    arguments = cmdline.Substring(nTok + 1).TrimStart();
-                    return true;
-                }
-                else
-                    nFrom = nTok + 1;
-            }
-
-            if (nTok < 0 && nFrom <= cmdline.Length)
-            {
-                file = SubstituteArguments(cmdline, EmptyDiffArgs, DiffToolMode.None);
-
-                if (!string.IsNullOrEmpty(file) && File.Exists(file))
-                {
-                    program = file;
-                    arguments = "";
-                    return true;
-                }
-            }
-
-
-            return false;
-        }
-
         Regex _re;
 
         private string SubstituteArguments(string arguments, AnkhDiffToolArgs diffArgs, DiffToolMode toolMode)
