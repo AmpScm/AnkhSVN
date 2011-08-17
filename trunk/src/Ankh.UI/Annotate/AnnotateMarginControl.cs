@@ -84,14 +84,9 @@ namespace Ankh.UI.Annotate
                 sb.AppendFormat(AnnotateResources.AuthorHead, src.Author);
                 sb.AppendLine();
                 sb.AppendFormat(AnnotateResources.TimeHead, src.Time.ToLocalTime());
-                sb.AppendLine();
 
-                string msg = src.LogMessage;
-
-                if (msg == null)
-                    sb.Append(AnnotateResources.LoadingMessage);
-                else
-                    sb.AppendLine(msg);
+                if (!string.IsNullOrEmpty(src.LogMessage))
+                    sb.Append(src.LogMessage);
 
                 _toolTip.Show(sb.ToString(), this, mp);
                 _tipSection = region;
