@@ -563,8 +563,7 @@ namespace Ankh.Services
                         {
                             AnkhDiff diff = _context.GetService<AnkhDiff>(typeof(IAnkhDiffHandler));
                             string program;
-                            string args;
-                            _isAvailable = diff.Substitute(Program, new AnkhDiffArgs(), DiffToolMode.None, out program, out args);
+                            _isAvailable = SvnTools.TryFindApplication(diff.SubstituteArguments(Program, new AnkhDiffArgs(), DiffToolMode.None), out program);
                         }
                         finally
                         {
