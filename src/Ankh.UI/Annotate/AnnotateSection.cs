@@ -119,8 +119,16 @@ namespace Ankh.UI.Annotate
         {
             get
             {
-                return _logMessage
-                    ?? (_logMessage = _args.RevisionProperties.Contains(SvnPropertyNames.SvnLog) ? _args.RevisionProperties[SvnPropertyNames.SvnLog].StringValue : "") ?? "";
+                if (_logMessage == null)
+                {
+                    if (_args.RevisionProperties != null && _args.RevisionProperties.Contains(SvnPropertyNames.SvnLog))
+                    {
+                        _logMessage = _args.RevisionProperties[SvnPropertyNames.SvnLog].StringValue ?? "";
+                    }
+                    else
+                        _logMessage = "";
+                }
+                return _logMessage;
             }
         }
 

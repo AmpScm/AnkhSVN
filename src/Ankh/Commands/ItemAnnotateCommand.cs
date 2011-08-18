@@ -81,7 +81,7 @@ namespace Ankh.Commands
             switch (e.Command)
             {
                 case AnkhCommand.ItemAnnotate:
-                    endRev = SvnRevision.Base;
+                    endRev = SvnRevision.Working;
                     foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
                     {
                         if (i.IsVersionable)
@@ -104,7 +104,7 @@ namespace Ankh.Commands
                     break;
                 case AnkhCommand.DocumentAnnotate:
                     targets.Add(new SvnOrigin(e.GetService<IFileStatusCache>()[e.Selection.ActiveDocumentFilename]));
-                    endRev = SvnRevision.Base;
+                    endRev = SvnRevision.Working;
                     break;
             }
 
