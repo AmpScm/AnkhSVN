@@ -79,14 +79,22 @@ namespace Ankh.UI.Annotate
             {
                 AnnotateSource src = region.Source;
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat(AnnotateResources.RevisonHead, src.Revision);
-                sb.AppendLine();
-                sb.AppendFormat(AnnotateResources.AuthorHead, src.Author);
-                sb.AppendLine();
-                sb.AppendFormat(AnnotateResources.TimeHead, src.Time.ToLocalTime());
+                if (src.Revision >= 0)
+                {
+                    sb.AppendFormat(AnnotateResources.RevisonHead, src.Revision);
+                    sb.AppendLine();
+                    sb.AppendFormat(AnnotateResources.AuthorHead, src.Author);
+                    sb.AppendLine();
+                    sb.AppendFormat(AnnotateResources.TimeHead, src.Time.ToLocalTime());
 
-                if (!string.IsNullOrEmpty(src.LogMessage))
-                    sb.Append(src.LogMessage);
+                    if (!string.IsNullOrEmpty(src.LogMessage))
+                    {
+                        sb.AppendLine();
+                        sb.Append(src.LogMessage);
+                    }
+                }
+                else
+                    sb.Append(AnnotateResources.LocalChange);
 
                 _toolTip.Show(sb.ToString(), this, mp);
                 _tipSection = region;
@@ -360,6 +368,7 @@ namespace Ankh.UI.Annotate
             using (Brush grayBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, Color.LightGray))
             using (Brush blueBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, Color.LightBlue))
             using (Brush selectedBg = new SolidBrush(SystemColors.Highlight))
+            using (SolidBrush localBg = new SolidBrush(SystemColors.Info))
             {
                 foreach (AnnotateRegion region in _regions)
                 {
@@ -381,33 +390,38 @@ namespace Ankh.UI.Annotate
                     {
                         if (region.Hovered)
                             e.Graphics.FillRectangle(blueBg, rect);
-                        else
+                        else if (region.Source.Revision >= 0)
                             e.Graphics.FillRectangle(grayBg, rect);
+                        else
+                            e.Graphics.FillRectangle(localBg, rect);
                     }
                     e.Graphics.DrawRectangle(border, rect);
 
                     AnnotateSource src = region.Source;
-                    string revisionString = src.Revision.ToString();
-                    string dateString = src.Time.ToShortDateString();
+                    if (src.Revision >= 0)
+                    {
+                        string revisionString = src.Revision.ToString();
+                        string dateString = src.Time.ToShortDateString();
 
-                    float rectTop = rect.Top + 2; // top padding of 2px
-                    float revisionWidth = e.Graphics.MeasureString(revisionString, f).Width;
-                    float dateWidth = e.Graphics.MeasureString(dateString, f).Width;
+                        float rectTop = rect.Top + 2; // top padding of 2px
+                        float revisionWidth = e.Graphics.MeasureString(revisionString, f).Width;
+                        float dateWidth = e.Graphics.MeasureString(dateString, f).Width;
 
-                    // Calculate the author field based on the fields to the left and right of it
-                    // because we use ellipsis trimming when it's too small
-                    float authorWidth = Width - revisionWidth - dateWidth - 8; // left+right padding of both revision and date means 2+2+2+2 = 8
-                    
-                    Brush color = IsSelected(region) ? selectedTextColor : textColor;
-                    e.Graphics.DrawString(revisionString, f, color, new RectangleF(3, rectTop, revisionWidth, LineHeight), sfr);
+                        // Calculate the author field based on the fields to the left and right of it
+                        // because we use ellipsis trimming when it's too small
+                        float authorWidth = Width - revisionWidth - dateWidth - 8; // left+right padding of both revision and date means 2+2+2+2 = 8
 
-                    // TODO: decide if this is the best way
-                    // If the authorWidth is negative, don't attempt to show the author. This case should only
-                    // occur with very long ShortDateStrings, or very long revision strings.
-                    if(authorWidth > 0) 
-                        e.Graphics.DrawString(src.Author, f, color, new RectangleF(revisionWidth + 5, rectTop, authorWidth, LineHeight), sfl);
+                        Brush color = IsSelected(region) ? selectedTextColor : textColor;
+                        e.Graphics.DrawString(revisionString, f, color, new RectangleF(3, rectTop, revisionWidth, LineHeight), sfr);
 
-                    e.Graphics.DrawString(dateString, f, color, new RectangleF(Width - dateWidth - 2, rectTop, dateWidth, LineHeight), sfr);
+                        // TODO: decide if this is the best way
+                        // If the authorWidth is negative, don't attempt to show the author. This case should only
+                        // occur with very long ShortDateStrings, or very long revision strings.
+                        if (authorWidth > 0)
+                            e.Graphics.DrawString(src.Author, f, color, new RectangleF(revisionWidth + 5, rectTop, authorWidth, LineHeight), sfl);
+
+                        e.Graphics.DrawString(dateString, f, color, new RectangleF(Width - dateWidth - 2, rectTop, dateWidth, LineHeight), sfr);
+                    }
                 }
 
                 Rectangle clip = e.ClipRectangle;

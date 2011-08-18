@@ -120,8 +120,8 @@
   <data name="AuthorHead" xml:space="preserve">
     <value>Author: {0}</value>
   </data>
-  <data name="LoadingMessage" xml:space="preserve">
-    <value>&lt;loading logmessages&gt;</value>
+  <data name="LocalChange" xml:space="preserve">
+    <value>Local Change (uncommitted)</value>
   </data>
   <data name="RevisonHead" xml:space="preserve">
     <value>Revision: {0}</value>
