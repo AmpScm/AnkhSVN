@@ -350,7 +350,7 @@ namespace Ankh.Scc
         /// <returns>
         /// 	<c>true</c> if [is cleanup change]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsChangeForPatching()
+        public bool IsNoChangeForPatching()
         {
             switch (Kind)
             {
@@ -412,6 +412,8 @@ namespace Ankh.Scc
 
                     return PendingChangeKind.Added;
                 case SvnStatus.Deleted:
+                    if (item != null && item.Exists && item.InSolution)
+                        return PendingChangeKind.DeletedNew;
                     return PendingChangeKind.Deleted;
                 case SvnStatus.Missing:
                     if (item != null && item.IsCasingConflicted)
@@ -474,6 +476,7 @@ namespace Ankh.Scc
                 switch (Kind)
                 {
                     case PendingChangeKind.New:
+                    case PendingChangeKind.DeletedNew:
                         return true;
                     case PendingChangeKind.WrongCasing:
                         return true;

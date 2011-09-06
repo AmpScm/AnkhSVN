@@ -45,6 +45,7 @@ namespace Ankh
         readonly string _lastChangeAuthor;
         readonly long _lastChangeRevision;
         readonly long _revision;
+        readonly bool _localFileExists;
 
         public AnkhStatus(SvnStatusEventArgs status)
         {
@@ -56,6 +57,7 @@ namespace Ankh
             _localCopied = status.LocalCopied;
             _localPropertyStatus = status.LocalPropertyStatus;
             _uri = status.Uri;
+            _localFileExists = (status.FileLength >= 0);
 
             if (status.Versioned)
             {
@@ -198,6 +200,11 @@ namespace Ankh
         public bool IsLockedLocal
         {
             get { return _localLocked; }
+        }
+
+        internal bool LocalFileExists
+        {
+            get { return _localFileExists; }
         }
 
         internal Uri Uri
