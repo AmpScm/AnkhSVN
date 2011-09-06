@@ -55,8 +55,6 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             get { return _context; }
         }
 
-
-
         public abstract string Title
         {
             get;
@@ -81,14 +79,6 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             [System.Diagnostics.DebuggerStepThrough]
             get { return _parent; }
         }
-
-        /// <summary>
-        /// Derived classes implement this method to append their resources
-        /// to the list.
-        /// </summary>
-        /// <param name="list"></param>
-        public abstract void GetResources(Collection<SvnItem> list, bool getChildItems,
-            Predicate<SvnItem> filter);
 
         public void Refresh()
         {

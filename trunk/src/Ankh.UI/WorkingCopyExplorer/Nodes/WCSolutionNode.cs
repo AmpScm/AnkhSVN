@@ -77,11 +77,6 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             }
         }
 
-        public override void GetResources(System.Collections.ObjectModel.Collection<SvnItem> list, bool getChildItems, Predicate<SvnItem> filter)
-        {
-//            throw new NotImplementedException();
-        }
-
         protected override void RefreshCore(bool rescan)
         {
 //            throw new NotImplementedException();
