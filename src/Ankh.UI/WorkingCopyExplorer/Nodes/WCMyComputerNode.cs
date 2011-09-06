@@ -34,11 +34,7 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
 
         public override string Title
         {
-            get { return "My Computer"; }
-        }
-
-        public override void GetResources(System.Collections.ObjectModel.Collection<SvnItem> list, bool getChildItems, Predicate<SvnItem> filter)
-        {
+            get { return WCStrings.MyComputer; }
         }
 
         public override IEnumerable<WCTreeNode> GetChildren()

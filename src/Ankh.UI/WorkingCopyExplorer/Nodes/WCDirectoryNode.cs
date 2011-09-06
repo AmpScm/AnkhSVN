@@ -72,15 +72,11 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             }
         }
 
-        public override void GetResources(System.Collections.ObjectModel.Collection<SvnItem> list, bool getChildItems, Predicate<SvnItem> filter)
-        {
-        }
-
         protected override void RefreshCore(bool rescan)
         {
             if(SvnItem == null)
                 return;
-             
+
             if(rescan)
                 StatusCache.MarkDirtyRecursive(SvnItem.FullPath);
 
@@ -97,7 +93,6 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         {
             return false;
         }
-        
     }
 
     class WCDirectoryNode : WCFileSystemNode
@@ -116,27 +111,32 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             }
         }
 
-        public override void GetResources(System.Collections.ObjectModel.Collection<SvnItem> list, bool getChildItems, Predicate<SvnItem> filter)
-        {
-        }
-
         protected override void RefreshCore(bool rescan)
         {
+            if (SvnItem == null)
+                return;
+
+            if (rescan)
+                StatusCache.MarkDirtyRecursive(SvnItem.FullPath);
+
+            if (TreeNode != null)
+                TreeNode.Refresh();
         }
 
         public override IEnumerable<WCTreeNode> GetChildren()
         {
-            IFileStatusCache cache = Context.GetService<IFileStatusCache>();
             foreach (SccFileSystemNode node in SccFileSystemNode.GetDirectoryNodes(SvnItem.FullPath))
             {
-                if ((node.Attributes & (FileAttributes.Hidden | FileAttributes.System
-                    | FileAttributes.Offline)) != 0)
+                if (node.IsHiddenOrSystem)
+                    continue;
+
+                if ((node.Attributes & FileAttributes.Offline) != 0)
                     continue;
 
                 if (node.IsDirectory)
-                    yield return new WCDirectoryNode(Context, this, cache[node.FullPath]);
+                    yield return new WCDirectoryNode(Context, this, StatusCache[node.FullPath]);
                 else
-                    yield return new WCFileNode(Context, this, cache[node.FullPath]);
+                    yield return new WCFileNode(Context, this, StatusCache[node.FullPath]);
             }
         }
 
