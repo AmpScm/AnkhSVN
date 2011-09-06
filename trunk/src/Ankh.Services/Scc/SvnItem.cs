@@ -1091,6 +1091,18 @@ namespace Ankh
                 return DeleteFile(fullPath);
         }
 
+        internal static string MakeLongPath(string fullPath)
+        {
+            // Windows doesn't normalize long paths via this trick, so we should
+            fullPath = SvnTools.GetNormalizedFullPath(fullPath);
+
+            // Documented method of allowing paths over 160 characters (APR+SharpSvn use this too!)
+            if (!fullPath.StartsWith("\\\\"))
+                return "\\\\?\\" + fullPath;
+            else
+                return "\\\\?\\UNC" + fullPath.Substring(1);
+        }
+
         static class NativeMethods
         {
             /// <summary>
@@ -1104,10 +1116,10 @@ namespace Ankh
                 if (string.IsNullOrEmpty(filename))
                     throw new ArgumentNullException("filename");
 
-                if (filename.Length < 160)
+                if (filename.Length < 240)
                     return GetFileAttributesW(filename);
                 else
-                    return GetFileAttributesW("\\\\?\\" + filename); // Documented method of allowing paths over 160 characters (APR+SharpSvn use this too!)
+                    return GetFileAttributesW(MakeLongPath(filename)); // Documented method of allowing paths over 160 characters (APR+SharpSvn use this too!)
             }
 
             public static bool DeleteFile(string filename)
@@ -1115,8 +1127,8 @@ namespace Ankh
                 if (string.IsNullOrEmpty(filename))
                     throw new ArgumentNullException("filename");
 
-                if (filename.Length >= 160)
-                    filename = "\\\\?\\" + filename; // Documented method of allowing paths over 160 characters (APR+SharpSvn use this too!)
+                if (filename.Length >= 240)
+                    filename = MakeLongPath(filename);
 
                 SetFileAttributesW(filename, FILE_ATTRIBUTE_NORMAL);
                 return DeleteFileW(filename);
@@ -1128,10 +1140,10 @@ namespace Ankh
                 if (string.IsNullOrEmpty(pathname))
                     throw new ArgumentNullException("pathname");
 
-                if (pathname.Length < 160)
-                    return RemoveDirectoryW(pathname);
-                else
-                    return RemoveDirectoryW("\\\\?\\" + pathname); // Documented method of allowing paths over 160 characters (APR+SharpSvn use this too!)
+                if (pathname.Length >= 240)
+                    pathname = MakeLongPath(pathname);
+
+                return RemoveDirectoryW(MakeLongPath(pathname));
             }
 
             [DllImport("kernel32.dll", ExactSpelling = true)]
