@@ -413,7 +413,9 @@ namespace Ankh.Services.PendingChanges
         {
             foreach (PendingChange pc in state.Changes)
             {
-                if (pc.Change != null && pc.Change.State == PendingChangeKind.New)
+                if (pc.Change != null 
+                    && (pc.Change.State == PendingChangeKind.New
+                        || pc.Change.State == PendingChangeKind.DeletedNew))
                 {
                     SvnItem item = pc.SvnItem;
 

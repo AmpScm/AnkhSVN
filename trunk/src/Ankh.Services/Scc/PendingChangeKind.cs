@@ -83,6 +83,11 @@ namespace Ankh.Scc
         EditorDirty,
 
         /// <summary>
+        /// The item is deleted, but exists and referenced from the solution
+        /// </summary>
+        DeletedNew,
+
+        /// <summary>
         /// The item is locked locally
         /// </summary>
         LockedOnly,

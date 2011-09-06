@@ -272,8 +272,13 @@ namespace Ankh
                     break;
                 case SvnStatus.Deleted:
                     SetState(managed | SvnItemState.Deleted, unset);
-                    exists = false;
-                    provideDiskInfo = false; // File/folder might still exist
+                    if (status.LocalFileExists)
+                        exists = provideDiskInfo = true;
+                    else
+                    {
+                        exists = false;
+                        provideDiskInfo = false; // Folder might still exist
+                    }
                     break;
                 case SvnStatus.External:
                     // Should be handled above
@@ -343,6 +348,11 @@ namespace Ankh
                             break;
                         case SvnNodeKind.File:
                             SetState(SvnItemState.IsDiskFile | SvnItemState.Exists, SvnItemState.IsDiskFolder);
+                            break;
+                        default:
+                            // Handle direct replacement without an additional stat
+                            if (status.LocalFileExists)
+                                goto case SvnNodeKind.File;
                             break;
                     }
                 else

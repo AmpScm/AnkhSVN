@@ -73,7 +73,7 @@ namespace Ankh.Commands
             {
                 PendingChange pc = changes[item.FullPath];
 
-                if (pc.IsChangeForPatching())
+                if (pc.IsNoChangeForPatching())
                     continue;
 
                 resources.Add(item);

@@ -129,6 +129,9 @@
   <data name="StateDeleted" xml:space="preserve">
     <value>Deleted</value>
   </data>
+  <data name="StateDeletedAndNew" xml:space="preserve">
+    <value>Deleted and New</value>
+  </data>
   <data name="StateEdited" xml:space="preserve">
     <value>Edited</value>
   </data>
