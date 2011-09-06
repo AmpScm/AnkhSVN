@@ -29,13 +29,20 @@ namespace Ankh.Scc
     /// </summary>
     public sealed class SccFileSystemNode
     {
-        readonly NativeMethods.WIN32_FIND_DATA _findData;
-        string _basePath;
-        string _fullPath;
-        SccFileSystemNode(string basePath, NativeMethods.WIN32_FIND_DATA findData)
+        readonly string _basePath;
+        readonly string _fileName;
+        readonly FileAttributes _attributes;
+
+        SccFileSystemNode(string basePath, string fileName, FileAttributes attributes)
         {
+            if (string.IsNullOrEmpty(basePath))
+                throw new ArgumentNullException("basePath");
+            else if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException("fileName");
+
             _basePath = basePath;
-            _findData = findData;
+            _fileName = fileName;
+            _attributes = attributes;
         }
 
         /// <summary>
@@ -44,7 +51,7 @@ namespace Ankh.Scc
         /// <value>The attributes.</value>
         public FileAttributes Attributes
         {
-            get { return (FileAttributes)_findData.dwFileAttributes; }
+            get { return _attributes; }
         }
 
         /// <summary>
@@ -53,9 +60,10 @@ namespace Ankh.Scc
         /// <value>The name.</value>
         public string Name
         {
-            get { return _findData.cFileName; }
+            get { return _fileName; }
         }
 
+        string _fullPath;
         /// <summary>
         /// Gets the full path.
         /// </summary>
@@ -127,10 +135,7 @@ namespace Ankh.Scc
 
             if (fullPath.Length > 240)
             {
-                if (fullPath.StartsWith("\\\\"))
-                    fullPath = "\\\\?\\UNC" + fullPath.Substring(1);
-                else
-                    fullPath = "\\\\?\\" + fullPath;
+                fullPath = SvnItem.MakeLongPath(fullPath);
             }
 
             NativeMethods.WIN32_FIND_DATA data;
@@ -144,7 +149,7 @@ namespace Ankh.Scc
             else
             {
                 canRead = true;
-                return DoGetDirectoryNodes(new SccFileSystemNode(path, data), sh);
+                return DoGetDirectoryNodes(new SccFileSystemNode(path, data.cFileName, (FileAttributes)data.dwFileAttributes), sh);
             }
         }
 
@@ -153,26 +158,25 @@ namespace Ankh.Scc
             string basePath = result._basePath;
             using (findHandle)
             {
-                if (!IsDotPath(result))
+                if (!IsDotPath(result.Name))
                     yield return result;
 
                 NativeMethods.WIN32_FIND_DATA data;
                 while (NativeMethods.FindNextFileW(findHandle, out data))
                 {
-                    result = new SccFileSystemNode(basePath, data);
-                    if (!IsDotPath(result))
-                        yield return result;
+                    if (IsDotPath(data.cFileName))
+                        continue;
+
+                    yield return new SccFileSystemNode(basePath, data.cFileName, (FileAttributes)data.dwFileAttributes);
                 }
             }
         }
 
-        private static bool IsDotPath(SccFileSystemNode result)
+        private static bool IsDotPath(string name)
         {
-            string p = result.Name;
-
-            if (p.Length == 1 && p[0] == '.')
+            if (name.Length == 1 && name[0] == '.')
                 return true;
-            else if (p.Length == 2 && p == "..")
+            else if (name.Length == 2 && name == "..")
                 return true;
 
             return false;

@@ -133,7 +133,7 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
                     | FileAttributes.Offline)) != 0)
                     continue;
 
-                if ((node.Attributes & FileAttributes.Directory) > 0)
+                if (node.IsDirectory)
                     yield return new WCDirectoryNode(Context, this, cache[node.FullPath]);
                 else
                     yield return new WCFileNode(Context, this, cache[node.FullPath]);
