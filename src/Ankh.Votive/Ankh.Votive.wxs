@@ -100,11 +100,33 @@
           </Directory>
         </Directory>
       </Directory>
+      <Directory Id="VS110_ROOT_FOLDER">
+        <Directory Name="Common7" Id="Common7_11">
+          <Directory Name="IDE" Id="VSIDE_11">
+            <Directory Name="Extensions" Id="EXTENSIONS_11">
+              <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_11">
+                <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_ANKH_11">
+                  <Directory Name="2.0" Id="ANKHSVN_EXTENSION_11">
+                    <Component Id="C_Reg11" Guid="1A91E814-7713-4C3C-8DCF-8F7D599F2841">
+                      <Condition>VS110DEVENV</Condition>
+                      <CopyFile Id="Vsix_Mnf_11" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
+                      <CopyFile Id="Vsix_Lic_11" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
+                      <CopyFile Id="Vsix_Ico_11" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
+                      <CopyFile Id="Vsix_Pvw_11" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
+                    </Component>
+                  </Directory>
+                </Directory>
+              </Directory>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
     </Directory>
     <!-- Make sure the packages are set up in The VS Environment -->
     <CustomActionRef Id="VS2005Setup"/>
     <CustomActionRef Id="VS90SetupNoVSTemplates"/>
     <CustomActionRef Id="VS100SetupNoVSTemplates"/>
+    <CustomActionRef Id="VS110SetupNoVSTemplates"/>
     <UI>
       <InstallUISequence>
         <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
@@ -113,6 +135,7 @@
       <ProgressText Action="VS2005Setup" Template="[1]">Updating Visual Studio 2005 registration</ProgressText>
       <ProgressText Action="VS90SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
       <ProgressText Action="VS100SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
+      <ProgressText Action="VS110SetupNoVSTemplates" Template="[1]">Updating Visual Studio 11 Developer Preview registration</ProgressText>
     </UI>
 
     <InstallExecuteSequence>
@@ -160,6 +183,12 @@
         <ComponentGroupRef Id="PkgReg2010"/>
         <ComponentGroupRef Id="Extension2010"/>
         <ComponentRef Id="C_Reg2010"/>
+      </Feature>
+      <Feature Id="RegVS11" Title="Register in Microsoft Visual Studio 11 Developer Preview"
+               Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2010" Level="1" AllowAdvertise="no">
+        <ComponentGroupRef Id="PkgReg11"/>
+        <ComponentGroupRef Id="Extension11"/>
+        <ComponentRef Id="C_Reg11"/>
       </Feature>
     </Feature>
   </Product>
