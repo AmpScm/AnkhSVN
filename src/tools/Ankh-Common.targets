@@ -11,9 +11,11 @@
     <UseVsSdkVersion Condition="'$(UseVS2005MPF)' == 'true'">8.0</UseVsSdkVersion>
     <UseVsSdkVersion Condition="'$(UseVS2005MPF)' != 'true'">9.0</UseVsSdkVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '4.0'">
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '4.0' and '$(VisualStudioVersion)' == ''">
     <VisualStudioVersion>10.0</VisualStudioVersion>
-    <UseVsSdkVersion>10.0</UseVsSdkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(UseVsSdkVersion)' == '' and '$(VisualStudioVersion)' != ''">
+    <UseVsSdkVersion>$(VisualStudioVersion)</UseVsSdkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(UseVsSdkVersion)' == '8.0'">
     <!-- Visual Studio 2005 SDK 1.1 -->
@@ -33,6 +35,12 @@
     <MinVsTasksVersion>9.0.30820.0</MinVsTasksVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(UseVsSdkVersion)' == '10.0'">
+    <!-- Visual Studio 2010 Beta 1-->
+    <MsVsShellAssembly>Microsoft.VisualStudio.Shell.10.0</MsVsShellAssembly>
+    <MsVsLangAssembly>Microsoft.VisualStudio.Package.LanguageService.10.0</MsVsLangAssembly>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(UseVsSdkVersion)' == '11.0'">
     <!-- Visual Studio 2010 Beta 1-->
     <MsVsShellAssembly>Microsoft.VisualStudio.Shell.10.0</MsVsShellAssembly>
     <MsVsLangAssembly>Microsoft.VisualStudio.Package.LanguageService.10.0</MsVsLangAssembly>
