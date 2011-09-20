@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.10440</title>
+          AnkhSVN-Daily Update - 2.3.10448</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -17,20 +17,35 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5118/AnkhSvn-Daily-2.3.10440.1025.msi">AnkhSVN 2.3.10440</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5121/AnkhSvn-Daily-2.3.10448.1026.msi">AnkhSVN 2.3.10448</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=10440">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=10448">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2011-09-20</td></tr>
+<tr><td> </td><td class="r"><a id="10447" href="http://ankhsvn.net/rev/10447">
+            [r10447]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.Glyphs.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use glyph indexes above 16 for our state images on Visual Studio 2010 and 11.
+The VS 11 solution explorer and VS 10 solution navigator support these glyphs
+and older controls (like the VS2010 solution explorer and the class viewer)
+wrap over and show the original icons.</td></tr>
+<tr><td> </td><td class="r"><a id="10446" href="http://ankhsvn.net/rev/10446">
+            [r10446]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/SolutionExplorer:</strong> StatusGlyphs7.bmp, StatusGlyphs8.bmp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Following up on <a href="http://ankhsvn.net/rev/10445">r10445</a>, remove some artifacts left over from editting the
+glyphs.</td></tr>
+<tr><td> </td><td class="r"><a id="10445" href="http://ankhsvn.net/rev/10445">
+            [r10445]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/SolutionExplorer/StatusGlyphs.bmp, Ankh.VS/SolutionExplorer/SolutionExplorerWindow.cs, Ankh.VS/Ankh.VS.csproj, Ankh.VS/SolutionExplorer/StatusGlyphs7.bmp, Ankh.VS/SolutionExplorer/StatusGlyphs8.bmp, Ankh.VS/SolutionExplorer/StatusImageMapper.cs, Ankh.Services/VSVersion.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Disable the Solution Explorer Hook/Hack for Visual Studio 11 and later and add
+an 7 pixel wide image list variant for usage by Visual Studio's controls.</td></tr>
 <tr class="d"><td colspan="4">2011-09-19</td></tr>
 <tr><td> </td><td class="r"><a id="10438" href="http://ankhsvn.net/rev/10438">
             [r10438]
