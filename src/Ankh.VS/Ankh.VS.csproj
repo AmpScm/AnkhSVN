@@ -131,12 +131,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ankh.VS.wxs" />
+    <EmbeddedResource Include="SolutionExplorer\StatusGlyphs7.bmp" />
+    <EmbeddedResource Include="SolutionExplorer\StatusGlyphs8.bmp" />
     <EmbeddedResource Include="SolutionExplorer\SolutionExplorerStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SolutionExplorerStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="SolutionExplorer\UpDnListView.png" />
-    <EmbeddedResource Include="SolutionExplorer\StatusGlyphs.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\" />
