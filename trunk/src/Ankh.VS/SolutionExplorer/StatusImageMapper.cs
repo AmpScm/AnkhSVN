@@ -23,6 +23,7 @@ using Ankh.Scc;
 using SharpSvn;
 using System.IO;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace Ankh.VS.SolutionExplorer
 {
@@ -37,12 +38,18 @@ namespace Ankh.VS.SolutionExplorer
         ImageList _statusImageList;
         public ImageList StatusImageList
         {
-            get { return _statusImageList ?? (_statusImageList = CreateStatusImageList()); }
+            get { return _statusImageList ?? (_statusImageList = CreateStatusImageList(true)); }
         }
 
-        public ImageList CreateStatusImageList()
+        ImageList IStatusImageMapper.CreateStatusImageList()
         {
-            using (Stream images = typeof(StatusImageMapper).Assembly.GetManifestResourceStream(typeof(StatusImageMapper).Namespace + ".StatusGlyphs.bmp"))
+            return CreateStatusImageList(false);
+        }
+
+        public ImageList CreateStatusImageList(bool width8)
+        {
+            int width = width8 ? 8 : 7;
+            using (Stream images = typeof(StatusImageMapper).Assembly.GetManifestResourceStream(typeof(StatusImageMapper).Namespace + string.Format(CultureInfo.InvariantCulture, ".StatusGlyphs{0}.bmp", width)))
             {
                 if (images == null)
                     return null;
@@ -50,7 +57,7 @@ namespace Ankh.VS.SolutionExplorer
                 Bitmap bitmap = (Bitmap)Image.FromStream(images, true);
 
                 ImageList imageList = new ImageList();
-                imageList.ImageSize = new Size(8, bitmap.Height);
+                imageList.ImageSize = new Size(width, bitmap.Height);
                 bitmap.MakeTransparent(bitmap.GetPixel(0, 0));
 
                 imageList.Images.AddStrip(bitmap);
