@@ -334,9 +334,12 @@ namespace Ankh.Scc
             if (hier == null)
                 return;
 
-            AnkhGlyph glp = GetPathGlyph(sf);
+            int glyph = (int)GetPathGlyph(sf);
 
-            hier.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_StateIconIndex, (int)glp + _glyphOffset);
+            if (VSVersion.VS11OrLater)
+                glyph += (int)_glyphOffset;
+
+            hier.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_StateIconIndex, glyph);
         }
 
         void ClearSolutionGlyph()
