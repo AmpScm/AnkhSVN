@@ -55,6 +55,7 @@ namespace Ankh
         public const string ExtensionDescription = "Open Source Subversion SCC Provider for Visual Studio 2005, 2008 and 2010.";
         public const string ExtensionMoreInfoUrl = "http://www.ankhsvn.net/";
         public const string ExtensionGettingStartedUrl = "http://www.ankhsvn.net/";
+        public const string ExtensionReleaseNotesUrl = "http://ankhsvn.net/releasenotes";
 
         /// <summary>
         /// The guid used for registering the commands registered by the AnkhSvn package

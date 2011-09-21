@@ -10,13 +10,16 @@
     <License>..\LICENSE.rtf</License>
     <Icon>Margin_small.png</Icon>
     <PreviewImage>Margin_large.png</PreviewImage>
+    <InstalledByMsi>true</InstalledByMsi>
+    <AllUsers>true</AllUsers>
+    <ReleaseNotes>http://ankhsvn.net/releasenotes</ReleaseNotes>
     <SupportedProducts>
       <VisualStudio Version="10.0">
         <Edition>IntegratedShell</Edition>
         <Edition>Pro</Edition>
         <Edition>Premium</Edition>
         <Edition>Ultimate</Edition>
-        <Edition>Express_All</Edition>        
+        <Edition>Express_All</Edition>
       </VisualStudio>
       <VisualStudio Version="11.0">
         <Edition>IntegratedShell</Edition>
@@ -26,7 +29,7 @@
         <Edition>Express_All</Edition>
       </VisualStudio>
     </SupportedProducts>
-    <SupportedFrameworkRuntimeEdition MinVersion="2.0" MaxVersion="4.0" />
+    <SupportedFrameworkRuntimeEdition MinVersion="2.0" MaxVersion="4.5" />
   </Identifier>
   <References />
   <Content>
