@@ -32,25 +32,31 @@ namespace Ankh.GenerateVSIXManifest
                 xw.WriteElementString("Description", AnkhId.ExtensionDescription);
                 xw.WriteElementString("Locale", "1033");
                 xw.WriteElementString("MoreInfoUrl", AnkhId.ExtensionMoreInfoUrl);
+                xw.WriteElementString("ReleaseNotes", AnkhId.ExtensionReleaseNotesUrl);
                 xw.WriteElementString("License", "License.rtf");
                 xw.WriteElementString("GettingStartedGuide", AnkhId.ExtensionGettingStartedUrl);
                 xw.WriteElementString("Icon", AnkhId.PlkProduct + "-Icon.png");
                 xw.WriteElementString("PreviewImage", AnkhId.PlkProduct + "-Preview.png");
                 xw.WriteElementString("InstalledByMsi", "true");
+                xw.WriteElementString("AllUsers", "true");
 
                 xw.WriteStartElement("SupportedProducts", vsix2010);
-                xw.WriteStartElement("VisualStudio", vsix2010);
-                xw.WriteAttributeString("Version", "10.0");
-                xw.WriteElementString("Edition", "Ultimate");
-                xw.WriteElementString("Edition", "Premium");
-                xw.WriteElementString("Edition", "Pro");
-                xw.WriteElementString("Edition", "IntegratedShell");
-                xw.WriteEndElement();
+                foreach (string version in new string[] { "10.0", "11.0" })
+                {
+                    xw.WriteStartElement("VisualStudio", vsix2010);
+                    xw.WriteAttributeString("Version", version);
+                    xw.WriteElementString("Edition", "IntegratedShell");
+                    xw.WriteElementString("Edition", "Pro");
+                    xw.WriteElementString("Edition", "Premium");
+                    xw.WriteElementString("Edition", "Ultimate");
+                    xw.WriteElementString("Edition", "Express_All");
+                    xw.WriteEndElement();
+                }
                 xw.WriteEndElement(); // /SupportedProducts
 
                 xw.WriteStartElement("SupportedFrameworkRuntimeEdition", vsix2010);
                 xw.WriteAttributeString("MinVersion", "2.0");
-                xw.WriteAttributeString("MaxVersion", "4.0");
+                xw.WriteAttributeString("MaxVersion", "4.5");
                 xw.WriteEndElement(); // /SupportedFrameworkRuntimeEdition
 
                 xw.WriteEndElement(); // /Identifier
@@ -58,6 +64,7 @@ namespace Ankh.GenerateVSIXManifest
                 xw.WriteStartElement("References", vsix2010);
                 xw.WriteEndElement();
                 xw.WriteStartElement("Content", vsix2010);
+                xw.WriteElementString("VsPackage", vsix2010, "Ankh.Package.dll");
                 xw.WriteEndElement();
 
                 xw.WriteEndElement(); // /Vsix

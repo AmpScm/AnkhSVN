@@ -49,6 +49,10 @@
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Pkg-VS2010" Value="1" Type="integer" KeyPath="yes" />
         <?include $(var.Ankh.Package.ProjectDir)obj\$(var.Ankh.Package.Configuration)\$(var.Ankh.Package.TargetName)-2010.wxi ?>
       </Component>
+      <Component Id="CR_Pkg_11" Guid="F0EF04F2-EB57-486C-BF47-62FC2E0744CD">
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Pkg-VS11" Value="1" Type="integer" KeyPath="yes" />
+        <?include $(var.Ankh.Package.ProjectDir)obj\$(var.Ankh.Package.Configuration)\$(var.Ankh.Package.TargetName)-11.wxi ?>
+      </Component>
     </DirectoryRef>
     <ComponentGroup Id="PkgReg2005">
       <ComponentGroupRef Id="Ankh.Package"/>
@@ -61,6 +65,10 @@
     <ComponentGroup Id="PkgReg2010">
       <ComponentGroupRef Id="Ankh.Package"/>
       <ComponentRef Id="CR_Pkg_2010"/>
+    </ComponentGroup>
+    <ComponentGroup Id="PkgReg11">
+      <ComponentGroupRef Id="Ankh.Package"/>
+      <ComponentRef Id="CR_Pkg_11"/>
     </ComponentGroup>
   </Fragment>
 </Wix>

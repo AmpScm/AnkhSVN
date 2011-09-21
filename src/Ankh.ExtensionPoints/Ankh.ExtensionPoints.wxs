@@ -83,4 +83,22 @@
       </Directory>
     </DirectoryRef>
   </Fragment>
+  <Fragment>
+    <ComponentGroup Id="Extension11">
+      <ComponentRef Id="C_Extension11"/>
+    </ComponentGroup>
+    <PropertyRef Id="VS110_ROOT_FOLDER"/>
+    <DirectoryRef Id="VSIDE_11">
+      <Directory Name="PublicAssemblies" Id="PublicAssemblies_11">
+        <Component Id="C_Extension11" Guid="FB6409E2-46E5-4A17-8BCA-565092CCD6B2">
+          <Condition>VS110DEVENV</Condition>
+          <CopyFile Id="CF_Extension11" FileId="CF_Ankh.ExtensionPoints.dll" DestinationProperty="PublicAssemblies_11" />
+          <CopyFile Id="CF_Extension11Xml" FileId="CF_Ankh.ExtensionPoints.xml" DestinationProperty="PublicAssemblies_11" />
+          <?undef extId?>
+          <?define extId=VS110DEVENV ?>
+          <?include $(var.Ankh.ExtensionPoints.ProjectDir)\Ankh.ExtensionReg.wxi?>
+        </Component>
+      </Directory>
+    </DirectoryRef>
+  </Fragment>
 </Wix>
