@@ -206,7 +206,14 @@ namespace Ankh.Scc
                 AnkhGlyph glyph = GetPathGlyph(file);
 
                 if (rgsiGlyphs != null)
-                    rgsiGlyphs[i] = (VsStateIcon)glyph;
+                {
+                    VsStateIcon icon = (VsStateIcon)glyph;
+
+                    if (icon == VsStateIcon.STATEICON_BLANK || icon == VsStateIcon.STATEICON_NOSTATEICON)
+                        rgsiGlyphs[i] = icon;
+                    else
+                        rgsiGlyphs[i] = (VsStateIcon)((uint)icon + _glyphOffset);
+                }
 
                 if (rgdwSccStatus != null)
                 {
@@ -327,9 +334,12 @@ namespace Ankh.Scc
             if (hier == null)
                 return;
 
-            AnkhGlyph glp = GetPathGlyph(sf);
+            int glyph = (int)GetPathGlyph(sf);
 
-            hier.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_StateIconIndex, (int)glp);
+            if (VSVersion.VS11OrLater)
+                glyph += (int)_glyphOffset;
+
+            hier.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_StateIconIndex, glyph);
         }
 
         void ClearSolutionGlyph()
@@ -342,26 +352,65 @@ namespace Ankh.Scc
             hier.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_StateIconIndex, (int)AnkhGlyph.Blank);
         }
 
+        uint _glyphOffset;
         uint _baseIndex;
         ImageList _glyphList;
-        public int GetCustomGlyphList(uint BaseIndex, out uint pdwImageListHandle)
+        public int GetCustomGlyphList(uint baseIndex, out uint pdwImageListHandle)
         {
-            if (_glyphList != null && BaseIndex != _baseIndex)
+            if (baseIndex == _baseIndex && _glyphList != null)
+            {
+                pdwImageListHandle = unchecked((uint)_glyphList.Handle);
+
+                return VSConstants.S_OK;
+            }
+
+            if (_glyphList != null)
             {
                 _glyphList.Dispose();
                 _glyphList = null;
+            }           
+
+            // Visual Studio 2002-2010 use a System TreeView control which
+            // supports up to 16 glyph images. 12 of those are filled by
+            // Visual Studio and the other 4 are overridable.
+            // In these versions AnkhSVN provides its 4 images here. (It also
+            // forces its own imagelist in the treeview to support more glyphs)
+            //
+            // 'Visual Studio 11' switched to a WPF control which supports more
+            // common controls, but the api isn't extended (yet). We now provide
+            // the same 4 glyphs, but add the entire list of images at the end
+            // (offset + 16)
+            //
+            // In VS11 when someone asks for a glyph we provide the higher value.
+            // If a user uses the old control (read=Classviewer) it will overflow
+            // and provide the default icon, but if it is the new solution explorer
+            // it won't overflow and provide our nice glyph.
+
+            // In an attempt to trick the VS2010 'Solution navigator' extension we
+            // try to do the same overflow trick in 2010. The solution explorer will
+            // then just fall back to our forced image control
+
+            _glyphList = StatusImages.CreateStatusImageList();
+
+            if (VSVersion.VS2010OrLater)
+            {
+                for (int i = 0; i < 16; i++)
+                {
+                    using (System.Drawing.Image img = _glyphList.Images[i])
+                    {
+                        _glyphList.Images.Add(img);
+                    }
+                }
+                _glyphOffset = 16;
             }
 
-            // We give VS all our custom glyphs from baseindex upwards
-            if (_glyphList == null)
+            // Now we delete all images before BaseIndex, to properly align our images
+            for (int i = (int)baseIndex - 1; i >= 0; i--)
             {
-                _baseIndex = BaseIndex;
-                _glyphList = StatusImages.CreateStatusImageList();
-                for (int i = (int)BaseIndex - 1; i >= 0; i--)
-                {
-                    _glyphList.Images.RemoveAt(i);
-                }
+                _glyphList.Images.RemoveAt(i);
             }
+
+            _baseIndex = baseIndex;
             pdwImageListHandle = unchecked((uint)_glyphList.Handle);
 
             return VSConstants.S_OK;

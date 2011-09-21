@@ -73,6 +73,11 @@ namespace Ankh
             get { return FullVersion >= new Version(10, 0); }
         }
 
+        public static bool VS11OrLater
+        {
+            get { return FullVersion >= new Version(11, 0); }
+        }
+
         public static bool VS2008OrOlder
         {
             get { return FullVersion < new Version(10, 0); }

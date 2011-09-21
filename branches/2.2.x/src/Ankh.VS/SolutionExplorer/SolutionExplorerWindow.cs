@@ -45,11 +45,16 @@ namespace Ankh.VS.SolutionExplorer
         IVsUIHierarchyWindow _tree;
         
         uint _cookie;
+        bool _hookImageList;
 
         public SolutionExplorerWindow(IAnkhServiceProvider context)
             : base(context)
         {
-            _manager = new SolutionTreeViewManager(Context);
+            if (!VSVersion.VS11OrLater)
+            {
+                _hookImageList = true;
+                _manager = new SolutionTreeViewManager(Context);
+            }
         }
 
         internal void Initialize()
@@ -76,7 +81,7 @@ namespace Ankh.VS.SolutionExplorer
 
         void MaybeEnsure()
         {
-            if (SolutionExplorerFrame.IsVisible() == VSConstants.S_OK)
+            if (_hookImageList && SolutionExplorerFrame.IsVisible() == VSConstants.S_OK)
                 _manager.Ensure(this);
         }
 
@@ -90,7 +95,7 @@ namespace Ankh.VS.SolutionExplorer
 
         public void Dispose()
         {
-            if (_solutionExplorer2 != null)
+            if (_hookImageList && _solutionExplorer2 != null)
             {
                 try
                 {
@@ -127,13 +132,13 @@ namespace Ankh.VS.SolutionExplorer
                             _solutionExplorer = solutionExplorer;
                             IVsWindowFrame2 solutionExplorer2 = solutionExplorer as IVsWindowFrame2;
 
-                            if (solutionExplorer2 != null)
+                            if (_hookImageList && solutionExplorer2 != null)
                             {
                                 uint cookie;
                                 Marshal.ThrowExceptionForHR(solutionExplorer2.Advise(this, out cookie));
                                 _cookie = cookie;
-                                _solutionExplorer2 = solutionExplorer2;
                             }
+                            _solutionExplorer2 = solutionExplorer2;
                         }
                     }
                 }
@@ -160,49 +165,49 @@ namespace Ankh.VS.SolutionExplorer
                 }
                 return _tree;
             }
-        }        
+        }
 
-        public int OnDockableChange(int fDockable)
+        int IVsWindowFrameNotify.OnDockableChange(int fDockable)
         {
             return VSConstants.S_OK;
         }
 
-        public int OnMove()
+        int IVsWindowFrameNotify.OnMove()
         {
             return VSConstants.S_OK;
         }
 
-        public int OnShow(int fShow)
-        {
-            _manager.Ensure(this);
-            return VSConstants.S_OK;
-        }
-
-        public int OnSize()
+        int IVsWindowFrameNotify.OnShow(int fShow)
         {
             _manager.Ensure(this);
             return VSConstants.S_OK;
         }
 
-        public int OnClose(ref uint pgrfSaveOptions)
+        int IVsWindowFrameNotify.OnSize()
+        {
+            _manager.Ensure(this);
+            return VSConstants.S_OK;
+        }
+
+        int IVsWindowFrameNotify2.OnClose(ref uint pgrfSaveOptions)
         {
             return VSConstants.S_OK;
         }
 
+        #region IAnkhSolutionExplorerToolWindow Members
         public void Show()
         {
             if (SolutionExplorerFrame != null)
                 Marshal.ThrowExceptionForHR(SolutionExplorerFrame.Show());
         }
 
-        #region IAnkhSolutionExplorerToolWindow Members
-
-
         public void EnableAnkhIcons(bool enabled)
         {
-            _manager.Ensure(this);
-
-            _manager.SetAnkhIcons(enabled);
+            if (_hookImageList)
+            {
+                _manager.Ensure(this);
+                _manager.SetAnkhIcons(enabled);
+            }
         }
 
         #endregion
