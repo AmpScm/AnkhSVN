@@ -34,9 +34,10 @@ namespace Ankh.VS
         public string GetTempDir()
         {
             string name = "";
+            string tempPath = SvnTools.GetNormalizedFullPath(Path.GetTempPath());
             for (int i = 4; i < 32; i += 2)
             {
-                name = Path.Combine(Path.GetTempPath(), "AnkhSVN\\" + Guid.NewGuid().ToString("N").Substring(0, i));
+                name = Path.Combine(tempPath, "AnkhSVN\\" + Guid.NewGuid().ToString("N").Substring(0, i));
 
                 if (!SvnItem.PathExists(name))
                     break;
