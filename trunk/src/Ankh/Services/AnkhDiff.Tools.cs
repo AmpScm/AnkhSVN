@@ -155,8 +155,10 @@ namespace Ankh.Services
                 "-r1 $(ReadOnly?'-r2 ')'$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "DevartCodeCompare", "Devart CodeCompare",
-                RelativePath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "HelpFile"), "CodeCompare.exe")
-                    ?? "$(ProgramFiles)\\Devart\\CodeCompare\\CodeCompare.exe",
+                RelativePath(ClsIdServerSearch(new Guid("{8C2B8E72-E398-482D-8609-FC606231624C}")), "CodeCompare.exe")
+                    ?? RelativePath(RegistrySearch("SOFTWARE\\Devart\\Code Compare", "HelpFile"), "CodeCompare.exe")
+                    ?? RelativePath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "HelpFile"), "CodeCompare.exe")
+                    ?? "$(HostProgramFiles)\\Devart\\Code Compare\\CodeCompare.exe",
                 "/WAIT /SC=SVN /t1='$(BaseName)' /t2='$(MineName)' '$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "ComparePlusPlus", "Coodesoft Compare++",
@@ -242,8 +244,10 @@ namespace Ankh.Services
                 "-smart '$(Base)' '$(Mine)' '$(Theirs)' '$(Merged)'", true));
 
             tools.Add(new DiffTool(this, "DevartCodeCompare", "Devart CodeCompare",
-                SubPath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "ExecutablePath"), "CodeMerge.exe")
-                    ?? "$(ProgramFiles)\\Devart\\CodeCompare\\CodeMerge.exe",
+                RelativePath(ClsIdServerSearch(new Guid("{8C2B8E72-E398-482D-8609-FC606231624C}")), "CodeCompare.exe")
+                    ?? SubPath(RegistrySearch("SOFTWARE\\Devart\\Code Compare", "HelpFile"), "CodeMerge.exe")
+                    ?? SubPath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "HelpFile"), "CodeMerge.exe")
+                    ?? "$(HostProgramFiles)\\Devart\\Code Compare\\CodeMerge.exe",
                 "/WAIT /SC=SVN /REMOVEFILES '/BF=$(Base)' '/MF=$(Mine)' '/MT=$(MineName)' " +
                 "'/TF=$(Theirs)' '/TT=$(TheirsName)' '/RF=$(Merged)'", true));
 
@@ -316,6 +320,11 @@ namespace Ankh.Services
             if (!ErrorHandler.Succeeded(NativeMethods.CLSIDFromProgID(appId, out clsid)))
                 return null;
 
+            return ClsIdServerSearch(clsid);
+        }
+
+        static string ClsIdServerSearch(Guid clsid)
+        {
             using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("B") + "\\LocalServer32", false))
             {
                 if (rk != null)
