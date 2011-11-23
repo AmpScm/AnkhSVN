@@ -38,7 +38,7 @@ namespace Ankh
         SvnItemState _onceValid;
 
         const SvnItemState MaskRefreshTo = SvnItemState.Versioned | SvnItemState.HasLockToken | SvnItemState.Obstructed | SvnItemState.Modified | SvnItemState.PropertyModified | SvnItemState.Added | SvnItemState.HasCopyOrigin
-            | SvnItemState.Deleted | SvnItemState.Replaced | SvnItemState.HasProperties | SvnItemState.ContentConflicted | SvnItemState.PropertyModified | SvnItemState.SvnDirty | SvnItemState.Ignored;
+            | SvnItemState.Deleted | SvnItemState.Replaced | SvnItemState.HasProperties | SvnItemState.ContentConflicted | SvnItemState.PropertyModified | SvnItemState.SvnDirty | SvnItemState.Ignored | SvnItemState.Conflicted;
 
         public SvnItemState GetState(SvnItemState flagsToGet)
         {

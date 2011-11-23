@@ -141,9 +141,9 @@ namespace Ankh.Scc
         PropertiesConflicted    = 0x00200000,
 
         /// <summary>
-        /// The SvnItem is part of a tree conflict
+        /// The SvnItem is somehow conflicted
         /// </summary>
-        TreeConflicted          = 0x00400000,
+        Conflicted              = 0x00400000,
 
         /// <summary>
         /// The item is marked as ignored in subversion
