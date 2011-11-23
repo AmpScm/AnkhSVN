@@ -134,10 +134,9 @@ namespace Ankh
             SvnItemState unset = SvnItemState.Modified | SvnItemState.Added | SvnItemState.HasCopyOrigin
                 | SvnItemState.Deleted | SvnItemState.ContentConflicted | SvnItemState.Ignored
                 | SvnItemState.Obstructed | SvnItemState.Replaced | SvnItemState.Versioned
-                | SvnItemState.SvnDirty | SvnItemState.PropertyModified | SvnItemState.PropertiesConflicted
+                | SvnItemState.SvnDirty | SvnItemState.PropertyModified | SvnItemState.PropertiesConflicted | SvnItemState.Conflicted
                 | SvnItemState.Obstructed | SvnItemState.MustLock | SvnItemState.IsNested
-                | SvnItemState.HasProperties | SvnItemState.HasLockToken | SvnItemState.HasCopyOrigin
-                | SvnItemState.TreeConflicted;
+                | SvnItemState.HasProperties | SvnItemState.HasLockToken | SvnItemState.HasCopyOrigin;
 
             switch (status)
             {
@@ -243,9 +242,6 @@ namespace Ankh
                     SetState(SvnItemState.Ignored, unset | managed);
                     svnDirty = false;
                     break;
-                case SvnStatus.Modified:
-                    SetState(managed | SvnItemState.Modified, unset);
-                    break;
                 case SvnStatus.Added:
                     if (status.IsCopied)
                         SetState(managed | SvnItemState.Added | SvnItemState.HasCopyOrigin, unset);
@@ -258,9 +254,25 @@ namespace Ankh
                     else
                         SetState(managed | SvnItemState.Replaced, unset);
                     break;
+                case SvnStatus.Modified:
                 case SvnStatus.Conflicted:
-                    SetState(managed | SvnItemState.ContentConflicted, unset);
-                    break;
+                    {
+                        bool done = false;
+                        switch (status.LocalContentStatus)
+                        {
+                            case SvnStatus.Modified:
+                                SetState(managed | SvnItemState.Modified, unset);
+                                done = true;
+                                break;
+                            case SvnStatus.Conflicted:
+                                SetState(managed | SvnItemState.ContentConflicted | SvnItemState.Conflicted, unset);
+                                done = true;
+                                break;
+                        }
+                        if (!done)
+                            goto case SvnStatus.Normal;
+                        break;
+                    }
                 case SvnStatus.Obstructed: // node exists but is of the wrong type
                     SetState(SvnItemState.None, managed | unset);
                     provideDiskInfo = false; // Info is wrong
@@ -301,10 +313,8 @@ namespace Ankh
             else
                 SetState(SvnItemState.None, SvnItemState.Versionable);
 
-            if (status.HasTreeConflict)
-                SetState(SvnItemState.TreeConflicted, SvnItemState.None);
-            else
-                SetState(SvnItemState.None, SvnItemState.TreeConflicted);
+            if (status.Conflicted)
+                SetState(SvnItemState.Conflicted, SvnItemState.None);
 
             bool hasProperties = true;
             switch (status.LocalPropertyStatus)
@@ -430,6 +440,7 @@ namespace Ankh
             _cookie = NextCookie();
             _workingCopy = null;
             _modified = new DateTime();
+            _conflicts = null;
         }
 
         bool ISvnItemUpdate.IsStatusClean()
@@ -764,7 +775,7 @@ namespace Ankh
         /// </summary>
         public bool IsConflicted
         {
-            get { return 0 != GetState(SvnItemState.ContentConflicted | SvnItemState.PropertiesConflicted | SvnItemState.TreeConflicted); }
+            get { return 0 != GetState(SvnItemState.Conflicted); }
         }
 
         /// <summary>
@@ -775,7 +786,18 @@ namespace Ankh
         /// </value>
         public bool IsTreeConflicted
         {
-            get { return 0 != GetState(SvnItemState.TreeConflicted); }
+            get
+            {
+                if (GetState(SvnItemState.Conflicted) != 0)
+                {
+                    foreach (SvnConflictData cd in Conflicts)
+                    {
+                        if (cd.ConflictType == SvnConflictType.Tree)
+                            return true;
+                    }
+                }
+                return false;
+            }
         }
 
         /// <summary>
@@ -787,6 +809,70 @@ namespace Ankh
         public bool IsCasingConflicted
         {
             get { return IsVersioned && Status.LocalContentStatus == SvnStatus.Missing && Status.NodeKind == SvnNodeKind.File && IsFile && Exists; }
+        }
+
+        private void StoreConflicts(object sender, SvnInfoEventArgs e)
+        {
+            if (e.Conflicts != null && e.Conflicts.Count > 0)
+            {
+                _conflicts = e.Conflicts;
+
+                foreach (SvnConflictData d in _conflicts)
+                {
+                    d.Detach();
+                }
+            }
+        }
+
+        IEnumerable<SvnConflictData> _conflicts;
+        /// <summary>
+        /// Gets the list of conflicts for this node. An empty list if not conflicted.
+        /// </summary>
+        public IEnumerable<SvnConflictData> Conflicts
+        {
+            get
+            {
+                if (_conflicts != null)
+                    return _conflicts;
+
+                SvnConflictData[] empty = new SvnConflictData[0];
+                _conflicts = empty;
+                SvnItemState state;
+                if (TryGetState(SvnItemState.Conflicted, out state) && state == 0)
+                    return _conflicts;
+
+                using (SvnClient cl = _context.GetService<ISvnClientPool>().GetNoUIClient())
+                {
+                    SvnInfoArgs ia = new SvnInfoArgs();
+                    ia.ThrowOnError = false;
+                    ia.Depth = SvnDepth.Empty;
+
+                    cl.Info(FullPath, ia, StoreConflicts); // Ignore errors
+                }
+
+                if (_conflicts != empty)
+                {
+                    SetState(SvnItemState.Conflicted, SvnItemState.None);
+                    foreach (SvnConflictData cd in _conflicts)
+                    {
+                        switch (cd.ConflictType)
+                        {
+                            case SvnConflictType.Content:
+                                SetState(SvnItemState.ContentConflicted,  SvnItemState.None);
+                                break;
+                            case SvnConflictType.Property:
+                                SetState(SvnItemState.PropertiesConflicted, SvnItemState.None);
+                                break;
+                            case SvnConflictType.Tree:
+                                break;
+                        }
+                    }
+                }
+                else
+                    SetState(SvnItemState.None, SvnItemState.Conflicted | SvnItemState.ContentConflicted | SvnItemState.PropertiesConflicted);
+
+                return _conflicts;
+            }
         }
 
         /// <summary>
