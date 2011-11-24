@@ -315,6 +315,9 @@ namespace Ankh
 
             if (status.Conflicted)
                 SetState(SvnItemState.Conflicted, SvnItemState.None);
+            else
+                SetState(SvnItemState.None, SvnItemState.Conflicted);
+
 
             bool hasProperties = true;
             switch (status.LocalPropertyStatus)
