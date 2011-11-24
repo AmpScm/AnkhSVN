@@ -59,7 +59,12 @@ namespace Ankh.Commands.RepositoryExplorer
 
             SvnRevision from;
             SvnRevision to;
-            if (e.Command == AnkhCommand.RepositoryCompareWithWc)
+            if (reposItem.Revision.Revision < 0)
+            {
+                from = SvnRevision.Base;
+                to = SvnRevision.Working;
+            }
+            else if (e.Command == AnkhCommand.RepositoryCompareWithWc)
             {
                 from = reposItem.Revision;
                 to = SvnRevision.Working;
