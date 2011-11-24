@@ -124,7 +124,8 @@ namespace Ankh.Commands
                         return;
                     break;
                 case AnkhCommand.AnnotateShowLog:
-                    if (EnumTools.GetSingle(e.Selection.GetSelection<IAnnotateSection>()) != null)
+                    IAnnotateSection section = EnumTools.GetSingle(e.Selection.GetSelection<IAnnotateSection>())
+                    if (section != null && section.Revision >= 0)
                         return;
                     break;
             }

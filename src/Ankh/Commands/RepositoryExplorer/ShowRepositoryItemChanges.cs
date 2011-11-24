@@ -45,6 +45,11 @@ namespace Ankh.Commands.RepositoryExplorer
 
                 return;
             }
+            else if (e.Command == AnkhCommand.RepositoryCompareWithWc
+                     && reposItem.Revision == SvnRevision.Working)
+            {
+                return;
+            }
 
             e.Enabled = false;
         }

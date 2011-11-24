@@ -156,7 +156,7 @@ namespace Ankh.UI.Annotate
 
         SvnRevision ISvnRepositoryItem.Revision
         {
-            get { return Revision; }
+            get { return Revision >= 0 ? Revision : SvnRevision.Working; }
         }
 
         public void RefreshItem(bool refreshParent)
