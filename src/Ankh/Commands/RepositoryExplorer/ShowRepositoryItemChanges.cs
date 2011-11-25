@@ -31,24 +31,27 @@ namespace Ankh.Commands.RepositoryExplorer
         {
             ISvnRepositoryItem reposItem = EnumTools.GetSingle(e.Selection.GetSelection<ISvnRepositoryItem>());
 
-            if (reposItem != null && reposItem.Origin != null && reposItem.NodeKind != SharpSvn.SvnNodeKind.Directory
-                && reposItem.Revision.RevisionType == SharpSvn.SvnRevisionType.Number)
+            if (reposItem != null)
             {
-                if (e.Command == AnkhCommand.RepositoryCompareWithWc)
+                if (reposItem.Origin != null && reposItem.NodeKind != SharpSvn.SvnNodeKind.Directory
+                    && reposItem.Revision.RevisionType == SharpSvn.SvnRevisionType.Number)
                 {
-                    if (!(reposItem.Origin.Target is SvnPathTarget))
+                    if (e.Command == AnkhCommand.RepositoryCompareWithWc)
                     {
-                        e.Enabled = false;
-                        return;
+                        if (!(reposItem.Origin.Target is SvnPathTarget))
+                        {
+                            e.Enabled = false;
+                            return;
+                        }
                     }
-                }
 
-                return;
-            }
-            else if (e.Command == AnkhCommand.RepositoryCompareWithWc
-                     && reposItem.Revision == SvnRevision.Working)
-            {
-                return;
+                    return;
+                }
+                else if (e.Command == AnkhCommand.RepositoryCompareWithWc
+                         && reposItem.Revision == SvnRevision.Working)
+                {
+                    return;
+                }
             }
 
             e.Enabled = false;
@@ -64,7 +67,7 @@ namespace Ankh.Commands.RepositoryExplorer
 
             SvnRevision from;
             SvnRevision to;
-            if (reposItem.Revision.Revision < 0)
+            if (reposItem.Revision == SvnRevision.Working)
             {
                 from = SvnRevision.Base;
                 to = SvnRevision.Working;
