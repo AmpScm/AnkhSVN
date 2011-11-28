@@ -37,7 +37,7 @@ namespace Ankh.Commands
             foreach(SvnItem i in e.Selection.GetSelectedSvnItems(true))
             {
                 SvnDirectory dir = i.ParentDirectory;
-                if (dir.NeedsWorkingCopyUpgrade && !dirs.Contains(dir.FullPath))
+                if (dir != null && dir.NeedsWorkingCopyUpgrade && !dirs.Contains(dir.FullPath))
                     dirs.Add(dir.FullPath);
             }
 
