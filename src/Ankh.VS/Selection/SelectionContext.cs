@@ -462,7 +462,25 @@ namespace Ankh.VS.Selection
 
             uint subId;
             IntPtr hierPtr;
-            int hr = si.Hierarchy.GetNestedHierarchy(si.Id, ref hierarchyId, out hierPtr, out subId);
+            int hr;
+            try
+            {
+                hr = si.Hierarchy.GetNestedHierarchy(si.Id, ref hierarchyId, out hierPtr, out subId);
+            }
+            catch (Exception e)
+            {
+                ExternalException ee = e as ExternalException;
+
+                if (ee != null && !ErrorHandler.Succeeded(ee.ErrorCode))
+                    hr = ee.ErrorCode; // Should have been returned instead
+                else if (e is NotImplementedException)
+                    hr = VSConstants.E_NOTIMPL; // From Microsoft.VisualStudio.PerformanceTools.DummyVsUIHierarchy.GetNestedHierarchy()
+                else
+                    hr = VSConstants.E_FAIL;
+
+                hierPtr = IntPtr.Zero;
+                subId = VSConstants.VSITEMID_NIL;
+            }
 
             if (ErrorHandler.Succeeded(hr) && hierPtr != IntPtr.Zero)
             {
