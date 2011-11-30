@@ -265,6 +265,8 @@ namespace Ankh.Commands
             {
                 SvnAddArgs aa = new SvnAddArgs();
                 aa.AddParents = true;
+                aa.AddExpectedError(SvnErrorCode.SVN_ERR_ENTRY_EXISTS); // Don't fail on already added nodes. (<= 1.7)
+                aa.AddExpectedError(SvnErrorCode.SVN_ERR_WC_PATH_FOUND); // Don't fail on already added nodes. (1.8+?)
                 cl.Add(path, aa);
             }
         }
