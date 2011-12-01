@@ -206,6 +206,9 @@
     <Content Include="Gui\menu\Lock.png" />
     <Content Include="Gui\menu\MakeDirectory.png" />
     <Content Include="Gui\menu\Merge.png" />
+    <Content Include="Gui\menu\PBAlpha.png" />
+    <Content Include="Gui\menu\PBCatego.png" />
+    <Content Include="Gui\menu\PBPage.png" />
     <Content Include="Gui\menu\Properties.png" />
     <Content Include="Gui\menu\RemoveFolder.png" />
     <Content Include="Gui\menu\RemoveUrl.png" />

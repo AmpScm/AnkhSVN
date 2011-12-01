@@ -191,5 +191,7 @@ namespace Ankh
         SvnInfoTB5,
 
         SvnInfoComboTB,
+        SvnInfoGridOps1,
+        SvnInfoGridOps2,
     }
 }
