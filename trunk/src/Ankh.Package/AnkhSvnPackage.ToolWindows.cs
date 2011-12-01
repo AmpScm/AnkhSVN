@@ -379,6 +379,7 @@ namespace Ankh.VSPackage
         AnkhToolWindowControl _control;
         IAnkhToolWindowControl _twControl;
         AnkhToolWindow _toolWindow;
+        AnkhToolBar _extraToolBar;
 
         protected AnkhToolWindowPane()
             : base(null)
@@ -469,6 +470,22 @@ namespace Ankh.VSPackage
         {
             base.OnToolBarAdded();
 
+            if (ExtraToolBarId != AnkhToolBar.None)
+            {
+                IVsWindowFrame frame = (IVsWindowFrame)this.Frame;
+
+                object obj;
+
+                if (frame != null
+                    && ErrorHandler.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_ToolbarHost, out obj)))
+                {
+                    IVsToolWindowToolbarHost host = obj as IVsToolWindowToolbarHost;
+
+                    Guid g = AnkhId.CommandSetGuid;
+                    host.AddToolbar((VSTWT_LOCATION)ToolBarLocation, ref g, (uint)ExtraToolBarId);
+                }
+            }
+
             _twControl.OnFrameCreated(EventArgs.Empty);
         }
 
@@ -528,6 +545,18 @@ namespace Ankh.VSPackage
             return OnSize(0, 0, 0, 0);
         }
 
+        public AnkhToolBar ToolBarId
+        {
+            get { return (ToolBar != null) ? (AnkhToolBar)ToolBar.ID : AnkhToolBar.None; }
+            set { ToolBar = value != AnkhToolBar.None ? new CommandID(AnkhId.CommandSetGuid, (int)value) : null; }
+        }
+
+        public AnkhToolBar ExtraToolBarId
+        {
+            get { return _extraToolBar; }
+            set { _extraToolBar = value; }
+        }
+
         #endregion
     }
 
@@ -544,7 +573,7 @@ namespace Ankh.VSPackage
 
             AnkhToolWindow = AnkhToolWindow.WorkingCopyExplorer;
 
-            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.WorkingCopyExplorerToolBar);
+            ToolBarId = (AnkhToolBar)AnkhCommandMenu.WorkingCopyExplorerToolBar;
             ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
     }
@@ -562,7 +591,7 @@ namespace Ankh.VSPackage
 
             AnkhToolWindow = AnkhToolWindow.RepositoryExplorer;
 
-            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.RepositoryExplorerToolBar);
+            ToolBarId = (AnkhToolBar)AnkhCommandMenu.RepositoryExplorerToolBar;
             ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
     }
@@ -580,7 +609,7 @@ namespace Ankh.VSPackage
 
             AnkhToolWindow = AnkhToolWindow.PendingChanges;
 
-            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.PendingChanges);
+            ToolBarId = AnkhToolBar.PendingChanges;
             ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
     }
@@ -595,7 +624,7 @@ namespace Ankh.VSPackage
 
             AnkhToolWindow = AnkhToolWindow.Log;
 
-            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
+            ToolBarId = AnkhToolBar.LogViewer;
             ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
     }
@@ -622,7 +651,8 @@ namespace Ankh.VSPackage
 
             AnkhToolWindow = AnkhToolWindow.SvnInfo;
 
-            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.SvnInfo);
+            ToolBarId = AnkhToolBar.SvnInfoCombo;
+            ExtraToolBarId = AnkhToolBar.SvnInfo;
             ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
     }

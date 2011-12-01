@@ -670,6 +670,19 @@
         </Group-->
       </Menu>
     </GroupRef>
+    <GroupRef id="ToolBar_SvnInfoCombo">
+      <Menu id="ToolBar_SvnInfoCombo" name="SvnInfoCombo" priority="0" type="ToolWindowToolbar">
+        <Group id="Grp_SvnInfoComboTB" priority="0x100">
+          <ComboBox id="Cmd_SvnInfoComboBox" type="DropDownCombo" width="100" priority="0x100"
+                fillCommand="Cmd_SvnInfoComboBoxFill"
+                caseSensitive="true"
+                stretchHorizontally="true"
+                toolTip="Selected File"
+                text="Selected"
+                />
+        </Group>
+      </Menu>
+    </GroupRef>
     <GroupRef id="ToolBar_SvnInfo">
       <!-- The Subversion Properties ToolWindow Toolbar -->
       <Menu id="ToolBar_SvnInfo" name="SvnInfo" priority="0" type="ToolWindowToolbar">
