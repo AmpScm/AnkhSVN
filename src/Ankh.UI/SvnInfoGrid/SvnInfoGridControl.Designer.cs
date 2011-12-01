@@ -28,24 +28,23 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SvnInfoGridControl));
-			System.Windows.Forms.ToolStripSystemRenderer toolStripSystemRenderer1 = new System.Windows.Forms.ToolStripSystemRenderer();
-			this.grid = new Ankh.UI.SvnInfoGrid.InfoPropertyGrid();
-			this.SuspendLayout();
-			// 
-			// grid
-			// 
-			resources.ApplyResources(this.grid, "grid");
-			this.grid.Name = "grid";
-			this.grid.ToolStripRenderer = toolStripSystemRenderer1;
-			// 
-			// SvnInfoGridControl
-			// 
-			resources.ApplyResources(this, "$this");
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.grid);
-			this.Name = "SvnInfoGridControl";
-			this.ResumeLayout(false);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SvnInfoGridControl));
+            this.grid = new Ankh.UI.SvnInfoGrid.InfoPropertyGrid();
+            this.SuspendLayout();
+            // 
+            // grid
+            // 
+            resources.ApplyResources(this.grid, "grid");
+            this.grid.Name = "grid";
+            this.grid.ToolbarVisible = false;
+            // 
+            // SvnInfoGridControl
+            // 
+            resources.ApplyResources(this, "$this");
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.grid);
+            this.Name = "SvnInfoGridControl";
+            this.ResumeLayout(false);
 
 		}
 

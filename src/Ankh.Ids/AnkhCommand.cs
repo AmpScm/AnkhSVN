@@ -303,5 +303,9 @@ namespace Ankh
 
         SvnInfoComboBox,
         SvnInfoComboBoxFill,
+
+        SvnInfoCategorized,
+        SvnInfoAlphabetical,
+        SvnInfoPropertyPages,
     }
 }

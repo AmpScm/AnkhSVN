@@ -136,7 +136,7 @@
     <value>grid</value>
   </data>
   <data name="&gt;&gt;grid.Type" xml:space="preserve">
-    <value>Ankh.UI.SvnInfoGrid.InfoPropertyGrid, Ankh.UI, Version=2.2.3790.25434, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.SvnInfoGrid.InfoPropertyGrid, Ankh.UI, Version=2.3.4352.27870, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;grid.Parent" xml:space="preserve">
     <value>$this</value>
@@ -154,6 +154,6 @@
     <value>SvnInfoGridControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.AnkhToolWindowControl, Ankh.Services, Version=2.2.3790.25433, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
+    <value>Ankh.UI.AnkhToolWindowControl, Ankh.Services, Version=2.3.4352.27092, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
   </data>
 </root>
