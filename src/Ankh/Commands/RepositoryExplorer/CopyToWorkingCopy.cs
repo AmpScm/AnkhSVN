@@ -134,6 +134,7 @@ namespace Ankh.Commands.RepositoryExplorer
                     {
                         SvnExportArgs ea = new SvnExportArgs();
                         ea.Revision = item.Revision;
+                        ea.Overwrite = true;
 
                         a.Client.Export(item.Origin.Target, copyTo, ea);
                     });

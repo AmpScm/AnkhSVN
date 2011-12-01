@@ -51,6 +51,7 @@ namespace Ankh.Commands
                         SvnExportArgs args = new SvnExportArgs();
                         args.Depth = depth;
                         args.Revision = dlg.Revision;
+                        args.Overwrite = true;
 
                         wa.Client.Export(dlg.ExportSource, dlg.LocalPath, args);
                     });
