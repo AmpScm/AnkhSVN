@@ -189,5 +189,7 @@ namespace Ankh
         SvnInfoTB3,
         SvnInfoTB4,
         SvnInfoTB5,
+
+        SvnInfoComboTB,
     }
 }

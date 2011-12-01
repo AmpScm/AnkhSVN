@@ -300,5 +300,8 @@ namespace Ankh
         CommitProjectFile,
 
         UpgradeWorkingCopy,
+
+        SvnInfoComboBox,
+        SvnInfoComboBoxFill,
     }
 }

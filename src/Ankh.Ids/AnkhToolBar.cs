@@ -30,6 +30,7 @@ namespace Ankh
         PendingChanges,
         SourceControl,
         LogViewer,
-        SvnInfo
+        SvnInfo,
+        SvnInfoCombo,
     }
 }
