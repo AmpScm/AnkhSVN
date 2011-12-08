@@ -11,8 +11,6 @@
     <Icon>Margin_small.png</Icon>
     <PreviewImage>Margin_large.png</PreviewImage>
     <InstalledByMsi>true</InstalledByMsi>
-    <AllUsers>true</AllUsers>
-    <ReleaseNotes>http://ankhsvn.net/releasenotes</ReleaseNotes>
     <SupportedProducts>
       <VisualStudio Version="10.0">
         <Edition>IntegratedShell</Edition>
@@ -30,6 +28,7 @@
       </VisualStudio>
     </SupportedProducts>
     <SupportedFrameworkRuntimeEdition MinVersion="2.0" MaxVersion="4.5" />
+    <AllUsers>true</AllUsers>
   </Identifier>
   <References />
   <Content>
