@@ -170,7 +170,7 @@ namespace Ankh.VS.Selection
             _selectedProjectsRecursive = null;
             _ownerProjects = null;
 
-            _isSolutionExplorer = null;            
+            _isSolutionExplorer = null;
             _miscFiles = null;
             _checkedMisc = false;
             _selectedItemsMap = null;
@@ -245,7 +245,7 @@ namespace Ankh.VS.Selection
             }
         }
 
-        #endregion        
+        #endregion
 
         protected bool MightBeSolutionExplorerSelection
         {
@@ -598,7 +598,7 @@ namespace Ankh.VS.Selection
             get { return _hashCache; }
         }
 
-        #region ISelectionContext Members
+        #region ISelectionContext Members: GetSelected*()
 
         protected IEnumerable<string> GetSelectedFiles()
         {
@@ -671,7 +671,7 @@ namespace Ankh.VS.Selection
 
         #endregion
 
-        #region ISelectionContext Members
+        #region ISelectionContext Members: Get*Projects()
 
         public IEnumerable<SvnProject> GetOwnerProjects()
         {
@@ -733,72 +733,6 @@ namespace Ankh.VS.Selection
                     }
             }
         }
-
-
-        #endregion
-
-        #region ISccProjectWalker Members
-
-        bool IncludeNoScc(ProjectWalkDepth depth)
-        {
-            return (depth != ProjectWalkDepth.AllDescendantsInHierarchy) && (depth != ProjectWalkDepth.SpecialFiles);
-        }
-
-        /// <summary>
-        /// Gets the list of files specified by the hierarchy (IVsSccProject2 or IVsHierarchy)
-        /// </summary>
-        /// <param name="hierarchy"></param>
-        /// <param name="id"></param>
-        /// <param name="depth"></param>
-        /// <returns></returns>
-        /// <remarks>The list might contain duplicates if files are included more than once</remarks>
-        public IEnumerable<string> GetSccFiles(IVsHierarchy hierarchy, uint id, ProjectWalkDepth depth, IDictionary<string, uint> map)
-        {
-            // Note: This command is not cached like the other commands on this object!
-            if (hierarchy == null)
-                throw new ArgumentNullException("hierarchy");
-
-            SelectionItem si = new SelectionItem(hierarchy, id);
-
-            string[] files;
-            if (!SelectionUtils.GetSccFiles(si, out files, depth >= ProjectWalkDepth.SpecialFiles, IncludeNoScc(depth), map))
-                yield break;
-
-            foreach (string file in files)
-            {
-                yield return SvnTools.GetNormalizedFullPath(file);
-            }
-
-            if (depth > ProjectWalkDepth.SpecialFiles)
-            {
-                Dictionary<SelectionItem, SelectionItem> previous = new Dictionary<SelectionItem, SelectionItem>();
-                previous.Add(si, si);
-
-                foreach (SelectionItem item in GetDescendants(si, previous, depth))
-                {
-                    if (!SelectionUtils.GetSccFiles(item, out files, depth >= ProjectWalkDepth.SpecialFiles, depth != ProjectWalkDepth.AllDescendantsInHierarchy, map))
-                        continue;
-
-                    foreach (string file in files)
-                    {
-                        yield return SvnTools.GetNormalizedFullPath(file);
-                    }
-                }
-            }
-        }
-
-        void ISccProjectWalker.SetPrecreatedFilterItem(IVsHierarchy hierarchy, uint id)
-        {
-            if (id != VSConstants.VSITEMID_NIL || _filterItem != VSConstants.VSITEMID_NIL)
-                ClearCache(); // Make sure we use the filter directly
-
-            _filterHierarchy = hierarchy;
-            _filterItem = id;
-        }
-
-        #endregion
-
-        #region ISelectionContext Members
 
         protected IEnumerable<SvnProject> GetSelectedProjects()
         {
@@ -886,27 +820,89 @@ namespace Ankh.VS.Selection
             }
         }
         #endregion
+
+
+        #region ISccProjectWalker Members
+
+        bool IncludeNoScc(ProjectWalkDepth depth)
+        {
+            return (depth != ProjectWalkDepth.AllDescendantsInHierarchy) && (depth != ProjectWalkDepth.SpecialFiles);
+        }
+
+        /// <summary>
+        /// Gets the list of files specified by the hierarchy (IVsSccProject2 or IVsHierarchy)
+        /// </summary>
+        /// <param name="hierarchy"></param>
+        /// <param name="id"></param>
+        /// <param name="depth"></param>
+        /// <returns></returns>
+        /// <remarks>The list might contain duplicates if files are included more than once</remarks>
+        public IEnumerable<string> GetSccFiles(IVsHierarchy hierarchy, uint id, ProjectWalkDepth depth, IDictionary<string, uint> map)
+        {
+            // Note: This command is not cached like the other commands on this object!
+            if (hierarchy == null)
+                throw new ArgumentNullException("hierarchy");
+
+            SelectionItem si = new SelectionItem(hierarchy, id);
+
+            string[] files;
+            if (!SelectionUtils.GetSccFiles(si, out files, depth >= ProjectWalkDepth.SpecialFiles, IncludeNoScc(depth), map))
+                yield break;
+
+            foreach (string file in files)
+            {
+                yield return SvnTools.GetNormalizedFullPath(file);
+            }
+
+            if (depth > ProjectWalkDepth.SpecialFiles)
+            {
+                Dictionary<SelectionItem, SelectionItem> previous = new Dictionary<SelectionItem, SelectionItem>();
+                previous.Add(si, si);
+
+                foreach (SelectionItem item in GetDescendants(si, previous, depth))
+                {
+                    if (!SelectionUtils.GetSccFiles(item, out files, depth >= ProjectWalkDepth.SpecialFiles, depth != ProjectWalkDepth.AllDescendantsInHierarchy, map))
+                        continue;
+
+                    foreach (string file in files)
+                    {
+                        yield return SvnTools.GetNormalizedFullPath(file);
+                    }
+                }
+            }
+        }
+
+        void ISccProjectWalker.SetPrecreatedFilterItem(IVsHierarchy hierarchy, uint id)
+        {
+            if (id != VSConstants.VSITEMID_NIL || _filterItem != VSConstants.VSITEMID_NIL)
+                ClearCache(); // Make sure we use the filter directly
+
+            _filterHierarchy = hierarchy;
+            _filterItem = id;
+        }
+
+        #endregion
     }
 
-	class CmdUIContextChangeEventArgs : EventArgs
-	{
-		readonly uint _cookie;
-		readonly bool _active;
+    class CmdUIContextChangeEventArgs : EventArgs
+    {
+        readonly uint _cookie;
+        readonly bool _active;
 
-		public CmdUIContextChangeEventArgs(uint cookie, bool active)
-		{
-			_cookie = cookie;
-			_active = active;
-		}
+        public CmdUIContextChangeEventArgs(uint cookie, bool active)
+        {
+            _cookie = cookie;
+            _active = active;
+        }
 
-		public uint Cookie
-		{
-			get { return _cookie; }
-		}
+        public uint Cookie
+        {
+            get { return _cookie; }
+        }
 
-		public bool Active
-		{
-			get { return _active; }
-		}
-	}
+        public bool Active
+        {
+            get { return _active; }
+        }
+    }
 }
