@@ -75,11 +75,18 @@ namespace Ankh.UI
             }
         }
 
-        public new void Select()
+        // Select() = Select(false, false)
+
+        protected override void Select(bool directed, bool forward)
         {
-            base.Select();
+            base.Select(directed, forward);
             if (_implementation != null)
-                _implementation.Select();
+                _implementation.Select(directed, forward);
+        }
+
+        void IVSTextEditorImplementation.Select(bool directed, bool forward)
+        {
+            Select(directed, forward);
         }
 
         protected override CreateParams CreateParams
@@ -427,7 +434,7 @@ namespace Ankh.UI
         void PasteText(string text);
         IOleCommandTarget EditorCommandTarget { get; }
 
-        void Select();
+        void Select(bool directed, bool forward);
     }
 
     [CLSCompliant(false)]
