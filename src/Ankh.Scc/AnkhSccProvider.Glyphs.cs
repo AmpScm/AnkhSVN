@@ -212,7 +212,7 @@ namespace Ankh.Scc
                     if (icon == VsStateIcon.STATEICON_BLANK || icon == VsStateIcon.STATEICON_NOSTATEICON)
                         rgsiGlyphs[i] = icon;
                     else
-                        rgsiGlyphs[i] = (VsStateIcon)((uint)icon + _glyphOffset);
+                        rgsiGlyphs[i] = (VsStateIcon)((int)icon + _glyphOffset);
                 }
 
                 if (rgdwSccStatus != null)
@@ -334,10 +334,7 @@ namespace Ankh.Scc
             if (hier == null)
                 return;
 
-            int glyph = (int)GetPathGlyph(sf);
-
-            if (VSVersion.VS11OrLater)
-                glyph += (int)_glyphOffset;
+            int glyph = (int)GetPathGlyph(sf) + _glyphOffset;
 
             hier.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_StateIconIndex, glyph);
         }
@@ -352,7 +349,7 @@ namespace Ankh.Scc
             hier.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_StateIconIndex, (int)AnkhGlyph.Blank);
         }
 
-        uint _glyphOffset;
+        int _glyphOffset;
         uint _baseIndex;
         ImageList _glyphList;
         public int GetCustomGlyphList(uint baseIndex, out uint pdwImageListHandle)
