@@ -31,7 +31,7 @@ using Ankh.UI;
 
 namespace Ankh.VS.Dialogs
 {
-    class VSCommandRouting : AnkhService, IMessageFilter, IDisposable, IVsToolWindowToolbar, IOleCommandTarget
+    sealed class VSCommandRouting : AnkhService, IMessageFilter, IVsToolWindowToolbar, IOleCommandTarget
     {
         readonly VSContainerForm _form;
         readonly IAnkhVSContainerForm _vsForm;
@@ -40,7 +40,7 @@ namespace Ankh.VS.Dialogs
         VSFormContainerPane _pane;
         IVsToolWindowToolbarHost _tbHost;
         IVsFilterKeys2 _fKeys;
-        IVsRegisterPriorityCommandTarget _rPct;
+        IVsRegisterPriorityCommandTarget _priorityCommandTarget;
         uint _csCookie;
         Panel _panel;
         List<IOleCommandTarget> _ctList;
@@ -68,11 +68,12 @@ namespace Ankh.VS.Dialogs
             _vsWpf = !VSVersion.VS2008OrOlder;
             _map.Add(form, this);
 
-            _rPct = GetService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
+            _priorityCommandTarget = GetService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
 
-            if(_rPct != null)
+            if(_priorityCommandTarget != null)
             {
-                Marshal.ThrowExceptionForHR(_rPct.RegisterPriorityCommandTarget(0, this, out _csCookie));
+                if (!ErrorHandler.Succeeded(_priorityCommandTarget.RegisterPriorityCommandTarget(0, this, out _csCookie)))
+                    _priorityCommandTarget = null;
             }
 
             ISelectionContextEx sel = GetService<ISelectionContextEx>(typeof(ISelectionContext));
@@ -93,43 +94,64 @@ namespace Ankh.VS.Dialogs
             return null;
         }
 
-        #region IDisposable Members
-
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            if (_activeStack != null)
-                _activeStack.Dispose();
-
-            if (_csCookie != 0 && _rPct != null)
+            try
             {
-                _rPct.UnregisterPriorityCommandTarget(_csCookie);
-                _csCookie = 0;
+                if (_priorityCommandTarget != null)
+                {
+                    try
+                    {
+                        _priorityCommandTarget.UnregisterPriorityCommandTarget(_csCookie);
+                    }
+                    finally
+                    { }
+                        _priorityCommandTarget = null;
+                }
+
+                if (_activeStack != null)
+                    try
+                    {
+                        _activeStack.Dispose();
+                    }
+                    finally
+                    {
+                        _activeStack = null;
+                    }
+
+
+                if (_panel != null)
+                    RestoreLayout();
+
+                if (_pane != null)
+                {
+                    _pane.Dispose(); // Unhook
+                    _pane = null;
+                }
+
+                if (_panel != null)
+                {
+                    _panel.Dispose();
+                    _panel = null;
+                }
             }
-
-            if(_panel != null)
-                RestoreLayout();
-
-            if (_pane != null)
+            finally
             {
-                _pane.Dispose(); // Unhook
-                _pane = null;
-            }
+                _map.Remove(_form);
 
-            if (_panel != null)
-            {
-                _panel.Dispose();
-                _panel = null;
-            }
+                if (_installed)
+                {
+                    _installed = false;
+                    Application.RemoveMessageFilter(this);
 
-            _map.Remove(_form);
-            if (_installed)
-            {
-                VSCommandRouting cr = _routers.Pop();
-                Debug.Assert(cr == this, "Pop routing in the right order");
-                Application.RemoveMessageFilter(this);
+                    VSCommandRouting cr = _routers.Pop();
+                    Debug.Assert(cr == this, "Pop routing in the right order");
 
-                if (_routers.Count > 0)
-                    _routers.Peek().Enabled = true;
+                    if (_routers.Count > 0)
+                        _routers.Peek().Enabled = true;
+                }
+
+                base.Dispose(disposing);
             }
         }
 
@@ -149,8 +171,6 @@ namespace Ankh.VS.Dialogs
             _form.CancelButton = cancelButton;
             _form.AcceptButton = acceptButton;
         }
-
-        #endregion
 
         #region IMessageFilter Members
 
