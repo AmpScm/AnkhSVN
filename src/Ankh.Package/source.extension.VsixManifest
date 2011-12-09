@@ -17,14 +17,12 @@
         <Edition>Pro</Edition>
         <Edition>Premium</Edition>
         <Edition>Ultimate</Edition>
-        <Edition>Express_All</Edition>
       </VisualStudio>
       <VisualStudio Version="11.0">
         <Edition>IntegratedShell</Edition>
         <Edition>Pro</Edition>
         <Edition>Premium</Edition>
         <Edition>Ultimate</Edition>
-        <Edition>Express_All</Edition>
       </VisualStudio>
     </SupportedProducts>
     <SupportedFrameworkRuntimeEdition MinVersion="2.0" MaxVersion="4.5" />
