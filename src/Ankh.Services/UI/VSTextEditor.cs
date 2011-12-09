@@ -75,6 +75,13 @@ namespace Ankh.UI
             }
         }
 
+        public new void Select()
+        {
+            base.Select();
+            if (_implementation != null)
+                _implementation.Select();
+        }
+
         protected override CreateParams CreateParams
         {
             [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
@@ -419,6 +426,8 @@ namespace Ankh.UI
 
         void PasteText(string text);
         IOleCommandTarget EditorCommandTarget { get; }
+
+        void Select();
     }
 
     [CLSCompliant(false)]
