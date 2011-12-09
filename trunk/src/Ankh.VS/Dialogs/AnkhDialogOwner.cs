@@ -49,8 +49,6 @@ namespace Ankh.VS.Dialogs
             get { return _uiService ?? (_uiService = GetService<IUIService>()); }
         }
 
-        #region IAnkhDialogOwner Members
-
         public IWin32Window DialogOwner
         {
             get
@@ -61,8 +59,6 @@ namespace Ankh.VS.Dialogs
                     return null;
             }
         }
-
-        #region IAnkhDialogOwner Members
 
         public IDisposable InstallFormRouting(Ankh.UI.VSContainerForm container, EventArgs eventArgs)
         {
@@ -76,21 +72,11 @@ namespace Ankh.VS.Dialogs
             if (routing != null)
                 routing.OnHandleCreated();
         }
-        #endregion
-
-        #endregion
-
-        #region IAnkhDialogOwner Members
 
         public AnkhMessageBox MessageBox
         {
             get { return new AnkhMessageBox(this); }
         }
-
-        #endregion
-
-        #region IAnkhDialogOwner Members
-
 
         public void AddCommandTarget(Ankh.UI.VSContainerForm form, IOleCommandTarget commandTarget)
         {
@@ -112,7 +98,5 @@ namespace Ankh.VS.Dialogs
                 throw new InvalidOperationException("Command routing not initialized yet");
         }
 
-        #endregion
-        
     }
 }
