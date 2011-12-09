@@ -344,6 +344,11 @@ namespace Ankh.UI.VS.TextEditor
             }
         }
 
+        public new void Select()
+        {
+            base.Select();
+        }
+
         public IOleCommandTarget EditorCommandTarget
         {
             get
