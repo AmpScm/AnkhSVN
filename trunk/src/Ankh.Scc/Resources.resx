@@ -159,9 +159,13 @@
 Most likely AnkhSVN will not work correctly on this and other upgraded working copies until you upgrade to a newer version.</value>
   </data>
   <data name="UpgradeRequired" xml:space="preserve">
-    <value>Subversion detected a working copy that needs an explicit upgrade in '{0}'. While this working copy is not upgraded all files in this will appear as new. When a working copy is upgraded it can no longer be used by Subversion clients that weren't designed for this (or later) working copy formats.
+    <value>Subversion detected a working copy that needs an explicit upgrade in '{0}'. 
 
-Further upgrade required warnings are suppressed until you restart Visual Studio.</value>
+While this working copy is not upgraded all files in this working copy will appear as new. 
+
+When a working copy is upgraded it can no longer be used by Subversion clients that weren't designed for this (or later) working copy formats.
+
+Further working copy upgrade required warnings are suppressed until after you restart Visual Studio.</value>
   </data>
   <data name="YourMergeToolSavedXWouldYouLikeItMarkedAsResolved" xml:space="preserve">
     <value>Your external merge tool saved '{0}'.
