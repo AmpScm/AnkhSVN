@@ -46,7 +46,7 @@ namespace Ankh.VS.Dialogs
         List<IOleCommandTarget> _ctList;
         List<IVsWindowPane> _paneList;
         IDisposable _activeStack;
-        bool _disabled;        
+        bool _disabled;
         static readonly Stack<VSCommandRouting> _routers = new Stack<VSCommandRouting>();
 
         bool _installed;
@@ -70,7 +70,7 @@ namespace Ankh.VS.Dialogs
 
             _priorityCommandTarget = GetService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
 
-            if(_priorityCommandTarget != null)
+            if (_priorityCommandTarget != null)
             {
                 if (!ErrorHandler.Succeeded(_priorityCommandTarget.RegisterPriorityCommandTarget(0, this, out _csCookie)))
                     _priorityCommandTarget = null;
@@ -106,7 +106,7 @@ namespace Ankh.VS.Dialogs
                     }
                     finally
                     { }
-                        _priorityCommandTarget = null;
+                    _priorityCommandTarget = null;
                 }
 
                 if (_activeStack != null)
@@ -162,7 +162,7 @@ namespace Ankh.VS.Dialogs
             IButtonControl cancelButton = _form.CancelButton;
             IButtonControl acceptButton = _form.AcceptButton;
 
-            while(_panel.Controls.Count > 0)
+            while (_panel.Controls.Count > 0)
             {
                 Control c = _panel.Controls[0];
                 _form.Controls.Add(c);
@@ -216,11 +216,11 @@ namespace Ankh.VS.Dialogs
             if (m.Msg < WM_KEYFIRST || m.Msg > WM_IME_KEYLAST)
                 return false; // Only key translation below
 
-            if(m.Msg == WM_KEYDOWN)
+            if (m.Msg == WM_KEYDOWN)
                 switch ((int)m.WParam)
                 {
                     case '\t':
-                        if((Control.ModifierKeys & Keys.Control) != 0)
+                        if ((Control.ModifierKeys & Keys.Control) != 0)
                             return false;
                         break;
                     case 27:
@@ -229,10 +229,10 @@ namespace Ankh.VS.Dialogs
                 }
 
             MSG[] messages = new MSG[1];
-                messages[0].hwnd = m.HWnd;
-                messages[0].lParam = m.LParam;
-                messages[0].wParam = m.WParam;
-                messages[0].message = (uint)m.Msg;
+            messages[0].hwnd = m.HWnd;
+            messages[0].lParam = m.LParam;
+            messages[0].wParam = m.WParam;
+            messages[0].message = (uint)m.Msg;
 
             VSContainerMode mode = _vsForm.ContainerMode;
             if (_fKeys != null && 0 != (mode & (VSContainerMode.TranslateKeys | VSContainerMode.UseTextEditorScope)))
@@ -373,7 +373,7 @@ namespace Ankh.VS.Dialogs
                     IVsUIShell uiShell = GetService<IVsUIShell>(typeof(SVsUIShell));
 
                     Marshal.ThrowExceptionForHR(uiShell.SetupToolbar(_form.Handle, (IVsToolWindowToolbar)this, out _tbHost));
-                }                
+                }
 
                 Guid toolbarCommandSet = tbId.Guid;
                 Marshal.ThrowExceptionForHR(
@@ -478,7 +478,7 @@ namespace Ankh.VS.Dialogs
 
             if (!ErrorHandler.Succeeded(hr))
             {
-                bool skipProcessing =false;
+                bool skipProcessing = false;
                 if (pguidCmdGroup == VSConstants.GUID_VSStandardCommandSet97)
                 {
                     VSConstants.VSStd97CmdID id = (VSConstants.VSStd97CmdID)nCmdID;
@@ -500,7 +500,7 @@ namespace Ankh.VS.Dialogs
                     VSConstants.VSStd2KCmdID id = (VSConstants.VSStd2KCmdID)nCmdID;
 
                     switch (id)
-                    {                        
+                    {
                         case VSConstants.VSStd2KCmdID.STYLE:
                         case VSConstants.VSStd2KCmdID.STYLEGETLIST:
                         case VSConstants.VSStd2KCmdID.FONTSTYLE:
@@ -514,10 +514,10 @@ namespace Ankh.VS.Dialogs
                     }
                 }
 
-                if(skipProcessing)
+                if (skipProcessing)
                     return VSConstants.S_OK;
             }
-            
+
             return hr;
         }
 
@@ -535,7 +535,7 @@ namespace Ankh.VS.Dialogs
                         break;
                 }
             }
-            
+
             return hr;
         }
 
