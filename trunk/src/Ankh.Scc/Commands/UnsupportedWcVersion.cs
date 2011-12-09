@@ -31,20 +31,31 @@ namespace Ankh.Scc.Commands
         {
         }
 
-        bool _skip;
+        bool _skipToNew;
+        bool _skipUpgradeRequired;
         public void OnExecute(CommandEventArgs e)
         {
             if (e.Command == AnkhCommand.NotifyWcToNew)
             {
-                if (_skip) // Only show this message once!
+                if (_skipToNew) // Only show this message once!
                     return;
 
-                _skip = true;
-                AnkhMessageBox mb = new AnkhMessageBox(e.Context);
-                mb.Show(string.Format(Resources.UnsupportedWorkingCopyFound, e.Argument));
+                _skipToNew = true;
+                using (AnkhMessageBox mb = new AnkhMessageBox(e.Context))
+                {
+                    mb.Show(string.Format(Resources.UnsupportedWorkingCopyFound, e.Argument));
+                }
             }
-            else
+            else if (e.Command == AnkhCommand.NotifyUpgradeRequired)
             {
+                if (_skipUpgradeRequired) // Only show this message once!
+                    return;
+
+                _skipUpgradeRequired = true;
+                using (AnkhMessageBox mb = new AnkhMessageBox(e.Context))
+                {
+                    mb.Show(string.Format(Resources.UpgradeRequired, e.Argument));
+                }
             }
         }
     }
