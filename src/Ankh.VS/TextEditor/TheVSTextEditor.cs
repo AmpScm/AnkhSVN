@@ -344,9 +344,10 @@ namespace Ankh.UI.VS.TextEditor
             }
         }
 
-        public new void Select()
+        // Called from VSTextEditor.Select(directed, forward)
+        void IVSTextEditorImplementation.Select(bool directed, bool forward)
         {
-            base.Select();
+            Select(directed, forward);
         }
 
         public IOleCommandTarget EditorCommandTarget
