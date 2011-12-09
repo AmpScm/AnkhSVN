@@ -461,6 +461,10 @@ namespace Ankh.VS.Dialogs
         int IOleCommandTarget.Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
             int hr = (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+
+            if (!Enabled)
+                return hr;
+
             if (_ctList != null)
             {
                 foreach (IOleCommandTarget ct in _ctList)
@@ -520,7 +524,8 @@ namespace Ankh.VS.Dialogs
         int IOleCommandTarget.QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             int hr = (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
-            if (_ctList != null)
+
+            if (Enabled && _ctList != null)
             {
                 foreach (IOleCommandTarget ct in _ctList)
                 {

@@ -317,7 +317,7 @@ namespace Ankh.VS.Selection
             return project is SolutionSccHelper;
         }
 
-        class SolutionSccHelper : IVsSccProject2
+        sealed class SolutionSccHelper : IVsSccProject2
         {
             readonly IAnkhServiceProvider _context;
             IVsSolution _solution;
