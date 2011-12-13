@@ -841,20 +841,52 @@ namespace Ankh.Scc
 
             IDisposable moveAway = null;
 
-            if (File.Exists(path))
+            if (SvnItem.PathExists(path))
                 moveAway = MoveAway(path, false);
-            else if (!File.Exists(contentFrom))
+            else if (!SvnItem.PathExists(contentFrom))
                 throw new InvalidOperationException("Source does not exist");
+
+            string dir = Path.GetDirectoryName(path);
+            int nDirsCreated = 0;
+
+            if (!SvnItem.PathExists(dir))
+            {
+                nDirsCreated = 1;
+
+                string pd = Path.GetDirectoryName(dir);
+                while (pd != Path.GetPathRoot(pd)
+                       && !SvnItem.PathExists(pd))
+                {
+                    nDirsCreated++;
+                    pd = Path.GetDirectoryName(pd);
+                }
+
+                Directory.CreateDirectory(dir);
+            }
 
             File.Copy(contentFrom, path);
 
             return new DelegateRunner(
                 delegate()
                 {
-                    if (File.Exists(path))
+                    if (SvnItem.PathExists(path))
                     {
-                        File.SetAttributes(path, FileAttributes.Normal);
-                        File.Delete(path);
+                        try
+                        {
+                            File.SetAttributes(path, FileAttributes.Normal);
+                        }
+                        catch { }
+                        SvnItem.DeleteNode(path);
+                    }
+
+                    string dd = Path.GetDirectoryName(path);
+                    while (nDirsCreated-- > 0)
+                    {
+                        if (SvnItem.PathExists(dd))
+                            if (!SvnItem.DeleteDirectory(dd))
+                                break;
+
+                        dd = Path.GetDirectoryName(dd);
                     }
 
                     if (moveAway != null)
