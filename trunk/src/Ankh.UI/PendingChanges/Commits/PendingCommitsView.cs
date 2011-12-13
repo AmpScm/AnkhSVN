@@ -16,17 +16,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Ankh.Selection;
-using Microsoft.VisualStudio;
 using System.ComponentModel;
-using Ankh.UI.VSSelectionControls;
-using Ankh.VS;
-using System.Windows.Forms;
-using Ankh.Scc;
-using System.Drawing;
 using System.ComponentModel.Design;
+using System.Drawing;
+using System.Windows.Forms;
+
 using Ankh.Commands;
+using Ankh.Configuration;
+using Ankh.Scc;
+using Ankh.UI.VSSelectionControls;
+
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.UI.PendingChanges.Commits
@@ -41,6 +41,9 @@ namespace Ankh.UI.PendingChanges.Commits
     {
         public PendingCommitsView()
         {
+            // TODO initialize to false for now, until all the usage paths are verified
+            OpenPendingChangeOnDoubleClick = false;
+
             StrictCheckboxesClick = true;
             FullRowSelect = true;
             HideSelection = false;
@@ -55,7 +58,6 @@ namespace Ankh.UI.PendingChanges.Commits
         {
             container.Add(this);
         }
-
 
         public void Initialize()
         {
@@ -156,6 +158,18 @@ namespace Ankh.UI.PendingChanges.Commits
         void OnSelectAll(object sender, CommandEventArgs e)
         {
             SelectAllItems();
+        }
+
+        bool _openPCOnDoubleClick;
+
+        /// <summary>
+        /// Gets or Sets the flag to open pending changes when double-clicked.
+        /// </summary>
+        [DefaultValue(false)]
+        public bool OpenPendingChangeOnDoubleClick
+        {
+            get { return _openPCOnDoubleClick; }
+            set { _openPCOnDoubleClick = value; }
         }
 
         bool IPendingChangeSource.HasPendingChanges
@@ -273,6 +287,42 @@ namespace Ankh.UI.PendingChanges.Commits
 
             return pci != null &&
                 !PendingChange.IsIgnoreOnCommitChangeList(pci.PendingChange.ChangeList);
+        }
+
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+
+            if (OpenPendingChangeOnDoubleClick)
+            {
+                ListViewHitTestInfo info = HitTest(e.X, e.Y);
+
+                if (info == null || info.Location == ListViewHitTestLocations.None)
+                    return;
+
+                if (info.Location == ListViewHitTestLocations.StateImage)
+                    return; // Just check the item
+
+                if (CommandService != null)
+                    CommandService.ExecCommand(Config.PCDoubleClickShowsChanges
+                        ? AnkhCommand.ItemShowChanges : AnkhCommand.ItemOpenVisualStudio, true);
+            }
+        }
+
+        IAnkhConfigurationService _configurationService;
+        protected IAnkhConfigurationService ConfigurationService
+        {
+            get { return _configurationService ?? (_configurationService = Context.GetService<IAnkhConfigurationService>()); }
+        }
+
+        AnkhConfig Config
+        {
+            get { return ConfigurationService.Instance; }
+        }
+
+        IAnkhCommandService CommandService
+        {
+            get { return Context == null ? null : Context.GetService<IAnkhCommandService>(); }
         }
     }
 }
