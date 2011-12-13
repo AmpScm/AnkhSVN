@@ -86,7 +86,6 @@ namespace Ankh.UI.SccManagement
             this.pendingList.Name = "pendingList";
             this.pendingList.ShowSelectAllCheckBox = true;
             this.pendingList.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.pendingList_ItemChecked);
-            this.pendingList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pendingList_MouseDoubleClick);
             // 
             // issueNumberBox
             // 

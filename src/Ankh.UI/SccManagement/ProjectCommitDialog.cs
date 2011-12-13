@@ -37,15 +37,6 @@ namespace Ankh.UI.SccManagement
             logMessage.PasteSource = pendingList;
         }
 
-        AnkhConfig Config
-        {
-            get { return ConfigurationService.Instance; }
-        }
-
-        IAnkhCommandService CommandService
-        {
-            get { return GetService<IAnkhCommandService>(); }
-        }
         IEnumerable<PendingChange> _changeEnumerator;
 
         public void LoadChanges(IEnumerable<Ankh.Scc.PendingChange> changeWalker)
@@ -57,6 +48,7 @@ namespace Ankh.UI.SccManagement
             {
                 pendingList.Context = Context;
                 pendingList.SelectionPublishServiceProvider = Context;
+                pendingList.OpenPendingChangeOnDoubleClick = true;
             }
 
             _changeEnumerator = changeWalker;
@@ -260,21 +252,6 @@ namespace Ankh.UI.SccManagement
                 if (replace)
                     issueNumberBox.Text = txt;
             }
-        }
-
-        private void pendingList_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            ListViewHitTestInfo info = pendingList.HitTest(e.X, e.Y);
-
-            if (info == null || info.Location == ListViewHitTestLocations.None)
-                return;
-
-            if (info.Location == ListViewHitTestLocations.StateImage)
-                return; // Just check the item
-
-            if (CommandService != null)
-                CommandService.ExecCommand(Config.PCDoubleClickShowsChanges
-                    ? AnkhCommand.ItemShowChanges : AnkhCommand.ItemOpenVisualStudio, true);
         }
     }
 }
