@@ -54,6 +54,7 @@ namespace Ankh.UI.PathSelector
             {
                 pendingList.Context = Context;
                 pendingList.SelectionPublishServiceProvider = Context;
+                pendingList.OpenPendingChangeOnDoubleClick = true;
             }
 
             pendingList.ColumnWidthChanged += new ColumnWidthChangedEventHandler(pendingList_ColumnWidthChanged);
