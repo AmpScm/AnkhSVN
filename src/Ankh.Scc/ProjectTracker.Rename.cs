@@ -245,7 +245,7 @@ namespace Ankh.Scc
 
                     if (wa != null)
                         continue; // Not an unexpected WC root
-                    else if (!SvnTools.IsManagedPath(newDir))
+                    else if (!SvnTools.IsBelowManagedPath(newDir))
                         continue; // Not a wc root at all
 
                     svn.SafeWcDirectoryCopyFixUp(oldDir, newDir, safeRename); // Recreate the old WC directory
