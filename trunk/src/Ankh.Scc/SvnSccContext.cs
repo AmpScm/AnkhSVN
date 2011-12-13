@@ -340,8 +340,6 @@ namespace Ankh.Scc
                 if (!_client.Add(toDir, aa))
                     throw new InvalidOperationException();
             }
-
-            Debug.Assert(SvnTools.IsManagedPath(toDir));
         }
 
         public bool WcDelete(string path)
@@ -373,7 +371,6 @@ namespace Ankh.Scc
                 {
                     string toDir = SvnTools.GetNormalizedDirectoryName(toPath);
 
-                    if (!SvnTools.IsManagedPath(toDir))
                     {
                         SvnAddArgs aa = new SvnAddArgs();
                         aa.Depth = SvnDepth.Empty;
@@ -384,8 +381,6 @@ namespace Ankh.Scc
                         if (!_client.Add(toDir, aa))
                             return false;
                     }
-
-                    Debug.Assert(SvnTools.IsManagedPath(toDir));
 
                     SvnMoveArgs ma = new SvnMoveArgs();
                     ma.AlwaysMoveAsChild = false;
