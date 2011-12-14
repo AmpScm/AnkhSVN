@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Ankh.Commands;
+using Ankh.Scc;
 
 namespace Ankh.UI.SvnInfoGrid.Commands
 {
@@ -51,16 +52,16 @@ namespace Ankh.UI.SvnInfoGrid.Commands
                     _cached = _names[0];
 
                     if (_control != null)
-                        _control.Grid.SelectedObject = new Ankh.Scc.SvnItemData(e.Context, full[0]);
+                        _control.Grid.SelectedObject = new SvnItemData(e.Context, full[0]);
                 }
                 else
                 {
                     _cached = null;
-                    List<Ankh.Scc.SvnItemData> items = new List<Ankh.Scc.SvnItemData>();
-                    for (int i = 0; i < full.Count; i++)
-                        items.Add(new Ankh.Scc.SvnItemData(e.Context, full[i]));
+                    List<Ankh.Scc.SvnItemData> items = new List<SvnItemData>();
+                    foreach(SvnItem i in full)
+                        items.Add(new Ankh.Scc.SvnItemData(e.Context, i));
 
-                    _control.Grid.SelectedObjects = items.ToArray();
+                    _control.Grid.SelectedObjects = items.Count > 0 ? items.ToArray() : null;
                 }
             }
 
@@ -88,7 +89,7 @@ namespace Ankh.UI.SvnInfoGrid.Commands
                         {
                             _cached = s;
 
-                            // Update selection
+                            // TODO: Update selection
                         }
                     }
                 }
@@ -97,6 +98,8 @@ namespace Ankh.UI.SvnInfoGrid.Commands
                     // Keyboard filter
                 }
             }
+            else if (string.IsNullOrEmpty(_cached) && _names != null && _names.Length > 1)
+                e.Result = string.Format(SvnInfoStrings.NrOfFileInfo, _names.Length);
             else
                 e.Result = _cached;
         }
