@@ -5,7 +5,7 @@ using Ankh.Commands;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace Ankh.UI.SvnInfoGrid
+namespace Ankh.UI.SvnInfoGrid.Commands
 {
     [Command(AnkhCommand.SvnInfoCategorized, AlwaysAvailable = true)]
     [Command(AnkhCommand.SvnInfoAlphabetical, AlwaysAvailable = true)]
