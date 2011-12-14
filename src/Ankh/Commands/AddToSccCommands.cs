@@ -70,7 +70,7 @@ namespace Ankh.Commands
                 }
                 SvnItem item = cache[solutionFilename];
 
-                if (!item.Exists || !item.IsFile)
+                if (!item.Exists || !item.IsFile || item.ParentDirectory.NeedsWorkingCopyUpgrade)
                 {
                     // Decide where you store the .sln first
                     e.Visible = e.Enabled = false;
@@ -371,71 +371,75 @@ namespace Ankh.Commands
 
             List<SvnProject> projectsToBeManaged = new List<SvnProject>();
             SvnItem slnItem = cache[e.Selection.SolutionFilename];
-            Uri solutionReposRoot = slnItem.WorkingCopy.RepositoryRoot;
-
-            foreach (SvnProject project in GetSelection(e.Selection))
+            Uri solutionReposRoot = null;
+            if (slnItem.WorkingCopy != null)
             {
-                ISvnProjectInfo projInfo = mapper.GetProjectInfo(project);
+                solutionReposRoot = slnItem.WorkingCopy.RepositoryRoot;
 
-                if (projInfo == null || projInfo.ProjectDirectory == null
-                    || !projInfo.IsSccBindable)
-                    continue; // Some projects can't be managed
-
-                SvnItem projectDir = cache[projInfo.ProjectDirectory];
-
-                if (projectDir.WorkingCopy == slnItem.WorkingCopy)
+                foreach (SvnProject project in GetSelection(e.Selection))
                 {
-                    // This is a 'normal' project, part of the solution and in the same working copy
-                    projectsToBeManaged.Add(project);
-                    continue;
-                }
+                    ISvnProjectInfo projInfo = mapper.GetProjectInfo(project);
 
-                bool markAsManaged;
-                bool writeReference;
+                    if (projInfo == null || projInfo.ProjectDirectory == null
+                        || !projInfo.IsSccBindable)
+                        continue; // Some projects can't be managed
 
-                if (projectDir.IsVersioned)
-                    continue; // We don't have to add this one
-                if (projectDir.IsVersionable)
-                {
-                    SvnItem parentDir = GetVersionedParent(projectDir);
-                    Debug.Assert(parentDir != null);
+                    SvnItem projectDir = cache[projInfo.ProjectDirectory];
 
-                    DialogResult rslt = mb.Show(string.Format(CommandResources.AddXToExistingWcY,
-                                                              Path.GetFileName(projInfo.ProjectName),
-                                                              parentDir.FullPath), AnkhId.PlkProduct, MessageBoxButtons.YesNoCancel);
-
-                    switch (rslt)
+                    if (projectDir.WorkingCopy == slnItem.WorkingCopy)
                     {
-                        case DialogResult.Cancel:
-                            return;
-                        case DialogResult.No:
-                            if (CheckoutWorkingCopyForProject(e, projInfo, solutionReposRoot, out markAsManaged, out writeReference))
-                            {
-                                if (markAsManaged)
-                                    scc.SetProjectManaged(project, true);
-                                if (writeReference)
-                                    scc.EnsureCheckOutReference(project);
-
-                                continue;
-                            }
-                            break;
-                        case DialogResult.Yes:
-                            projectsToBeManaged.Add(project);
-                            AddPathToSubversion(e, projInfo.ProjectFile ?? projInfo.ProjectDirectory);
-                            continue;
-                    }
-                }
-                else
-                {
-                    // We have to checkout (and create repository location)
-                    if (CheckoutWorkingCopyForProject(e, projInfo, solutionReposRoot, out markAsManaged, out writeReference))
-                    {
-                        if (markAsManaged)
-                            scc.SetProjectManaged(project, true);
-                        if (writeReference)
-                            scc.EnsureCheckOutReference(project);
-
+                        // This is a 'normal' project, part of the solution and in the same working copy
+                        projectsToBeManaged.Add(project);
                         continue;
+                    }
+
+                    bool markAsManaged;
+                    bool writeReference;
+
+                    if (projectDir.IsVersioned)
+                        continue; // We don't have to add this one
+                    if (projectDir.IsVersionable)
+                    {
+                        SvnItem parentDir = GetVersionedParent(projectDir);
+                        Debug.Assert(parentDir != null);
+
+                        DialogResult rslt = mb.Show(string.Format(CommandResources.AddXToExistingWcY,
+                                                                  Path.GetFileName(projInfo.ProjectName),
+                                                                  parentDir.FullPath), AnkhId.PlkProduct, MessageBoxButtons.YesNoCancel);
+
+                        switch (rslt)
+                        {
+                            case DialogResult.Cancel:
+                                return;
+                            case DialogResult.No:
+                                if (CheckoutWorkingCopyForProject(e, projInfo, solutionReposRoot, out markAsManaged, out writeReference))
+                                {
+                                    if (markAsManaged)
+                                        scc.SetProjectManaged(project, true);
+                                    if (writeReference)
+                                        scc.EnsureCheckOutReference(project);
+
+                                    continue;
+                                }
+                                break;
+                            case DialogResult.Yes:
+                                projectsToBeManaged.Add(project);
+                                AddPathToSubversion(e, projInfo.ProjectFile ?? projInfo.ProjectDirectory);
+                                continue;
+                        }
+                    }
+                    else
+                    {
+                        // We have to checkout (and create repository location)
+                        if (CheckoutWorkingCopyForProject(e, projInfo, solutionReposRoot, out markAsManaged, out writeReference))
+                        {
+                            if (markAsManaged)
+                                scc.SetProjectManaged(project, true);
+                            if (writeReference)
+                                scc.EnsureCheckOutReference(project);
+
+                            continue;
+                        }
                     }
                 }
             }
