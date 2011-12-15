@@ -125,7 +125,6 @@ namespace Ankh.UI.PendingChanges
 			this.pendingCommits.Name = "pendingCommits";
 			this.pendingCommits.ShowItemToolTips = true;
 			this.pendingCommits.ShowSelectAllCheckBox = true;
-			this.pendingCommits.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pendingCommits_MouseDoubleClick);
 			this.pendingCommits.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pendingCommits_KeyUp);
 			this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.Commits.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
 			// 
