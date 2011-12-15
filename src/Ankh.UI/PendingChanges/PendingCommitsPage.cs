@@ -53,6 +53,7 @@ namespace Ankh.UI.PendingChanges
             {
                 pendingCommits.SelectionPublishServiceProvider = Context;
                 pendingCommits.Context = Context;
+                pendingCommits.OpenPendingChangeOnDoubleClick = true;
                 pendingCommits.HookCommands();
                 pendingCommits.ColumnWidthChanged += new ColumnWidthChangedEventHandler(pendingCommits_ColumnWidthChanged);
                 IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
@@ -352,20 +353,6 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        private void pendingCommits_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            ListViewHitTestInfo info = pendingCommits.HitTest(e.X, e.Y);
-
-            if (info == null || info.Location == ListViewHitTestLocations.None)
-                return;
-
-            if (info.Location == ListViewHitTestLocations.StateImage)
-                return; // Just check the item
-
-            if (CommandService != null)
-                CommandService.ExecCommand(Config.PCDoubleClickShowsChanges
-                    ? AnkhCommand.ItemShowChanges : AnkhCommand.ItemOpenVisualStudio, true);
-        }
         internal void OnUpdate(Ankh.Commands.CommandUpdateEventArgs e)
         {
             switch (e.Command)
