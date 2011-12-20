@@ -201,7 +201,6 @@ namespace Ankh.VS.LanguageServices.Core
                 }
             }
             Connect();
-            localRegistry = null;
         }
 
         /// <include file='doc\PropertySheet.uex' path='docs/doc[@for="LanguagePreferences.InitUserPreferences"]/*' />
@@ -214,7 +213,9 @@ namespace Ankh.VS.LanguageServices.Core
         {
             object o = key.GetValue(name);
             if (o is int) return (int)o;
-            if (o is string) return int.Parse((string)o, CultureInfo.InvariantCulture);
+            int result;
+            if (o is string && int.TryParse((string)o, NumberStyles.Integer, CultureInfo.InvariantCulture, out result))
+                return result;
             return def;
         }
         /// <include file='doc\PropertySheet.uex' path='docs/doc[@for="LanguagePreferences.GetBooleanValue"]/*' />
@@ -222,7 +223,9 @@ namespace Ankh.VS.LanguageServices.Core
         {
             object o = key.GetValue(name);
             if (o is int) return ((int)o != 0);
-            if (o is string) return bool.Parse((string)o);
+            bool result;
+            if (o is string && bool.TryParse((string)o, out result))
+                return result;
             return def;
         }
 
@@ -399,7 +402,6 @@ namespace Ankh.VS.LanguageServices.Core
                         Debug.Assert(false, "textMgr2.GetUserPreferences2");
                     }
                 }
-                Marshal.ReleaseComObject(textMgr);
             }
         }
 
@@ -416,7 +418,6 @@ namespace Ankh.VS.LanguageServices.Core
                 {
                     Debug.Assert(false, "textMgr2.SetUserPreferences2");
                 }
-                Marshal.ReleaseComObject(textMgr2);
             }
         }
 
@@ -428,7 +429,6 @@ namespace Ankh.VS.LanguageServices.Core
                 if (textMgr2 != null)
                 {
                     this.connection = new NativeMethods.ConnectionPointCookie(textMgr2, (IVsTextManagerEvents2)this, typeof(IVsTextManagerEvents2));
-                    Marshal.ReleaseComObject(textMgr2);
                 }
             }*/
         }
