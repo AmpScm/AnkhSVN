@@ -500,14 +500,14 @@ namespace Ankh.VSPackage
 
         public int OnDockableChange(int fDockable, int x, int y, int w, int h)
         {
-            _twControl.OnFrameDockableChanged(new FrameEventArgs(fDockable != 0, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
+            _twControl.OnFrameDockableChanged(new FrameEventArgs(fDockable != 0, new Rectangle(x, y, w, h), (__FRAMESHOW)(-1)));
 
             return VSConstants.S_OK;
         }
 
         public int OnMove(int x, int y, int w, int h)
         {
-            _twControl.OnFrameMove(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
+            _twControl.OnFrameMove(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)(-1)));
 
             return VSConstants.S_OK;
         }
@@ -521,7 +521,7 @@ namespace Ankh.VSPackage
 
         public int OnSize(int x, int y, int w, int h)
         {
-            _twControl.OnFrameSize(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
+            _twControl.OnFrameSize(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)(-1)));
 
             return VSConstants.S_OK;
         }
