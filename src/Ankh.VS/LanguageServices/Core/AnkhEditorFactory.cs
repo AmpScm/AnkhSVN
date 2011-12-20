@@ -387,20 +387,19 @@ namespace Ankh.VS.LanguageServices.Core
                 Guid vsCoreSid = new Guid("{8239bec4-ee87-11d0-8c98-00c04fc2ab22}");
                 Guid currentSid;
                 ErrorHandler.ThrowOnFailure(buffer.GetLanguageServiceID(out currentSid));
-                if (currentSid == langSid)
+                // If the language service is set to the default SID, then
+                // set it to our language
+                if (currentSid == vsCoreSid)
                 {
-                    // We may have recently closed the editor on this buffer and for some
-                    // reason VS loses our colorizer, so we need to reset it.
-                    ErrorHandler.ThrowOnFailure(buffer.SetLanguageServiceID(ref vsCoreSid));
+                    ErrorHandler.ThrowOnFailure(buffer.SetLanguageServiceID(ref langSid));
                 }
-                else if (currentSid != vsCoreSid)
+                else if (currentSid != langSid)
                 {
                     // Some other language service has it, so return VS_E_INCOMPATIBLEDOCDATA
-                    // (See Whidbey bug 375512 for details).
                     hr = VSConstants.VS_E_INCOMPATIBLEDOCDATA;
                     goto cleanup;
                 }
-                ErrorHandler.ThrowOnFailure(buffer.SetLanguageServiceID(ref langSid));
+
                 takeover = true;
             }
 
@@ -426,7 +425,7 @@ namespace Ankh.VS.LanguageServices.Core
             {
                 // We couldn't create the view, so return this special error code so
                 // VS can try another editor factory.
-                hr = VSConstants.VS_E_UNSUPPORTEDFORMAT;
+                hr = (int)NativeMethods.VS_E_UNSUPPORTEDFORMAT;
             }
 
         cleanup:
@@ -447,6 +446,7 @@ namespace Ankh.VS.LanguageServices.Core
         {
             Type tcw = typeof(IVsCodeWindow);
             Guid riid = tcw.GUID;
+            // Once this is done the project's assembly reference to "$(EnvRefPath)\Microsoft.VisualStudio.Editor.dll" may be removed
             Guid clsid = typeof(VsCodeWindowClass).GUID;
             IntPtr docView = IntPtr.Zero;
             IVsCodeWindow window = (IVsCodeWindow)package.CreateInstance(ref clsid, ref riid, tcw);
