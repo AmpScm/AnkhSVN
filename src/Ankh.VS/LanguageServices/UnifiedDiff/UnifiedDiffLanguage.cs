@@ -19,8 +19,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-using Microsoft.VisualStudio.Package;
-
 using Ankh.VS.LanguageServices.Core;
 using Microsoft.VisualStudio.TextManager.Interop;
 
