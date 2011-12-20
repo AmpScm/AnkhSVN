@@ -129,6 +129,9 @@ namespace Ankh
         public const string UserToolsSettingsPageGuid = "AE1A4DB8-09C3-438D-93BD-0FE37412CE34";
         public const string IssueTrackerSettingsPageGuid = "363B3E68-EE94-403D-88BA-681A7CAD247A";
 
+        public const string LanguagePreferencesId = "C4CC1BD2-A679-4746-A09E-3E83E8906D7E";
+        public const string EditorFactoryId = "72FABA81-D5B6-430C-BD63-B938B3DC0CED";
+
         /// <summary>
         /// The command set as a guid
         /// </summary>
