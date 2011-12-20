@@ -255,6 +255,36 @@ namespace Ankh.UI.PendingChanges
             ShowPanel(_conflictsPage, true);
         }
 
+        bool _vertical;
+        protected override void OnFrameSize(FrameEventArgs e)
+        {
+            Size sz = e.Location.Size;
+
+            if (sz.Height > 50 && sz.Width > 50)
+            {
+                if (!_vertical && sz.Height > sz.Width * 5 / 4)
+                {
+                    _vertical = true;
+                    ChangeOrientation();
+                }
+                else if (_vertical && sz.Width > sz.Height * 5 / 4)
+                {
+                    _vertical = false;
+                    ChangeOrientation();
+                }
+            }
+
+            base.OnFrameSize(e);
+        }
+
+        private void ChangeOrientation()
+        {
+            if (_vertical)
+                pendingChangesTabs.Dock = DockStyle.Bottom;
+            else
+                pendingChangesTabs.Dock = DockStyle.Left;
+        }
+
         #region IAnkhHasVsTextView Members
         Microsoft.VisualStudio.TextManager.Interop.IVsTextView IAnkhHasVsTextView.TextView
         {
