@@ -12,12 +12,11 @@ using Microsoft.Win32;
 namespace Ankh.VS.LanguageServices.Core
 {
     [ComVisible(true), Guid(AnkhId.LanguagePreferencesId)]
-    public class AnkhLanguagePreferences : IVsTextManagerEvents2, IDisposable
+    public class AnkhLanguagePreferences : AnkhService, IVsTextManagerEvents2
     {
-        IServiceProvider site;
         Guid langSvc;
         LANGPREFERENCES2 prefs;
-        //NativeMethods.ConnectionPointCookie connection;
+        uint? _connection;
         bool enableCodeSense;
         bool enableMatchBraces;
         bool enableQuickInfo;
@@ -37,39 +36,18 @@ namespace Ankh.VS.LanguageServices.Core
         /// <summary>
         /// Gets the language preferences.
         /// </summary>
-        public AnkhLanguagePreferences(IServiceProvider site, Guid langSvc, string name)
+        public AnkhLanguagePreferences(IAnkhServiceProvider site, Guid langSvc, string name)
+            : base(site)
         {
-            this.site = site;
             this.langSvc = langSvc;
             this.name = name;
         }
-
-        /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.LanguagePreferences1"]/*' />
-        public AnkhLanguagePreferences() { }
 
         /// <include file='doc\PropertySheet.uex' path='docs/doc[@for="LanguagePreferences.LanguageName;"]/*' />
         protected string LanguageName
         {
             get { return this.name; }
             set { this.name = value; }
-        }
-
-        /// <include file='doc\PropertySheet.uex' path='docs/doc[@for="LanguagePreferences.Site;"]/*' />
-        /// <summary>
-        /// This property is not public for a reason. If it were public it would
-        /// get called during LoadSettingsFromStorage which will break it.  
-        /// Instead use GetSite().
-        /// </summary>
-        protected IServiceProvider Site
-        {
-            get { return this.site; }
-            set { this.site = value; }
-        }
-
-        /// <include file='doc\PropertySheet.uex' path='docs/doc[@for="LanguagePreferences.Site;"]/*' />
-        public IServiceProvider GetSite()
-        {
-            return this.site;
         }
 
         // Our base language service perferences (from Babel originally)
@@ -175,7 +153,7 @@ namespace Ankh.VS.LanguageServices.Core
         /// <include file='doc\PropertySheet.uex' path='docs/doc[@for="LanguagePreferences.Init"]/*' />
         public virtual void Init()
         {
-            ILocalRegistry3 localRegistry = site.GetService(typeof(SLocalRegistry)) as ILocalRegistry3;
+            ILocalRegistry3 localRegistry = GetService<ILocalRegistry3>(typeof(SLocalRegistry));
             string root = null;
             if (localRegistry != null)
             {
@@ -251,11 +229,16 @@ namespace Ankh.VS.LanguageServices.Core
             }
         }
 
-        /// <include file='doc\PropertySheet.uex' path='docs/doc[@for="LanguagePreferences.Dispose"]/*' />
-        public virtual void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            Disconnect();
-            site = null;
+            try
+            {
+                Disconnect();
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
         }
 
         // General tab
@@ -382,11 +365,11 @@ namespace Ankh.VS.LanguageServices.Core
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.GetLanguagePrefs"]/*' />
         public virtual void GetLanguagePreferences()
         {
-            IVsTextManager textMgr = site.GetService(typeof(SVsTextManager)) as IVsTextManager;
+            IVsTextManager textMgr = GetService<IVsTextManager>(typeof(SVsTextManager));
             if (textMgr != null)
             {
                 this.prefs.guidLang = langSvc;
-                IVsTextManager2 textMgr2 = site.GetService(typeof(SVsTextManager)) as IVsTextManager2;
+                IVsTextManager2 textMgr2 = textMgr as IVsTextManager2;
                 if (textMgr != null)
                 {
                     LANGPREFERENCES2[] langPrefs2 = new LANGPREFERENCES2[1];
@@ -406,7 +389,7 @@ namespace Ankh.VS.LanguageServices.Core
         /// <include file='doc\PropertySheet.uex' path='docs/doc[@for="LanguagePreferences.Apply"]/*' />
         public virtual void Apply()
         {
-            IVsTextManager2 textMgr2 = site.GetService(typeof(SVsTextManager)) as IVsTextManager2;
+            IVsTextManager2 textMgr2 = GetService<IVsTextManager2>(typeof(SVsTextManager));
             if (textMgr2 != null)
             {
                 this.prefs.guidLang = langSvc;
@@ -421,23 +404,25 @@ namespace Ankh.VS.LanguageServices.Core
 
         private void Connect()
         {
-            /*if (this.connection == null && this.site != null)
+            IVsTextManager2 textMgr = GetService<IVsTextManager2>(typeof(SVsTextManager));
+            uint cookie;
+            if (textMgr != null
+                && TryHookConnectionPoint<IVsTextManagerEvents2>(textMgr, this, out cookie))
             {
-                IVsTextManager2 textMgr2 = this.site.GetService(typeof(SVsTextManager)) as IVsTextManager2;
-                if (textMgr2 != null)
-                {
-                    this.connection = new NativeMethods.ConnectionPointCookie(textMgr2, (IVsTextManagerEvents2)this, typeof(IVsTextManagerEvents2));
-                }
-            }*/
+                _connection = cookie;
+            }
         }
 
         private void Disconnect()
         {
-            /*if (this.connection != null)
+            if (_connection.HasValue)
             {
-                this.connection.Dispose();
-                this.connection = null;
-            }*/
+                IVsTextManager2 textMgr = GetService<IVsTextManager2>(typeof(SVsTextManager));
+
+                if (textMgr != null)
+                    ReleaseHook<IVsTextManagerEvents2>(textMgr, _connection.Value);
+                _connection = null;
+            }
         }
 
         #region IVsTextManagerEvents2 Members
