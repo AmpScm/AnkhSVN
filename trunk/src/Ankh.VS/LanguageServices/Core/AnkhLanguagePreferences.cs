@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.TextManager.Interop;
 using System.ComponentModel;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
-using System.Globalization;
-using Microsoft.VisualStudio;
 using System.Diagnostics;
+using System.Globalization;
+using System.Runtime.InteropServices;
+
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.Win32;
 
 namespace Ankh.VS.LanguageServices.Core
 {
