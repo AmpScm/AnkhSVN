@@ -425,7 +425,7 @@ namespace Ankh.VS.LanguageServices.Core
             {
                 // We couldn't create the view, so return this special error code so
                 // VS can try another editor factory.
-                hr = (int)NativeMethods.VS_E_UNSUPPORTEDFORMAT;
+                hr = VSConstants.VS_E_UNSUPPORTEDFORMAT;
             }
 
         cleanup:
