@@ -21,7 +21,6 @@
   <PropertyGroup Condition="'$(UseVsSdkVersion)' == '8.0'">
     <!-- Visual Studio 2005 SDK 1.1 -->
     <MsVsShellAssembly>Microsoft.VisualStudio.Shell, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</MsVsShellAssembly>
-    <MsVsLangAssembly>Microsoft.VisualStudio.Package.LanguageService, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</MsVsLangAssembly>
     <!-- Required setting for VS2005 SDK -->
     <TargetRegistryRoot>Software\Microsoft\VisualStudio\8.0Exp</TargetRegistryRoot>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
@@ -29,7 +28,6 @@
   <PropertyGroup Condition="'$(UseVsSdkVersion)' == '9.0'">
     <!-- Visual Studio 2008 SP1 SDK-->
     <MsVsShellAssembly>Microsoft.VisualStudio.Shell.9.0, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</MsVsShellAssembly>
-    <MsVsLangAssembly>Microsoft.VisualStudio.Package.LanguageService.9.0, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</MsVsLangAssembly>
     <TargetFrameworkVersion Condition="'$(Not2005Compatible)' != 'true'">v2.0</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(Not2005Compatible)' == 'true'">v3.5</TargetFrameworkVersion>
     <!-- Older Microsoft.VsSDK.Build.Tasks.dll versions have a bug in compiling the vsct from our location -->
@@ -38,13 +36,11 @@
   <PropertyGroup Condition="'$(UseVsSdkVersion)' == '10.0'">
     <!-- Visual Studio 2010 (SP1) SDK -->
     <MsVsShellAssembly>Microsoft.VisualStudio.Shell.10.0</MsVsShellAssembly>
-    <MsVsLangAssembly>Microsoft.VisualStudio.Package.LanguageService.10.0</MsVsLangAssembly>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(UseVsSdkVersion)' == '11.0'">
     <!-- 'Visual Studio 11 Developer Preview'-->
     <MsVsShellAssembly>Microsoft.VisualStudio.Shell.10.0</MsVsShellAssembly>
-    <MsVsLangAssembly>Microsoft.VisualStudio.Package.LanguageService.10.0</MsVsLangAssembly>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
 </Project>
