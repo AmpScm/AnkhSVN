@@ -69,7 +69,8 @@ namespace Ankh.UI.WorkingCopyExplorer
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerOpen, OnOpen, OnUpdateOpen);
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerUp, OnUp, OnUpdateUp);
             VSCommandHandler.Install(Context, this, AnkhCommand.Refresh, OnRefresh, OnUpdateRefresh);
-            VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Delete), OnDelete);
+            VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Delete), OnDelete, OnUpdateDelete);
+            VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Rename), OnRename, OnUpdateRename);
 
             AnkhServiceEvents environment = Context.GetService<AnkhServiceEvents>();
 
@@ -117,9 +118,46 @@ namespace Ankh.UI.WorkingCopyExplorer
             RefreshRoots();
         }
 
+        CommandMapper _mapper;
+        CommandMapper CommandMapper
+        {
+            get
+            {
+                if (_mapper == null && Context != null)
+                    _mapper = Context.GetService<CommandMapper>();
+
+                return _mapper;
+            }
+        }
+
+        void OnUpdateDelete(object sender, CommandUpdateEventArgs e)
+        {
+            CommandMapper mapper = CommandMapper;
+
+            if (mapper != null)
+                mapper.PerformUpdate(AnkhCommand.ItemDelete, e);
+            else
+                e.Enabled = false;
+        }
+
         void OnDelete(object sender, CommandEventArgs e)
         {
             e.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.ItemDelete);
+        }
+
+        void OnUpdateRename(object sender, CommandUpdateEventArgs e)
+        {
+            CommandMapper mapper = CommandMapper;
+
+            if (mapper != null)
+                mapper.PerformUpdate(AnkhCommand.ItemRename, e);
+            else
+                e.Enabled = false;
+        }
+
+        void OnRename(object sender, CommandEventArgs e)
+        {
+            e.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.ItemRename);
         }
 
         bool _rootsPresent;
