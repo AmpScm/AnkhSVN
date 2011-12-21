@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
-using LanguagePreferences = Microsoft.VisualStudio.Package.LanguagePreferences;
 
 using Ankh.Selection;
 
@@ -81,20 +80,18 @@ namespace Ankh.VS.LanguageServices.Core
             get;
         }
 
-        [CLSCompliant(false)]
-        protected virtual LanguagePreferences CreatePreferences()
+        protected virtual AnkhLanguagePreferences CreatePreferences()
         {
-            LanguagePreferences preferences;
+            AnkhLanguagePreferences preferences;
 
-            preferences = new LanguagePreferences(this, GetType().GUID, Name);
+            preferences = new AnkhLanguagePreferences(this, GetType().GUID, Name);
             preferences.Init();
 
             return preferences;
         }
 
-        LanguagePreferences _preferences;
-        [CLSCompliant(false)]
-        public LanguagePreferences LanguagePreferences
+        AnkhLanguagePreferences _preferences;
+        public AnkhLanguagePreferences LanguagePreferences
         {
             get { return _preferences ?? (_preferences = CreatePreferences()); }
         }

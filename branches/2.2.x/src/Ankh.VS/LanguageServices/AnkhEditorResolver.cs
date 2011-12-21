@@ -17,19 +17,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.Package;
-using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using Ankh.VS.LanguageServices.Core;
 
 namespace Ankh.VS.LanguageServices
 {
     [GlobalService(typeof(IAnkhEditorResolver))]
     class AnkhEditorResolver : AnkhService, IAnkhEditorResolver
     {
-        readonly EditorFactory _factory;
+        readonly AnkhEditorFactory _factory;
         public AnkhEditorResolver(IAnkhServiceProvider context)
             : base(context)
         {
-            _factory = new EditorFactory();
+            _factory = new AnkhEditorFactory();
             _factory.SetSite(this);
         }
 

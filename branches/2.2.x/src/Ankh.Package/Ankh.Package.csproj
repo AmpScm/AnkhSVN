@@ -73,7 +73,6 @@
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop" />
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0" />
     <Reference Include="$(MsVsShellAssembly)" />
-    <Reference Include="$(MsVsLangAssembly)" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="'$(UseVsSdkVersion)' != '8.0'">
       <Visible>false</Visible>
     </Reference>
