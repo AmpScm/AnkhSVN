@@ -129,6 +129,13 @@ namespace Ankh.Commands
             internal set { _alwaysAvailable = value; }
         }
 
+        bool _hideWhenUnavailable;
+        public bool HiddenWhenUnavailable
+        {
+            get { return _hideWhenUnavailable; }
+            internal set { _hideWhenUnavailable = value; }
+        }
+
         bool _hideWhenDisabled;
         /// <summary>
         /// Gets or sets a value indicating whether the command is hidden when disabled
