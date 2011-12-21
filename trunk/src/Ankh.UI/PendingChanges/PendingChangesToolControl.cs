@@ -91,9 +91,6 @@ namespace Ankh.UI.PendingChanges
                 IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
 
                 Color color;
-                if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
-                    BackColor = color;
-
                 if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
                 {
                     pendingChangesTabs.BackColor = color;

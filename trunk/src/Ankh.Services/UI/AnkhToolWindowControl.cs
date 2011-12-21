@@ -15,9 +15,15 @@
 //  limitations under the License.
 
 using System;
-using System.Windows.Forms;
-using Ankh.Scc.UI;
 using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
+
+using Microsoft.VisualStudio.Shell.Interop;
+
+using Ankh.Scc.UI;
+using Ankh.VS;
 
 namespace Ankh.UI
 {
@@ -66,6 +72,27 @@ namespace Ankh.UI
 
         protected virtual void OnContextChanged(EventArgs e)
         {
+            if (Context != null)
+            {
+                IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
+
+                Color color;
+                if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
+                    BackColor = color;
+
+                if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_TEXT, out color))
+                    ForeColor = color;
+
+                IUIService uis = Context.GetService<IUIService>();
+
+                if (uis != null)
+                {
+                    Font f = (Font)uis.Styles["DialogFont"];
+
+                    if (f != null)
+                        this.Font = f;
+                }
+            }
         }
 
         /// <summary>
