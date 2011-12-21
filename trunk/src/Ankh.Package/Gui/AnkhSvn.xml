@@ -633,10 +633,8 @@
         <Group id="Grp_WceEdit" priority="0x300">
           <ButtonRef id="guidVSStd97:cmdidCopy" priority="0x100" />
           <ButtonRef id="guidVSStd97:cmdidPaste" priority="0x200" />
-          <Button id="Cmd_ItemDelete" name="SvnNodeDelete" priority="0x800" text="&amp;Delete..."
-                  iconFile="PendingChanges/Delete.png" dynamicVisibility="true" />
-          <Button id="Cmd_ItemRename" name="Rename" priority="0x900"
-                  text="&amp;Rename..." dynamicVisibility="true" allowParams="true" />
+          <ButtonRef id="guidVSStd97:cmdidDelete" priority="0x800" />
+          <ButtonRef id="guidVSStd97:cmdidRename" priority="0x900" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
@@ -1023,6 +1021,12 @@
         <Button id="Cmd_ForceUIShow" text="&#160;" priority="0" noShowOnMenuController="true" noButtonCustomize ="true"
                 noCustomize="true" noKeyCustomize="true" defaultInvisible="true" textOnly="true" />
         <Button id="Cmd_MakeNonSccFileWriteable" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" postExec="false" defaultInvisible="true" defaultDisabled="false" />
+        
+        <!-- Temp no UI -->
+        <Button id="Cmd_ItemDelete" name="SvnNodeDelete" priority="0x800" text="&amp;Delete..."
+        iconFile="PendingChanges/Delete.png" dynamicVisibility="true" />
+        <Button id="Cmd_ItemRename" name="Rename" priority="0x900"
+                text="&amp;Rename..." dynamicVisibility="true" allowParams="true" />
       </Group>
     </MenuRef>
   </UI>
