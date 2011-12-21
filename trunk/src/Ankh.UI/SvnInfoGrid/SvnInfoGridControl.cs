@@ -21,16 +21,6 @@ namespace Ankh.UI.SvnInfoGrid
 
         protected override void OnLoad(EventArgs e)
         {
-            ToolStripRenderer renderer = null;
-            System.Windows.Forms.Design.IUIService ds = Context.GetService<System.Windows.Forms.Design.IUIService>();
-            if (ds != null)
-            {
-                renderer = ds.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
-            }
-
-            if (renderer != null)
-                grid.ToolStripRenderer = renderer;
-
             IServiceContainer container = Context.GetService<IServiceContainer>();
 
             if (container != null)
