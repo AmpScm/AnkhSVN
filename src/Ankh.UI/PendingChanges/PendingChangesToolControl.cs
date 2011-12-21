@@ -85,9 +85,26 @@ namespace Ankh.UI.PendingChanges
                 }
             }
 
-            base.OnLoad(e);
+            if (VSVersion.VS2008OrOlder && !SystemInformation.HighContrast)
+            {
+                // We should use the VS colors instead of the ones provided by the OS
+                IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
 
-            UpdateColors(renderer != null);
+                Color color;
+                if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
+                {
+                    pendingChangesTabs.BackColor = color;
+                    pendingChangesTabs.OverflowButton.BackColor = color;
+                }
+
+                if (renderer == null && colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
+                {
+                    pendingChangesTabs.ForeColor = color;
+                    pendingChangesTabs.OverflowButton.ForeColor = color;
+                }
+            }
+
+            base.OnLoad(e);
 
             AnkhServiceEvents ev = Context.GetService<AnkhServiceEvents>();
 
@@ -146,31 +163,6 @@ namespace Ankh.UI.PendingChanges
             ToolWindowHost.CommandContext = AnkhId.PendingChangeContextGuid;
             //ToolWindowSite.KeyboardContext = AnkhId.PendingChangeContextGuid;
             UpdateCaption();
-        }
-
-        private void UpdateColors(bool hasRenderer)
-        {
-            if (Context == null || SystemInformation.HighContrast)
-                return;
-
-            // We should use the VS colors instead of the ones provided by the OS
-            IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
-
-            Color color;
-            if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
-                BackColor = color;
-
-            if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
-            {
-                pendingChangesTabs.BackColor = color;
-                pendingChangesTabs.OverflowButton.BackColor = color;
-            }
-
-            if (!hasRenderer && colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
-            {
-                pendingChangesTabs.ForeColor = color;
-                pendingChangesTabs.OverflowButton.ForeColor = color;
-            }
         }
 
         void ShowPanel(PendingChangesPage page, bool select)
