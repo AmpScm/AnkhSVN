@@ -60,6 +60,12 @@ namespace Ankh.VS.Selection
                 if (!ErrorHandler.Succeeded(shell.AdviseShellPropertyChanges(this, out _shellPropsCookie)))
                     _shellPropsCookie = 0;
             }
+
+            // We might already have cached some stale values!
+            foreach (CmdStateCacheItem i in _cookieMap.Values)
+            {
+                i.Reload(Monitor);
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -188,7 +194,7 @@ namespace Ankh.VS.Selection
         CmdStateCacheItem _ankhActiveScc;
         public bool SccProviderActive
         {
-            get { return (_ankhActiveScc ?? (_ankhActiveScc = GetCache(new Guid(AnkhId.SccProviderId)))).Active; }
+            get { return (_ankhActiveScc ?? (_ankhActiveScc = GetCache(AnkhId.SccProviderGuid))).Active; }
         }
 
         sealed class CmdStateCacheItem
@@ -202,6 +208,11 @@ namespace Ankh.VS.Selection
 
                 _cookie = cookie;
 
+                Reload(monitor);
+            }
+
+            internal void Reload(IVsMonitorSelection monitor)
+            {
                 int active;
                 _active = ErrorHandler.Succeeded(monitor.IsCmdUIContextActive(_cookie, out active)) && active != 0;
             }
