@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="2.1" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
+<Vsix Version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
   <Identifier Id="AnkhSVN2.AnkhSVN.589b1d34-e895-4c2c-ac85-b1d781686675">
     <Name>AnkhSVN</Name>
     <Author>AnkhSVN Core Team</Author>
