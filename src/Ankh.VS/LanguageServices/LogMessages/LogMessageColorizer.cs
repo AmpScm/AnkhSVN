@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.Package;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio;

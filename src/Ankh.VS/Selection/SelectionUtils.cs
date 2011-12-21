@@ -328,7 +328,7 @@ namespace Ankh.VS.Selection
                 _context = context;
             }
 
-            protected IVsSolution Solution
+            IVsSolution Solution
             {
                 get
                 {
@@ -339,7 +339,7 @@ namespace Ankh.VS.Selection
                 }
             }
 
-            protected IVsHierarchy SolutionAsHierarchy
+            IVsHierarchy SolutionAsHierarchy
             {
                 get
                 {
