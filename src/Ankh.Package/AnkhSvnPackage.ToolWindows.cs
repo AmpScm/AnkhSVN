@@ -118,7 +118,7 @@ namespace Ankh.VSPackage
                     _ambientProperties = new AmbientProperties();
                     Font f = (Font)uis.Styles["DialogFont"];
 
-                    _ambientProperties.Font = new Font(f.FontFamily, f.Size);
+                    _ambientProperties.Font = new Font(f.Name, f.Size);
                 }
                 return _ambientProperties;
             }
