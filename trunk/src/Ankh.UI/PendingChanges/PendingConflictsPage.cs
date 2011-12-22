@@ -47,19 +47,33 @@ namespace Ankh.UI.PendingChanges
             base.OnLoad(e);
             conflictView.Context = Context;
 
-            if (!SystemInformation.HighContrast)
+            IAnkhVSColor clr = Context.GetService<IAnkhVSColor>();
+            if (clr != null)
             {
-                IAnkhVSColor clr = Context.GetService<IAnkhVSColor>();
                 Color c;
-                if (clr != null && clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TITLEBAR_INACTIVE, out c))
+                if (clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TITLEBAR_INACTIVE, out c))
                 {
-                    resolvePannel.BackColor = c;
+                    resolvePanel.BackColor = c;
                 }
 
-                if (clr != null && clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TITLEBAR_INACTIVE_TEXT, out c))
+                if (clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TITLEBAR_INACTIVE_TEXT, out c))
                 {
-                    resolvePannel.ForeColor = c;
+                    resolvePanel.ForeColor = c;
                 }
+
+                if (clr.TryGetColor((__VSSYSCOLOREX)(-207) /* VS2010: VSCOLOR_INFOBACKGROUND */, out c))
+                {
+                    conflictHeader.BackColor = c;
+                }
+                else
+                    conflictHeader.BackColor = System.Drawing.SystemColors.Info;
+
+                if (clr.TryGetColor((__VSSYSCOLOREX)(-208) /* VS2010: VSCOLOR_INFOTEXT */, out c))
+                {
+                    conflictHeader.ForeColor = c;
+                }
+                else
+                    conflictHeader.ForeColor = System.Drawing.SystemColors.InfoText;
             }
 
             conflictView.ColumnWidthChanged += new ColumnWidthChangedEventHandler(conflictView_ColumnWidthChanged);
