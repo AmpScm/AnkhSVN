@@ -40,7 +40,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(UseVsSdkVersion)' == '11.0'">
     <!-- 'Visual Studio 11 Developer Preview'-->
-    <MsVsShellAssembly>Microsoft.VisualStudio.Shell.10.0</MsVsShellAssembly>
+    <MsVsShellAssembly>Microsoft.VisualStudio.Shell.11.0</MsVsShellAssembly>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
 </Project>

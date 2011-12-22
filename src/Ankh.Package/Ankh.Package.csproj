@@ -76,10 +76,16 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="'$(UseVsSdkVersion)' != '8.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="'$(UseVsSdkVersion)' == '10.0' or '$(UseVsSdkVersion)' == '11.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' == '10.0' OR '$(UseVsSdkVersion)' == '11.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.11.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' != '10.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' != '10.0'">
       <Visible>false</Visible>
     </Reference>
     <Reference Include="SharpSvn">
