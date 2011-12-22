@@ -76,6 +76,7 @@
     <Compile Include="Commands\IAnkhCommandService.cs" />
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
+    <Compile Include="Scc\SvnItemAnnotation.cs" />
     <Compile Include="UI\AnkhToolWindowControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
