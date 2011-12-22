@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
-    <Not2005Compatible>true</Not2005Compatible>
+    <LatestTargetFramework>true</LatestTargetFramework>
   </PropertyGroup>
   <Import Project="../tools/Ankh-Common.targets" />
   <PropertyGroup>
@@ -54,16 +54,22 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" />
     <Reference Include="$(MsVsShellAssembly)" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="'$(UseVsSdkVersion)' != '8.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="'$(UseVsSdkVersion)' != '9.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="'$(UseVsSdkVersion)' == '10.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.11.0" Condition="'$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' != '10.0'">
       <Visible>false</Visible>
     </Reference>
     <!---->
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
-    <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop" />
     <Reference Include="Microsoft.VSSDK.UnitTestLibrary" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' != '10.0'">
+      <Visible>false</Visible>
+    </Reference>
     <Reference Include="Moq, Version=3.0.204.1, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Moq.dll</HintPath>
@@ -77,9 +83,6 @@
       <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Windows.Forms" />
