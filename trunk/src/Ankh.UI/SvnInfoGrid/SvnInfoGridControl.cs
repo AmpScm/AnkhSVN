@@ -32,6 +32,13 @@ namespace Ankh.UI.SvnInfoGrid
             base.OnLoad(e);
         }
 
+        protected override void OnFrameCreated(EventArgs e)
+        {
+            base.OnFrameCreated(e);
+            Grid.HelpBackColor = BackColor;
+            Grid.HelpForeColor = ForeColor;
+        }
+
         internal InfoPropertyGrid Grid
         {
             get { return grid; }
