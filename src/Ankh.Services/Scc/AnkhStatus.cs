@@ -35,6 +35,7 @@ namespace Ankh
         readonly bool _conflicted;
         readonly SvnNodeKind _nodeKind;
         readonly string _changeList;
+        readonly SvnStatus _localNodeStatus;
         readonly SvnStatus _localContentStatus;
         readonly bool _localCopied;
         readonly bool _localLocked;
@@ -53,6 +54,7 @@ namespace Ankh
                 throw new ArgumentNullException("status");
 
             _nodeKind = status.NodeKind;
+            _localNodeStatus = status.LocalNodeStatus;
             _localContentStatus = status.LocalContentStatus;
             _localCopied = status.LocalCopied;
             _localPropertyStatus = status.LocalPropertyStatus;
@@ -78,6 +80,7 @@ namespace Ankh
         /// <param name="allStatuses"></param>
         private AnkhStatus(SvnStatus allStatuses)
         {
+            _localNodeStatus = allStatuses;
             _localContentStatus = allStatuses;
             _localPropertyStatus = SvnStatus.None;
             //_localLocked = false;
@@ -103,6 +106,14 @@ namespace Ankh
             get { return _none; }
         }
         #endregion
+
+        /// <summary>
+        /// Content status in working copy
+        /// </summary>
+        public SvnStatus LocalNodeStatus
+        {
+            get { return _localNodeStatus; }
+        }
 
         /// <summary>
         /// Content status in working copy

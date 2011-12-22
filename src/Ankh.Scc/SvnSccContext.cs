@@ -161,7 +161,7 @@ namespace Ankh.Scc
             SvnItem item = StatusCache[path];
             item.MarkDirty();
 
-            if (!item.IsFile || item.Status.LocalContentStatus != SvnStatus.Replaced)
+            if (!item.IsFile || item.Status.LocalNodeStatus != SvnStatus.Replaced)
                 return;
 
             SvnInfoEventArgs info = null;

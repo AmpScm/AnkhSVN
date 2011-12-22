@@ -171,7 +171,7 @@ namespace Ankh
             if (status == null)
                 throw new ArgumentNullException("status");
 
-            if (status.LocalContentStatus == SvnStatus.External)
+            if (status.LocalNodeStatus == SvnStatus.External)
             {
                 // When iterating the status of an external in it's parent directory
                 // We get an external status and no really usefull information
@@ -222,7 +222,7 @@ namespace Ankh
             bool svnDirty = true;
             bool exists = true;
             bool provideDiskInfo = true;
-            switch (status.LocalContentStatus)
+            switch (status.LocalNodeStatus)
             {
                 case SvnStatus.None:
                     SetState(SvnItemState.None, managed | unset);
@@ -380,7 +380,7 @@ namespace Ankh
 
         static bool MightBeNestedWorkingCopy(AnkhStatus status)
         {
-            switch (status.LocalContentStatus)
+            switch (status.LocalNodeStatus)
             {
                 case SvnStatus.NotVersioned:
                 case SvnStatus.Ignored:
@@ -630,7 +630,7 @@ namespace Ankh
 
         static bool GetIsVersioned(AnkhStatus status)
         {
-            switch (status.LocalContentStatus)
+            switch (status.LocalNodeStatus)
             {
                 case SvnStatus.Added:
                 case SvnStatus.Conflicted:
@@ -677,7 +677,7 @@ namespace Ankh
                 if (!IsModified)
                     return IsDocumentDirty;
 
-                switch (Status.LocalContentStatus)
+                switch (Status.LocalNodeStatus)
                 {
                     case SvnStatus.Normal:
                         // Probably property modified
@@ -811,7 +811,7 @@ namespace Ankh
         /// </value>
         public bool IsCasingConflicted
         {
-            get { return IsVersioned && Status.LocalContentStatus == SvnStatus.Missing && Status.NodeKind == SvnNodeKind.File && IsFile && Exists; }
+            get { return IsVersioned && Status.LocalNodeStatus == SvnStatus.Missing && Status.NodeKind == SvnNodeKind.File && IsFile && Exists; }
         }
 
         private void StoreConflicts(object sender, SvnInfoEventArgs e)
@@ -1129,6 +1129,20 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Checks if the node is somehow added. In this case its parents are
+        /// needed for commits
+        /// </summary>
+        public bool IsNewAddition
+        {
+            get { return IsAdded || IsReplaced || Status.IsCopied; }
+        }
+
+        public bool IsMissing
+        {
+            get { return IsVersioned && !Exists; }
+        }
+
+        /// <summary>
         /// Long path safe version of File.Exists(path) || Directory.Exists(path)
         /// </summary>
         /// <param name="path"></param>
@@ -1263,15 +1277,6 @@ namespace Ankh
             public const uint FILE_ATTRIBUTE_DIRECTORY = 0x10;
             public const uint FILE_ATTRIBUTE_READONLY = 0x1;
             const uint FILE_ATTRIBUTE_NORMAL = 0x80;
-        }
-
-        /// <summary>
-        /// Checks if the node is somehow added. In this case its parents are
-        /// needed for commits
-        /// </summary>
-        public bool IsNewAddition
-        {
-            get { return IsAdded || IsReplaced || Status.IsCopied; }
         }
 
         static int _globalCookieBox = 0;

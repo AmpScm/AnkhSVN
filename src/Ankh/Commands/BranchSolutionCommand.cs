@@ -33,7 +33,7 @@ namespace Ankh.Commands
         {
             SvnItem item = GetRoot(e);
 
-            if(item == null || !item.IsVersioned || item.IsDeleteScheduled || item.Status.LocalContentStatus == SvnStatus.Added || item.Uri == null)
+            if(item == null || !item.IsVersioned || item.IsDeleteScheduled || item.Status.LocalNodeStatus == SvnStatus.Added || item.Uri == null)
                 e.Enabled = false;
         }
 

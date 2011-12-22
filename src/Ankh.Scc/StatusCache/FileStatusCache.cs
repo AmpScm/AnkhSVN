@@ -530,7 +530,7 @@ namespace Ankh.Scc.StatusCache
             if (fullPath == item.FullPath)
                 return true;
 
-            switch (status.LocalContentStatus)
+            switch (status.LocalNodeStatus)
             {
                 case SvnStatus.Added:
                 case SvnStatus.Conflicted:
