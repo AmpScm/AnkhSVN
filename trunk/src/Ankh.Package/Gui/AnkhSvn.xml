@@ -522,7 +522,7 @@
           <Button id="Cmd_SaveToFile" name="SaveToFile" priority="0xA00"
               text="Save to &amp;File"
               toolTip="Save the file to disk." iconFile="menu/SaveToFile.png" defaultInvisible="true" />
-          <ButtonRef id="Cmd_SvnNodeDelete" priority="0xC00" />
+          <ButtonRef id="guidVSStd97:cmdidDelete" priority="0xC00" />
         </Group>
       </Menu>
     </GroupRef>
@@ -610,7 +610,7 @@
           <Button id="Cmd_Export" name="Export" priority="0x300"
               text="E&amp;xport..."
               toolTip="Export to Folder" iconFile="menu/Export.png" />
-          <ButtonRef id="Cmd_ItemDelete" priority="0x700" />
+          <ButtonRef id="guidVSStd97:cmdidDelete" priority="0x700" />
         </Group>
         <Group id="Grp_WceBranch" priority="0x9000">
 
@@ -1021,7 +1021,7 @@
         
         <!-- Temp no UI -->
         <Button id="Cmd_ItemDelete" name="SvnNodeDelete" priority="0" text="&amp;Delete..."
-        iconFile="PendingChanges/Delete.png" dynamicVisibility="true" />
+                iconFile="PendingChanges/Delete.png" dynamicVisibility="true" />
         <Button id="Cmd_ItemRename" name="Rename" priority="0"
                 text="&amp;Rename..." dynamicVisibility="true" allowParams="true" />
         <Button id="Cmd_SvnNodeDelete" name="SvnNodeDelete" priority="0" text="&amp;Delete..."
