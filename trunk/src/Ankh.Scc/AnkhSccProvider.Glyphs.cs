@@ -128,7 +128,7 @@ namespace Ankh.Scc
         {
             while (item != null)
             {
-                SvnStatus lc = item.Status.LocalContentStatus;
+                SvnStatus lc = item.Status.LocalNodeStatus;
                 if (lc == SvnStatus.Ignored)
                     return true;
                 else if (lc != SvnStatus.NotVersioned)

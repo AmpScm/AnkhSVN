@@ -225,7 +225,7 @@ namespace Ankh.Scc
 
                 SvnItem item = StatusCache[oldDir];
 
-                if (!item.IsVersioned && item.Status.LocalContentStatus != SvnStatus.Missing)
+                if (!item.IsVersioned && item.Status.LocalNodeStatus != SvnStatus.Missing)
                     continue; // Item was not cached as versioned or now-missing (Missing implicits Versioned)
 
                 StatusCache.MarkDirty(oldDir);
@@ -233,7 +233,7 @@ namespace Ankh.Scc
 
                 item = StatusCache[oldDir];
 
-                if (item.Status.LocalContentStatus != SvnStatus.Missing)
+                if (item.Status.LocalNodeStatus != SvnStatus.Missing)
                     continue;
 
                 SvnItem newItem = StatusCache[newDir];
