@@ -51,7 +51,7 @@ namespace Ankh.UI.PendingChanges
 			this.conflictHeader = new System.Windows.Forms.Label();
 			this.conflictEditSplitter = new System.Windows.Forms.SplitContainer();
 			this.conflictView = new Ankh.UI.PendingChanges.Conflicts.ConflictListView();
-			this.resolvePannel = new System.Windows.Forms.FlowLayoutPanel();
+			this.resolvePanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.resolveButton0 = new System.Windows.Forms.Button();
 			this.resolveButton1 = new System.Windows.Forms.Button();
 			this.resolveButton2 = new System.Windows.Forms.Button();
@@ -70,7 +70,7 @@ namespace Ankh.UI.PendingChanges
 			this.conflictEditSplitter.Panel1.SuspendLayout();
 			this.conflictEditSplitter.Panel2.SuspendLayout();
 			this.conflictEditSplitter.SuspendLayout();
-			this.resolvePannel.SuspendLayout();
+			this.resolvePanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// splitContainer1
@@ -89,7 +89,6 @@ namespace Ankh.UI.PendingChanges
 			// 
 			// panel1
 			// 
-			this.panel1.BackColor = System.Drawing.SystemColors.Info;
 			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panel1.Controls.Add(this.conflictHeader);
 			resources.ApplyResources(this.panel1, "panel1");
@@ -113,7 +112,7 @@ namespace Ankh.UI.PendingChanges
 			// 
 			// conflictEditSplitter.Panel2
 			// 
-			this.conflictEditSplitter.Panel2.Controls.Add(this.resolvePannel);
+			this.conflictEditSplitter.Panel2.Controls.Add(this.resolvePanel);
 			// 
 			// conflictView
 			// 
@@ -123,20 +122,20 @@ namespace Ankh.UI.PendingChanges
 			// 
 			// resolvePannel
 			// 
-			resources.ApplyResources(this.resolvePannel, "resolvePannel");
-			this.resolvePannel.BackColor = System.Drawing.Color.SkyBlue;
-			this.resolvePannel.Controls.Add(this.resolveButton0);
-			this.resolvePannel.Controls.Add(this.resolveButton1);
-			this.resolvePannel.Controls.Add(this.resolveButton2);
-			this.resolvePannel.Controls.Add(this.resolveButton3);
-			this.resolvePannel.Controls.Add(this.resolveButton4);
-			this.resolvePannel.Controls.Add(this.resolveButton5);
-			this.resolvePannel.Controls.Add(this.resolveButton6);
-			this.resolvePannel.Controls.Add(this.resolveButton7);
-			this.resolvePannel.Controls.Add(this.resolveTopLabel);
-			this.resolvePannel.Controls.Add(this.resolveBottomLabel);
-			this.resolvePannel.Controls.Add(this.resolveLinkLabel);
-			this.resolvePannel.Name = "resolvePannel";
+			resources.ApplyResources(this.resolvePanel, "resolvePannel");
+			this.resolvePanel.BackColor = System.Drawing.Color.SkyBlue;
+			this.resolvePanel.Controls.Add(this.resolveButton0);
+			this.resolvePanel.Controls.Add(this.resolveButton1);
+			this.resolvePanel.Controls.Add(this.resolveButton2);
+			this.resolvePanel.Controls.Add(this.resolveButton3);
+			this.resolvePanel.Controls.Add(this.resolveButton4);
+			this.resolvePanel.Controls.Add(this.resolveButton5);
+			this.resolvePanel.Controls.Add(this.resolveButton6);
+			this.resolvePanel.Controls.Add(this.resolveButton7);
+			this.resolvePanel.Controls.Add(this.resolveTopLabel);
+			this.resolvePanel.Controls.Add(this.resolveBottomLabel);
+			this.resolvePanel.Controls.Add(this.resolveLinkLabel);
+			this.resolvePanel.Name = "resolvePannel";
 			// 
 			// resolveButton0
 			// 
@@ -190,7 +189,7 @@ namespace Ankh.UI.PendingChanges
 			// resolveButton7
 			// 
 			resources.ApplyResources(this.resolveButton7, "resolveButton7");
-			this.resolvePannel.SetFlowBreak(this.resolveButton7, true);
+			this.resolvePanel.SetFlowBreak(this.resolveButton7, true);
 			this.resolveButton7.MinimumSize = new System.Drawing.Size(75, 23);
 			this.resolveButton7.Name = "resolveButton7";
 			this.resolveButton7.UseVisualStyleBackColor = true;
@@ -198,7 +197,7 @@ namespace Ankh.UI.PendingChanges
 			// resolveTopLabel
 			// 
 			resources.ApplyResources(this.resolveTopLabel, "resolveTopLabel");
-			this.resolvePannel.SetFlowBreak(this.resolveTopLabel, true);
+			this.resolvePanel.SetFlowBreak(this.resolveTopLabel, true);
 			this.resolveTopLabel.Name = "resolveTopLabel";
 			this.resolveTopLabel.UseMnemonic = false;
 			// 
@@ -225,8 +224,8 @@ namespace Ankh.UI.PendingChanges
 			this.conflictEditSplitter.Panel1.ResumeLayout(false);
 			this.conflictEditSplitter.Panel2.ResumeLayout(false);
 			this.conflictEditSplitter.ResumeLayout(false);
-			this.resolvePannel.ResumeLayout(false);
-			this.resolvePannel.PerformLayout();
+			this.resolvePanel.ResumeLayout(false);
+			this.resolvePanel.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -237,7 +236,7 @@ namespace Ankh.UI.PendingChanges
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.SplitContainer conflictEditSplitter;
         private Ankh.UI.PendingChanges.Conflicts.ConflictListView conflictView;
-        private System.Windows.Forms.FlowLayoutPanel resolvePannel;
+        private System.Windows.Forms.FlowLayoutPanel resolvePanel;
         private System.Windows.Forms.Button resolveButton0;
         private System.Windows.Forms.Button resolveButton1;
         private System.Windows.Forms.Button resolveButton2;
