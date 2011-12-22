@@ -244,7 +244,7 @@
     <value>conflictView</value>
   </data>
   <data name="&gt;&gt;conflictView.Type" xml:space="preserve">
-    <value>Ankh.UI.PendingChanges.Conflicts.ConflictListView, Ankh.UI, Version=2.2.3790.25393, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.PendingChanges.Conflicts.ConflictListView, Ankh.UI, Version=2.3.4373.23657, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;conflictView.Parent" xml:space="preserve">
     <value>conflictEditSplitter.Panel1</value>
@@ -264,7 +264,7 @@
   <data name="&gt;&gt;conflictEditSplitter.Panel1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="resolvePannel.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+  <data name="resolvePanel.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
     <value>GrowAndShrink</value>
   </data>
   <data name="resolveButton0.AutoSize" type="System.Boolean, mscorlib">
@@ -298,7 +298,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resolveButton0.Parent" xml:space="preserve">
-    <value>resolvePannel</value>
+    <value>resolvePanel</value>
   </data>
   <data name="&gt;&gt;resolveButton0.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -334,7 +334,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resolveButton1.Parent" xml:space="preserve">
-    <value>resolvePannel</value>
+    <value>resolvePanel</value>
   </data>
   <data name="&gt;&gt;resolveButton1.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -370,7 +370,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resolveButton2.Parent" xml:space="preserve">
-    <value>resolvePannel</value>
+    <value>resolvePanel</value>
   </data>
   <data name="&gt;&gt;resolveButton2.ZOrder" xml:space="preserve">
     <value>2</value>
@@ -406,7 +406,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resolveButton3.Parent" xml:space="preserve">
-    <value>resolvePannel</value>
+    <value>resolvePanel</value>
   </data>
   <data name="&gt;&gt;resolveButton3.ZOrder" xml:space="preserve">
     <value>3</value>
@@ -442,7 +442,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resolveButton4.Parent" xml:space="preserve">
-    <value>resolvePannel</value>
+    <value>resolvePanel</value>
   </data>
   <data name="&gt;&gt;resolveButton4.ZOrder" xml:space="preserve">
     <value>4</value>
@@ -478,7 +478,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resolveButton5.Parent" xml:space="preserve">
-    <value>resolvePannel</value>
+    <value>resolvePanel</value>
   </data>
   <data name="&gt;&gt;resolveButton5.ZOrder" xml:space="preserve">
     <value>5</value>
@@ -514,7 +514,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resolveButton6.Parent" xml:space="preserve">
-    <value>resolvePannel</value>
+    <value>resolvePanel</value>
   </data>
   <data name="&gt;&gt;resolveButton6.ZOrder" xml:space="preserve">
     <value>6</value>
@@ -550,7 +550,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resolveButton7.Parent" xml:space="preserve">
-    <value>resolvePannel</value>
+    <value>resolvePanel</value>
   </data>
   <data name="&gt;&gt;resolveButton7.ZOrder" xml:space="preserve">
     <value>7</value>
@@ -577,7 +577,7 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resolveTopLabel.Parent" xml:space="preserve">
-    <value>resolvePannel</value>
+    <value>resolvePanel</value>
   </data>
   <data name="&gt;&gt;resolveTopLabel.ZOrder" xml:space="preserve">
     <value>8</value>
@@ -604,7 +604,7 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resolveBottomLabel.Parent" xml:space="preserve">
-    <value>resolvePannel</value>
+    <value>resolvePanel</value>
   </data>
   <data name="&gt;&gt;resolveBottomLabel.ZOrder" xml:space="preserve">
     <value>9</value>
@@ -628,33 +628,33 @@
     <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;resolveLinkLabel.Parent" xml:space="preserve">
-    <value>resolvePannel</value>
+    <value>resolvePanel</value>
   </data>
   <data name="&gt;&gt;resolveLinkLabel.ZOrder" xml:space="preserve">
     <value>10</value>
   </data>
-  <data name="resolvePannel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="resolvePanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="resolvePannel.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="resolvePanel.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="resolvePannel.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="resolvePanel.Size" type="System.Drawing.Size, System.Drawing">
     <value>768, 34</value>
   </data>
-  <data name="resolvePannel.TabIndex" type="System.Int32, mscorlib">
+  <data name="resolvePanel.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;resolvePannel.Name" xml:space="preserve">
-    <value>resolvePannel</value>
+  <data name="&gt;&gt;resolvePanel.Name" xml:space="preserve">
+    <value>resolvePanel</value>
   </data>
-  <data name="&gt;&gt;resolvePannel.Type" xml:space="preserve">
+  <data name="&gt;&gt;resolvePanel.Type" xml:space="preserve">
     <value>System.Windows.Forms.FlowLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;resolvePannel.Parent" xml:space="preserve">
+  <data name="&gt;&gt;resolvePanel.Parent" xml:space="preserve">
     <value>conflictEditSplitter.Panel2</value>
   </data>
-  <data name="&gt;&gt;resolvePannel.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;resolvePanel.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="&gt;&gt;conflictEditSplitter.Panel2.Name" xml:space="preserve">
@@ -745,6 +745,6 @@
     <value>PendingConflictsPage</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.PendingChanges.PendingChangesPage, Ankh.UI, Version=2.2.3790.25393, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.PendingChanges.PendingChangesPage, Ankh.UI, Version=2.3.4373.23657, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>
