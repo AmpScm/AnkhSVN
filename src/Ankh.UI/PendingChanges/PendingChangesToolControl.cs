@@ -247,7 +247,7 @@ namespace Ankh.UI.PendingChanges
             ShowPanel(_conflictsPage, true);
         }
 
-        bool _vertical;
+        static bool _vertical;
         protected override void OnFrameSize(FrameEventArgs e)
         {
             Size sz = e.Location.Size;
@@ -269,12 +269,24 @@ namespace Ankh.UI.PendingChanges
             base.OnFrameSize(e);
         }
 
+        internal static bool ShownVertically
+        {
+            get { return _vertical; }
+        }
+
         private void ChangeOrientation()
         {
             if (_vertical)
                 pendingChangesTabs.Dock = DockStyle.Bottom;
             else
                 pendingChangesTabs.Dock = DockStyle.Left;
+
+            if (Context != null)
+            {
+                IVsUIShell ui = Context.GetService<IVsUIShell>(typeof(SVsUIShell));
+                if (ui != null)
+                    ui.UpdateCommandUI(0);
+            }
         }
 
         #region IAnkhHasVsTextView Members
