@@ -28,8 +28,8 @@
   <PropertyGroup Condition="'$(UseVsSdkVersion)' == '9.0'">
     <!-- Visual Studio 2008 SP1 SDK-->
     <MsVsShellAssembly>Microsoft.VisualStudio.Shell.9.0, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</MsVsShellAssembly>
-    <TargetFrameworkVersion Condition="'$(Not2005Compatible)' != 'true'">v2.0</TargetFrameworkVersion>
-    <TargetFrameworkVersion Condition="'$(Not2005Compatible)' == 'true'">v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(LatestTargetFramework)' != 'true'">v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(LatestTargetFramework)' == 'true'">v3.5</TargetFrameworkVersion>
     <!-- Older Microsoft.VsSDK.Build.Tasks.dll versions have a bug in compiling the vsct from our location -->
     <MinVsTasksVersion>9.0.30820.0</MinVsTasksVersion>
   </PropertyGroup>
@@ -41,6 +41,7 @@
   <PropertyGroup Condition="'$(UseVsSdkVersion)' == '11.0'">
     <!-- 'Visual Studio 11 Developer Preview'-->
     <MsVsShellAssembly>Microsoft.VisualStudio.Shell.11.0</MsVsShellAssembly>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(LatestTargetFramework)' != 'true'">v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(LatestTargetFramework)' == 'true'">v4.5</TargetFrameworkVersion>
   </PropertyGroup>
 </Project>
