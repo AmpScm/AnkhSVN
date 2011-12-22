@@ -251,6 +251,7 @@
     <Compile Include="PendingChanges\Commands\ConfigureRecentChangesPage.cs" />
     <Compile Include="PendingChanges\Commands\CreatePatch.cs" />
     <Compile Include="PendingChanges\Commands\OpenIssue.cs" />
+    <Compile Include="PendingChanges\Commands\SpacerHider.cs" />
     <Compile Include="PendingChanges\ConfigureRecentChangesPageDialog.cs">
       <SubType>Form</SubType>
     </Compile>
