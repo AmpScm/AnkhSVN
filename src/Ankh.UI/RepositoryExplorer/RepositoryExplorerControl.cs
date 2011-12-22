@@ -60,7 +60,8 @@ namespace Ankh.UI.RepositoryExplorer
             ToolWindowHost.CommandContext = AnkhId.SccExplorerContextGuid;
             ToolWindowHost.KeyboardContext = AnkhId.SccExplorerContextGuid;
 
-            VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Delete), OnDelete);
+            VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Delete), OnDelete, OnUpdateDelete);
+            VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Rename), OnRename, OnUpdateRename);
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerOpen, OnOpen, OnUpdateOpen);
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerUp, OnUp, OnUpdateUp);
 
@@ -75,9 +76,46 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
+        CommandMapper _mapper;
+        CommandMapper CommandMapper
+        {
+            get
+            {
+                if (_mapper == null && Context != null)
+                    _mapper = Context.GetService<CommandMapper>();
+
+                return _mapper;
+            }
+        }
+
+        void OnUpdateDelete(object sender, CommandUpdateEventArgs e)
+        {
+            CommandMapper mapper = CommandMapper;
+
+            if (mapper != null)
+                mapper.PerformUpdate(AnkhCommand.SvnNodeDelete, e);
+            else
+                e.Enabled = false;
+        }
+
         void OnDelete(object sender, CommandEventArgs e)
         {
             e.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.SvnNodeDelete);
+        }
+
+        void OnUpdateRename(object sender, CommandUpdateEventArgs e)
+        {
+            CommandMapper mapper = CommandMapper;
+
+            if (mapper != null)
+                mapper.PerformUpdate(AnkhCommand.RenameRepositoryItem, e);
+            else
+                e.Enabled = false;
+        }
+
+        void OnRename(object sender, CommandEventArgs e)
+        {
+            e.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.RenameRepositoryItem);
         }
 
         protected override void OnLoad(EventArgs e)
