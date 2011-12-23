@@ -61,6 +61,14 @@ namespace Ankh.UI.Commands
             }
         }
 
+        Uri _reposRoot;
+
+        public Uri RepositoryRoot
+        {
+            get { return _reposRoot; }
+            set { _reposRoot = value; }
+        }
+
         protected override void OnContextChanged(EventArgs e)
         {
             base.OnContextChanged(e);
@@ -148,7 +156,7 @@ namespace Ankh.UI.Commands
         private void urlTextBox_TextChanged(object sender, EventArgs e)
         {
             if (Uri != null)
-                revisionPicker.SvnOrigin = new Ankh.Scc.SvnOrigin(Uri, Uri);
+                revisionPicker.SvnOrigin = new Ankh.Scc.SvnOrigin(Uri, RepositoryRoot);
         }
 
         private void urlBrowse_Click(object sender, EventArgs e)
@@ -159,7 +167,9 @@ namespace Ankh.UI.Commands
                 dlg.SelectedUri = Uri;
 
                 if (dlg.ShowDialog(Context) == DialogResult.OK)
+                {
                     Uri = dlg.SelectedUri;
+                }
             }
         }
 
