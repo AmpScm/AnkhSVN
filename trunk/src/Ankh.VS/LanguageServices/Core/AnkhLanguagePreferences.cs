@@ -11,7 +11,7 @@ using Microsoft.Win32;
 
 namespace Ankh.VS.LanguageServices.Core
 {
-    [ComVisible(true), Guid(AnkhId.LanguagePreferencesId)]
+    [ComVisible(true), Guid(AnkhId.LanguagePreferencesId), ComDefaultInterface(typeof(IVsTextManagerEvents2))]
     public class AnkhLanguagePreferences : AnkhService, IVsTextManagerEvents2
     {
         Guid langSvc;
