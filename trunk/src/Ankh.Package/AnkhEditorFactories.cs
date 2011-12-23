@@ -98,6 +98,7 @@ namespace Ankh.VSPackage
     }
 
     [Guid(AnkhId.DiffEditorId), ComVisible(true)]
+    [ComDefaultInterface(typeof(IVsEditorFactory))]
     sealed class AnkhDiffEditorFactory : AnkhEditorFactory
     {
         public AnkhDiffEditorFactory(AnkhSvnPackage package)
@@ -132,6 +133,7 @@ namespace Ankh.VSPackage
     }
 
     [Guid(AnkhId.DynamicEditorId), ComVisible(true)]
+    [ComDefaultInterface(typeof(IAnkhDynamicEditorFactory))]
     sealed class AnkhDynamicEditorFactory : AnkhEditorFactory, IAnkhDynamicEditorFactory
     {
         readonly Stack<VSEditorControl> _forms = new Stack<VSEditorControl>();

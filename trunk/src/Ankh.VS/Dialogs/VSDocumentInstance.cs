@@ -34,6 +34,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 namespace Ankh.VS.Dialogs
 {
     [ComVisible(true)]
+    [ComDefaultInterface(typeof(IVsPersistDocData))]
     sealed class VSDocumentInstance : AnkhService/*, IOleCommandTarget*/, IVsPersistDocData, IPersistFileFormat, IVsPersistDocData2, IVsPersistDocData3, IVsFindTarget, IVsFindTarget2
     {
         readonly Guid _factoryId;

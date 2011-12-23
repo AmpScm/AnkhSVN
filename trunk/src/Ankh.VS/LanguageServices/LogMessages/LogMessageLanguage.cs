@@ -25,8 +25,9 @@ namespace Ankh.VS.LanguageServices.LogMessages
     /// Implements a simple VS Languageservice to implement syntaxcoloring on our LogMessages
     /// </summary>
     [Guid(AnkhId.LogMessageLanguageServiceId), ComVisible(true), CLSCompliant(false)]
+    [ComDefaultInterface(typeof(IVsLanguageInfo))]
     [GlobalService(typeof(LogMessageLanguage), true)]
-    public partial class LogMessageLanguage : AnkhLanguage
+    public sealed class LogMessageLanguage : AnkhLanguage
     {
         public const string ServiceName = AnkhId.LogMessageServiceName;
 
