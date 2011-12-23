@@ -54,6 +54,7 @@ namespace Ankh.Commands
             {
                 dlg.Context = e.Context;
                 dlg.Uri = uri;
+                dlg.RepositoryRoot = selected.Origin.RepositoryRoot;
                 dlg.LocalPath = System.IO.Path.Combine(ss.NewProjectLocation, name);
                 
                 if (dlg.ShowDialog(e.Context) != DialogResult.OK)
