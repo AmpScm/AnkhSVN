@@ -500,7 +500,7 @@
           <Menu id="Menu_RepositoryExplorerTbOpen" name="ReposExplorerOpen" text="&amp;Open" priority="0x100"
                 type="MenuController" iconAndText="true">
             <Group id="Menu_RepositoryExplorerTbOpen" priority="0x100">
-              <ButtonRef id="Cmd_ExplorerOpen" priority="0x680" />
+              <ButtonRef id="guidVSStd97:cmdidOpen" priority="0x680" />
               <ButtonRef id="Cmd_ViewInVsNet" priority="0x700" />
               <ButtonRef id="Cmd_ViewInWindows"  priority="0x800" />
             </Group>
@@ -540,8 +540,7 @@
             text="Repository Explorer" priority="0" type="Context" notInTBList="true">
         <Group id="Grp_RepositoryExplorerOpen" priority="0x100">
           <!-- Cmd_RepositoryOpen is handled on the control itself and does 'the right thing' -->
-          <Button id="Cmd_ExplorerOpen" name="RepositoryOpen" priority="0x100"
-                  text="&amp;Open" iconFile="PendingChanges/Open.png" dynamicVisibility="true" iconAndText="true" fixMenuController="true"/>
+          <ButtonRef id="guidVSStd97:cmdidOpen" priority="0x100" />
           <ButtonRef id="Cmd_SaveToFile" priority="0x200" />
           <Menu id="Menu_RepositoryExplorerOpenWith" priority ="0xF000" name="OpenWith" text="Open Wit&amp;h">
             <Group id="Grp_OpenWith" priority="0x100">
@@ -623,7 +622,7 @@
             priority="0" type="Context" notInTBList="true">
         <Group id="Grp_WorkingCopyExplorerContext" priority="0x100">
           <!--<ButtonRef id="Cmd_Refresh" priority="0x500" />-->
-          <ButtonRef id="Cmd_ExplorerOpen" priority="0x100" />
+          <ButtonRef id="guidVSStd97:cmdidOpen" priority="0x100" />
           <ButtonRef id="Cmd_Export" priority="0x300" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC" priority="0x200" />

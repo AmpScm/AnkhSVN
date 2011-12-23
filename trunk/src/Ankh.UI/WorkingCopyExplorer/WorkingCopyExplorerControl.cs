@@ -66,9 +66,9 @@ namespace Ankh.UI.WorkingCopyExplorer
             folderTree.Context = Context;
             fileList.Context = Context;
 
-            VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerOpen, OnOpen, OnUpdateOpen);
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerUp, OnUp, OnUpdateUp);
             VSCommandHandler.Install(Context, this, AnkhCommand.Refresh, OnRefresh, OnUpdateRefresh);
+            VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Open), OnOpen, OnUpdateOpen);
             VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Delete), OnDelete, OnUpdateDelete);
             VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Rename), OnRename, OnUpdateRename);
 

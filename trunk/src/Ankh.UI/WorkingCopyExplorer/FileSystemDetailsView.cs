@@ -22,6 +22,8 @@ using Ankh.VS;
 using Ankh.Scc;
 using Ankh.Commands;
 using Ankh.UI.WorkingCopyExplorer.Nodes;
+using System.ComponentModel.Design;
+using Microsoft.VisualStudio;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -132,7 +134,7 @@ namespace Ankh.UI.WorkingCopyExplorer
                 li.Selected = true;
             }
 
-            Context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.ExplorerOpen);
+            Context.GetService<IAnkhCommandService>().PostExecCommand(new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Open));
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -142,7 +144,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             // Enter means open if there's only one selected item
             if (e.KeyCode == Keys.Enter && SelectedItems.Count > 0)
             {
-                Context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.ExplorerOpen);
+                Context.GetService<IAnkhCommandService>().PostExecCommand(new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Open));
             }
         }
 
