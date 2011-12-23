@@ -66,11 +66,11 @@ namespace Ankh.DotNet2Test
                         continue;
                     else if (t.ContainsGenericParameters)
                         continue;
-                    else if (null == t.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance | BindingFlags.ExactBinding, null, new Type[0], null))
+                    else if (null == t.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance | BindingFlags.ExactBinding, null, new Type[0], null))
                         continue;
 
                     Console.WriteLine("  Instantiating {0}", t.FullName);
-                    Activator.CreateInstance(t);
+                    Activator.CreateInstance(t, true);
                 }
 
                 foreach (Type t in assemblyTypes)
