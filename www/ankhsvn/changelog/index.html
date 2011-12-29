@@ -6,6 +6,29 @@
   </head>
   <body>
 	<div class="h1"><h1>AnkhSVN 2.3 Changelog</h1></div>
+	
+	<div class="h2"><h2>AnkhSVN 2.3.vNext</h2></div>
+	<p><!--a href="http://ankhsvn.net/downloads/2.3/">Download now</a-->(unreleased, but
+	   available in the <a href="/daily">daily builds</a>)</p>
+
+	<ul>
+	  <li>Compiled against Subversion 1.7.2</li>
+	  <li>The 'Subversion Info' toolwindow is now operational</li>
+	  <li>When the 'Pending Changes' toolwindow is docked vertically the buttons
+	      automatically move to the bottom.</li>
+	  <li>Fixed loading AnkhSVN in a few specific Visual Studio start scenarios</li>
+	  <li>Properly set focus in the Commit Dialog</li>
+	  <li>Some scenarios where moved files were seen as new/missing are now fixed, by
+	      removing .svn directory assumptions.</li>
+	  <li>Code cleanup to follow the Visual Studio design guidelines in more places
+	      (dynamic colors, standard icons, etc.)</li>
+	  <li>Resolved some technical/theoretical issues identified by testing in the
+	     Visual Studio 11 Developer Preview (COM registration attributes).</li>
+	  <li>Remove dependency on Microsoft.VisualStudio.Package.LanguageService
+	      (fixes issues found on a clean VM with only Visual Studio 11 DP)</li>	     
+	  <li>Fixed several user reported exceptions. Thanks!</li>
+	</ul>
+	
 	<div class="h2"><h2>AnkhSVN 2.3.10509</h2></div>
 	<p><a href="http://ankhsvn.net/downloads/2.3/">Download now</a></p>
 	
@@ -13,6 +36,7 @@
 		<li>Compiled against Subversion 1.7.1</li>
 		<li>Support detection for new DevArt Code Compare version</li>
 		<li>Fix exception where a non-normalized path to the temp path was used</li>
+		<li>The AnkhSVN glyphs are now visible in the Visual Studio 2010 Solution Navigator extension</li>
 	</ul>
 
 	<div class="h2"><h2>AnkhSVN 2.3.10481</h2></div>
