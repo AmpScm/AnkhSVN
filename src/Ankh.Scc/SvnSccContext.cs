@@ -117,8 +117,6 @@ namespace Ankh.Scc
 
             Guid repId = Guid.Empty;
 
-            // Svn does not allow a repository in a path root 
-            // (See: canonicalization rules)
             while (!string.IsNullOrEmpty(path))
             {
                 if (SvnTools.IsManagedPath(path))
@@ -127,17 +125,14 @@ namespace Ankh.Scc
                     a.ThrowOnError = false;
                     a.Depth = SvnDepth.Empty;
 
-                    if (_client.Info(new SvnPathTarget(path),
+                    if (_client.Info(path,
                         delegate(object sender, SvnInfoEventArgs e)
                         {
                             repId = e.RepositoryId;
                         }))
                     {
-                        if (repId != Guid.Empty) // Directory was just added; Guid not updated
-                        {
-                            repositoryId = repId;
-                            return true;
-                        }
+                        repositoryId = repId;
+                        return true;
                     }
                     else
                         return false;
@@ -169,7 +164,7 @@ namespace Ankh.Scc
             ia.ThrowOnError = false;
             ia.Depth = SvnDepth.Empty;
 
-            if (!_client.Info(new SvnPathTarget(path), ia,
+            if (!_client.Info(path, ia,
                 delegate(object sender, SvnInfoEventArgs e)
                 {
                     e.Detach();

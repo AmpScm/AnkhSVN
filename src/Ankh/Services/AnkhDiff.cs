@@ -742,7 +742,7 @@ namespace Ankh.Services
                     wa.Revision = revision;
 
                     using (Stream s = File.Create(file))
-                        aa.Client.Write(new SvnPathTarget(target.FullPath), s, wa);
+                        aa.Client.Write(target.FullPath, s, wa);
                 });
 
             if (!r.Succeeded)

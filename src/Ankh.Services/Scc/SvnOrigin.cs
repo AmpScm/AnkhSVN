@@ -45,7 +45,7 @@ namespace Ankh.Scc
             if (!svnItem.IsVersioned)
                 throw new InvalidOperationException("Can only create a SvnOrigin from versioned items");
 
-            _target = new SvnPathTarget(svnItem.FullPath);
+            _target = svnItem.FullPath;
             _uri = svnItem.Status.Uri;
             _reposRoot = svnItem.WorkingCopy.RepositoryRoot;
         }
