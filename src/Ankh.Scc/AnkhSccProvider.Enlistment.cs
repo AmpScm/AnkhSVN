@@ -911,24 +911,4 @@ namespace Ankh.Scc
 
         #endregion
     }
-
-
-    #region ISupportsAsyncLoading
-    [GuidAttribute("2242" + "09ED" + "-E56C" + "-4C8D" + "-A7FF" + "-31CF4" + "6867" + "98D")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown), ComImport]
-    interface ISccSupportsAsyncLoading : IVsSccManager2
-    {
-        [PreserveSig, MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        int SupportsAsyncLoading([MarshalAs(UnmanagedType.VariantBool)]out bool pfSubversionSupport);
-    }
-
-    partial class AnkhSccProvider : ISccSupportsAsyncLoading
-    {
-        public int SupportsAsyncLoading(out bool pfSupportsAsyncLoading)
-        {
-            pfSupportsAsyncLoading = true;
-            return VSConstants.S_OK;
-        }
-    }
-    #endregion
 }
