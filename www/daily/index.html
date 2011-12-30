@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.10662</title>
+          AnkhSVN-Daily Update - 2.3.10666</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -15,14 +15,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5559/AnkhSvn-Daily-2.3.10662.1140.msi">AnkhSVN 2.3.10662</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5571/AnkhSvn-Daily-2.3.10666.1141.msi">AnkhSVN 2.3.10666</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=10662">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=10666">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -30,6 +30,18 @@
 <h2>Recent changes</h2>
 <table>
 <tr class="d"><td colspan="4">2011-12-30</td></tr>
+<tr><td> </td><td class="r"><a id="10666" href="http://ankhsvn.net/rev/10666">
+            [r10666]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update SharpSvn reference to allow using diff on UNC shares that contain a $ or
+whitespace in their name.</td></tr>
+<tr><td> </td><td class="r"><a id="10665" href="http://ankhsvn.net/rev/10665">
+            [r10665]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/PathSelector/PathSelectorInfo.cs, Ankh/Commands/LockCommand.cs, Ankh/Services/UIShell.cs, Ankh/Commands/ItemShowChanges.cs, Ankh/Commands/UnlockCommand.cs, Ankh/Commands/ItemUnifiedDiffCommand.cs, Ankh.Services/UI/PathSelectorResult.cs, Ankh/Commands/UpdateItemCommand.cs, Ankh/Commands/RepositoryExplorer/RepositoryBrowseCommand.cs, Ankh.UI/Ankh.UI.csproj, Ankh.UI/PathSelector/PathSelectorResult.cs, Ankh.Services/UI/PathSelectorInfo.cs, Ankh/Ankh.csproj, Ankh.Services/UI/IUIShell.cs (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove the IUIShell abstraction from AnkhSVN. It was only used for the
+to-be removed tree based path selector.</td></tr>
+<tr><td> </td><td class="r"><a id="10663" href="http://ankhsvn.net/rev/10663">
+            [r10663]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/Scc/SvnOrigin.cs, Ankh/Commands/BranchSolutionCommand.cs, Ankh.Scc/SvnSccContext.cs, Ankh/Services/AnkhDiff.cs, Ankh/Commands/LocalDiffCommandBase.cs, Ankh.Services/Scc/SvnItem.State.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Avoid unneeded wrapping in Svn*Target instances where the compiler can handle
+this for us.</td></tr>
 <tr><td> </td><td class="r"><a id="10662" href="http://ankhsvn.net/rev/10662">
             [r10662]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc/ProjectMap:</strong> SccProjectData.ProjectRefresh.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Detect and avoid <a href="http://ankhsvn.net/issues/700">issue #700</a>. I will look into more specific corner cases tomorrow.</td></tr>
