@@ -17,24 +17,19 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-
 using SharpSvn;
 
 using Ankh.Scc.ProjectMap;
-using Ankh.Selection;
-using Ankh.VS;
-using System.Runtime.CompilerServices;
-using System.IO;
 
 namespace Ankh.Scc
 {
-    [InterfaceType(1), ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown), ComImport]
     [Guid("55272A00-42CB-11CE-8135-00AA004BB851")]
     interface IMyPropertyBag
     {
@@ -916,4 +911,24 @@ namespace Ankh.Scc
 
         #endregion
     }
+
+
+    #region ISupportsAsyncLoading
+    [GuidAttribute("2242" + "09ED" + "-E56C" + "-4C8D" + "-A7FF" + "-31CF4" + "6867" + "98D")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown), ComImport]
+    interface ISccSupportsAsyncLoading : IVsSccManager2
+    {
+        [PreserveSig, MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+        int SupportsAsyncLoading([MarshalAs(UnmanagedType.VariantBool)]out bool pfSubversionSupport);
+    }
+
+    partial class AnkhSccProvider : ISccSupportsAsyncLoading
+    {
+        public int SupportsAsyncLoading(out bool pfSupportsAsyncLoading)
+        {
+            pfSupportsAsyncLoading = true;
+            return VSConstants.S_OK;
+        }
+    }
+    #endregion
 }

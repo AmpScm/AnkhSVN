@@ -16,19 +16,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Ankh.UI;
+using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Ankh.Selection;
+using SharpSvn;
+
 using Ankh.Commands;
 using Ankh.Scc.ProjectMap;
-using System.IO;
-using SharpSvn;
-using System.Diagnostics;
 using Ankh.Scc.SccUI;
-using System.Windows.Forms;
 
 namespace Ankh.Scc
 {
