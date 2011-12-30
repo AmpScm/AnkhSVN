@@ -176,10 +176,19 @@ namespace Ankh.Scc.ProjectMap
                         hierarchy = VsProject as IVsHierarchy;
 
                     // We need this additional check to find directories in Websites
-                    if (hierarchy != null &&
-                        ErrorHandler.Succeeded(hierarchy.ParseCanonicalName(item.FullPath, out id)))
+                    if (hierarchy != null
+                        && ErrorHandler.Succeeded(hierarchy.ParseCanonicalName(item.FullPath, out id)))
                     {
                         bFound = (id != VSConstants.VSITEMID_NIL) && (id != VSConstants.VSITEMID_ROOT);
+
+                        // Perform an extra validation step to avoid issue #700
+                        string foundName;
+                        if (bFound
+                            && ErrorHandler.Succeeded(hierarchy.GetCanonicalName(id, out foundName)))
+                        {
+                            foundName = SharpSvn.SvnTools.GetNormalizedFullPath(foundName);
+                            bFound = String.Equals(item.FullPath, foundName, StringComparison.OrdinalIgnoreCase);
+                        }
                     }
                 }
                 if (bFound == item.Exists)
