@@ -14,12 +14,15 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using Ankh.UI;
 using System;
-using SharpSvn;
 using System.Collections.Generic;
-using Ankh.Scc.UI;
+using System.Windows.Forms;
+
+using SharpSvn;
+
 using Ankh.Scc;
+using Ankh.Scc.UI;
+using Ankh.UI.PathSelector;
 
 namespace Ankh.Commands
 {
@@ -170,9 +173,16 @@ namespace Ankh.Commands
                 // should we show the path selector?
                 if (e.PromptUser || !Shift)
                 {
-                    IUIShell ui = e.GetService<IUIShell>();
+                    using (PathSelector selector = new PathSelector(info))
+                    {
+                        selector.Context = e.Context;
 
-                    result = ui.ShowPathSelector(info);
+                        bool succeeded = selector.ShowDialog(e.Context) == DialogResult.OK;
+                        result = new PathSelectorResult(succeeded, selector.CheckedItems);
+                        result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
+                        result.RevisionStart = selector.RevisionStart;
+                        result.RevisionEnd = selector.RevisionEnd;
+                    }
                     if (!result.Succeeded)
                         return;
                 }

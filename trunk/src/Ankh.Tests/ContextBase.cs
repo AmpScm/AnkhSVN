@@ -116,13 +116,4 @@ namespace Ankh.Tests
         #endregion
 
     }
-
-    public class UIShellImpl : IUIShell
-    {        
-        PathSelectorResult IUIShell.ShowPathSelector(PathSelectorInfo info)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 }

@@ -20,7 +20,7 @@ using System.Text;
 using SharpSvn;
 using System.Diagnostics;
 
-namespace Ankh.UI
+namespace Ankh.UI.PathSelector
 {
     public class PathSelectorResult
     {

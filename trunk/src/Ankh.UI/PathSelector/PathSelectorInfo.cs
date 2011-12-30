@@ -23,7 +23,7 @@ using System.Collections.ObjectModel;
 using Ankh.UI;
 using Ankh.Scc;
 
-namespace Ankh
+namespace Ankh.UI.PathSelector
 {
     /// <summary>
     /// Represents the parameters passed to UIShell.ShowPathSelector

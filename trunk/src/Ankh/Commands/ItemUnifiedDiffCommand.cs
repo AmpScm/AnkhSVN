@@ -15,13 +15,15 @@
 //  limitations under the License.
 
 using System;
-using System.Text;
-using SharpSvn;
-using Ankh.UI;
 using System.IO;
-using Ankh.VS;
+using System.Text;
+using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell;
+using SharpSvn;
+
 using Ankh.Scc;
+using Ankh.UI.PathSelector;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {
@@ -92,7 +94,6 @@ namespace Ankh.Commands
         static PathSelectorResult ShowDialog(CommandEventArgs e)
         {
             PathSelectorInfo info = new PathSelectorInfo("Select items for diffing", e.Selection.GetSelectedSvnItems(true));
-            IUIShell uiShell = e.GetService<IUIShell>();
             info.VisibleFilter += delegate { return true; };
             info.CheckedFilter += delegate(SvnItem item) { return item.IsFile && (item.IsModified || item.IsDocumentDirty); };
 
@@ -102,7 +103,17 @@ namespace Ankh.Commands
             // should we show the path selector?
             if (!Shift)
             {
-                return uiShell.ShowPathSelector(info);
+                using (PathSelector selector = new PathSelector(info))
+                {
+                    selector.Context = e.Context;
+
+                    bool succeeded = selector.ShowDialog(e.Context) == DialogResult.OK;
+                    PathSelectorResult result = new PathSelectorResult(succeeded, selector.CheckedItems);
+                    result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
+                    result.RevisionStart = selector.RevisionStart;
+                    result.RevisionEnd = selector.RevisionEnd;
+                    return result;
+                }
             }
             return info.DefaultResult;
         }

@@ -230,6 +230,8 @@
     <Compile Include="OptionsPages\SvnProxyEditor.Designer.cs">
       <DependentUpon>SvnProxyEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="PathSelector\PathSelectorInfo.cs" />
+    <Compile Include="PathSelector\PathSelectorResult.cs" />
     <Compile Include="PathSelector\RevisionSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
