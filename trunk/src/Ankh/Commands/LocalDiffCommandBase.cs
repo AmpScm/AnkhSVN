@@ -167,10 +167,10 @@ namespace Ankh.Commands
                     case SvnRevisionType.Head:
                     case SvnRevisionType.Number:
                     case SvnRevisionType.Time:
-                        target = new SvnUriTarget(item.Uri);
+                        target = item.Uri;
                         break;
                     default:
-                        target = new SvnPathTarget(item.FullPath);
+                        target = item.FullPath;
                         break;
                 }
                 SvnWriteArgs args = new SvnWriteArgs();
