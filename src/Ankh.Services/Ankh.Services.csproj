@@ -133,9 +133,6 @@
     <Compile Include="Scc\PendingChange.cs" />
     <Compile Include="UI\ICurrentItemSource.cs" />
     <Compile Include="UI\IProgressRunner.cs" />
-    <Compile Include="UI\IUIShell.cs" />
-    <Compile Include="UI\PathSelectorInfo.cs" />
-    <Compile Include="UI\PathSelectorResult.cs" />
     <Compile Include="UI\VSCommandHandler.cs" />
     <Compile Include="UI\VSEditorControl.cs">
       <SubType>UserControl</SubType>

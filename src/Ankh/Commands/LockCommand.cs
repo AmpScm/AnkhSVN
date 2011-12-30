@@ -25,6 +25,7 @@ using SharpSvn;
 using Ankh.Configuration;
 using Ankh.UI;
 using Ankh.UI.SccManagement;
+using Ankh.UI.PathSelector;
 
 namespace Ankh.Commands
 {

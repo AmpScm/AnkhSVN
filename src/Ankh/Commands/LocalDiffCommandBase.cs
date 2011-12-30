@@ -17,11 +17,13 @@
 using System;
 using System.CodeDom.Compiler;
 using System.IO;
+using System.Windows.Forms;
+using SharpSvn;
+
 using Ankh.Scc.UI;
 using Ankh.Selection;
-using Ankh.UI;
+using Ankh.UI.PathSelector;
 using Ankh.VS;
-using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -39,13 +41,13 @@ namespace Ankh.Commands
         protected TempFileCollection TempFileCollection
         {
             get { return _tempFileCollection; }
-        }        
+        }
 
         protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection)
         {
             return GetDiff(
-                context, 
-                selection, 
+                context,
+                selection,
                 null);
         }
         /// <summary>
@@ -58,12 +60,12 @@ namespace Ankh.Commands
         protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions)
         {
             return GetDiff(
-                context, 
-                selection, 
-                revisions, 
-                delegate(SvnItem item) 
-                { 
-                    return item.IsVersioned; 
+                context,
+                selection,
+                revisions,
+                delegate(SvnItem item)
+                {
+                    return item.IsVersioned;
                 });
         }
         /// <summary>
@@ -80,8 +82,6 @@ namespace Ankh.Commands
                 throw new ArgumentNullException("selection");
             if (context == null)
                 throw new ArgumentNullException("context");
-
-            IUIShell uiShell = context.GetService<IUIShell>();
 
             bool foundModified = false;
             foreach (SvnItem item in selection.GetSelectedSvnItems(true))
@@ -105,7 +105,17 @@ namespace Ankh.Commands
             // should we show the path selector?
             if (!Shift && (revisions == null || !foundModified))
             {
-                result = uiShell.ShowPathSelector(info);
+                using (PathSelector selector = new PathSelector(info))
+                {
+                    selector.Context = context;
+
+                    bool succeeded = selector.ShowDialog(context) == DialogResult.OK;
+                    result = new PathSelectorResult(succeeded, selector.CheckedItems);
+                    result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
+                    result.RevisionStart = selector.RevisionStart;
+                    result.RevisionEnd = selector.RevisionEnd;
+                }
+
                 if (!result.Succeeded)
                     return null;
             }
@@ -159,10 +169,10 @@ namespace Ankh.Commands
             tempFile = Path.Combine(tempDir, tempFile);
             // we need to get it from the repos
             context.GetService<IProgressRunner>().RunModal("Retrieving file for diffing", delegate(object o, ProgressWorkerArgs ee)
-            { 
+            {
                 SvnTarget target;
 
-                switch(revision.RevisionType)
+                switch (revision.RevisionType)
                 {
                     case SvnRevisionType.Head:
                     case SvnRevisionType.Number:
@@ -176,7 +186,7 @@ namespace Ankh.Commands
                 SvnWriteArgs args = new SvnWriteArgs();
                 args.Revision = revision;
                 args.AddExpectedError(SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES);
-                
+
                 using (FileStream stream = File.Create(tempFile))
                 {
                     ee.Client.Write(target, stream, args);

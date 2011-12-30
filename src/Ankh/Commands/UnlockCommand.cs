@@ -15,10 +15,12 @@
 //  limitations under the License.
 
 using System.Collections.Generic;
+using System.Windows.Forms;
 using SharpSvn;
 
 using Ankh.Scc;
 using Ankh.UI;
+using Ankh.UI.PathSelector;
 
 namespace Ankh.Commands
 {
@@ -41,34 +43,41 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            PathSelectorInfo psi = new PathSelectorInfo("Select Files to Unlock", e.Selection.GetSelectedSvnItems(true));
+            PathSelectorInfo info = new PathSelectorInfo("Select Files to Unlock", e.Selection.GetSelectedSvnItems(true));
 
-            psi.VisibleFilter += delegate(SvnItem item)
+            info.VisibleFilter += delegate(SvnItem item)
                                      {
                                          return item.IsLocked;
                                      };
 
-            psi.CheckedFilter += delegate(SvnItem item)
+            info.CheckedFilter += delegate(SvnItem item)
                                      {
                                          return item.IsLocked;
                                      };
 
-            PathSelectorResult psr;
+            PathSelectorResult result;
             if (!Shift)
             {
-                IUIShell uiShell = e.GetService<IUIShell>();
+                using (PathSelector selector = new PathSelector(info))
+                {
+                    selector.Context = e.Context;
 
-                psr = uiShell.ShowPathSelector(psi);
+                    bool succeeded = selector.ShowDialog(e.Context) == DialogResult.OK;
+                    result = new PathSelectorResult(succeeded, selector.CheckedItems);
+                    result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
+                    result.RevisionStart = selector.RevisionStart;
+                    result.RevisionEnd = selector.RevisionEnd;
+                }
             }
             else
-                psr = psi.DefaultResult;
+                result = info.DefaultResult;
 
-            if (!psr.Succeeded)
+            if (!result.Succeeded)
                 return;
 
             List<string> files = new List<string>();
 
-            foreach (SvnItem item in psr.Selection)
+            foreach (SvnItem item in result.Selection)
             {
                 files.Add(item.FullPath);
             }
@@ -79,11 +88,11 @@ namespace Ankh.Commands
             e.GetService<IProgressRunner>().RunModal(
                 "Unlocking",
                 delegate(object sender, ProgressWorkerArgs ee)
-                    {
-                        SvnUnlockArgs ua = new SvnUnlockArgs();
+                {
+                    SvnUnlockArgs ua = new SvnUnlockArgs();
 
-                        ee.Client.Unlock(files, ua);
-                    });
+                    ee.Client.Unlock(files, ua);
+                });
         }
     }
 }

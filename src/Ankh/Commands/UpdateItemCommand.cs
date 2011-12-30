@@ -15,11 +15,12 @@
 //  limitations under the License.
 
 using System.Collections.Generic;
+using System.Windows.Forms;
 using SharpSvn;
 
-using Ankh.UI;
 using Ankh.Scc;
-using System.Windows.Forms;
+using Ankh.UI;
+using Ankh.UI.PathSelector;
 
 namespace Ankh.Commands
 {
@@ -69,10 +70,8 @@ namespace Ankh.Commands
             SvnDepth depth;
             List<string> files = new List<string>();
             if (e.Command == AnkhCommand.UpdateItemSpecific
-                || e.Command ==  AnkhCommand.UpdateProjectFileSpecific)
+                || e.Command == AnkhCommand.UpdateProjectFileSpecific)
             {
-                IUIShell uiShell = e.GetService<IUIShell>();
-
                 PathSelectorInfo info = new PathSelectorInfo("Select Items to Update",
                     e.Selection.GetSelectedSvnItems(true));
 
@@ -82,7 +81,23 @@ namespace Ankh.Commands
                 info.RevisionStart = SvnRevision.Head;
                 info.Depth = SvnDepth.Infinity;
 
-                PathSelectorResult result = !Shift ? uiShell.ShowPathSelector(info) : info.DefaultResult;
+                PathSelectorResult result;
+
+                if (Shift)
+                    result = info.DefaultResult;
+                else
+                {
+                    using (PathSelector selector = new PathSelector(info))
+                    {
+                        selector.Context = e.Context;
+
+                        bool succeeded = selector.ShowDialog(e.Context) == DialogResult.OK;
+                        result = new PathSelectorResult(succeeded, selector.CheckedItems);
+                        result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
+                        result.RevisionStart = selector.RevisionStart;
+                        result.RevisionEnd = selector.RevisionEnd;
+                    }
+                }
 
                 if (!result.Succeeded)
                     return;

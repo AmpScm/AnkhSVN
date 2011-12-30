@@ -15,11 +15,11 @@
 //  limitations under the License.
 
 using System;
+using System.Windows.Forms;
+
+using Ankh.Scc;
 using Ankh.UI;
 using Ankh.UI.RepositoryExplorer;
-using System.Windows.Forms;
-using Ankh.Scc;
-using SharpSvn;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -31,7 +31,6 @@ namespace Ankh.Commands.RepositoryExplorer
     {
         public override void OnExecute(CommandEventArgs e)
         {
-            IUIShell shell = e.GetService<IUIShell>();
             Uri info;
 
             if (e.Argument is string)
