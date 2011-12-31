@@ -83,7 +83,7 @@ namespace Ankh.Services
             string program;
             string arguments;
             if (!Substitute(diffApp, args, DiffToolMode.Diff, out program, out arguments)
-                || !File.Exists(diffApp))
+                || !File.Exists(program))
             {
                 new AnkhMessageBox(Context).Show(string.Format("Can't find diff program '{0}'", program ?? diffApp));
                 return false;
@@ -164,9 +164,10 @@ namespace Ankh.Services
 
             string program;
             string arguments;
-            if (!Substitute(mergeApp, args, DiffToolMode.Merge, out program, out arguments))
+            if (!Substitute(mergeApp, args, DiffToolMode.Merge, out program, out arguments)
+                || !File.Exists(program))
             {
-                new AnkhMessageBox(Context).Show(string.Format("Can't find merge program '{0}'", program));
+                new AnkhMessageBox(Context).Show(string.Format("Can't find merge program '{0}'", program ?? mergeApp));
                 return false;
             }
 
