@@ -15,17 +15,16 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Ankh.Scc.UI;
-using System.IO;
 using System.Diagnostics;
-using Ankh.UI;
+using System.IO;
 using System.Text.RegularExpressions;
-using Ankh.Scc;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
+
+using Ankh.Scc;
+using Ankh.Scc.UI;
+using Ankh.UI;
 using Ankh.VS;
 
 namespace Ankh.Services
@@ -71,13 +70,20 @@ namespace Ankh.Services
 
             string diffApp = this.GetDiffPath(args.Mode);
 
-
             if (string.IsNullOrEmpty(diffApp))
-                return RunInternalDiff(args);
+            {
+                IAnkhInternalDiff internalDiff = GetService<IAnkhInternalDiff>();
+
+                if (internalDiff == null || !internalDiff.HasDiff)
+                    throw new InvalidOperationException("Internal diff not available");
+
+                return internalDiff.RunDiff(args);
+            }
 
             string program;
             string arguments;
-            if (!Substitute(diffApp, args, DiffToolMode.Diff, out program, out arguments))
+            if (!Substitute(diffApp, args, DiffToolMode.Diff, out program, out arguments)
+                || !File.Exists(diffApp))
             {
                 new AnkhMessageBox(Context).Show(string.Format("Can't find diff program '{0}'", program ?? diffApp));
                 return false;
@@ -137,9 +143,19 @@ namespace Ankh.Services
             else if (!args.Validate())
                 throw new ArgumentException("Arguments not filled correctly", "args");
 
-            string diffApp = this.GetMergePath(args.Mode);
+            string mergeApp = this.GetMergePath(args.Mode);
 
-            if (string.IsNullOrEmpty(diffApp))
+            if (string.IsNullOrEmpty(mergeApp))
+            {
+                IAnkhInternalDiff internalDiff = GetService<IAnkhInternalDiff>();
+
+                if (internalDiff != null && internalDiff.HasMerge)
+                {
+                    return internalDiff.RunMerge(args);
+                }
+            }
+
+            if (string.IsNullOrEmpty(mergeApp))
             {
                 new AnkhMessageBox(Context).Show("Please specify a merge tool in Tools->Options->SourceControl->Subversion", "AnkhSVN - No visual merge tool is available");
 
@@ -148,7 +164,7 @@ namespace Ankh.Services
 
             string program;
             string arguments;
-            if (!Substitute(diffApp, args, DiffToolMode.Merge, out program, out arguments))
+            if (!Substitute(mergeApp, args, DiffToolMode.Merge, out program, out arguments))
             {
                 new AnkhMessageBox(Context).Show(string.Format("Can't find merge program '{0}'", program));
                 return false;
