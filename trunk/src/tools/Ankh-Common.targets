@@ -44,4 +44,6 @@
     <TargetFrameworkVersion Condition="'$(LatestTargetFramework)' != 'true'">v4.0</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(LatestTargetFramework)' == 'true'">v4.5</TargetFrameworkVersion>
   </PropertyGroup>
+  <Import Project="..\..\local\Common.targets.local" Condition="('$(ApplyLocalCustomizations)' != 'false') and Exists('..\..\local\Common.targets.local')" />
+  <Import Project="..\..\local\$(MSBuildProjectName)\$(MSBuildProjectFile).local" Condition="('$(ApplyLocalCustomizations)' != 'false') and Exists('..\..\local\$(MSBuildProjectName)\$(MSBuildProjectFile).local')" />
 </Project>
