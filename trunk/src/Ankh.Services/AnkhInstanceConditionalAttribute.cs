@@ -69,16 +69,14 @@ namespace Ankh
                             return false;
                         break;
                     case VSInstance.VS2008:
-                        if (!VSVersion.VS2008OrOlder)
-                            return false;
-                        break;
-                    case VSInstance.VS2010:
                         if (VSVersion.VS2010OrLater)
                             return false;
                         break;
-                    case VSInstance.VS11:
+                    case VSInstance.VS2010:
                         if (VSVersion.VS11OrLater)
                             return false;
+                        break;
+                    case VSInstance.VS11:
                         break;
                     default:
                         break;
