@@ -21,7 +21,7 @@ using System.Text;
 namespace Ankh.Commands
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-    public sealed class CommandAttribute : Attribute
+    public sealed class CommandAttribute : AnkhInstanceConditionalAttribute
     {
         readonly AnkhCommand _command;
         readonly AnkhCommandContext _context;

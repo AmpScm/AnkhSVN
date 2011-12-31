@@ -246,6 +246,9 @@ namespace Ankh
                     if (!serviceType.IsAssignableFrom(type))
                         throw new InvalidOperationException(string.Format("{0} does not implement global service {1} but has an attribute that says it does", type.AssemblyQualifiedName, serviceType.FullName));
 #endif
+                    if (!attr.Applies())
+                        return;
+
                     if (attr.AllowPreRegistered && null != (container.GetService(serviceType)))
                         continue;
 
