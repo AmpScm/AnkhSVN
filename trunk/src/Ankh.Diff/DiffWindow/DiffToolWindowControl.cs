@@ -15,18 +15,13 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using Ankh.Scc.UI;
-using Ankh.UI.Services;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.ObjectModel;
 using System.IO;
 using Ankh.Diff.DiffUtils;
+using Ankh.Diff;
 
 namespace Ankh.UI.DiffWindow
 {
@@ -101,7 +96,7 @@ namespace Ankh.UI.DiffWindow
 
             if (_nFrame >= 0)
             {
-                Context.GetService<IAnkhDiffHandler>().ReleaseDiff(_nFrame);
+                Context.GetService<AnkhInternalDiff>().ReleaseDiff(_nFrame);
                 _nFrame = -1;
             }
         }

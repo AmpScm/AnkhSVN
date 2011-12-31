@@ -365,6 +365,33 @@ namespace Ankh.Scc.UI
         }
     }
 
+    public interface IAnkhInternalDiff
+    {
+        /// <summary>
+        /// Runs the diff as specified by the args
+        /// </summary>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
+        bool RunDiff(AnkhDiffArgs args);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        bool HasDiff { get; }
+
+        /// <summary>
+        /// Runs the merge as specified by the args
+        /// </summary>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
+        bool RunMerge(AnkhMergeArgs args);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        bool HasMerge { get; }
+    }
+
     public interface IAnkhDiffHandler
     {
         /// <summary>
@@ -379,17 +406,12 @@ namespace Ankh.Scc.UI
         /// <param name="args">The args.</param>
         /// <returns></returns>
         bool RunMerge(AnkhMergeArgs args);
+
         /// <summary>
         /// Runs the patch as specified by the args
         /// </summary>
         /// <param name="args">The args.</param>
         bool RunPatch(AnkhPatchArgs args);
-
-        /// <summary>
-        /// Releases the diff.
-        /// </summary>
-        /// <param name="frameNumber">The frame number.</param>
-        void ReleaseDiff(int frameNumber);
 
         /// <summary>
         /// Gets the temp file.

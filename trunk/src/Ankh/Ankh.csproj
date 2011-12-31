@@ -199,9 +199,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Services\AnkhDiff.cs" />
-    <Compile Include="Services\AnkhDiff.Internal.cs">
-      <DependentUpon>AnkhDiff.cs</DependentUpon>
-    </Compile>
     <Compile Include="Services\AnkhDiff.Tools.cs">
       <DependentUpon>AnkhDiff.cs</DependentUpon>
     </Compile>
