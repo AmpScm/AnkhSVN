@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnkhInstanceConditionalAttribute.cs" />
     <Compile Include="AnkhModule.cs" />
     <Compile Include="AnkhRuntime.cs" />
     <Compile Include="AnkhService.cs" />

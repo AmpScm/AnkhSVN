@@ -21,7 +21,7 @@ using System.Text;
 namespace Ankh
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=false)]
-    public sealed class GlobalServiceAttribute : Attribute
+    public sealed class GlobalServiceAttribute : AnkhInstanceConditionalAttribute
     {
         readonly Type _serviceType;
         bool _publicService;

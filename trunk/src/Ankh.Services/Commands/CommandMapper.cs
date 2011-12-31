@@ -217,7 +217,7 @@ namespace Ankh.Commands
 
                     foreach (CommandAttribute cmdAttr in type.GetCustomAttributes(typeof(CommandAttribute), false))
                     {
-                        if (cmdAttr.Context != _commandContext)
+                        if (cmdAttr.Context != _commandContext || !cmdAttr.Applies())
                             continue;
 
                         foreach (AnkhCommand cmdInstance in cmdAttr.GetAllCommands())
