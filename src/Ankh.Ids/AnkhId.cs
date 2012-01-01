@@ -40,7 +40,7 @@ namespace Ankh
         public const string PlkCompany = "AnkhSVN Core Team";
         //**********************************************************************************
 
-        public const string AssemblyCopyright = "Copyright © AnkhSVN Team 2003-2011";
+        public const string AssemblyCopyright = "Copyright © AnkhSVN Team 2003-2012";
         public const string AssemblyProduct = "AnkhSVN - Subversion Support for Visual Studio";
         public const string AssemblyCompany = "AnkhSVN Team";
         //**********************************************************************************
@@ -70,16 +70,6 @@ namespace Ankh
         /// <summary>Language neutral SCC Provider title</summary>
         public const string SccProviderTitle = "AnkhSVN - Subversion Support for Visual Studio";
 
-
-        //************ Special contexts managed by our Trigger package *********************        
-        /// <summary>
-        /// Context set by Trigger package when another Scc package is active
-        /// </summary>
-        public const string CtxNoOtherSccActive = "3eec2d0e-8224-4d68-9748-773e2ace8dda";
-        public const string CtxNoOtherSccManaging = "644c07df-048b-44c5-aeff-cf54ad82a209";
-        
-        // When this context is set the full package is loaded and the trigger package is deactivated
-        public const string CtxFullSccLoaded = "1142ad52-4c53-499a-afac-3f3694261f5d";
         //**********************************************************************************
 
         // Increase this value when you want to have AnkhCommand.MigrateSettings called on first use
