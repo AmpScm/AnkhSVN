@@ -36,6 +36,8 @@ namespace Ankh.Scc.UI
     public abstract class AnkhDiffToolArgs
     {
         DiffMode _diffMode;
+        string _caption;
+        string _label;
 
         /// <summary>
         /// Gets or sets the mode.
@@ -45,6 +47,24 @@ namespace Ankh.Scc.UI
         {
             get { return _diffMode; }
             set { _diffMode = value; }
+        }
+
+        /// <summary>
+        /// Caption for the internal diff/merge viewer
+        /// </summary>
+        public string Caption
+        {
+            get { return _caption; }
+            set { _caption = value; }
+        }
+
+        /// <summary>
+        /// Label for the internal diff/merge viewer.
+        /// </summary>
+        public string Label
+        {
+            get { return _label; }
+            set { _label = value; }
         }
 
         /// <summary>
