@@ -170,7 +170,7 @@ namespace Ankh.VS.SolutionExplorer
 
         void SetIcons()
         {
-            if (TreeView == null)
+            if (TreeView == null || StatusImageMapper == null)
                 return; // Nothing to do
 
             // store the original image list (check that we're not storing our own statusImageList
