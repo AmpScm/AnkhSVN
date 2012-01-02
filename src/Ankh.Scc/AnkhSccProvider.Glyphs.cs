@@ -122,8 +122,8 @@ namespace Ankh.Scc
                 return false;
 
             return PendingChange.IsPending(item);
-        } 
-        
+        }
+
         bool ShouldIgnore(SvnItem item)
         {
             while (item != null)
@@ -186,7 +186,7 @@ namespace Ankh.Scc
                 for (int i = 0; i < cFiles; i++)
                 {
                     rgsiGlyphs[i] = VsStateIcon.STATEICON_NOSTATEICON;
-                    if(rgdwSccStatus != null)
+                    if (rgdwSccStatus != null)
                         rgdwSccStatus[i] = (uint)SccStatus.SCC_STATUS_NOTCONTROLLED;
                 }
                 return VSConstants.S_OK;
@@ -365,7 +365,7 @@ namespace Ankh.Scc
             {
                 _glyphList.Dispose();
                 _glyphList = null;
-            }           
+            }
 
             // Visual Studio 2002-2010 use a System TreeView control which
             // supports up to 16 glyph images. 12 of those are filled by
@@ -386,6 +386,12 @@ namespace Ankh.Scc
             // In an attempt to trick the VS2010 'Solution navigator' extension we
             // try to do the same overflow trick in 2010. The solution explorer will
             // then just fall back to our forced image control
+
+            if (StatusImages == null)
+            {
+                pdwImageListHandle = 0;
+                return VSConstants.E_FAIL; // Vital service missing
+            }
 
             _glyphList = StatusImages.CreateStatusImageList();
 
