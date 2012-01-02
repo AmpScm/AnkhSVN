@@ -70,7 +70,7 @@ namespace Ankh.Scc
         {
             SvnItem item = StatusCache[path];
 
-            if (item == null)
+            if (item == null  || StatusImages == null)
                 return AnkhGlyph.None;
 
             AnkhGlyph glyph = StatusImages.GetStatusImageForSvnItem(item);
