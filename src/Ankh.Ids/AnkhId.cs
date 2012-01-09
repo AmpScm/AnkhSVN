@@ -29,7 +29,7 @@ namespace Ankh
         /// <summary>
         /// The guid the AnkhSvn package is registered with inside Visual Studio
         /// </summary>
-        public const string PackageId = "604ad610-5cf9-4bd5-8acc-f49810e2efd4";
+        public const string PackageId = "604AD610-5CF9-4BD5-8ACC-F49810E2EFD4";
         public const string PackageDescription = "AnkhSVN - Subversion Support for Visual Studio";
 
         /// <summary>The package version as used in the PLK</summary>
@@ -61,12 +61,12 @@ namespace Ankh
         /// The guid used for registering the commands registered by the AnkhSvn package
         /// </summary>
         /// <remarks>Must be changed when the PackageId changes</remarks>
-        public const string CommandSet = "aa61c329-d559-468f-8f0f-4f03896f704d";
+        public const string CommandSet = "AA61C329-D559-468F-8F0F-4F03896F704D";
 
         /// <summary>The SCC Provider guid (used as SCC active marker by VS)</summary>
-        public const string SccProviderId = "8770915b-b235-42ec-bbc6-8e93286e59b5";
+        public const string SccProviderId = "8770915B-B235-42EC-BBC6-8E93286E59B5";
         /// <summary>The GUID of the SCC Service</summary>
-        public const string SccServiceId = "d8c473d2-9634-4513-91d5-e1a671fe2df4";
+        public const string SccServiceId = "D8C473D2-9634-4513-91D5-E1A671FE2DF4";
         /// <summary>Language neutral SCC Provider title</summary>
         public const string SccProviderTitle = "AnkhSVN - Subversion Support for Visual Studio";
 
