@@ -72,10 +72,10 @@ namespace Ankh.VSPackage.Attributes
                 key.SetValue("", _exportName);
                 key.SetValue("Description", string.Format("#{0}", _desc));
                 key.SetValue("Name", _name);
-                key.SetValue("Package", UINamePkg.ToString("B").ToUpperInvariant());
-                key.SetValue("ResourcePackage", UINamePkg.ToString("B").ToUpperInvariant());
+                key.SetValue("Package", UINamePkg.ToString("B"));
+                key.SetValue("ResourcePackage", UINamePkg.ToString("B"));
                 key.SetValue("ProfileSave", 1);
-                //key.SetValue("ResourcePackage", UINamePkg.ToString("B").ToUpperInvariant());
+                //key.SetValue("ResourcePackage", UINamePkg.ToString("B"));
             }
         }
 
