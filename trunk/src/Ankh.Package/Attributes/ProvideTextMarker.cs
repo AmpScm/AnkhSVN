@@ -52,7 +52,7 @@ namespace Ankh.VSPackage.Attributes
         /// <value>The registry path.</value>
         public string RegistryPath
         {
-            get { return string.Format("Text Editor\\External Markers\\{0}", _markerType.GUID.ToString("B").ToUpper()); }
+            get { return string.Format("Text Editor\\External Markers\\{0}", _markerType.GUID.ToString("B")); }
         }
 
         /// <summary>
@@ -70,8 +70,8 @@ namespace Ankh.VSPackage.Attributes
             using (Key key = context.CreateKey(RegistryPath))
             {
                 key.SetValue("", RegName);
-                key.SetValue("Service", _providerType.GUID.ToString("B").ToUpperInvariant());
-                key.SetValue("Package", PackageGuid.ToString("B").ToUpperInvariant());
+                key.SetValue("Service", _providerType.GUID.ToString("B"));
+                key.SetValue("Package", PackageGuid.ToString("B"));
                 key.SetValue("DisplayName", DisplayName);
             }
         }

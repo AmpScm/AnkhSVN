@@ -31,7 +31,7 @@ namespace Ankh.VSPackage.Attributes
         internal const string RemapName = "AnkhSVN-UI-Version";
         string GetPath(RegistrationAttribute.RegistrationContext context)
         {
-            return "Packages\\" + context.ComponentType.GUID.ToString("B").ToUpperInvariant();
+            return "Packages\\" + context.ComponentType.GUID.ToString("B");
         }
 
         public override void Register(RegistrationAttribute.RegistrationContext context)

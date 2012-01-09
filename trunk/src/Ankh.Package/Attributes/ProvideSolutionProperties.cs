@@ -45,7 +45,7 @@ namespace Ankh.VSPackage.Attributes
             {
                 childKey = context.CreateKey(string.Format(CultureInfo.InvariantCulture, "{0}\\{1}", "SolutionPersistence", PropName));
 
-                childKey.SetValue(string.Empty, context.ComponentType.GUID.ToString("B").ToUpperInvariant());
+                childKey.SetValue(string.Empty, context.ComponentType.GUID.ToString("B"));
             }
             finally
             {

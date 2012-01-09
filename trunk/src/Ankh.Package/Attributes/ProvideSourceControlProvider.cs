@@ -97,15 +97,15 @@ namespace Ankh.VSPackage.Attributes
                 // BH: Set ourselves as current default SCC Provider
                 sccProviders.SetValue("", RegGuid.ToString("B"));
 
-                using (Key sccProviderKey = sccProviders.CreateSubkey(RegGuid.ToString("B").ToUpperInvariant()))
+                using (Key sccProviderKey = sccProviders.CreateSubkey(RegGuid.ToString("B")))
                 {
                     sccProviderKey.SetValue("", RegName);
-                    sccProviderKey.SetValue("Service", SccProviderService.ToString("B").ToUpperInvariant());
+                    sccProviderKey.SetValue("Service", SccProviderService.ToString("B"));
 
                     using (Key sccProviderNameKey = sccProviderKey.CreateSubkey("Name"))
                     {
                         sccProviderNameKey.SetValue("", UIName);
-                        sccProviderNameKey.SetValue("Package", UINamePkg.ToString("B").ToUpperInvariant());
+                        sccProviderNameKey.SetValue("Package", UINamePkg.ToString("B"));
 
                         sccProviderNameKey.Close();
                     }
