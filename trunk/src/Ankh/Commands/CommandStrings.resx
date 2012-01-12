@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="IgnoreCaption" xml:space="preserve">
     <value>Ignore in Subversion</value>
@@ -172,7 +172,7 @@
     <value>'{0}' will be deleted permanently.</value>
   </data>
   <data name="AnnotateBinaryFileContinueAnywayText" xml:space="preserve">
-    <value>You are trying to annotate a binary fily. Are you sure you want to continue?</value>
+    <value>You are trying to annotate a binary file. Are you sure you want to continue?</value>
   </data>
   <data name="AnnotateBinaryFileContinueAnywayTitle" xml:space="preserve">
     <value>Binary file detected</value>

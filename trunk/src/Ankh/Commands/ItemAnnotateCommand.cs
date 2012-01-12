@@ -189,19 +189,19 @@ namespace Ankh.Commands
             {
                 using (AnkhMessageBox mb = new AnkhMessageBox(e.Context))
                 {
-                    if (DialogResult.Yes == mb.Show(
+                    if (DialogResult.Yes != mb.Show(
                                                 CommandStrings.AnnotateBinaryFileContinueAnywayText,
                                                 CommandStrings.AnnotateBinaryFileContinueAnywayTitle,
                                                 MessageBoxButtons.YesNo, MessageBoxIcon.Information))
-                    {
-                        r = e.GetService<IProgressRunner>()
+                        return;
+
+                    r = e.GetService<IProgressRunner>()
                             .RunModal(CommandStrings.Annotating,
                                       delegate(object sender, ProgressWorkerArgs ee)
                                       {
                                           ba.IgnoreMimeType = true;
                                           ee.Client.GetBlame(target, ba, out blameResult);
                                       });
-                    }
                 }
             }
 
