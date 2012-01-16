@@ -221,6 +221,11 @@
       <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>
       <Name>Ankh.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ankh.VS.Interop\Ankh.VS.Interop.csproj">
+      <Project>{B99CB919-1A2C-4E3B-9C15-8789B358EA99}</Project>
+      <Name>Ankh.VS.Interop</Name>
+      <Aliases>vs</Aliases>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

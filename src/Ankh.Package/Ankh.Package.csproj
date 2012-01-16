@@ -287,10 +287,6 @@
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
       <Name>Ankh.Ids</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ankh.Migrate\Ankh.Migrate.csproj">
-      <Project>{1AD899A2-9283-4AB6-9426-E251E5772196}</Project>
-      <Name>Ankh.Migrate</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ankh.Scc\Ankh.Scc.csproj">
       <Project>{ECE36A69-DD85-4AAB-B329-12BAE4675056}</Project>
       <Name>Ankh.Scc</Name>

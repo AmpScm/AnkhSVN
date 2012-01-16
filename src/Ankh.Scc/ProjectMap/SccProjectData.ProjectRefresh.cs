@@ -184,7 +184,7 @@ namespace Ankh.Scc.ProjectMap
                         // Perform an extra validation step to avoid issue #700
                         string foundName;
                         if (bFound
-                            && ErrorHandler.Succeeded(hierarchy.GetCanonicalName(id, out foundName)))
+                            && ErrorHandler.Succeeded(VsProject.GetMkDocument(id, out foundName)))
                         {
                             foundName = SharpSvn.SvnTools.GetNormalizedFullPath(foundName);
                             bFound = String.Equals(item.FullPath, foundName, StringComparison.OrdinalIgnoreCase);

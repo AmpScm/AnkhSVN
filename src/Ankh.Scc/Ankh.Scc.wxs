@@ -3,6 +3,7 @@
 		<ComponentGroup Id="Ankh.Scc">
       <ComponentGroupRef Id="Ankh.Ids"/>
       <ComponentGroupRef Id="Ankh.Services"/>
+      <ComponentGroupRef Id="Ankh.VS.Interop"/>
 			<ComponentRef Id="C_Ankh.Scc.dll"/>
 		</ComponentGroup>
 		<DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Scc.TargetDir)">
