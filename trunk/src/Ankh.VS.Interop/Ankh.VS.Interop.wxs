@@ -1,0 +1,17 @@
+﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:u="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <ComponentGroup Id="Ankh.VS.Interop">
+      <ComponentRef Id="C_Ankh.VS.Interop.dll"/>
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.VS.Interop.TargetDir)">
+      <Component Id="C_Ankh.VS.Interop.dll" Guid="DB6B102F-6879-4C86-A46D-88D157D084CA">
+        <File Id="CF_Ankh.VS.Interop.dll" Name="Ankh.VS.Interop.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
+        <?ifdef Ankh_Pdb?>
+        <File Id="CF_Ankh.VS.Interop.pdb" Name="Ankh.VS.Interop.pdb" Checksum="yes" Vital="yes" />
+        <?endif?>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
