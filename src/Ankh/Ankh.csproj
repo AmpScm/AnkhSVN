@@ -72,10 +72,6 @@
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
       <Name>Ankh.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ankh.Migrate\Ankh.Migrate.csproj">
-      <Project>{1AD899A2-9283-4AB6-9426-E251E5772196}</Project>
-      <Name>Ankh.Migrate</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.snk" />
@@ -119,7 +115,6 @@
     <Compile Include="Commands\ItemConflictEdit.cs" />
     <Compile Include="Commands\ItemIgnore.cs" />
     <Compile Include="Commands\ItemUnifiedDiffCommand.cs" />
-    <Compile Include="Commands\MigrateAnkhSettings.cs" />
     <Compile Include="Commands\OpenInXExplorer.cs" />
     <Compile Include="Commands\SolutionCommitCommand.cs" />
     <Compile Include="AnkhModule.cs" />
