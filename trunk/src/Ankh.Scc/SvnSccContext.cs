@@ -121,15 +121,7 @@ namespace Ankh.Scc
             {
                 if (SvnTools.IsManagedPath(path))
                 {
-                    SvnInfoArgs a = new SvnInfoArgs();
-                    a.ThrowOnError = false;
-                    a.Depth = SvnDepth.Empty;
-
-                    if (_client.Info(path,
-                        delegate(object sender, SvnInfoEventArgs e)
-                        {
-                            repId = e.RepositoryId;
-                        }))
+                    if (_client.TryGetRepositoryId(path, out repId))
                     {
                         repositoryId = repId;
                         return true;
