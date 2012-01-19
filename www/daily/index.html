@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.10713</title>
+          AnkhSVN-Daily Update - 2.3.10715</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -15,14 +15,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5630/AnkhSvn-Daily-2.3.10713.1163.msi">AnkhSVN 2.3.10713</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5634/AnkhSvn-Daily-2.3.10715.1164.msi">AnkhSVN 2.3.10715</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=10713">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=10715">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -115,33 +115,6 @@ version to be able to find the new assembly.</td></tr>
             [r10633]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> tools/Ankh-Common.targets, tools/Ankh.GenPkgDef/Ankh.GenPkgDef.csproj, Ankh.Package/Ankh.Package.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">When compiling with the Visual Studio 11 preview SDK compile using the new
 shell assemblies instead of with those of Visual Studio 2010.</td></tr>
-<tr class="d"><td colspan="4">2011-12-21</td></tr>
-<tr><td> </td><td class="r"><a id="10628" href="http://ankhsvn.net/rev/10628">
-            [r10628]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/PendingChanges/PendingChangesToolControl.cs, Ankh.Services/UI/AnkhToolWindowControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Initialize the VS default fore and backcolor in all our toolwindows in one
-place instead of doing it in multiple places.</td></tr>
-<tr><td> </td><td class="r"><a id="10624" href="http://ankhsvn.net/rev/10624">
-            [r10624]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/Selection:</strong> CommandState.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Resolve a race condition in the command state cache. We might have cached a
-value before we were properly hooked for receiving changes.<br>
-Noticed this myself when switching between different SCC providers.</td></tr>
-<tr><td> </td><td class="r"><a id="10622" href="http://ankhsvn.net/rev/10622">
-            [r10622]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services/Commands:</strong> CommandAttribute.cs, CommandMapper.cs, CommandMapItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">By default hide unavailable commands even when HiddenWhenDisabled is false.</td></tr>
-<tr><td> </td><td class="r"><a id="10621" href="http://ankhsvn.net/rev/10621">
-            [r10621]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">VS best practices: reuse common commands in the user interface.
-In this case reuse the common delete and rename in the working copy explorer.</td></tr>
-<tr><td> </td><td class="r"><a id="10615" href="http://ankhsvn.net/rev/10615">
-            [r10615]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use a slightly newer SharpSvn</td></tr>
-<tr class="d"><td colspan="4">2011-12-20</td></tr>
-<tr><td> </td><td class="r"><a id="10612" href="http://ankhsvn.net/rev/10612">
-            [r10612]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> PendingChangesToolControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Automatically move the pending changes tab buttons to the bottom of the
-toolwindow when the toolwindow is used vertically.<br>
-Making the window workable vertically will take more work, but this is a first
-step.</td></tr>
 
 </table>
 <!--/Recent changes-->
