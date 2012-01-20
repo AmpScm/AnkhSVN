@@ -158,6 +158,15 @@ namespace Ankh.Scc
                     status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT
                         | SccStatus.SCC_STATUS_OUTBYUSER | SccStatus.SCC_STATUS_OUTEXCLUSIVE;
                     break;
+                case AnkhGlyph.Normal:
+                    status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT;
+                    break;
+                //case AnkhGlyph.ShouldBeAdded:
+                //case AnkhGlyph.FileDirty:
+                //case AnkhGlyph.FileMissing:
+                //case AnkhGlyph.CopiedOrMoved:
+                //case AnkhGlyph.InConflict:
+                //case AnkhGlyph.ChildChanged:
                 default:
                     status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT
                         | SccStatus.SCC_STATUS_OUTBYUSER;
