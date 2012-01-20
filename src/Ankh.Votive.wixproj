@@ -206,7 +206,9 @@
       <Output TaskParameter="Value" PropertyName="ProjectDefineConstants" />
     </CreateProperty>
     <Exec Command="tools\Ankh.GenPkgDef\bin\$(Configuration)\Ankh.GenPkgDef.exe Ankh.pkgdef Ankh.Package\bin\$(Configuration)\Ankh.Package.dll" />
+
     <Exec Command="tools\Ankh.GenerateVSIXManifest\bin\$(Configuration)\Ankh.GenerateVSIXManifest.exe extension.VsixManifest" />
+    <Exec Command="tools\Ankh.GenerateVSIXManifest\bin\$(Configuration)\Ankh.GenerateVSIXManifest.exe -v10 vs2010/extension.VsixManifest" />
   </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
