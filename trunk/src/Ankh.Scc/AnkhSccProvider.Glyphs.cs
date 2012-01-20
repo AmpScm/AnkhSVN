@@ -144,30 +144,41 @@ namespace Ankh.Scc
             SccStatus status;
             switch (glyph)
             {
-                case AnkhGlyph.MustLock:
-                    status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_LOCKED;
-                    break;
                 case AnkhGlyph.None:
                 case AnkhGlyph.Blank:
                 case AnkhGlyph.Ignored:
                 case AnkhGlyph.FileMissing:
+                    // Not versioned
                     status = SccStatus.SCC_STATUS_NOTCONTROLLED;
                     break;
-                case AnkhGlyph.LockedModified:
+                case AnkhGlyph.Normal:
                 case AnkhGlyph.LockedNormal:
+                case AnkhGlyph.ChildChanged:
+                    // Not changed / no real pending change by itself
+                    // (Some tools keep track of checked out as a pending change)
+                    status = SccStatus.SCC_STATUS_CONTROLLED;
+                    break;
+                case AnkhGlyph.MustLock:
+                    // Not changed, but needs a lock before editting
+                    status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_LOCKED;
+                    break;
+                case AnkhGlyph.LockedModified:
+                    // Modified under a lock
                     status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT
                         | SccStatus.SCC_STATUS_OUTBYUSER | SccStatus.SCC_STATUS_OUTEXCLUSIVE;
                     break;
-                case AnkhGlyph.Normal:
-                    status = SccStatus.SCC_STATUS_CONTROLLED;
+                case AnkhGlyph.InConflict:
+                    // Needs fixups after merging. Probably ignored
+                    status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT
+                        | SccStatus.SCC_STATUS_OUTBYUSER | SccStatus.SCC_STATUS_MERGED;
                     break;
+                //case AnkhGlyph.Added:
                 //case AnkhGlyph.ShouldBeAdded:
+                //case AnkhGlyph.Deleted:
                 //case AnkhGlyph.FileDirty:
-                //case AnkhGlyph.FileMissing:
                 //case AnkhGlyph.CopiedOrMoved:
-                //case AnkhGlyph.InConflict:
-                //case AnkhGlyph.ChildChanged:
                 default:
+                    // Pending change + Checked out
                     status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT
                         | SccStatus.SCC_STATUS_OUTBYUSER;
                     break;
