@@ -76,6 +76,11 @@
               <File Id="CF_VSIXPREVIEW" Name="AnkhSVN-Preview.png" Vital="yes" Source="Ankh.Votive\AnkhSVN-Preview.png"/>
             </Component>
             <!-- All assemblies are placed here -->
+            <Directory Id="APP_vs2010" Name="VS2010" SourceName="vs2010">
+              <Component Id="C_VSIXMANIFEST10" Guid="56F2C5B8-DAD2-4C11-9ECE-F9C827242073">
+                <File Id="CF_VSIXMANIFEST10" Name="extension.VsixManifest" Vital="yes" />
+              </Component>
+            </Directory>
           </Directory>
         </Directory>
       </Directory>
@@ -88,7 +93,7 @@
                   <Directory Name="2.0" Id="ANKHSVN_EXTENSION_2010">
                     <Component Id="C_Reg2010" Guid="2AF423CF-2FA7-4232-9A4E-F701022DCAF8">
                       <Condition>VS100DEVENV</Condition>
-                      <CopyFile Id="Vsix_Mnf2010" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
+                      <CopyFile Id="Vsix_Mnf2010" FileId="CF_VSIXMANIFEST10" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
                       <CopyFile Id="Vsix_Lic2010" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
                       <CopyFile Id="Vsix_Ico2010" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
                       <CopyFile Id="Vsix_Pvw2010" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
@@ -163,6 +168,7 @@
       <ComponentRef Id="C_NOTICE" />
       <ComponentRef Id="C_PKGDEF" />
       <ComponentRef Id="C_VSIXMANIFEST" />
+      <ComponentRef Id="C_VSIXMANIFEST10" />
       <ComponentRef Id="C_VSIXICO" />
       <ComponentRef Id="C_VSIXPREVIEW" />
       <ComponentGroupRef Id="SharpSvn_LICENSES"/>
