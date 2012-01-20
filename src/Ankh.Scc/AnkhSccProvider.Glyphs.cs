@@ -159,7 +159,7 @@ namespace Ankh.Scc
                         | SccStatus.SCC_STATUS_OUTBYUSER | SccStatus.SCC_STATUS_OUTEXCLUSIVE;
                     break;
                 case AnkhGlyph.Normal:
-                    status = SccStatus.SCC_STATUS_CONTROLLED | SccStatus.SCC_STATUS_CHECKEDOUT;
+                    status = SccStatus.SCC_STATUS_CONTROLLED;
                     break;
                 //case AnkhGlyph.ShouldBeAdded:
                 //case AnkhGlyph.FileDirty:
