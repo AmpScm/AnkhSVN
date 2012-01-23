@@ -105,6 +105,12 @@ namespace Ankh.Commands
             ICollection<string> revertPaths = SvnItem.GetPaths(toRevert);
             documentTracker.SaveDocuments(revertPaths);
 
+            // Revert items backwards to make sure we revert children before their ancestors
+            toRevert.Sort(delegate(SvnItem i1, SvnItem i2)
+                          {
+                              return -StringComparer.OrdinalIgnoreCase.Compare(i1.FullPath, i2.FullPath);
+                          });
+
             // perform the actual revert 
             using (DocumentLock dl = documentTracker.LockDocuments(revertPaths, DocumentLockType.NoReload))
             using (dl.MonitorChangesForReload())
