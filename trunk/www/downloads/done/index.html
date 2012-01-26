@@ -24,7 +24,11 @@
           var ankhVersion = document.getElementById('ankhVersion');
         
           if (ankhVersion && ankhVersion.innerText)
-            _gaq.push(['AnkhSVNVersion', ankhVersion.innerText]);
+            _gaq.push(['_setCustomVar',
+                          1,                      // Slot 1
+                          'AnkhSVNVersion',       // Name
+                          ankhVersion.innerText,  // Value
+                          2]);                    // Per session
       }
 
        (function() {
