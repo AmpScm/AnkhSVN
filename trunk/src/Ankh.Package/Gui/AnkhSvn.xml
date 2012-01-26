@@ -12,6 +12,7 @@
     <Import type="Ankh.AnkhCommandMenu" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Menu_" />
     <Import type="Ankh.AnkhCommandBitmap" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Bmp_" />
     <Import type="Ankh.AnkhToolBar" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="ToolBar_" />
+    <Import type="Ankh.CMDSETID_HtmEdGrp" from="..\..\Ankh.VS.Interop\bin\$(Configuration)\Ankh.VS.Interop.dll" />
   </Imports>
   <UI packageId="Ankh_PackageGuid" autoBmpId="Ankh_AnkhCommandBitmap" autoBmpResId="Bmp_AnkhBmp">
     <MenuRef id="guidSHLMainMenu:IDM_VS_CSCD_OPEN">
@@ -128,6 +129,52 @@
           </Group>
         </Menu>
       </Group>
+    </MenuRef>
+    <!-- The HTML Editor support defines many menus on its own-->
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_DESIGN_BASE">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_DESIGN_TABLE">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_BASIC">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_HTML">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_SCRIPT">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <!-- ASPX-->
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_ASPX">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_ASPX_CODE">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_ASPX_CODE_VB">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <!-- ASMX-->
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_ASMX">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_ASMX_CODE">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_ASMX_CODE_VB">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <!-- ASAX-->
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_ASAX">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_ASAX_CODE">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_ASAX_CODE_VB">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
     </MenuRef>
     <MenuRef id="guidSHLMainMenu:IDM_VS_CTXT_EZDOCWINTAB">
       <Group id="Grp_MdiDocumentScc" priority="0xE110">
@@ -1017,7 +1064,7 @@
         <Button id="Cmd_ForceUIShow" text="&#160;" priority="0" noShowOnMenuController="true" noButtonCustomize ="true"
                 noCustomize="true" noKeyCustomize="true" defaultInvisible="true" textOnly="true" />
         <Button id="Cmd_MakeNonSccFileWriteable" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" postExec="false" defaultInvisible="true" defaultDisabled="false" />
-        
+
         <!-- Temp no UI -->
         <Button id="Cmd_ItemDelete" name="SvnNodeDelete" priority="0" text="&amp;Delete..."
                 iconFile="PendingChanges/Delete.png" dynamicVisibility="true" />
