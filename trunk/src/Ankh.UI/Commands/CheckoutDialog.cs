@@ -144,7 +144,7 @@ namespace Ankh.UI.Commands
         /// <param name="e"></param>
         private void BrowseClicked(object sender, System.EventArgs e)
         {
-			using (FolderBrowserDialog browser = new FolderBrowserDialog())
+            using (FolderBrowserDialog browser = new FolderBrowserDialog())
             {
                 if (browser.ShowDialog(this) == DialogResult.OK)
                 {
@@ -155,8 +155,8 @@ namespace Ankh.UI.Commands
 
         private void urlTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (Uri != null)
-                revisionPicker.SvnOrigin = new Ankh.Scc.SvnOrigin(Uri, RepositoryRoot);
+            if (Uri != null )
+                revisionPicker.SvnOrigin = new Ankh.Scc.SvnOrigin(Context, Uri, RepositoryRoot);
         }
 
         private void urlBrowse_Click(object sender, EventArgs e)
