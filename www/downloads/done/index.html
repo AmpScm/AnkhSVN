@@ -3,12 +3,30 @@
     <title>DWL Counter</title>
   </head>
   <body>
+    <span id="ankhVersion" style="display: none;">
+    <![if !AnkhSVN]>-<![endif]>
+    <![if AnkhSVN 2.0]>2.0<![endif]>
+    <![if AnkhSVN 2.1]>2.1<![endif]>
+    <![if AnkhSVN 2.2]>2.2<![endif]>
+    <![if AnkhSVN 2.3]>2.3<![endif]>
+    <![if AnkhSVN 2.4]>2.4<![endif]>
+    <![if AnkhSVN 2.5]>2.5<![endif]>
+    <![if AnkhSVN 2.6]>2.6<![endif]>
+    <![if AnkhSVN 2.7]>2.7<![endif]>
+    </span>
     <script type="text/javascript">    
     <!--
        var _gaq = _gaq || [];
        _gaq.push(['_setAccount', 'UA-15818662-1']);
        _gaq.push(['_trackPageview']);
     
+      if (document.getElementById) {
+          var ankhVersion = document.getElementById('ankhVersion');
+        
+          if (ankhVersion && ankhVersion.innerText)
+            _gaq.push(['AnkhSVNVersion', ankhVersion.innerText]);
+      }
+
        (function() {
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
