@@ -16,9 +16,11 @@
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Threading;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
@@ -98,7 +100,19 @@ namespace Ankh.VSPackage
         /// </summary>
         protected override void Initialize()
         {
-            base.Initialize();
+            // The VS2005 SDK code changes the global VS UI culture, but that
+            // is not the way we should behave: We should keep the global
+            // state how VS initialized it.
+            CultureInfo uiCulture = Thread.CurrentThread.CurrentUICulture;
+            try
+            {
+                base.Initialize();
+            }
+            finally
+            {
+                if (Thread.CurrentThread.CurrentUICulture != uiCulture)
+                    Thread.CurrentThread.CurrentUICulture = uiCulture;
+            }
 
             if (InCommandLineMode)
                 return; // Do nothing; speed up devenv /setup by not loading all our modules!
