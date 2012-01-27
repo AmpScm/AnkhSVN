@@ -365,8 +365,7 @@ namespace Ankh.Scc
                         aa.Force = true;
                         aa.ThrowOnError = false;
 
-                        if (!_client.Add(toDir, aa))
-                            return false;
+                        _client.Add(toDir, aa);
                     }
 
                     SvnMoveArgs ma = new SvnMoveArgs();
