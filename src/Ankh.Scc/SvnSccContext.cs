@@ -356,21 +356,9 @@ namespace Ankh.Scc
                 using (TempFile(fromPath, toPath))
                 using (MoveAway(toPath, true))
                 {
-                    string toDir = SvnTools.GetNormalizedDirectoryName(toPath);
-
-                    {
-                        SvnAddArgs aa = new SvnAddArgs();
-                        aa.Depth = SvnDepth.Empty;
-                        aa.AddParents = true;
-                        aa.Force = true;
-                        aa.ThrowOnError = false;
-
-                        _client.Add(toDir, aa);
-                    }
-
                     SvnMoveArgs ma = new SvnMoveArgs();
                     ma.AlwaysMoveAsChild = false;
-                    ma.CreateParents = false; // We just did that ourselves. Use Svn for this?
+                    ma.CreateParents = true; 
                     ma.Force = true;
                     ma.ThrowOnError = false;
 
