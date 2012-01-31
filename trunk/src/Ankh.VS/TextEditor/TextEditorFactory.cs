@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Ankh.UI;
-using Ankh.UI.VS.TextEditor;
 
 namespace Ankh.VS.TextEditor
 {

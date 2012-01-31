@@ -29,8 +29,9 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System.Security.Permissions;
 using Ankh.Scc.UI;
+using Ankh.UI;
 
-namespace Ankh.UI.VS.TextEditor
+namespace Ankh.VS.TextEditor
 {
     /// <summary>
     /// This class is used to implement CodeEditorUserControl
