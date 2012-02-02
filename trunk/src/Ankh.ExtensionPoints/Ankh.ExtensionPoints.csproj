@@ -52,6 +52,7 @@
     <Compile Include="IssueTracker\IssueRepositoryConfigurationPage.cs" />
     <Compile Include="IssueTracker\IssueRepositoryConnector.cs" />
     <Compile Include="IssueTracker\IssueRepositorySettings.cs" />
+    <Compile Include="Items\ISvnUriItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
