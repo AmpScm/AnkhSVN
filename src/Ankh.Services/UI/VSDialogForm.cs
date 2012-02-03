@@ -18,11 +18,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.VS;
 
@@ -176,38 +174,71 @@ namespace Ankh.UI
             LoadPlacement();
         }
 
+        bool _storePlacement;
+        protected override void OnMove(EventArgs e)
+        {
+            base.OnMove(e);
+            if (!_storePlacement && IsHandleCreated && Visible)
+                _storePlacement = true;
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            if (!_storePlacement && IsHandleCreated && Visible)
+                _storePlacement = true;
+        }
+
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
-            SavePlacement();
+            if (_storePlacement)
+                SavePlacement();
         }
 
         private void LoadPlacement()
         {
-            if (PreserveWindowPlacement)
+            if (!PreserveWindowPlacement || Context == null)
+                return;
+
+            IDictionary<string, int> placement = ConfigurationService.GetWindowPlacement(GetType());
+            if (placement != null)
             {
-                IDictionary<string, int> placement = ConfigurationService.GetWindowPlacement(GetType());
-                if (placement != null)
+                int left, top, width, height;
+
+                if (placement.TryGetValue("Left", out left)
+                    && placement.TryGetValue("Top", out top)
+                    && placement.TryGetValue("Width", out width)
+                    && placement.TryGetValue("Height", out height))
                 {
-                    SetPlacementFromRegistry(delegate(int i) { Left = i; }, "Left", placement);
-                    SetPlacementFromRegistry(delegate(int i) { Top = i; }, "Top", placement);
-                    SetPlacementFromRegistry(delegate(int i) { Width = i; }, "Width", placement);
-                    SetPlacementFromRegistry(delegate(int i) { Height = i; }, "Height", placement);
+                    Rectangle pos = new Rectangle(left, top, width, height);
+                    bool ok = false;
+
+                    foreach (Screen screen in Screen.AllScreens)
+                    {
+                        if (screen.Bounds.Contains(pos))
+                        {
+                            ok = true;
+                            break;
+                        }
+                    }
+                    if (ok)
+                        Bounds = pos;
                 }
             }
         }
 
         private void SavePlacement()
         {
-            if (PreserveWindowPlacement)
-            {
-                Dictionary<string, int> placement = new Dictionary<string, int>(4);
-                placement["Left"] = Left;
-                placement["Top"] = Top;
-                placement["Width"] = Width;
-                placement["Height"] = Height;
-                ConfigurationService.SaveWindowPlacement(GetType(), placement);
-            }
+            if (!PreserveWindowPlacement || Context == null)
+                return;
+
+            Dictionary<string, int> placement = new Dictionary<string, int>(4);
+            placement["Left"] = Left;
+            placement["Top"] = Top;
+            placement["Width"] = Width;
+            placement["Height"] = Height;
+            ConfigurationService.SaveWindowPlacement(GetType(), placement);
         }
 
         private void SetPlacementFromRegistry(Action<int> setter, string key, IDictionary<string, int> placement)
