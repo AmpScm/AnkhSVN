@@ -285,35 +285,34 @@ namespace Ankh.Scc
 
             StringBuilder sb = new StringBuilder();
 
-            List<SccProjectFile> files = new List<SccProjectFile>();
+            HybridCollection<string> files = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+
 
             int n = 0;
             // pHierarchy = null if it is t
             foreach (string file in walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.Empty, null))
             {
+                if (files.Contains(file) || !SvnItem.IsValidPath(file))
+                    continue;
+
+                files.Add(file);
+
                 SccProjectFile spf;
                 if (_fileMap.TryGetValue(file, out spf))
                 {
-                    if (files.Contains(spf))
-                        files.Remove(spf); // Must have been added as a subfile and normal file :(
-
-                    files.Insert(n++, spf);
-
                     foreach (string subfile in spf.FirstReference.GetSubFiles())
                     {
-                        if (_fileMap.TryGetValue(subfile, out spf))
-                        {
-                            if (!files.Contains(spf))
-                                files.Add(spf);
-                        }
+                        if (!files.Contains(subfile))
+                            files.Add(subfile);
                     }
                 }
             }
 
             string format = (files.Count > 0) ? "{0}: {1}" : "{1}";
-            for (int i = 0; i < files.Count; i++)
+            int i = 0;
+            foreach (string file in files)
             {
-                SvnItem item = StatusCache[files[i].FullPath];
+                SvnItem item = StatusCache[file];
 
                 if (i >= n) // This is a subitem!
                 {
@@ -332,6 +331,10 @@ namespace Ankh.Scc
 
                 if (item.IsLocked)
                     sb.AppendFormat(format, item.Name, Resources.ToolTipLocked).AppendLine();
+                i++;
+
+                if (sb.Length > 2048)
+                    break;
             }
 
             if (sb.Length > 0)
