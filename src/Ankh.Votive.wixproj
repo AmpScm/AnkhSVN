@@ -77,7 +77,6 @@
     <Compile Include="Ankh.Votive\VSExtension.wxs" />
     <Compile Include="autolib\SharpSvn\SharpSvn.wxs" />
     <Compile Include="autolib\SharpSvn\Licenses\SharpSvn-Licenses.wxs" />
-    <Compile Include="Utils\Utils.wxs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Ankh.Diff\" />
@@ -94,7 +93,6 @@
     <Folder Include="autolib\SharpSvn\" />
     <Folder Include="autolib\SharpSvn\Licenses\" />
     <Folder Include="Ankh.Package" />
-    <Folder Include="Utils\" />
     <Folder Include="Ankh.Votive" />
   </ItemGroup>
   <ItemGroup>
@@ -163,12 +161,6 @@
     <ProjectReference Include="tools\Ankh.GenPkgDef\Ankh.GenPkgDef.csproj">
       <Name>Ankh.GenPkgDef</Name>
       <Project>{9392145e-1047-4ffc-84f5-6b5f3c80ca9b}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-    </ProjectReference>
-    <ProjectReference Include="Utils\Utils.csproj">
-      <Name>Utils</Name>
-      <Project>{a3248e1e-8272-4227-af02-bb86040fbed9}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
