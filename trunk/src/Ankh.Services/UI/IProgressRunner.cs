@@ -77,6 +77,7 @@ namespace Ankh
 
         public ProgressRunnerResult(bool succeeded, Exception e)
         {
+            _succeeded = succeeded;
             _ex = e;
         }
 
