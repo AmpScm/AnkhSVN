@@ -628,24 +628,6 @@ namespace Ankh
             get { return 0 != GetState(SvnItemState.Versioned); }
         }
 
-        static bool GetIsVersioned(AnkhStatus status)
-        {
-            switch (status.LocalNodeStatus)
-            {
-                case SvnStatus.Added:
-                case SvnStatus.Conflicted:
-                case SvnStatus.Merged:
-                case SvnStatus.Modified:
-                case SvnStatus.Normal:
-                case SvnStatus.Replaced:
-                case SvnStatus.Deleted:
-                case SvnStatus.Incomplete:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
         /// <summary>
         /// Is this resource modified; implies the item is versioned
         /// </summary>
@@ -991,8 +973,6 @@ namespace Ankh
 
             foreach (SvnItem i in items)
             {
-                string p = i.FullPath;
-
                 if (parent == null)
                 {
                     parent = i;
