@@ -14,6 +14,8 @@
     <Import type="Ankh.AnkhToolBar" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="ToolBar_" />
     <Import type="Ankh.CMDSETID_HtmEdGrp" from="..\..\Ankh.VS.Interop\bin\$(Configuration)\Ankh.VS.Interop.dll" />
     <Import type="Ankh.CMDSETID_TeamSystemDac" from="..\..\Ankh.VS.Interop\bin\$(Configuration)\Ankh.VS.Interop.dll" />
+    <Import type="Ankh.CMDSETID_WinFormsDesigner" from="..\..\Ankh.VS.Interop\bin\$(Configuration)\Ankh.VS.Interop.dll" />
+    <Import type="Ankh.CMDSETID_XamlUI" from="..\..\Ankh.VS.Interop\bin\$(Configuration)\Ankh.VS.Interop.dll" />
   </Imports>
   <UI packageId="Ankh_PackageGuid" autoBmpId="Ankh_AnkhCommandBitmap" autoBmpResId="Bmp_AnkhBmp">
     <MenuRef id="guidSHLMainMenu:IDM_VS_CSCD_OPEN">
@@ -177,9 +179,31 @@
     <MenuRef id="Ankh_CMDSETID_HtmEdGrp:IDMX_HTM_SOURCE_ASAX_CODE_VB">
       <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
     </MenuRef>
+    <!-- SQL Editor-->
     <MenuRef id="Ankh_CMDSETID_TeamSystemDac:mnuIdTeamSystemSqlEditorContext">
       <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
     </MenuRef>
+    <!-- Windows Forms and Component Designer-->
+    <MenuRef id="Ankh_CMDSETID_WinFormsDesigner:IDM_IF_CTXT_SELECTION">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_WinFormsDesigner:IDM_IF_CTXT_CONTAINER">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_WinFormsDesigner:IDM_IF_CTXT_TRAYSELECTION">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_WinFormsDesigner:IDM_IF_CTXT_DOCUMENT_OUTLINE">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <MenuRef id="Ankh_CMDSETID_WinFormsDesigner:IDM_IF_CTXT_TRAY">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+    <!-- Xaml Editor-->
+    <MenuRef id="Ankh_CMDSETID_XamlUI:IDM_XAML_EDITOR">
+      <GroupRef id="Grp_CodeEditorScc" priority="0xFEFF" />
+    </MenuRef>
+
     <MenuRef id="guidSHLMainMenu:IDM_VS_CTXT_EZDOCWINTAB">
       <Group id="Grp_MdiDocumentScc" priority="0xE110">
         <ButtonRef id="Cmd_DocumentHistory" priority="0x2000" />
