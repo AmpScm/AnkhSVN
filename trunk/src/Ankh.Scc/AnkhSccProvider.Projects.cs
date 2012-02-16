@@ -370,7 +370,6 @@ namespace Ankh.Scc
             _managedSolution = false;
             _isDirty = false;
             _solutionLoaded = false;
-            _reloading = null;
             ClearEnlistState();
 
             IPendingChangesManager mgr = GetService<IPendingChangesManager>();
@@ -447,6 +446,7 @@ namespace Ankh.Scc
                 data.NotifyGlyphsChanged();
             }
 
+            data.OnOpened();
             _syncMap = true;
 
             // Don't take the focus from naming the folder. The rename will perform the .Load()
@@ -454,12 +454,9 @@ namespace Ankh.Scc
             if (added && data.IsSolutionFolder)
                 return;
 
-            bool isReload = (_reloading == data.ProjectLocation);
-            _reloading = null;
-            if (added && !isReload)
+            if (added && !string.IsNullOrEmpty(SolutionFilename))
             {
-                if (!string.IsNullOrEmpty(SolutionFilename))
-                    DocumentTracker.CheckDirty(SolutionFilename);
+                DocumentTracker.CheckDirty(SolutionFilename);
             }
 
             RegisterForSccCleanup();
@@ -524,8 +521,6 @@ namespace Ankh.Scc
             return false;
         }
 
-        string _reloading;
-
         /// <summary>
         /// Called by ProjectDocumentTracker when a scc-capable project is closed
         /// </summary>
@@ -534,18 +529,13 @@ namespace Ankh.Scc
         internal void OnProjectClosed(IVsSccProject2 project, bool removed)
         {
             SccProjectData data;
-            _reloading = null;
-
             if (_projectMap.TryGetValue(project, out data))
             {
                 data.OnClose();
                 _projectMap.Remove(project);
-
-                if (data.Unloading)
-                    _reloading = data.ProjectLocation;
             }
 
-            if (removed && _reloading == null)
+            if (removed)
             {
                 if (!string.IsNullOrEmpty(SolutionFilename))
                     DocumentTracker.CheckDirty(SolutionFilename);
