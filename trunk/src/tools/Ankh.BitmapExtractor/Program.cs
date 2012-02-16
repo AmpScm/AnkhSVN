@@ -100,16 +100,16 @@ namespace Ankh.BitmapExtractor
                     Bitmap bm = bitmaps.GetBitmap(cb.IconGID, cb.IconIndex);
                     string name = cb.CanonicalName.Trim(' ', '.', '\t', '&').Replace(" ", "").Replace("&", "");
 
-                    if (bm == null || bm.PixelFormat == PixelFormat.Undefined)
+                    if (bm == null)
                     {
-                        Console.WriteLine("Couldn't get icon for {0} (index={1}/{2})", name, cb.IconIndex, cb.IconGID);
+                        Console.WriteLine("Couldn't get icon for {0}", name);
                         continue;
                     }
 
                     if (_transparentHack)
                         bm.MakeTransparent(transparentColor);
 
-                    Console.WriteLine("Writing {0} (index={1}/{2})", name, cb.IconIndex, cb.IconGID);
+                    Console.WriteLine("Writing {0}", name);
                     bm.Save(Path.Combine(dir, name + ".png"), ImageFormat.Png);
                 }
             }
