@@ -99,10 +99,6 @@
       <Project>{874C0358-E7DD-42DA-BF07-58198B41FD25}</Project>
       <Name>TestUtils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Utils\Utils.csproj">
-      <Name>Utils</Name>
-      <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="AnkhContextTest.cs">
