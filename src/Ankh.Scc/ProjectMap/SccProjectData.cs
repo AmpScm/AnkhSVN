@@ -485,10 +485,16 @@ namespace Ankh.Scc.ProjectMap
             get { return _disposed; }
         }
 
+        bool _opened;
+        internal void OnOpened()
+        {
+            _opened = true;
+        }
+
         bool _inLoad;
         internal void Load()
         {
-            if (_loaded)
+            if (_loaded || !_opened)
                 return;
 
             _inLoad = true;
