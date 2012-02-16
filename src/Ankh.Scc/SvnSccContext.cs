@@ -112,27 +112,17 @@ namespace Ankh.Scc
             if (Directory.Exists(path))
                 path = SvnTools.GetTruePath(path); // Resolve casing issues
 
-            string root = Path.GetPathRoot(path);
-            repositoryId = Guid.Empty;
-
-            Guid repId = Guid.Empty;
-
             while (!string.IsNullOrEmpty(path))
             {
                 if (SvnTools.IsManagedPath(path))
                 {
-                    if (_client.TryGetRepositoryId(path, out repId))
-                    {
-                        repositoryId = repId;
-                        return true;
-                    }
-                    else
-                        return false;
+                    return _client.TryGetRepositoryId(path, out repositoryId);
                 }
 
                 path = SvnTools.GetNormalizedDirectoryName(path);
             }
 
+            repositoryId = Guid.Empty;
             return false;
         }
 
