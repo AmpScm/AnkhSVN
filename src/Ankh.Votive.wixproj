@@ -196,10 +196,14 @@
     <Content Include="Ankh.Votive\SetupPage.pdn" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v11.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '11.0'" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '10.0'" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '9.0'" />
+  <Import Project="tools\VSSdk2005Tasks\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '8.0'" />
   <PropertyGroup>
     <CompileDependsOn>$(CompileDependsOn);AddVersionDefines</CompileDependsOn>
   </PropertyGroup>
-  <Target Name="AddVersionDefines" DependsOnTargets="AddProjectReferenceDefineConstants">
+  <Target Name="AddVersionDefines" DependsOnTargets="FindSDKInstallation;AddProjectReferenceDefineConstants">
     <GetAssemblyIdentity AssemblyFiles="Ankh.ExtensionPoints\bin\$(Configuration)\Ankh.ExtensionPoints.dll">
       <Output TaskParameter="Assemblies" ItemName="MyVersionAssembly" />
     </GetAssemblyIdentity>
@@ -211,6 +215,15 @@
 
     <Exec Command="tools\Ankh.GenerateVSIXManifest\bin\$(Configuration)\Ankh.GenerateVSIXManifest.exe extension.VsixManifest" />
     <Exec Command="tools\Ankh.GenerateVSIXManifest\bin\$(Configuration)\Ankh.GenerateVSIXManifest.exe -v10 extension.VsixManifest-vs2010" />
+
+    <Exec Condition="'$(UseVS2005MPF)' == ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;Ankh.Package\bin\$(Configuration)\Ankh.Package.dll&quot; &quot;/wixfile:Ankh.Package\obj\$(Configuration)\Ankh.Package-2005.wxi&quot; /codebase &gt; nul:" />
+    <Exec Condition="'$(UseVS2005MPF)' == ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;Ankh.Package\bin\$(Configuration)\Ankh.Package.dll&quot; &quot;/wixfile:Ankh.Package\obj\$(Configuration)\Ankh.Package-2008.wxi&quot; /codebase &gt; nul:" />
+    <Exec Condition="'$(UseVS2005MPF)' == ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\10.0 &quot;Ankh.Package\bin\$(Configuration)\Ankh.Package.dll&quot; &quot;/wixfile:Ankh.Package\obj\$(Configuration)\Ankh.Package-2010.wxi&quot; /codebase &gt; nul:" />
+    <Exec Condition="'$(UseVS2005MPF)' == ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\11.0 &quot;Ankh.Package\bin\$(Configuration)\Ankh.Package.dll&quot; &quot;/wixfile:Ankh.Package\obj\$(Configuration)\Ankh.Package-11.wxi&quot; /codebase &gt; nul:" />
+    <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;Ankh.Package\bin\$(Configuration)\Ankh.Package.dll&quot; &quot;/wixfile:Ankh.Package\obj\$(Configuration)\Ankh.Package-2005.wxi&quot; /codebase &gt; nul:" />
+    <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;Ankh.Package\bin\$(Configuration)\Ankh.Package.dll&quot; &quot;/wixfile:Ankh.Package\obj\$(Configuration)\Ankh.Package-2008.wxi&quot; /codebase &gt; nul:" />
+    <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\10.0 &quot;Ankh.Package\bin\$(Configuration)\Ankh.Package.dll&quot; &quot;/wixfile:Ankh.Package\obj\$(Configuration)\Ankh.Package-2010.wxi&quot; /codebase &gt; nul:" />
+    <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\11.0 &quot;Ankh.Package\bin\$(Configuration)\Ankh.Package.dll&quot; &quot;/wixfile:Ankh.Package\obj\$(Configuration)\Ankh.Package-11.wxi&quot; /codebase &gt; nul:" />
   </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
