@@ -10,10 +10,13 @@ namespace Ankh.BitmapExtractor
 {
     class Program
     {
+        // This code requires VSCTLibrary.dll and VSCTCompress.dll, which are available as part of the VS-SDK
+        // and as part of The VSCT Powertoy
         static void Main(string[] args)
         {
             List<string> argList = new List<string>(args);
-            while(argList.Count > 0 && argList[0].StartsWith("-"))
+            bool _transparentHack = false;
+            while (argList.Count > 0 && argList[0].StartsWith("-"))
             {
                 string arg = argList[0];
                 if (arg == "--")
@@ -21,14 +24,23 @@ namespace Ankh.BitmapExtractor
                     argList.RemoveAt(0);
                     break;
                 }
-
-                Console.Error.WriteLine("Unhandled argument {0}", arg);
-                Environment.Exit(1);
+                switch (arg)
+                {
+                    case "-th":
+                        _transparentHack = true;
+                        break;
+                    default:
+                        Console.Error.WriteLine("Unhandled argument {0}", arg);
+                        Environment.Exit(1);
+                        break;
+                }
+                argList.RemoveAt(0);
             }
 
             if (argList.Count < 2)
             {
                 Console.Error.WriteLine("Required argument missing");
+                Console.Error.WriteLine("BitmapExtractor [-th] <assembly> <dir>");
                 Environment.Exit(1);
             }
             string from = argList[0];
@@ -63,37 +75,42 @@ namespace Ankh.BitmapExtractor
             {
                 uint resourceId = bi.IDResource;
                 Dictionary<uint, int> map = new Dictionary<uint, int>();
+                Color transparentColor = Color.FromArgb(0xFF, 0xFF, 0, 0xFF);
+                bool haveColor = false;
 
                 for (int i = 0; i < bi.UsedSlots.Length; i++)
+                {
                     map[bi.UsedSlots[i]] = i;
+                    if (_transparentHack && !haveColor && bi.UsedSlots[i] == 1)
+                    {
+                        Bitmap bm = bitmaps.GetBitmap(bi.GID, bi.UsedSlots[i]);
+                        transparentColor = bm.GetPixel(0, 0);
+                        Console.WriteLine("Found color: {0}", transparentColor);
+                        haveColor = true;
+                    }
+                }
 
                 ButtonList bl = table.GetButtonList();
-                
-                foreach(CommandButton cb in table.GetButtonList())
-                {
-                    if (map.Count == 0)
-                        break;
 
+                foreach (CommandButton cb in table.GetButtonList())
+                {
                     if (cb.IconGID != bi.GID)
                         continue;
 
-                    if (map.ContainsKey(cb.IconIndex))
+                    Bitmap bm = bitmaps.GetBitmap(cb.IconGID, cb.IconIndex);
+                    string name = cb.CanonicalName.Trim(' ', '.', '\t', '&').Replace(" ", "").Replace("&", "");
+
+                    if (bm == null || bm.PixelFormat == PixelFormat.Undefined)
                     {
-                        using (Bitmap bm = bitmaps.GetBitmap(bi.GID, cb.IconIndex))
-                        {
-                            if (bm.PixelFormat == PixelFormat.Undefined)
-                            {
-                                Console.WriteLine("Couldn't get icon for {0}", cb.CanonicalName);
-                                continue;
-                            }
-
-                            string name = cb.CanonicalName.Trim(' ', '.', '\t', '&').Replace(" ", "").Replace("&","");
-
-                            Console.WriteLine("Writing {0}", name);
-                            bm.Save(Path.Combine(dir, name + ".png"), ImageFormat.Png);
-                        }
-                        map.Remove(cb.IconIndex);
+                        Console.WriteLine("Couldn't get icon for {0} (index={1}/{2})", name, cb.IconIndex, cb.IconGID);
+                        continue;
                     }
+
+                    if (_transparentHack)
+                        bm.MakeTransparent(transparentColor);
+
+                    Console.WriteLine("Writing {0} (index={1}/{2})", name, cb.IconIndex, cb.IconGID);
+                    bm.Save(Path.Combine(dir, name + ".png"), ImageFormat.Png);
                 }
             }
             Console.WriteLine("Done");
