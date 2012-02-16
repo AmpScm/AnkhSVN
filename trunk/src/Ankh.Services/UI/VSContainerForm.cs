@@ -71,7 +71,8 @@ namespace Ankh.UI
         protected VSContainerForm(IContainer container)
             : this()
         {
-            container.Add(this);
+            if (container != null)
+                container.Add(this);
         }
 
         /// <summary>

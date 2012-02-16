@@ -68,7 +68,8 @@ namespace Ankh.UI
         protected VSDialogForm(IContainer container)
             : this()
         {
-            container.Add(this);
+            if (container != null)
+                container.Add(this);
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -239,14 +240,6 @@ namespace Ankh.UI
             placement["Width"] = Width;
             placement["Height"] = Height;
             ConfigurationService.SaveWindowPlacement(GetType(), placement);
-        }
-
-        private void SetPlacementFromRegistry(Action<int> setter, string key, IDictionary<string, int> placement)
-        {
-            if (placement.ContainsKey(key) && placement[key] > 0)
-            {
-                setter(placement[key]);
-            }
         }
 
         /// <summary>
