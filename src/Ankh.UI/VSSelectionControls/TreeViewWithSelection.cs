@@ -247,6 +247,11 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
+        bool ISelectionMapOwner<TNode>.SelectionContains(TNode item)
+        {
+            return (item == SelectedNode);
+        }
+
         System.Collections.IList ISelectionMapOwner<TNode>.AllItems
         {
             get { return ((ISelectionMapOwner<TNode>)this).Selection; }

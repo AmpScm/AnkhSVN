@@ -146,6 +146,7 @@ namespace Ankh.UI.VSSelectionControls
                 NotifySelectionUpdated();
         }
 
+        bool _selectingAll;
         public void SelectAllItems()
         {
             if (!MultiSelect)
@@ -153,14 +154,12 @@ namespace Ankh.UI.VSSelectionControls
 
             bool unchanged = true;
             _inWndProc++;
+            _selectingAll = true;
             try
             {
                 foreach (ListViewItem i in this.Items)
                 {
-                    if (unchanged && !i.Selected)
-                        unchanged = false;
-
-                    i.Selected = true;
+                    SetSelected(i, true);
                 }
             }
             finally
@@ -173,6 +172,7 @@ namespace Ankh.UI.VSSelectionControls
                         NotifySelectionUpdated();
                     }
                 }
+                _selectingAll = false;
             }
         }
 
@@ -359,6 +359,16 @@ namespace Ankh.UI.VSSelectionControls
                     return lvi;
                 }
             }
+        }
+
+        bool ISelectionMapOwner<TListViewItem>.SelectionContains(TListViewItem item)
+        {
+            if (_selectingAll)
+                return true;
+            else if (item != null)
+                return false;
+            else
+                return item.Selected;
         }
 
         IList ISelectionMapOwner<TListViewItem>.AllItems
