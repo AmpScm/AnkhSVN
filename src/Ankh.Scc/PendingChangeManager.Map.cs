@@ -68,62 +68,61 @@ namespace Ankh.Scc
         {
             PendingChangeEventArgs pceMe = new PendingChangeEventArgs(this, null);
 
-            OnRefreshStarted(pceMe);
-
-            bool wasClean = (_pendingChanges.Count == 0);
-            Dictionary<string, PendingChange> mapped = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
-
-            IFileStatusCache cache = Cache;
-
-            foreach (string file in Mapper.GetAllFilesOfAllProjects())
+            using (BatchRefresh())
             {
-                _extraFiles.Remove(file); // If we find it here; it is no longer 'extra'!
+                bool wasClean = (_pendingChanges.Count == 0);
+                Dictionary<string, PendingChange> mapped = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
 
-                SvnItem item = cache[file];
+                IFileStatusCache cache = Cache;
 
-                if (item == null)
-                    continue;
-                
-                PendingChange pc = UpdatePendingChange(wasClean, item);
-
-                if(pc != null)
-                    mapped[pc.FullPath] = pc;
-            }
-
-            foreach (string file in new List<string>(_extraFiles))
-            {
-                SvnItem item = cache[file];
-
-                if (item == null)
+                foreach (string file in Mapper.GetAllFilesOfAllProjects())
                 {
-                    _extraFiles.Remove(file);
-                    continue;
+                    _extraFiles.Remove(file); // If we find it here; it is no longer 'extra'!
+
+                    SvnItem item = cache[file];
+
+                    if (item == null)
+                        continue;
+
+                    PendingChange pc = UpdatePendingChange(wasClean, item);
+
+                    if (pc != null)
+                        mapped[pc.FullPath] = pc;
                 }
 
-                PendingChange pc = UpdatePendingChange(wasClean, item);
-
-                if(pc != null)
-                    mapped[pc.FullPath] = pc;
-            }
-
-            for (int i = 0; i < _pendingChanges.Count; i++)
-            {
-                PendingChange pc = _pendingChanges[i];
-
-                if (mapped.ContainsKey(pc.FullPath))
-                    continue;
-
-                _pendingChanges.RemoveAt(i--);
-                if (!wasClean)
+                foreach (string file in new List<string>(_extraFiles))
                 {
-                    OnRemoved(new PendingChangeEventArgs(this, pc));
+                    SvnItem item = cache[file];
+
+                    if (item == null)
+                    {
+                        _extraFiles.Remove(file);
+                        continue;
+                    }
+
+                    PendingChange pc = UpdatePendingChange(wasClean, item);
+
+                    if (pc != null)
+                        mapped[pc.FullPath] = pc;
                 }
+
+                for (int i = 0; i < _pendingChanges.Count; i++)
+                {
+                    PendingChange pc = _pendingChanges[i];
+
+                    if (mapped.ContainsKey(pc.FullPath))
+                        continue;
+
+                    _pendingChanges.RemoveAt(i--);
+                    if (!wasClean)
+                    {
+                        OnRemoved(new PendingChangeEventArgs(this, pc));
+                    }
+                }
+
+                if (wasClean && _pendingChanges.Count > 0)
+                    OnInitialUpdate(pceMe);
             }
-
-            if (wasClean && _pendingChanges.Count > 0)
-                OnInitialUpdate(pceMe);
-
-            OnRefreshCompleted(pceMe);
         }
 
         private PendingChange UpdatePendingChange(bool wasClean, SvnItem item)
@@ -215,22 +214,6 @@ namespace Ankh.Scc
         {
             if (InitialUpdate != null)
                 InitialUpdate(this, e);
-        }
-
-        public event EventHandler<PendingChangeEventArgs> RefreshStarted;
-
-        protected void OnRefreshStarted(PendingChangeEventArgs e)
-        {
-            if (RefreshStarted != null)
-                RefreshStarted(this, e);
-        }
-
-        public event EventHandler<PendingChangeEventArgs> RefreshCompleted;
-
-        protected void OnRefreshCompleted(PendingChangeEventArgs e)
-        {
-            if (RefreshCompleted != null)
-                RefreshCompleted(this, e);
         }
 
         /// <summary>

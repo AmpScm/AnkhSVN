@@ -123,11 +123,29 @@ namespace Ankh.Scc
                 InnerRefresh();
             else
             {
-                foreach (string path in toRefresh)
+                using (SmartRefresh(toRefresh.Count))
                 {
-                    ItemRefresh(path);
+                    foreach (string path in toRefresh)
+                    {
+                        ItemRefresh(path);
+                    }
                 }
             }
+        }
+
+        private IDisposable SmartRefresh(int itemsToRefresh)
+        {
+            if (itemsToRefresh < 32)
+                return null;
+
+            return BatchRefresh();
+        }
+
+        private IDisposable BatchRefresh()
+        {
+            BatchStartedEventArgs ba = new BatchStartedEventArgs();
+            OnBatchUpdateStarted(ba);
+            return ba;
         }
 
         void OnSvnItemsChanged(object sender, SvnItemsEventArgs e)
@@ -331,6 +349,14 @@ namespace Ankh.Scc
             if (ListFlushed != null)
                 ListFlushed(this, e);
 
+        }
+
+        public event EventHandler<BatchStartedEventArgs> BatchUpdateStarted;
+
+        void OnBatchUpdateStarted(BatchStartedEventArgs e)
+        {
+            if (BatchUpdateStarted != null)
+                BatchUpdateStarted(this, e);
         }
 
         /// <summary>
