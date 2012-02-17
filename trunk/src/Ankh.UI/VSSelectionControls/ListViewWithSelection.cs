@@ -103,7 +103,6 @@ namespace Ankh.UI.VSSelectionControls
                 {
                     if (_shouldUpdate)
                     {
-                        _shouldUpdate = false;
                         NotifySelectionUpdated();
                     }
                 }
@@ -116,7 +115,6 @@ namespace Ankh.UI.VSSelectionControls
 
             if (_shouldUpdate)
             {
-                _shouldUpdate = false;
                 NotifySelectionUpdated();
             }
         }
@@ -125,7 +123,6 @@ namespace Ankh.UI.VSSelectionControls
         {
             if (_shouldUpdate)
             {
-                _shouldUpdate = false;
                 NotifySelectionUpdated();
             }
 
@@ -168,7 +165,6 @@ namespace Ankh.UI.VSSelectionControls
                 {
                     if (_shouldUpdate || !unchanged)
                     {
-                        _shouldUpdate = false;
                         NotifySelectionUpdated();
                     }
                 }
@@ -184,6 +180,7 @@ namespace Ankh.UI.VSSelectionControls
             if (_updatingSelection)
                 return;
 
+            _shouldUpdate = false;
             _updatingSelection = true;
             try
             {
@@ -194,9 +191,6 @@ namespace Ankh.UI.VSSelectionControls
 
                     SelectionMap.NotifySelectionUpdated();
                 }
-
-                if (_selectionChanged != null)
-                    _selectionChanged(this, EventArgs.Empty);
             }
             finally
             {
@@ -336,14 +330,6 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         #region ISelectionMapOwner<TListViewItem> Members
-
-        EventHandler _selectionChanged;
-
-        event EventHandler ISelectionMapOwner<TListViewItem>.SelectionChanged
-        {
-            add { _selectionChanged += value; }
-            remove { _selectionChanged -= value; }
-        }
 
         IList ISelectionMapOwner<TListViewItem>.Selection
         {
