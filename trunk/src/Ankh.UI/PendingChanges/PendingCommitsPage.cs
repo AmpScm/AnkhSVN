@@ -253,7 +253,6 @@ namespace Ankh.UI.PendingChanges
             {
                 _checkedItems = null;
                 pendingCommits.EndUpdate();
-                pendingCommits.Invalidate();
             }
         }
 
