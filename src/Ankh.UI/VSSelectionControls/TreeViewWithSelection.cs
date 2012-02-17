@@ -27,8 +27,6 @@ namespace Ankh.UI.VSSelectionControls
     public class TreeViewWithSelection<TNode> : SmartTreeView, ISelectionMapOwner<TNode>
         where TNode : TreeNode
     {
-        EventHandler _selectionChanged;
-
         public TreeViewWithSelection()
         {
         }
@@ -226,12 +224,6 @@ namespace Ankh.UI.VSSelectionControls
             {
                 get { return _item; }
             }
-        }
-
-        event EventHandler ISelectionMapOwner<TNode>.SelectionChanged
-        {
-            add { _selectionChanged += value; }
-            remove { _selectionChanged -= value; }
         }
 
         System.Collections.IList ISelectionMapOwner<TNode>.Selection

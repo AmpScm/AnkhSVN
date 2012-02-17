@@ -29,7 +29,6 @@ namespace Ankh.UI.VSSelectionControls
 {
     public interface ISelectionMapOwner<T>
     {
-        event EventHandler SelectionChanged;
         IList Selection { get; }
         IList AllItems { get; }
 
@@ -108,7 +107,6 @@ namespace Ankh.UI.VSSelectionControls
                     throw new ArgumentNullException("owner");
 
                 _owner = owner;
-                _owner.SelectionChanged += new EventHandler(OwnerSelectionChanged);
                 _owner.HandleDestroyed += new EventHandler(OwnerHandleDestroyed);
             }
 
@@ -160,14 +158,6 @@ namespace Ankh.UI.VSSelectionControls
             void OwnerHandleDestroyed(object sender, EventArgs e)
             {
                 OnHandleDestroyed(e);
-            }
-
-            void OwnerSelectionChanged(object sender, EventArgs e)
-            {
-                if (_items.Count == 0)
-                    return;
-
-                CleanSelection();
             }
 
             internal override void CleanSelection()
