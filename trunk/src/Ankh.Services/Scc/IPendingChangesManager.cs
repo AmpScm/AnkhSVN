@@ -60,6 +60,40 @@ namespace Ankh.Scc
         }
     }
 
+    public sealed class BatchStartedEventArgs : EventArgs, IDisposable
+    {
+        Stack<AnkhAction> _closers = new Stack<AnkhAction>();
+
+        public event AnkhAction Disposers
+        {
+            add
+            {
+                if (value != null)
+                    _closers.Push(value);
+            }
+            remove
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_closers.Count == 0)
+                return;
+
+            try
+            {
+                _closers.Pop()();
+            }
+            finally
+            {
+                if (_closers.Count > 0)
+                    Dispose();
+            }
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -129,6 +163,11 @@ namespace Ankh.Scc
         event EventHandler<PendingChangeEventArgs> ListFlushed;
 
         /// <summary>
+        /// Raised around 'large' updates
+        /// </summary>
+        event EventHandler<BatchStartedEventArgs> BatchUpdateStarted;
+
+        /// <summary>
         /// Occurs when [initial update].
         /// </summary>
         event EventHandler<PendingChangeEventArgs> InitialUpdate;
@@ -137,16 +176,6 @@ namespace Ankh.Scc
         /// Raised when the pending changes manager is activated or disabled
         /// </summary>
         event EventHandler<PendingChangeEventArgs> IsActiveChanged;
-
-        /// <summary>
-        /// Occurs when starting a refresh of more than a few items (This event allows you to batch a series of updates)
-        /// </summary>
-        event EventHandler<PendingChangeEventArgs> RefreshStarted;
-
-        /// <summary>
-        /// Occurs when completing a refresh of more than a few items (This event allows you to batch a series of updates)
-        /// </summary>
-        event EventHandler<PendingChangeEventArgs> RefreshCompleted;
 
         /// <summary>
         /// Clears all state; called on solution close
