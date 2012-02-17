@@ -95,11 +95,12 @@ namespace Ankh.UI.PendingChanges
             _manager.InitialUpdate += new EventHandler<PendingChangeEventArgs>(OnPendingChangesInitialUpdate);
             _manager.IsActiveChanged += new EventHandler<PendingChangeEventArgs>(OnPendingChangesActiveChanged);
             _manager.ListFlushed += new EventHandler<PendingChangeEventArgs>(OnPendingChangesListFlushed);
+            _manager.BatchUpdateStarted += new EventHandler<BatchStartedEventArgs>(OnBatchUpdateStarted);
 
             if (!_manager.IsActive)
             {
                 _manager.IsActive = true;
-                _manager.FullRefresh(false);
+                _manager.FullRefresh(false); 
             }
             else
                 PerformInitialUpdate(_manager);
@@ -109,6 +110,12 @@ namespace Ankh.UI.PendingChanges
             ev.SolutionClosed += new EventHandler(OnSolutionRefresh);
             ev.SolutionOpened += new EventHandler(OnSolutionRefresh);
             OnSolutionRefresh(this, EventArgs.Empty);
+        }
+
+        void OnBatchUpdateStarted(object sender, BatchStartedEventArgs e)
+        {
+            pendingCommits.BeginUpdate();
+            e.Disposers += pendingCommits.EndUpdate;
         }
 
         void OnSolutionRefresh(object sender, EventArgs e)
