@@ -33,6 +33,8 @@ namespace Ankh.UI.VSSelectionControls
         IList Selection { get; }
         IList AllItems { get; }
 
+        bool SelectionContains(T item);
+
         IntPtr GetImageList();
         int GetImageListIndex(T item);
         string GetText(T item);
@@ -172,7 +174,7 @@ namespace Ankh.UI.VSSelectionControls
             {
                 foreach (T i in new List<T>(_items.Keys))
                 {
-                    if (!_owner.Selection.Contains(i))
+                    if (!_owner.SelectionContains(i))
                     {
                         uint id = (uint)_items[i];
                         _ids.Remove(id);

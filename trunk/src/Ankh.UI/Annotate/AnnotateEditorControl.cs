@@ -203,6 +203,11 @@ namespace Ankh.UI.Annotate
             }
         }
 
+        bool ISelectionMapOwner<IAnnotateSection>.SelectionContains(IAnnotateSection item)
+        {
+            return (item == _selected);
+        }
+
         System.Collections.IList ISelectionMapOwner<IAnnotateSection>.AllItems
         {
             get { return ((ISelectionMapOwner<IAnnotateSection>)this).Selection; }

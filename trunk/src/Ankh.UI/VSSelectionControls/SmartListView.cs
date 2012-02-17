@@ -238,6 +238,24 @@ namespace Ankh.UI.VSSelectionControls
                 public IntPtr pvFilter;
             };
 
+            [StructLayout(LayoutKind.Sequential)]
+            public struct LVITEM
+            {
+                public int mask;
+                public int iItem;
+                public int iSubItem;
+                public int state;
+                public int stateMask;
+                public string pszText;
+                public int cchTextMax;
+                public int iImage;
+                public IntPtr lParam;
+                public int iIndent;
+                public int iGroupId;
+                public int cColumns;
+                public IntPtr puColumns;
+            }
+
             public const Int32 GWL_STYLE = -16;
 
             // Parameters for ListView-Headers
@@ -253,7 +271,9 @@ namespace Ankh.UI.VSSelectionControls
             public const Int32 HDS_NOSIZING = 0x0800;
             public const Int32 HDS_OVERFLOW = 0x1000;
 
-            public const Int32 LVM_GETHEADER = 0x1000 + 31;  // LVM_FIRST + 31
+            
+            public const Int32 LVM_GETHEADER = 0x1000 + 31;     // LVM_FIRST + 31
+            public const Int32 LVM_SETITEMSTATE = 0x1000 + 43;  // LVM_FIRST + 43
             public const Int32 HDM_GETITEM = 0x1200 + 11;  // HDM_FIRST + 11
             public const Int32 HDM_SETITEM = 0x1200 + 12;  // HDM_FIRST + 12
 
@@ -269,11 +289,17 @@ namespace Ankh.UI.VSSelectionControls
             public const int WM_HSCROLL = 0x114;
             public const int WM_VSCROLL = 0x115;
 
+            public const int LVIF_STATE = 8;
+            public const int LVIS_SELECTED = 0x02;
+
             [DllImport("user32.dll")]
             public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
             [DllImport("user32.dll")]
             public static extern IntPtr SendMessage(IntPtr Handle, Int32 msg, IntPtr wParam, ref HDITEM lParam);
+
+            [DllImport("user32.dll")]
+            public static extern IntPtr SendMessage(IntPtr Handle, Int32 msg, IntPtr wParam, ref LVITEM lParam);
 
             [StructLayout(LayoutKind.Sequential)]
             public struct RECT
@@ -716,6 +742,11 @@ namespace Ankh.UI.VSSelectionControls
                 ShowContextMenu(this, e);
         }
 
+        bool InUpdateBatch
+        {
+            get { return _nInUpdates > 0; }
+        }
+
         /// <summary>
         /// Overrides <see cref="M:System.Windows.Forms.Control.WndProc(System.Windows.Forms.Message@)"/>.
         /// </summary>
@@ -860,6 +891,9 @@ namespace Ankh.UI.VSSelectionControls
             try
             {
                 base.BeginUpdate();
+
+                if (_nInUpdates == 0)
+                    OnBeginUpdate(EventArgs.Empty);
             }
             finally
             {
@@ -869,27 +903,44 @@ namespace Ankh.UI.VSSelectionControls
 
         public new void EndUpdate()
         {
-            if (0 >= --_nInUpdates)
+            try
             {
-                if (_updateAllBox)
+                --_nInUpdates;
+
+                if (_nInUpdates == 0)
                 {
-                    _updateAllBox = false;
-
-                    bool allChecked = true;
-                    foreach (ListViewItem i in Items)
-                    {
-                        if (!i.Checked && IsPartOfSelectAll(i))
-                        {
-                            allChecked = false;
-                            break;
-                        }
-                    }
-
-                    SelectAllChecked = allChecked;
-                    UpdateSortGlyphs();
+                    OnEndUpdate(EventArgs.Empty);                    
                 }
             }
-            base.EndUpdate();
+            finally
+            {
+                base.EndUpdate();
+            }
+        }
+
+        protected virtual void OnBeginUpdate(EventArgs eventArgs)
+        {
+        }
+
+        protected virtual void OnEndUpdate(EventArgs e)
+        {
+            if (_updateAllBox)
+            {
+                _updateAllBox = false;
+
+                bool allChecked = true;
+                foreach (ListViewItem i in Items)
+                {
+                    if (!i.Checked && IsPartOfSelectAll(i))
+                    {
+                        allChecked = false;
+                        break;
+                    }
+                }
+
+                SelectAllChecked = allChecked;
+                UpdateSortGlyphs();
+            }
         }
 
         protected override void OnItemChecked(ItemCheckedEventArgs e)
@@ -1183,6 +1234,24 @@ namespace Ankh.UI.VSSelectionControls
                     ch.Width = Math.Max(0, ch.Width + rest / resizeColumns.Length);
                 }
             }
+        }
+
+        internal void SetSelected(ListViewItem i, bool selected)
+        {
+            if (i == null)
+                throw new ArgumentNullException("i");
+            else if (VirtualMode || !IsHandleCreated)
+            {
+                i.Selected = true;
+                return;
+            }
+
+            NativeMethods.LVITEM lvItem = new NativeMethods.LVITEM();
+            lvItem.mask = NativeMethods.LVIF_STATE;
+            lvItem.state = selected ? NativeMethods.LVIS_SELECTED : 0;
+            lvItem.stateMask = NativeMethods.LVIS_SELECTED;
+
+            NativeMethods.SendMessage(Handle, NativeMethods.LVM_SETITEMSTATE, (IntPtr)i.Index, ref lvItem);
         }
     }
 }
