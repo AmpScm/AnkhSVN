@@ -167,8 +167,8 @@ namespace Ankh.Scc
 
                         if (!forUpdate)
                         {
-                            Debug.Assert(data.Hierarchy == hier, "Hierarchy not the same", string.Format("File={0}", data.Name));
-                            Debug.Assert(data.ItemId == itemId, "Id not the same", string.Format("File={0}; from {1} into {2}", data.Name, data.ItemId, itemId));
+                            Debug.Assert(data.Hierarchy == hier, "Hierarchy not the same", string.Format("File={0}", data.FullPath));
+                            Debug.Assert(data.ItemId == itemId, "Id not the same", string.Format("File={0}; from {1} into {2}", data.FullPath, data.ItemId, itemId));
                         }
                     }
                     else
