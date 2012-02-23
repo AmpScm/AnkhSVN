@@ -70,6 +70,15 @@ namespace Ankh.Scc.ProjectMap
             get { return _name; }
         }
 
+        string _fullPath;
+        /// <summary>
+        /// Gets the full path to the document
+        /// </summary>
+        public string FullPath
+        {
+            get { return _isFileDocument ? (_fullPath ?? (_fullPath = SvnTools.GetNormalizedFullPath(_name))) : null; }
+        }
+
         /// <summary>
         /// Gets a cached value indicating whether this instance is dirty.
         /// </summary>
@@ -169,7 +178,7 @@ namespace Ankh.Scc.ProjectMap
                 return;
 
             IFileStatusMonitor statusMonitor = GetService<IFileStatusMonitor>();
-            statusMonitor.ScheduleSvnStatus(Name);
+            statusMonitor.ScheduleSvnStatus(FullPath);
         }
 
         internal void OnClosed(bool closedWithoutSaving)
@@ -193,7 +202,7 @@ namespace Ankh.Scc.ProjectMap
                         if (dirty != IsDirty)
                             SetDirty(dirty);
 
-                        monitor.ScheduleGlyphUpdate(Name);
+                        monitor.ScheduleGlyphUpdate(FullPath);
                     }
                 }
                 else
@@ -223,7 +232,7 @@ namespace Ankh.Scc.ProjectMap
             if (!_isFileDocument)
                 return;
 
-            SvnItem item = GetService<IFileStatusCache>()[Name];
+            SvnItem item = GetService<IFileStatusCache>()[FullPath];
 
             if (item == null)
                 return;
@@ -261,7 +270,7 @@ namespace Ankh.Scc.ProjectMap
             IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
 
             if (monitor != null)
-                monitor.ScheduleGlyphUpdate(Name);
+                monitor.ScheduleGlyphUpdate(FullPath);
         }
 
         public void Dispose()

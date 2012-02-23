@@ -209,7 +209,7 @@ namespace Ankh.Scc
 
             foreach (SccDocumentData d in _docMap.Values)
             {
-                if (d.Name.StartsWith(path, StringComparison.OrdinalIgnoreCase) && d.Name.Length > path.Length)
+                if (d.FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase) && d.FullPath.Length > path.Length)
                     files.Add(SvnTools.GetNormalizedFullPath(d.Name));
             }
 
@@ -536,7 +536,7 @@ namespace Ankh.Scc
 
                 if (hh != null && dd.Hierarchy == hier)
                 {
-                    return dd.Name;
+                    return dd.FullPath;
                 }
             }
 
