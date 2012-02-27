@@ -225,7 +225,6 @@
     <Content Include="Gui\PendingChanges\Compare.png" />
     <Content Include="Gui\PendingChanges\CopyTo.png" />
     <Content Include="Gui\PendingChanges\CreatePatch.png" />
-    <Content Include="Gui\PendingChanges\Delete.png" />
     <Content Include="Gui\PendingChanges\EditConflict.png" />
     <Content Include="Gui\PendingChanges\FetchAll.png" />
     <Content Include="Gui\PendingChanges\FilterOnSolution.png" />
