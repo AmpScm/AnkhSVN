@@ -64,7 +64,7 @@ namespace Ankh.VSPackage
     [ProvideAutoLoad(AnkhId.SccProviderId)] // Load on 'Scc active'
 
     // This attribute is needed to let the shell know that this package exposes some menus.
-    [ProvideMenuResourceEx("1000.ctmenu", 1)] // The number must match the number in the .csproj file for the ctc task
+    [ProvideMenuResourceEx("1000.ctmenu", 1, LegacyResourceID="1001.ctmenu")] // The numbers must match the number in the .csproj file for the ctc task
 
     [ProvideKeyBindingTable(AnkhId.LogViewContext, 501)]
     [ProvideKeyBindingTable(AnkhId.DiffMergeViewContext, 502)]

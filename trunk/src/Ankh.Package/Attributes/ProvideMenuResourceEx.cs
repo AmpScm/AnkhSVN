@@ -28,6 +28,7 @@ namespace Ankh.VSPackage.Attributes
 
         private string _resourceID;
         private int _version;
+        string _legacyResourceID;
 
         /// <include file='doc\ProvideMenuResourceAttribute.uex' path='docs/doc[@for="ProvideMenuResourceAttribute.ProvideMenuResourceAttribute"]' />
         /// <devdoc>
@@ -77,6 +78,18 @@ namespace Ankh.VSPackage.Attributes
             }
         }
 
+        public string LegacyResourceID
+        {
+            get
+            {
+                return _legacyResourceID;
+            }
+            set
+            {
+                _legacyResourceID = value;
+            }
+        }
+
         /// <include file='doc\ProvideMenuResourceAttribute.uex' path='docs/doc[@for="Register"]' />
         /// <devdoc>
         ///     Called to register this attribute with the given context.  The context
@@ -89,11 +102,34 @@ namespace Ankh.VSPackage.Attributes
         public override void Register(RegistrationContext context)
         {
             //context.Log.WriteLine(string.Format(Resources.Culture, Resources.Reg_NotifyMenuResource, ResourceID, Version));
-
             using (Key childKey = context.CreateKey("Menus"))
             {
-                childKey.SetValue(context.ComponentType.GUID.ToString("B"), string.Format(CultureInfo.InvariantCulture, ", {0}, {1}", ResourceID, Version));
+                string resourceId = ResourceID;
+
+                if (!string.IsNullOrEmpty(LegacyResourceID))
+                {
+                    string path = GetPath(childKey);
+
+                    if (path != null && (path.Contains("\\8.0\\") || path.Contains("\\9.0\\") || path.Contains("\\10.0\\")))
+                    {
+                        context.Log.WriteLine("Using legacy resource id");
+                        resourceId = LegacyResourceID;
+                    }
+                }
+                childKey.SetValue(context.ComponentType.GUID.ToString("B"), string.Format(CultureInfo.InvariantCulture, ", {0}, {1}", resourceId, Version));
             }
+        }
+
+        static string GetPath(Key childKey)
+        {
+            if (childKey == null)
+                throw new ArgumentNullException("childKey");
+
+            System.Reflection.PropertyInfo pathInfo = childKey.GetType().GetProperty("Path");
+            if (pathInfo == null)
+                return null;
+
+            return (string)pathInfo.GetValue(childKey, null);
         }
 
         /// <summary>
