@@ -25,6 +25,7 @@ namespace Ankh
 	[Guid(AnkhId.BmpId)]
     public enum AnkhCommandBitmap
     {
-		AnkhBmp = 555
+		AnkhBmp = 555,
+        AnkhBmpLegacy = 556
     }
 }

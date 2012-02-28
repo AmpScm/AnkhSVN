@@ -42,7 +42,7 @@
                 <xsl:otherwise>
                   <!-- This replicates the old behavior -->
                   <xsl:attribute name="resID">
-                    <xsl:value-of select="gui:UI/@autoBmpResId"/>
+                    <xsl:value-of select="$BitmapResId"/>
                   </xsl:attribute>
                 </xsl:otherwise>
               </xsl:choose>
