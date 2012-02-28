@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Patched with knowledge from later SDKs to allow multiple targets -->
+  <Target Name="VSCTCompile"
+          DependsOnTargets="$(VSCTCompileDependsOn)"
+          Condition="'$(BuildingProject)' != 'false' And '@(VSCTCompile)' != ''">
+
+    <!--Create the list of include path to use for the VSCT compilation-->
+    <!--As first add the user provided folders-->
+    <CreateItem Include="@(VSCTIncludePath)" Condition="'@(VSCTIncludePath)' != ''">
+      <Output TaskParameter="Include" ItemName="_InternalVSCTIncludePath"/>
+    </CreateItem>
+    <!--Now add the internal folders-->
+    <CreateItem Include="$(VsSDKIncludes)" Condition="'$(VsSDKIncludes)' != ''">
+      <Output TaskParameter="Include" ItemName="_InternalVSCTIncludePath"/>
+    </CreateItem>
+    <CreateItem Include="$(VsSDKIncludes)\office10" Condition="'$(VsSDKIncludes)' != ''">
+      <Output TaskParameter="Include" ItemName="_InternalVSCTIncludePath"/>
+    </CreateItem>
+
+    <VSCTCompiler AdditionalIncludeDirectories="@(_InternalVSCTIncludePath)"
+                  IntermediateDirectory="$(IntermediateOutputPath)"
+                  Definitions="$(__internal_VSCTDefinitions)"
+                  NoLogo="true"
+                  OutputFile="%(VSCTCompile.FileName).cto"
+                  Source="@(VSCTCompile)"
+                  Verbose="true"
+                  SDKVersion="$(VsSDKVersion)" />
+    <!-- OutputFile="@(VSCTCompile->'%(FileName).cto')" -->
+
+    <!--Record the VSCT compile CTO outputs for the Clean task.-->
+    <CreateItem Include="@(VSCTCompile->'$(IntermediateOutputPath)%(FileName).cto')" Condition="Exists('@(VSCTCompile->'$(IntermediateOutputPath)%(FileName).cto')')">
+      <Output TaskParameter="Include" ItemName="FileWrites"/>
+    </CreateItem>
+  </Target>
+</Project>

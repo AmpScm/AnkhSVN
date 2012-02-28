@@ -320,6 +320,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v11.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '11.0'" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '10.0'" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '9.0'" />
+  <Import Project="..\tools\VSSdk2005Tasks\VS9.0-fixes.targets" Condition="$(VisualStudioVersion) == '9.0'" />
   <Import Project="..\tools\VSSdk2005Tasks\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '8.0'" />
   <Import Project="..\tools\turtletasks\QQn.TurtleTasks.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
