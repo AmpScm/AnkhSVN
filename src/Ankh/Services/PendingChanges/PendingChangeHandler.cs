@@ -457,7 +457,7 @@ namespace Ankh.Services.PendingChanges
                             + PccStrings.YouCanDownloadAnkh, "", MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                         return false;
                     }
-                    else if (state.MessageBox.Show(error.Message, "", MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Error) == DialogResult.Cancel)
+                    else if (state.MessageBox.Show(error.Message, "", MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Error) != DialogResult.OK)
                         return false;
                 }
             }
