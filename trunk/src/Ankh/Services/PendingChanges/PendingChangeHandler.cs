@@ -216,7 +216,7 @@ namespace Ankh.Services.PendingChanges
 
                         if (!PreCommit_VerifyIssueTracker(state))
                             return false;
-                        
+
                         if (!PreCommit_VerifyLogMessage(state))
                             return false;
 
@@ -282,12 +282,12 @@ namespace Ankh.Services.PendingChanges
             {
                 SvnItem item = pc.SvnItem;
 
-                if(item.IsConflicted)
+                if (item.IsConflicted)
                 {
                     state.MessageBox.Show(PccStrings.OneOrMoreItemsConflicted,
                         "",
                         MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    
+
                     return false;
                 }
             }
@@ -411,34 +411,54 @@ namespace Ankh.Services.PendingChanges
         /// <returns></returns>
         private bool PreCommit_AddNewFiles(PendingCommitState state)
         {
+            Queue<string> toAdd = new Queue<string>();
             foreach (PendingChange pc in state.Changes)
             {
-                if (pc.Change != null 
+                if (pc.Change != null
                     && (pc.Change.State == PendingChangeKind.New
                         || pc.Change.State == PendingChangeKind.DeletedNew))
                 {
                     SvnItem item = pc.SvnItem;
 
                     // HACK: figure out why PendingChangeKind.New is still true
-                    if (item.IsVersioned)
+                    if (item.IsVersioned && !item.IsDeleteScheduled)
                         continue; // No need to add
 
-                    SvnAddArgs a = new SvnAddArgs();
-                    a.AddParents = true;
-                    a.Depth = SvnDepth.Empty;
-                    a.ThrowOnError = false;
+                    toAdd.Enqueue(item.FullPath);
+                }
+            }
+            while (toAdd.Count > 0)
+            {
+                SvnException error = null;
 
-                    if (!state.Client.Add(pc.FullPath, a))
+                state.GetService<IProgressRunner>().RunModal(PccStrings.AddingTitle,
+                    delegate(object sender, ProgressWorkerArgs e)
                     {
-                        if (a.LastException != null && a.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_UNSUPPORTED_FORMAT)
+                        SvnAddArgs aa = new SvnAddArgs();
+                        aa.AddParents = true;
+                        aa.Depth = SvnDepth.Empty;
+                        aa.ThrowOnError = false;
+
+                        while (toAdd.Count > 0)
                         {
-                            state.MessageBox.Show(a.LastException.Message + Environment.NewLine + Environment.NewLine
-                                + PccStrings.YouCanDownloadAnkh, "", MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-                            return false;
+                            if (!e.Client.Add(toAdd.Dequeue(), aa))
+                            {
+                                error = aa.LastException;
+                                break;
+                            }
                         }
-                        else if (state.MessageBox.Show(a.LastException.Message, "", MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Error) == DialogResult.Cancel)
-                            return false;
+                    });
+
+                if (error != null)
+                {
+                    if (error.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_UNSUPPORTED_FORMAT)
+                    {
+                        state.MessageBox.Show(error.Message + Environment.NewLine + Environment.NewLine
+                            + PccStrings.YouCanDownloadAnkh, "", MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        return false;
                     }
+                    else if (state.MessageBox.Show(error.Message, "", MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Error) == DialogResult.Cancel)
+                        return false;
                 }
             }
             return true;
@@ -469,7 +489,7 @@ namespace Ankh.Services.PendingChanges
 
                     string wcPath = wc.FullPath;
 
-                    while (parent != null && 
+                    while (parent != null &&
                            !string.Equals(parent.FullPath, wcPath, StringComparison.OrdinalIgnoreCase)
                            && parent.IsNewAddition)
                     {
@@ -588,7 +608,7 @@ namespace Ankh.Services.PendingChanges
                 return false;
 
             StringBuilder outOfDateMessage = null;
-            ProgressRunnerResult r = state.GetService<IProgressRunner>().RunModal(PccStrings.CommitTitle,
+            state.GetService<IProgressRunner>().RunModal(PccStrings.CommitTitle,
                 delegate(object sender, ProgressWorkerArgs e)
                 {
                     SvnCommitArgs ca = new SvnCommitArgs();
@@ -608,7 +628,7 @@ namespace Ankh.Services.PendingChanges
                         state.CommitPaths,
                         ca, out rslt);
 
-                    if(!ok && ca.LastException != null)
+                    if (!ok && ca.LastException != null)
                     {
                         switch (ca.LastException.SvnErrorCode)
                         {
@@ -621,7 +641,7 @@ namespace Ankh.Services.PendingChanges
                                 outOfDateMessage = new StringBuilder();
                                 Exception ex = ca.LastException;
 
-                                while(ex != null)
+                                while (ex != null)
                                 {
                                     outOfDateMessage.AppendLine(ex.Message);
                                     ex = ex.InnerException;
