@@ -135,6 +135,7 @@
       <Transform Condition="'$(UseCtcInsteadOfVsct)' != 'true'">Gui\Gui-To-Vsct.xsl</Transform>
       <To Condition="'$(UseCtcInsteadOfVsct)' != 'true'">$(IntermediateOutputPath)..\AnkhSvn.vsct</To>
       <Debug>true</Debug>
+      <Variables>BitmapResId=Bmp_AnkhBmp</Variables>
       <SubType>Designer</SubType>
     </XslSource>
     <XslSource Include="Gui\AnkhSvn.xml">
@@ -143,7 +144,9 @@
       <Transform Condition="'$(UseCtcInsteadOfVsct)' != 'true'">Gui\Gui-To-Vsct.xsl</Transform>
       <To Condition="'$(UseCtcInsteadOfVsct)' != 'true'">$(IntermediateOutputPath)..\AnkhSvn-legacy.vsct</To>
       <Debug>true</Debug>
+      <Variables>BitmapResId=Bmp_AnkhBmpLegacy;BitmapFile=../obj/CtCBitmap-legacy.bmp</Variables>
       <SubType>Designer</SubType>
+      <Visible>false</Visible>
     </XslSource>
     <None Include="Ankh.Package.snk" />
     <None Include="source.extension.VsixManifest" />

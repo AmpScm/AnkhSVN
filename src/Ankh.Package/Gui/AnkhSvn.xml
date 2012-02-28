@@ -17,7 +17,7 @@
     <Import type="Ankh.CMDSETID_WinFormsDesigner" from="..\..\Ankh.VS.Interop\bin\$(Configuration)\Ankh.VS.Interop.dll" />
     <Import type="Ankh.CMDSETID_XamlUI" from="..\..\Ankh.VS.Interop\bin\$(Configuration)\Ankh.VS.Interop.dll" />
   </Imports>
-  <UI packageId="Ankh_PackageGuid" autoBmpId="Ankh_AnkhCommandBitmap" autoBmpResId="Bmp_AnkhBmp">
+  <UI packageId="Ankh_PackageGuid" autoBmpId="Ankh_AnkhCommandBitmap">
     <MenuRef id="guidSHLMainMenu:IDM_VS_CSCD_OPEN">
       <Group id="Grp_FileFileOpen" priority="0x800">
         <!-- The bottom of the File->Open->* menu-->

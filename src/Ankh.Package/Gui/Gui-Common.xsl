@@ -6,6 +6,7 @@
   <xsl:param name="Src" select="'F:\ankhsvn\trunk-2\src\ankh.package\gui\AnkhSvn.xml'" />
   <xsl:param name="Configuration" select="'Debug'" />
   <xsl:param name="BitmapFile" select="'../obj/CtCBitmap.bmp'" />
+  <xsl:param name="BitmapResId" select="555" />
   <msxsl:script implements-prefix="me" language="C#">
     <msxsl:assembly name="System.Drawing" />
     <msxsl:using namespace="System.Collections.Generic" />

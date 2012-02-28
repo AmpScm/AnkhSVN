@@ -41,7 +41,7 @@
 			Outputs="@(XslSource->'%(To)')"
 			TargetDir="$(OutputPath)"
 			IntermediateDir="$(IntermediateOutputPath)"
-			Attributes="Configuration=$(Configuration)"
+			Attributes="Configuration=$(Configuration);%(Variables)"
 			>
 			<Output TaskParameter="FilesWritten" ItemName="FileWrites" />
 		</ApplyXslTransform>
