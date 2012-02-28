@@ -73,7 +73,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
     <Ctc IncludeDirs="@(CtcIncludePath);$(VsSDKIncludes);$(VsSDKIncludes)\office10" 
          Inputs="@(CtcFile)" 
          Defines="$(CtcDefines)" 
-         OutputFile="@(CtcFile->'$(IntermediateOutputPath)%(FileName).cto')"
+         OutputFile="$(IntermediateOutputPath)%(CtcFile.FileName).cto"
          ProductVersion="$(ProductVersion)" 
          SDKVersion="$(VsSDKVersion)" >
     </Ctc>
