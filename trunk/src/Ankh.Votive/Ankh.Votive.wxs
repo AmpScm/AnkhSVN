@@ -138,7 +138,7 @@
       <ProgressText Action="VS2005Setup" Template="[1]">Updating Visual Studio 2005 registration</ProgressText>
       <ProgressText Action="VS90SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
       <ProgressText Action="VS100SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
-      <ProgressText Action="VS110SetupNoVSTemplates" Template="[1]">Updating Visual Studio 11 Developer Preview registration</ProgressText>
+      <ProgressText Action="VS110SetupNoVSTemplates" Template="[1]">Updating Visual Studio 11-Preview registration</ProgressText>
     </UI>
 
     <InstallExecuteSequence>
