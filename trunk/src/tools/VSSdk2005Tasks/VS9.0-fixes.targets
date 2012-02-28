@@ -29,7 +29,7 @@
     <!-- OutputFile="@(VSCTCompile->'%(FileName).cto')" -->
 
     <!--Record the VSCT compile CTO outputs for the Clean task.-->
-    <CreateItem Include="$(IntermediateOutputPath)%(VSCTCompile.FileName).cto" Condition="Exists('$(IntermediateOutputPath)%(VSCTCompile.FileName).cto')')">
+    <CreateItem Include="$(IntermediateOutputPath)%(VSCTCompile.FileName).cto" Condition="Exists('$(IntermediateOutputPath)%(VSCTCompile.FileName).cto')">
       <Output TaskParameter="Include" ItemName="FileWrites"/>
     </CreateItem>
   </Target>
