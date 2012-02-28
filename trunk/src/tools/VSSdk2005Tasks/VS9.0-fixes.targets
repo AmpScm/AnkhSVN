@@ -22,15 +22,28 @@
                   IntermediateDirectory="$(IntermediateOutputPath)"
                   Definitions="$(__internal_VSCTDefinitions)"
                   NoLogo="true"
-                  OutputFile="$(IntermediateOutputPath)%(VSCTCompile.FileName).cto"
+                  OutputFile="%(VSCTCompile.FileName).cto"
                   Source="@(VSCTCompile)"
                   Verbose="true"
                   SDKVersion="$(VsSDKVersion)" />
     <!-- OutputFile="@(VSCTCompile->'%(FileName).cto')" -->
 
     <!--Record the VSCT compile CTO outputs for the Clean task.-->
-    <CreateItem Include="$(IntermediateOutputPath)%(VSCTCompile.FileName).cto" Condition="Exists('$(IntermediateOutputPath)%(VSCTCompile.FileName).cto')">
+    <CreateItem Include="%(VSCTCompile.FileName).cto" Condition="Exists('$(IntermediateOutputPath)%(VSCTCompile.FileName).cto')">
       <Output TaskParameter="Include" ItemName="FileWrites"/>
     </CreateItem>
   </Target>
+  <Target Name="MergeCtoResource"
+           Condition="('@(CtcFile)'!='' OR '@(VSCTCompile)' != '') AND '$(BuildingProject)'!='false'"
+           DependsOnTargets="$(MergeCtoResourceDependsOn)">
+
+    <CtoResourceMerger DestinationResource="$(PackageResources)"
+                       CtoFile="@(_GeneratedCTOFiles)" 
+                       ResourcesToMerge="@(_ResourcesToMergeWithCTO)"
+                       Condition="'%(_GeneratedCTOFiles.Identity)' != ''">
+      <Output TaskParameter="GeneratedResource" ItemName="MergedCtoResource" />
+    </CtoResourceMerger>
+
+  </Target>
+
 </Project>
