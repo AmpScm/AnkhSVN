@@ -22,14 +22,14 @@
                   IntermediateDirectory="$(IntermediateOutputPath)"
                   Definitions="$(__internal_VSCTDefinitions)"
                   NoLogo="true"
-                  OutputFile="%(VSCTCompile.FileName).cto"
+                  OutputFile="$(IntermediateOutputPath)%(VSCTCompile.FileName).cto"
                   Source="@(VSCTCompile)"
                   Verbose="true"
                   SDKVersion="$(VsSDKVersion)" />
     <!-- OutputFile="@(VSCTCompile->'%(FileName).cto')" -->
 
     <!--Record the VSCT compile CTO outputs for the Clean task.-->
-    <CreateItem Include="@(VSCTCompile->'$(IntermediateOutputPath)%(FileName).cto')" Condition="Exists('@(VSCTCompile->'$(IntermediateOutputPath)%(FileName).cto')')">
+    <CreateItem Include="$(IntermediateOutputPath)%(VSCTCompile.FileName).cto" Condition="Exists('$(IntermediateOutputPath)%(VSCTCompile.FileName).cto')')">
       <Output TaskParameter="Include" ItemName="FileWrites"/>
     </CreateItem>
   </Target>
