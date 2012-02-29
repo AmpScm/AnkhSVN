@@ -209,7 +209,11 @@ namespace Ankh.Scc
 
             foreach (SccDocumentData d in _docMap.Values)
             {
-                if (d.FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase) && d.FullPath.Length > path.Length)
+                string docPath = d.FullPath;
+                if (docPath == null)
+                    continue; // Not file based
+
+                if (docPath.StartsWith(path, StringComparison.OrdinalIgnoreCase) && d.FullPath.Length > path.Length)
                     files.Add(SvnTools.GetNormalizedFullPath(d.Name));
             }
 
