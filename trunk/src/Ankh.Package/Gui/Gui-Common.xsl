@@ -7,6 +7,7 @@
   <xsl:param name="Configuration" select="'Debug'" />
   <xsl:param name="BitmapFile" select="'../obj/CtCBitmap.bmp'" />
   <xsl:param name="BitmapResId" select="555" />
+  <xsl:param name="ImgSubdir" select="''" />
   <msxsl:script implements-prefix="me" language="C#">
     <msxsl:assembly name="System.Drawing" />
     <msxsl:using namespace="System.Collections.Generic" />
@@ -246,7 +247,23 @@
                   ", 0x" + v.Substring(-1+35,2) + " } }";
   }
   
-  public string generateBitmap(XPathNodeIterator nodes, string bitmapFile, string sourceFile)
+  static string FindImage(string baseDir, string imgName, string imgSubdir)
+  {
+     string imgPath = Path.GetFullPath(Path.Combine(baseDir, imgName));
+     
+     if (!string.IsNullOrEmpty(imgSubdir))
+     {
+        string altPath = Path.Combine(
+                            Path.GetDirectoryName(imgPath),
+                            Path.Combine(imgSubdir, Path.GetFileName(imgPath)));
+                            
+        if (File.Exists(altPath))
+          return altPath;
+     }
+     return imgPath;
+  }
+  
+  public string generateBitmap(XPathNodeIterator nodes, string bitmapFile, string sourceFile, string imgSubdir)
   {
     string baseDir = Path.GetDirectoryName(sourceFile);
     StringBuilder sb = new StringBuilder();
@@ -258,7 +275,7 @@
       int i = 0;
       foreach(XPathNavigator n in nodes)
       {
-        using(Image img = Image.FromFile(Path.GetFullPath(Path.Combine(baseDir, n.Value))))
+        using(Image img = Image.FromFile(FindImage(baseDir, n.Value, imgSubdir)))
         {
           g.DrawImage(img, 16 * i++, 0);
         }

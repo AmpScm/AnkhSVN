@@ -147,7 +147,7 @@
       <Transform Condition="'$(UseCtcInsteadOfVsct)' != 'true'">Gui\Gui-To-Vsct.xsl</Transform>
       <To Condition="'$(UseCtcInsteadOfVsct)' != 'true'">$(IntermediateOutputPath)..\AnkhSvn-legacy.vsct</To>
       <Debug>true</Debug>
-      <Variables>BitmapResId=Bmp_AnkhBmpLegacy;BitmapFile=../obj/CtCBitmap-legacy.bmp</Variables>
+      <Variables>BitmapResId=Bmp_AnkhBmpLegacy;BitmapFile=../obj/CtCBitmap-legacy.bmp;ImgSubdir=legacy</Variables>
       <SubType>Designer</SubType>
       <Visible>false</Visible>
     </XslSource>
