@@ -47,7 +47,7 @@
                 </xsl:otherwise>
               </xsl:choose>
               <xsl:attribute name="usedList">
-                <xsl:value-of select="normalize-space(substring-after(me:generateBitmap(//gui:UI//gui:Button[@iconFile]/@iconFile, $BitmapFile, $Src),','))"/>
+                <xsl:value-of select="normalize-space(substring-after(me:generateBitmap(//gui:UI//gui:Button[@iconFile]/@iconFile, $BitmapFile, $Src, $ImgSubdir),','))"/>
               </xsl:attribute>
             </Bitmap>
           </xsl:if>

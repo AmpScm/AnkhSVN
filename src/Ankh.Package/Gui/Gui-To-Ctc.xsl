@@ -45,7 +45,7 @@
     <xsl:if test="gui:UI/@autoBmpId and //gui:UI//gui:Button[@iconFile]">
       <xsl:text>&#9;&#9;</xsl:text>
       <xsl:value-of select="gui:UI/@autoBmpId"/>:<xsl:value-of select="$BitmapResId"/>
-      <xsl:value-of select="me:generateBitmap(//gui:UI//gui:Button[@iconFile]/@iconFile, $BitmapFile, $Src)"/>
+      <xsl:value-of select="me:generateBitmap(//gui:UI//gui:Button[@iconFile]/@iconFile, $BitmapFile, $Src, $ImgSubdir)"/>
       <xsl:text>;&#10;</xsl:text>
     </xsl:if>
     <xsl:text>&#9;BITMAPS_END&#10;&#10;</xsl:text>
