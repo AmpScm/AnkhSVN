@@ -22,14 +22,14 @@
       <Group id="Grp_FileFileOpen" priority="0x800">
         <!-- The bottom of the File->Open->* menu-->
         <Button id="Cmd_FileFileOpenFromSubversion" text="Subve&amp;rsion Project..." name="OpenFromSubversion" priority="0x100"
-                toolTip="Open a Project or Solution from Subversion" iconFile="PendingChanges/PendingChanges.png" allowParams="true"/>
+                toolTip="Open a Project or Solution from Subversion" iconFile="Scc/TfsContextViewPendingChanges.png" allowParams="true"/>
       </Group>
     </MenuRef>
     <MenuRef id="guidSHLMainMenu:IDM_VS_CSCD_ADD">
       <Group id="Grp_FileFileAdd" priority="0x800">
         <!-- The bottom of the File->Add->* menu-->
         <Button id="Cmd_FileFileAddFromSubversion" text="Subve&amp;rsion Project..." name="AddFromSubversion" priority="0x100"
-                toolTip="Add an existing Project or Solution from Subversion" iconFile="PendingChanges/PendingChanges.png" allowParams="true"
+                toolTip="Add an existing Project or Solution from Subversion" iconFile="Scc/TfsContextViewPendingChanges.png" allowParams="true"
                 dynamicVisibility="true">
           <!-- Only show Add when not debugging, etc -->
           <Visibility context="UICONTEXT_SolutionExistsAndNotBuildingAndNotDebugging" />
@@ -53,20 +53,20 @@
             <Button id="Cmd_UpgradeWorkingCopy" priority="0x050"
                 text="&amp;Upgrade Working Copy"
                 toolTip="Upgrade Working Copy to allow using it with the current AnkhSVN version."
-                iconFile="PendingChanges/Update.png" defaultInvisible="true" />
+                iconFile="Scc/TfsGetLatestVersion.png" defaultInvisible="true" />
             <ButtonRef id="Cmd_UpdateItemSpecific" priority="0x100" />
             <Button id="Cmd_CommitItem" name="CommitItem" priority="0x200"
                 text="&amp;Commit..."
-                toolTip="Commit selected items to the Subversion repository." iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
+                toolTip="Commit selected items to the Subversion repository." iconFile="Scc/TfsCheckIn.png" defaultInvisible="true"/>
             <Button id="Cmd_RevertItem" name="RevertItem" priority="0x300"
                 text="&amp;Revert"
-                toolTip="Revert this item to last updated revision." iconFile="menu/Revert.png" defaultInvisible="true"/>
+                toolTip="Revert this item to last updated revision." iconFile="Scc/TfsUndoCheckout.png" defaultInvisible="true"/>
             <Button id="Cmd_ItemAnnotate" name="Annotate" priority="0x400"
                 text="&amp;Annotate..."
                 toolTip="Identify which user wrote which lines." iconFile="PendingChanges/Annotate.png" defaultInvisible="true"/>
             <Button id="Cmd_DiffLocalItem" name="DiffLocalItem" priority="0x500"
                 text="Compa&amp;re..."
-                toolTip="Show differences compared to another Version." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
+                toolTip="Show differences compared to another Version." iconFile="Scc/TfsCompare.png" defaultInvisible="true"/>
             <ButtonRef id="Cmd_Log" priority="0x600" />
           </Group>
           <Group id="Grp_FileSccItem" priority="0x0190">
@@ -86,19 +86,19 @@
           <Group id="Grp_FileSccAdd" priority="0x01B0">
             <Button id="Cmd_FileSccAddSolutionToSubversion" name="AddSolutionToRepository" priority="0x100"
                 text="Add &amp;Solution to Subversion..."
-                toolTip="Add this solution to a Subversion repository." iconFile="PendingChanges/AddToSourceControl.ico">
+                toolTip="Add this solution to a Subversion repository." iconFile="Scc/TfsAddSolutionToSourceControl.png">
               <Visibility context="Ankh_SccProviderGuid" />
             </Button>
             <Button id="Cmd_FileSccAddProjectToSubversion" name="AddProjectToRepository" priority="0x200"
                 text="Add S&amp;elected Projects to Subversion..."
-                toolTip="Add the selected projects to a Subversion repository." iconFile="PendingChanges/AddToSourceControl.ico">
+                toolTip="Add the selected projects to a Subversion repository." iconFile="Scc/TfsAddSelectedProjectsToSourceControl.png">
               <Visibility context="Ankh_SccProviderGuid" />
             </Button>
           </Group>
           <Group id="Grp_FileSccManagement" priority="0x0200">
             <Button id="Cmd_FileSccChangeSourceControl" name="ChangeSourceControl"  priority="0x100"
                     text="Change Source C&amp;ontrol..."
-                    toolTip="Change the Source Control bindings of the projects in this solution" iconFile="PendingChanges/ChangeSourceControl.png">
+                    toolTip="Change the Source Control bindings of the projects in this solution" iconFile="Scc/TfsChangeSourceControl.png">
               <Visibility context="Ankh_SccProviderGuid"/>
             </Button>
             <ButtonRef id="Cmd_ShowPendingChanges" priority="0x301" />
@@ -114,10 +114,10 @@
           <Group id="Menu_EditorScc" priority="0x1000">
             <Button id="Cmd_DocumentHistory" priority="0x1000"
                   name="DocumentHistory" defaultInvisible="true"
-                  text="View &amp;History" iconFile="PendingChanges/ViewHistory.png" />
+                  text="View &amp;History" iconFile="Scc/TfsHistory.png" />
             <Button id="Cmd_DocumentShowChanges" priority="0x1100"
                   name="DocumentChanges" defaultInvisible="true"
-                  text="Show &amp;Changes" iconFile="PendingChanges/Compare.png" />
+                  text="Show &amp;Changes" iconFile="Scc/TfsCompare.png" />
             <Button id="Cmd_DocumentAnnotate" priority="0x1200"
                   name="DocumentAnnotate" defaultInvisible="true"
                   text="&amp;Annotate..." iconFile="PendingChanges/Annotate.png" />
@@ -220,7 +220,7 @@
       <!-- View - The Group containing the Solution Explorer,.. -->
       <Button id="Cmd_ShowPendingChanges" name="ShowPendingChanges" priority="0x301"
                 text="&amp;Pending Changes"
-                toolTip="Show the Pending Changes Window." iconFile="PendingChanges/PendingChanges.png" defaultInvisible="true">
+                toolTip="Show the Pending Changes Window." iconFile="Scc/TfsContextViewPendingChanges.png" defaultInvisible="true">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="c" />
       </Button>
       <Button id="Cmd_ShowRepositoryExplorer" name="RepositoryExplorer" priority="0x901"
@@ -257,15 +257,15 @@
       <Button id="Cmd_SolutionUpdateLatest" name="UpdateLatest" priority="0x100"
                   text="U&amp;pdate Solution to Latest Version"
                   toolTip="Update your solution to the HEAD version"
-                  iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
+                  iconFile="Scc/TfsGetLatestVersion.png" defaultInvisible="true"/>
       <Button id="Cmd_SolutionCommit" priority="0x1500" name="SolutionCommit" defaultInvisible="true"
-              text="Comm&amp;it Solution Changes" iconFile="PendingChanges/Commit.png" />
+              text="Comm&amp;it Solution Changes" iconFile="Scc/TfsCheckIn.png" />
       <ButtonRef id="Cmd_LockMustLock" priority="0x1550" />
       <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1600" />
       <ButtonRef id="Cmd_ItemShowChanges" priority="0x1700" />
       <ButtonRef id="Cmd_ItemShowPropertyChanges" priority="0x1780" />
       <Button id="Cmd_SolutionHistory" priority="0x1800" name="SolutionHistory" defaultInvisible="true"
-              text="View Solution &amp;History" iconFile="PendingChanges/ViewHistory.png" />
+              text="View Solution &amp;History" iconFile="Scc/TfsHistory.png" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1900" />
       <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x1f00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SccSlnUpdate" priority="0x1000">
@@ -322,23 +322,23 @@
       <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1200" />
       <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1300" />
       <Button id="Cmd_ProjectUpdateLatest" priority="0x1400" name="ProjectUpdateLatest" text="U&amp;pdate Project to Latest Version"
-              iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
+              iconFile="Scc/TfsGetLatestVersion.png" defaultInvisible="true"/>
       <Button id="Cmd_ProjectCommit" priority="0x1500" name="ProjectCommit"
-              text="Comm&amp;it Project Changes" iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
+              text="Comm&amp;it Project Changes" iconFile="Scc/TfsCheckIn.png" defaultInvisible="true"/>
 
       <ButtonRef id="Cmd_LockMustLock" priority="0x1550" />
       <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1600" />
       <ButtonRef id="Cmd_ItemShowChanges" priority="0x1700" />
       <ButtonRef id="Cmd_ItemShowPropertyChanges" priority="0x1780" />
       <Button id="Cmd_ProjectHistory" priority="0x1800" name="ProjectHistory"
-              text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
+              text="View Project &amp;History" iconFile="Scc/TfsHistory.png" defaultInvisible="true"/>
       <MenuRef id="Menu_ItemResolve" priority="0x1900" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1A00" />
       <Menu id="Menu_SolutionExplorerSccForProject" priority="0x1B00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SccProjectUpdate" priority="0x1000">
           <Button id="Cmd_ProjectUpdateSpecific" name="UpdateSpecific" priority="0x1000"
                   text="Update to Specific &amp;Version..." defaultInvisible="true"
-                  toolTip="Update your project to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
+                  toolTip="Update your project to a specific version" iconFile="Scc/TfsGetSpecificVersion.png"/>
         </Group>
         <GroupRef id="Grp_SccLock" priority="0x2000" />
         <Group id="Grp_SccProjectAction" priority="0x3000">
@@ -377,11 +377,11 @@
           <Button id="Cmd_UpdateProjectFileSpecific" name="UpdateItemSpecific" priority="0x100"
                 text="&amp;Update Project File to Specific Version..."
                 toolTip="Updates local items with changes from the Subversion repository."
-                iconFile="PendingChanges/UpdateSpecific.png" defaultInvisible="true"/>
+                iconFile="Scc/TfsGetSpecificVersion.png" defaultInvisible="true"/>
           <Button id="Cmd_CommitProjectFile" name="CommitItem" priority="0x200"
                 text="&amp;Commit..."
                 toolTip="Commit Project File to the Subversion repository."
-                iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
+                iconFile="Scc/TfsCheckIn.png" defaultInvisible="true"/>
           <ButtonRef id="Cmd_ItemShowChanges" priority="0x300" />
           <ButtonRef id="Cmd_ItemShowPropertyChanges" priority="0x380" />
           <ButtonRef id="Cmd_Log" priority="0x400" />
@@ -396,10 +396,10 @@
       <ButtonRef id="Cmd_UpgradeWorkingCopy" priority="0x1150" />
       <Button id="Cmd_FolderUpdateLatest" name="UpdateFolderLatest" priority="0x1200"
                 text="&amp;Update Folder to Latest Version"
-                toolTip="Update all items in the folder with changes from the Subversion repository."  iconFile="PendingChanges/Update.png" defaultInvisible="true" />
+                toolTip="Update all items in the folder with changes from the Subversion repository."  iconFile="Scc/TfsGetLatestVersion.png" defaultInvisible="true" />
       <Button id="Cmd_UpdateItemLatest" name="UpdateItemLatest" priority="0x1400"
                 text="&amp;Update to Latest Version"
-                toolTip="Updates local items with changes from the Subversion repository." iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
+                toolTip="Updates local items with changes from the Subversion repository." iconFile="Scc/TfsGetLatestVersion.png" defaultInvisible="true"/>
       <ButtonRef id="Cmd_CommitItem" priority="0x1500" />
       <Button id="Cmd_LockMustLock" name="LockMustLock" priority="0x1650" defaultInvisible="true"
               text="Loc&amp;k..."
@@ -407,13 +407,13 @@
       <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1700" />
       <Button id="Cmd_ItemShowChanges" name="Svn.Compare" priority="0x1800"
                 text="Show C&amp;hanges"
-                toolTip="Show differences compared to local text base." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
+                toolTip="Show differences compared to local text base." iconFile="Scc/TfsCompare.png" defaultInvisible="true"/>
       <Button id="Cmd_ItemShowPropertyChanges" name="Svn.PropertyCompare" priority="0x1880"
                 text="Show &amp;Property Changes"
                 toolTip="Show property changes." iconFile="Menu/Properties.png" defaultInvisible="true"/>
       <Button id="Cmd_Log" name="ViewHistory" priority="0x1900"
                 text="View &amp;History"
-                toolTip="Show the Log Viewer for the selected item." iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
+                toolTip="Show the Log Viewer for the selected item." iconFile="Scc/TfsHistory.png" defaultInvisible="true"/>
       <Menu id="Menu_ItemResolve" priority="0x1A00" name="Resolve" text="Resol&amp;ve">
         <Group id="Grp_ItemResolveCommand" priority="0x100">
           <Button id="Cmd_ItemResolveMerge" priority="0x10" text="Resolve &amp;Conflict" defaultInvisible="true" />
@@ -438,10 +438,10 @@
         <Group id="Grp_SccItemUpdate" priority="0x1000">
           <Button id="Cmd_FolderUpdateSpecific" name="UpdateFolderSpecific" priority="0xFF"
                 text="&amp;Update Folder to Specific Version..."
-                toolTip="Updates folder with changes from the Subversion repositor."  iconFile="PendingChanges/UpdateSpecific.png" defaultInvisible="true" />
+                toolTip="Updates folder with changes from the Subversion repositor."  iconFile="Scc/TfsGetSpecificVersion.png" defaultInvisible="true" />
           <Button id="Cmd_UpdateItemSpecific" name="UpdateItemSpecific" priority="0x100"
                 text="&amp;Update to Specific Version..."
-                toolTip="Updates local items with changes from the Subversion repository." iconFile="PendingChanges/UpdateSpecific.png" defaultInvisible="true"/>
+                toolTip="Updates local items with changes from the Subversion repository." iconFile="Scc/TfsGetSpecificVersion.png" defaultInvisible="true"/>
         </Group>
         <Group id="Grp_SccLock" priority="0x2000">
           <Button id="Cmd_Lock" name="Lock" priority="0x45" defaultInvisible="true"
@@ -515,7 +515,7 @@
               toolTip="Cleanup the working copy." iconFile="PendingChanges/Cleanup.png"/>
           <Button id="Cmd_Refresh" name="SvnRefreshStatus" priority="0x120" defaultInvisible="true"
                 text="Refres&amp;h Status"
-                toolTip="Refresh this view." iconFile="PendingChanges/Refresh.png"/>
+                toolTip="Refresh this view." iconFile="Scc/TfsRefreshStatus.png"/>
         </Group>
         <Group id="Grp_SccExplore" priority="0xF000">
           <Button id="Cmd_ItemSelectInSolutionExplorer" name="OpenInSolutionExplorer" priority="0x100"
@@ -569,7 +569,7 @@
 
           <Button id="Cmd_RefreshRepositoryItem" name="RefreshRepositoryItem" priority="0xF000"
                 text="Refres&amp;h"
-                toolTip="Refresh this item." iconFile="PendingChanges/Refresh.png"/>
+                toolTip="Refresh this item." iconFile="Scc/TfsRefreshStatus.png"/>
         </Group>
         <Group id="Grp_RepositoryExplorerTbOpen" priority="0x300">
           <Menu id="Menu_RepositoryExplorerTbOpen" name="ReposExplorerOpen" text="&amp;Open" priority="0x100"
@@ -582,7 +582,7 @@
             <GroupRef id="Grp_OpenWith2" priority="0xF000" />
           </Menu>
           <Button id="Cmd_Checkout" name="Checkout" priority="0x300"
-                text="Chec&amp;kout from Subversion..." iconFile="PendingChanges/Checkout.png" dynamicVisibility="true" />
+                text="Chec&amp;kout from Subversion..." iconFile="Scc/TfsCheckOut.png" dynamicVisibility="true" />
         </Group>
         <Group id="Grp_RepositoryExplorerTbAction" priority="0x800">
           <Button id="Cmd_ReposCopyTo" priority="0x100"
@@ -666,7 +666,7 @@
         <Group id="Grp_WceUpdate" priority="0x2000">
           <Button id="Cmd_UpdateItemLatestRecursive" name="UpdateItemLatest" priority="0x100"
                 text="&amp;Update to Latest Version (Recursive)"
-                toolTip="&amp;Update to Latest Version (Recursive)" iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
+                toolTip="&amp;Update to Latest Version (Recursive)" iconFile="Scc/TfsGetLatestVersion.png" defaultInvisible="true"/>
         </Group>
         <Group id="Grp_WceAction" priority="0x3000">
           <MenuRef id="Menu_ItemRevert" priority="0x100" />
@@ -720,7 +720,7 @@
                   toolTip="Include merged revisions." />
           <Button id="Cmd_LogShowLogMessage" name="LogShowLogMessage" priority="0x300"
                   text="Show log message"
-                  toolTip="Show log message." iconFile="PendingChanges/ShowComment.png"/>
+                  toolTip="Show log message." iconFile="Scc/Comments.png"/>
           <Button id="Cmd_LogShowChangedPaths" name="LogShowChangedPaths" priority="0x301"
                   text="Show changed paths" iconAndText="true"
                   toolTip="Show changed paths." iconFile="PendingChanges/ShowChangedPaths.png"/>
@@ -786,15 +786,15 @@
             priority="0" notInTBList="true">
         <Group id="Grp_LogViewerContextMenu" priority="0x1000">
           <Button id="Cmd_LogCompareWithWorkingCopy" name="Svn.LogCompareWithWorkingCopy" priority="0x100"
-                  text="Compare with &amp;Working copy" iconFile="PendingChanges/Compare.png" dynamicVisibility="true"/>
+                  text="Compare with &amp;Working copy" iconFile="Scc/TfsCompare.png" dynamicVisibility="true"/>
           <Button id="Cmd_LogChangeLogMessage" name="LogChangeLogMessage" priority="0xB000"
                   text="Change Log &amp;Message" dynamicVisibility="true"/>
           <Button id="Cmd_LogShowChanges" name="LogShowChanges" priority="0xB100"
-                  text="Show &amp;Changes" iconFile="PendingChanges/Compare.png" dynamicVisibility="true"/>
+                  text="Show &amp;Changes" iconFile="Scc/TfsCompare.png" dynamicVisibility="true"/>
           <Button id="Cmd_LogRevertTo" name="LogRevertTo" priority="0xB200"
-                  text="&amp;Revert to this Revision" dynamicVisibility="true" iconFile="PendingChanges/Revert.png"/>
+                  text="&amp;Revert to this Revision" dynamicVisibility="true" iconFile="Scc/TfsUndoCheckout.png"/>
           <Button id="Cmd_LogRevertThisRevisions" name="LogRevertChangesFrom" priority="0xB300"
-                  text="Revert &amp;Changes from this revision" dynamicVisibility="true" iconFile="PendingChanges/Revert.png"/>
+                  text="Revert &amp;Changes from this revision" dynamicVisibility="true" iconFile="Scc/TfsUndoCheckout.png"/>
           <Button id="Cmd_LogShowRevisionProperties" name="LogShowRevisionProperties" priority="0xB400"
                   text="Show Revision &amp;Properties" dynamicVisibility="true" iconFile="menu/Properties.png"/>
           <Button id="Cmd_LogOpenIssue" name="LogOpenIssue" priority="0xB500"
@@ -821,12 +821,12 @@
         <Group id="Grp_AnnotateContextMenu" priority="0x100">
           <Button id="Cmd_RepositoryCompareWithWc" priority="0x100" name="RepositoryCompareToWc"
                   text="Compare with &amp;Working copy"
-                  iconFile="PendingChanges/Compare.png" dynamicVisibility="true" />
+                  iconFile="Scc/TfsCompare.png" dynamicVisibility="true" />
           <Button id="Cmd_AnnotateShowLog" priority="0x200" name="AnnotateShowLog" text="View &amp;History"
-                  iconFile="PendingChanges/ViewHistory.png" dynamicVisibility="true"/>
+                  iconFile="Scc/TfsHistory.png" dynamicVisibility="true"/>
           <Button id="Cmd_RepositoryShowChanges" priority="0x300" name="RepositoryShowChanges"
                   text="Show &amp;Changes"
-                  iconFile="PendingChanges/Compare.png" dynamicVisibility="true" />
+                  iconFile="Scc/TfsCompare.png" dynamicVisibility="true" />
           <Button id="Cmd_SvnNodeAnnotate" priority="0x400" name="SvnNodeAnnotate" text="&amp;Annotate..."
                   iconFile="PendingChanges/Annotate.png" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_CopyToWorkingCopy" priority="0x800" />
@@ -844,10 +844,10 @@
             <Group id="Grp_PendingChangesCommit1" priority="0x100">
               <Button id="Cmd_CommitPendingChanges" name="CommitPendingChanges" priority="0x100"
                   text="&amp;Commit Changes"
-                  toolTip="Commit Pending Changes" fixMenuController="true" iconFile="PendingChanges/Commit.png" defaultDisabled="true" />
+                  toolTip="Commit Pending Changes" fixMenuController="true" iconFile="Scc/TfsCheckIn.png" defaultDisabled="true" />
               <Button id="Cmd_CommitPendingChangesKeepingLocks" name="CommitPendingChangesKeepingLocks" priority="0x200"
                   text="Commit &amp;Keeping Locks"
-                  toolTip="Commit pending changes keeping locks after committing" iconFile="PendingChanges/Commit.png"/>
+                  toolTip="Commit pending changes keeping locks after committing" iconFile="Scc/TfsCheckIn.png"/>
             </Group>
             <Group id="Grp_PendingChangesCommit2" priority="0x200">
               <Button id="Cmd_PendingChangesApplyWorkingCopy" name="ApplyWorkingCopy" priority="0x100"
@@ -866,10 +866,10 @@
               <Button id="Cmd_PendingChangesUpdateLatest" name="UpdatePendingChanges" priority="0x100"
                   text="U&amp;pdate to Latest Version"
                   toolTip="Update your solution to the HEAD version"
-                  fixMenuController="true" iconFile="PendingChanges/Update.png" defaultDisabled="true"/>
+                  fixMenuController="true" iconFile="Scc/TfsGetLatestVersion.png" defaultDisabled="true"/>
               <Button id="Cmd_SolutionUpdateSpecific" name="UpdateSpecific" priority="0x200" defaultInvisible="true"
                   text="Update to Specific &amp;Version..."
-                  toolTip="Update your solution to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
+                  toolTip="Update your solution to a specific version" iconFile="Scc/TfsGetSpecificVersion.png"/>
             </Group>
             <Group id="Grp_PendingChangesUpdate2" priority="0x200">
               <Button id="Cmd_PendingChangesApplyPatch" name="ApplyPatch" priority="0x100"
@@ -887,7 +887,7 @@
             <Group id="Menu_PendingChangesView" priority="0x100">
               <Button id="Cmd_PendingChangesViewFlat" name="ViewFlat" priority="0x100"
                   text="&amp;Flat"
-                  toolTip="Flat changes view" iconFile="PendingChanges/FlatView.png" fixMenuController="true"/>
+                  toolTip="Flat changes view" iconFile="Scc/FlatView.png" fixMenuController="true"/>
               <Button id="Cmd_PendingChangesViewProject" name="ViewProject" priority="0x200"
                   text="&amp;Project"
                   toolTip="Project changes view" />
@@ -902,7 +902,7 @@
           <Button id="Cmd_PendingChangesViewAll" priority="0x200" name="ViewAll"
               text="View &amp;All" iconFile="PendingChanges/ShowAll.png"/>
           <Button id="Cmd_PendingChangesViewLogMessage" priority="0x300" name="ViewLogMessage"
-              text="View &amp;Message" iconFile="PendingChanges/ShowComment.png"/>
+              text="View &amp;Message" iconFile="Scc/Comments.png"/>
         </Group>
         <Group id="Grp_PendingChangesItems" priority="0x300">
           <Menu id="Menu_ItemConflict" priority="0x100" name="Conflicts" type="MenuController">
@@ -922,7 +922,7 @@
           <Menu id="Menu_ItemCompare" priority="0x200" name="Compare" type="MenuController" dynamicVisibility="true">
             <Group id="Menu_ItemCompare" priority="0x100">
               <Button id="Cmd_ItemCompareBase" name="CompareBase" priority="0x100"
-                  text="&amp;Compare to Original Version" fixMenuController="true" iconFile="PendingChanges/Compare.png"/>
+                  text="&amp;Compare to Original Version" fixMenuController="true" iconFile="Scc/TfsCompare.png"/>
               <Button id="Cmd_ItemCompareLatest" name="CompareLatest" priority="0x200"
                   text="Compare to &amp;Latest Version" />
               <Button id="Cmd_ItemCompareCommitted" name="ComparePrevious" priority="0x300"
@@ -952,7 +952,7 @@
             </Group>
           </Menu>
           <Button id="Cmd_ItemRevertBase" name="Revert" priority="0x400" defaultDisabled="true"
-                  text="&amp;Revert to BASE Version" iconFile="PendingChanges/Revert.png"/>
+                  text="&amp;Revert to BASE Version" iconFile="Scc/TfsUndoCheckout.png"/>
         </Group>
         <Group id="Grp_PendingChangesAdmin" priority="0x400">
           <!--Menu id="Menu_ItemIgnore" priority="0x100" name="Ignore" type="MenuController">
@@ -966,7 +966,7 @@
             </Group>
           </Menu-->
           <Button id="Cmd_RefreshPendingChanges" name="RefreshPendingChanges" priority="0x200"
-              text="Refresh Pending Changes" menuText="&amp;Refresh" iconFile="PendingChanges/Refresh.png"/>
+              text="Refresh Pending Changes" menuText="&amp;Refresh" iconFile="Scc/TfsRefreshStatus.png"/>
           <Button id="Cmd_PendingChangesConfigureRecentChangesPage" name="PendingChangesConfigureRecentChangesPage" priority="0x300"
               text="&amp;Configure..." toolTip="Recent Changes page options" textOnly="true" dynamicVisibility="true"/>
         </Group>
