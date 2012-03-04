@@ -61,11 +61,19 @@ namespace Ankh.BitmapExtractor
             catch { }
 
 
-            if (asm != null
-                ? !table.Read(Assembly.LoadFile(from), new ReadErrorHandler())
-                : !table.Read(from, new ReadErrorHandler()))
+            try
             {
-                Console.Error.WriteLine("* Loading failed, exiting *");
+                if (asm != null
+                    ? !table.Read(Assembly.LoadFile(from), new ReadErrorHandler())
+                    : !table.Read(from, new ReadErrorHandler()))
+                {
+                    Console.Error.WriteLine("* Loading failed, exiting *");
+                    Environment.Exit(1);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e.ToString());
                 Environment.Exit(1);
             }
 

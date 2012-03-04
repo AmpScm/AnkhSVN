@@ -41,7 +41,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="VSCTLibrary" />
+    <Reference Include="VSCTLibrary">
+      <HintPath>.\VSCTLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
