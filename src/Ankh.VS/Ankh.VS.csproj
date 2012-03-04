@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Diff\InternalDiff.cs" />
     <Compile Include="LanguageServices\Core\AnkhEditorFactory.cs" />
     <Compile Include="LanguageServices\Core\AnkhLanguagePreferences.cs" />
     <Compile Include="TempDirManager.cs" />

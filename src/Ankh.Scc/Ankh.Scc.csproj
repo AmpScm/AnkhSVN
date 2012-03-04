@@ -89,6 +89,9 @@
     <Compile Include="AnkhSccProvider.Glyphs.cs">
       <DependentUpon>AnkhSccProvider.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnkhSccProvider.IVsSccManager3.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
     <Compile Include="AnkhSccProvider.Projects.cs">
       <DependentUpon>AnkhSccProvider.cs</DependentUpon>
     </Compile>
