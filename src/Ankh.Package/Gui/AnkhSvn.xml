@@ -63,7 +63,7 @@
                 toolTip="Revert this item to last updated revision." iconFile="Scc/TfsUndoCheckout.png" defaultInvisible="true"/>
             <Button id="Cmd_ItemAnnotate" name="Annotate" priority="0x400"
                 text="&amp;Annotate..."
-                toolTip="Identify which user wrote which lines." iconFile="PendingChanges/Annotate.png" defaultInvisible="true"/>
+                toolTip="Identify which user wrote which lines." iconFile="Scc/TfsContextExplorerAnnotate.png" defaultInvisible="true"/>
             <Button id="Cmd_DiffLocalItem" name="DiffLocalItem" priority="0x500"
                 text="Compa&amp;re..."
                 toolTip="Show differences compared to another Version." iconFile="Scc/TfsCompare.png" defaultInvisible="true"/>
@@ -120,7 +120,7 @@
                   text="Show &amp;Changes" iconFile="Scc/TfsCompare.png" />
             <Button id="Cmd_DocumentAnnotate" priority="0x1200"
                   name="DocumentAnnotate" defaultInvisible="true"
-                  text="&amp;Annotate..." iconFile="PendingChanges/Annotate.png" />
+                  text="&amp;Annotate..." iconFile="Scc/TfsContextExplorerAnnotate.png" />
             <Button id="Cmd_DocumentConflictEdit" name="DocumentConflictEdit" priority="0x3000" defaultInvisible="true"
                   text="&amp;Edit Conflicts" iconFile="PendingChanges/EditConflict.png" />
           </Group>
@@ -289,10 +289,10 @@
         </Group>
         <Group id="Grp_SccSlnBranch" priority="0x9000">
           <Button id="Cmd_SolutionBranch" priority="0x100" name="BranchSolution"
-                  text="&amp;Branch Solution..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />
+                  text="&amp;Branch Solution..." iconFile="Scc/TfsContextExplorerBranch.png" defaultInvisible="true" />
           <ButtonRef id="Cmd_SolutionSwitchDialog" priority="0x300" />
           <Button id="Cmd_SolutionMerge" priority="0x400" name="MergeSolution"
-              text="&amp;Merge Solution..." iconFile="menu/Merge.png" defaultInvisible="true"/>
+              text="&amp;Merge Solution..." iconFile="Scc/Merge.png" defaultInvisible="true"/>
         </Group>
         <Group id="Grp_SccSlnPatch" priority="0xA000">
           <ButtonRef id="Cmd_CreatePatch" priority="0x8000" />
@@ -357,12 +357,12 @@
         </Group>
         <Group id="Grp_SccProjectBranch" priority="0x9000">
           <Button id="Cmd_ProjectBranch" priority="0x100" name="BranchSolution"
-                  text="&amp;Branch Project..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />
+                  text="&amp;Branch Project..." iconFile="Scc/TfsContextExplorerBranch.png" defaultInvisible="true" />
           <Button id="Cmd_SwitchProject" name="SwitchProject" priority="0x300" defaultInvisible="true"
                 text="&amp;Switch Project..." allowParams="true"
                 toolTip="Switch this project to a different Url." iconFile="PendingChanges/Switch.png"/>
           <Button id="Cmd_ProjectMerge" priority="0x400" name="MergeProject"
-              text="&amp;Merge Project..." iconFile="menu/Merge.png" defaultInvisible="true"/>
+              text="&amp;Merge Project..." iconFile="Scc/Merge.png" defaultInvisible="true"/>
         </Group>
         <Group id="Grp_SccProjectPatch" priority="0xA000">
           <ButtonRef id="Cmd_CreatePatch" priority="0x8000" />
@@ -470,7 +470,7 @@
                 text="&amp;Switch..." allowParams="true"
                 toolTip="Switch this item to a different Url." iconFile="PendingChanges/Switch.png"/>
           <Button id="Cmd_ItemMerge" priority="0x400" name="Merge"
-              text="&amp;Merge..." iconFile="menu/Merge.png" defaultInvisible="true"/>
+              text="&amp;Merge..." iconFile="Scc/Merge.png" defaultInvisible="true"/>
         </Group>
         <Group id="Grp_SccItemPatch" priority="0xA000">
           <Button id="Cmd_CreatePatch" name="CreatePatch" priority="0x8000" defaultInvisible="true"
@@ -480,7 +480,7 @@
         <Group id="Grp_SccAddIgnore" priority="0xD000">
           <Button id="Cmd_AddItem" name="AddItem" priority="0x100"
                   text="&amp;Add..." toolTip="Add selected items to the working copy."
-                  iconFile="menu/Add.png" defaultInvisible="true" allowParams="true"/>
+                  iconFile="Scc/AddItem.png" defaultInvisible="true" allowParams="true"/>
           <Menu id="Menu_ItemIgnore" priority="0x100" name="ItemIgnore" text="&amp;Ignore">
             <Group id="Menu_ItemIgnore" priority="0x100">
               <Button id="Cmd_ItemIgnoreFile" priority="0x1000" name="SvnIgnoreFile"
@@ -637,7 +637,7 @@
         <Group id="Grp_RepositoryExplorerReview" priority="0x200">
           <Button id="Cmd_ReposExplorerLog" name="ReposExplorerLog" priority ="0x100"
                   text="View &amp;History"
-                  toolTip="View History." iconFile ="PendingChanges/ViewHistory.png" dynamicVisibility="true"/>
+                  toolTip="View History." iconFile ="Scc/TfsHistory.png" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_SvnNodeAnnotate" priority="0x200" />
         </Group>
         <Group id="Grp_RepositoryExplorerEdit" priority="0x300">
@@ -808,7 +808,7 @@
             type="Context" priority="0" notInTBList="true">
         <Group id="Grp_LogChangedPathsContextMenu" priority="0x100">
           <Button id="Cmd_LogAnnotateRevision" name="LogAnnotateRevision" priority="0x300"
-                  text="&amp;Annotate Revision..." iconFile="PendingChanges/Annotate.png" dynamicVisibility="true"/>
+                  text="&amp;Annotate Revision..." iconFile="Scc/TfsContextExplorerAnnotate.png" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_LogShowChanges" priority="0x400" />
           <ButtonRef id="Cmd_CopyToWorkingCopy" priority="0x800" />
         </Group>
@@ -828,7 +828,7 @@
                   text="Show &amp;Changes"
                   iconFile="Scc/TfsCompare.png" dynamicVisibility="true" />
           <Button id="Cmd_SvnNodeAnnotate" priority="0x400" name="SvnNodeAnnotate" text="&amp;Annotate..."
-                  iconFile="PendingChanges/Annotate.png" dynamicVisibility="true"/>
+                  iconFile="Scc/TfsContextExplorerAnnotate.png" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_CopyToWorkingCopy" priority="0x800" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
