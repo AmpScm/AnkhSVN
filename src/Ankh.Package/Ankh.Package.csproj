@@ -217,7 +217,7 @@
     <Content Include="Gui\menu\CopyUrlToClipboard.png" />
     <Content Include="Gui\menu\Export.png" />
     <Content Include="Gui\menu\IssueRepository.png" />
-    <Content Include="Gui\menu\Lock.png" />
+    <Content Include="Gui\Scc\Legacy\Lock.png" />
     <Content Include="Gui\menu\MakeDirectory.png" />
     <Content Include="Gui\menu\Merge.png" />
     <Content Include="Gui\menu\PBAlpha.png" />
@@ -422,6 +422,7 @@
     <Content Include="Gui\Scc\Legacy\UndoCheckout.png" />
     <Content Include="Gui\Scc\Legacy\ViewHistory.png" />
     <Content Include="Gui\Scc\Legacy\ViewPendingCheckins.png" />
+    <Content Include="Gui\Scc\Lock.png" />
     <Content Include="Gui\Scc\Merge.png" />
     <Content Include="Gui\Scc\NewFolder.png" />
     <Content Include="Gui\Scc\Open.png" />
