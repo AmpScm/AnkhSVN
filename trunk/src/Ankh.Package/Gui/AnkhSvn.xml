@@ -60,7 +60,7 @@
                 toolTip="Commit selected items to the Subversion repository." iconFile="Scc/TfsCheckIn.png" defaultInvisible="true"/>
             <Button id="Cmd_RevertItem" name="RevertItem" priority="0x300"
                 text="&amp;Revert"
-                toolTip="Revert this item to last updated revision." iconFile="Scc/TfsUndoCheckout.png" defaultInvisible="true"/>
+                toolTip="Revert this item to last updated revision." iconFile="Scc/Undo.png" defaultInvisible="true"/>
             <Button id="Cmd_ItemAnnotate" name="Annotate" priority="0x400"
                 text="&amp;Annotate..."
                 toolTip="Identify which user wrote which lines." iconFile="Scc/TfsContextExplorerAnnotate.png" defaultInvisible="true"/>
@@ -792,9 +792,9 @@
           <Button id="Cmd_LogShowChanges" name="LogShowChanges" priority="0xB100"
                   text="Show &amp;Changes" iconFile="Scc/TfsCompare.png" dynamicVisibility="true"/>
           <Button id="Cmd_LogRevertTo" name="LogRevertTo" priority="0xB200"
-                  text="&amp;Revert to this Revision" dynamicVisibility="true" iconFile="Scc/TfsUndoCheckout.png"/>
+                  text="&amp;Revert to this Revision" dynamicVisibility="true" iconFile="Scc/Undo.png"/>
           <Button id="Cmd_LogRevertThisRevisions" name="LogRevertChangesFrom" priority="0xB300"
-                  text="Revert &amp;Changes from this revision" dynamicVisibility="true" iconFile="Scc/TfsUndoCheckout.png"/>
+                  text="Revert &amp;Changes from this revision" dynamicVisibility="true" iconFile="Scc/Undo.png"/>
           <Button id="Cmd_LogShowRevisionProperties" name="LogShowRevisionProperties" priority="0xB400"
                   text="Show Revision &amp;Properties" dynamicVisibility="true" iconFile="menu/Properties.png"/>
           <Button id="Cmd_LogOpenIssue" name="LogOpenIssue" priority="0xB500"
@@ -952,7 +952,7 @@
             </Group>
           </Menu>
           <Button id="Cmd_ItemRevertBase" name="Revert" priority="0x400" defaultDisabled="true"
-                  text="&amp;Revert to BASE Version" iconFile="Scc/TfsUndoCheckout.png"/>
+                  text="&amp;Revert to BASE Version" iconFile="Scc/Undo.png"/>
         </Group>
         <Group id="Grp_PendingChangesAdmin" priority="0x400">
           <!--Menu id="Menu_ItemIgnore" priority="0x100" name="Ignore" type="MenuController">
