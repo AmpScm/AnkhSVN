@@ -936,7 +936,7 @@
           <Menu id="Menu_ItemOpen" priority="0x300" name="Open" type="MenuControllerLatched">
             <Group id="Menu_ItemOpen" priority="0x100">
               <Button id="Cmd_ItemOpenVisualStudio" name="OpenVisualStudio" priority="0x100"
-                  text="&amp;Open in Visual Studio" fixMenuController="true" iconFile="PendingChanges/Open.png"/>
+                  text="&amp;Open in Visual Studio" fixMenuController="true" iconFile="Scc/Open.png"/>
               <Button id="Cmd_ItemOpenWindows" name="OpenWindows" priority="0x200"
                   text="Open with &amp;Default Application" />
               <Button id="Cmd_ItemOpenTextEditor" name="OpenText" priority="0x300"
