@@ -258,7 +258,7 @@
     <Content Include="Gui\PendingChanges\Help.png" />
     <Content Include="Gui\PendingChanges\ignore.png" />
     <Content Include="Gui\PendingChanges\MoveTo.png" />
-    <Content Include="Gui\PendingChanges\Open.png" />
+    <Content Include="Gui\Scc\Legacy\Open.png" />
     <Content Include="Gui\PendingChanges\OpenFolder.png" />
     <Content Include="Gui\PendingChanges\PendingChanges.png" />
     <Content Include="Gui\PendingChanges\Refresh.png" />
@@ -424,6 +424,7 @@
     <Content Include="Gui\Scc\Legacy\ViewPendingCheckins.png" />
     <Content Include="Gui\Scc\Merge.png" />
     <Content Include="Gui\Scc\NewFolder.png" />
+    <Content Include="Gui\Scc\Open.png" />
     <Content Include="Gui\Scc\Options.png" />
     <Content Include="Gui\Scc\PendingCheckins.png" />
     <Content Include="Gui\Scc\Properties.png" />
