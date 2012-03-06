@@ -72,27 +72,44 @@ namespace Ankh.UI
 
         protected virtual void OnContextChanged(EventArgs e)
         {
-            if (Context != null)
-            {
-                IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
+            if (Context == null)
+                return;
 
+            OnThemeChanged(e);
+        }
+
+        protected virtual void OnThemeChanged(EventArgs e)
+        {
+            if (Context == null)
+                return;
+
+            IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
+
+            if (colorSvc != null)
+            {
                 Color color;
                 if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
                     BackColor = color;
 
                 if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_TEXT, out color))
                     ForeColor = color;
-
-                IUIService uis = Context.GetService<IUIService>();
-
-                if (uis != null)
-                {
-                    Font f = (Font)uis.Styles["DialogFont"];
-
-                    if (f != null)
-                        this.Font = f;
-                }
             }
+
+
+            IUIService uis = Context.GetService<IUIService>();
+
+            if (uis != null)
+            {
+                Font f = (Font)uis.Styles["DialogFont"];
+
+                if (f != null)
+                    this.Font = f;
+            }
+        }
+
+        void IAnkhToolWindowControl.OnThemeChanged(EventArgs e)
+        {
+            OnThemeChanged(e);
         }
 
         /// <summary>

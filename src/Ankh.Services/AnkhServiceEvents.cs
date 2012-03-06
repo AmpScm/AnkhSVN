@@ -71,10 +71,16 @@ namespace Ankh
         void OnSolutionClosed(EventArgs e);
 
         /// <summary>
-        /// Raises the <see cref="UIShellActivate"/>
+        /// Raises the <see cref="UIShellActivate"/> event.
         /// </summary>
         /// <param name="e"></param>
         void OnUIShellActivate(EventArgs e);
+
+        /// <summary>
+        /// Raises the <see cref="TheneChanged"/> event.
+        /// </summary>
+        /// <param name="e"></param>
+        void OnThemeChanged(EventArgs e);
     }
 
     /// <summary>
@@ -135,6 +141,11 @@ namespace Ankh
         /// to allow initiating services that really need the UI Shell
         /// </summary>
         public event EventHandler UIShellActivate;
+
+        /// <summary>
+        /// Raised when the Visual Studio or Windows theme changes
+        /// </summary>
+        public event EventHandler ThemeChanged;
 
         /// <summary>
         /// Raises the <see cref="E:RuntimeLoaded"/> event.
@@ -224,6 +235,12 @@ namespace Ankh
         {
             if (UIShellActivate != null)
                 UIShellActivate(this, e);
+        }
+
+        private void OnThemeChanged(EventArgs e)
+        {
+            if (ThemeChanged != null)
+                ThemeChanged(this, e);
         }
 
         #region IAnkhServiceEvents Members
@@ -329,6 +346,23 @@ namespace Ankh
             try
             {
                 OnUIShellActivate(e);
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
+
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
+                else
+                    throw;
+            }
+        }
+
+        void IAnkhServiceEvents.OnThemeChanged(EventArgs e)
+        {
+            try
+            {
+                OnThemeChanged(e);
             }
             catch (Exception ex)
             {
