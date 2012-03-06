@@ -409,6 +409,22 @@ namespace Ankh.VSPackage
             }
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (_serviceEvents != null)
+                        _serviceEvents.ThemeChanged -= OnThemeChanged;
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
+
         bool _created;
         public override IWin32Window Window
         {
@@ -453,12 +469,23 @@ namespace Ankh.VSPackage
             return base.GetService(serviceType);
         }
 
+        AnkhServiceEvents _serviceEvents;
         protected override void OnCreate()
         {
             _host.Load();
             //Control.Site = _host;
             Control.ToolWindowHost = _host;
             base.OnCreate();
+
+            _serviceEvents = _host.GetService<AnkhServiceEvents>();
+            if (_serviceEvents != null)
+                _serviceEvents.ThemeChanged += OnThemeChanged;
+        }
+
+        private void OnThemeChanged(object sender, EventArgs e)
+        {
+            if (_twControl != null)
+                _twControl.OnThemeChanged(e);
         }
 
         public override void OnToolWindowCreated()

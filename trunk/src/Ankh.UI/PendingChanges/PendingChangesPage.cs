@@ -136,5 +136,9 @@ namespace Ankh.UI.PendingChanges
         {
             throw new NotImplementedException();
         }
+
+        public virtual void OnThemeChanged(EventArgs e)
+        {
+        }
     }
 }

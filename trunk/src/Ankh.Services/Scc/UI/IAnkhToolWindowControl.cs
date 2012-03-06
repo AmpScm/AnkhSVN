@@ -63,6 +63,11 @@ namespace Ankh.Scc.UI
         /// <param name="e">The <see cref="Ankh.Scc.UI.FrameEventArgs"/> instance containing the event data.</param>
         void OnFrameSize(FrameEventArgs e);
 
+        /// <summary>
+        /// Called when the Windows or Visual Studio theme changed
+        /// </summary>
+        /// <param name="e"></param>
+        void OnThemeChanged(EventArgs e);
 
         /// <summary>
         /// Occurs when the frame show state changed

@@ -526,6 +526,8 @@ namespace Ankh.Scc
 
         const uint WM_ACTIVATE = 0x0006;
         const uint WM_ACTIVATEAPP = 0x001C;
+        const uint WM_SYSCOLORCHANGE = 0x0015;
+        const uint WM_THEMECHANGED = 0x031A;
 
         int IVsBroadcastMessageEvents.OnBroadcastMessage(uint msg, IntPtr wParam, IntPtr lParam)
         {
@@ -540,6 +542,15 @@ namespace Ankh.Scc
                 case VSConstants.VSM_TOOLBARMETRICSCHANGE:
                     break;
 
+                case WM_THEMECHANGED:
+                case WM_SYSCOLORCHANGE:
+                    {
+                        IAnkhServiceEvents services = GetService<IAnkhServiceEvents>();
+
+                        if (services != null)
+                            services.OnThemeChanged(EventArgs.Empty);
+                    }
+                    break;
             }
             return VSConstants.S_OK;
         }

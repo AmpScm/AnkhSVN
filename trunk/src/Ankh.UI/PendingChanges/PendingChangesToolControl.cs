@@ -62,16 +62,6 @@ namespace Ankh.UI.PendingChanges
 
         protected override void OnLoad(EventArgs e)
         {
-            ToolStripRenderer renderer = null;
-            System.Windows.Forms.Design.IUIService ds = Context.GetService<System.Windows.Forms.Design.IUIService>();
-            if (ds != null)
-            {
-                renderer = ds.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
-            }
-
-            if (renderer != null)
-                pendingChangesTabs.Renderer = renderer;
-
             foreach (PendingChangesPage p in _pages)
             {
                 p.Context = Context;
@@ -82,25 +72,6 @@ namespace Ankh.UI.PendingChanges
                     p.Enabled = p.Visible = false;
                     p.Dock = DockStyle.Fill;
                     panel1.Controls.Add(p);
-                }
-            }
-
-            if (VSVersion.VS2008OrOlder && !SystemInformation.HighContrast)
-            {
-                // We should use the VS colors instead of the ones provided by the OS
-                IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
-
-                Color color;
-                if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
-                {
-                    pendingChangesTabs.BackColor = color;
-                    pendingChangesTabs.OverflowButton.BackColor = color;
-                }
-
-                if (renderer == null && colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
-                {
-                    pendingChangesTabs.ForeColor = color;
-                    pendingChangesTabs.OverflowButton.ForeColor = color;
                 }
             }
 
@@ -130,6 +101,48 @@ namespace Ankh.UI.PendingChanges
 
             ShowPanel(shouldActivate ? _lastPage : _activatePage, false);
             pendingChangesTabs.Enabled = shouldActivate;
+        }
+
+        protected override void OnThemeChanged(EventArgs e)
+        {
+            base.OnThemeChanged(e);
+
+            ToolStripRenderer renderer = null;
+            System.Windows.Forms.Design.IUIService ds = Context.GetService<System.Windows.Forms.Design.IUIService>();
+            if (ds != null)
+            {
+                renderer = ds.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
+            }
+
+            if (renderer != null)
+                pendingChangesTabs.Renderer = renderer;
+
+            if (VSVersion.VS2008OrOlder && !SystemInformation.HighContrast)
+            {
+                // We should use the VS colors instead of the ones provided by the OS
+                IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
+
+                Color color;
+                if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
+                {
+                    pendingChangesTabs.BackColor = color;
+                    pendingChangesTabs.OverflowButton.BackColor = color;
+                }
+
+                if (renderer == null && colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
+                {
+                    pendingChangesTabs.ForeColor = color;
+                    pendingChangesTabs.OverflowButton.ForeColor = color;
+                }
+            }
+
+            foreach (PendingChangesPage p in _pages)
+            {
+                p.OnThemeChanged(e);
+            }
+
+            Invalidate();
+            pendingChangesTabs.Invalidate();
         }
 
         void OnSccShellActivate(object sender, EventArgs e)
