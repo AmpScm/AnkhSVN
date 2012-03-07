@@ -28,7 +28,7 @@ namespace Ankh
         IList<SvnItem> GetUpdateQueueAndClearScheduled();
 
         void SetDocumentDirty(bool value);
-        void SetSolutionContained(bool value);
+        void SetSolutionContained(bool inSolution, bool sccExcluded);
     }
 
     partial class SvnItem : ISvnItemStateUpdate
@@ -272,7 +272,10 @@ namespace Ankh
             bool inSolution = false;
 
             if (pfm != null)
+            {
                 inSolution = pfm.ContainsPath(FullPath);
+                _sccExcluded = pfm.IsSccExcluded(FullPath);
+            }
 
             if (inSolution)
                 SetState(SvnItemState.InSolution, SvnItemState.None);
@@ -280,12 +283,14 @@ namespace Ankh
                 SetState(SvnItemState.None, SvnItemState.InSolution);
         }
 
-        void ISvnItemStateUpdate.SetSolutionContained(bool inSolution)
+        void ISvnItemStateUpdate.SetSolutionContained(bool inSolution, bool sccExcluded)
         {
             if (inSolution)
                 SetState(SvnItemState.InSolution, SvnItemState.None);
             else
                 SetState(SvnItemState.None, SvnItemState.InSolution);
+
+            _sccExcluded = sccExcluded;
         }
 
         #endregion

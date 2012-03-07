@@ -78,6 +78,12 @@ namespace Ankh.Scc
 
         bool EnableUpgradeCommand { get; }
 
-        void SetSolutionContained(string path, bool contained);
+        /// <summary>
+        /// Updates the in-solution and Scc excluded state
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="inSolution"></param>
+        /// <param name="sccExcluded"></param>
+        void SetSolutionContained(string path, bool inSolution, bool sccExcluded);
     }
 }

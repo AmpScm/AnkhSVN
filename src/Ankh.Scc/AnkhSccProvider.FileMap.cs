@@ -399,7 +399,12 @@ namespace Ankh.Scc
             SccProjectFile projectFile;
 
             if (!_fileMap.TryGetValue(path, out projectFile))
+            {
                 _fileMap.Add(path, projectFile = new SccProjectFile(Context, path));
+
+                // Force an initial status into the SvnItem
+                StatusCache.SetSolutionContained(path, true, _sccExcluded.Contains(path));
+            }
 
             return projectFile;
         }
