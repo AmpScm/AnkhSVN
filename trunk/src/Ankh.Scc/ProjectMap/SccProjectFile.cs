@@ -46,8 +46,6 @@ namespace Ankh.Scc.ProjectMap
 
             _context = context;
             _filename = filename;
-
-            GetService<IFileStatusCache>().SetSolutionContained(FullPath, true);
         }
 
         [DebuggerStepThrough]
@@ -199,7 +197,7 @@ namespace Ankh.Scc.ProjectMap
 
                 if (_firstReference == null)
                 {
-                    _context.GetService<IFileStatusCache>().SetSolutionContained(this.FullPath, false);
+                    _context.GetService<IFileStatusCache>().SetSolutionContained(this.FullPath, false, false);
                     _context.GetService<AnkhSccProvider>().RemoveFile(this);
                 }
                 return;

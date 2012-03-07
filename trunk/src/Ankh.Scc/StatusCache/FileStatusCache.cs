@@ -733,14 +733,14 @@ namespace Ankh.Scc.StatusCache
             }
         }
 
-        void IFileStatusCache.SetSolutionContained(string path, bool contained)
+        void IFileStatusCache.SetSolutionContained(string path, bool inSolution, bool sccExcluded)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             SvnItem item;
             if (_map.TryGetValue(path, out item))
-                ((ISvnItemStateUpdate)item).SetSolutionContained(contained);
+                ((ISvnItemStateUpdate)item).SetSolutionContained(inSolution, sccExcluded);
         }
 
         #region IFileStatusCache Members

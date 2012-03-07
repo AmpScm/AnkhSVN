@@ -73,6 +73,7 @@ namespace Ankh
         bool _ticked;
         int _cookie;
         DateTime _modified;
+        bool _sccExcluded;
 
         public SvnItem(IFileStatusCache context, string fullPath, AnkhStatus status)
         {
@@ -883,6 +884,14 @@ namespace Ankh
         public bool InSolution
         {
             get { return GetState(SvnItemState.InSolution) != 0; }
+        }
+
+        /// <summary>
+        /// Gets a boolean indicating whether the <see cref="ScnItem"/> is explicitly Scc Excluded
+        /// </summary>
+        public bool IsSccExcluded
+        {
+            get { return InSolution && _sccExcluded; }
         }
 
         /// <summary>

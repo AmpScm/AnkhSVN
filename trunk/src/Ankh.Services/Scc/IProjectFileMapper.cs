@@ -69,6 +69,13 @@ namespace Ankh.Scc
         bool ContainsPath(string path);
 
         /// <summary>
+        /// Gets a boolean indicating whether a file is explicitly excluded from sourcecontrol (E.g. C++ 'Scc Files' property set to false)
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        bool IsSccExcluded(string path);
+
+        /// <summary>
         /// Gets the solution path.
         /// </summary>
         /// <value>The solution path.</value>

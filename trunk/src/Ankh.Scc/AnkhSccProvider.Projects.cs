@@ -370,6 +370,7 @@ namespace Ankh.Scc
             _managedSolution = false;
             _isDirty = false;
             _solutionLoaded = false;
+            _sccExcluded.Clear();
             ClearEnlistState();
 
             IPendingChangesManager mgr = GetService<IPendingChangesManager>();
