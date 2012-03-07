@@ -7,12 +7,63 @@ using Ankh.Commands;
 
 using EnvDTESourceControl = EnvDTE.SourceControl;
 using EnvDTESourceControl2 = EnvDTE80.SourceControl2;
+using System.IO;
+using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Scc
 {
     partial class AnkhSccProvider : EnvDTESourceControl2, EnvDTESourceControl
     {
         readonly HybridCollection<string> _sccExcluded = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+
+        public void SerializeSccExcludeData(System.IO.Stream store, bool writeData)
+        {
+            string baseDir = SolutionDirectory;
+
+            if (writeData)
+            {
+                if (_sccExcluded.Count == 0)
+                    return;
+
+                using (BinaryWriter bw = new BinaryWriter(store))
+                {
+                    bw.Write(_sccExcluded.Count);
+
+                    foreach (string path in _sccExcluded)
+                    {
+                        if (baseDir != null)
+                            bw.Write(PackageUtilities.MakeRelative(baseDir, path));
+                        else
+                            bw.Write(path);
+                    }
+                }
+            }
+            else
+            {
+                if (store.Length == 0)
+                    return;
+
+                using (BinaryReader br = new BinaryReader(store))
+                {
+                    int count = br.ReadInt32();
+
+                    while (count-- > 0)
+                    {
+                        string path = br.ReadString();
+
+                        if (baseDir != null)
+                            path = SvnTools.GetNormalizedFullPath(Path.Combine(baseDir, path));
+                        else
+                            path = SvnTools.GetNormalizedFullPath(path);
+
+                        if (!_sccExcluded.Contains(path))
+                            _sccExcluded.Add(path);
+                    }
+                }
+            }
+        }
+
+
 
         public bool IsSccExcluded(string path)
         {

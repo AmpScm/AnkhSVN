@@ -107,6 +107,13 @@ namespace Ankh.Scc
         void SerializeEnlistData(Stream store, bool writeData);
 
         /// <summary>
+        /// Serializes the scc-exclude data.
+        /// </summary>
+        /// <param name="store">The store.</param>
+        /// <param name="writeData">if set to <c>true</c> [write data].</param>
+        void SerializeSccExcludeData(Stream store, bool writeData);
+
+        /// <summary>
         /// Gets a boolean indicating whether to ignores the enumeration side effects flag on this project
         /// </summary>
         /// <param name="sccProject">The SCC project.</param>
