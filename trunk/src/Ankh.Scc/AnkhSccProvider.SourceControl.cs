@@ -101,9 +101,11 @@ namespace Ankh.Scc
                 {
                     _sccExcluded.Add(path);
 
-                    if (changed != null)
+                    if (changed == null)
                         changed = new List<string>();
                     changed.Add(path);
+
+                    StatusCache.SetSolutionContained(path, _fileMap.ContainsKey(path), _sccExcluded.Contains(path));
                 }
             }
 
@@ -132,7 +134,7 @@ namespace Ankh.Scc
 
                 if (_sccExcluded.Remove(path))
                 {
-                    if (changed != null)
+                    if (changed == null)
                         changed = new List<string>();
                     changed.Add(path);
                 }
