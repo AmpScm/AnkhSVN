@@ -244,7 +244,7 @@ namespace Ankh.Scc
                 create = true; // Tree conflict (unversioned) or other conflict
             else if (item.IsModified)
                 create = true; // Must commit
-            else if (item.InSolution && !item.IsVersioned && !item.IsIgnored && item.IsVersionable)
+            else if (item.InSolution && !item.IsVersioned && !item.IsIgnored && item.IsVersionable && !item.IsSccExcluded)
                 create = true; // To be added
             else if (item.IsVersioned && item.IsDocumentDirty)
                 create = true;
@@ -399,7 +399,7 @@ namespace Ankh.Scc
                         if (item.IsIgnored)
                             return PendingChangeKind.Ignored;
                         else if (item.InSolution)
-                            return PendingChangeKind.New;
+                            return item.IsSccExcluded ? PendingChangeKind.Ignored : PendingChangeKind.New;
                     }
                     return PendingChangeKind.None;
                 case SvnStatus.Modified:
@@ -412,7 +412,7 @@ namespace Ankh.Scc
 
                     return PendingChangeKind.Added;
                 case SvnStatus.Deleted:
-                    if (item != null && item.Exists && item.InSolution)
+                    if (item != null && item.Exists && item.InSolution && !item.IsSccExcluded)
                         return PendingChangeKind.DeletedNew;
                     return PendingChangeKind.Deleted;
                 case SvnStatus.Missing:

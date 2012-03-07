@@ -63,7 +63,14 @@ namespace Ankh.Commands
 
                         pcs.LoadItems(selection,
                                       delegate(SvnItem item) { return !item.IsVersioned && item.IsVersionable; },
-                                      delegate(SvnItem item) { return !item.IsIgnored || !item.InSolution; });
+                                      delegate(SvnItem item) 
+                                      {
+                                          if (item.IsIgnored)
+                                              return false;
+                                          else if (item.IsSccExcluded)
+                                              return false;
+                                          return item.InSolution;
+                                      });
 
                         if (pcs.ShowDialog(e.Context) != DialogResult.OK)
                             return;
