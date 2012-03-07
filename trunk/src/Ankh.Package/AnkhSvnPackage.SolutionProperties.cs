@@ -206,6 +206,7 @@ namespace Ankh.VSPackage
         #region IVsPersistSolutionOpts
         const string SccPendingChangeStream = AnkhId.SubversionSccName + "Pending";
         const string SccEnlistStream = AnkhId.SubversionSccName + "Enlist";
+        const string SccExcludedStream = AnkhId.SubversionSccName + "SccExcluded";
 
         public int LoadUserOptions(IVsSolutionPersistence pPersistence, uint grfLoadOpts)
         {
@@ -217,13 +218,15 @@ namespace Ankh.VSPackage
             try
             {
                 pPersistence.LoadPackageUserOpts(this, SccPendingChangeStream);
-                pPersistence.LoadPackageUserOpts(this, SccEnlistStream);
+                pPersistence.LoadPackageUserOpts(this, SccExcludedStream);
+                pPersistence.LoadPackageUserOpts(this, SccEnlistStream);                
 
                 return VSConstants.S_OK;
             }
             finally
             {
-                Marshal.ReleaseComObject(pPersistence); // See Package.cs from MPF for reason
+                if (Marshal.IsComObject(pPersistence))
+                    Marshal.ReleaseComObject(pPersistence); // See Package.cs from MPF for reason
             }
         }
 
@@ -233,15 +236,21 @@ namespace Ankh.VSPackage
             {
                 using (ComStreamWrapper wrapper = new ComStreamWrapper(pOptionsStream, true))
                 {
+                    IAnkhSccService scc;
                     switch (pszKey)
                     {
                         case SccPendingChangeStream:
                             LoadPendingChanges(wrapper);
                             break;
                         case SccEnlistStream:
-                            IAnkhSccService scc = GetService<IAnkhSccService>();
+                            scc = GetService<IAnkhSccService>();
                             if (scc != null)
                                 scc.SerializeEnlistData(wrapper, false);
+                            break;
+                        case SccExcludedStream:
+                            scc = GetService<IAnkhSccService>();
+                            if (scc != null)
+                                scc.SerializeSccExcludeData(wrapper, false);
                             break;
 
                         default:
@@ -253,7 +262,8 @@ namespace Ankh.VSPackage
             }
             finally
             {
-                Marshal.ReleaseComObject(pOptionsStream); // See Package.cs from MPF for reason
+                if (Marshal.IsComObject(pOptionsStream))
+                    Marshal.ReleaseComObject(pOptionsStream); // See Package.cs from MPF for reason
             }
         }
 
@@ -264,9 +274,14 @@ namespace Ankh.VSPackage
                 IAnkhSccService scc = GetService<IAnkhSccService>();
                 if (scc != null)
                 {
-                    if (scc.IsActive && scc.IsSolutionManaged)
+                    if (!scc.IsActive)
+                        return VSConstants.S_OK;
+
+                    pPersistence.SavePackageUserOpts(this, SccPendingChangeStream);
+                    pPersistence.SavePackageUserOpts(this, SccExcludedStream);
+
+                    if (scc.IsSolutionManaged)
                     {
-                        pPersistence.SavePackageUserOpts(this, SccPendingChangeStream);
                         pPersistence.SavePackageUserOpts(this, SccEnlistStream);
                     }
                 }
@@ -275,7 +290,8 @@ namespace Ankh.VSPackage
             }
             finally
             {
-                Marshal.ReleaseComObject(pPersistence); // See Package.cs from MPF for reason
+                if (Marshal.IsComObject(pPersistence))
+                    Marshal.ReleaseComObject(pPersistence); // See Package.cs from MPF for reason
             }
         }
 
@@ -296,6 +312,11 @@ namespace Ankh.VSPackage
                             if (scc != null)
                                 scc.SerializeEnlistData(wrapper, true);
                             break;
+                        case SccExcludedStream:
+                            scc = GetService<IAnkhSccService>();
+                            if (scc != null)
+                                scc.SerializeSccExcludeData(wrapper, true);
+                            break;
                         default:
                             // TODO: Add support for some service api for our services
                             break;
@@ -306,7 +327,8 @@ namespace Ankh.VSPackage
             }
             finally
             {
-                Marshal.ReleaseComObject(pOptionsStream); // See Package.cs from MPF for reason
+                if (Marshal.IsComObject(pOptionsStream))
+                    Marshal.ReleaseComObject(pOptionsStream); // See Package.cs from MPF for reason
             }
         }
 
