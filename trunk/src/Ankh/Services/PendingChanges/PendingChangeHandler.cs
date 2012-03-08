@@ -607,10 +607,14 @@ namespace Ankh.Services.PendingChanges
             if (depth == SvnDepth.Unknown)
                 return false;
 
+            bool outOfDateError = false;
+            bool otherError = false;
+
             StringBuilder outOfDateMessage = null;
             state.GetService<IProgressRunner>().RunModal(PccStrings.CommitTitle,
                 delegate(object sender, ProgressWorkerArgs e)
                 {
+                    string itemPath = null;
                     SvnCommitArgs ca = new SvnCommitArgs();
                     ca.Depth = depth;
                     ca.KeepLocks = state.KeepLocks;
@@ -622,6 +626,26 @@ namespace Ankh.Services.PendingChanges
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_IO_INCONSISTENT_EOL);
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_FS_TXN_OUT_OF_DATE);
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_RA_OUT_OF_DATE);
+                    ca.Notify += delegate(object notifySender, SvnNotifyEventArgs notifyE)
+                                {
+                                    switch (notifyE.Action)
+                                    {
+                                        case SvnNotifyAction.FailedOutOfDate:
+                                            ca.AddExpectedError(notifyE.Error.SvnErrorCode); // Don't throw an exception
+                                            outOfDateError = true;
+                                            itemPath = itemPath ?? notifyE.FullPath;
+                                            break;
+                                        case SvnNotifyAction.FailedConflict:
+                                        case SvnNotifyAction.FailedMissing:
+                                        case SvnNotifyAction.FailedNoParent:
+                                        case SvnNotifyAction.FailedLocked:
+                                        case SvnNotifyAction.FailedForbiddenByServer:
+                                            ca.AddExpectedError(notifyE.Error.SvnErrorCode); // Don't throw an exception
+                                            otherError = true;
+                                            itemPath = itemPath ?? notifyE.FullPath;                                            
+                                            break;
+                                    }
+                                };
                     ca.RunTortoiseHooks = enableHooks;
 
                     ok = e.Client.Commit(
@@ -638,16 +662,26 @@ namespace Ankh.Services.PendingChanges
                             case SvnErrorCode.SVN_ERR_IO_INCONSISTENT_EOL:
                             case SvnErrorCode.SVN_ERR_RA_OUT_OF_DATE:
                             case SvnErrorCode.SVN_ERR_FS_TXN_OUT_OF_DATE:
-                                outOfDateMessage = new StringBuilder();
-                                Exception ex = ca.LastException;
-
-                                while (ex != null)
-                                {
-                                    outOfDateMessage.AppendLine(ex.Message);
-                                    ex = ex.InnerException;
-                                }
-
+                                outOfDateError = true;
                                 break;
+                        }
+
+                        if (outOfDateError || otherError)
+                        {
+                            outOfDateMessage = new StringBuilder();
+                            Exception ex = ca.LastException;
+
+                            while (ex != null)
+                            {
+                                outOfDateMessage.AppendLine(ex.Message);
+                                ex = ex.InnerException;
+                            }
+
+                            if (!string.IsNullOrEmpty(itemPath))
+                            {
+                                outOfDateMessage.AppendLine();
+                                outOfDateMessage.AppendFormat(PccStrings.WhileCommittingX, itemPath);
+                            }
                         }
                     }
                 });
@@ -655,7 +689,7 @@ namespace Ankh.Services.PendingChanges
             if (outOfDateMessage != null)
             {
                 state.MessageBox.Show(outOfDateMessage.ToString(),
-                                      PccStrings.OutOfDateCaption,
+                                      outOfDateError ? PccStrings.OutOfDateCaption : PccStrings.CommitFailedCaption,
                                       MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 

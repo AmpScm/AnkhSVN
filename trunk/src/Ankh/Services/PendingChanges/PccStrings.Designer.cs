@@ -70,6 +70,15 @@ namespace Ankh.Services.PendingChanges {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Commit Failed.
+        /// </summary>
+        internal static string CommitFailedCaption {
+            get {
+                return ResourceManager.GetString("CommitFailedCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can only commit from one working copy at a time.
         /// </summary>
         internal static string CommitSingleWc {
@@ -193,6 +202,15 @@ namespace Ankh.Services.PendingChanges {
         internal static string ShouldNotCommitX {
             get {
                 return ResourceManager.GetString("ShouldNotCommitX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to While committing: {0}.
+        /// </summary>
+        internal static string WhileCommittingX {
+            get {
+                return ResourceManager.GetString("WhileCommittingX", resourceCulture);
             }
         }
         

@@ -169,4 +169,10 @@ Are you sure you want to commit without an issue number?</value>
   <data name="AddingTitle" xml:space="preserve">
     <value>Adding files to Subversion</value>
   </data>
+  <data name="CommitFailedCaption" xml:space="preserve">
+    <value>Commit Failed</value>
+  </data>
+  <data name="WhileCommittingX" xml:space="preserve">
+    <value>While committing: {0}</value>
+  </data>
 </root>
