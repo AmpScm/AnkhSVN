@@ -82,7 +82,12 @@ namespace Ankh.VS.SolutionExplorer
                 else if (item.IsIgnored)
                     return AnkhGlyph.Ignored;
                 else if (item.IsVersionable)
-                    return item.InSolution ? AnkhGlyph.ShouldBeAdded : AnkhGlyph.Blank;
+                {
+                    if (item.InSolution)
+                        return item.IsSccExcluded ? AnkhGlyph.Ignored : AnkhGlyph.ShouldBeAdded;
+                    else
+                        return AnkhGlyph.None;
+                }
                 else
                     return AnkhGlyph.None;
             }
@@ -107,8 +112,10 @@ namespace Ankh.VS.SolutionExplorer
                     if (item.IsCasingConflicted)
                         return AnkhGlyph.InConflict;
                     else
-                        goto case SvnStatus.Deleted;
+                        return AnkhGlyph.Deleted;
                 case SvnStatus.Deleted:
+                    if (item.Exists && item.InSolution)
+                        return item.IsSccExcluded ? AnkhGlyph.Ignored : AnkhGlyph.ShouldBeAdded;
                     return AnkhGlyph.Deleted;
 
                 case SvnStatus.Conflicted: // Should have been handled above
