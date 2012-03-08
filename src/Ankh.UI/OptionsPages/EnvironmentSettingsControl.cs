@@ -40,6 +40,7 @@ namespace Ankh.UI.OptionsPages
             Config.SuppressLockingUI = autoLockFiles.Checked;
             Config.FlashWindowWhenOperationCompletes = flashWindowAfterOperation.Checked;
             Config.PCDoubleClickShowsChanges = pcDefaultDoubleClick.SelectedIndex == 1;
+            Config.EnableTortoiseSvnHooks = clientSideHooks.Checked;
         }
 
         protected override void LoadSettingsCore()
@@ -49,6 +50,7 @@ namespace Ankh.UI.OptionsPages
             autoLockFiles.Checked = Config.SuppressLockingUI;
             flashWindowAfterOperation.Checked = Config.FlashWindowWhenOperationCompletes;
             pcDefaultDoubleClick.SelectedIndex = Config.PCDoubleClickShowsChanges ? 1 : 0;
+            clientSideHooks.Checked = Config.EnableTortoiseSvnHooks;
         }
 
         private void proxyEdit_Click(object sender, EventArgs e)
