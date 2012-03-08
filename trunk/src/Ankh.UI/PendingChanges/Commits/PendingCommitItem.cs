@@ -79,7 +79,12 @@ namespace Ankh.UI.PendingChanges.Commits
                 if (item.IsConflicted || PendingChange.Kind == PendingChangeKind.WrongCasing)
                     clr = System.Drawing.Color.Red;
                 else if (item.IsDeleteScheduled)
-                    clr = System.Drawing.Color.DarkRed;
+                {
+                    if (item.Exists && item.InSolution && !item.IsSccExcluded)
+                        clr = System.Drawing.Color.FromArgb(100, 0, 100); // As added
+                    else
+                        clr = System.Drawing.Color.DarkRed;
+                }
                 else if (item.Status.IsCopied || item.Status.CombinedStatus == SharpSvn.SvnStatus.Added)
                     clr = System.Drawing.Color.FromArgb(100, 0, 100);
                 else if (!item.IsVersioned)
