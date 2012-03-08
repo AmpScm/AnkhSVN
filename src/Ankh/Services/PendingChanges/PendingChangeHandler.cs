@@ -626,12 +626,14 @@ namespace Ankh.Services.PendingChanges
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_IO_INCONSISTENT_EOL);
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_FS_TXN_OUT_OF_DATE);
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_RA_OUT_OF_DATE);
+                    ca.AddExpectedError(SvnErrorCode.SVN_ERR_WC_FOUND_CONFLICT);
                     ca.Notify += delegate(object notifySender, SvnNotifyEventArgs notifyE)
                                 {
                                     switch (notifyE.Action)
                                     {
                                         case SvnNotifyAction.FailedOutOfDate:
-                                            ca.AddExpectedError(notifyE.Error.SvnErrorCode); // Don't throw an exception
+                                            if (notifyE.Error != null)
+                                                ca.AddExpectedError(notifyE.Error.SvnErrorCode); // Don't throw an exception for this error
                                             outOfDateError = true;
                                             itemPath = itemPath ?? notifyE.FullPath;
                                             break;
@@ -640,7 +642,8 @@ namespace Ankh.Services.PendingChanges
                                         case SvnNotifyAction.FailedNoParent:
                                         case SvnNotifyAction.FailedLocked:
                                         case SvnNotifyAction.FailedForbiddenByServer:
-                                            ca.AddExpectedError(notifyE.Error.SvnErrorCode); // Don't throw an exception
+                                            if (notifyE.Error != null)
+                                                ca.AddExpectedError(notifyE.Error.SvnErrorCode); // Don't throw an exception for this error
                                             otherError = true;
                                             itemPath = itemPath ?? notifyE.FullPath;                                            
                                             break;
@@ -654,34 +657,22 @@ namespace Ankh.Services.PendingChanges
 
                     if (!ok && ca.LastException != null)
                     {
-                        switch (ca.LastException.SvnErrorCode)
+                        if (!outOfDateError && !otherError)
+                            outOfDateError = true; // Remaining errors are handled as exception
+
+                        outOfDateMessage = new StringBuilder();
+                        Exception ex = ca.LastException;
+
+                        while (ex != null)
                         {
-                            case SvnErrorCode.SVN_ERR_WC_NOT_UP_TO_DATE:
-                            case SvnErrorCode.SVN_ERR_CLIENT_FORBIDDEN_BY_SERVER:
-                            case SvnErrorCode.SVN_ERR_CLIENT_NO_LOCK_TOKEN:
-                            case SvnErrorCode.SVN_ERR_IO_INCONSISTENT_EOL:
-                            case SvnErrorCode.SVN_ERR_RA_OUT_OF_DATE:
-                            case SvnErrorCode.SVN_ERR_FS_TXN_OUT_OF_DATE:
-                                outOfDateError = true;
-                                break;
+                            outOfDateMessage.AppendLine(ex.Message);
+                            ex = ex.InnerException;
                         }
 
-                        if (outOfDateError || otherError)
+                        if (!string.IsNullOrEmpty(itemPath))
                         {
-                            outOfDateMessage = new StringBuilder();
-                            Exception ex = ca.LastException;
-
-                            while (ex != null)
-                            {
-                                outOfDateMessage.AppendLine(ex.Message);
-                                ex = ex.InnerException;
-                            }
-
-                            if (!string.IsNullOrEmpty(itemPath))
-                            {
-                                outOfDateMessage.AppendLine();
-                                outOfDateMessage.AppendFormat(PccStrings.WhileCommittingX, itemPath);
-                            }
+                            outOfDateMessage.AppendLine();
+                            outOfDateMessage.AppendFormat(PccStrings.WhileCommittingX, itemPath);
                         }
                     }
                 });
