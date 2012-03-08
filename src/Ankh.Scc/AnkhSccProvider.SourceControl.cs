@@ -18,6 +18,7 @@ namespace Ankh.Scc
 
         public void SerializeSccExcludeData(System.IO.Stream store, bool writeData)
         {
+            LoadSolutionInfo(); // Force the right data
             string baseDir = SolutionDirectory;
 
             if (writeData)
