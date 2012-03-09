@@ -54,10 +54,12 @@ namespace Ankh.WpfPackage
         {
             base.Initialize();
 
-            AnkhRuntime runtime = (AnkhRuntime)GetService(typeof(AnkhRuntime));
+            AnkhRuntime runtime = GetService(typeof(AnkhRuntime)) as AnkhRuntime;
 
             if (runtime != null)
                 runtime.AddModule(new AnkhWpfModule(runtime));
+            else
+                Trace.WriteLine("Failed to initialize {0}, because the Ankh Runtime is not available", typeof(AnkhSvnWpfPackage).FullName);
 
         }
         #endregion
