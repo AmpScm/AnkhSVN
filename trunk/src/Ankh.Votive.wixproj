@@ -72,6 +72,7 @@
     <Compile Include="Ankh.UI\Ankh.UI.wxs" />
     <Compile Include="Ankh.VS.Interop\Ankh.VS.Interop.wxs" />
     <Compile Include="Ankh.VS\Ankh.VS.wxs" />
+    <Compile Include="Ankh.WpfEditor.Package\Ankh.WpfEditor.Package.wxs" />
     <Compile Include="Ankh\Ankh.wxs" />
     <Compile Include="Ankh.Votive\Ankh.Votive.wxs" />
     <Compile Include="Ankh.Votive\VSExtension.wxs" />
@@ -87,6 +88,7 @@
     <Folder Include="Ankh.UI\" />
     <Folder Include="Ankh.VS.Interop\" />
     <Folder Include="Ankh.VS\" />
+    <Folder Include="Ankh.WpfEditor.Package\" />
     <Folder Include="Ankh\" />
     <Folder Include="lib\" />
     <Folder Include="autolib\" />
@@ -146,6 +148,14 @@
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
+    <ProjectReference Include="Ankh.WpfEditor.Package\Ankh.WpfEditor.Package.csproj">
+      <Name>Ankh.WpfEditor.Package</Name>
+      <Project>{d3ffd86d-b2ac-4659-86dd-559e42844bd0}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="Ankh\Ankh.csproj">
       <Name>Ankh</Name>
       <Project>{ce58aac8-2271-4223-882f-0cd1a7105a52}</Project>
@@ -204,10 +214,8 @@
       <Output TaskParameter="Value" PropertyName="ProjectDefineConstants" />
     </CreateProperty>
     <Exec Command="tools\Ankh.GenPkgDef\bin\$(Configuration)\Ankh.GenPkgDef.exe Ankh.pkgdef Ankh.Package\bin\$(Configuration)\Ankh.Package.dll" />
-
     <Exec Command="tools\Ankh.GenerateVSIXManifest\bin\$(Configuration)\Ankh.GenerateVSIXManifest.exe extension.VsixManifest" />
     <Exec Command="tools\Ankh.GenerateVSIXManifest\bin\$(Configuration)\Ankh.GenerateVSIXManifest.exe -v10 extension.VsixManifest-vs2010" />
-
     <Exec Condition="'$(UseVS2005MPF)' == ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;Ankh.Package\bin\$(Configuration)\Ankh.Package.dll&quot; &quot;/wixfile:Ankh.Package\obj\$(Configuration)\Ankh.Package-2005.wxi&quot; /codebase &gt; nul:" />
     <Exec Condition="'$(UseVS2005MPF)' == ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;Ankh.Package\bin\$(Configuration)\Ankh.Package.dll&quot; &quot;/wixfile:Ankh.Package\obj\$(Configuration)\Ankh.Package-2008.wxi&quot; /codebase &gt; nul:" />
     <Exec Condition="'$(UseVS2005MPF)' == ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\10.0 &quot;Ankh.Package\bin\$(Configuration)\Ankh.Package.dll&quot; &quot;/wixfile:Ankh.Package\obj\$(Configuration)\Ankh.Package-2010.wxi&quot; /codebase &gt; nul:" />
