@@ -45,6 +45,8 @@ namespace Ankh
         public const string AssemblyCompany = "AnkhSVN Team";
         //**********************************************************************************
 
+        public const string WpfPackageId = "4ca6301e-2571-4832-b16a-6c98787ce299";
+
         /// <summary>The Subversion SCC Provider name as used in the solution file</summary>
         public const string SubversionSccName = "SubversionScc";
         public const string SccStructureName = "SccStructure";
