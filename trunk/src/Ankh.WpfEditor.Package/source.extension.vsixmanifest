@@ -1,18 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-    <Identity Id="97381444-2bc6-44b9-a248-205e457aa10d" Version="2.0" Language="en-US" Publisher="AnkhSVN Team" />
-    <DisplayName>Ankh.WpfEditor.Package</DisplayName>
-    <Description>AnkhSVN Wpf Editor support</Description>
-  </Metadata>
-  <Installation InstalledByMsi="false">
-    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="11.0" />
-  </Installation>
-  <Dependencies>
-    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
-    <Dependency Id="Microsoft.VisualStudio.MPF.11.0" DisplayName="Visual Studio MPF 11.0" d:Source="Installed" Version="11.0" />
-  </Dependencies>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-  </Assets>
-</PackageManifest>
+<Vsix Version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
+  <Identifier Id="AnkhSVN2.AnkhSVN.WpfEditor.589b1d34-e895-4c2c-ac85-b1d781686675">
+    <Name>AnkhSVN</Name>
+    <Author>AnkhSVN Core Team</Author>
+    <Version>2.3</Version>
+    <Description xml:space="preserve">AnkhSVN - Subversion Support for Visual Studio</Description>
+    <Locale>1033</Locale>
+    <MoreInfoUrl>http://ankhsvn.net/</MoreInfoUrl>
+    <License>..\LICENSE.rtf</License>
+    <Icon>Margin_small.png</Icon>
+    <PreviewImage>Margin_large.png</PreviewImage>
+    <InstalledByMsi>true</InstalledByMsi>
+    <SupportedProducts>
+      <VisualStudio Version="10.0">
+        <Edition>IntegratedShell</Edition>
+        <Edition>Pro</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Ultimate</Edition>
+      </VisualStudio>
+      <VisualStudio Version="11.0">
+        <Edition>IntegratedShell</Edition>
+        <Edition>Pro</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Ultimate</Edition>
+      </VisualStudio>
+    </SupportedProducts>
+    <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.5" />
+    <AllUsers>true</AllUsers>
+  </Identifier>
+  <References />
+  <Content>
+    <VsPackage>Ankh.Package.dll</VsPackage>
+  </Content>
+</Vsix>
+
