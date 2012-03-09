@@ -75,7 +75,6 @@ namespace Ankh.VSPackage.Attributes
                 key.SetValue("Package", UINamePkg.ToString("B"));
                 key.SetValue("ResourcePackage", UINamePkg.ToString("B"));
                 key.SetValue("ProfileSave", 1);
-                //key.SetValue("ResourcePackage", UINamePkg.ToString("B"));
             }
         }
 
