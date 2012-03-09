@@ -33,8 +33,8 @@ namespace Ankh
         readonly CommandMapper _commandMapper;
         readonly AnkhContext _context;
         readonly List<IAnkhServiceImplementation> _services = new List<IAnkhServiceImplementation>();
-        readonly AnkhServiceEvents _events;
         bool _ensureServices;
+        bool _servicesLoaded;
 
         public AnkhRuntime(IServiceContainer parentContainer)
         {
@@ -52,8 +52,6 @@ namespace Ankh
                 _container.AddService(typeof(AnkhContext), _context = AnkhContext.Create(this));
 
             InitializeServices();
-
-            _events = GetService<AnkhServiceEvents>();
         }
 
         public AnkhRuntime(IServiceProvider parentProvider)
@@ -65,6 +63,9 @@ namespace Ankh
 
         void InitializeServices()
         {
+            if (_servicesLoaded)
+                return;
+
             if (GetService<AnkhRuntime>() == null)
             {
                 _container.AddService(typeof(AnkhRuntime), this, true);
@@ -86,6 +87,8 @@ namespace Ankh
 #if DEBUG
             PreloadServicesViaEnsure = true;
 #endif
+            // If the parent container is not hooked up yet, we have to reinitialize later!
+            _servicesLoaded = (GetService<AnkhRuntime>() != null);
         }
 
         /// <summary>
@@ -168,6 +171,8 @@ namespace Ankh
 
         public void AddModule(Module module)
         {
+            InitializeServices();
+
             _modules.Add(module);
 
             module.OnPreInitialize();
@@ -175,6 +180,8 @@ namespace Ankh
 
         public void Start()
         {
+            InitializeServices();
+
             foreach (Module module in _modules)
             {
                 module.OnInitialize();
@@ -185,10 +192,11 @@ namespace Ankh
                 service.OnInitialize();
             }
 
-            if (_events != null)
+            AnkhServiceEvents events = GetService<AnkhServiceEvents>();
+            if (events != null)
             {
-                _events.OnRuntimeLoaded(EventArgs.Empty);
-                _events.OnRuntimeStarted(EventArgs.Empty);
+                events.OnRuntimeLoaded(EventArgs.Empty);
+                events.OnRuntimeStarted(EventArgs.Empty);
             }
         }
 

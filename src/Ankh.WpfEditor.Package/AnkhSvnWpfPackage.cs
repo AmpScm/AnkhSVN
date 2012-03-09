@@ -61,7 +61,7 @@ namespace Ankh.WpfPackage
             IAnkhPackage pkg = GetService(typeof(IAnkhPackage)) as IAnkhPackage;
 
             if (pkg != null)
-                runtime = pkg.GetService<AnkhRuntime>();
+                runtime = AnkhRuntime.Get(pkg);
 
             if (runtime != null)
                 runtime.AddModule(new AnkhWpfModule(runtime));
