@@ -185,12 +185,14 @@
       <Feature Id="RegVS10" Title="Register in Microsoft Visual Studio 2010"
                Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2010" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg2010"/>
+        <ComponentGroupRef Id="PkgWpfReg2010"/>
         <ComponentGroupRef Id="Extension2010"/>
         <ComponentRef Id="C_Reg2010"/>
       </Feature>
       <Feature Id="RegVS11" Title="Register in Microsoft Visual Studio 11 Developer Preview"
                Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2010" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg11"/>
+        <ComponentGroupRef Id="PkgWpfReg11"/>
         <ComponentGroupRef Id="Extension11"/>
         <ComponentRef Id="C_Reg11"/>
       </Feature>
