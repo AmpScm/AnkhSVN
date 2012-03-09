@@ -26,7 +26,7 @@ using Ankh;
 // associated with an assembly.
 
 [assembly: CLSCompliant(true)]
-[assembly: AssemblyTitle("AnkhSvn")]
+[assembly: AssemblyTitle("AnkhSvn Package")]
 [assembly: AssemblyDescription("AnkhSVN - Subversion Support for Visual Studio")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany(AnkhId.AssemblyCompany)]
