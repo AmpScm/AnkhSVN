@@ -66,7 +66,7 @@ namespace Ankh.WpfPackage
             if (runtime != null)
                 runtime.AddModule(new AnkhWpfModule(runtime));
             else
-                Trace.WriteLine("Failed to initialize {0}, because the Ankh Runtime is not available", typeof(AnkhSvnWpfPackage).FullName);
+                Trace.WriteLine(string.Format("Failed to initialize {0}, because the Ankh Runtime is not available", typeof(AnkhSvnWpfPackage).FullName));
         }
         #endregion
 
