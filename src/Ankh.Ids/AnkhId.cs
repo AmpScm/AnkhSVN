@@ -46,6 +46,7 @@ namespace Ankh
         //**********************************************************************************
 
         public const string WpfPackageId = "4ca6301e-2571-4832-b16a-6c98787ce299";
+        public const string WpfPackageDescription = "AnkhSVN - Subversion Support for Visual Studio - Wpf Editor Support";
 
         /// <summary>The Subversion SCC Provider name as used in the solution file</summary>
         public const string SubversionSccName = "SubversionScc";

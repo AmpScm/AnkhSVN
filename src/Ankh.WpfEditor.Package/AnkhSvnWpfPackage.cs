@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Ankh;
+using System.ComponentModel;
 
 namespace Ankh.WpfPackage
 {
@@ -25,6 +26,7 @@ namespace Ankh.WpfPackage
     // This attribute tells the PkgDef creation utility (CreatePkgDef.exe) that this class is
     // a package.
     [PackageRegistration(UseManagedResourcesOnly = true)]
+    [Description(AnkhId.WpfPackageDescription)]
     [Guid(AnkhId.WpfPackageId)]
     [ProvideAutoLoad(AnkhId.AnkhServicesAvailable)]
     public sealed class AnkhSvnWpfPackage : Package
@@ -60,7 +62,6 @@ namespace Ankh.WpfPackage
                 runtime.AddModule(new AnkhWpfModule(runtime));
             else
                 Trace.WriteLine("Failed to initialize {0}, because the Ankh Runtime is not available", typeof(AnkhSvnWpfPackage).FullName);
-
         }
         #endregion
 
