@@ -228,11 +228,13 @@ namespace Ankh
             object[] constructorArgs = null;
             foreach (Type type in assembly.GetTypes())
             {
+                if (!Attribute.IsDefined(type, typeof(GlobalServiceAttribute), false))
+                    continue;
+
                 if (!typeof(IAnkhServiceImplementation).IsAssignableFrom(type))
                 {
 #if DEBUG
-                    if (type.GetCustomAttributes(typeof(GlobalServiceAttribute), false).Length > 0)
-                        Debug.WriteLine(string.Format("Ignoring AnkhGlobalServiceAttribute on {0} as it does not implement IAnkhServiceImplementation", type.AssemblyQualifiedName));
+                    Debug.WriteLine(string.Format("Ignoring AnkhGlobalServiceAttribute on {0} as it does not implement IAnkhServiceImplementation", type.AssemblyQualifiedName));
 #endif
                     continue;
                 }
