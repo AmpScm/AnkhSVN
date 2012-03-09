@@ -5,7 +5,7 @@
       <ComponentGroupRef Id="Ankh.Services"/>
       <ComponentRef Id="C_Ankh.WpfEditor.Package.dll"/>
     </ComponentGroup>
-    <DirectoryRef Id="APP_bin" FileSource="$(sys.SOURCEFILEDIR)">
+    <DirectoryRef Id="APP_bin" FileSource="$(sys.SOURCEFILEDIR)bin\$(var.Configuration)">
       <Component Id="C_Ankh.WpfEditor.Package.dll" Guid="89B5BD49-F226-481F-9A29-7BF813D270D5">
         <!-- File must be called File_$(Ankh.WpfEditor.Package.TargetName).dll for the following includes-->
         <File Id="File_Ankh.WpfEditor.Package.dll" Name="Ankh.WpfEditor.Package.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
