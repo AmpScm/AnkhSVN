@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Ankh;
 using System.ComponentModel;
+using Ankh.UI;
 
 namespace Ankh.WpfPackage
 {
@@ -56,7 +57,11 @@ namespace Ankh.WpfPackage
         {
             base.Initialize();
 
-            AnkhRuntime runtime = GetService(typeof(AnkhRuntime)) as AnkhRuntime;
+            AnkhRuntime runtime = null;
+            IAnkhPackage pkg = GetService(typeof(IAnkhPackage)) as IAnkhPackage;
+
+            if (pkg != null)
+                runtime = pkg.GetService<AnkhRuntime>();
 
             if (runtime != null)
                 runtime.AddModule(new AnkhWpfModule(runtime));
