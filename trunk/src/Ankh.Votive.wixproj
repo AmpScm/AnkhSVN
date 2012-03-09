@@ -139,8 +139,6 @@
       <Project>{b99cb919-1a2c-4e3b-9c15-8789b358ea99}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
     <ProjectReference Include="Ankh.VS\Ankh.VS.csproj">
       <Name>Ankh.VS</Name>
@@ -153,8 +151,6 @@
       <Project>{d3ffd86d-b2ac-4659-86dd-559e42844bd0}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
     <ProjectReference Include="Ankh\Ankh.csproj">
       <Name>Ankh</Name>
