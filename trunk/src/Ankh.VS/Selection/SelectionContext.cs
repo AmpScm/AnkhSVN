@@ -45,9 +45,13 @@ namespace Ankh.VS.Selection
         bool _disposed;
         uint _cookie;
 
-        uint _currentItem;
-        IVsHierarchy _currentHierarchy;
-        IVsMultiItemSelect _currentSelection;
+        struct HierarchySelection
+        {
+            public IVsHierarchy hierarchy;
+            public uint id;
+            public IVsMultiItemSelect selection;
+        }
+        HierarchySelection current;
         ISelectionContainer _currentContainer;
         IVsSolution _solution;
 
@@ -137,15 +141,15 @@ namespace Ankh.VS.Selection
             if (!_disposed)
             {
                 // The current selection changed; store for future reference
-                _currentHierarchy = pHierNew;
-                _currentItem = itemidNew;
-                _currentSelection = pMISNew;
+                current.hierarchy = pHierNew;
+                current.id = itemidNew;
+                current.selection = pMISNew;
                 _currentContainer = pSCNew;
             }
 
             if (_filterItem != VSConstants.VSITEMID_NIL)
             {
-                if (_filterItem != _currentItem || _filterHierarchy != _currentHierarchy)
+                if (_filterItem != current.id || _filterHierarchy != current.hierarchy)
                 {
                     // Clear the filter if the selection change is not to exactly the filtered item
                     _filterHierarchy = null;
@@ -272,10 +276,10 @@ namespace Ankh.VS.Selection
                         Marshal.Release(hierarchy);
                     }
 
-                    if (_currentItem != itemId)
+                    if (current.id != itemId)
                         return false;
 
-                    if (ms != _currentSelection)
+                    if (ms != current.selection)
                         return false;
 
                     _isSolutionExplorer = ((hier is IVsSolution) || (hier == null)) && (SolutionFilename != null);
@@ -291,11 +295,12 @@ namespace Ankh.VS.Selection
             {
                 if (!_isSingleNodeSelection.HasValue)
                 {
-                    if (_currentSelection != null)
+                    if (current.id == VSConstants.VSITEMID_SELECTION
+                        && current.selection != null)
                     {
                         uint nItems;
                         int withinSingleHierarchy;
-                        if (ErrorHandler.Succeeded(_currentSelection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
+                        if (ErrorHandler.Succeeded(current.selection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
                         {
                             if (nItems == 1)
                                 _isSingleNodeSelection = true;
@@ -305,9 +310,9 @@ namespace Ankh.VS.Selection
                         else
                             _isSingleNodeSelection = true;
                     }
-                    else if (_currentHierarchy != null)
+                    else if (current.hierarchy != null)
                     {
-                        switch (_currentItem)
+                        switch (current.id)
                         {
                             case VSConstants.VSITEMID_SELECTION:
                             case VSConstants.VSITEMID_NIL:
@@ -347,27 +352,39 @@ namespace Ankh.VS.Selection
         /// <returns></returns>
         IEnumerable<SelectionItem> InternalGetSelectedItems()
         {
-            if (_currentSelection != null)
+            HierarchySelection sel = current; // Cache the selection to make sure we don't use an id for another hierarchy
+
+            if ((sel.hierarchy != null)
+                && (sel.id != VSConstants.VSITEMID_NIL)
+                && (sel.id != VSConstants.VSITEMID_SELECTION))
+            {
+                if (sel.id == _filterItem && sel.hierarchy == _filterHierarchy)
+                    yield break;
+
+                yield return new SelectionItem(sel.hierarchy, sel.id);
+            }
+            else if (sel.selection != null
+                     && sel.id == VSConstants.VSITEMID_SELECTION)
             {
                 uint nItems;
                 int withinSingleHierarchy;
 
-                if (!ErrorHandler.Succeeded(_currentSelection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
+                if (!ErrorHandler.Succeeded(sel.selection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
                     yield break;
 
                 uint flags = 0;
 
-                if ((withinSingleHierarchy != 0) && _currentHierarchy != null)
+                if ((withinSingleHierarchy != 0) && sel.hierarchy != null)
                     flags = (uint)__VSGSIFLAGS.GSI_fOmitHierPtrs; // Don't marshal the hierarchy for every item
 
                 VSITEMSELECTION[] items = new VSITEMSELECTION[nItems];
 
-                if (!ErrorHandler.Succeeded(_currentSelection.GetSelectedItems(flags, nItems, items)))
+                if (!ErrorHandler.Succeeded(sel.selection.GetSelectedItems(flags, nItems, items)))
                     yield break;
 
                 for (int i = 0; i < nItems; i++)
                 {
-                    IVsHierarchy hier = items[i].pHier ?? _currentHierarchy;
+                    IVsHierarchy hier = items[i].pHier ?? sel.hierarchy;
 
                     if (hier != null)
                         yield return new SelectionItem(hier, items[i].itemid);
@@ -380,20 +397,11 @@ namespace Ankh.VS.Selection
                     }
                 }
             }
-            else if ((_currentHierarchy != null)
-                && (_currentItem != VSConstants.VSITEMID_NIL)
-                && (_currentItem != VSConstants.VSITEMID_SELECTION))
-            {
-                if (_currentItem == _filterItem && _currentHierarchy == _filterHierarchy)
-                    yield break;
-
-                yield return new SelectionItem(_currentHierarchy, _currentItem);
-            }
             else if (_currentContainer == null)
             {
                 // No selection, no hierarchy.... -> no selection!
             }
-            else if (_currentItem == VSConstants.VSITEMID_ROOT)
+            else if (sel.id == VSConstants.VSITEMID_ROOT)
             {
                 // This is the case in the solution explorer when only the solution is selected
 
