@@ -219,6 +219,9 @@ namespace Ankh.VS.Dialogs
             {
                 object o = base.GetService(serviceType);
 
+                if (o == null && _context != null)
+                    o = _context.GetService(serviceType);
+
                 return o;
             }
         }
