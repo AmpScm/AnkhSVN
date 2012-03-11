@@ -56,26 +56,13 @@ namespace Ankh.VS.Selection
         {
             if (enumerabled == null)
                 throw new ArgumentNullException("enumerabled");
+            else if (disposer == null)
+                throw new ArgumentNullException("disposer");
             
             _cache = new List<T>();
             _enumerator = enumerabled.GetEnumerator();
-            _disposer = disposer ?? new Disposer();
+            _disposer = disposer;
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CachedIEnumerable&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="enumerator">The inner enumerator.</param>
-        /// <remarks>The <see cref="CachedEnumerable "/> needs exclusive access to the enumerator</remarks>
-        public CachedEnumerable(IEnumerator<T> enumerator)
-        {
-            if (enumerator == null)
-                throw new ArgumentNullException("enumerator");
-
-            _cache = new List<T>();
-            _enumerator = enumerator;
-        }
-
 
         #region IEnumerable<T> Members
 
@@ -113,7 +100,12 @@ namespace Ankh.VS.Selection
         /// <returns></returns>
         internal bool GetNext(int index, out T value)
         {
-            if (index < _cache.Count)
+            if (_disposer.IsDisposed)
+            {
+                value = null;
+                return false;
+            }
+            else if (index < _cache.Count)
             {
                 value = _cache[index];
                 return true;
@@ -122,7 +114,7 @@ namespace Ankh.VS.Selection
             {
                 if (!_atTheEnd)
                 {
-                    if (!_disposer.IsDisposed && _enumerator.MoveNext())
+                    if (_enumerator.MoveNext())
                     {
                         _cache.Add(value = _enumerator.Current);
                         return true;
