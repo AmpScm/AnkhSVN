@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.10905</title>
+          AnkhSVN-Daily Update - 2.3.10918</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -15,20 +15,38 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5855/AnkhSvn-Daily-2.3.10905.1231.msi">AnkhSVN 2.3.10905</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5857/AnkhSvn-Daily-2.3.10918.1232.msi">AnkhSVN 2.3.10918</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=10905">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=10918">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2012-03-11</td></tr>
+<tr><td> </td><td class="r"><a id="10917" href="http://ankhsvn.net/rev/10917">
+            [r10917]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/Dialogs:</strong> VSDocumentFormPane.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">In the document pane: also try fetching services directly from the package.</td></tr>
+<tr><td> </td><td class="r"><a id="10910" href="http://ankhsvn.net/rev/10910">
+            [r10910]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/Selection:</strong> SelectionContext.cs, SelectionContext.Active.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure the selection context can never use an id with a different hierarchy
+then the one defining this id. I can't prove that this failed, but when it does
+it probably causes segfaults for unmanaged projects.</td></tr>
+<tr class="d"><td colspan="4">2012-03-10</td></tr>
+<tr><td> </td><td class="r"><a id="10908" href="http://ankhsvn.net/rev/10908">
+            [r10908]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> AnkhSvn.2005.sln, AnkhSvn.2008.sln, AnkhSvn.2010.sln</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">And update the other .sln files</td></tr>
+<tr><td> </td><td class="r"><a id="10907" href="http://ankhsvn.net/rev/10907">
+            [r10907]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS.UnitTest/Ankh.VS.UnitTest.csproj, Ankh.VS.Interop/Ankh.VS.Interop.csproj, tools/Ankh.BitmapExtractor/Ankh.BitmapExtractor.csproj, Ankh.Diff/Ankh.Diff.csproj, Ankh.Scc/Ankh.Scc.csproj, Ankh.VS/Ankh.VS.csproj, Ankh.ExtensionPoints/Ankh.ExtensionPoints.csproj, tools/Ankh.GenPkgDef/Ankh.GenPkgDef.csproj, Ankh.VS.IntegrationTest/Ankh.VS.IntegrationTest.csproj, tools/Ankh.GenerateVSIXManifest/Ankh.GenerateVSIXManifest.csproj, Ankh.Package/Ankh.Package.csproj, AnkhSvn.2011.sln, Ankh.UI/Ankh.UI.csproj, Ankh.WpfEditor.Package/Ankh.WpfEditor.Package.csproj (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">In an attempt to finally make Visual Studio stop creating a mixed mode
+solution configuration give all projects a proper x86 target.
+(All projects except Ankh.Ids are x86 specific anyway)</td></tr>
 <tr class="d"><td colspan="4">2012-03-09</td></tr>
 <tr><td> </td><td class="r"><a id="10903" href="http://ankhsvn.net/rev/10903">
             [r10903]
