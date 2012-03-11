@@ -80,7 +80,7 @@ namespace Ankh
 
         public static bool VS2008OrOlder
         {
-            get { return FullVersion.Minor <= 9; }
+            get { return FullVersion.Major <= 9; }
         }
 
         public static bool VS2005
