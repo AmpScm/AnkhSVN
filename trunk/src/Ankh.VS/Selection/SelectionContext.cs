@@ -145,14 +145,6 @@ namespace Ankh.VS.Selection
                 current.id = itemidNew;
                 current.selection = pMISNew;
                 _currentContainer = pSCNew;
-
-#if DEBUG
-                string name;
-                if (pHierNew != null && ErrorHandler.Succeeded(pHierNew.GetCanonicalName(VSConstants.VSITEMID_ROOT, out name)))
-                    Debug.WriteLine(string.Format("Selection from {0}", name));
-                else
-                    Debug.WriteLine(string.Format("Selection from ?"));
-#endif
             }
 
             if (_filterItem != VSConstants.VSITEMID_NIL)
