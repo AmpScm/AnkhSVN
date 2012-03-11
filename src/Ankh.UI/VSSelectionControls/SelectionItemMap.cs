@@ -24,7 +24,6 @@ using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
 using Ankh.Selection;
 using System.Windows.Forms;
-using IOleCommandTarget = Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget;
 
 namespace Ankh.UI.VSSelectionControls
 {
@@ -55,11 +54,9 @@ namespace Ankh.UI.VSSelectionControls
         string GetCanonicalName(T item);
     }
 
-    [ComVisible(true), ComDefaultInterfaceAttribute(typeof(IVsMultiItemSelect))]
-    public sealed class SelectionItemMap : IVsMultiItemSelect, ISelectionContainer
+    public class SelectionItemMap : IVsHierarchy, IVsMultiItemSelect, ISelectionContainer
     {
-        readonly SelectionMapHierarchy _hierarchy;
-        abstract class MapData
+        protected abstract class MapData
         {
             internal MapData()
             {
@@ -102,7 +99,7 @@ namespace Ankh.UI.VSSelectionControls
             readonly Dictionary<uint, IVsHierarchyEvents> _eventHandlers = new Dictionary<uint, IVsHierarchyEvents>();
             readonly Dictionary<T, uint> _items = new Dictionary<T, uint>();
             readonly Dictionary<uint, T> _ids = new Dictionary<uint, T>();
-            uint lvId = 100;
+            uint lvId;
 
             public MapData(ISelectionMapOwner<T> owner)
             {
@@ -326,11 +323,10 @@ namespace Ankh.UI.VSSelectionControls
 
         readonly MapData _data;
 
-        SelectionItemMap(MapData mapData)
+        protected SelectionItemMap(MapData mapData)
         {
             _data = mapData;
             _data.HandleDestroyed += new EventHandler(OnDataHandleDestroyed);
-            _hierarchy = new SelectionMapHierarchy(this, _data);
         }
 
         public static SelectionItemMap Create<T>(ISelectionMapOwner<T> owner)
@@ -342,12 +338,117 @@ namespace Ankh.UI.VSSelectionControls
             return new SelectionItemMap(CreateData<T>(owner));
         }
 
-        static MapData CreateData<T>(ISelectionMapOwner<T> owner)
+        protected static MapData CreateData<T>(ISelectionMapOwner<T> owner)
             where T : class
         {
             return new MapData<T>(owner);
         }
-        
+
+        int IVsHierarchy.AdviseHierarchyEvents(IVsHierarchyEvents pEventSink, out uint pdwCookie)
+        {
+            return _data.AdviseHierarchyEvents(pEventSink, out pdwCookie);
+        }
+
+        int IVsHierarchy.UnadviseHierarchyEvents(uint dwCookie)
+        {
+            return _data.UnadviseHierarchyEvents(dwCookie);
+        }
+
+        int IVsHierarchy.Close()
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsHierarchy.GetCanonicalName(uint itemid, out string pbstrName)
+        {
+            string name = _data.GetCanonicalName(itemid);
+
+            if (name == null)
+                pbstrName = "{" + itemid + "}";
+            else
+                pbstrName = name;
+
+            return VSConstants.S_OK;
+        }
+
+        int IVsHierarchy.GetGuidProperty(uint itemid, int propid, out Guid pguid)
+        {
+            pguid = Guid.Empty;
+            return VSConstants.E_FAIL;
+        }
+
+        int IVsHierarchy.GetNestedHierarchy(uint itemid, ref Guid iidHierarchyNested, out IntPtr ppHierarchyNested, out uint pitemidNested)
+        {
+            ppHierarchyNested = IntPtr.Zero;
+            pitemidNested = VSConstants.VSITEMID_NIL;
+            return VSConstants.E_FAIL;
+        }
+
+        int IVsHierarchy.GetProperty(uint itemid, int propid, out object pvar)
+        {
+            return _data.GetProperty(itemid, propid, out pvar);
+        }
+
+        Microsoft.VisualStudio.OLE.Interop.IServiceProvider _serviceProvider;
+        int IVsHierarchy.GetSite(out Microsoft.VisualStudio.OLE.Interop.IServiceProvider ppSP)
+        {
+            ppSP = _serviceProvider;
+            return VSConstants.S_OK;
+        }
+
+        int IVsHierarchy.ParseCanonicalName(string pszName, out uint pitemid)
+        {
+            pitemid = uint.Parse(pszName.TrimStart('{').TrimEnd('}'));
+            return VSConstants.S_OK;
+        }
+
+        int IVsHierarchy.QueryClose(out int pfCanClose)
+        {
+            pfCanClose = 0;
+            return VSConstants.S_OK;
+        }
+
+        int IVsHierarchy.SetGuidProperty(uint itemid, int propid, ref Guid rguid)
+        {
+            return VSConstants.E_FAIL;
+        }
+
+        int IVsHierarchy.SetProperty(uint itemid, int propid, object var)
+        {
+            return VSConstants.E_FAIL;
+        }
+
+        int IVsHierarchy.SetSite(Microsoft.VisualStudio.OLE.Interop.IServiceProvider psp)
+        {
+            _serviceProvider = psp;
+            return VSConstants.S_OK;
+        }
+
+        int IVsHierarchy.Unused0()
+        {
+            return VSConstants.E_NOTIMPL;
+        }
+
+        int IVsHierarchy.Unused1()
+        {
+            return VSConstants.E_NOTIMPL;
+        }
+
+        int IVsHierarchy.Unused2()
+        {
+            return VSConstants.E_NOTIMPL;
+        }
+
+        int IVsHierarchy.Unused3()
+        {
+            return VSConstants.E_NOTIMPL;
+        }
+
+        int IVsHierarchy.Unused4()
+        {
+            return VSConstants.E_NOTIMPL;
+        }
+
         [DebuggerHidden, DebuggerNonUserCode]
         int IVsMultiItemSelect.GetSelectionInfo(out uint pcItems, out int pfSingleHierarchy)
         {
@@ -361,17 +462,17 @@ namespace Ankh.UI.VSSelectionControls
 
         int IVsMultiItemSelect.GetSelectedItems(uint grfGSI, uint cItems, VSITEMSELECTION[] rgItemSel)
         {
-            bool omitHiers = (grfGSI & (uint)__VSGSIFLAGS.GSI_fOmitHierPtrs) != 0;
+            bool omitHiers = (grfGSI == (uint)__VSGSIFLAGS.GSI_fOmitHierPtrs);
 
-            IList selection = _data.Selection;
-
-            if (cItems > selection.Count || cItems > rgItemSel.Length)
+            if (cItems > _data.Selection.Count)
                 return VSConstants.E_FAIL;
-            
+
             for (int i = 0; i < cItems; i++)
             {
-                rgItemSel[i].pHier = omitHiers ? null : _hierarchy;
-                rgItemSel[i].itemid = _data.GetId(selection[i]);
+                rgItemSel[i].pHier = omitHiers ? null : this;
+
+                if (i < _data.Selection.Count)
+                    rgItemSel[i].itemid = _data.GetId(_data.Selection[i]);
             }
 
             return VSConstants.S_OK;
@@ -512,12 +613,14 @@ namespace Ankh.UI.VSSelectionControls
             {
                 _context = value;
                 _tracker = null;
+                GC.KeepAlive(Tracker);
             }
         }
 
         IVsTrackSelectionEx _tracker;
 
-        IVsTrackSelectionEx Tracker
+        [CLSCompliant(false)]
+        protected IVsTrackSelectionEx Tracker
         {
             get
             {
@@ -542,12 +645,6 @@ namespace Ankh.UI.VSSelectionControls
             if (Tracker == null)
                 return;
 
-            if (_selHandle == IntPtr.Zero)
-                _selHandle = Marshal.GetComInterfaceForObject(this, typeof(ISelectionContainer));
-
-            if (_hierHandle == IntPtr.Zero)
-                _hierHandle = Marshal.GetComInterfaceForObject(_hierarchy, typeof(IVsHierarchy));
-
             _sel = null; // Clear wrapper cache
             _data.CleanSelection();
 
@@ -555,6 +652,17 @@ namespace Ankh.UI.VSSelectionControls
 
             if (selectedCount > 0)
             {
+                IntPtr selHandle = _selHandle;
+                IntPtr hier = _hierHandle;
+
+                selHandle = _selHandle;
+
+                if (selHandle == IntPtr.Zero)
+                    selHandle = _selHandle = Marshal.GetComInterfaceForObject(this, typeof(ISelectionContainer));
+
+                if (hier == IntPtr.Zero)
+                    hier = _hierHandle = Marshal.GetComInterfaceForObject(this, typeof(IVsHierarchy));
+
                 uint id;
 
                 IVsMultiItemSelect ms = null;
@@ -569,12 +677,12 @@ namespace Ankh.UI.VSSelectionControls
 
                 try
                 {
-                    Tracker.OnSelectChangeEx(_hierHandle, id, ms, _selHandle);
+                    Tracker.OnSelectChangeEx(hier, id, ms, selHandle);
                 }
                 catch { } // Ignore listener exceptions :(
             }
             else
-                Tracker.OnSelectChangeEx(_hierHandle, VSConstants.VSITEMID_NIL, null, _selHandle);
+                Tracker.OnSelectChangeEx(IntPtr.Zero, VSConstants.VSITEMID_NIL, null, IntPtr.Zero);
         }
 
         internal void EnsureSelection()
@@ -604,252 +712,10 @@ namespace Ankh.UI.VSSelectionControls
             NotifySelectionUpdated();
         }
 
-        object GetItem(uint id)
+        [CLSCompliant(false)]
+        protected object GetItem(uint id)
         {
             return _data.GetItemObject(id);
         }
-
-        public CustomQueryInterfaceResult GetInterface(ref Guid iid, out IntPtr ppv)
-        {
-            Debug.WriteLine(string.Format("Getting: {0}", iid));
-
-            ppv = IntPtr.Zero;
-
-            return CustomQueryInterfaceResult.NotHandled;
-        }
-
-        [ComVisible(true), ComDefaultInterface(typeof(IVsHierarchy)), ClassInterface(ClassInterfaceType.AutoDual)]
-        sealed class SelectionMapHierarchy : IVsHierarchy, IVsProject2, IVsSccProject2, Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget
-        {
-            readonly SelectionItemMap _map;
-            readonly MapData _data;
-
-            public SelectionMapHierarchy(SelectionItemMap map, MapData data)
-            {
-                if (map == null)
-                    throw new ArgumentNullException("map");
-                else if (data == null)
-                    throw new ArgumentNullException("data");
-
-                _map = map;
-                _data = data;
-            }
-
-            int IVsHierarchy.AdviseHierarchyEvents(IVsHierarchyEvents pEventSink, out uint pdwCookie)
-            {
-                return _data.AdviseHierarchyEvents(pEventSink, out pdwCookie);
-            }
-
-            int IVsHierarchy.UnadviseHierarchyEvents(uint dwCookie)
-            {
-                return _data.UnadviseHierarchyEvents(dwCookie);
-            }
-
-            int IVsHierarchy.Close()
-            {
-                return VSConstants.S_OK;
-            }
-
-            public int GetCanonicalName(uint itemid, out string pbstrName)
-            {
-                string name = _data.GetCanonicalName(itemid);
-
-                if (name == null)
-                    pbstrName = "{" + itemid + "}";
-                else
-                    pbstrName = name;
-
-                return VSConstants.S_OK;
-            }
-
-            int IVsHierarchy.GetGuidProperty(uint itemid, int propid, out Guid pguid)
-            {
-                pguid = Guid.Empty;
-                return VSConstants.E_FAIL;
-            }
-
-            int IVsHierarchy.GetNestedHierarchy(uint itemid, ref Guid iidHierarchyNested, out IntPtr ppHierarchyNested, out uint pitemidNested)
-            {
-                ppHierarchyNested = IntPtr.Zero;
-                pitemidNested = VSConstants.VSITEMID_NIL;
-                return VSConstants.E_FAIL;
-            }
-
-            int IVsHierarchy.GetProperty(uint itemid, int propid, out object pvar)
-            {
-                return _data.GetProperty(itemid, propid, out pvar);
-            }
-
-            Microsoft.VisualStudio.OLE.Interop.IServiceProvider _serviceProvider;
-            int IVsHierarchy.GetSite(out Microsoft.VisualStudio.OLE.Interop.IServiceProvider ppSP)
-            {
-                ppSP = _serviceProvider;
-                return VSConstants.S_OK;
-            }
-
-            int IVsHierarchy.ParseCanonicalName(string pszName, out uint pitemid)
-            {
-                pitemid = uint.Parse(pszName.TrimStart('{').TrimEnd('}'));
-                return VSConstants.S_OK;
-            }
-
-            int IVsHierarchy.QueryClose(out int pfCanClose)
-            {
-                pfCanClose = 0;
-                return VSConstants.S_OK;
-            }
-
-            int IVsHierarchy.SetGuidProperty(uint itemid, int propid, ref Guid rguid)
-            {
-                return VSConstants.E_FAIL;
-            }
-
-            int IVsHierarchy.SetProperty(uint itemid, int propid, object var)
-            {
-                return VSConstants.E_FAIL;
-            }
-
-            int IVsHierarchy.SetSite(Microsoft.VisualStudio.OLE.Interop.IServiceProvider psp)
-            {
-                _serviceProvider = psp;
-                return VSConstants.S_OK;
-            }
-
-            int IVsHierarchy.Unused0()
-            {
-                return VSConstants.E_NOTIMPL;
-            }
-
-            int IVsHierarchy.Unused1()
-            {
-                return VSConstants.E_NOTIMPL;
-            }
-
-            int IVsHierarchy.Unused2()
-            {
-                return VSConstants.E_NOTIMPL;
-            }
-
-            int IVsHierarchy.Unused3()
-            {
-                return VSConstants.E_NOTIMPL;
-            }
-
-            int IVsHierarchy.Unused4()
-            {
-                return VSConstants.E_NOTIMPL;
-            }
-
-            public int AddItem(uint itemidLoc, VSADDITEMOPERATION dwAddItemOperation, string pszItemName, uint cFilesToOpen, string[] rgpszFilesToOpen, IntPtr hwndDlgOwner, VSADDRESULT[] pResult)
-            {
-                return VSConstants.E_NOTIMPL;
-            }
-
-            public int AddItemWithSpecific(uint itemidLoc, VSADDITEMOPERATION dwAddItemOperation, string pszItemName, uint cFilesToOpen, string[] rgpszFilesToOpen, IntPtr hwndDlgOwner, uint grfEditorFlags, ref Guid rguidEditorType, string pszPhysicalView, ref Guid rguidLogicalView, VSADDRESULT[] pResult)
-            {
-                return VSConstants.E_NOTIMPL;
-            }
-
-            public int GenerateUniqueItemName(uint itemidLoc, string pszExt, string pszSuggestedRoot, out string pbstrItemName)
-            {
-                pbstrItemName = null;
-                return VSConstants.E_NOTIMPL;
-            }
-
-            public int GetItemContext(uint itemid, out Microsoft.VisualStudio.OLE.Interop.IServiceProvider ppSP)
-            {
-                ppSP = null;
-                return VSConstants.E_NOTIMPL;
-            }
-
-            public int GetMkDocument(uint itemid, out string pbstrMkDocument)
-            {
-                return GetCanonicalName(itemid, out pbstrMkDocument);
-            }
-
-            public int IsDocumentInProject(string pszMkDocument, out int pfFound, VSDOCUMENTPRIORITY[] pdwPriority, out uint pitemid)
-            {
-                pitemid = VSConstants.VSITEMID_NIL;
-                pfFound = 0;
-                return VSConstants.E_NOTIMPL;
-            }
-
-            public int OpenItem(uint itemid, ref Guid rguidLogicalView, IntPtr punkDocDataExisting, out IVsWindowFrame ppWindowFrame)
-            {
-                ppWindowFrame = null;
-                return VSConstants.E_NOTIMPL;
-            }
-
-            public int OpenItemWithSpecific(uint itemid, uint grfEditorFlags, ref Guid rguidEditorType, string pszPhysicalView, ref Guid rguidLogicalView, IntPtr punkDocDataExisting, out IVsWindowFrame ppWindowFrame)
-            {
-                ppWindowFrame = null;
-                return VSConstants.E_NOTIMPL;
-            }
-
-            public int RemoveItem(uint dwReserved, uint itemid, out int pfResult)
-            {
-                pfResult = 0;
-                return VSConstants.E_NOTIMPL;
-            }
-
-            public int ReopenItem(uint itemid, ref Guid rguidEditorType, string pszPhysicalView, ref Guid rguidLogicalView, IntPtr punkDocDataExisting, out IVsWindowFrame ppWindowFrame)
-            {
-                ppWindowFrame = null;
-                return VSConstants.E_NOTIMPL;
-            }
-
-            public int TransferItem(string pszMkDocumentOld, string pszMkDocumentNew, IVsWindowFrame punkWindowFrame)
-            {
-                return VSConstants.E_NOTIMPL;
-            }
-        
-            int IVsSccProject2.GetSccFiles(uint itemid, Microsoft.VisualStudio.OLE.Interop.CALPOLESTR[] pCaStringsOut, Microsoft.VisualStudio.OLE.Interop.CADWORD[] pCaFlagsOut)
-            {
-                return VSConstants.E_NOTIMPL;
-            }
-
-            int IVsSccProject2.GetSccSpecialFiles(uint itemid, string pszSccFile, Microsoft.VisualStudio.OLE.Interop.CALPOLESTR[] pCaStringsOut, Microsoft.VisualStudio.OLE.Interop.CADWORD[] pCaFlagsOut)
-            {
-                return VSConstants.E_NOTIMPL;
-            }
-
-            int IVsSccProject2.SccGlyphChanged(int cAffectedNodes, uint[] rgitemidAffectedNodes, VsStateIcon[] rgsiNewGlyphs, uint[] rgdwNewSccStatus)
-            {
-                return VSConstants.S_OK;
-            }
-
-            int IVsSccProject2.SetSccLocation(string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszSccProvider)
-            {
-                return VSConstants.E_NOTIMPL;
-            }
-
-            public CustomQueryInterfaceResult GetInterface(ref Guid iid, out IntPtr ppv)
-            {
-                Debug.WriteLine(string.Format("Getting on hier: {0}", iid));
-
-                ppv = IntPtr.Zero;
-
-                return CustomQueryInterfaceResult.NotHandled;
-            }
-
-            public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
-            {
-                IOleCommandTarget oct = _map.Context as IOleCommandTarget;
-                if (oct == null)
-                    oct = _map.Context.GetService<IOleCommandTarget>();
-
-                return oct.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
-            }
-
-            public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, Microsoft.VisualStudio.OLE.Interop.OLECMD[] prgCmds, IntPtr pCmdText)
-            {
-                IOleCommandTarget oct = _map.Context as IOleCommandTarget;
-                if (oct == null)
-                    oct = _map.Context.GetService<IOleCommandTarget>();
-
-                return oct.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
-            }
-        }
     }
-    
 }
