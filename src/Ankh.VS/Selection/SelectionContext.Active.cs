@@ -243,7 +243,7 @@ namespace Ankh.VS.Selection
                 _shouldRefresh = false;
 
                 // TODO: Perhaps get the global context again instead of returning cached values
-                OnSelectionChanged(_currentHierarchy, _currentItem, _currentSelection, _currentContainer,
+                OnSelectionChanged(current.hierarchy, current.id, current.selection, _currentContainer,
                     _hierCached, _idCached, _misCached, _contCached);
 
                 _hierCached = null;
@@ -299,9 +299,9 @@ namespace Ankh.VS.Selection
             if (!_shouldRefresh)
             {
                 _shouldRefresh = true;
-                _hierCached = _currentHierarchy;
-                _idCached = _currentItem;
-                _misCached = _currentSelection;
+                _hierCached = current.hierarchy;
+                _idCached = current.id;
+                _misCached = current.selection;
                 _contCached = _currentContainer;
             }
 
@@ -417,8 +417,8 @@ namespace Ankh.VS.Selection
             {
                 if (_ctx._topPopup == _top)
                 {
-                    _ctx.OnSelectionChanged(_ctx._currentHierarchy, _ctx._currentItem, _ctx._currentSelection, _ctx._currentContainer,
-                        _ctx._currentHierarchy, _ctx._currentItem, _ctx._currentSelection, pSC);
+                    _ctx.OnSelectionChanged(_ctx.current.hierarchy, _ctx.current.id, _ctx.current.selection, _ctx._currentContainer,
+                        _ctx.current.hierarchy, _ctx.current.id, _ctx.current.selection, pSC);
                 }
 
                 return VSConstants.S_OK;
@@ -432,7 +432,7 @@ namespace Ankh.VS.Selection
                     ISelectionContainer cont = (pSC != IntPtr.Zero) ? Marshal.GetObjectForIUnknown(pSC) as ISelectionContainer : null;
                     if (_ctx._topPopup == _top)
                     {
-                        _ctx.OnSelectionChanged(_ctx._currentHierarchy, _ctx._currentItem, _ctx._currentSelection, _ctx._currentContainer,
+                        _ctx.OnSelectionChanged(_ctx.current.hierarchy, _ctx.current.id, _ctx.current.selection, _ctx._currentContainer,
                             hier, itemid, pMIS, cont);
                     }
                 }
