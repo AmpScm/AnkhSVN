@@ -28,7 +28,6 @@ using SharpSvn;
 using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.Scc.UI;
-using Ankh.UI.PendingChanges;
 using Ankh.UI.VSSelectionControls;
 using System.Drawing;
 
@@ -59,8 +58,6 @@ namespace Ankh.UI.Annotate
             _map = SelectionItemMap.Create<IAnnotateSection>(this);
             _map.Context = Context;
 
-            if (SelectionChanged != null)
-                SelectionChanged(this, EventArgs.Empty);
             // Set Notify that we have a selection, otherwise the first selection request fails.
             _map.NotifySelectionUpdated();
 
@@ -148,9 +145,6 @@ namespace Ankh.UI.Annotate
 
             _selected = (AnnotateSource)section;
 
-            if (SelectionChanged != null)
-                SelectionChanged(this, EventArgs.Empty);
-
             _map.NotifySelectionUpdated();
         }
 
@@ -189,8 +183,6 @@ namespace Ankh.UI.Annotate
         }
 
         #region ISelectionMapOwner<IAnnotateSection> Members
-
-        public event EventHandler SelectionChanged;
 
         System.Collections.IList ISelectionMapOwner<IAnnotateSection>.Selection
         {
