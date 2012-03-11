@@ -208,19 +208,10 @@ namespace Ankh.UI.PendingChanges.Commits
             }
         }
 
-        PendingCommitsSelectionMap _map;
+        SelectionItemMap _map;
         internal override SelectionItemMap SelectionMap
         {
-            get { return _map ?? (_map = new PendingCommitsSelectionMap(this)); }
-        }
-
-        sealed class PendingCommitsSelectionMap : SelectionItemMap
-        {
-            public PendingCommitsSelectionMap(PendingCommitsView view)
-                : base(CreateData(view))
-            {
-
-            }
+            get { return _map ?? (_map = SelectionItemMap.Create(this)); }
         }
 
         protected override string GetCanonicalName(PendingCommitItem item)
