@@ -75,12 +75,12 @@ namespace Ankh
 
         public static bool VS11OrLater
         {
-            get { return FullVersion >= new Version(11, 0); }
+            get { return FullVersion.Major >= 11; }
         }
 
         public static bool VS2008OrOlder
         {
-            get { return FullVersion < new Version(10, 0); }
+            get { return FullVersion.Minor <= 9; }
         }
 
         public static bool VS2005
