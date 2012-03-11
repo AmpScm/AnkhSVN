@@ -106,8 +106,9 @@
         <h1>AnkhSVN-Daily Update</h1>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
-        <p>Please use <a href="/daily/2.2.x">AnkhSVN 2.2</a> for the latest daily build based
-           on Subversion 1.6</p>
+        <p>If you don't want to upgrade to Subversion 1.7, you can use an <a href="/daily/2.2.x">
+           AnkhSVN 2.2 daily</a> for Subversion 1.6 and an<a href="/daily/2.0.x">AnkhSVN 2.0 daily</a>
+           for the latest daily build based on Subversion 1.5</p>
         <xsl:text>&#13;&#10;</xsl:text>
         <p>
           The AnkhSVN project provides Daily builds of the current development tree. These versions
@@ -214,9 +215,9 @@
         </xsl:for-each>
         <xsl:if test="count(path[@kind != 'dir']) &gt; 15">
           <xsl:text> (and </xsl:text>
-          <xsl:value-of select="count(paths/path[@kind != 'dir'])-8"/>
+          <xsl:value-of select="count(path[@kind != 'dir'])-15"/>
           <xsl:choose>
-            <xsl:when test="count(paths/path) = 9">
+            <xsl:when test="count(path[@kind != 'dir']) = 16">
               <xsl:text> other path)</xsl:text>
             </xsl:when>
             <xsl:otherwise>
