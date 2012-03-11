@@ -205,7 +205,7 @@ namespace Ankh
             if (serviceProvider == null)
                 throw new ArgumentNullException("serviceProvider");
 
-            return (AnkhRuntime)serviceProvider.GetService(typeof(AnkhRuntime));
+            return serviceProvider.GetService(typeof(AnkhRuntime)) as AnkhRuntime;
         }
 
         readonly static Type[] _serviceConstructorParams = new Type[] { typeof(IAnkhServiceProvider) };
