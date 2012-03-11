@@ -89,7 +89,7 @@ namespace Ankh.UI.Annotate
         internal int GetTopLine()
         {
             // TODO: implement real fix for VS2010
-            if (VSVersion.VS2010)
+            if (VSVersion.VS2010OrLater)
                 return 0;
 
             Point p = editor.EditorClientTopLeft;
