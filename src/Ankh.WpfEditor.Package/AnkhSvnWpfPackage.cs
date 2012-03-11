@@ -28,6 +28,7 @@ namespace Ankh.WpfPackage
     // a package.
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [Description(AnkhId.WpfPackageDescription)]
+    [CLSCompliant(false)]
     [Guid(AnkhId.WpfPackageId)]
     [ProvideAutoLoad(AnkhId.AnkhServicesAvailable)]
     public sealed class AnkhSvnWpfPackage : Package

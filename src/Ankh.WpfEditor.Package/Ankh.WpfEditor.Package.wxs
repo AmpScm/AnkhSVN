@@ -15,11 +15,11 @@
       </Component>
       <Component Id="CR_PkgWpf_2010" Guid="C953E5E1-A952-4E15-A4A7-A6ACBE713FE6">
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="PkgWpf-VS2010" Value="1" Type="integer" KeyPath="yes" />
-        <?include $(sys.SOURCEFILEDIR)obj\$(var.Configuration)\Ankh.WpfEditor.Package-2010.wxi ?>
+        <?include $(sys.SOURCEFILEDIR)obj\Ankh.WpfEditor.Package-2010.wxi ?>
       </Component>
       <Component Id="CR_PkgWpf_11" Guid="D7035C6B-46A9-4272-87A5-743FB08DA989">
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="PkgWpf-VS11" Value="1" Type="integer" KeyPath="yes" />
-        <?include $(sys.SOURCEFILEDIR)obj\$(var.Configuration)\Ankh.WpfEditor.Package-11.wxi ?>
+        <?include $(sys.SOURCEFILEDIR)obj\Ankh.WpfEditor.Package-11.wxi ?>
       </Component>
     </DirectoryRef>
     <ComponentGroup Id="PkgWpfReg2010">
