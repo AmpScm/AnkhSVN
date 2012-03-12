@@ -56,8 +56,6 @@ namespace Ankh.UI
 
         AmbientProperties AmbientProperties { get; }
 
-        bool LoadUserProperties(string streamName);
-
         // Summary:
         //     Gets the root registry key of the current Visual Studio registry hive.
         //

@@ -47,19 +47,10 @@ namespace Ankh.VSPackage
             return VSConstants.S_OK;
         }
 
-        public bool LoadUserProperties(string streamName)
-        {
-            IVsSolutionPersistence ps = GetService<IVsSolutionPersistence>(typeof(SVsSolutionPersistence));
-            if (ps == null)
-                return false;
-
-            return ErrorHandler.Succeeded(ps.LoadPackageUserOpts((IVsPersistSolutionOpts)GetService<Ankh.UI.IAnkhPackage>(), streamName));
-        }
 
         // Global note: 
         // The same trick we do here for the solution (loading the package when encountering a solution property) 
         // can be done on several project types using IVsProjectStartupServices
-
         public int QuerySaveSolutionProps(IVsHierarchy pHierarchy, VSQUERYSAVESLNPROPS[] pqsspSave)
         {
             // This function is called by the IDE to determine if something needs to be saved in the solution.
