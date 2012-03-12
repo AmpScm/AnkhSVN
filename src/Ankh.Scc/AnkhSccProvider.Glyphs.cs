@@ -274,13 +274,7 @@ namespace Ankh.Scc
             ISccProjectWalker walker = Context.GetService<ISccProjectWalker>();
             pbstrTooltipText = null;
 
-            if (walker == null || StatusCache == null)
-                return VSConstants.S_OK;
-
-            if (phierHierarchy == null)
-                phierHierarchy = GetService<IVsHierarchy>(typeof(SVsSolution));
-
-            if (phierHierarchy == null)
+            if (walker == null || StatusCache == null || phierHierarchy == null)
                 return VSConstants.S_OK;
 
             StringBuilder sb = new StringBuilder();
