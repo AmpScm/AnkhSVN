@@ -79,6 +79,7 @@ namespace Ankh.VS.Selection
         public SelectionContext(IAnkhServiceProvider context)
             : base(context)
         {
+            _filterItem = VSConstants.VSITEMID_NIL;
         }
 
         protected override void OnInitialize()
@@ -354,22 +355,12 @@ namespace Ankh.VS.Selection
         {
             HierarchySelection sel = current; // Cache the selection to make sure we don't use an id for another hierarchy
 
-            if ((sel.hierarchy != null)
-                && (sel.id != VSConstants.VSITEMID_NIL)
-                && (sel.id != VSConstants.VSITEMID_SELECTION))
-            {
-                if (sel.id == _filterItem && sel.hierarchy == _filterHierarchy)
-                    yield break;
-
-                yield return new SelectionItem(sel.hierarchy, sel.id);
-            }
-            else if (sel.selection != null
-                     && sel.id == VSConstants.VSITEMID_SELECTION)
+            if (sel.id == VSConstants.VSITEMID_SELECTION)
             {
                 uint nItems;
                 int withinSingleHierarchy;
 
-                if (!ErrorHandler.Succeeded(sel.selection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
+                if (sel.selection == null || !ErrorHandler.Succeeded(sel.selection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
                     yield break;
 
                 uint flags = 0;
@@ -397,6 +388,13 @@ namespace Ankh.VS.Selection
                     }
                 }
             }
+            else if (sel.id != VSConstants.VSITEMID_NIL && (sel.hierarchy != null))
+            {
+                if (sel.id == _filterItem && sel.hierarchy == _filterHierarchy)
+                    yield break;
+
+                yield return new SelectionItem(sel.hierarchy, sel.id);
+            }
             else if (_currentContainer == null)
             {
                 // No selection, no hierarchy.... -> no selection!
@@ -412,7 +410,7 @@ namespace Ankh.VS.Selection
                     IVsHierarchy hier = (IVsHierarchy)Solution;
 
                     if (hier != null)
-                        yield return new SelectionItem((IVsHierarchy)Solution, VSConstants.VSITEMID_ROOT,
+                        yield return new SelectionItem(hier, VSConstants.VSITEMID_ROOT,
                             SelectionUtils.GetSolutionAsSccProject(Context));
                 }
             }
