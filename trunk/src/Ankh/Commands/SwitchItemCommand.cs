@@ -36,8 +36,6 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-
-            IFileStatusCache statusCache;
             switch (e.Command)
             {
                 case AnkhCommand.SolutionSwitchDialog:
@@ -47,8 +45,7 @@ namespace Ankh.Commands
                         e.Enabled = false;
                         return;
                     }
-                    statusCache = e.GetService<IFileStatusCache>();
-                    SvnItem solutionItem = statusCache[solutionSettings.ProjectRoot];
+                    SvnItem solutionItem = e.GetService<IFileStatusCache>()[solutionSettings.ProjectRoot];
                     if (!solutionItem.IsVersioned)
                     {
                         e.Enabled = false;
@@ -57,41 +54,34 @@ namespace Ankh.Commands
                     break;
 
                 case AnkhCommand.SwitchProject:
-                    statusCache = e.GetService<IFileStatusCache>();
-                    IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
-                    foreach (SvnProject item in e.Selection.GetSelectedProjects(true))
+                    SvnProject oneProject = EnumTools.GetSingle(e.Selection.GetSelectedProjects(false));
+
+                    if (oneProject == null)
                     {
-                        ISvnProjectInfo pi = pfm.GetProjectInfo(item);
-
-                        if (pi == null || pi.ProjectDirectory == null)
-                        {
-                            e.Enabled = false;
-                            return;
-                        }
-
-                        SvnItem projectItem = statusCache[pi.ProjectDirectory];
-                        if (!projectItem.IsVersioned)
-                        {
-                            e.Enabled = false;
-                            return;
-                        }
+                        e.Enabled = false;
+                        return;
                     }
+
+                    IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
+                    ISvnProjectInfo pi = pfm.GetProjectInfo(oneProject);
+
+                    if (pi == null || pi.ProjectDirectory == null)
+                    {
+                        e.Enabled = false;
+                        return;
+                    }
+
+                    SvnItem projectItem = e.GetService<IFileStatusCache>()[pi.ProjectDirectory];
+
+                    if (projectItem == null || !projectItem.IsVersioned)
+                        e.Enabled = false;
                     break;
 
                 case AnkhCommand.SwitchItem:
-                    bool foundOne = false, error = false;
-                    foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-                    {
-                        if (item.IsVersioned && !foundOne)
-                            foundOne = true;
-                        else
-                        {
-                            error = true;
-                            break;
-                        }
-                    }
+                    SvnItem oneItem = EnumTools.GetSingle(e.Selection.GetSelectedSvnItems(false));
 
-                    e.Enabled = foundOne && !error;
+                    if (oneItem == null || !oneItem.IsVersioned)
+                        e.Enabled = false;
                     break;
             }
         }
