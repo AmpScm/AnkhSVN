@@ -231,6 +231,8 @@ namespace Ankh.Scc
 
                     if (icon == VsStateIcon.STATEICON_BLANK || icon == VsStateIcon.STATEICON_NOSTATEICON)
                         rgsiGlyphs[i] = icon;
+                    else if (Walker.InClassViewer)
+                        rgsiGlyphs[i] = (VsStateIcon)((int)icon);
                     else
                         rgsiGlyphs[i] = (VsStateIcon)((int)icon + _glyphOffset);
                 }
@@ -261,7 +263,6 @@ namespace Ankh.Scc
         }
 
         ISccProjectWalker _walker;
-
         ISccProjectWalker Walker
         {
             get { return _walker ?? (_walker = GetService<ISccProjectWalker>()); }

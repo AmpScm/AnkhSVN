@@ -50,5 +50,10 @@ namespace Ankh.Scc
         IEnumerable<string> GetSccFiles(IVsHierarchy hierarchy, uint id, ProjectWalkDepth depth, IDictionary<string, uint> map);
 
         void SetPrecreatedFilterItem(IVsHierarchy hierarchy, uint id);
+
+        /// <summary>
+        /// Gets a boolean indicating whether the class viewer is active.
+        /// </summary>
+        bool InClassViewer { get; }
     }
 }
