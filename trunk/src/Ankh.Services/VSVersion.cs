@@ -24,7 +24,6 @@ namespace Ankh
 {
     public static class VSVersion
     {
-        static readonly object _lock = new object();
         static Version _vsVersion;
         static Version _osVersion;
 
@@ -32,31 +31,28 @@ namespace Ankh
         {
             get
             {
-                lock (_lock)
+                if (_vsVersion == null)
                 {
-                    if (_vsVersion == null)
+                    string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "msenv.dll");
+
+                    if (File.Exists(path))
                     {
-                        string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "msenv.dll");
+                        FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(path);
 
-                        if (File.Exists(path))
+                        string verName = fvi.ProductVersion;
+
+                        for (int i = 0; i < verName.Length; i++)
                         {
-                            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(path);
-
-                            string verName = fvi.ProductVersion;
-
-                            for (int i = 0; i < verName.Length; i++)
+                            if (!char.IsDigit(verName, i) && verName[i] != '.')
                             {
-                                if (!char.IsDigit(verName, i) && verName[i] != '.')
-                                {
-                                    verName = verName.Substring(0, i);
-                                    break;
-                                }
+                                verName = verName.Substring(0, i);
+                                break;
                             }
-                            _vsVersion = new Version(verName);
                         }
-                        else
-                            _vsVersion = new Version(0, 0); // Not running inside Visual Studio!
+                        _vsVersion = new Version(verName);
                     }
+                    else
+                        _vsVersion = new Version(0, 0); // Not running inside Visual Studio!
                 }
 
                 return _vsVersion;
