@@ -260,6 +260,13 @@ namespace Ankh.Scc
             return VSConstants.S_OK;
         }
 
+        ISccProjectWalker _walker;
+
+        ISccProjectWalker Walker
+        {
+            get { return _walker ?? (_walker = GetService<ISccProjectWalker>()); }
+        }
+
         /// <summary>
         /// Provides ToolTip text based on the source control data for a specific node in the project's hierarchy Solution Explorer.
         /// </summary>
@@ -271,20 +278,15 @@ namespace Ankh.Scc
         /// </returns>
         public int GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode, out string pbstrTooltipText)
         {
-            ISccProjectWalker walker = Context.GetService<ISccProjectWalker>();
             pbstrTooltipText = null;
 
-            if (walker == null || StatusCache == null || phierHierarchy == null)
+            if (Walker == null || StatusCache == null || phierHierarchy == null)
                 return VSConstants.S_OK;
-
-            StringBuilder sb = new StringBuilder();
 
             HybridCollection<string> files = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
-
             int n = 0;
-            // pHierarchy = null if it is t
-            foreach (string file in walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.Empty, null))
+            foreach (string file in Walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.Empty, null))
             {
                 if (files.Contains(file) || !SvnItem.IsValidPath(file))
                     continue;
@@ -302,6 +304,7 @@ namespace Ankh.Scc
                 }
             }
 
+            StringBuilder sb = new StringBuilder();
             string format = (files.Count > 0) ? "{0}: {1}" : "{1}";
             int i = 0;
             foreach (string file in files)
