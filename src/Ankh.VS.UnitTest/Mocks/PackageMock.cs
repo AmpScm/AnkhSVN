@@ -65,11 +65,6 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 get { throw new NotImplementedException(); }
             }
 
-            public bool LoadUserProperties(string streamName)
-            {
-                throw new NotImplementedException();
-            }
-
             public Microsoft.Win32.RegistryKey ApplicationRegistryRoot
             {
                 get { throw new NotImplementedException(); }
