@@ -632,7 +632,7 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         [ComVisible(true), ComDefaultInterface(typeof(IVsHierarchy)), ClassInterface(ClassInterfaceType.AutoDual)]
-        sealed class SelectionMapHierarchy : IVsHierarchy, IVsHi
+        sealed class SelectionMapHierarchy : IVsHierarchy
         {
             readonly SelectionItemMap _map;
             readonly MapData _data;
