@@ -24,6 +24,7 @@ using Ankh.UI;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+using IOleObjectWithSite = Microsoft.VisualStudio.OLE.Interop.IObjectWithSite;
 using Microsoft.VisualStudio.TextManager.Interop;
 
 
@@ -32,6 +33,7 @@ namespace Ankh.VS.Dialogs
     sealed class VSDocumentHost : ISite, IAnkhEditorPane, IOleCommandTarget, IAnkhServiceProvider
     {
         readonly VSDocumentFormPane _pane;
+        readonly ServiceProviderHierarchy _spHier = new ServiceProviderHierarchy();
 
         public VSDocumentHost(VSDocumentFormPane pane)
         {
@@ -80,16 +82,18 @@ namespace Ankh.VS.Dialogs
             }
         }
 
+        public ServiceProviderHierarchy ServiceProviderHierarchy
+        {
+            get { return _spHier; }
+        }
+
         public object GetService(Type serviceType)
         {
             if (serviceType == typeof(AmbientProperties))
             {
                 return GetService<IAnkhPackage>().AmbientProperties;
             }
-
-            System.IServiceProvider paneSp = _pane;
-
-            object ob = paneSp.GetService(serviceType);
+            object ob = ServiceProviderHierarchy.GetService(serviceType);
 
             if (ob != null)
                 return ob;
@@ -215,12 +219,14 @@ namespace Ankh.VS.Dialogs
         {
             if (serviceType == typeof(IOleCommandTarget))
                 return _host;
+            else if (serviceType == typeof(IOleObjectWithSite))
+                return null;
             else
             {
                 object o = base.GetService(serviceType);
 
-                if (o == null && _context != null)
-                    o = _context.GetService(serviceType);
+                if (o == null)
+                    o = _host.ServiceProviderHierarchy.GetService(serviceType);
 
                 return o;
             }
