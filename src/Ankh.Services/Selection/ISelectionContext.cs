@@ -164,12 +164,6 @@ namespace Ankh.Selection
         IVsWindowFrame ActiveDocumentFrame { get; }
 
         /// <summary>
-        /// Gets the user context.
-        /// </summary>
-        /// <value>The user context.</value>
-        IVsUserContext UserContext { get; }
-
-        /// <summary>
         /// Pushes the popup context.
         /// </summary>
         /// <param name="control">The control.</param>

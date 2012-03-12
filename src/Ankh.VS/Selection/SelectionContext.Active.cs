@@ -40,9 +40,9 @@ namespace Ankh.VS.Selection
         string _activeDocumentFileName;
         IVsTextView _activeFrameTextView;
         bool _determinedActiveFrameTextView;
+        bool _classViewerActive;
 
-
-        IVsUserContext _userContext;
+        static Guid IID_IVsClassView = typeof(IVsClassView).GUID;
 
         public int OnElementValueChanged(uint elementid, object varValueOld, object varValueNew)
         {
@@ -52,7 +52,19 @@ namespace Ankh.VS.Selection
                     _activeFrameObject = _activeFrameControl = null;
                     _activeFrameTextView = null;
                     _determinedActiveFrameTextView = false;
+                    _classViewerActive = false;
                     _activeFrame = varValueNew as IVsWindowFrame;
+
+                    if (_activeFrame != null)
+                    {
+                        IntPtr v;
+
+                        if (ErrorHandler.Succeeded(_activeFrame.QueryViewInterface(ref IID_IVsClassView, out v)))
+                        {
+                            Marshal.Release(v);
+                            _classViewerActive = true;
+                        }
+                    }
                     break;
                 case VSConstants.VSSELELEMID.SEID_DocumentFrame:
                     _activeDocumentFrameObject = _activeDocumentControl = null;
@@ -60,10 +72,10 @@ namespace Ankh.VS.Selection
                     _determinedActiveFrameTextView = false;
                     _activeDocumentFrame = varValueNew as IVsWindowFrame;
                     break;
-                case VSConstants.VSSELELEMID.SEID_UserContext:
-                    _userContext = varValueNew as IVsUserContext;
-                    break;
 #if NEVER
+                case VSConstants.VSSELELEMID.SEID_UserContext:
+                    IVsUserContext userContext = varValueNew as IVsUserContext;
+                    break;
                 case VSConstants.VSSELELEMID.SEID_PropertyBrowserSID:
                     IVsPropertyBrowser pb = varValueNew as IVsPropertyBrowser;
                     break;
@@ -97,9 +109,9 @@ namespace Ankh.VS.Selection
             get { return _activeDocumentFrame; }
         }
 
-        public IVsUserContext UserContext
+        public bool InClassViewer
         {
-            get { return _userContext; }
+            get { return _classViewerActive; }
         }
 
         #endregion
