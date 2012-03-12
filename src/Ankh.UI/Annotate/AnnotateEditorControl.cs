@@ -56,6 +56,7 @@ namespace Ankh.UI.Annotate
                 return;
 
             _map = SelectionItemMap.Create<IAnnotateSection>(this);
+            _map.PublishHierarchy = false;
             _map.Context = Context;
 
             // Set Notify that we have a selection, otherwise the first selection request fails.
