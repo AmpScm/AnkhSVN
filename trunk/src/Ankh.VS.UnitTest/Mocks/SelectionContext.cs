@@ -117,11 +117,6 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 get { throw new NotImplementedException(); }
             }
 
-            public Microsoft.VisualStudio.Shell.Interop.IVsUserContext UserContext
-            {
-                get { throw new NotImplementedException(); }
-            }
-
             public IDisposable PushPopupContext(System.Windows.Forms.Control control)
             {
                 return null;
