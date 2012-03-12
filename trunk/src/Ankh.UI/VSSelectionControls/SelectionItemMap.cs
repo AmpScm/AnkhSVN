@@ -549,6 +549,7 @@ namespace Ankh.UI.VSSelectionControls
             if (Tracker == null)
                 return;
 
+            return;
             if (!PublishHierarchy)
             {
                 Tracker.OnSelectChange(this);
