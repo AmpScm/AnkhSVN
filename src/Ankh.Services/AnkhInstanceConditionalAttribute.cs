@@ -36,48 +36,20 @@ namespace Ankh
         {
             if (MinVersion != VSInstance.None)
             {
-                switch (MinVersion)
-                {
-                    case VSInstance.VS2005:
-                        break;
-                    case VSInstance.VS2008:
-                        if (VSVersion.VS2005)
-                            return false;
-                        break;
-                    case VSInstance.VS2010:
-                        if (!VSVersion.VS2010OrLater)
-                            return false;
-                        break;
-                    case VSInstance.VS11:
-                        if (!VSVersion.VS11OrLater)
-                            return false;
-                        break;
-                    default:
-                        break;
-                }
+                // Calculate enum value. VS2005 = VS 8.0
+                VSInstance actualVersion = (VSInstance)(VSVersion.FullVersion.Major - 8 + (int)VSInstance.VS2005);
+
+                if (MinVersion > actualVersion)
+                    return false;
             }
 
             if (MaxVersion != VSInstance.None)
             {
-                switch (MaxVersion)
-                {
-                    case VSInstance.VS2005:
-                        if (!VSVersion.VS2005)
-                            return false;
-                        break;
-                    case VSInstance.VS2008:
-                        if (VSVersion.VS2010OrLater)
-                            return false;
-                        break;
-                    case VSInstance.VS2010:
-                        if (VSVersion.VS11OrLater)
-                            return false;
-                        break;
-                    case VSInstance.VS11:
-                        break;
-                    default:
-                        break;
-                }
+                // Calculate enum value. VS2005 = VS 8.0
+                VSInstance actualVersion = (VSInstance)(VSVersion.FullVersion.Major - 8 + (int)VSInstance.VS2005);
+
+                if (MaxVersion < actualVersion)
+                    return false;
             }
 
             return true;
