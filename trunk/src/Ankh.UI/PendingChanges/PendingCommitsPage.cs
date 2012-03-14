@@ -112,10 +112,33 @@ namespace Ankh.UI.PendingChanges
             OnSolutionRefresh(this, EventArgs.Empty);
         }
 
+        int _inBatchUpdate;
+        List<PendingCommitItem> _toAdd;
         void OnBatchUpdateStarted(object sender, BatchStartedEventArgs e)
         {
             pendingCommits.BeginUpdate();
-            e.Disposers += pendingCommits.EndUpdate;
+            _inBatchUpdate++;
+            e.Disposers += OnBatchEnd;
+        }
+
+        void OnBatchEnd()
+        {
+            try
+            {
+                if (--_inBatchUpdate == 0)
+                {
+                    if (_toAdd != null)
+                    {
+                        PendingCommitItem[] toAdd = _toAdd.ToArray();
+                        _toAdd = null;
+                        pendingCommits.Items.AddRange(toAdd);
+                    }
+                }
+            }
+            finally
+            {
+                pendingCommits.EndUpdate();
+            }
         }
 
         void OnSolutionRefresh(object sender, EventArgs e)
@@ -188,7 +211,14 @@ namespace Ankh.UI.PendingChanges
 
             pci = new PendingCommitItem(pendingCommits, e.Change);
             _listItems.Add(path, pci);
-            pendingCommits.Items.Add(pci);
+            if (_inBatchUpdate > 0)
+            {
+                if (_toAdd == null)
+                    _toAdd = new List<PendingCommitItem>();
+                _toAdd.Add(pci);
+            }
+            else
+                pendingCommits.Items.Add(pci);
 
             // TODO: Maybe add something like
             //pendingCommits.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -209,6 +239,7 @@ namespace Ankh.UI.PendingChanges
                 }
                 _listItems.Clear();
                 pendingCommits.ClearItems();
+                _toAdd = null;
             }
         }
 
@@ -296,6 +327,11 @@ namespace Ankh.UI.PendingChanges
             {
                 _listItems.Remove(path);
                 pci.Remove();
+
+                // Currently probably not necessary, but just to be sure
+                if (_toAdd != null)
+                    _toAdd.Remove(pci);
+
                 pendingCommits.RefreshGroupsAvailable();
             }
             OnPendingChangeActivity(sender, e);
