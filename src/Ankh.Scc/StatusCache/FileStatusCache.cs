@@ -314,7 +314,6 @@ namespace Ankh.Scc.StatusCache
 
                 bool ok;
                 bool statSelf = false;
-                bool noWcAtAll = false;
 
                 // Don't retry file open/read operations on failure. These would only delay the result 
                 // (default number of delays = 100)
@@ -325,29 +324,22 @@ namespace Ankh.Scc.StatusCache
 
                 if (!ok)
                 {
-                    if (args.LastException != null)
+                    if (args.LastException != null &&
+                        args.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_UNSUPPORTED_FORMAT)
                     {
-                        switch (args.LastException.SvnErrorCode)
-                        {
-                            case SvnErrorCode.SVN_ERR_WC_UNSUPPORTED_FORMAT:
-                                if (CommandService != null)
-                                    CommandService.PostExecCommand(AnkhCommand.NotifyWcToNew, walkPath);
-                                break;
-                            case SvnErrorCode.SVN_ERR_WC_UPGRADE_REQUIRED:
-                                _enableUpgrade = true;
+                        if (CommandService != null)
+                            CommandService.PostExecCommand(AnkhCommand.NotifyWcToNew, walkPath);
+                    }
+                    else if (args.LastException != null &&
+                             args.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_UPGRADE_REQUIRED)
+                    {
+                        _enableUpgrade = true;
 
-                                if (updateDir != null)
-                                    updateDir.SetNeedsUpgrade();
+                        if (updateDir != null)
+                            updateDir.SetNeedsUpgrade();
 
-                                if (CommandService != null)
-                                    CommandService.PostExecCommand(AnkhCommand.NotifyUpgradeRequired, walkPath);
-                                break;
-                            case SvnErrorCode.SVN_ERR_WC_NOT_WORKING_COPY:
-                                // Status only reports this error if there is no ancestor working copy
-                                // We should avoid statting all parent directories again for .IsVersionable
-                                noWcAtAll = true;
-                                break;
-                        }
+                        if (CommandService != null)
+                            CommandService.PostExecCommand(AnkhCommand.NotifyUpgradeRequired, walkPath);
                     }
                     statSelf = true;
                 }
@@ -367,7 +359,7 @@ namespace Ankh.Scc.StatusCache
                     // Svn did not stat the items for us.. Let's make something up
 
                     if (walkingDirectory)
-                        StatDirectory(walkPath, directory, noWcAtAll);
+                        StatDirectory(walkPath, directory);
                     else
                     {
                         // Just stat the item passed and nothing else in the Depth.Empty case
@@ -431,13 +423,12 @@ namespace Ankh.Scc.StatusCache
             }
         }
 
-        private void StatDirectory(string walkPath, SvnDirectory directory, bool noWcAtAll)
+        private void StatDirectory(string walkPath, SvnDirectory directory)
         {
             // Note: There is a lock(_lock) around this in our caller
 
             bool canRead;
             string adminName = SvnClient.AdministrativeDirectoryName;
-            NoSccStatus noSccStatus = noWcAtAll ? NoSccStatus.NotVersionable : NoSccStatus.NotVersioned;
             foreach (SccFileSystemNode node in SccFileSystemNode.GetDirectoryNodes(walkPath, out canRead))
             {
                 if (string.Equals(node.Name, adminName, StringComparison.OrdinalIgnoreCase) || node.IsHiddenOrSystem)
@@ -447,18 +438,18 @@ namespace Ankh.Scc.StatusCache
                 if (node.IsFile)
                 {
                     if (!_map.TryGetValue(node.FullPath, out item))
-                        StoreItem(CreateItem(node.FullPath, noSccStatus, SvnNodeKind.File));
+                        StoreItem(CreateItem(node.FullPath, NoSccStatus.NotVersioned, SvnNodeKind.File));
                     else
                     {
                         ISvnItemUpdate updateItem = item;
                         if (updateItem.ShouldRefresh())
-                            updateItem.RefreshTo(noSccStatus, SvnNodeKind.File);
+                            updateItem.RefreshTo(NoSccStatus.NotVersioned, SvnNodeKind.File);
                     }
                 }
                 else
                 {
                     if (!_map.TryGetValue(node.FullPath, out item))
-                        StoreItem(CreateItem(node.FullPath, noSccStatus, SvnNodeKind.Directory));
+                        StoreItem(CreateItem(node.FullPath, NoSccStatus.NotVersioned, SvnNodeKind.Directory));
                     // Don't clear state of a possible working copy
                 }
             }

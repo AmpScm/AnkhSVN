@@ -145,9 +145,7 @@ namespace Ankh
                     SetState(set, SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.IsDiskFile | SvnItemState.IsDiskFolder | SvnItemState.Versionable | unset);
                     _status = AnkhStatus.NotExisting;
                     break;
-                case NoSccStatus.NotVersionable:
-                    unset |= SvnItemState.Versionable;
-                    goto case NoSccStatus.NotVersioned; // fall through
+
                 case NoSccStatus.NotVersioned:
                     SetState(SvnItemState.Exists | set, SvnItemState.None | unset);
                     _status = AnkhStatus.NotVersioned;
@@ -164,7 +162,7 @@ namespace Ankh
 
         void ISvnItemUpdate.RefreshTo(NoSccStatus status, SvnNodeKind nodeKind)
         {
-            Debug.Assert(status != NoSccStatus.Unknown);
+            Debug.Assert(status == NoSccStatus.NotExisting || status == NoSccStatus.NotVersioned);
             _ticked = false;
             RefreshTo(status, nodeKind);
         }
