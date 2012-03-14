@@ -26,6 +26,7 @@ namespace Ankh
     {
         Unknown,
         NotVersioned,
+        NotVersionable,
         NotExisting
     }
 
