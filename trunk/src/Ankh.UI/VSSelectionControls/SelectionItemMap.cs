@@ -622,15 +622,6 @@ namespace Ankh.UI.VSSelectionControls
             return _data.GetItemObject(id);
         }
 
-        public CustomQueryInterfaceResult GetInterface(ref Guid iid, out IntPtr ppv)
-        {
-            Debug.WriteLine(string.Format("Getting: {0}", iid));
-
-            ppv = IntPtr.Zero;
-
-            return CustomQueryInterfaceResult.NotHandled;
-        }
-
         [ComVisible(true), ComDefaultInterface(typeof(IVsHierarchy)), ClassInterface(ClassInterfaceType.AutoDual)]
         sealed class SelectionMapHierarchy : IVsHierarchy
         {
