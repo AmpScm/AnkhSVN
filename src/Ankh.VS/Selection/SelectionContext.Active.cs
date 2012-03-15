@@ -40,7 +40,6 @@ namespace Ankh.VS.Selection
         string _activeDocumentFileName;
         IVsTextView _activeFrameTextView;
         bool _determinedActiveFrameTextView;
-        bool _classViewerActive;
 
         static Guid IID_IVsClassView = typeof(IVsClassView).GUID;
 
@@ -52,19 +51,7 @@ namespace Ankh.VS.Selection
                     _activeFrameObject = _activeFrameControl = null;
                     _activeFrameTextView = null;
                     _determinedActiveFrameTextView = false;
-                    _classViewerActive = false;
                     _activeFrame = varValueNew as IVsWindowFrame;
-
-                    if (_activeFrame != null)
-                    {
-                        IntPtr v;
-
-                        if (ErrorHandler.Succeeded(_activeFrame.QueryViewInterface(ref IID_IVsClassView, out v)))
-                        {
-                            Marshal.Release(v);
-                            _classViewerActive = true;
-                        }
-                    }
                     break;
                 case VSConstants.VSSELELEMID.SEID_DocumentFrame:
                     _activeDocumentFrameObject = _activeDocumentControl = null;
@@ -107,11 +94,6 @@ namespace Ankh.VS.Selection
         public IVsWindowFrame ActiveDocumentFrame
         {
             get { return _activeDocumentFrame; }
-        }
-
-        public bool InClassViewer
-        {
-            get { return _classViewerActive; }
         }
 
         #endregion

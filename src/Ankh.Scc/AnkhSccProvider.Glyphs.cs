@@ -231,8 +231,6 @@ namespace Ankh.Scc
 
                     if (icon == VsStateIcon.STATEICON_BLANK || icon == VsStateIcon.STATEICON_NOSTATEICON)
                         rgsiGlyphs[i] = icon;
-                    else if (Walker.InClassViewer)
-                        rgsiGlyphs[i] = (VsStateIcon)((int)icon);
                     else
                         rgsiGlyphs[i] = (VsStateIcon)((int)icon + _glyphOffset);
                 }
@@ -416,7 +414,7 @@ namespace Ankh.Scc
 
             _glyphList = StatusImages.CreateStatusImageList();
 
-            if (VSVersion.VS2010OrLater)
+            if (VSVersion.VS11OrLater || SolutionNavigatorInstalled())
             {
                 for (int i = 0; i < 16; i++)
                 {
@@ -438,6 +436,22 @@ namespace Ankh.Scc
             pdwImageListHandle = unchecked((uint)_glyphList.Handle);
 
             return VSConstants.S_OK;
+        }
+
+        private bool SolutionNavigatorInstalled()
+        {
+            IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
+
+            if (shell == null)
+                return false;
+
+            Guid solutionNavigatorPackage = new Guid("{cf6a5c16-83b0-4d04-b702-195c35c6e887}");
+
+            int bInstalled;
+            if (!ErrorHandler.Succeeded(shell.IsPackageInstalled(ref solutionNavigatorPackage, out bInstalled)))
+                return false;
+
+            return (bInstalled != 0);
         }
     }
 }
