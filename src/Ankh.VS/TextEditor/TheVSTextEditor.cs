@@ -42,6 +42,8 @@ namespace Ankh.VS.TextEditor
         CodeEditorWindow _nativeWindow;
         IAnkhServiceProvider _context;
         Guid? _forceLanguageService;
+        IGetWpfEditorInfo _wpfEditorInfo;
+        WpfEditorInfo _wpfInfo;
 
         public TheVSTextEditor()
         {
@@ -188,6 +190,9 @@ namespace Ankh.VS.TextEditor
                 if (DesignMode || _nativeWindow == null)
                     return 0; // Designer scenario
 
+                if (_wpfInfo != null)
+                    return _wpfInfo.GetLineHeight();
+
                 return _nativeWindow.LineHeight;
             }
         }
@@ -303,6 +308,8 @@ namespace Ankh.VS.TextEditor
                 throw new ArgumentNullException("context");
 
             _context = context;
+            _wpfEditorInfo = context.GetService<IGetWpfEditorInfo>();
+
             try
             {
                 _nativeWindow = new CodeEditorWindow(_context, this);
@@ -324,6 +331,9 @@ namespace Ankh.VS.TextEditor
                 _nativeWindow = null;
                 throw;
             }
+
+            if (_wpfEditorInfo != null)
+                _wpfInfo = _nativeWindow.GetWpfInfo(_wpfEditorInfo);
         }
 
         void UpdateSize()
@@ -368,6 +378,8 @@ namespace Ankh.VS.TextEditor
             {
                 if (_nativeWindow == null)
                     return PointToScreen(new Point(0, 0));
+                else if (_wpfInfo != null)
+                    return PointToScreen(_wpfInfo.GetTopLeft());
 
                 Point? p = _nativeWindow.EditorClientTopLeft;
 
@@ -1423,6 +1435,11 @@ namespace Ankh.VS.TextEditor
                 return new Point(bX, bY);
             else
                 return new Point(-1, -1); // Not represented in view
+        }
+
+        internal WpfEditorInfo GetWpfInfo(IGetWpfEditorInfo wpfEditorInfo)
+        {
+            return wpfEditorInfo.GetWpfInfo(_textView);
         }
 
 

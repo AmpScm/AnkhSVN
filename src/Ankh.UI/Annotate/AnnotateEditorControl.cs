@@ -42,17 +42,16 @@ namespace Ankh.UI.Annotate
         public AnnotateEditorControl()
         {
             InitializeComponent();
-            editor.ReadOnly = true;
 
-            if (VSVersion.VS2008OrOlder)
-                editor.EnableNavigationBar = true;
+            editor.ReadOnly = true;
+            editor.EnableNavigationBar = true;
         }
 
         protected override void OnFrameCreated(EventArgs e)
         {
             base.OnFrameCreated(e);
 
-            if (DesignMode)
+            if (DesignMode || Context == null)
                 return;
 
             _map = SelectionItemMap.Create<IAnnotateSection>(this);
@@ -89,10 +88,6 @@ namespace Ankh.UI.Annotate
 
         internal int GetTopLine()
         {
-            // TODO: implement real fix for VS2010
-            if (VSVersion.VS2010OrLater)
-                return 0;
-
             Point p = editor.EditorClientTopLeft;
             return PointToClient(p).Y;
         }
