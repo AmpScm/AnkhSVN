@@ -394,6 +394,8 @@ namespace Ankh.VS.TextEditor
         {
             try
             {
+                _wpfInfo = null;
+
                 if (disposing)
                 {
                     if (_nativeWindow != null)
