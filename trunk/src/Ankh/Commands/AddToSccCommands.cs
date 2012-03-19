@@ -80,7 +80,7 @@ namespace Ankh.Commands
                 if (!item.IsVersioned)
                 {
                     // If the .sln is ignored hide it in the context menus
-                    // but don't hide it on 
+                    // but don't hide it on the node itself
                     e.HideOnContextMenu = item.IsIgnored && !e.Selection.IsSolutionSelected;
                 }
                 return;
@@ -286,43 +286,41 @@ namespace Ankh.Commands
             using (AddToSubversion dialog = new AddToSubversion())
             {
                 dialog.PathToAdd = e.Selection.SolutionFilename;
-                if (dialog.ShowDialog(e.Context) == DialogResult.OK)
+                if (dialog.ShowDialog(e.Context) != DialogResult.OK)
+                    return false; // Don't set as managed by AnkhSVN
+
+                confirmed = true;
+                Collection<SvnInfoEventArgs> info;
+                SvnInfoArgs ia = new SvnInfoArgs();
+                ia.ThrowOnError = false;
+                if (!cl.GetInfo(dialog.RepositoryAddUrl, ia, out info))
                 {
-                    confirmed = true;
-                    Collection<SvnInfoEventArgs> info;
-                    SvnInfoArgs ia = new SvnInfoArgs();
-                    ia.ThrowOnError = false;
-                    if (!cl.GetInfo(dialog.RepositoryAddUrl, ia, out info))
-                    {
-                        // Target uri doesn't exist in the repository, let's create
-                        if (!RemoteCreateDirectory(e, dialog.Text, dialog.RepositoryAddUrl, cl))
-                            return false; // Create failed; bail out
-                    }
-
-                    // Create working copy
-                    SvnCheckOutArgs coArg = new SvnCheckOutArgs();
-                    coArg.AllowObstructions = true;
-                    cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
-
-                    // Add solutionfile so we can set properties (set managed)
-                    AddPathToSubversion(e, e.Selection.SolutionFilename);
-
-                    IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
-                    IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
-                    IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
-
-                    settings.ProjectRoot = SvnTools.GetNormalizedFullPath(dialog.WorkingCopyDir);
-
-                    if (monitor != null && mapper != null)
-                    {
-                        // Make sure all visible glyphs are updated to reflect a new working copy
-                        monitor.ScheduleSvnStatus(mapper.GetAllFilesOfAllProjects());
-                    }
-
-                    return true;
+                    // Target uri doesn't exist in the repository, let's create
+                    if (!RemoteCreateDirectory(e, dialog.Text, dialog.RepositoryAddUrl, cl))
+                        return false; // Create failed; bail out
                 }
 
-                return false; // User cancelled the "Add to subversion" dialog, don't set as managed by Ankh
+                // Create working copy
+                SvnCheckOutArgs coArg = new SvnCheckOutArgs();
+                coArg.AllowObstructions = true;
+                cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
+
+                // Add solutionfile so we can set properties (set managed)
+                AddPathToSubversion(e, e.Selection.SolutionFilename);
+
+                IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
+                IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+                IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
+
+                settings.ProjectRoot = SvnTools.GetNormalizedFullPath(dialog.WorkingCopyDir);
+
+                if (monitor != null && mapper != null)
+                {
+                    // Make sure all visible glyphs are updated to reflect a new working copy
+                    monitor.ScheduleSvnStatus(mapper.GetAllFilesOfAllProjects());
+                }
+
+                return true;
             }
         }
 
