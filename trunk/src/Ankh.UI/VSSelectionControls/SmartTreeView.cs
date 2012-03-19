@@ -28,15 +28,33 @@ namespace Ankh.UI.VSSelectionControls
     {
         ImageList _stateImageList;
         ImageList _realStateImageList;
+        bool _showLines;
 
         /// <summary>
         /// Initializes a new SmartTreeView
         /// </summary>
         public SmartTreeView()
         {
-            if (VSVersion.VS2010OrLater)
-            {
+            ShowLines = true; // Matches default value, but updates VS2010+ behavior
+        }
+
+        public SmartTreeView(IContainer container)
+        {
+            if (container != null)
+                container.Add(this);
+
+            if (!DesignMode && VSVersion.VS2010OrLater)
                 ShowLines = false;
+        }
+
+        [DefaultValue(true)]
+        public new bool ShowLines
+        {
+            get { return _showLines; }
+            set
+            {
+                _showLines = value;
+                base.ShowLines = value && VSVersion.VS2008OrOlder;
             }
         }
 
