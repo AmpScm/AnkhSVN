@@ -106,7 +106,7 @@ namespace Ankh.UI
                 string toAdd = fullUri.AbsoluteUri;
                 if (!recentUrls.Contains(toAdd))
                 {
-                    GetService<IAnkhConfigurationService>().GetRecentReposUrls().Add(toAdd);
+                    recentUrls.Add(toAdd);
                 }
             }
         }
