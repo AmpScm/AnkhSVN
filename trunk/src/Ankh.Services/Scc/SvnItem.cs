@@ -1330,22 +1330,32 @@ namespace Ankh
         /// <summary>
         /// Determines whether the current instance is below the specified path
         /// </summary>
-        /// <param name="path">The path.</param>
+        /// <param name="root">The path.</param>
         /// <returns>
         /// 	<c>true</c> if the <see cref="SvnItem"/> is below or equal to the specified path; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsBelowPath(string path)
+        public bool IsBelowPath(string root)
+        {
+            if (string.IsNullOrEmpty(root))
+                throw new ArgumentNullException("path");
+
+            return IsBelowRoot(FullPath, root);
+        }
+
+        public static bool IsBelowRoot(string path, string root)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
+            else if (string.IsNullOrEmpty(root))
+                throw new ArgumentNullException("root");
 
-            if (!FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase))
+            if (!path.StartsWith(root, StringComparison.OrdinalIgnoreCase))
                 return false;
 
-            int n = FullPath.Length - path.Length;
+            int n = path.Length - path.Length;
 
             if (n > 0)
-                return (FullPath[path.Length] == '\\');
+                return (path[root.Length] == '\\');
 
             return (n == 0);
         }

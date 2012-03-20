@@ -26,6 +26,7 @@ using SharpSvn;
 using Ankh.VS;
 using System.Collections.ObjectModel;
 using Ankh.Scc;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.UI.SccManagement
 {
@@ -97,13 +98,6 @@ namespace Ankh.UI.SccManagement
             }
             if (localFolder.Items.Count > 0)
                 localFolder.SelectedIndex = 0;
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-
-            // TODO: Save repository location
         }
 
         SvnClient _client;
@@ -244,6 +238,26 @@ namespace Ankh.UI.SccManagement
 
             if (cea.Cancel)
                 DialogResult = DialogResult.None;
+            else if (Context != null)
+            {
+                RepositoryTreeNode rtn = repositoryTree.SelectedNode;
+
+                if (rtn != null && rtn.RepositoryRoot != null)
+                {
+                    IAnkhConfigurationService config = Context.GetService<IAnkhConfigurationService>();
+
+                    RegistryLifoList lifo = config.GetRecentReposUrls();
+
+                    string url = rtn.RepositoryRoot.ToString();
+                    if (!lifo.Contains(url))
+                        lifo.Add(url);
+                }
+            }
+        }
+
+        public bool CommitAllFiles
+        {
+            get { return commitAll.Checked; }
         }
     }
 }
