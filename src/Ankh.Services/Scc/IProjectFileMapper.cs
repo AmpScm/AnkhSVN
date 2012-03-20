@@ -48,6 +48,14 @@ namespace Ankh.Scc
         /// <param name="project"></param>
         /// <returns></returns>
         IEnumerable<string> GetAllFilesOf(SvnProject project);
+
+        /// <summary>
+        /// Gets a list of all files contained within <paramref name="project"/>
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        IEnumerable<string> GetAllFilesOf(SvnProject project, bool exceptExcluded);
+
         /// <summary>
         /// Gets a list of all files contained within the list of <paramref name="projects"/>
         /// </summary>
@@ -56,10 +64,23 @@ namespace Ankh.Scc
         IEnumerable<string> GetAllFilesOf(ICollection<SvnProject> projects);
 
         /// <summary>
+        /// Gets a list of all files contained within the list of <paramref name="projects"/>
+        /// </summary>
+        /// <param name="projects"></param>
+        /// <returns></returns>
+        IEnumerable<string> GetAllFilesOf(ICollection<SvnProject> projects, bool exceptExcluded);
+
+        /// <summary>
         /// Gets all files of all projects.
         /// </summary>
         /// <returns></returns>
         ICollection<string> GetAllFilesOfAllProjects();
+
+        /// <summary>
+        /// Gets all files of all projects.
+        /// </summary>
+        /// <returns></returns>
+        ICollection<string> GetAllFilesOfAllProjects(bool exceptExcluded);
 
         /// <summary>
         /// Gets a boolean indicating whether one or more projects (or the solution) contains path

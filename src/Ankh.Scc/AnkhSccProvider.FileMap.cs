@@ -502,12 +502,17 @@ namespace Ankh.Scc
             return false;
         }
 
+        public IEnumerable<string> GetAllFilesOf(Ankh.Selection.SvnProject project)
+        {
+            return GetAllFilesOf(project, false);
+        }
+
         /// <summary>
         /// Gets a list of all files contained within <paramref name="project"/>
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        public IEnumerable<string> GetAllFilesOf(Ankh.Selection.SvnProject project)
+        public IEnumerable<string> GetAllFilesOf(Ankh.Selection.SvnProject project, bool exceptExcluded)
         {
             if (project == null)
                 throw new ArgumentNullException("project");
@@ -516,7 +521,7 @@ namespace Ankh.Scc
             {
                 string sf = SolutionFilename;
 
-                if (sf != null)
+                if (sf != null && (!exceptExcluded || !IsSccExcluded(SolutionFilename)))
                     yield return sf;
 
                 yield break;
@@ -533,11 +538,21 @@ namespace Ankh.Scc
             foreach (string file in data.GetAllFiles())
             {
                 if (file[file.Length - 1] != '\\') // Don't return paths
+                {
+                    if (exceptExcluded && IsSccExcluded(file))
+                        continue;
+
                     yield return file;
+                }
             }
         }
 
         public IEnumerable<string> GetAllFilesOf(ICollection<SvnProject> projects)
+        {
+            return GetAllFilesOf(projects, false);
+        }
+
+        public IEnumerable<string> GetAllFilesOf(ICollection<SvnProject> projects, bool exceptExcluded)
         {
             SortedList<string, string> files = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
             Hashtable handled = new Hashtable();
@@ -551,7 +566,14 @@ namespace Ankh.Scc
                 if (scc == null || !_projectMap.TryGetValue(scc, out data))
                 {
                     if (p.IsSolution && SolutionFilename != null && !files.ContainsKey(SolutionFilename))
+                    {
                         files.Add(SolutionFilename, SolutionFilename);
+
+                        if (exceptExcluded && IsSccExcluded(SolutionFilename))
+                            continue;
+
+                        yield return SolutionFilename;
+                    }
 
                     continue;
                 }
@@ -570,12 +592,21 @@ namespace Ankh.Scc
                         continue;
 
                     files.Add(file, file);
+
+                    if (exceptExcluded && IsSccExcluded(file))
+                        continue;
+
                     yield return file;
                 }
             }
         }
 
         public ICollection<string> GetAllFilesOfAllProjects()
+        {
+            return GetAllFilesOfAllProjects(false);
+        }
+
+        public ICollection<string> GetAllFilesOfAllProjects(bool exceptExcluded)
         {
             List<string> files = new List<string>(_fileMap.Count + 1);
 
@@ -585,6 +616,9 @@ namespace Ankh.Scc
             foreach (string file in _fileMap.Keys)
             {
                 if (file[file.Length - 1] == '\\') // Don't return paths
+                    continue;
+
+                if (exceptExcluded && IsSccExcluded(file))
                     continue;
 
                 files.Add(file);

@@ -291,6 +291,8 @@ namespace Ankh.Commands
                     dialog.CommitAllVisible = false;
                     dialog.CommitAllFiles = false;
                 }
+                else
+                    dialog.CommitAllFiles = true;
 
                 if (dialog.ShowDialog(e.Context) != DialogResult.OK)
                     return false; // Don't set as managed by AnkhSVN
@@ -305,7 +307,7 @@ namespace Ankh.Commands
                     string wcPath = dialog.WorkingCopyDir;
                     Uri reposUrl = dialog.RepositoryAddUrl;
 
-                    allFiles.UniqueAddRange(e.GetService<IProjectFileMapper>().GetAllFilesOfAllProjects());
+                    allFiles.UniqueAddRange(e.GetService<IProjectFileMapper>().GetAllFilesOfAllProjects(true));
                     using (CreateDirectoryDialog dlg = new CreateDirectoryDialog())
                     {
                         dlg.Text = CommandStrings.ImportingTitle;
@@ -319,33 +321,41 @@ namespace Ankh.Commands
                     }
 
 
-                    e.GetService<IProgressRunner>().RunModal(CommandStrings.ImportingTitle,
-                        delegate(object sender, ProgressWorkerArgs a)
-                        {
-                            SvnImportArgs importArgs = new SvnImportArgs();
-                            importArgs.LogMessage = logMessage;
-                            importArgs.Filter +=
-                                delegate(object ieSender, SvnImportFilterEventArgs ie)
-                                {
-                                    if (ie.NodeKind != SvnNodeKind.Directory)
-                                        ie.Filter = !allFiles.Contains(ie.FullPath);
-                                    else
+                    IAnkhOpenDocumentTracker documentTracker = e.GetService<IAnkhOpenDocumentTracker>();
+
+                    documentTracker.SaveDocuments(allFiles); // Make sure all files are saved before updating/merging!
+
+                    using (DocumentLock lck = documentTracker.LockDocuments(allFiles, DocumentLockType.NoReload))
+                    using (lck.MonitorChangesForReload())
+                    {
+                        e.GetService<IProgressRunner>().RunModal(CommandStrings.ImportingTitle,
+                            delegate(object sender, ProgressWorkerArgs a)
+                            {
+                                SvnImportArgs importArgs = new SvnImportArgs();
+                                importArgs.LogMessage = logMessage;
+                                importArgs.Filter +=
+                                    delegate(object ieSender, SvnImportFilterEventArgs ie)
                                     {
-                                        bool filter = true;
-                                        foreach (string p in allFiles)
+                                        if (ie.NodeKind != SvnNodeKind.Directory)
+                                            ie.Filter = !allFiles.Contains(ie.FullPath);
+                                        else
                                         {
-                                            if (SvnItem.IsBelowRoot(p, ie.FullPath))
+                                            bool filter = true;
+                                            foreach (string p in allFiles)
                                             {
-                                                filter = false;
-                                                break;
+                                                if (SvnItem.IsBelowRoot(p, ie.FullPath))
+                                                {
+                                                    filter = false;
+                                                    break;
+                                                }
                                             }
+                                            if (filter)
+                                                ie.Filter = true;
                                         }
-                                        if (filter)
-                                            ie.Filter = true;
-                                    }
-                                };
-                            a.Client.Import(wcPath, reposUrl, importArgs);
-                        });
+                                    };
+                                a.Client.Import(wcPath, reposUrl, importArgs);
+                            });
+                    }
                 }
                 else
                 {
@@ -583,6 +593,8 @@ namespace Ankh.Commands
                     dialog.CommitAllVisible = false;
                     dialog.CommitAllFiles = false;
                 }
+                else
+                    dialog.CommitAllFiles = true;
 
                 if (dialog.ShowDialog(e.Context) != DialogResult.OK)
                     return false; // User cancelled the "Add to subversion" dialog, don't set as managed by Ankh
@@ -624,33 +636,41 @@ namespace Ankh.Commands
 
                         logMessage = dlg.LogMessage;
                     }
-                    e.GetService<IProgressRunner>().RunModal(CommandStrings.ImportingTitle,
-                        delegate(object sender, ProgressWorkerArgs a)
-                        {
-                            SvnImportArgs importArgs = new SvnImportArgs();
-                            importArgs.LogMessage = logMessage;
-                            importArgs.Filter +=
-                                delegate(object ieSender, SvnImportFilterEventArgs ie)
-                                {
-                                    if (ie.NodeKind != SvnNodeKind.Directory)
-                                        ie.Filter = !projectFiles.Contains(ie.FullPath);
-                                    else
+                    IAnkhOpenDocumentTracker documentTracker = e.GetService<IAnkhOpenDocumentTracker>();
+
+                    documentTracker.SaveDocuments(projectFiles); // Make sure all files are saved before updating/merging!
+
+                    using (DocumentLock lck = documentTracker.LockDocuments(projectFiles, DocumentLockType.NoReload))
+                    using (lck.MonitorChangesForReload())
+                    {
+                        e.GetService<IProgressRunner>().RunModal(CommandStrings.ImportingTitle,
+                            delegate(object sender, ProgressWorkerArgs a)
+                            {
+                                SvnImportArgs importArgs = new SvnImportArgs();
+                                importArgs.LogMessage = logMessage;
+                                importArgs.Filter +=
+                                    delegate(object ieSender, SvnImportFilterEventArgs ie)
                                     {
-                                        bool filter = true;
-                                        foreach(string p in projectFiles)
+                                        if (ie.NodeKind != SvnNodeKind.Directory)
+                                            ie.Filter = !projectFiles.Contains(ie.FullPath);
+                                        else
                                         {
-                                            if (SvnItem.IsBelowRoot(p, ie.FullPath))
+                                            bool filter = true;
+                                            foreach (string p in projectFiles)
                                             {
-                                                filter = false;
-                                                break;
+                                                if (SvnItem.IsBelowRoot(p, ie.FullPath))
+                                                {
+                                                    filter = false;
+                                                    break;
+                                                }
                                             }
+                                            if (filter)
+                                                ie.Filter = true;
                                         }
-                                        if (filter)
-                                            ie.Filter = true;
-                                    }
-                                };
-                            a.Client.Import(wcDir, reposUrl, importArgs);
-                        });
+                                    };
+                                a.Client.Import(wcDir, reposUrl, importArgs);
+                            });
+                    }
                 }
 
                 shouldMarkAsManaged = dialog.MarkAsManaged;
