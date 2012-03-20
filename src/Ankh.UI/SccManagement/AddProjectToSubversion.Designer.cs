@@ -44,44 +44,44 @@ namespace Ankh.UI.SccManagement
         /// </summary>
         private void InitializeComponent()
         {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddProjectToSubversion));
-			this.markAsManaged = new System.Windows.Forms.CheckBox();
-			this.writeUrlInSolution = new System.Windows.Forms.CheckBox();
-			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-			this.SuspendLayout();
-			// 
-			// bodyPanel
-			// 
-			resources.ApplyResources(this.bodyPanel, "bodyPanel");
-			// 
-			// markAsManaged
-			// 
-			resources.ApplyResources(this.markAsManaged, "markAsManaged");
-			this.markAsManaged.Checked = true;
-			this.markAsManaged.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.markAsManaged.Name = "markAsManaged";
-			this.markAsManaged.UseVisualStyleBackColor = true;
-			// 
-			// writeUrlInSolution
-			// 
-			resources.ApplyResources(this.writeUrlInSolution, "writeUrlInSolution");
-			this.writeUrlInSolution.Checked = true;
-			this.writeUrlInSolution.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.writeUrlInSolution.Name = "writeUrlInSolution";
-			this.writeUrlInSolution.UseVisualStyleBackColor = true;
-			// 
-			// AddProjectToSubversion
-			// 
-			resources.ApplyResources(this, "$this");
-			this.Controls.Add(this.writeUrlInSolution);
-			this.Controls.Add(this.markAsManaged);
-			this.Name = "AddProjectToSubversion";
-			this.Controls.SetChildIndex(this.bodyPanel, 0);
-			this.Controls.SetChildIndex(this.markAsManaged, 0);
-			this.Controls.SetChildIndex(this.writeUrlInSolution, 0);
-			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddProjectToSubversion));
+            this.markAsManaged = new System.Windows.Forms.CheckBox();
+            this.writeUrlInSolution = new System.Windows.Forms.CheckBox();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bodyPanel
+            // 
+            resources.ApplyResources(this.bodyPanel, "bodyPanel");
+            // 
+            // markAsManaged
+            // 
+            resources.ApplyResources(this.markAsManaged, "markAsManaged");
+            this.markAsManaged.Checked = true;
+            this.markAsManaged.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.markAsManaged.Name = "markAsManaged";
+            this.markAsManaged.UseVisualStyleBackColor = true;
+            // 
+            // writeUrlInSolution
+            // 
+            resources.ApplyResources(this.writeUrlInSolution, "writeUrlInSolution");
+            this.writeUrlInSolution.Checked = true;
+            this.writeUrlInSolution.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.writeUrlInSolution.Name = "writeUrlInSolution";
+            this.writeUrlInSolution.UseVisualStyleBackColor = true;
+            // 
+            // AddProjectToSubversion
+            // 
+            resources.ApplyResources(this, "$this");
+            this.Controls.Add(this.writeUrlInSolution);
+            this.Controls.Add(this.markAsManaged);
+            this.Name = "AddProjectToSubversion";
+            this.Controls.SetChildIndex(this.bodyPanel, 0);
+            this.Controls.SetChildIndex(this.markAsManaged, 0);
+            this.Controls.SetChildIndex(this.writeUrlInSolution, 0);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

@@ -222,4 +222,7 @@
   <data name="NotInWorkingCopyTitle" xml:space="preserve">
     <value>No Working Copy</value>
   </data>
+  <data name="ImportingTitle" xml:space="preserve">
+    <value>Importing</value>
+  </data>
 </root>

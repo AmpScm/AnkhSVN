@@ -290,34 +290,87 @@ namespace Ankh.Commands
                     return false; // Don't set as managed by AnkhSVN
 
                 confirmed = true;
-                Collection<SvnInfoEventArgs> info;
-                SvnInfoArgs ia = new SvnInfoArgs();
-                ia.ThrowOnError = false;
-                if (!cl.GetInfo(dialog.RepositoryAddUrl, ia, out info))
+
+                if (dialog.CommitAllFiles)
                 {
-                    // Target uri doesn't exist in the repository, let's create
-                    if (!RemoteCreateDirectory(e, dialog.Text, dialog.RepositoryAddUrl, cl))
-                        return false; // Create failed; bail out
+                    HybridCollection<string> allFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+
+                    string logMessage;
+                    string wcPath = dialog.WorkingCopyDir;
+                    Uri reposUrl = dialog.RepositoryAddUrl;
+
+                    allFiles.UniqueAddRange(e.GetService<IProjectFileMapper>().GetAllFilesOfAllProjects());
+                    using (CreateDirectoryDialog dlg = new CreateDirectoryDialog())
+                    {
+                        dlg.Text = CommandStrings.ImportingTitle;
+                        dlg.NewDirectoryName = dialog.RepositoryAddUrl.ToString();
+                        dlg.NewDirectoryReadonly = true;
+
+                        if (dlg.ShowDialog(e.Context) != DialogResult.OK)
+                            return false;
+
+                        logMessage = dlg.LogMessage;
+                    }
+
+
+                    e.GetService<IProgressRunner>().RunModal(CommandStrings.ImportingTitle,
+                        delegate(object sender, ProgressWorkerArgs a)
+                        {
+                            SvnImportArgs importArgs = new SvnImportArgs();
+                            importArgs.Filter +=
+                                delegate(object ieSender, SvnImportFilterEventArgs ie)
+                                {
+                                    if (ie.NodeKind != SvnNodeKind.Directory)
+                                        ie.Filter = allFiles.Contains(ie.FullPath);
+                                    else
+                                    {
+                                        bool filter = true;
+                                        foreach (string p in allFiles)
+                                        {
+                                            if (SvnItem.IsBelowRoot(p, ie.FullPath))
+                                            {
+                                                filter = false;
+                                                break;
+                                            }
+                                        }
+                                        if (filter)
+                                            ie.Filter = true;
+                                    }
+                                };
+                            a.Client.Import(wcPath, reposUrl, importArgs);
+                        });
                 }
-
-                // Create working copy
-                SvnCheckOutArgs coArg = new SvnCheckOutArgs();
-                coArg.AllowObstructions = true;
-                cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
-
-                // Add solutionfile so we can set properties (set managed)
-                AddPathToSubversion(e, e.Selection.SolutionFilename);
-
-                IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
-                IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
-                IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
-
-                settings.ProjectRoot = SvnTools.GetNormalizedFullPath(dialog.WorkingCopyDir);
-
-                if (monitor != null && mapper != null)
+                else
                 {
-                    // Make sure all visible glyphs are updated to reflect a new working copy
-                    monitor.ScheduleSvnStatus(mapper.GetAllFilesOfAllProjects());
+                    Collection<SvnInfoEventArgs> info;
+                    SvnInfoArgs ia = new SvnInfoArgs();
+                    ia.ThrowOnError = false;
+                    if (!cl.GetInfo(dialog.RepositoryAddUrl, ia, out info))
+                    {
+                        // Target uri doesn't exist in the repository, let's create
+                        if (!RemoteCreateDirectory(e, dialog.Text, dialog.RepositoryAddUrl, cl))
+                            return false; // Create failed; bail out
+                    }
+
+                    // Create working copy
+                    SvnCheckOutArgs coArg = new SvnCheckOutArgs();
+                    coArg.AllowObstructions = true;
+                    cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
+
+                    // Add solutionfile so we can set properties (set managed)
+                    AddPathToSubversion(e, e.Selection.SolutionFilename);
+
+                    IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
+                    IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+                    IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
+
+                    settings.ProjectRoot = SvnTools.GetNormalizedFullPath(dialog.WorkingCopyDir);
+
+                    if (monitor != null && mapper != null)
+                    {
+                        // Make sure all visible glyphs are updated to reflect a new working copy
+                        monitor.ScheduleSvnStatus(mapper.GetAllFilesOfAllProjects());
+                    }
                 }
 
                 return true;
@@ -410,7 +463,7 @@ namespace Ankh.Commands
                             case DialogResult.Cancel:
                                 return;
                             case DialogResult.No:
-                                if (CheckoutWorkingCopyForProject(e, projInfo, solutionReposRoot, out markAsManaged, out writeReference))
+                                if (CheckoutWorkingCopyForProject(e, project, projInfo, solutionReposRoot, out markAsManaged, out writeReference))
                                 {
                                     if (markAsManaged)
                                         scc.SetProjectManaged(project, true);
@@ -429,7 +482,7 @@ namespace Ankh.Commands
                     else
                     {
                         // We have to checkout (and create repository location)
-                        if (CheckoutWorkingCopyForProject(e, projInfo, solutionReposRoot, out markAsManaged, out writeReference))
+                        if (CheckoutWorkingCopyForProject(e, project, projInfo, solutionReposRoot, out markAsManaged, out writeReference))
                         {
                             if (markAsManaged)
                                 scc.SetProjectManaged(project, true);
@@ -507,7 +560,7 @@ namespace Ankh.Commands
         /// <param name="shouldMarkAsManaged"></param>
         /// <param name="storeReference"></param>
         /// <returns></returns>
-        static bool CheckoutWorkingCopyForProject(CommandEventArgs e, ISvnProjectInfo projectInfo, Uri solutionReposRoot, out bool shouldMarkAsManaged, out bool storeReference)
+        static bool CheckoutWorkingCopyForProject(CommandEventArgs e, SvnProject project, ISvnProjectInfo projectInfo, Uri solutionReposRoot, out bool shouldMarkAsManaged, out bool storeReference)
         {
             shouldMarkAsManaged = false;
             storeReference = false;
@@ -520,21 +573,71 @@ namespace Ankh.Commands
                 if (dialog.ShowDialog(e.Context) != DialogResult.OK)
                     return false; // User cancelled the "Add to subversion" dialog, don't set as managed by Ankh
 
-
-                Collection<SvnInfoEventArgs> info;
-                SvnInfoArgs ia = new SvnInfoArgs();
-                ia.ThrowOnError = false;
-                if (!cl.GetInfo(dialog.RepositoryAddUrl, ia, out info))
+                if (!dialog.CommitAllFiles)
                 {
-                    // Target uri doesn't exist in the repository, let's create
-                    if (!RemoteCreateDirectory(e, dialog.Text, dialog.RepositoryAddUrl, cl))
-                        return false; // Create failed; bail out
-                }
+                    Collection<SvnInfoEventArgs> info;
+                    SvnInfoArgs ia = new SvnInfoArgs();
+                    ia.ThrowOnError = false;
+                    if (!cl.GetInfo(dialog.RepositoryAddUrl, ia, out info))
+                    {
+                        // Target uri doesn't exist in the repository, let's create
+                        if (!RemoteCreateDirectory(e, dialog.Text, dialog.RepositoryAddUrl, cl))
+                            return false; // Create failed; bail out
+                    }
 
-                // Create working copy
-                SvnCheckOutArgs coArg = new SvnCheckOutArgs();
-                coArg.AllowObstructions = true;
-                cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
+                    // Create working copy
+                    SvnCheckOutArgs coArg = new SvnCheckOutArgs();
+                    coArg.AllowObstructions = true;
+                    cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
+                }
+                else
+                {
+                    // Cache some values before thread marshalling
+                    HybridCollection<string> projectFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                    string wcDir = dialog.WorkingCopyDir;
+                    Uri reposUrl = dialog.RepositoryAddUrl;
+                    string logMessage;
+
+                    projectFiles.UniqueAddRange(e.GetService<IProjectFileMapper>().GetAllFilesOf(project));
+                    using (CreateDirectoryDialog dlg = new CreateDirectoryDialog())
+                    {
+                        dlg.Text = CommandStrings.ImportingTitle;
+                        dlg.NewDirectoryName = reposUrl.ToString();
+                        dlg.NewDirectoryReadonly = true;
+
+                        if (dlg.ShowDialog(e.Context) != DialogResult.OK)
+                            return false;
+
+                        logMessage = dlg.LogMessage;
+                    }
+                    e.GetService<IProgressRunner>().RunModal(CommandStrings.ImportingTitle,
+                        delegate(object sender, ProgressWorkerArgs a)
+                        {
+                            SvnImportArgs importArgs = new SvnImportArgs();
+                            importArgs.LogMessage = logMessage;
+                            importArgs.Filter +=
+                                delegate(object ieSender, SvnImportFilterEventArgs ie)
+                                {
+                                    if (ie.NodeKind != SvnNodeKind.Directory)
+                                        ie.Filter = projectFiles.Contains(ie.FullPath);
+                                    else
+                                    {
+                                        bool filter = true;
+                                        foreach(string p in projectFiles)
+                                        {
+                                            if (SvnItem.IsBelowRoot(p, ie.FullPath))
+                                            {
+                                                filter = false;
+                                                break;
+                                            }
+                                        }
+                                        if (filter)
+                                            ie.Filter = true;
+                                    }
+                                };
+                            a.Client.Import(wcDir, reposUrl, importArgs);
+                        });
+                }
 
                 shouldMarkAsManaged = dialog.MarkAsManaged;
                 storeReference = dialog.WriteCheckOutInformation;
