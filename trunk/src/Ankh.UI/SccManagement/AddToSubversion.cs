@@ -255,9 +255,16 @@ namespace Ankh.UI.SccManagement
             }
         }
 
+        public bool CommitAllVisible
+        {
+            get { return commitAll.Visible; }
+            set { commitAll.Enabled = commitAll.Visible = value; }
+        }
+
         public bool CommitAllFiles
         {
             get { return commitAll.Checked; }
+            set { commitAll.Checked = value; }
         }
     }
 }

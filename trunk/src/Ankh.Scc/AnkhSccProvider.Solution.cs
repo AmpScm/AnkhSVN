@@ -33,7 +33,7 @@ namespace Ankh.Scc
         /// </returns>
         public int AddNewSolutionToSourceControl()
         {
-            CommandService.PostExecCommand(AnkhCommand.FileSccAddSolutionToSubversion);
+            CommandService.PostExecCommand(AnkhCommand.FileSccAddSolutionToSubversion, this);
 
             return VSConstants.S_OK;
         }

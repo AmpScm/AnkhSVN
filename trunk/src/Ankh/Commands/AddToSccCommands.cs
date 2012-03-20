@@ -286,6 +286,12 @@ namespace Ankh.Commands
             using (AddToSubversion dialog = new AddToSubversion())
             {
                 dialog.PathToAdd = e.Selection.SolutionFilename;
+                if (e.Argument is IAnkhSccService)
+                {
+                    dialog.CommitAllVisible = false;
+                    dialog.CommitAllFiles = false;
+                }
+
                 if (dialog.ShowDialog(e.Context) != DialogResult.OK)
                     return false; // Don't set as managed by AnkhSVN
 
@@ -570,6 +576,13 @@ namespace Ankh.Commands
                 dialog.Context = e.Context;
                 dialog.PathToAdd = projectInfo.ProjectDirectory;
                 dialog.RepositoryAddUrl = solutionReposRoot;
+
+                if (e.Argument is IAnkhSccService)
+                {
+                    dialog.CommitAllVisible = false;
+                    dialog.CommitAllFiles = false;
+                }
+
                 if (dialog.ShowDialog(e.Context) != DialogResult.OK)
                     return false; // User cancelled the "Add to subversion" dialog, don't set as managed by Ankh
 

@@ -86,7 +86,7 @@
           <Group id="Grp_FileSccAdd" priority="0x01B0">
             <Button id="Cmd_FileSccAddSolutionToSubversion" name="AddSolutionToRepository" priority="0x100"
                 text="Add &amp;Solution to Subversion..."
-                toolTip="Add this solution to a Subversion repository." iconFile="Scc/TfsAddSolutionToSourceControl.png">
+                toolTip="Add this solution to a Subversion repository." iconFile="Scc/TfsAddSolutionToSourceControl.png" allowParams="true">
               <Visibility context="Ankh_SccProviderGuid" />
             </Button>
             <Button id="Cmd_FileSccAddProjectToSubversion" name="AddProjectToRepository" priority="0x200"
