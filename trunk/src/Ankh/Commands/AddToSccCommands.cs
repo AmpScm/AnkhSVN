@@ -323,11 +323,12 @@ namespace Ankh.Commands
                         delegate(object sender, ProgressWorkerArgs a)
                         {
                             SvnImportArgs importArgs = new SvnImportArgs();
+                            importArgs.LogMessage = logMessage;
                             importArgs.Filter +=
                                 delegate(object ieSender, SvnImportFilterEventArgs ie)
                                 {
                                     if (ie.NodeKind != SvnNodeKind.Directory)
-                                        ie.Filter = allFiles.Contains(ie.FullPath);
+                                        ie.Filter = !allFiles.Contains(ie.FullPath);
                                     else
                                     {
                                         bool filter = true;
@@ -632,7 +633,7 @@ namespace Ankh.Commands
                                 delegate(object ieSender, SvnImportFilterEventArgs ie)
                                 {
                                     if (ie.NodeKind != SvnNodeKind.Directory)
-                                        ie.Filter = projectFiles.Contains(ie.FullPath);
+                                        ie.Filter = !projectFiles.Contains(ie.FullPath);
                                     else
                                     {
                                         bool filter = true;
