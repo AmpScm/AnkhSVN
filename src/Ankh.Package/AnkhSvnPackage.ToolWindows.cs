@@ -393,7 +393,7 @@ namespace Ankh.VSPackage
             protected set
             {
                 _toolWindow = value;
-                BitmapResourceID = VSVersion.VS11OrLater ? 401 : 402;
+                BitmapResourceID = VSVersion.VS11OrLater ? 701 : 702;
                 BitmapIndex = (int)_toolWindow;
             }
         }
