@@ -24,6 +24,8 @@ using Ankh.Commands;
 using Ankh.VS;
 using Ankh.UI.PendingChanges.Commits;
 using Ankh.Configuration;
+using Microsoft.VisualStudio;
+using System.IO;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -62,7 +64,26 @@ namespace Ankh.UI.PendingChanges
 
             Context.GetService<IServiceContainer>().AddService(typeof(ILastChangeInfo), this);
 
+            VSCommandHandler.Install(Context, this, new CommandID(VSConstants.VSStd2K, 1635 /* cmdidExploreFolderInWindows */), OnOpenFolder, OnUpdateOpenFolder);
+
             HookList();
+        }
+
+        private void OnUpdateOpenFolder(object sender, CommandUpdateEventArgs e)
+        {
+            SvnItem one = EnumTools.GetSingle(e.Selection.GetSelectedSvnItems(false));
+
+            if (one == null || !one.Exists)
+                e.Enabled = false;            
+        }
+
+        private void OnOpenFolder(object sender, CommandEventArgs e)
+        {
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            {
+                if (item.Exists)
+                    System.Diagnostics.Process.Start(item.IsDirectory ? item.FullPath : Path.GetDirectoryName(item.FullPath));
+            }
         }
 
         protected void pendingCommits_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
