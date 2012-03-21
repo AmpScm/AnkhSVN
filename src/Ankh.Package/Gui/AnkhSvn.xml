@@ -1148,20 +1148,20 @@
     <!--Command id="guidVSStd97:ECMD_SLNREFRESH" /-->
   </UsedCommands>
   <BitmapStrips>
-    <Strip name="ToolWindows" bitmap24="..\obj\ToolWindows.bmp" type="Ankh.AnkhToolWindow" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll">
+    <Strip name="ToolWindows" bitmap="..\obj\ToolWindows.bmp" type="Ankh.AnkhToolWindow" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll">
       <StripIcon id="RepositoryExplorer" iconFile="PendingChanges/RepositoryExplorer.png" />
       <StripIcon id="WorkingCopyExplorer" iconFile="PendingChanges/WCExplorer.png"/>
-      <StripIcon id="PendingChanges" iconFile="PendingChanges/PendingChanges.png"/>
-      <StripIcon id="Log" iconFile="PendingChanges/ViewHistory.png"/>
-      <StripIcon id="Diff" iconFile="PendingChanges/Compare.png"/>
+      <StripIcon id="PendingChanges" iconFile="Scc/TfsContextViewPendingChanges.png"/>
+      <StripIcon id="Log" iconFile="Scc/TfsHistory.png"/>
+      <StripIcon id="Diff" iconFile="Scc/TfsCompare.png"/>
       <StripIcon id="SvnInfo" iconFile="menu/Properties.png"/>
     </Strip>
     <Strip name="ToolWindows" bitmap24="..\obj\ToolWindows-Legacy.bmp" type="Ankh.AnkhToolWindow" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll">
       <StripIcon id="RepositoryExplorer" iconFile="PendingChanges/RepositoryExplorer.png" />
       <StripIcon id="WorkingCopyExplorer" iconFile="PendingChanges/WCExplorer.png"/>
-      <StripIcon id="PendingChanges" iconFile="PendingChanges/PendingChanges.png"/>
-      <StripIcon id="Log" iconFile="PendingChanges/ViewHistory.png"/>
-      <StripIcon id="Diff" iconFile="PendingChanges/Compare.png"/>
+      <StripIcon id="PendingChanges" iconFile="Scc/Legacy/TfsContextViewPendingChanges.png"/>
+      <StripIcon id="Log" iconFile="Scc/Legacy/TfsHistory.png"/>
+      <StripIcon id="Diff" iconFile="Scc/Legacy/TfsCompare.png"/>
       <StripIcon id="SvnInfo" iconFile="menu/Properties.png"/>
     </Strip>
   </BitmapStrips>
