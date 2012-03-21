@@ -142,10 +142,10 @@
   <data name="400" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Package.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="401" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="701" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>obj\ToolWindows.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="402" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="702" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>obj\ToolWindows-Legacy.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="555" type="System.Resources.ResXFileRef, System.Windows.Forms">

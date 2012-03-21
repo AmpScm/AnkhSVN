@@ -1148,7 +1148,7 @@
     <!--Command id="guidVSStd97:ECMD_SLNREFRESH" /-->
   </UsedCommands>
   <BitmapStrips>
-    <Strip name="ToolWindows" bitmap="..\obj\ToolWindows.bmp" type="Ankh.AnkhToolWindow" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll">
+    <Strip name="ToolWindows" bitmap24="..\obj\ToolWindows.bmp" type="Ankh.AnkhToolWindow" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll">
       <StripIcon id="RepositoryExplorer" iconFile="PendingChanges/RepositoryExplorer.png" />
       <StripIcon id="WorkingCopyExplorer" iconFile="PendingChanges/WCExplorer.png"/>
       <StripIcon id="PendingChanges" iconFile="Scc/TfsContextViewPendingChanges.png"/>
