@@ -28,7 +28,6 @@ using Ankh.Scc;
 namespace Ankh.Commands
 {
     [Command(AnkhCommand.ItemOpenVisualStudio)]
-    [Command(AnkhCommand.ItemOpenFolder)]
     [Command(AnkhCommand.ItemOpenSolutionExplorer)]
     [Command(AnkhCommand.ItemOpenTextEditor)]
     [Command(AnkhCommand.ItemOpenWindows)]
@@ -89,7 +88,10 @@ namespace Ankh.Commands
                             if (mapper.IsProjectFileOrSolution(item.FullPath))
                                 goto case AnkhCommand.ItemOpenSolutionExplorer;
                             if (item.IsDirectory)
-                                goto case AnkhCommand.ItemOpenFolder;
+                            {
+                                System.Diagnostics.Process.Start(item.FullPath);
+                                break;
+                            }
 
                             if (!item.IsFile || !item.Exists)
                                 continue;
@@ -107,12 +109,6 @@ namespace Ankh.Commands
 
                                 VsShellUtilities.OpenDocument(e.Context, item.FullPath, VSConstants.LOGVIEWID_TextView, out hier, out id, out frame);
                             }
-                            break;
-                        case AnkhCommand.ItemOpenFolder:
-                            if (!item.IsDirectory)
-                                System.Diagnostics.Process.Start(Path.GetDirectoryName(item.FullPath));
-                            else
-                                System.Diagnostics.Process.Start(item.FullPath);
                             break;
                         case AnkhCommand.ItemOpenWindows:
                             System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo(item.FullPath);

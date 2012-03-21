@@ -166,7 +166,7 @@ namespace Ankh
         ItemOpenVisualStudio,
         ItemOpenWindows,
         ItemOpenTextEditor,
-        ItemOpenFolder,
+        ItemOpenFolder, // Unused
         ItemOpenSolutionExplorer,
         ItemOpenInRepositoryExplorer, // Unused
 
