@@ -97,41 +97,6 @@ namespace Ankh.VSPackage
 
     }
 
-    [Guid(AnkhId.DiffEditorId), ComVisible(true)]
-    [ComDefaultInterface(typeof(IVsEditorFactory))]
-    sealed class AnkhDiffEditorFactory : AnkhEditorFactory
-    {
-        public AnkhDiffEditorFactory(AnkhSvnPackage package)
-            : base(package)
-        {
-
-        }
-
-        protected override Guid FactoryId
-        {
-            get { return new Guid(AnkhId.DiffEditorId); }
-        }
-
-        public override int MapLogicalView(ref Guid rguidLogicalView, out string pbstrPhysicalView)
-        {
-            if (ErrorHandler.Succeeded(base.MapLogicalView(ref rguidLogicalView, out pbstrPhysicalView)))
-                return VSConstants.S_OK;
-
-            if (rguidLogicalView == new Guid(AnkhId.DiffEditorViewId))
-            {
-                pbstrPhysicalView = null;
-                return VSConstants.S_OK;
-            }
-
-            return VSConstants.E_NOTIMPL;
-        }
-
-        protected override VSEditorControl CreateForm()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     [Guid(AnkhId.DynamicEditorId), ComVisible(true)]
     [ComDefaultInterface(typeof(IAnkhDynamicEditorFactory))]
     sealed class AnkhDynamicEditorFactory : AnkhEditorFactory, IAnkhDynamicEditorFactory

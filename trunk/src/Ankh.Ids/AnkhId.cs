@@ -114,9 +114,7 @@ namespace Ankh
         public const string LogViewContext = "0d2ca125-6cdf-407a-9c03-e8427e27f34d";
 
         public const string AnnotateContext = "61ade608-f2f9-4983-ae28-623de0dca5c6";
-        public const string DiffEditorId = "7c6facce-0c14-4a3e-bc69-15f3966ee312";
         public const string DynamicEditorId = "923f6990-98c1-4dd5-983e-25088c02975d";
-        public const string DiffEditorViewId = "3d9f7a9d-f9d1-4dd6-a89f-c89312708923";
 
         public const string EnvironmentSettingsPageGuid = "f362b52e-e8f8-43de-a02d-5072a2a96e6a";
         public const string UserToolsSettingsPageGuid = "ae1a4db8-09c3-438d-93bd-0fe37412ce34";
