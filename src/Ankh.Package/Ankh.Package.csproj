@@ -154,6 +154,7 @@
       <Visible>false</Visible>
     </XslSource>
     <None Include="Ankh.Package.snk" />
+    <None Include="Gui\Scc\CompareProperties.pdn" />
     <None Include="source.extension.VsixManifest" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
@@ -162,7 +163,7 @@
     <None Include="Gui\Gui.xsx">
       <DependentUpon>Gui.xsd</DependentUpon>
     </None>
-    <None Include="Gui\menu\Properties.pdn" />
+    <None Include="Gui\Scc\Legacy\CompareProperties.pdn" />
     <None Include="Gui\PendingChanges\RepositoryExplorer.pdn" />
     <None Include="Gui\PendingChanges\WCExplorer.pdn" />
     <None Include="Resources\AnkhLogo32x32.pdn" />
@@ -220,13 +221,14 @@
     <Content Include="Gui\menu\Export.png" />
     <Content Include="Gui\menu\IssueRepository.png" />
     <Content Include="Gui\PendingChanges\FolderUp.png" />
+    <Content Include="Gui\Scc\CompareProperties.png" />
     <Content Include="Gui\Scc\Legacy\Lock.png" />
     <Content Include="Gui\menu\MakeDirectory.png" />
     <Content Include="Gui\menu\Merge.png" />
     <Content Include="Gui\menu\PBAlpha.png" />
     <Content Include="Gui\menu\PBCatego.png" />
     <Content Include="Gui\menu\PBPage.png" />
-    <Content Include="Gui\menu\Properties.png" />
+    <Content Include="Gui\Scc\Legacy\CompareProperties.png" />
     <Content Include="Gui\menu\RemoveFolder.png" />
     <Content Include="Gui\menu\RemoveUrl.png" />
     <Content Include="Gui\menu\Revert.png" />
@@ -253,7 +255,7 @@
     <Content Include="Gui\Scc\Legacy\Open.png" />
     <Content Include="Gui\PendingChanges\RepositoryExplorer.png" />
     <Content Include="Gui\PendingChanges\RevisionGraph.png" />
-    <Content Include="Gui\PendingChanges\ShowAll.png" />
+    <Content Include="Gui\Scc\Legacy\ShowAll.png" />
     <Content Include="Gui\PendingChanges\ShowChangedPaths.png" />
     <Content Include="Gui\PendingChanges\SolutionExplorer.png" />
     <Content Include="Gui\PendingChanges\SortAscending.png" />
@@ -413,6 +415,7 @@
     <Content Include="Gui\Scc\RefreshStatus.png" />
     <Content Include="Gui\Scc\RemovefromLabel.png" />
     <Content Include="Gui\Scc\Share.png" />
+    <Content Include="Gui\Scc\ShowAll.png" />
     <Content Include="Gui\Scc\Sort.png" />
     <Content Include="Gui\Scc\SourceControlManager.png" />
     <Content Include="Gui\Scc\TfsAddFilesToSourceControl.png" />

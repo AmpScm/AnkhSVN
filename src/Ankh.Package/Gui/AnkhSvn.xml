@@ -282,7 +282,7 @@
           <Button id="Cmd_SolutionEditProperties" priority="0x300" defaultDisabled="true"
                   text="Solution Prop&amp;erties..."
                   toolTip="View/Edit Solution Subversion Properties"
-                  iconFile="menu/Properties.png" defaultInvisible="true"/>
+                  iconFile="Scc/CompareProperties.png" defaultInvisible="true"/>
         </Group>
         <Group id="Grp_SccSlnAdvanced" priority="0x5000">
 
@@ -351,7 +351,7 @@
           <Button id="Cmd_ProjectEditProperties" priority="0x700" defaultDisabled="true"
                   text="Project Prop&amp;erties..."
                   toolTip="View/Edit Project Subversion Properties"
-                  iconFile="menu/Properties.png" defaultInvisible="true"/>
+                  iconFile="Scc/CompareProperties.png" defaultInvisible="true"/>
         </Group>
         <Group id="Grp_SccProjectAdvanced" priority="0x5000">
         </Group>
@@ -410,7 +410,7 @@
                 toolTip="Show differences compared to local text base." iconFile="Scc/TfsCompare.png" defaultInvisible="true"/>
       <Button id="Cmd_ItemShowPropertyChanges" name="Svn.PropertyCompare" priority="0x1880"
                 text="Show &amp;Property Changes"
-                toolTip="Show property changes." iconFile="Menu/Properties.png" defaultInvisible="true"/>
+                toolTip="Show property changes." iconFile="Scc/CompareProperties.png" defaultInvisible="true"/>
       <Button id="Cmd_Log" name="ViewHistory" priority="0x1900"
                 text="View &amp;History"
                 toolTip="Show the Log Viewer for the selected item." iconFile="Scc/TfsHistory.png" defaultInvisible="true"/>
@@ -461,7 +461,7 @@
           <Button id="Cmd_ItemEditProperties" priority="0x700" defaultDisabled="true"
                   text="Subversion Prop&amp;erties..."
                   toolTip="View/Edit Subversion Properties"
-                  iconFile="menu/Properties.png" defaultInvisible="true"/>
+                  iconFile="Scc/CompareProperties.png" defaultInvisible="true"/>
         </Group>
         <Group id="Grp_SccItemAdvanced" priority="0x5000">
         </Group>
@@ -796,7 +796,7 @@
           <Button id="Cmd_LogRevertThisRevisions" name="LogRevertChangesFrom" priority="0xB300"
                   text="Revert &amp;Changes from this revision" dynamicVisibility="true" iconFile="Scc/Undo.png"/>
           <Button id="Cmd_LogShowRevisionProperties" name="LogShowRevisionProperties" priority="0xB400"
-                  text="Show Revision &amp;Properties" dynamicVisibility="true" iconFile="menu/Properties.png"/>
+                  text="Show Revision &amp;Properties" dynamicVisibility="true" iconFile="Scc/CompareProperties.png"/>
           <Button id="Cmd_LogOpenIssue" name="LogOpenIssue" priority="0xB500"
                   text="Open &amp;Issue" dynamicVisibility="true"/>
         </Group>
@@ -900,9 +900,9 @@
             </Group>
           </Menu>
           <Button id="Cmd_PendingChangesViewAll" priority="0x200" name="ViewAll"
-              text="View &amp;All" iconFile="PendingChanges/ShowAll.png"/>
+              text="Show &amp;All Files" iconFile="Scc/ShowAll.png"/>
           <Button id="Cmd_PendingChangesViewLogMessage" priority="0x300" name="ViewLogMessage"
-              text="View &amp;Message" iconFile="Scc/Comments.png"/>
+              text="Show &amp;Message" iconFile="Scc/Comments.png"/>
         </Group>
         <Group id="Grp_PendingChangesItems" priority="0x300">
           <Menu id="Menu_ItemConflict" priority="0x100" name="Conflicts" type="MenuController">
@@ -1154,7 +1154,7 @@
       <StripIcon id="PendingChanges" iconFile="Scc/TfsContextViewPendingChanges.png"/>
       <StripIcon id="Log" iconFile="Scc/TfsHistory.png"/>
       <StripIcon id="Diff" iconFile="Scc/TfsCompare.png"/>
-      <StripIcon id="SvnInfo" iconFile="menu/Properties.png"/>
+      <StripIcon id="SvnInfo" iconFile="Scc/CompareProperties.png"/>
     </Strip>
     <Strip name="ToolWindows" bitmap24="..\obj\ToolWindows-Legacy.bmp" type="Ankh.AnkhToolWindow" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll">
       <StripIcon id="RepositoryExplorer" iconFile="PendingChanges/RepositoryExplorer.png" />
@@ -1162,7 +1162,7 @@
       <StripIcon id="PendingChanges" iconFile="Scc/Legacy/TfsContextViewPendingChanges.png"/>
       <StripIcon id="Log" iconFile="Scc/Legacy/TfsHistory.png"/>
       <StripIcon id="Diff" iconFile="Scc/Legacy/TfsCompare.png"/>
-      <StripIcon id="SvnInfo" iconFile="menu/Properties.png"/>
+      <StripIcon id="SvnInfo" iconFile="Scc/Legacy/CompareProperties.png"/>
     </Strip>
   </BitmapStrips>
 </VsGui>
