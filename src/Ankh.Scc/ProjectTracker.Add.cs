@@ -94,9 +94,9 @@ namespace Ankh.Scc
                 string newDoc = rgpszNewMkDocuments[i];
                 string origDoc = rgpszSrcMkDocuments[i];
 
-                if (!SccProvider.IsSafeSccPath(rgpszNewMkDocuments[i]))
+                if (!SccProvider.IsSafeSccPath(newDoc))
                     continue;
-                else if (!SccProvider.IsSafeSccPath(rgpszSrcMkDocuments[i]))
+                else if (!SccProvider.IsSafeSccPath(origDoc))
                     continue;
 
                 // Save the origins of the to be added files as they are not available in the added event
