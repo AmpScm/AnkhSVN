@@ -603,7 +603,7 @@ namespace Ankh.Settings
                         {
                             string path = r as string;
 
-                            if (!string.IsNullOrEmpty(path) && SvnItem.IsValidPath(path))
+                            if (SvnItem.IsValidPath(path))
                                 path = Path.Combine(path, "msenv.dll");
                             else
                                 path = null;

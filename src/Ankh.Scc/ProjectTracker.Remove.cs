@@ -61,7 +61,7 @@ namespace Ankh.Scc
 
                     string file = rgpszMkDocuments[iFile];
 
-                    if (string.IsNullOrEmpty(file) || !SvnItem.IsValidPath(file))
+                    if (!SvnItem.IsValidPath(file))
                         continue;
 
                     file = SvnTools.GetNormalizedFullPath(file);
@@ -110,7 +110,7 @@ namespace Ankh.Scc
 
                     string dir = rgpszMkDocuments[iDirectory];
 
-                    if (string.IsNullOrEmpty(dir) || !SvnItem.IsValidPath(dir))
+                    if (!SvnItem.IsValidPath(dir))
                         continue;
 
                     dir = SvnTools.GetNormalizedFullPath(dir);
