@@ -44,6 +44,7 @@ namespace Ankh.Scc
         bool _solutionLoaded;
         readonly HybridCollection<string> _fileHints = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
         readonly SortedList<string, string> _fileOrigins;
+        readonly HybridCollection<string> _alreadyProcessed = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
         public ProjectTracker(IAnkhServiceProvider context)
             : base(context)
@@ -215,6 +216,7 @@ namespace Ankh.Scc
 
             _fileHints.Clear();
             _fileOrigins.Clear();
+            _alreadyProcessed.Clear();
         }
 
         void RegisterForSccCleanup()

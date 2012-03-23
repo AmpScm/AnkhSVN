@@ -32,10 +32,28 @@ namespace Ankh.Scc
             if (rgszMkNewNames == null || rgszMkOldNames == null)
                 return VSConstants.E_POINTER;
 
+            RegisterForSccCleanup(); // Clear the origins
+            _collectHints = true;
+
             for (int i = 0; i < cFiles; i++)
             {
                 if (rgResults != null)
                     rgResults[i] = VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK;
+
+                string newDoc = rgszMkNewNames[i];
+                string origDoc = rgszMkOldNames[i];
+
+                if (!SccProvider.IsSafeSccPath(newDoc))
+                    continue;
+                else if (!SccProvider.IsSafeSccPath(origDoc))
+                    continue;
+
+                // Save the origins of the to be added files as they are not available in the added event
+                newDoc = SvnTools.GetNormalizedFullPath(newDoc);
+                origDoc = SvnTools.GetNormalizedFullPath(origDoc);
+
+                if (newDoc != origDoc)
+                    _fileOrigins[newDoc] = origDoc;
             }
 
             if (pSummaryResult != null)
@@ -52,67 +70,64 @@ namespace Ankh.Scc
             // TODO: C++ projects do not send directory renames; but do send OnAfterRenameFile() events
             //       for all files (one at a time). We should detect that case here and fix up this dirt!
 
-            int iFile = 0;
-
             for (int i = 0; i < cFiles; i++)
             {
                 string s = rgszMkOldNames[i];
-                if (!string.IsNullOrEmpty(s) && SvnItem.IsValidPath(s))
+                if (SvnItem.IsValidPath(s))
                     StatusCache.MarkDirty(s);
 
                 s = rgszMkNewNames[i];
-                if (!string.IsNullOrEmpty(s) && SvnItem.IsValidPath(s))
+                if (SvnItem.IsValidPath(s))
                     StatusCache.MarkDirty(s);
             }
 
-            if (SccProvider.IsActive)
+            if (!SccProvider.IsActive)
+                return VSConstants.S_OK;
+
+            ProcessRenames(rgszMkOldNames, rgszMkNewNames);
+
+            for (int iProject = 0, iFile = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
             {
-                FixWorkingCopyAfterRenames(rgszMkOldNames, rgszMkNewNames);
+                int iLastFileThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cFiles;
 
-                for (int iProject = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
+                if (rgpProjects[iProject] != null)
                 {
-                    int iLastFileThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cFiles;
+                    IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                    if (rgpProjects[iProject] != null)
+                    bool track = SccProvider.TrackProjectChanges(sccProject);
+
+                    for (; iFile < iLastFileThisProject; iFile++)
                     {
-                        IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
+                        if (sccProject == null || !track)
+                            continue; // Not handled by our provider
 
-                        bool track = SccProvider.TrackProjectChanges(sccProject);
+                        if (!SvnItem.IsValidPath(rgszMkOldNames[iFile]))
+                            continue;
 
-                        for (; iFile < iLastFileThisProject; iFile++)
-                        {
-                            if (sccProject == null || !track)
-                                continue; // Not handled by our provider
+                        string oldName = SvnTools.GetNormalizedFullPath(rgszMkOldNames[iFile]);
+                        string newName = SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]);
 
-                            if (string.IsNullOrEmpty(rgszMkOldNames[iFile]) || !SvnItem.IsValidPath(rgszMkOldNames[iFile]))
-                                continue;
+                        if (oldName == newName)
+                            continue;
 
-                            string oldName = SvnTools.GetNormalizedFullPath(rgszMkOldNames[iFile]);
-                            string newName = SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]);
-
-                            if (oldName == newName)
-                                continue;
-
-                            SccProvider.OnProjectRenamedFile(sccProject, oldName, newName, rgFlags[iFile]);
-                        }
+                        SccProvider.OnProjectRenamedFile(sccProject, oldName, newName, rgFlags[iFile]);
                     }
-                    else
+                }
+                else
+                {
+                    // Renaming something in the solution (= solution file itself)
+                    for (; iFile < iLastFileThisProject; iFile++)
                     {
-                        // Renaming something in the solution (= solution file itself)
+                        if (!SvnItem.IsValidPath(rgszMkOldNames[iFile]))
+                            continue;
 
-                        for (; iFile < iLastFileThisProject; iFile++)
-                        {
-                            if (string.IsNullOrEmpty(rgszMkOldNames[iFile]) || !SvnItem.IsValidPath(rgszMkOldNames[iFile]))
-                                continue;
+                        string oldName = SvnTools.GetNormalizedFullPath(rgszMkOldNames[iFile]);
+                        string newName = SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]);
 
-                            string oldName = SvnTools.GetNormalizedFullPath(rgszMkOldNames[iFile]);
-                            string newName = SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]);
+                        if (oldName == newName)
+                            continue;
 
-                            if (oldName == newName)
-                                continue;
-
-                            SccProvider.OnSolutionRenamedFile(oldName, newName);
-                        }
+                        SccProvider.OnSolutionRenamedFile(oldName, newName);
                     }
                 }
             }
@@ -125,7 +140,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="rgszMkOldNames"></param>
         /// <param name="rgszMkNewNames"></param>
-        private void FixWorkingCopyAfterRenames(string[] rgszMkOldNames, string[] rgszMkNewNames)
+        private void ProcessRenames(string[] rgszMkOldNames, string[] rgszMkNewNames)
         {
             if (rgszMkNewNames == null || rgszMkOldNames == null || rgszMkOldNames.Length != rgszMkNewNames.Length)
                 return;
@@ -135,76 +150,93 @@ namespace Ankh.Scc
                 string oldName = rgszMkOldNames[i];
                 string newName = rgszMkNewNames[i];
 
-                if (string.IsNullOrEmpty(oldName) || !SvnItem.IsValidPath(oldName))
+                if (!SvnItem.IsValidPath(oldName))
+                    continue;
+                if (!SvnItem.IsValidPath(newName))
                     continue;
 
                 oldName = SvnTools.GetNormalizedFullPath(oldName);
                 newName = SvnTools.GetNormalizedFullPath(newName);
 
-                string oldDir;
-                string newDir;
-                bool safeRename = false;
+                ProcessRename(oldName, newName);
+            }
+        }
 
-                if (!Directory.Exists(newName))
+        private void ProcessRename(string oldName, string newName)
+        {
+            if (_alreadyProcessed.Contains(newName))
+                return;
+
+            if (MaybeProcessAncestorRename(oldName, newName))
+                return;
+
+            SvnItem old = StatusCache[oldName];
+            SvnItem nw = StatusCache[newName];
+
+            if (old.IsVersioned && !old.IsDeleteScheduled
+                && nw.IsVersionable
+                && (!nw.IsVersioned || nw.IsDeleteScheduled))
+            {
+                SvnItem opp = nw.Parent;
+
+                using (SvnSccContext ctx = new SvnSccContext(this))
                 {
-                    // Try to fix the parent of the new item
-                    oldDir = SvnTools.GetNormalizedDirectoryName(oldName);
-                    newDir = SvnTools.GetNormalizedDirectoryName(newName);
-                }
-                else
-                {
-                    // The item itself is the directory to fix
-                    oldDir = oldName;
-                    newDir = newName;
-                    safeRename = true;
-                }
+                    if (opp != null && !opp.IsVersioned)
+                        ctx.AddParents(newName);
 
-                if (Directory.Exists(oldDir))
-                    continue; // Nothing to fix up
+                    ctx.MarkAsMoved(oldName, newName);
+                    StatusCache.MarkDirtyRecursive(newName);
+                    StatusCache.MarkDirtyRecursive(oldName);
 
-                string parent = SvnTools.GetNormalizedDirectoryName(oldDir);
-                if (!Directory.Exists(parent))
-                {
-                    continue; // We can't fix up more than one level at this time
-                    // We probably fix it with one of the following renames; as paths are included too
-                }
-
-                SvnItem item = StatusCache[oldDir];
-
-                if (!item.IsVersioned && item.Status.LocalNodeStatus != SvnStatus.Missing)
-                    continue; // Item was not cached as versioned or now-missing (Missing implicits Versioned)
-
-                StatusCache.MarkDirty(oldDir);
-                StatusCache.MarkDirty(newDir);
-
-                item = StatusCache[oldDir];
-
-                if (item.Status.LocalNodeStatus != SvnStatus.Missing)
-                    continue;
-
-                SvnItem newItem = StatusCache[newDir];
-
-                using (SvnSccContext svn = new SvnSccContext(Context))
-                {
-                    SvnWorkingCopyEntryEventArgs wa = svn.SafeGetEntry(newDir);
-                    string newParent = SvnTools.GetNormalizedDirectoryName(newDir);
-
-                    if (wa != null)
-                        continue; // Not an unexpected WC root
-                    else if (!SvnTools.IsBelowManagedPath(newDir))
-                        continue; // Not a wc root at all
-
-                    svn.SafeWcDirectoryCopyFixUp(oldDir, newDir, safeRename); // Recreate the old WC directory
-
-                    SccProvider.AddDelayedDelete(oldDir); // Delete everything in the old wc when done
-                    // TODO: Once Subversion understands true renames, fixup the renames in the delayed hook
-
-                    // We have all files of the old wc directory unversioned in the new location now
-
-                    StatusCache.MarkDirtyRecursive(oldDir);
-                    StatusCache.MarkDirtyRecursive(newDir);
+                    _alreadyProcessed.Add(newName);
                 }
             }
+            
+        }
+
+        private bool MaybeProcessAncestorRename(string oldName, string newName)
+        {
+            string oldParent = SvnTools.GetNormalizedDirectoryName(oldName);
+            string newParent = SvnTools.GetNormalizedDirectoryName(newName);
+
+            if (oldParent == null || newParent == null)
+                return false;
+
+            if (_alreadyProcessed.Contains(newParent))
+                return true;
+
+            if (newParent == newName)
+                return false; // Root reached
+
+            if (MaybeProcessAncestorRename(oldParent, newParent))
+                return true;
+
+            if (!_fileOrigins.ContainsKey(newParent))
+                return false;
+
+            SvnItem old = StatusCache[oldParent];
+            SvnItem nw = StatusCache[newParent];
+
+            if (old.IsVersioned && !old.IsDeleteScheduled
+                && nw.IsVersionable
+                && (!nw.IsVersioned || nw.IsDeleteScheduled))
+            {
+                SvnItem opp = nw.Parent;
+
+                using (SvnSccContext ctx = new SvnSccContext(this))
+                {
+                    if (opp != null && !opp.IsVersioned)
+                        ctx.AddParents(newParent);
+
+                    ctx.MarkAsMoved(oldParent, newParent);
+                    StatusCache.MarkDirtyRecursive(newParent);
+                    StatusCache.MarkDirtyRecursive(oldParent);
+
+                    _alreadyProcessed.Add(newParent);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public int OnQueryRenameDirectories(IVsProject pProject, int cDirs, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEDIRECTORYFLAGS[] rgFlags, VSQUERYRENAMEDIRECTORYRESULTS[] pSummaryResult, VSQUERYRENAMEDIRECTORYRESULTS[] rgResults)
@@ -212,10 +244,28 @@ namespace Ankh.Scc
             if (rgszMkNewNames == null || pProject == null || rgszMkOldNames == null)
                 return VSConstants.E_POINTER;
 
+            RegisterForSccCleanup(); // Clear the origins
+            _collectHints = true;
+
             for (int i = 0; i < cDirs; i++)
             {
                 if (rgResults != null)
                     rgResults[i] = VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK;
+
+                string newDoc = rgszMkNewNames[i];
+                string origDoc = rgszMkOldNames[i];
+
+                if (!SccProvider.IsSafeSccPath(newDoc))
+                    continue;
+                else if (!SccProvider.IsSafeSccPath(origDoc))
+                    continue;
+
+                // Save the origins of the to be added files as they are not available in the added event
+                newDoc = SvnTools.GetNormalizedFullPath(newDoc);
+                origDoc = SvnTools.GetNormalizedFullPath(origDoc);
+
+                if (newDoc != origDoc)
+                    _fileOrigins[newDoc] = origDoc;
             }
 
             if (pSummaryResult != null)
