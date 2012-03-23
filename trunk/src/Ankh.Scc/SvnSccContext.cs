@@ -357,6 +357,21 @@ namespace Ankh.Scc
 
                     ok = _client.Move(fromPath, toPath, ma);
 
+                    if (!ok && ma.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_PATH_NOT_FOUND)
+                    {
+                        // The directory exists, but is no working copy
+                        SvnAddArgs aa = new SvnAddArgs();
+                        aa.Depth = SvnDepth.Empty;
+                        aa.AddParents = true;
+                        aa.Force = true;
+                        aa.ThrowOnError = false;
+
+                        _client.Add(SvnTools.GetNormalizedDirectoryName(toPath), aa);
+
+                        // And retry
+                        ok = _client.Move(fromPath, toPath, ma);
+                    }
+
                     if (ok)
                     {
                         setReadOnly = (File.GetAttributes(toPath) & FileAttributes.ReadOnly) != (FileAttributes)0;
