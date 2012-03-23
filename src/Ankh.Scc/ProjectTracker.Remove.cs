@@ -87,36 +87,16 @@ namespace Ankh.Scc
             if (rgpszMkDocuments == null)
                 return VSConstants.E_POINTER;
 
-            bool allOk = true;
-
-            IVsSccProject2 sccProject = pProject as IVsSccProject2;
-
             for (int i = 0; i < cDirectories; i++)
             {
-                bool ok = true;
-
-                string dir = rgpszMkDocuments[i];
-
-                if (string.IsNullOrEmpty(dir) || !SvnItem.IsValidPath(dir))
-                    continue;
-
-                dir = SvnTools.GetNormalizedFullPath(dir);
-
-
-                if (SccProvider.TrackProjectChanges(sccProject))
-                    SccProvider.OnBeforeRemoveDirectory(sccProject, dir, out ok);
-
                 if (rgResults != null)
                 {
-                    rgResults[i] = ok ? VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK : VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
+                    rgResults[i] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
                 }
-
-                if (!ok)
-                    allOk = false;
             }
 
             if (pSummaryResult != null)
-                pSummaryResult[0] = allOk ? VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK : VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
+                pSummaryResult[0] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
 
             return VSConstants.S_OK;
         }
