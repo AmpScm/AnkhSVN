@@ -28,7 +28,6 @@ namespace Ankh
         WorkingCopyExplorer,
         PendingChanges,
         Log,
-        Diff,
         SvnInfo
     }
 }

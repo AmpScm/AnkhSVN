@@ -105,7 +105,6 @@ namespace Ankh
         public const string WorkingCopyExplorerToolWindowId = "a1929d7e-610a-48b0-8152-8e4aa202427f";
         public const string BlameToolWindowId = "a543ea62-696c-4c7c-ab42-78bd7267da92";
         public const string LogToolWindowId = "2fac1ebf-6b37-4be3-9a44-f9ed32d561cd";
-        public const string DiffToolWindowId = "8b17630d-72a5-43ae-8105-db31004d08ad";
         public const string SvnInfoToolWindowId = "c3630016-f162-4af5-b165-9f468a642e9a";
 
         public const string PendingChangeViewContext = "a02c6d65-1f8b-46ac-8db3-511ae5dba374";

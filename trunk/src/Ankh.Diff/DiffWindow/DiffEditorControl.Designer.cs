@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Ankh.UI.DiffWindow
 {
-    partial class DiffToolWindowControl
+    partial class DiffEditorControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -43,7 +43,7 @@ namespace Ankh.UI.DiffWindow
         #region Component Designer generated code
         private void InitializeComponent()
         {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DiffToolWindowControl));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DiffEditorControl));
 			this.diffControl1 = new Ankh.Diff.DiffUtils.Controls.DiffControl();
 			this.SuspendLayout();
 			// 
