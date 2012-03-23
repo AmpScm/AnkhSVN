@@ -16,8 +16,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio;
+
 using Ankh.VS.LanguageServices.Core;
 
 namespace Ankh.VS.LanguageServices.UnifiedDiff
@@ -91,23 +94,23 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
             IVsTextLines lines = _buffer;
 
             int lastLine, linelen;
-            ErrorHandler.ThrowOnFailure(lines.GetLastLineIndex(out lastLine, out linelen));
+            Marshal.ThrowExceptionForHR(lines.GetLastLineIndex(out lastLine, out linelen));
 
             bool changed = false;
 
             int n = 0;
             for (int i = 0; i < lastLine; i++)
             {
-                ErrorHandler.ThrowOnFailure(lines.GetLengthOfLine(i, out linelen));
+                Marshal.ThrowExceptionForHR(lines.GetLengthOfLine(i, out linelen));
                 if (linelen < 8)
                     continue; // No 'Index: ' line
 
                 string start;
-                ErrorHandler.ThrowOnFailure(lines.GetLineText(i, 0, i, 7, out start));
+                Marshal.ThrowExceptionForHR(lines.GetLineText(i, 0, i, 7, out start));
                 if (!string.Equals(start, "Index: "))
                     continue;
 
-                ErrorHandler.ThrowOnFailure(lines.GetLineText(i, 7, i, linelen, out start));
+                Marshal.ThrowExceptionForHR(lines.GetLineText(i, 7, i, linelen, out start));
 
                 start = start.Trim();
 
@@ -135,7 +138,7 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
                     ts.iStartLine = _lines[i];
                     ts.iStartIndex = 0;
                     ts.iEndLine = (i+1 < _lines.Count) ? _lines[i+1]-1 : lastLine;                    
-                    ErrorHandler.ThrowOnFailure(lines.GetLengthOfLine(ts.iEndLine, out ts.iEndIndex));
+                    Marshal.ThrowExceptionForHR(lines.GetLengthOfLine(ts.iEndLine, out ts.iEndIndex));
                     ts.iEndIndex++;
 
                     DropDownTypes.Add(new ComboMember(_indexes[i], 1, DROPDOWNFONTATTR.FONTATTR_PLAIN, ts));

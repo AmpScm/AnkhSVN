@@ -157,7 +157,7 @@ namespace Ankh.VS.LanguageServices.Core
             string root = null;
             if (localRegistry != null)
             {
-                ErrorHandler.ThrowOnFailure(localRegistry.GetLocalRegistryRoot(out root));
+                Marshal.ThrowExceptionForHR(localRegistry.GetLocalRegistryRoot(out root));
             }
             if (root != null)
             {

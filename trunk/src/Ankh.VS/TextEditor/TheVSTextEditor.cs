@@ -17,19 +17,20 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
+
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 
-using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
-using System.Security.Permissions;
 using Ankh.Scc.UI;
 using Ankh.UI;
+
+using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 
 namespace Ankh.VS.TextEditor
 {
@@ -696,8 +697,8 @@ namespace Ankh.VS.TextEditor
 
                 string text;
                 int endLine, endIndex;
-                ErrorHandler.ThrowOnFailure(lines.GetLastLineIndex(out endLine, out endIndex));
-                ErrorHandler.ThrowOnFailure(lines.GetLineText(0, 0, endLine, endIndex, out text));
+                Marshal.ThrowExceptionForHR(lines.GetLastLineIndex(out endLine, out endIndex));
+                Marshal.ThrowExceptionForHR(lines.GetLineText(0, 0, endLine, endIndex, out text));
                 return text;
             }
             set
@@ -715,7 +716,7 @@ namespace Ankh.VS.TextEditor
 
                 int endLine, endIndex;
 
-                ErrorHandler.ThrowOnFailure(lines.GetLastLineIndex(out endLine, out endIndex));
+                Marshal.ThrowExceptionForHR(lines.GetLastLineIndex(out endLine, out endIndex));
 
                 IntPtr pText = Marshal.StringToCoTaskMemUni(value);
                 try
@@ -723,7 +724,7 @@ namespace Ankh.VS.TextEditor
                     if (_ro)
                         InternalSetReadOnly(false);
 
-                    ErrorHandler.ThrowOnFailure(lines.ReloadLines(0, 0, endLine, endIndex, pText, value.Length, null));
+                    Marshal.ThrowExceptionForHR(lines.ReloadLines(0, 0, endLine, endIndex, pText, value.Length, null));
                 }
                 finally
                 {
@@ -952,7 +953,7 @@ namespace Ankh.VS.TextEditor
                 cwFlags |= _codewindowbehaviorflags.CWB_DISABLEDROPDOWNBAR;
 
             IVsCodeWindowEx codeWindowEx = codeWindow as IVsCodeWindowEx;
-            ErrorHandler.ThrowOnFailure(codeWindowEx.Initialize((uint)cwFlags, 0, null, null, initViewFlags, initView));
+            Marshal.ThrowExceptionForHR(codeWindowEx.Initialize((uint)cwFlags, 0, null, null, initViewFlags, initView));
 
             // set buffer
             _textBuffer = CreateLocalInstance<IVsTextBuffer>(typeof(VsTextBufferClass), _serviceProvider);
@@ -983,13 +984,13 @@ namespace Ankh.VS.TextEditor
                     userData.SetData(ref roles, "INTERACTIVE");
             }
 
-            ErrorHandler.ThrowOnFailure(codeWindow.SetBuffer((IVsTextLines)_textBuffer));
+            Marshal.ThrowExceptionForHR(codeWindow.SetBuffer((IVsTextLines)_textBuffer));
 
             // create pane window
             _windowPane = (IVsWindowPane)codeWindow;
-            ErrorHandler.ThrowOnFailure(_windowPane.SetSite(_serviceProvider));
+            Marshal.ThrowExceptionForHR(_windowPane.SetSite(_serviceProvider));
 
-            ErrorHandler.ThrowOnFailure(_windowPane.CreatePaneWindow(parentHandle, place.X, place.Y, place.Width, place.Height, out editorHwnd));
+            Marshal.ThrowExceptionForHR(_windowPane.CreatePaneWindow(parentHandle, place.X, place.Y, place.Width, place.Height, out editorHwnd));
 
             //set the inheritKeyBinding guid so that navigation keys work. The VS 2008 SDK does this from the language service. 
             // The VS2005 sdk doesn't
@@ -1001,7 +1002,7 @@ namespace Ankh.VS.TextEditor
                 if (frame != null)
                 {
                     Guid CMDUIGUID_TextEditor = new Guid(0x8B382828, 0x6202, 0x11d1, 0x88, 0x70, 0x00, 0x00, 0xF8, 0x75, 0x79, 0xD2);
-                    ErrorHandler.ThrowOnFailure(frame.SetGuidProperty((int)__VSFPROPID.VSFPROPID_InheritKeyBindings, ref CMDUIGUID_TextEditor));
+                    Marshal.ThrowExceptionForHR(frame.SetGuidProperty((int)__VSFPROPID.VSFPROPID_InheritKeyBindings, ref CMDUIGUID_TextEditor));
                 }
             }
         }
@@ -1011,7 +1012,7 @@ namespace Ankh.VS.TextEditor
             get
             {
                 IVsTextView view;
-                ErrorHandler.ThrowOnFailure(_codeWindow.GetPrimaryView(out view));
+                Marshal.ThrowExceptionForHR(_codeWindow.GetPrimaryView(out view));
                 return view;
             }
         }
@@ -1038,7 +1039,7 @@ namespace Ankh.VS.TextEditor
             commandTarget = _codeWindow as IOleCommandTarget;
 
             IVsTextView textView;
-            ErrorHandler.ThrowOnFailure(_codeWindow.GetPrimaryView(out textView));
+            Marshal.ThrowExceptionForHR(_codeWindow.GetPrimaryView(out textView));
 
             _languageService = forceLanguageService;
             _textView = textView;
@@ -1068,7 +1069,7 @@ namespace Ankh.VS.TextEditor
                     IVsTextEditorPropertyContainer spPropContainer;
                     Guid GUID_EditPropCategory_View_MasterSettings =
                         new Guid("{D1756E7C-B7FD-49a8-B48E-87B14A55655A}");
-                    ErrorHandler.ThrowOnFailure(spPropCatContainer.GetPropertyCategory(
+                    Marshal.ThrowExceptionForHR(spPropCatContainer.GetPropertyCategory(
                         ref GUID_EditPropCategory_View_MasterSettings,
                         out spPropContainer));
 
@@ -1193,7 +1194,7 @@ namespace Ankh.VS.TextEditor
                 IVsTextStream tempStream = (IVsTextStream)tempBuffer;
 
                 int size;
-                ErrorHandler.ThrowOnFailure(tempStream.GetSize(out size));
+                Marshal.ThrowExceptionForHR(tempStream.GetSize(out size));
 
                 buffer = Marshal.AllocCoTaskMem((size + 1) * sizeof(char));
 
@@ -1203,11 +1204,11 @@ namespace Ankh.VS.TextEditor
                     setReadOnly = true;
                 }
 
-                ErrorHandler.ThrowOnFailure(tempStream.GetStream(0, size, buffer));
+                Marshal.ThrowExceptionForHR(tempStream.GetStream(0, size, buffer));
 
                 IVsTextStream destStream = (IVsTextStream)_textBuffer;
                 int oldDestSize;
-                ErrorHandler.ThrowOnFailure(destStream.GetSize(out oldDestSize));
+                Marshal.ThrowExceptionForHR(destStream.GetSize(out oldDestSize));
 
                 destStream.ReplaceStream(0, oldDestSize, buffer, size);
             }
@@ -1227,7 +1228,7 @@ namespace Ankh.VS.TextEditor
         internal void LoadFile(string path)
         {
             IVsPersistDocData2 docData = (IVsPersistDocData2)_textBuffer;
-            ErrorHandler.ThrowOnFailure(docData.LoadDocData(path));
+            Marshal.ThrowExceptionForHR(docData.LoadDocData(path));
         }
 
         internal void Clear(bool clearUndoBuffer)
@@ -1249,7 +1250,7 @@ namespace Ankh.VS.TextEditor
         {
             IVsDocDataFileChangeControl dfc = (IVsDocDataFileChangeControl)_textBuffer;
 
-            ErrorHandler.ThrowOnFailure(dfc.IgnoreFileChanges(ignore ? 1 : 0));
+            Marshal.ThrowExceptionForHR(dfc.IgnoreFileChanges(ignore ? 1 : 0));
         }
 
         public Point? EditorClientTopLeft
@@ -1272,7 +1273,7 @@ namespace Ankh.VS.TextEditor
             get
             {
                 int height;
-                ErrorHandler.ThrowOnFailure(_textView.GetLineHeight(out height));
+                Marshal.ThrowExceptionForHR(_textView.GetLineHeight(out height));
                 return height;
             }
         }
@@ -1346,7 +1347,7 @@ namespace Ankh.VS.TextEditor
 
         private void SetLanguageServiceInternal(Guid languageService)
         {
-            ErrorHandler.ThrowOnFailure(_textBuffer.SetLanguageServiceID(ref languageService));
+            Marshal.ThrowExceptionForHR(_textBuffer.SetLanguageServiceID(ref languageService));
         }
 
         #region Native Methods

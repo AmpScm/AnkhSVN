@@ -16,15 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text;
 using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-using SharpSvn;
 
 using Ankh.Commands;
 using Ankh.Scc.ProjectMap;
@@ -83,7 +78,7 @@ namespace Ankh.Scc
             IVsRegisterScciProvider rscp = GetService<IVsRegisterScciProvider>();
             if (rscp != null)
             {
-                ErrorHandler.ThrowOnFailure(rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid));
+                Marshal.ThrowExceptionForHR(rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid));
             }
         }
 

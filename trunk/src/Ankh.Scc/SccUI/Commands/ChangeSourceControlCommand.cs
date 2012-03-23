@@ -16,7 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using Microsoft.VisualStudio.Shell.Interop;
@@ -59,7 +59,7 @@ namespace Ankh.Scc.SccUI.Commands
             IVsSolution solution = context.GetService<IVsSolution>(typeof(SVsSolution));
             Guid gNone = Guid.Empty;
             IEnumHierarchies hierEnum;
-            ErrorHandler.ThrowOnFailure(solution.GetProjectEnum((uint)flags, ref gNone, out hierEnum));
+            Marshal.ThrowExceptionForHR(solution.GetProjectEnum((uint)flags, ref gNone, out hierEnum));
 
             IVsHierarchy[] hiers = new IVsHierarchy[32];
             List<IVsHierarchy> result = new List<IVsHierarchy>();

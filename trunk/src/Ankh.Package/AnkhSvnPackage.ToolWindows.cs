@@ -33,7 +33,6 @@ using ShellPackage = Microsoft.VisualStudio.Shell.Package;
 using Ankh.Commands;
 using Ankh.Scc.UI;
 using Ankh.UI;
-using Ankh.UI.DiffWindow;
 using Ankh.UI.RepositoryExplorer;
 using Ankh.UI.SvnInfoGrid;
 using Ankh.UI.SvnLog;
@@ -87,7 +86,7 @@ namespace Ankh.VSPackage
                 throw new InvalidOperationException("FindToolWindow failed");
             }
             // Bring the tool window to the front and give it focus
-            Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(frame.Show());
+            Marshal.ThrowExceptionForHR(frame.Show());
         }
 
         public void CloseToolWindow(AnkhToolWindow toolWindow, int id, FrameCloseMode close)
@@ -101,7 +100,7 @@ namespace Ankh.VSPackage
             if (frame == null)
                 return;
 
-            ErrorHandler.ThrowOnFailure(frame.CloseFrame((uint) close));
+            Marshal.ThrowExceptionForHR(frame.CloseFrame((uint) close));
         }
 
         AmbientProperties _ambientProperties;
@@ -342,7 +341,7 @@ namespace Ankh.VSPackage
 
         private void SetGuid(__VSFPROPID id, Guid value)
         {
-            ErrorHandler.ThrowOnFailure(Frame.SetGuidProperty((int)id, ref value));
+            Marshal.ThrowExceptionForHR(Frame.SetGuidProperty((int)id, ref value));
         }
 
         #endregion

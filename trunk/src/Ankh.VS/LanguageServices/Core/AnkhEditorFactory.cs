@@ -338,7 +338,7 @@ namespace Ankh.VS.LanguageServices.Core
                     IVsTextBufferProvider bp = dataObject as IVsTextBufferProvider;
                     if (bp != null)
                     {
-                        ErrorHandler.ThrowOnFailure(bp.GetTextBuffer(out buffer));
+                        Marshal.ThrowExceptionForHR(bp.GetTextBuffer(out buffer));
                     }
                 }
                 if (buffer == null)
@@ -364,7 +364,7 @@ namespace Ankh.VS.LanguageServices.Core
                         Guid GUID_VsBufferMoniker = typeof(IVsUserData).GUID;
                         // Must be set in time for language service GetColorizer call in case the colorizer
                         // is file name dependent.
-                        ErrorHandler.ThrowOnFailure(iud.SetData(ref GUID_VsBufferMoniker, moniker));
+                        Marshal.ThrowExceptionForHR(iud.SetData(ref GUID_VsBufferMoniker, moniker));
                     }
                 }
                 IObjectWithSite ows = buffer as IObjectWithSite;
@@ -378,7 +378,7 @@ namespace Ankh.VS.LanguageServices.Core
             {
                 IVsUserData iud = (IVsUserData)buffer;
                 Guid GUID_VsBufferEncodingPromptOnLoad = new Guid(0x99ec03f0, 0xc843, 0x4c09, 0xbe, 0x74, 0xcd, 0xca, 0x51, 0x58, 0xd3, 0x6c);
-                ErrorHandler.ThrowOnFailure(iud.SetData(ref GUID_VsBufferEncodingPromptOnLoad, (uint)this.CodePagePrompt));
+                Marshal.ThrowExceptionForHR(iud.SetData(ref GUID_VsBufferEncodingPromptOnLoad, (uint)this.CodePagePrompt));
             }
 
             Guid langSid = GetLanguageServiceGuid();
@@ -386,12 +386,12 @@ namespace Ankh.VS.LanguageServices.Core
             {
                 Guid vsCoreSid = new Guid("{8239bec4-ee87-11d0-8c98-00c04fc2ab22}");
                 Guid currentSid;
-                ErrorHandler.ThrowOnFailure(buffer.GetLanguageServiceID(out currentSid));
+                Marshal.ThrowExceptionForHR(buffer.GetLanguageServiceID(out currentSid));
                 // If the language service is set to the default SID, then
                 // set it to our language
                 if (currentSid == vsCoreSid)
                 {
-                    ErrorHandler.ThrowOnFailure(buffer.SetLanguageServiceID(ref langSid));
+                    Marshal.ThrowExceptionForHR(buffer.SetLanguageServiceID(ref langSid));
                 }
                 else if (currentSid != langSid)
                 {
@@ -407,7 +407,7 @@ namespace Ankh.VS.LanguageServices.Core
             {
                 IVsUserData vud = (IVsUserData)buffer;
                 Guid bufferDetectLang = GuidVSBufferDetectLangSid;
-                ErrorHandler.ThrowOnFailure(vud.SetData(ref bufferDetectLang, false));
+                Marshal.ThrowExceptionForHR(vud.SetData(ref bufferDetectLang, false));
             }
 
             if (existingDocData != IntPtr.Zero)
@@ -451,9 +451,9 @@ namespace Ankh.VS.LanguageServices.Core
             IntPtr docView = IntPtr.Zero;
             IVsCodeWindow window = (IVsCodeWindow)package.CreateInstance(ref clsid, ref riid, tcw);
 
-            ErrorHandler.ThrowOnFailure(window.SetBuffer(buffer));
-            ErrorHandler.ThrowOnFailure(window.SetBaseEditorCaption(null));
-            ErrorHandler.ThrowOnFailure(window.GetEditorCaption(READONLYSTATUS.ROSTATUS_Unknown, out editorCaption));
+            Marshal.ThrowExceptionForHR(window.SetBuffer(buffer));
+            Marshal.ThrowExceptionForHR(window.SetBaseEditorCaption(null));
+            Marshal.ThrowExceptionForHR(window.GetEditorCaption(READONLYSTATUS.ROSTATUS_Unknown, out editorCaption));
 
             Guid CMDUIGUID_TextEditor = new Guid(0x8B382828, 0x6202, 0x11d1, 0x88, 0x70, 0x00, 0x00, 0xF8, 0x75, 0x79, 0xD2);
             cmdUI = CMDUIGUID_TextEditor;
@@ -522,7 +522,7 @@ namespace Ankh.VS.LanguageServices.Core
             string root = null;
             if (localRegistry != null)
             {
-                ErrorHandler.ThrowOnFailure(localRegistry.GetLocalRegistryRoot(out root));
+                Marshal.ThrowExceptionForHR(localRegistry.GetLocalRegistryRoot(out root));
             }
             using (RegistryKey rootKey = Registry.LocalMachine.OpenSubKey(root))
             {
@@ -568,7 +568,7 @@ namespace Ankh.VS.LanguageServices.Core
             {
                 return editors;
             }
-            ErrorHandler.ThrowOnFailure(localRegistry.GetLocalRegistryRoot(out root));
+            Marshal.ThrowExceptionForHR(localRegistry.GetLocalRegistryRoot(out root));
             using (RegistryKey rootKey = Registry.LocalMachine.OpenSubKey(root))
             {
                 if (rootKey != null)
@@ -649,7 +649,7 @@ namespace Ankh.VS.LanguageServices.Core
             string root = null;
             if (localRegistry != null)
             {
-                ErrorHandler.ThrowOnFailure(localRegistry.GetLocalRegistryRoot(out root));
+                Marshal.ThrowExceptionForHR(localRegistry.GetLocalRegistryRoot(out root));
             }
             StringDictionary map = new StringDictionary();
             RegistryKey key = Registry.CurrentUser.OpenSubKey(root + "\\Default Editors", false);
