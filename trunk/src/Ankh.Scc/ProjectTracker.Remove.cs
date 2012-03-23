@@ -47,17 +47,7 @@ namespace Ankh.Scc
             if (rgpProjects == null || rgpszMkDocuments == null)
                 return VSConstants.E_POINTER;
 
-            for (int i = 0; i < cFiles; i++)
-            {
-                string s = rgpszMkDocuments[i];
-
-                if (!string.IsNullOrEmpty(s) && SvnItem.IsValidPath(s))
-                    StatusCache.MarkDirty(SvnTools.GetNormalizedFullPath(s));
-            }
-
-            int iFile = 0;
-
-            for (int iProject = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
+            for (int iProject = 0, iFile = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
             {
                 int iLastFileThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cFiles;
 
@@ -106,17 +96,7 @@ namespace Ankh.Scc
             if (rgpProjects == null || rgpszMkDocuments == null)
                 return VSConstants.E_POINTER;
 
-            int iDirectory = 0;
-
-            for (int i = 0; i < cDirectories; i++)
-            {
-                string s = rgpszMkDocuments[i];
-
-                if (!string.IsNullOrEmpty(s) && SvnItem.IsValidPath(s))
-                    StatusCache.MarkDirty(SvnTools.GetNormalizedFullPath(s));
-            }
-
-            for (int iProject = 0; (iProject < cProjects) && (iDirectory < cDirectories); iProject++)
+            for (int iProject = 0, iDirectory = 0; (iProject < cProjects) && (iDirectory < cDirectories); iProject++)
             {
                 int iLastDirectoryThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cDirectories;
 
