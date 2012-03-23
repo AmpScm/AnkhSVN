@@ -158,17 +158,35 @@ namespace Ankh.Scc
                 oldName = SvnTools.GetNormalizedFullPath(oldName);
                 newName = SvnTools.GetNormalizedFullPath(newName);
 
-                ProcessRename(oldName, newName);
+                if (!MaybeProcessAncestorRename(oldName, newName))
+                    ProcessRename(oldName, newName);
             }
         }
 
-        private void ProcessRename(string oldName, string newName)
+        private bool MaybeProcessAncestorRename(string oldName, string newName)
+        {
+            string oldNode = SvnTools.GetNormalizedDirectoryName(oldName);
+            string newNode = SvnTools.GetNormalizedDirectoryName(newName);
+
+            if (oldNode == null || newNode == null)
+                return false;
+
+            if (_alreadyProcessed.Contains(newNode))
+                return true;
+
+            if (MaybeProcessAncestorRename(oldNode, newNode))
+                return true;
+
+            if (!_fileOrigins.ContainsKey(newNode))
+                return false;
+
+            return ProcessRename(oldNode, newNode);
+        }
+
+        private bool ProcessRename(string oldName, string newName)
         {
             if (_alreadyProcessed.Contains(newName))
-                return;
-
-            if (MaybeProcessAncestorRename(oldName, newName))
-                return;
+                return true;
 
             SvnItem old = StatusCache[oldName];
             SvnItem nw = StatusCache[newName];
@@ -189,55 +207,13 @@ namespace Ankh.Scc
                     StatusCache.MarkDirtyRecursive(oldName);
 
                     _alreadyProcessed.Add(newName);
-                }
-            }
-            
-        }
 
-        private bool MaybeProcessAncestorRename(string oldName, string newName)
-        {
-            string oldParent = SvnTools.GetNormalizedDirectoryName(oldName);
-            string newParent = SvnTools.GetNormalizedDirectoryName(newName);
-
-            if (oldParent == null || newParent == null)
-                return false;
-
-            if (_alreadyProcessed.Contains(newParent))
-                return true;
-
-            if (newParent == newName)
-                return false; // Root reached
-
-            if (MaybeProcessAncestorRename(oldParent, newParent))
-                return true;
-
-            if (!_fileOrigins.ContainsKey(newParent))
-                return false;
-
-            SvnItem old = StatusCache[oldParent];
-            SvnItem nw = StatusCache[newParent];
-
-            if (old.IsVersioned && !old.IsDeleteScheduled
-                && nw.IsVersionable
-                && (!nw.IsVersioned || nw.IsDeleteScheduled))
-            {
-                SvnItem opp = nw.Parent;
-
-                using (SvnSccContext ctx = new SvnSccContext(this))
-                {
-                    if (opp != null && !opp.IsVersioned)
-                        ctx.AddParents(newParent);
-
-                    ctx.MarkAsMoved(oldParent, newParent);
-                    StatusCache.MarkDirtyRecursive(newParent);
-                    StatusCache.MarkDirtyRecursive(oldParent);
-
-                    _alreadyProcessed.Add(newParent);
                     return true;
                 }
             }
             return false;
         }
+
 
         public int OnQueryRenameDirectories(IVsProject pProject, int cDirs, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEDIRECTORYFLAGS[] rgFlags, VSQUERYRENAMEDIRECTORYRESULTS[] pSummaryResult, VSQUERYRENAMEDIRECTORYRESULTS[] rgResults)
         {
