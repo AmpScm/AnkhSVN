@@ -75,7 +75,7 @@ namespace Ankh.Services
                 return;
             _ensuredNames = true;
 
-            SvnClient.AddClientName("VisualStudio", GetService<IAnkhSolutionSettings>().VisualStudioVersion);
+            SvnClient.AddClientName("VisualStudio", VSVersion.VisualStudioVersion);
             SvnClient.AddClientName("AnkhSVN", GetService<IAnkhPackage>().UIVersion);
         }
 

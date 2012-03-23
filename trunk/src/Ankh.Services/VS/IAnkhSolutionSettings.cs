@@ -48,9 +48,6 @@ namespace Ankh.VS
         /// </summary>
         string NewProjectLocation { get; }
 
-
-        Version VisualStudioVersion { get; }
-
         /// <summary>
         /// Gets the project root URI.
         /// </summary>

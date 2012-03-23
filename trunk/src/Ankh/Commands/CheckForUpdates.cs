@@ -142,7 +142,6 @@ namespace Ankh.Commands
             }
 
             Version version = GetCurrentVersion(e.Context);
-            Version vsVersion = e.GetService<IAnkhSolutionSettings>().VisualStudioVersion;
             Version osVersion = Environment.OSVersion.Version;
 
             StringBuilder sb = new StringBuilder();
@@ -155,7 +154,7 @@ namespace Ankh.Commands
             sb.Append("?av=");
             sb.Append(version);
             sb.Append("&vs=");
-            sb.Append(vsVersion);
+            sb.Append(VSVersion.FullVersion);
             sb.Append("&os=");
             sb.Append(osVersion);
 

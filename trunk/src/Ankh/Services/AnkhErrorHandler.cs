@@ -208,7 +208,7 @@ namespace Ankh.Services
 
             IAnkhSolutionSettings ss = GetService<IAnkhSolutionSettings>();
             if (ss != null)
-                additionalInfo.Add("VS-Version", ss.VisualStudioVersion.ToString());
+                additionalInfo.Add("VS-Version", VSVersion.FullVersion.ToString());
 
             if (info != null && info.CommandArgs != null)
                 additionalInfo.Add("Command", info.CommandArgs.Command.ToString());
