@@ -94,12 +94,10 @@ namespace Ankh.Scc
 
             if (SvnItem.PathExists(filename))
             {
-                // The file was only removed from the project. We should not touch it
-
+                // The node may be just removed from the project. Check later
                 // Some projects delete the file before (C#) and some after (C++) calling OnProjectFileRemoved
+
                 AddDelayedDelete(filename);
-                MarkDirty(filename);
-                return;
             }
             else if (StatusCache[filename].IsVersioned)
                 using (SvnSccContext svn = new SvnSccContext(Context))
@@ -121,7 +119,8 @@ namespace Ankh.Scc
                 return; // Not managed by us
 
             // Add a directory like a folder but with an ending '\'
-            data.AddPath(SvnTools.GetNormalizedFullPath(directoryname).TrimEnd('\\') + '\\');
+            string dir = directoryname.TrimEnd('\\') + '\\';
+            data.AddPath(dir);
 
             if (!IsActive)
                 return;
@@ -142,21 +141,35 @@ namespace Ankh.Scc
         /// Called when a directory is removed from a project
         /// </summary>
         /// <param name="project">The SCC project.</param>
-        /// <param name="dir">The directoryname.</param>
+        /// <param name="directoryname">The directoryname.</param>
         /// <param name="flags">The flags.</param>
-        internal void OnProjectDirectoryRemoved(IVsSccProject2 project, string dir, VSREMOVEDIRECTORYFLAGS flags)
+        internal void OnProjectDirectoryRemoved(IVsSccProject2 project, string directoryname, VSREMOVEDIRECTORYFLAGS flags)
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
                 return; // Not managed by us
 
             // a directory can be added like a folder but with an ending '\'
+            string dir = directoryname.TrimEnd('\\') + '\\';
             data.RemovePath(dir);
 
             if (!IsActive)
                 return;
 
-            AddDelayedDelete(dir);
+            if (!IsActive)
+                return; // Let the other SCC package manage it
+
+            if (SvnItem.PathExists(directoryname))
+            {
+                // The node may be just removed from the project. Check later
+                // Some projects delete the file before (C#) and some after (C++) calling OnProjectFileRemoved
+                AddDelayedDelete(directoryname);
+            }
+            else if (StatusCache[directoryname].IsVersioned)
+                using (SvnSccContext svn = new SvnSccContext(Context))
+                {
+                    svn.SafeDelete(directoryname);
+                }
         }
 
         /// <summary>
