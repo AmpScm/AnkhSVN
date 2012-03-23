@@ -34,9 +34,8 @@ namespace Ankh.Scc
     partial class AnkhSccProvider
     {
         readonly Dictionary<IVsSccProject2, SccProjectData> _projectMap = new Dictionary<IVsSccProject2, SccProjectData>();
-        readonly HybridCollection<string> _maybeDelete = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
         bool _managedSolution;
-        List<string> _delayedDelete;
+        HybridCollection<string> _delayedDelete;
         List<FixUp> _delayedMove;
 
         class FixUp
@@ -578,18 +577,15 @@ namespace Ankh.Scc
 
             if (_delayedDelete != null)
             {
-                List<string> files = _delayedDelete;
+                IEnumerable<string> files = _delayedDelete;
                 _delayedDelete = null;
 
                 using (SvnSccContext svn = new SvnSccContext(Context))
                 {
-                    foreach (string file in files)
+                    foreach (string node in files)
                     {
-                        if (!File.Exists(file))
-                        {
-                            svn.SafeDeleteFile(file);
-                            MarkDirty(file);
-                        }
+                        if (!SvnItem.PathExists((node)))
+                            svn.SafeDelete(node);
                     }
                 }
             }
@@ -610,20 +606,20 @@ namespace Ankh.Scc
                     }
                 }
             }
+        }
 
-            while (_maybeDelete.Count > 0)
-            {
-                string dir = _maybeDelete[0];
-                _maybeDelete.RemoveAt(0);
+        internal void AddDelayedDelete(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
 
-                if (!SvnItem.PathExists(dir))
-                {
-                    using (SvnSccContext svn = new SvnSccContext(Context))
-                    {
-                        svn.WcDelete(dir);
-                    }
-                }
-            }
+            if (_delayedDelete == null)
+                _delayedDelete = new HybridCollection<string>();
+
+            if (!_delayedDelete.Contains(path))
+                _delayedDelete.Add(path);
+
+            RegisterForSccCleanup();
         }
 
         public void ScheduleSvnRefresh(List<SvnClientAction> sccRefreshItems)
@@ -671,41 +667,6 @@ namespace Ankh.Scc
 
             if (cmd != null)
                 cmd.PostTickCommand(ref _registeredSccCleanup, AnkhCommand.SccFinishTasks);
-        }
-
-        int _disableSvnUpdates;
-        public IDisposable DisableSvnUpdates()
-        {
-            _disableSvnUpdates++;
-
-            return new UndisableSvnUpdate(this);
-        }
-
-        public bool SvnUpdatesDisabled
-        {
-            [DebuggerStepThrough]
-            get { return _disableSvnUpdates > 0; }
-        }
-
-        sealed class UndisableSvnUpdate : IDisposable
-        {
-            readonly AnkhSccProvider _provider;
-            bool _disposed;
-            public UndisableSvnUpdate(AnkhSccProvider provider)
-            {
-                _provider = provider;
-            }
-            #region IDisposable Members
-
-            public void Dispose()
-            {
-                if (_disposed)
-                    return;
-                _disposed = true;
-                _provider._disableSvnUpdates--;
-            }
-
-            #endregion
         }
     }
 }

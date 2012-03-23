@@ -207,8 +207,6 @@ namespace Ankh.Scc
             return VSConstants.S_OK;
         }
 
-        readonly List<string> _delayedDeletes = new List<string>();
-
         bool _registeredSccCleanup;
         internal void OnSccCleanup(CommandEventArgs e)
         {
@@ -217,18 +215,6 @@ namespace Ankh.Scc
 
             _fileHints.Clear();
             _fileOrigins.Clear();
-
-            if (_delayedDeletes.Count > 0)
-            {
-                using (SvnSccContext svn = new SvnSccContext(Context))
-                {
-                    foreach (string d in _delayedDeletes.ToArray())
-                    {
-                        _delayedDeletes.Remove(d);
-                        svn.WcDelete(d);
-                    }
-                }
-            }
         }
 
         void RegisterForSccCleanup()

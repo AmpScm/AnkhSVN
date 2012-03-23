@@ -92,53 +92,20 @@ namespace Ankh.Scc
             if (!IsActive)
                 return; // Let the other SCC package manage it
 
-            MarkDirty(filename);
-
-            if (SvnUpdatesDisabled || !StatusCache[filename].IsVersioned)
-                return; // Don't bother
-
-            using (SvnSccContext svn = new SvnSccContext(Context))
+            if (SvnItem.PathExists(filename))
             {
-                if (File.Exists(filename))
-                {
-                    // The file was only removed from the project. We should not touch it
+                // The file was only removed from the project. We should not touch it
 
-                    // Some projects delete the file before (C#) and some after (C++) calling OnProjectFileRemoved
-                    if (_delayedDelete == null)
-                        _delayedDelete = new List<string>();
-
-                    if (!_delayedDelete.Contains(filename))
-                        _delayedDelete.Add(filename);
-
-                    RegisterForSccCleanup();
-                    return;
-                }
-
-                if (svn.IsUnversioned(filename))
-                    return;
-
-                svn.SafeDeleteFile(filename);
-            }
-        }
-
-        internal void OnBeforeRemoveDirectory(IVsSccProject2 project, string fullPath, out bool ok)
-        {
-            ok = true;
-            SccProjectData data;
-            if (!_projectMap.TryGetValue(project, out data))
-                return; // Not managed by us
-            else if (!IsActive)
+                // Some projects delete the file before (C#) and some after (C++) calling OnProjectFileRemoved
+                AddDelayedDelete(filename);
+                MarkDirty(filename);
                 return;
-
-            SvnItem dir = StatusCache[fullPath];
-
-            if (!dir.IsVersioned)
-                return; // Nothing to do for us
-
-            if (!_maybeDelete.Contains(dir.FullPath))
-                _maybeDelete.Add(dir.FullPath);
-
-            RegisterForSccCleanup();
+            }
+            else if (StatusCache[filename].IsVersioned)
+                using (SvnSccContext svn = new SvnSccContext(Context))
+                {
+                    svn.SafeDelete(filename);
+                }
         }
 
         /// <summary>
@@ -175,22 +142,21 @@ namespace Ankh.Scc
         /// Called when a directory is removed from a project
         /// </summary>
         /// <param name="project">The SCC project.</param>
-        /// <param name="directoryname">The directoryname.</param>
+        /// <param name="dir">The directoryname.</param>
         /// <param name="flags">The flags.</param>
-        internal void OnProjectDirectoryRemoved(IVsSccProject2 project, string directoryname, VSREMOVEDIRECTORYFLAGS flags)
+        internal void OnProjectDirectoryRemoved(IVsSccProject2 project, string dir, VSREMOVEDIRECTORYFLAGS flags)
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
                 return; // Not managed by us
 
             // a directory can be added like a folder but with an ending '\'
-            string dir = SvnTools.GetNormalizedFullPath(directoryname);
             data.RemovePath(dir);
 
             if (!IsActive)
                 return;
 
-            RegisterForSccCleanup();
+            AddDelayedDelete(dir);
         }
 
         /// <summary>

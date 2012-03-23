@@ -319,15 +319,6 @@ namespace Ankh.Scc
             }
         }
 
-        public bool WcDelete(string path)
-        {
-            SvnDeleteArgs da = new SvnDeleteArgs();
-            da.ThrowOnError = false;
-            da.Force = true;
-
-            return _client.Delete(path, da);
-        }
-
         internal bool SafeWcMoveFixup(string fromPath, string toPath)
         {
             if (string.IsNullOrEmpty(fromPath))
@@ -499,7 +490,7 @@ namespace Ankh.Scc
             RecursiveCopyNotVersioned(from, to, true);
         }
 
-        public bool SafeDeleteFile(string path)
+        public bool SafeDelete(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
@@ -508,7 +499,7 @@ namespace Ankh.Scc
             da.Force = true;
             da.KeepLocal = false;
             da.ThrowOnError = false;
-            da.KeepLocal = !File.Exists(path); // This will stop the error if the file was already deleted
+            da.KeepLocal = !SvnItem.PathExists(path); // This will stop the error if the file was already deleted
 
             return _client.Delete(path, da);
         }
