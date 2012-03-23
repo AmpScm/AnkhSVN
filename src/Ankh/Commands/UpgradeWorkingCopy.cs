@@ -76,7 +76,7 @@ namespace Ankh.Commands
                                 || ua.LastException.SvnErrorCode != SvnErrorCode.SVN_ERR_WC_INVALID_OP_ON_CWD)
                                 break;
 
-                            string pd = Path.GetDirectoryName(tryDir);
+                            string pd = SvnTools.GetNormalizedDirectoryName(tryDir);
 
                             if (pd == tryDir || string.IsNullOrEmpty(pd))
                                 break;

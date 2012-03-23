@@ -93,7 +93,7 @@ namespace Ankh.UI.SccManagement
             localFolder.Items.Add(directory);
             while (!root.Equals(directory, StringComparison.OrdinalIgnoreCase))
             {
-                directory = Path.GetDirectoryName(directory);
+                directory = SvnTools.GetNormalizedDirectoryName(directory);
                 localFolder.Items.Add(directory);
             }
             if (localFolder.Items.Count > 0)
