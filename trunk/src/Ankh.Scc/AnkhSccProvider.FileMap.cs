@@ -721,7 +721,7 @@ namespace Ankh.Scc
 
             string file = pd.ProjectFile;
 
-            if (string.IsNullOrEmpty(file) || !SvnItem.IsValidPath(file))
+            if (!SvnItem.IsValidPath(file))
                 yield break;
 
             SvnItem projectFileItem = StatusCache[file];

@@ -150,7 +150,7 @@ namespace Ankh.Scc
                     string origin = null;
                     string newName = rgpszMkDocuments[iFile];
 
-                    if (string.IsNullOrEmpty(newName) || !SvnItem.IsValidPath(newName))
+                    if (!SvnItem.IsValidPath(newName))
                         continue;
 
                     newName = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iFile]);
@@ -468,7 +468,7 @@ namespace Ankh.Scc
             {
                 string dir = rgpszMkDocuments[i];
 
-                if (string.IsNullOrEmpty(dir) || !SvnItem.IsValidPath(dir))
+                if (!SvnItem.IsValidPath(dir))
                     continue;
 
                 dir = SvnTools.GetNormalizedFullPath(dir);
@@ -517,7 +517,7 @@ namespace Ankh.Scc
 
                     string dir = rgpszMkDocuments[iDir];
 
-                    if (string.IsNullOrEmpty(dir) || !SvnItem.IsValidPath(dir))
+                    if (!SvnItem.IsValidPath(dir))
                         continue;
 
                     dir = SvnTools.GetNormalizedFullPath(dir);

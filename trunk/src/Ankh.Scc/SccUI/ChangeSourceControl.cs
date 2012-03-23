@@ -306,7 +306,7 @@ namespace Ankh.Scc.SccUI
                         string doc;
                         if (ErrorHandler.Succeeded(ps.GetMkDocument(VSConstants.VSITEMID_ROOT, out doc)))
                         {
-                            if (!string.IsNullOrEmpty(doc) && SvnItem.IsValidPath(doc))
+                            if (SvnItem.IsValidPath(doc))
                                 pLoc = PackageUtilities.MakeRelative(SolutionSettings.SolutionFilename, doc);
                             else
                                 pLoc = doc;
