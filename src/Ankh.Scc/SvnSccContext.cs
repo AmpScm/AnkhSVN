@@ -101,7 +101,7 @@ namespace Ankh.Scc
                 ma.ThrowOnError = false;
                 ma.MetaDataOnly = true;
 
-                wcc.Move(oldName, newName);
+                wcc.Move(oldName, newName, ma);
             }
         }
 
@@ -807,6 +807,15 @@ namespace Ankh.Scc
                 else
                     break;
             }
+        }
+
+        internal void AddParents(string newParent)
+        {
+            SvnAddArgs aa = new SvnAddArgs();
+            aa.AddParents = true;
+            aa.ThrowOnError = false;
+
+            _client.Add(SvnTools.GetNormalizedDirectoryName(newParent), aa);
         }
 
         public IDisposable TempFile(string path, string contentFrom)
