@@ -36,19 +36,6 @@ namespace Ankh.Scc
         readonly Dictionary<IVsSccProject2, SccProjectData> _projectMap = new Dictionary<IVsSccProject2, SccProjectData>();
         bool _managedSolution;
         HybridCollection<string> _delayedDelete;
-        List<FixUp> _delayedMove;
-
-        class FixUp
-        {
-            public readonly string From;
-            public readonly string To;
-
-            public FixUp(string from, string to)
-            {
-                From = from;
-                To = to;
-            }
-        }
         bool _isDirty;
 
         public bool IsSolutionManaged
@@ -586,23 +573,6 @@ namespace Ankh.Scc
                     {
                         if (!SvnItem.PathExists((node)))
                             svn.SafeDelete(node);
-                    }
-                }
-            }
-
-            if (_delayedMove != null)
-            {
-                List<FixUp> files = _delayedMove;
-                _delayedMove = null;
-
-                using (SvnSccContext svn = new SvnSccContext(Context))
-                {
-                    foreach (FixUp fu in files)
-                    {
-                        if (!svn.IsUnversioned(fu.From) && svn.IsUnversioned(fu.To))
-                        {
-                            svn.SafeWcMoveFixup(fu.From, fu.To);
-                        }
                     }
                 }
             }
