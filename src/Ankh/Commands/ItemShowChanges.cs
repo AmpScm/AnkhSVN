@@ -55,7 +55,8 @@ namespace Ankh.Commands
 
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
-                if (item.IsDirectory)
+                if (!item.IsFile
+                    && (e.Command != AnkhCommand.DiffLocalItem || item.NodeKind != SvnNodeKind.File))
                 {
                     e.Enabled = false;
                     return;
