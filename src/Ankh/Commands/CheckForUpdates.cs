@@ -234,7 +234,7 @@ namespace Ankh.Commands
             {
                 hwr.AllowAutoRedirect = true;
                 hwr.AllowWriteStreamBuffering = true;
-                hwr.UserAgent = string.Format("AnkhSVN/{0} VisualStudio/{1} Windows/{2}", version, vsVersion, osVersion);
+                hwr.UserAgent = string.Format("AnkhSVN/{0} VisualStudio/{1} Windows/{2}", version, VSVersion.FullVersion, osVersion);
             }
 
             wr.BeginGetResponse(OnResponse, wr);
