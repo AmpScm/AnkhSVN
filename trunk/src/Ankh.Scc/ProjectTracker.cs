@@ -59,6 +59,21 @@ namespace Ankh.Scc
             LoadInitial();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    Hook(false);
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
+
         AnkhSccProvider SccProvider
         {
             [DebuggerStepThrough]
