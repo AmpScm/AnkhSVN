@@ -808,19 +808,19 @@ namespace Ankh.Scc
             else if (!SvnItem.PathExists(contentFrom))
                 throw new InvalidOperationException("Source does not exist");
 
-            string dir = Path.GetDirectoryName(path);
+            string dir = SvnTools.GetNormalizedDirectoryName(path);
             int nDirsCreated = 0;
 
             if (!SvnItem.PathExists(dir))
             {
                 nDirsCreated = 1;
 
-                string pd = Path.GetDirectoryName(dir);
+                string pd = SvnTools.GetNormalizedDirectoryName(dir);
                 while (pd != Path.GetPathRoot(pd)
                        && !SvnItem.PathExists(pd))
                 {
                     nDirsCreated++;
-                    pd = Path.GetDirectoryName(pd);
+                    pd = SvnTools.GetNormalizedDirectoryName(pd);
                 }
 
                 Directory.CreateDirectory(dir);
@@ -841,45 +841,19 @@ namespace Ankh.Scc
                         SvnItem.DeleteNode(path);
                     }
 
-                    string dd = Path.GetDirectoryName(path);
+                    string dd = SvnTools.GetNormalizedDirectoryName(path);
                     while (nDirsCreated-- > 0)
                     {
                         if (SvnItem.PathExists(dd))
                             if (!SvnItem.DeleteDirectory(dd))
                                 break;
 
-                        dd = Path.GetDirectoryName(dd);
+                        dd = SvnTools.GetNormalizedDirectoryName(dd);
                     }
 
                     if (moveAway != null)
                         moveAway.Dispose();
                 });
-        }
-
-        string _adminDir;
-        private bool BelowAdminDir(SvnItem item)
-        {
-            if (item == null)
-                throw new ArgumentNullException("item");
-
-            if (_adminDir == null)
-            {
-                // Caching in this instance should be safe
-                _adminDir = '\\' + SvnClient.AdministrativeDirectoryName + '\\';
-            }
-
-            if (string.Equals(item.Name, SvnClient.AdministrativeDirectoryName))
-                return true;
-
-            return item.FullPath.IndexOf(_adminDir, StringComparison.OrdinalIgnoreCase) >= 0;
-        }
-
-        public bool BelowAdminDir(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
-
-            return BelowAdminDir(StatusCache[path]);
         }
 
         /// <summary>

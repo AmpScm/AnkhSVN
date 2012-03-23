@@ -16,16 +16,18 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Text;
 using System.Windows.Forms;
-using System.ComponentModel.Design;
-using Ankh.Scc;
-using Ankh.Commands;
-using Ankh.VS;
-using Ankh.UI.PendingChanges.Commits;
-using Ankh.Configuration;
 using Microsoft.VisualStudio;
-using System.IO;
+
+using SharpSvn;
+
+using Ankh.Commands;
+using Ankh.Configuration;
+using Ankh.Scc;
+using Ankh.UI.PendingChanges.Commits;
+using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -82,7 +84,7 @@ namespace Ankh.UI.PendingChanges
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 if (item.Exists)
-                    System.Diagnostics.Process.Start(item.IsDirectory ? item.FullPath : Path.GetDirectoryName(item.FullPath));
+                    System.Diagnostics.Process.Start(item.IsDirectory ? item.FullPath : SvnTools.GetNormalizedDirectoryName(item.FullPath));
             }
         }
 
