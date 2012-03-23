@@ -4,6 +4,7 @@ using Ankh.Scc.UI;
 using Ankh.UI;
 using Ankh.UI.DiffWindow;
 using Ankh.Selection;
+using Ankh.VS;
 
 namespace Ankh.Diff
 {
@@ -37,37 +38,15 @@ namespace Ankh.Diff
             get { return false; }
         }
 
-        readonly List<int> _freeDiffs = new List<int>();
-        int _nNext;
-        
         private bool RunInternalDiff(AnkhDiffArgs args)
         {
-            IAnkhPackage pkg = GetService<IAnkhPackage>();
+            DiffEditorControl diffEditor = new DiffEditorControl();
 
-            int nWnd;
+            IAnkhEditorResolver er = GetService<IAnkhEditorResolver>();
 
-            if (_freeDiffs.Count > 0)
-            {
-                nWnd = _freeDiffs[0];
-                _freeDiffs.RemoveAt(0);
-            }
-            else
-                nWnd = _nNext++;
+            diffEditor.CreateDiffEditor(this, args);
 
-            pkg.ShowToolWindow(AnkhToolWindow.Diff, nWnd, true);
-
-            DiffToolWindowControl twc = GetService<ISelectionContext>().ActiveFrameControl as DiffToolWindowControl;
-
-            if (twc != null)
-                twc.Reset(nWnd, args);
-
-            return false;
-        }
-
-        internal void ReleaseDiff(int frame)
-        {
-            if(!_freeDiffs.Contains(frame))
-                _freeDiffs.Add(frame);
+            return true;
         }
     }
 }

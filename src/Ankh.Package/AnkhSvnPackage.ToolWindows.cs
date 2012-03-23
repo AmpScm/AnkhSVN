@@ -48,7 +48,6 @@ namespace Ankh.VSPackage
     [ProvideToolWindow(typeof(RepositoryExplorerToolWindow), Style = VsDockStyle.MDI, Transient = true)]
     [ProvideToolWindow(typeof(PendingChangesToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false, Window = ToolWindowGuids80.Outputwindow)]
     [ProvideToolWindow(typeof(LogToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = true)]
-    [ProvideToolWindow(typeof(DiffToolWindow), Style = VsDockStyle.Float, Transient = true)]
     [ProvideToolWindow(typeof(SvnInfoToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Right, Transient = false, Window = ToolWindowGuids80.PropertiesWindow)]
     [ProvideToolWindowVisibility(typeof(PendingChangesToolWindow), AnkhId.SccProviderId)]
     [ProvideToolWindowVisibility(typeof(SvnInfoToolWindow), AnkhId.SccProviderId)]
@@ -71,8 +70,6 @@ namespace Ankh.VSPackage
                     return typeof(PendingChangesToolWindow);
                 case AnkhToolWindow.Log:
                     return typeof(LogToolWindow);
-                case AnkhToolWindow.Diff:
-                    return typeof(DiffToolWindow);
                 case AnkhToolWindow.SvnInfo:
                     return typeof(SvnInfoToolWindow);
                 default:
@@ -653,18 +650,6 @@ namespace Ankh.VSPackage
 
             ToolBarId = AnkhToolBar.LogViewer;
             ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
-        }
-    }
-
-    [Guid(AnkhId.DiffToolWindowId)]
-    class DiffToolWindow : AnkhToolWindowPane
-    {
-        public DiffToolWindow()
-        {
-            Caption = Resources.DiffToolWindowTitle;
-            Control = new DiffToolWindowControl();
-
-            AnkhToolWindow = AnkhToolWindow.Diff;
         }
     }
 

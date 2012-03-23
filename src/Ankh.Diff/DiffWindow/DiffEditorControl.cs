@@ -25,12 +25,12 @@ using Ankh.Diff;
 
 namespace Ankh.UI.DiffWindow
 {
-    public partial class DiffToolWindowControl : AnkhToolWindowControl
+    public partial class DiffEditorControl : VSEditorControl
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DiffControl"/> class.
         /// </summary>
-        public DiffToolWindowControl()
+        public DiffEditorControl()
         {
             InitializeComponent();
         }
@@ -48,9 +48,8 @@ namespace Ankh.UI.DiffWindow
         {
             base.OnFrameCreated(e);
 
-            ToolWindowHost.CommandContext = AnkhId.DiffMergeContextGuid;
-            ToolWindowHost.KeyboardContext = AnkhId.DiffMergeContextGuid;
-            
+            CommandContext = AnkhId.DiffMergeContextGuid;
+            KeyboardContext = AnkhId.DiffMergeContextGuid;            
         }
 
         protected override void OnLoad(EventArgs e)
@@ -68,70 +67,18 @@ namespace Ankh.UI.DiffWindow
             base.OnLoad(e);
         }
 
-        int _nFrame;
-        protected override void OnFrameClose(EventArgs e)
-        {
-            base.OnFrameClose(e);
-
-            OnClose();
-        }
-
-        protected override void OnFrameShow(FrameEventArgs e)
-        {
-            base.OnFrameShow(e);
-
-            switch (e.Show)
-            {
-                case __FRAMESHOW.FRAMESHOW_Hidden:
-                case __FRAMESHOW.FRAMESHOW_DestroyMultInst:
-                case __FRAMESHOW.FRAMESHOW_WinClosed:
-                    OnClose();
-                    break;
-            }
-        }
-
-        void OnClose()
-        {
-            Clear();
-
-            if (_nFrame >= 0)
-            {
-                Context.GetService<AnkhInternalDiff>().ReleaseDiff(_nFrame);
-                _nFrame = -1;
-            }
-        }
-
-        private void Clear()
-        {
-            //throw new NotImplementedException();
-        }
-
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            switch(keyData)
-            {
-                case Keys.Escape:
-                    CloseToolWindow();
-                    return true;
-            }
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        private void CloseToolWindow()
-        {
-            Package.CloseToolWindow(AnkhToolWindow.Diff, _nFrame, FrameCloseMode.NoSave);
-        }
-
         private void GetFileLines(string strA, string strB, out Collection<string> A, out Collection<string> B)
         {
             A = File.Exists(strA) ? Functions.GetFileTextLines(strA) : Functions.GetStringTextLines(string.Empty);
             B = File.Exists(strB) ? Functions.GetFileTextLines(strB) : Functions.GetStringTextLines(string.Empty);
         }
 
-        public void Reset(int n, AnkhDiffArgs args)
+        internal void CreateDiffEditor(IAnkhServiceProvider context, AnkhDiffArgs args)
         {
-            _nFrame = n;
-            Clear();
+            Context = context;
+
+            DynamicFactory.CreateEditor(args.BaseFile, this);
+            OnFrameCreated(EventArgs.Empty);
 
             Collection<string> A, B;
             GetFileLines(args.BaseFile, args.MineFile, out A, out B);
@@ -140,11 +87,7 @@ namespace Ankh.UI.DiffWindow
 
             string strCaptionA = args.BaseTitle ?? Path.GetFileName(args.BaseFile);
             string strCaptionB = args.MineTitle ?? Path.GetFileName(args.MineFile);
-            //Ankh.Diff.FileName fnA = new Ankh.Diff.FileName(mine);
-            //Ankh.Diff.FileName fnB = new Ankh.Diff.FileName(theirs);
             diffControl1.SetData(A, B, Script, strCaptionA, strCaptionB);
-
-            ToolWindowHost.Title = Path.GetFileName(args.MineFile) + " - Diff";
         }
     }
 }
