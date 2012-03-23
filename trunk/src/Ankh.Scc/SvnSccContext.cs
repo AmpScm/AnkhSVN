@@ -93,6 +93,18 @@ namespace Ankh.Scc
             }
         }
 
+        public void MarkAsMoved(string oldName, string newName)
+        {
+            using (SvnWorkingCopyClient wcc = GetService<ISvnClientPool>().GetWcClient())
+            {
+                SvnWorkingCopyMoveArgs ma = new SvnWorkingCopyMoveArgs();
+                ma.ThrowOnError = false;
+                ma.MetaDataOnly = true;
+
+                wcc.Move(oldName, newName);
+            }
+        }
+
         /// <summary>
         /// Tries to get the repository Guid of the specified path when it would be added to subversion
         /// </summary>
@@ -842,56 +854,6 @@ namespace Ankh.Scc
                     if (moveAway != null)
                         moveAway.Dispose();
                 });
-        }
-
-        /// <summary>
-        /// Check if adding the path might succeed
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns><c>false</c> when adding the file will fail, <c>true</c> if it could succeed</returns>
-        public bool CouldAdd(string path, SvnNodeKind nodeKind)
-        {
-            if (path == null)
-                throw new ArgumentNullException("path");
-
-            SvnItem item = StatusCache[path];
-            string file = item.Name;
-
-            if (!item.Exists || item.IsVersioned)
-                return true; // Item already exists.. Fast
-
-            SvnItem parent = item.Parent;
-
-            if (BelowAdminDir(item))
-                return false;
-
-            if (item.IsFile && parent != null && !parent.IsVersioned)
-                return true; // Not in a versioned directory -> Fast out
-
-            // Item does exist; check casing
-            string parentDir = SvnTools.GetNormalizedDirectoryName(path);
-            SvnWorkingCopyEntriesArgs wa = new SvnWorkingCopyEntriesArgs();
-            wa.ThrowOnError = false;
-            wa.ThrowOnCancel = false;
-
-            bool ok = true;
-
-            using (SvnWorkingCopyClient wcc = GetService<ISvnClientPool>().GetWcClient())
-            {
-                wcc.ListEntries(parentDir, wa,
-                delegate(object sender, SvnWorkingCopyEntryEventArgs e)
-                {
-                    if (string.Equals(e.FullPath, path, StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (!string.Equals(e.Name, file, StringComparison.Ordinal))
-                        {
-                            ok = false; // Casing issue
-                        }
-                    }
-                });
-            }
-
-            return ok;
         }
 
         string _adminDir;

@@ -32,68 +32,14 @@ namespace Ankh.Scc
             if (rgszMkNewNames == null || rgszMkOldNames == null)
                 return VSConstants.E_POINTER;
 
-            bool allOk = true;
-            if (pProject == null)
+            for (int i = 0; i < cFiles; i++)
             {
-                // We are renaming the solution file (or something in the solution itself)
-
-                for (int i = 0; i < cFiles; i++)
-                {
-                    bool ok = true;
-
-                    if(!SvnItem.IsValidPath(rgszMkOldNames[i]))
-                        continue;
-
-                    string oldName = SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]);
-                    string newName = SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]);
-
-                    if(oldName == newName)
-                        continue;
-
-                    SccProvider.OnBeforeSolutionRenameFile(oldName,newName, rgFlags[i], out ok);
-
-                    if (rgResults != null)
-                        rgResults[i] = ok ? VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK : VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
-
-                    if (!ok)
-                        allOk = false;
-                }
-            }
-            else
-            {
-                IVsSccProject2 sccProject = pProject as IVsSccProject2;
-                bool track = SccProvider.TrackProjectChanges(sccProject);
-
-                for (int i = 0; i < cFiles; i++)
-                {
-                    bool ok = true;
-
-                    if (!SvnItem.IsValidPath(rgszMkOldNames[i]))
-                        continue;
-
-                    string oldName = SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]);
-                    string newName = SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]);
-
-                    if (oldName == newName)
-                        continue;
-
-                    if (track)
-                        SccProvider.OnBeforeProjectRenameFile(sccProject, oldName,
-                            newName, rgFlags[i], out ok);
-
-                    if (rgResults != null)
-                        rgResults[i] = ok ? VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK : VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
-
-                    if (!ok)
-                        allOk = false;
-                }
+                if (rgResults != null)
+                    rgResults[i] = VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK;
             }
 
             if (pSummaryResult != null)
-                pSummaryResult[0] = allOk ? VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK : VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
-
-            if (!allOk)
-                _batchOk = false;
+                pSummaryResult[0] = VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK;
 
             return VSConstants.S_OK;
         }
@@ -147,7 +93,7 @@ namespace Ankh.Scc
                             if (oldName == newName)
                                 continue;
 
-                            SccProvider.OnProjectRenamedFile(sccProject, oldName, newName,rgFlags[iFile]);
+                            SccProvider.OnProjectRenamedFile(sccProject, oldName, newName, rgFlags[iFile]);
                         }
                     }
                     else
@@ -165,7 +111,7 @@ namespace Ankh.Scc
                             if (oldName == newName)
                                 continue;
 
-                            SccProvider.OnSolutionRenamedFile(oldName, newName, rgFlags[iFile]);
+                            SccProvider.OnSolutionRenamedFile(oldName, newName);
                         }
                     }
                 }
@@ -194,16 +140,16 @@ namespace Ankh.Scc
 
                 oldName = SvnTools.GetNormalizedFullPath(oldName);
                 newName = SvnTools.GetNormalizedFullPath(newName);
-                
+
                 string oldDir;
                 string newDir;
-                bool safeRename =false;
+                bool safeRename = false;
 
                 if (!Directory.Exists(newName))
                 {
                     // Try to fix the parent of the new item
-                     oldDir = SvnTools.GetNormalizedDirectoryName(oldName);
-                     newDir = SvnTools.GetNormalizedDirectoryName(newName);
+                    oldDir = SvnTools.GetNormalizedDirectoryName(oldName);
+                    newDir = SvnTools.GetNormalizedDirectoryName(newName);
                 }
                 else
                 {
@@ -211,7 +157,7 @@ namespace Ankh.Scc
                     oldDir = oldName;
                     newDir = newName;
                     safeRename = true;
-                }                                
+                }
 
                 if (Directory.Exists(oldDir))
                     continue; // Nothing to fix up
@@ -266,39 +212,14 @@ namespace Ankh.Scc
             if (rgszMkNewNames == null || pProject == null || rgszMkOldNames == null)
                 return VSConstants.E_POINTER;
 
-            IVsSccProject2 sccProject = pProject as IVsSccProject2;
-            bool track = SccProvider.TrackProjectChanges(sccProject);
-
-            if (track)
-                for (int i = 0; i < cDirs; i++)
-                {
-                    string s = rgszMkNewNames[i];
-                    if (!string.IsNullOrEmpty(s))
-                        StatusCache.MarkDirty(s);
-                }
-
-            bool allOk = true;
             for (int i = 0; i < cDirs; i++)
             {
-                bool ok = true;
-
-                if (track)
-                    SccProvider.OnBeforeProjectDirectoryRename(sccProject,
-                        SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]),
-                        SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]), rgFlags[i], out ok);
-
                 if (rgResults != null)
-                    rgResults[i] = ok ? VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK : VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameNotOK;
-
-                if (!ok)
-                    allOk = false;
+                    rgResults[i] = VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK;
             }
 
             if (pSummaryResult != null)
-                pSummaryResult[0] = allOk ? VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK : VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameNotOK;
-
-            if (!allOk)
-                _batchOk = false;
+                pSummaryResult[0] = VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK;
 
             return VSConstants.S_OK;
         }

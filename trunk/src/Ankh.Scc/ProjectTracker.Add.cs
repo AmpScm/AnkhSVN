@@ -53,33 +53,14 @@ namespace Ankh.Scc
             RegisterForSccCleanup(); // Clear the origins
             _collectHints = true; // Some projects call HandsOff(file) on which files they wish to import. Use that to get more information
 
-            bool allOk = true;
-
-            bool track = SccProvider.TrackProjectChanges(pProject as IVsSccProject2);
-
             for (int i = 0; i < cFiles; i++)
             {
-                bool ok = true;
-
-                if (string.IsNullOrEmpty(rgpszMkDocuments[i]) || !SvnItem.IsValidPath(rgpszMkDocuments[i]))
-                    continue;
-
-                // TODO: Verify the new names do not give invalid Subversion state (Double casings, etc.)
-                if (track && !SvnCanAddPath(SvnTools.GetNormalizedFullPath(rgpszMkDocuments[i]), SvnNodeKind.File))
-                    ok = false;
-
                 if (rgResults != null)
-                    rgResults[i] = ok ? VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK : VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddNotOK;
-
-                if (!ok)
-                    allOk = false;
+                    rgResults[i] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;
             }
 
             if (pSummaryResult != null)
-                pSummaryResult[0] = allOk ? VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK : VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddNotOK;
-
-            if (!allOk && !_inBatch)
-                ShowQueryErrorDialog();
+                pSummaryResult[0] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;
 
             return VSConstants.S_OK;
         }
@@ -103,74 +84,33 @@ namespace Ankh.Scc
             // For now, we allow adding all files as is
             // We might propose moving files to within a managed root
 
+            RegisterForSccCleanup(); // Clear the origins table after adding
             _collectHints = true; // Some projects call HandsOff(file) on which files they wish to import. Use that to get more information
-            bool allOk = true;
-
-            bool track = SccProvider.TrackProjectChanges(pProject as IVsSccProject2);
 
             for (int i = 0; i < cFiles; i++)
             {
-                bool ok = true;
+                rgResults[i] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;
 
-                if (string.IsNullOrEmpty(rgpszNewMkDocuments[i]) || !SccProvider.IsSafeSccPath(rgpszNewMkDocuments[i]))
+                string newDoc = rgpszNewMkDocuments[i];
+                string origDoc = rgpszSrcMkDocuments[i];
+
+                if (!SccProvider.IsSafeSccPath(rgpszNewMkDocuments[i]))
+                    continue;
+                else if (!SccProvider.IsSafeSccPath(rgpszSrcMkDocuments[i]))
                     continue;
 
                 // Save the origins of the to be added files as they are not available in the added event
+                newDoc = SvnTools.GetNormalizedFullPath(newDoc);
+                origDoc = SvnTools.GetNormalizedFullPath(origDoc);
 
-                string newDoc = SvnTools.GetNormalizedFullPath(rgpszNewMkDocuments[i]);
-                string origDoc = rgpszSrcMkDocuments[i];
-
-                if (origDoc != null && SccProvider.IsSafeSccPath(origDoc))
-                    origDoc = SvnTools.GetNormalizedFullPath(origDoc);
-                else
-                    origDoc = null;
-
-                if (!string.IsNullOrEmpty(newDoc) && !string.IsNullOrEmpty(origDoc)
-                    && !string.Equals(newDoc, origDoc, StringComparison.OrdinalIgnoreCase)) // VS tries to add the file
-                {
+                if (newDoc != origDoc)
                     _fileOrigins[newDoc] = origDoc;
-                }
-
-                if (track && !SvnCanAddPath(newDoc, SvnNodeKind.File))
-                    ok = false;
-
-                if (rgResults != null)
-                    rgResults[i] = ok ? VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK : VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddNotOK;
-
-                if (!ok)
-                    allOk = false;
             }
 
             if (pSummaryResult != null)
-                pSummaryResult[0] = allOk ? VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK : VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddNotOK;
-
-            RegisterForSccCleanup(); // Clear the origins table after adding
-
-            if (!allOk)
-            {
-                if (!_inBatch)
-                    ShowQueryErrorDialog();
-            }
+                pSummaryResult[0] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;            
 
             return VSConstants.S_OK;
-        }
-
-        protected bool SvnCanAddPath(string fullpath, SvnNodeKind nodeKind)
-        {
-            using (SvnSccContext svn = new SvnSccContext(Context))
-            {
-                // Determine if we could add fullname
-                if (!svn.CouldAdd(fullpath, nodeKind))
-                {
-                    if (svn.BelowAdminDir(fullpath))
-                        _batchErrors.Add(string.Format(Resources.SvnPathXBlocked, fullpath));
-                    else
-                        _batchErrors.Add(string.Format(Resources.PathXBlocked, fullpath));
-                    return false;
-                }
-                else
-                    return true;
-            }
         }
 
         /// <summary>
@@ -493,35 +433,17 @@ namespace Ankh.Scc
             if (pProject == null || rgpszMkDocuments == null)
                 return VSConstants.E_POINTER;
 
-            bool track = SccProvider.TrackProjectChanges(pProject as IVsSccProject2);
+            RegisterForSccCleanup(); // Clear the origins table after adding
+            _collectHints = true;
 
-            bool allOk = true;
             for (int i = 0; i < cDirectories; i++)
             {
-                bool ok = true;
-
-                string dir = rgpszMkDocuments[i];
-
-                if (string.IsNullOrEmpty(dir) || !SvnItem.IsValidPath(dir))
-                    continue;
-
-                dir = SvnTools.GetNormalizedFullPath(dir);
-
-                if (track && !SvnCanAddPath(dir, SvnNodeKind.Directory))
-                    ok = false;
-
                 if (rgResults != null)
-                    rgResults[i] = ok ? VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddOK : VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddNotOK;
-
-                if (!ok)
-                    allOk = false;
+                    rgResults[i] = VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddOK;
             }
 
             if (pSummaryResult != null)
-                pSummaryResult[0] = allOk ? VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddOK : VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddNotOK;
-
-            if (!allOk && !_inBatch)
-                ShowQueryErrorDialog();
+                pSummaryResult[0] = VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddOK;
 
             return VSConstants.S_OK;
         }

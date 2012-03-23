@@ -173,61 +173,6 @@ namespace Ankh.Scc
         }
 
         /// <summary>
-        /// Called just before a file in a project is renamed
-        /// </summary>
-        /// <param name="project">The SCC project.</param>
-        /// <param name="oldName">The old name.</param>
-        /// <param name="newName">The new name.</param>
-        /// <param name="flags">The flags.</param>
-        /// <param name="ok">if set to <c>true</c> [ok].</param>
-        internal void OnBeforeProjectRenameFile(IVsSccProject2 project, string oldName, string newName, VSQUERYRENAMEFILEFLAGS flags, out bool ok)
-        {
-            ok = true;
-
-            if (!_projectMap.ContainsKey(project))
-                return; // Not managed by us
-
-            if (!IsActive)
-                return;
-
-            using (SvnSccContext svn = new SvnSccContext(Context))
-            {
-                if (!svn.CouldAdd(newName, SvnNodeKind.File))
-                {
-                    ok = false;
-                    return;
-                }
-
-                if (svn.IsUnversioned(oldName))
-                    return;
-            }
-        }
-
-        internal void OnBeforeSolutionRenameFile(string oldName, string newName, VSQUERYRENAMEFILEFLAGS flags, out bool ok)
-        {
-            ok = true;
-            if (!IsActive)
-                return;
-
-            //if (IsProjectFileOrSolution(oldName))
-            //{
-            //    // TODO: Is enlisted -> Ask user!
-            //}
-
-            using (SvnSccContext svn = new SvnSccContext(Context))
-            {
-                if (!svn.CouldAdd(newName, SvnNodeKind.File))
-                {
-                    ok = false;
-                    return;
-                }
-
-                if (svn.IsUnversioned(oldName))
-                    return;
-            }
-        }
-
-        /// <summary>
         /// Called when a file in a project is renamed
         /// </summary>
         /// <param name="project">The SCC project.</param>
@@ -260,7 +205,7 @@ namespace Ankh.Scc
             }
         }
 
-        internal void OnSolutionRenamedFile(string oldName, string newName, VSRENAMEFILEFLAGS flags)
+        internal void OnSolutionRenamedFile(string oldName, string newName)
         {
             if (!IsActive)
                 return;
@@ -269,25 +214,23 @@ namespace Ankh.Scc
 
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
-                if (!svn.IsUnversioned(oldName))
+                if (StatusCache[oldName].IsVersioned
+                    && !SvnItem.PathExists(oldName)
+                    && SvnItem.PathExists(newName))
                 {
                     try
                     {
-                        svn.SafeWcMoveFixup(oldName, newName);
+                        using (SvnSccContext ctx = new SvnSccContext(this))
+                        {
+                            ctx.MarkAsMoved(oldName, newName);
+                        }
                     }
-                    catch (IOException)
+                    finally
                     {
-                        if (_delayedMove == null)
-                            _delayedMove = new List<FixUp>();
-                        _delayedMove.Add(new FixUp(oldName, newName));
-
-                        RegisterForSccCleanup();
+                        MarkDirty(new string[] { oldName, newName }, true);
                     }
-
-                    MarkDirty(new string[] { oldName, newName }, true);
                 }
             }
-
 
             Monitor.ScheduleGlyphUpdate(SolutionFilename);
         }
