@@ -250,9 +250,8 @@ namespace Ankh.Scc
 
                     svn.SafeWcDirectoryCopyFixUp(oldDir, newDir, safeRename); // Recreate the old WC directory
 
-                    _delayedDeletes.Add(oldDir); // Delete everything in the old wc when done
+                    SccProvider.AddDelayedDelete(oldDir); // Delete everything in the old wc when done
                     // TODO: Once Subversion understands true renames, fixup the renames in the delayed hook
-                    RegisterForSccCleanup();
 
                     // We have all files of the old wc directory unversioned in the new location now
 
