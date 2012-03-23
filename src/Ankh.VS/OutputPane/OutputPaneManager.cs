@@ -15,11 +15,8 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell.Interop;
-using System.IO;
-using Microsoft.VisualStudio;
 
 namespace Ankh.VS.OutputPane
 {
@@ -42,8 +39,8 @@ namespace Ankh.VS.OutputPane
         public void WriteToPane(string s)
         {           
             IVsOutputWindowPane pane;
-            ErrorHandler.ThrowOnFailure(Window.GetPane(ref g, out pane));            
-            ErrorHandler.ThrowOnFailure(pane.OutputString(s));
+            Marshal.ThrowExceptionForHR(Window.GetPane(ref g, out pane));            
+            Marshal.ThrowExceptionForHR(pane.OutputString(s));
         }
     }
 }

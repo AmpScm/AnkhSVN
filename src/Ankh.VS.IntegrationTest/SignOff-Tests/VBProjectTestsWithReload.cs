@@ -15,15 +15,13 @@
 //  limitations under the License.
 
 using System;
-using System.Text;
-using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
+using EnvDTE;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VsSDK.IntegrationTestLibrary;
 using Microsoft.VSSDK.Tools.VsIdeTesting;
-using EnvDTE;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio;
-using System.IO;
 
 namespace IntegrationTests
 {
@@ -131,7 +129,7 @@ namespace IntegrationTests
 
 			IVsHierarchy hier;
 
-			ErrorHandler.ThrowOnFailure(solutionService.GetProjectOfUniqueName(name, out hier));
+			Marshal.ThrowExceptionForHR(solutionService.GetProjectOfUniqueName(name, out hier));
 
 			solutionService.CloseSolutionElement((uint)__VSSLNCLOSEOPTIONS.SLNCLOSEOPT_UnloadProject, hier, 0);
 
