@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.10987</title>
+          AnkhSVN-Daily Update - 2.3.11005</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,20 +16,52 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5903/AnkhSvn-Daily-2.3.10987.1246.msi">AnkhSVN 2.3.10987</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5908/AnkhSvn-Daily-2.3.11005.1247.msi">AnkhSVN 2.3.11005</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=10987">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11005">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2012-03-23</td></tr>
+<tr><td> </td><td class="r"><a id="11003" href="http://ankhsvn.net/rev/11003">
+            [r11003]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> ProjectTracker.cs, ProjectTracker.Rename.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the project item rename handler track all batch renames, just like the
+add new item handler. This allows properly detecting folder renames in many
+project types, such as C#.<br>
+Assuming that the working copy is at a single revision, this will reduce the
+number of pending changes for a simple folder rename to just one, where every
+node was shown as a pending change before.</td></tr>
+<tr><td> </td><td class="r"><a id="11000" href="http://ankhsvn.net/rev/11000">
+            [r11000]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/SvnSccContext.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update SharpSvn reference to really allow using the metadata only move of the
+Subversion 1.7 libraries.</td></tr>
+<tr><td> </td><td class="r"><a id="10995" href="http://ankhsvn.net/rev/10995">
+            [r10995]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.Projects.cs, AnkhSccProvider.FileMap.cs, SvnSccContext.cs, ProjectTracker.Rename.cs, ProjectTracker.Add.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove the code that performed checks on case only change additions, etc. This
+was needed with Subversion 1.5 and 1.6 as the Subversion working copy library
+couldn't handle these cases. But this was fixed with 1.7's new pristine store
+and central db.<br>
+This also removes the delayed move handling as we can just record the move
+without touching files now.</td></tr>
+<tr><td> </td><td class="r"><a id="10992" href="http://ankhsvn.net/rev/10992">
+            [r10992]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.Projects.cs, Ankh.Scc/AnkhSccProvider.FileMap.cs, Ankh.Scc/ProjectTracker.cs, Ankh.Scc/SvnSccContext.cs, Ankh.Services/Scc/IAnkhSccService.cs, Ankh.Scc/ProjectTracker.Rename.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Consolidate the 'maybe delete' file code in the scc handling in one place.
+We used to have three different code paths with slightly different behavior,
+which was mostly a left-over from before the single db storage handling.</td></tr>
+<tr><td> </td><td class="r"><a id="10989" href="http://ankhsvn.net/rev/10989">
+            [r10989]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh.Diff/DiffWindow/DiffToolWindowControl.resx, Ankh.Diff/DiffWindow/DiffEditorControl.resx, Ankh.Diff/DiffWindow/DiffToolWindowControl.Designer.cs, Ankh.Ids/AnkhToolWindow.cs, Ankh.Package/AnkhSvnPackage.ToolWindows.cs, Ankh.Diff/DiffWindow/DiffEditorControl.Designer.cs, Ankh.Diff/DiffWindow/DiffToolWindowControl.cs, Ankh.Diff/DiffWindow/DiffEditorControl.cs, Ankh.Diff/Ankh.Diff.csproj, Ankh.Ids/AnkhId.cs, Ankh.Diff/AnkhInternalDiff.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make our internal VS2005-2010 diff work more similar to the VS11+ builtin
+diff by using a document instead of a toolwindow. In some ways this might be
+a regression, but I would recommend using an external diff in these VS versions
+anyway.</td></tr>
 <tr class="d"><td colspan="4">2012-03-22</td></tr>
 <tr><td> </td><td class="r"><a id="10986" href="http://ankhsvn.net/rev/10986">
             [r10986]
