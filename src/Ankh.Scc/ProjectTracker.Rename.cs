@@ -168,7 +168,7 @@ namespace Ankh.Scc
             string oldNode = SvnTools.GetNormalizedDirectoryName(oldName);
             string newNode = SvnTools.GetNormalizedDirectoryName(newName);
 
-            if (oldNode == null || newNode == null)
+            if (oldNode == null || newNode == null || String.Equals(oldNode, newNode))
                 return false;
 
             if (_alreadyProcessed.Contains(newNode))
