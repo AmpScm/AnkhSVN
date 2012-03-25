@@ -103,7 +103,7 @@ namespace Ankh.Services
 
         public SvnWorkingCopyClient GetWcClient()
         {
-            return new SvnWorkingCopyClient();
+            return new AnkhSvnPoolWorkingCopyClient(this);
         }
 
         private SvnPoolClient CreateClient(bool hookUI)
@@ -488,6 +488,61 @@ namespace Ankh.Services
             public int ReturnCookie
             {
                 get { return _returnCookie; }
+            }
+        }
+
+        sealed class AnkhSvnPoolWorkingCopyClient : SvnWorkingCopyClient
+        {
+            readonly SortedDictionary<string, SvnClientAction> _changes = new SortedDictionary<string, SvnClientAction>(StringComparer.OrdinalIgnoreCase);
+            AnkhClientPool _pool;
+
+            public AnkhSvnPoolWorkingCopyClient(AnkhClientPool pool)
+            {
+                _pool = pool;
+            }
+
+            protected override void OnNotify(SvnNotifyEventArgs e)
+            {
+                base.OnNotify(e);
+
+                string path = e.FullPath;
+
+                SvnClientAction action;
+                if (!_changes.TryGetValue(path, out action))
+                    _changes.Add(path, action = new SvnClientAction(path));
+
+                switch (e.Action)
+                {
+                    case SvnNotifyAction.Revert:
+                    case SvnNotifyAction.TreeConflict:
+                        action.Recursive = true;
+                        break;
+                    case SvnNotifyAction.UpdateDelete:
+                        action.Recursive = true;
+                        action.AddOrRemove = true;
+                        break;
+                    case SvnNotifyAction.UpdateReplace:
+                    case SvnNotifyAction.UpdateAdd:
+                        action.AddOrRemove = true;
+                        break;
+                    case SvnNotifyAction.UpdateUpdate:
+                        action.OldRevision = e.OldRevision;
+                        break;
+                }
+            }
+
+            protected override void Dispose(bool value)
+            {
+                try
+                {
+                    if (_changes.Count > 0)
+                        _pool.NotifyChanges(_changes);
+                }
+                finally
+                {
+                    _changes.Clear();
+                    base.Dispose(value);
+                }
             }
         }
 
