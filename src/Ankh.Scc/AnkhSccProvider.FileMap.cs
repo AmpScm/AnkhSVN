@@ -70,9 +70,6 @@ namespace Ankh.Scc
                 return; // Not managed by us
 
             data.AddPath(filename);
-
-            if (!IsActive)
-                return; // Let the other SCC package manage it
         }
 
         /// <summary>
@@ -88,21 +85,21 @@ namespace Ankh.Scc
                 return; // Not managed by us
 
             data.RemovePath(filename);
+        }
 
-            if (!IsActive)
-                return; // Let the other SCC package manage it
-
-            if (SvnItem.PathExists(filename))
+        internal void SccDelete(string path)
+        {
+            if (SvnItem.PathExists(path))
             {
                 // The node may be just removed from the project. Check later
                 // Some projects delete the file before (C#) and some after (C++) calling OnProjectFileRemoved
 
-                AddDelayedDelete(filename);
+                AddDelayedDelete(path);
             }
-            else if (StatusCache[filename].IsVersioned)
+            else if (StatusCache[path].IsVersioned)
                 using (SvnSccContext svn = new SvnSccContext(Context))
                 {
-                    svn.SafeDelete(filename);
+                    svn.SafeDelete(path);
                 }
         }
 
@@ -152,24 +149,6 @@ namespace Ankh.Scc
             // a directory can be added like a folder but with an ending '\'
             string dir = directoryname.TrimEnd('\\') + '\\';
             data.RemovePath(dir);
-
-            if (!IsActive)
-                return;
-
-            if (!IsActive)
-                return; // Let the other SCC package manage it
-
-            if (SvnItem.PathExists(directoryname))
-            {
-                // The node may be just removed from the project. Check later
-                // Some projects delete the file before (C#) and some after (C++) calling OnProjectFileRemoved
-                AddDelayedDelete(directoryname);
-            }
-            else if (StatusCache[directoryname].IsVersioned)
-                using (SvnSccContext svn = new SvnSccContext(Context))
-                {
-                    svn.SafeDelete(directoryname);
-                }
         }
 
         /// <summary>
@@ -189,20 +168,6 @@ namespace Ankh.Scc
 
             data.RemovePath(oldName);
             data.AddPath(newName);
-
-            if (!IsActive)
-                return;
-
-            using (SvnSccContext svn = new SvnSccContext(Context))
-            {
-                if (!svn.IsUnversioned(oldName))
-                {
-                    if (!Directory.Exists(newName)) // Fails if the new name is a directory!
-                        svn.SafeWcMoveFixup(oldName, newName);
-                }
-
-                MarkDirty(new string[] { oldName, newName }, true);
-            }
         }
 
         internal void OnSolutionRenamedFile(string oldName, string newName)
@@ -210,36 +175,10 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
+            // The solution file is renamed
+
             _solutionDirectory = _solutionFile = null; // Get new data after this rename
-
-            using (SvnSccContext svn = new SvnSccContext(Context))
-            {
-                if (StatusCache[oldName].IsVersioned
-                    && !SvnItem.PathExists(oldName)
-                    && SvnItem.PathExists(newName))
-                {
-                    try
-                    {
-                        using (SvnSccContext ctx = new SvnSccContext(this))
-                        {
-                            ctx.MarkAsMoved(oldName, newName);
-                        }
-                    }
-                    finally
-                    {
-                        MarkDirty(new string[] { oldName, newName }, true);
-                    }
-                }
-            }
-
             Monitor.ScheduleGlyphUpdate(SolutionFilename);
-        }
-
-        internal void OnDocumentSaveAs(string oldName, string newName)
-        {
-            if (!IsActive)
-                return;
-
         }
 
         /// <summary>

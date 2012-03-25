@@ -67,6 +67,9 @@ namespace Ankh.Scc
                     file = SvnTools.GetNormalizedFullPath(file);
 
                     SccProvider.OnProjectFileRemoved(sccProject, file, rgFlags[iFile]);
+
+                    if (SccProvider.IsActive && track)
+                        SccProvider.SccDelete(file);
                 }
             }
             return VSConstants.S_OK;
@@ -116,6 +119,9 @@ namespace Ankh.Scc
                     dir = SvnTools.GetNormalizedFullPath(dir);
 
                     SccProvider.OnProjectDirectoryRemoved(sccProject, dir, rgFlags[iDirectory]);
+
+                    if (SccProvider.IsActive && track)
+                        SccProvider.SccDelete(dir);
                 }
             }
 
