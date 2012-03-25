@@ -99,7 +99,7 @@ namespace Ankh.Scc
             else if (StatusCache[path].IsVersioned)
                 using (SvnSccContext svn = new SvnSccContext(Context))
                 {
-                    svn.SafeDelete(path);
+                    svn.MetaDelete(path);
                 }
         }
 

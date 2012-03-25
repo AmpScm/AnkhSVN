@@ -136,6 +136,19 @@ namespace Ankh.Scc
                 MaybeRevert(newName, toBefore);
         }
 
+        public bool MetaDelete(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            SvnDeleteArgs da = new SvnDeleteArgs();
+            da.ThrowOnError = false;
+            da.Force = true;
+            da.KeepLocal = true;
+
+            return Client.Delete(path, da);
+        }
+
         private void MaybeRevert(string newName, SvnEntry toBefore)
         {
             if (toBefore == null)
@@ -244,20 +257,6 @@ namespace Ankh.Scc
                         change.IgnoreFile(0, file, 0);
                     }
                 });
-        }
-
-        public bool SafeDelete(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
-
-            SvnDeleteArgs da = new SvnDeleteArgs();
-            da.Force = true;
-            da.KeepLocal = false;
-            da.ThrowOnError = false;
-            da.KeepLocal = !SvnItem.PathExists(path); // This will stop the error if the file was already deleted
-
-            return Client.Delete(path, da);
         }
 
         public bool IsUnversioned(string name)

@@ -572,7 +572,7 @@ namespace Ankh.Scc
                     foreach (string node in files)
                     {
                         if (!SvnItem.PathExists((node)))
-                            svn.SafeDelete(node);
+                            svn.MetaDelete(node);
                     }
                 }
             }
