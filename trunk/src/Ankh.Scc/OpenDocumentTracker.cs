@@ -355,7 +355,6 @@ namespace Ankh.Scc
                     string oldFile = SvnTools.GetNormalizedFullPath(pszMkDocumentOld);
                     string newFile = SvnTools.GetNormalizedFullPath(pszMkDocumentNew);
                     ProjectTracker.OnDocumentSaveAs(oldFile, newFile);
-                    SccProvider.OnDocumentSaveAs(oldFile, newFile);
                 }
             }
 
