@@ -103,12 +103,12 @@ namespace Ankh.Scc
                 newDoc = SvnTools.GetNormalizedFullPath(newDoc);
                 origDoc = SvnTools.GetNormalizedFullPath(origDoc);
 
-                if (newDoc != origDoc)
-                    _fileOrigins[newDoc] = origDoc;
+                // Some additions (e.g. drag&drop in C# project report the same locations. We use the hints later, but collect the targets anyway
+                _fileOrigins[newDoc] = (newDoc != origDoc) ? origDoc : null;
             }
 
             if (pSummaryResult != null)
-                pSummaryResult[0] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;            
+                pSummaryResult[0] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;
 
             return VSConstants.S_OK;
         }
@@ -125,15 +125,13 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int OnAfterAddFilesEx(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSADDFILEFLAGS[] rgFlags)
         {
-            int iFile = 0;
             RegisterForSccCleanup(); // Clear the origins table after adding
 
-            List<string> selectedFiles = null;
             SortedList<string, string> copies = null;
 
             bool sccActive = SccProvider.IsActive;
 
-            for (int iProject = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
+            for (int iProject = 0, iFile = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
             {
                 int iLastFileThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cFiles;
 
@@ -153,12 +151,12 @@ namespace Ankh.Scc
                     if (!SvnItem.IsValidPath(newName))
                         continue;
 
-                    newName = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iFile]);
+                    newName = SvnTools.GetNormalizedFullPath(newName);
 
                     if (sccActive && _solutionLoaded)
                     {
                         StatusCache.MarkDirty(newName);
-                        TryFindOrigin(newName, ref selectedFiles, out origin);
+                        TryFindOrigin(newName, out origin);
                     }
 
                     // We do this before the copies to make sure a failed copy doesn't break the project
@@ -179,203 +177,179 @@ namespace Ankh.Scc
             if (copies != null)
                 using (SvnSccContext svn = new SvnSccContext(Context))
                 {
-                    while (copies.Count > 0)
+                    foreach (KeyValuePair<string, string> kv in copies)
                     {
-                        string toFile = copies.Keys[0];
-                        string fromFile = copies.Values[0];
-                        string dir = SvnTools.GetNormalizedDirectoryName(toFile);
-
-                        copies.RemoveAt(0);
-                        Guid addGuid;
-
-                        if (!svn.TryGetRepositoryId(dir, out addGuid))
-                        {
-                            continue; // No repository to fix up
-                        }
-
-                        Guid fileGuid;
-
-                        if (!svn.TryGetRepositoryId(fromFile, out fileGuid) || fileGuid != addGuid)
-                            continue; // Can't fix history for this file
-
-                        if (string.Equals(Path.GetFileName(fromFile), Path.GetFileName(toFile), StringComparison.OrdinalIgnoreCase))
-                        {
-                            // If the names are the same we can handle all files to the same directory
-                            // without a sleep penalty             
-                            SortedList<string, string> now = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
-                            now.Add(toFile, fromFile);
-
-                            for (int i = 0; i < copies.Count; i++)
-                            {
-                                string fl = copies.Keys[i];
-                                string tl = copies.Values[i];
-
-                                if (string.Equals(SvnTools.GetNormalizedDirectoryName(fl), dir, StringComparison.OrdinalIgnoreCase) &&
-                                    string.Equals(Path.GetFileName(fl), Path.GetFileName(tl), StringComparison.OrdinalIgnoreCase))
-                                {
-                                    Guid fromGuid;
-                                    if (svn.TryGetRepositoryId(tl, out fromGuid) && (fromGuid == addGuid))
-                                        now.Add(fl, tl); // We can copy this item at the same time
-                                    // else 
-                                    // This copy comes from another repository, no history to save
-
-                                    copies.RemoveAt(i--);
-                                }
-                            }
-
-                            // Now contains all the files we are receiving in a single directory
-                            if (now.Count > 0)
-                                svn.SafeWcCopyToDirFixup(now, dir);
-                            else
-                                svn.SafeWcCopyFixup(fromFile, toFile);
-                        }
-                        else
-                            svn.SafeWcCopyFixup(fromFile, toFile);
+                        svn.AddParents(kv.Key);
+                        svn.MetaCopy(kv.Value, kv.Key, true);
                     }
                 }
 
             return VSConstants.S_OK;
         }
 
-        private void TryFindOrigin(string newName, ref List<string> selectedFiles, out string origin)
+        private void TryFindOrigin(string newName, out string origin)
         {
-            if ((!_fileOrigins.TryGetValue(newName, out origin) || (origin == null)))
+            if (_fileOrigins.TryGetValue(newName, out origin))
             {
-                // We haven't got the project file origin for free via OnQueryAddFilesEx
-                // So:
-                //  1 - The file is really new or
-                //  2 - The file is drag&dropped into the project from the solution explorer or
-                //  3 - The file is copy pasted into the project from an other project or
-                //  4 - The file is added via add existing item or
-                //  5 - The file is added via drag&drop from another application (OLE drop)
-                //
-                // The only way to determine is walking through these options
+                if (origin != null)
+                    return;
+            }
+            else
+                _fileOrigins.Add(newName, null);
 
-                FileInfo newInfo = new FileInfo(newName);
+            // We haven't got the project file origin for free via OnQueryAddFilesEx
+            // So:
+            //  1 - The file is really new or
+            //  2 - The file is drag&dropped into the project from the solution explorer or
+            //  3 - The file is copy pasted into the project from an other project or
+            //  4 - The file is added via add existing item or
+            //  5 - The file is added via drag&drop from another application (OLE drop)
+            //
+            // The only way to determine is walking through these options
+            SortedList<string, string> nameToItem = new SortedList<string, string>();
 
-                // 2 -  If the file is drag&dropped in the solution explorer
-                //      the current selection is still the original selection
-                if (selectedFiles == null)
+            nameToItem[Path.GetFileName(newName)] = newName;
+            foreach (KeyValuePair<string, string> kv in _fileOrigins)
+            {
+                if (kv.Value != null)
+                    continue;
+
+                nameToItem[Path.GetFileName(kv.Key)] = kv.Key;
+            }
+
+            // 2 -  If the file is drag&dropped in the solution explorer
+            //      the current selection is still the original selection
+
+            // **************** Check the current selection *************
+            // Checks for drag&drop actions. The selection contains the original list of files
+            // BH: resx files are not correctly included if we don't retrieve this list recursive
+            foreach (string file in SelectionContext.GetSelectedFiles(true))
+            {
+                if (_fileOrigins.ContainsKey(file))
+                    return;
+
+                string name = Path.GetFileName(file);
+                if (nameToItem.ContainsKey(name))
                 {
-                    if (SelectionContext != null)
-                    {
-                        // BH: resx files are not correctly included if we don't retrieve this list recursive
-                        selectedFiles = new List<string>(SelectionContext.GetSelectedFiles(true));
-                    }
-                    else
-                        selectedFiles = new List<string>();
+                    string item = nameToItem[name];
+
+                    CheckForMatch(item, file);
                 }
+            }
 
+            // **************** Check external hints ********************
+            // Checks for HandsOff events send by the project system
+            foreach (string file in _fileHints)
+            {
+                if (_fileOrigins.ContainsKey(file))
+                    return;
 
-                // **************** Check the current selection *************
-                // Checks for drag&drop actions. The selection contains the original list of files
-                foreach (string file in selectedFiles)
+                string name = Path.GetFileName(file);
+                if (nameToItem.ContainsKey(name))
                 {
-                    if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
+                    string item = nameToItem[name];
+
+                    CheckForMatch(item, file);
+                }
+            }
+
+            // **************** Check the clipboard *********************
+            // 3 - Copy & Paste in the solution explorer:
+            //     The original paths are still on the clipboard
+            if (System.Windows.Forms.Clipboard.ContainsText())
+            {
+                // TODO: BH: Look into using IVsUIHierWinClipboardHelper to parse the clipboard data!
+
+                // In some cases (Websites) the solution explorer just dumps a bunch of file:// Url's on the clipboard
+
+                string text = System.Windows.Forms.Clipboard.GetText();
+
+                if (!string.IsNullOrEmpty(text))
+                {
+                    foreach (string part in text.Split('\n'))
                     {
-                        FileInfo orgInfo = new FileInfo(file);
+                        string s = part.Trim();
+                        Uri uri;
 
-                        if (orgInfo.Exists && newInfo.Exists && orgInfo.Length == newInfo.Length)
+                        if (!Uri.TryCreate(s, UriKind.Absolute, out uri))
+                            break;
+
+                        if (uri.IsFile)
                         {
-                            // BH: Don't verify filedates, etc; as they shouldn't be copied
-                            // We can be reasonably be sure its the same file. Same name and same length
+                            string file = SvnTools.GetNormalizedFullPath(uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped));
 
-                            if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
+                            string name = Path.GetFileName(file);
+                            if (nameToItem.ContainsKey(name))
                             {
-                                // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
-                                _fileOrigins[newName] = origin = file;
+                                string item = nameToItem[name];
 
-                                break;
+                                CheckForMatch(item, file);
                             }
                         }
                     }
+
                 }
+            }
 
-                // **************** Check external hints ********************
-                // Checks for HandsOff events send by the project system
-                if (origin == null)
+            // The clipboard seems to have some other format which might contain other info
+            origin = _fileOrigins[newName];
+
+            if (origin == null)
+            {
+                bool first = true;
+                string path = null;
+
+                foreach (KeyValuePair<string, string> kv in _fileOrigins)
                 {
-                    foreach (string file in _fileHints)
+                    if (kv.Value == null)
+                        continue;
+
+                    if (SvnItem.IsBelowRoot(kv.Key, newName))
                     {
-                        if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
+                        string itemRoot = kv.Value.Substring(0, kv.Value.Length - kv.Key.Length + newName.Length);
+                        if (first)
                         {
-                            FileInfo orgInfo = new FileInfo(file);
-
-                            if (orgInfo.Exists && newInfo.Exists && orgInfo.Length == newInfo.Length)
-                            {
-                                // BH: Don't verify filedates, etc; as they shouldn't be copied
-
-                                if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
-                                {
-                                    // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
-                                    _fileOrigins[newName] = origin = SvnTools.GetNormalizedFullPath(file);
-
-                                    break;
-                                }
-                            }
-                            else if (!orgInfo.Exists)
-                            {
-                                // Handle Cut&Paste
-                                SvnItem item = StatusCache[orgInfo.FullName];
-
-                                if (item.IsVersioned && item.IsDeleteScheduled)
-                                {
-                                    _fileOrigins[newName] = origin = item.FullPath;
-                                }
-                            }
+                            path = itemRoot;
+                            first = false;
+                        }
+                        else if (path != itemRoot)
+                        {
+                            origin = null;
+                            return;
                         }
                     }
                 }
+                origin = path;
+            }
+        }
 
-                // **************** Check the clipboard *********************
-                // 3 - Copy & Paste in the solution explorer:
-                //     The original paths are still on the clipboard
-                if (origin == null && System.Windows.Forms.Clipboard.ContainsText())
+        void CheckForMatch(string newItem, string maybeFrom)
+        {
+            string v;
+            if (_fileOrigins.TryGetValue(newItem, out v) && v != null)
+                return;
+
+            FileInfo newInfo = new FileInfo(newItem);
+            FileInfo maybeInfo = new FileInfo(maybeFrom);
+
+            if (maybeInfo.Exists && newInfo.Exists && maybeInfo.Length == newInfo.Length)
+            {
+                // BH: Don't verify filedates, etc; as they shouldn't be copied
+
+                if (FileContentsEquals(maybeInfo.FullName, newInfo.FullName))
                 {
-                    // TODO: BH: Look into using IVsUIHierWinClipboardHelper to parse the clipboard data!
-
-                    // In some cases (Websites) the solution explorer just dumps a bunch of file:// Url's on the clipboard
-
-                    string text = System.Windows.Forms.Clipboard.GetText();
-
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        foreach (string part in text.Split('\n'))
-                        {
-                            string s = part.Trim();
-                            Uri uri;
-
-                            if (!Uri.TryCreate(s, UriKind.Absolute, out uri))
-                                break;
-
-                            if (uri.IsFile)
-                            {
-                                string file = SvnTools.GetNormalizedFullPath(uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped));
-
-                                if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    FileInfo orgInfo = new FileInfo(file);
-
-                                    if (orgInfo.Exists && newInfo.Exists && orgInfo.Length == newInfo.Length)
-                                    {
-                                        // BH: Don't verify filedates, etc; as they shouldn't be copied
-
-                                        if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
-                                        {
-                                            // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
-                                            _fileOrigins[newName] = origin = SvnTools.GetNormalizedFullPath(file);
-
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                    }
+                    _fileOrigins[newItem] = maybeFrom;
                 }
+            }
+            else if (!maybeInfo.Exists)
+            {
+                // Handles Delete followed by add?
+                SvnItem svnItem = StatusCache[maybeInfo.FullName];
 
-                // The clipboard seems to have some other format which might contain other info
+                if (svnItem.IsVersioned && svnItem.IsDeleteScheduled)
+                {
+                    _fileOrigins[newItem] = maybeFrom;
+                }
             }
         }
 
@@ -464,51 +438,16 @@ namespace Ankh.Scc
             if (rgpProjects == null || rgpszMkDocuments == null)
                 return VSConstants.E_POINTER;
 
-            for (int i = 0; i < cDirectories; i++)
-            {
-                string dir = rgpszMkDocuments[i];
+            bool sccActive = SccProvider.IsActive;
 
-                if (!SvnItem.IsValidPath(dir))
-                    continue;
-
-                dir = SvnTools.GetNormalizedFullPath(dir);
-
-                StatusCache.MarkDirty(dir);
-
-                SvnItem item = StatusCache[dir];
-
-                if (!item.Exists || !item.IsDirectory || !SvnTools.IsManagedPath(dir))
-                    continue;
-
-                if ((DateTime.UtcNow - GetCreated(item)) > new TimeSpan(0, 1, 0))
-                    continue; // Directory is older than one minute.. Not just copied
-
-                using (SvnSccContext svn = new SvnSccContext(Context))
-                {
-                    // Ok; we have a 'new' directory here.. Lets check if VS broke the subversion working copy
-                    SvnWorkingCopyEntryEventArgs entry = svn.SafeGetEntry(dir);
-
-                    if (entry != null && entry.NodeKind == SvnNodeKind.Directory) // Entry exists, valid dir
-                        continue;
-
-                    // VS Added a versioned dir below our project -> Unversion the directory to allow adding files
-
-                    // Don't unversion the directory if the parent is not versioned
-                    string parentDir = SvnTools.GetNormalizedDirectoryName(dir);
-                    if (parentDir == null || !SvnTools.IsManagedPath(parentDir))
-                        continue; 
-
-                    svn.UnversionRecursive(dir);
-                }
-            }
-
-            for (int iProject = 0, iDir=0; (iProject < cProjects) && (iDir < cDirectories); iProject++)
+            for (int iProject = 0, iDir = 0; (iProject < cProjects) && (iDir < cDirectories); iProject++)
             {
                 int iLastDirectoryThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cDirectories;
 
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                bool track = SccProvider.TrackProjectChanges(sccProject);
+                bool trackCopies;
+                bool track = SccProvider.TrackProjectChanges(sccProject, out trackCopies);
 
                 for (; iDir < iLastDirectoryThisProject; iDir++)
                 {
@@ -521,25 +460,31 @@ namespace Ankh.Scc
                         continue;
 
                     dir = SvnTools.GetNormalizedFullPath(dir);
+                    string origin = null;
+
+                    if (sccActive && _solutionLoaded)
+                    {
+                        StatusCache.MarkDirty(dir);
+                        TryFindOrigin(dir, out origin);
+                    }
 
                     if (sccProject != null)
-                        SccProvider.OnProjectDirectoryAdded(sccProject, dir, rgFlags[iDir]);
+                        SccProvider.OnProjectDirectoryAdded(sccProject, dir, origin);
+
+                    if (sccActive && trackCopies &&
+                        !string.IsNullOrEmpty(origin) &&
+                        StatusCache[origin].HasCopyableHistory)
+                    {
+                        using (SvnSccContext svn = new SvnSccContext(this))
+                        {
+                            svn.AddParents(dir);
+                            svn.MetaCopy(origin, dir, true);
+                        }
+                    }
                 }
             }
 
             return VSConstants.S_OK;
-        }
-
-        static DateTime GetCreated(SvnItem item)
-        {
-            try
-            {
-                return File.GetCreationTimeUtc(item.FullPath);
-            }
-            catch
-            {
-                return DateTime.UtcNow;
-            }
         }
 
         internal void OnDocumentSaveAs(string oldName, string newName)

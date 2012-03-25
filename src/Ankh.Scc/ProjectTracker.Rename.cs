@@ -202,9 +202,7 @@ namespace Ankh.Scc
                     if (opp != null && !opp.IsVersioned)
                         ctx.AddParents(newName);
 
-                    ctx.MarkAsMoved(oldName, newName);
-                    StatusCache.MarkDirtyRecursive(newName);
-                    StatusCache.MarkDirtyRecursive(oldName);
+                    ctx.MetaMove(oldName, newName, true);
 
                     _alreadyProcessed.Add(newName);
 
@@ -240,8 +238,7 @@ namespace Ankh.Scc
                 newDoc = SvnTools.GetNormalizedFullPath(newDoc);
                 origDoc = SvnTools.GetNormalizedFullPath(origDoc);
 
-                if (newDoc != origDoc)
-                    _fileOrigins[newDoc] = origDoc;
+                _fileOrigins[newDoc] = (newDoc != origDoc) ? origDoc : null;
             }
 
             if (pSummaryResult != null)

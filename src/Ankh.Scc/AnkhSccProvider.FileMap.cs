@@ -108,8 +108,8 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="directoryname">The directoryname.</param>
-        /// <param name="flags">The flags.</param>
-        internal void OnProjectDirectoryAdded(IVsSccProject2 project, string directoryname, VSADDDIRECTORYFLAGS flags)
+        /// <param name="origin">The origin or null.</param>
+        internal void OnProjectDirectoryAdded(IVsSccProject2 project, string directoryname, string origin)
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
