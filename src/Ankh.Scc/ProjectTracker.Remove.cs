@@ -115,7 +115,7 @@ namespace Ankh.Scc
 
                     dir = SvnTools.GetNormalizedFullPath(dir);
 
-                    SccProvider.OnProjectDirectoryRemoved(sccProject, rgpszMkDocuments[iDirectory], rgFlags[iDirectory]);
+                    SccProvider.OnProjectDirectoryRemoved(sccProject, dir, rgFlags[iDirectory]);
                 }
             }
 
