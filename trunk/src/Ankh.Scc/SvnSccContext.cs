@@ -172,61 +172,47 @@ namespace Ankh.Scc
                 return;
             }
 
-            using (MarkIgnoreFile(newName))
             using (MarkIgnoreRecursive(newName))
             using (MoveAway(newName))
             {
                 SvnRevertArgs ra = new SvnRevertArgs();
                 ra.Depth = SvnDepth.Empty;
                 ra.ThrowOnError = false;
-                Client.Revert(newName, ra);
-            }
-        }
 
-        /// <summary>
-        /// Tries to get the repository Guid of the specified path when it would be added to subversion
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="wcGuid"></param>
-        /// <returns></returns>
-        public bool TryGetRepositoryId(string path, out Guid repositoryId)
-        {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
-
-            path = SvnTools.GetNormalizedFullPath(path);
-
-            if (File.Exists(path))
-                path = SvnTools.GetNormalizedDirectoryName(path);
-
-            if (Directory.Exists(path))
-                path = SvnTools.GetTruePath(path); // Resolve casing issues
-
-            while (!string.IsNullOrEmpty(path))
-            {
-                if (SvnTools.IsManagedPath(path))
+                // Do a quick check if we can safely revert with depth infinity
+                using (new SharpSvn.Implementation.SvnFsOperationRetryOverride(0))
                 {
-                    return Client.TryGetRepositoryId(path, out repositoryId);
+                    SvnStatusArgs sa = new SvnStatusArgs();
+                    sa.ThrowOnError = false;
+                    bool modifications = false;
+                    if (Client.Status(newName, sa,
+                                  delegate(object sender, SvnStatusEventArgs e)
+                                  {
+                                      if (e.LocalPropertyStatus != SvnStatus.Normal
+                                          && e.LocalPropertyStatus != SvnStatus.None)
+                                      {
+                                          e.Cancel = modifications = true;
+                                      }
+                                      else if (e.FullPath != newName)
+                                          switch (e.LocalNodeStatus)
+                                          {
+                                              case SvnStatus.None:
+                                              case SvnStatus.Modified: // Text only change is ok
+                                              case SvnStatus.Ignored:
+                                              case SvnStatus.External:
+                                                  break;
+                                              default:
+                                                  e.Cancel = modifications = true;
+                                                  break;
+                                          }
+                                  })
+                        && !modifications)
+                    {
+                        ra.Depth = SvnDepth.Infinity;
+                    }
                 }
-
-                path = SvnTools.GetNormalizedDirectoryName(path);
-            }
-
-            repositoryId = Guid.Empty;
-            return false;
-        }
-
-        public void EnsureAdded(string toDir)
-        {
-            if (!SvnTools.IsManagedPath(toDir))
-            {
-                SvnAddArgs aa = new SvnAddArgs();
-                aa.Depth = SvnDepth.Empty;
-                aa.AddParents = true;
-                aa.Force = true;
-                aa.ThrowOnError = false;
-
-                Client.Add(toDir, aa);
+                
+                Client.Revert(newName, ra);
             }
         }
 

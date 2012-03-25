@@ -213,7 +213,7 @@ namespace Ankh.Scc
                 if (docPath == null)
                     continue; // Not file based
 
-                if (docPath.StartsWith(path, StringComparison.OrdinalIgnoreCase) && d.FullPath.Length > path.Length)
+                if (SvnItem.IsBelowRoot(docPath, path))
                     files.Add(SvnTools.GetNormalizedFullPath(d.Name));
             }
 
