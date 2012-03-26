@@ -247,7 +247,7 @@ namespace Ankh.Scc
             // 3 - Copy & Paste in the solution explorer:
             //     The original hierarchy information is still on the clipboard
             IDataObject dataObject;
-            if (Clipboard.ContainsText() && null != (dataObject = Clipboard.GetDataObject()) && dataObject.GetDataPresent(SolutionExplorerClipboardItem.ClipFormatProjectItem))
+            if (null != (dataObject = Clipboard.GetDataObject()) && dataObject.GetDataPresent(SolutionExplorerClipboardItem.ClipFormatProjectItem))
             {
                 IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
                 ISccProjectWalker walker = GetService<ISccProjectWalker>();

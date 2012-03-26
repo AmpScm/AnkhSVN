@@ -12,10 +12,15 @@ using System.Windows.Forms;
 namespace Ankh.Scc
 {
         /// <summary>
-        /// A structure containing the data for each of the drag-dropped Solution Explorer node
+        /// A class containing the data for each of the drag-dropped Solution Explorer node
         /// </summary>
         sealed class SolutionExplorerClipboardItem
         {
+            Guid _projectGuid;
+            string _projectFileName;
+            string _fileName;
+            bool _nodeIsProject;
+
             /// <summary>
             /// IDataObject format string for project items from solution explorer.
             /// </summary>
@@ -28,7 +33,7 @@ namespace Ankh.Scc
             /// <param name="streamKey">The key to get the memory stream  from data</param>
             /// <param name="nodeIsProject">True if the given node is a project node.</param>
             /// <returns>A list of SolutionExplorerNodeData objects.</returns>
-            internal static IList<SolutionExplorerClipboardItem> DecodeProjectItemData(IDataObject data, bool nodeIsProject)
+            public static IList<SolutionExplorerClipboardItem> DecodeProjectItemData(IDataObject data, bool nodeIsProject)
             {
                 /*
                  This function reads the memory stream in the data object and parses the data.
@@ -94,31 +99,31 @@ namespace Ankh.Scc
 
                         foreach (string eachNode in eachNodeStrings)
                         {
-                            string[] splitString = eachNode.Split('|');
-                            //Debug.Assert(splitString.Length == 3);
-                            if (splitString.Length == 3)
+                            string[] items = eachNode.Split('|');
+
+                            if (items.Length != 3)
+                                continue;
+
+                            SolutionExplorerClipboardItem node = new SolutionExplorerClipboardItem();
+                            node.ProjectGuid = new Guid(items[0]);
+                            node.ProjectFileName = items[1];
+
+                            // For PROJECTITEM data structures, the file name portion has been run through ToLower (or equivalent)
+                            // but the IDataObject will also have a "System.String" data type which is still in the correct case
+                            // so we will use the System.String data for PROJECTITEM objects. If there's more than one item in the
+                            // data string then just use the path embedded in the data since the System.String value depends
+                            // on what was selected first in the multiple selection. No, I didn't write this.
+                            if (nodeIsProject || !data.GetDataPresent("System.String") || (1 != eachNodeStrings.Count))
                             {
-                                SolutionExplorerClipboardItem node = new SolutionExplorerClipboardItem();
-                                node.ProjectGuid = new Guid(splitString[0]);
-                                node.ProjectFileName = splitString[1];
-
-                                // For PROJECTITEM data structures, the file name portion has been run through ToLower (or equivalent)
-                                // but the IDataObject will also have a "System.String" data type which is still in the correct case
-                                // so we will use the System.String data for PROJECTITEM objects. If there's more than one item in the
-                                // data string then just use the path embedded in the data since the System.String value depends
-                                // on what was selected first in the multiple selection. No, I didn't write this.
-                                if (nodeIsProject || !data.GetDataPresent("System.String") || (1 != eachNodeStrings.Count))
-                                {
-                                    node.FileName = splitString[2];
-                                }
-                                else
-                                {
-                                    node.FileName = data.GetData("System.String") as String;
-                                }
-
-                                node.IsProjectNode = nodeIsProject;
-                                nodeData.Add(node);
+                                node.FileName = items[2];
                             }
+                            else
+                            {
+                                node.FileName = data.GetData("System.String") as String;
+                            }
+
+                            node.IsProjectNode = nodeIsProject;
+                            nodeData.Add(node);
                         }
                     }
                     finally
@@ -133,43 +138,13 @@ namespace Ankh.Scc
                 return nodeData;
             }
 
-            #region Private Members
-            /// <summary>
-            /// The project GUID
-            /// </summary>
-            private Guid projectGuid;
-
-            /// <summary>
-            /// The project file name.
-            /// </summary>
-            private string projectFileName;
-
-            /// <summary>
-            /// The file name
-            /// </summary>
-            private string fileName;
-
-            /// <summary>
-            /// True if the node being examined is a project node.
-            /// </summary>
-            private bool nodeIsProject;
-
-            #endregion
-
             /// <summary>
             /// The guid of the project 
             /// </summary>
             public Guid ProjectGuid
             {
-                get
-                {
-                    return this.projectGuid;
-                }
-
-                set
-                {
-                    this.projectGuid = value;
-                }
+                get { return _projectGuid; }
+                private set { _projectGuid = value; }
             }
 
             /// <summary>
@@ -178,15 +153,8 @@ namespace Ankh.Scc
             /// <value></value>
             public string ProjectFileName
             {
-                get
-                {
-                    return this.projectFileName;
-                }
-
-                set
-                {
-                    this.projectFileName = value;
-                }
+                get { return _projectFileName; }
+                private set { _projectFileName = value; }
             }
 
             /// <summary>
@@ -195,15 +163,8 @@ namespace Ankh.Scc
             /// <value></value>
             public string FileName
             {
-                get
-                {
-                    return this.fileName;
-                }
-
-                set
-                {
-                    this.fileName = value;
-                }
+                get { return _fileName; }
+                private set { _fileName = value; }
             }
 
             /// <summary>
@@ -211,15 +172,8 @@ namespace Ankh.Scc
             /// </summary>
             public bool IsProjectNode
             {
-                get
-                {
-                    return this.nodeIsProject;
-                }
-
-                set
-                {
-                    this.nodeIsProject = value;
-                }
+                get { return _nodeIsProject; }
+                private set { _nodeIsProject = value; }
             }
 
             #region Equality Methods
@@ -230,12 +184,9 @@ namespace Ankh.Scc
             /// <returns></returns>
             public override bool Equals(object obj)
             {
-                if (obj == null || !(obj is SolutionExplorerClipboardItem))
-                {
-                    return false;
-                }
+                SolutionExplorerClipboardItem other = obj as SolutionExplorerClipboardItem;
 
-                return this == (SolutionExplorerClipboardItem)obj;
+                return (this == other);
             }
 
             /// <summary>
@@ -244,12 +195,7 @@ namespace Ankh.Scc
             /// <returns></returns>
             public override int GetHashCode()
             {
-                int hashCode = 0;
-                hashCode ^= this.ProjectFileName.GetHashCode();
-                hashCode ^= this.FileName.GetHashCode();
-                hashCode ^= this.IsProjectNode.GetHashCode();
-                hashCode ^= this.ProjectGuid.GetHashCode();
-                return hashCode;
+                return StringComparer.Ordinal.GetHashCode(FileName);
             }
 
             /// <summary>
@@ -271,10 +217,16 @@ namespace Ankh.Scc
             /// <returns></returns>
             public static bool operator ==(SolutionExplorerClipboardItem data1, SolutionExplorerClipboardItem data2)
             {
+                bool n1 = ((object)data1 == null);
+                bool n2 = ((object)data2 == null);
+
+                if (n1 || n2)
+                    return (n1 && n2);
+
                 return (data1.IsProjectNode == data2.IsProjectNode &&
                         data1.ProjectGuid == data2.ProjectGuid &&
-                        (data1.FileName == data2.FileName) &&
-                        (data1.ProjectFileName == data2.ProjectFileName));
+                        data1.FileName == data2.FileName &&
+                        data1.ProjectFileName == data2.ProjectFileName);
             }
             #endregion
         }
