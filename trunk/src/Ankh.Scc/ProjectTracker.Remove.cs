@@ -69,7 +69,7 @@ namespace Ankh.Scc
                     SccProvider.OnProjectFileRemoved(sccProject, file, rgFlags[iFile]);
 
                     if (SccProvider.IsActive && track)
-                        SccProvider.SccDelete(file);
+                        SccProvider.AddDelayedDelete(file);
                 }
             }
             return VSConstants.S_OK;
@@ -121,7 +121,7 @@ namespace Ankh.Scc
                     SccProvider.OnProjectDirectoryRemoved(sccProject, dir, rgFlags[iDirectory]);
 
                     if (SccProvider.IsActive && track)
-                        SccProvider.SccDelete(dir);
+                        SccProvider.AddDelayedDelete(dir);
                 }
             }
 
