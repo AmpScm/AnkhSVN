@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Vsix Version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
-  <Identifier Id="AnkhSVN2.AnkhSVN.WpfEditor.589b1d34-e895-4c2c-ac85-b1d781686675">
+  <Identifier Id="AnkhSVN.AnkhSVN.WpfEditor.Package">
     <Name>AnkhSVN</Name>
     <Author>AnkhSVN Core Team</Author>
     <Version>2.3</Version>
@@ -30,7 +30,7 @@
   </Identifier>
   <References />
   <Content>
-    <VsPackage>Ankh.Package.dll</VsPackage>
+    <VsPackage>Ankh.WpfEditor.Package.dll</VsPackage>
   </Content>
 </Vsix>
 
