@@ -183,6 +183,7 @@ namespace Ankh.Scc
                 using (new SharpSvn.Implementation.SvnFsOperationRetryOverride(0))
                 {
                     SvnStatusArgs sa = new SvnStatusArgs();
+                    sa.IgnoreExternals = true;
                     sa.ThrowOnError = false;
                     bool modifications = false;
                     if (Client.Status(newName, sa,

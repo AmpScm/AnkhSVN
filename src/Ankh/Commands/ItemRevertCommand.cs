@@ -153,34 +153,39 @@ namespace Ankh.Commands
                     {
                         SvnStatusArgs sa = new SvnStatusArgs();
                         sa.RetrieveIgnoredEntries = false;
+                        sa.IgnoreExternals = true;
+                        sa.ThrowOnError = false;
                         bool modifications = false;
 
                         using (new SharpSvn.Implementation.SvnFsOperationRetryOverride(0))
                         {
-                            a.Client.Status(item.FullPath, sa,
-                                delegate(object ss, SvnStatusEventArgs ee)
-                                {
-                                    if (ee.FullPath == item.FullPath)
-                                        return;
-
-                                    if (ee.Conflicted ||
-                                        (ee.LocalPropertyStatus != SvnStatus.Normal && ee.LocalPropertyStatus != SvnStatus.None))
+                            if (!a.Client.Status(item.FullPath, sa,
+                                    delegate(object ss, SvnStatusEventArgs ee)
                                     {
-                                        ee.Cancel = modifications = true;
-                                    }
-                                    else switch (ee.LocalNodeStatus)
+                                        if (ee.FullPath == item.FullPath)
+                                            return;
+
+                                        if (ee.Conflicted ||
+                                            (ee.LocalPropertyStatus != SvnStatus.Normal && ee.LocalPropertyStatus != SvnStatus.None))
                                         {
-                                            case SvnStatus.None:
-                                            case SvnStatus.Normal:
-                                            case SvnStatus.Ignored:
-                                            case SvnStatus.External:
-                                            case SvnStatus.NotVersioned:
-                                                break;
-                                            default:
-                                                ee.Cancel = modifications = true;
-                                                break;
+                                            ee.Cancel = modifications = true;
                                         }
-                                });
+                                        else switch (ee.LocalNodeStatus)
+                                            {
+                                                case SvnStatus.None:
+                                                case SvnStatus.Normal:
+                                                case SvnStatus.Ignored:
+                                                case SvnStatus.External:
+                                                case SvnStatus.NotVersioned:
+                                                    break;
+                                                default:
+                                                    ee.Cancel = modifications = true;
+                                                    break;
+                                            }
+                                    }))
+                            {
+                                modifications = true;
+                            }
                         }
 
                         if (!modifications)
