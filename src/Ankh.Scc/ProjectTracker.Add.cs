@@ -16,13 +16,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
+using System.IO;
+
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-using Ankh.Selection;
-using System.IO;
+
 using SharpSvn;
-using System.Diagnostics;
+using Ankh.Selection;
+using Clipboard = System.Windows.Forms.Clipboard;
+using IDataObject = System.Windows.Forms.IDataObject;
 
 namespace Ankh.Scc
 {
@@ -104,7 +107,10 @@ namespace Ankh.Scc
                 origDoc = SvnTools.GetNormalizedFullPath(origDoc);
 
                 // Some additions (e.g. drag&drop in C# project report the same locations. We use the hints later, but collect the targets anyway
-                _fileOrigins[newDoc] = (newDoc != origDoc) ? origDoc : null;
+                if (newDoc != origDoc)
+                    _fileOrigins[newDoc] = origDoc;
+                else if (!_fileOrigins.ContainsKey(newDoc))
+                    _fileOrigins[newDoc] = null;
             }
 
             if (pSummaryResult != null)
@@ -226,23 +232,7 @@ namespace Ankh.Scc
             foreach (string file in SelectionContext.GetSelectedFiles(true))
             {
                 if (_fileOrigins.ContainsKey(file))
-                    return;
-
-                string name = Path.GetFileName(file);
-                if (nameToItem.ContainsKey(name))
-                {
-                    string item = nameToItem[name];
-
-                    CheckForMatch(item, file);
-                }
-            }
-
-            // **************** Check external hints ********************
-            // Checks for HandsOff events send by the project system
-            foreach (string file in _fileHints)
-            {
-                if (_fileOrigins.ContainsKey(file))
-                    return;
+                    continue;
 
                 string name = Path.GetFileName(file);
                 if (nameToItem.ContainsKey(name))
@@ -255,39 +245,64 @@ namespace Ankh.Scc
 
             // **************** Check the clipboard *********************
             // 3 - Copy & Paste in the solution explorer:
-            //     The original paths are still on the clipboard
-            if (System.Windows.Forms.Clipboard.ContainsText())
+            //     The original hierarchy information is still on the clipboard
+            IDataObject dataObject;
+            if (Clipboard.ContainsText() && null != (dataObject = Clipboard.GetDataObject()) && dataObject.GetDataPresent(SolutionExplorerClipboardItem.ClipFormatProjectItem))
             {
-                // TODO: BH: Look into using IVsUIHierWinClipboardHelper to parse the clipboard data!
+                IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
+                ISccProjectWalker walker = GetService<ISccProjectWalker>();
 
-                // In some cases (Websites) the solution explorer just dumps a bunch of file:// Url's on the clipboard
-
-                string text = System.Windows.Forms.Clipboard.GetText();
-
-                if (!string.IsNullOrEmpty(text))
+                foreach (SolutionExplorerClipboardItem ci in SolutionExplorerClipboardItem.DecodeProjectItemData(dataObject, true))
                 {
-                    foreach (string part in text.Split('\n'))
+                    if (!SvnItem.IsValidPath(ci.FileName))
+                        continue;
+
+                    Guid projectGuid = ci.ProjectGuid;
+                    IVsHierarchy project;
+
+                    if (!ErrorHandler.Succeeded(solution.GetProjectOfGuid(ref projectGuid, out project)) || project == null)
+                        continue;
+
+                    uint itemid;
+                    if (!ErrorHandler.Succeeded(project.ParseCanonicalName(ci.FileName, out itemid)))
+                        continue;
+
+                    foreach(string rawFile in walker.GetSccFiles(project, itemid, ProjectWalkDepth.AllDescendantsInHierarchy, null))
                     {
-                        string s = part.Trim();
-                        Uri uri;
+                        if (!SvnItem.IsValidPath(rawFile))
+                            continue;
 
-                        if (!Uri.TryCreate(s, UriKind.Absolute, out uri))
-                            break;
+                        // The clipboard somehow only has lowercase filenames. Obtain the full path
+                        string file = SvnTools.GetNormalizedFullPath(rawFile);
 
-                        if (uri.IsFile)
+                        if (_fileOrigins.ContainsKey(file))
+                            continue;
+
+                        string name = Path.GetFileName(file);
+                        if (nameToItem.ContainsKey(name))
                         {
-                            string file = SvnTools.GetNormalizedFullPath(uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped));
+                            string item = nameToItem[name];
 
-                            string name = Path.GetFileName(file);
-                            if (nameToItem.ContainsKey(name))
-                            {
-                                string item = nameToItem[name];
-
-                                CheckForMatch(item, file);
-                            }
+                            CheckForMatch(item, file);
                         }
                     }
+                }
+            }
 
+
+            // **************** Check external hints ********************
+            // Checks for HandsOff events send by the project system
+            foreach (string file in _fileHints)
+            {
+                if (_fileOrigins.ContainsKey(file))
+                    continue;
+
+                string name = Path.GetFileName(file);
+                if (nameToItem.ContainsKey(name))
+                {
+                    string item = nameToItem[name];
+
+                    CheckForMatch(item, file);
                 }
             }
 
