@@ -108,7 +108,17 @@ namespace Ankh.Commands
             // Revert items backwards to make sure we revert children before their ancestors
             toRevert.Sort(delegate(SvnItem i1, SvnItem i2)
                           {
-                              return -StringComparer.OrdinalIgnoreCase.Compare(i1.FullPath, i2.FullPath);
+                              bool add1 = i1.IsAdded || i1.IsReplaced;
+                              bool add2 = i2.IsAdded || i2.IsReplaced;
+
+                              if (add1 && !add2)
+                                  return -1;
+                              else if (add2 && !add1)
+                                  return 1;
+                              else if (add1 && add2)
+                                  return -StringComparer.OrdinalIgnoreCase.Compare(i1.FullPath, i2.FullPath);
+                              
+                              return StringComparer.OrdinalIgnoreCase.Compare(i1.FullPath, i2.FullPath);
                           });
 
             // perform the actual revert 
@@ -119,12 +129,62 @@ namespace Ankh.Commands
                 delegate(object sender, ProgressWorkerArgs a)
                 {
                     SvnRevertArgs ra = new SvnRevertArgs();
+                    ra.AddExpectedError(SvnErrorCode.SVN_ERR_WC_NOT_DIRECTORY, SvnErrorCode.SVN_ERR_WC_INVALID_OPERATION_DEPTH); // Parent revert invalidated this change
                     ra.Depth = SvnDepth.Empty;
-                    ra.AddExpectedError(SvnErrorCode.SVN_ERR_WC_NOT_DIRECTORY); // Parent revert invalidated this change
+                    List<SvnItem> toRevertWithInfinity = new List<SvnItem>();
 
                     foreach (SvnItem item in toRevert)
                     {
-                        a.Client.Revert(item.FullPath, ra);
+                        if (!a.Client.Revert(item.FullPath, ra))
+                        {
+                            switch (ra.LastException.SvnErrorCode)
+                            {
+                                case SvnErrorCode.SVN_ERR_WC_INVALID_OPERATION_DEPTH:
+                                    toRevertWithInfinity.Add(item);
+                                    break;
+                            }
+                        }
+                    }
+
+                    SvnRevertArgs ra = new SvnRevertArgs();
+                    ra.AddExpectedError(SvnErrorCode.SVN_ERR_WC_NOT_DIRECTORY);
+                    ra.Depth = SvnDepth.Infinity;
+                    foreach (SvnItem item in toRevertWithInfinity)
+                    {
+                        SvnStatusArgs sa = new SvnStatusArgs();
+                        sa.RetrieveIgnoredEntries = false;
+                        bool modifications = false;
+
+                        using (new SharpSvn.Implementation.SvnFsOperationRetryOverride(0))
+                        {
+                            a.Client.Status(item.FullPath, sa,
+                                delegate(object ss, SvnStatusEventArgs ee)
+                                {
+                                    if (ee.FullPath == item.FullPath)
+                                        return;
+
+                                    if (ee.Conflicted ||
+                                        (ee.LocalPropertyStatus != SvnStatus.Normal && ee.LocalPropertyStatus != SvnStatus.None))
+                                    {
+                                        ee.Cancel = modifications = true;
+                                    }
+                                    else switch (ee.LocalNodeStatus)
+                                        {
+                                            case SvnStatus.None:
+                                            case SvnStatus.Normal:
+                                            case SvnStatus.Ignored:
+                                            case SvnStatus.External:
+                                            case SvnStatus.NotVersioned:
+                                                break;
+                                            default:
+                                                ee.Cancel = modifications = true;
+                                                break;
+                                        }
+                                });
+                        }
+
+                        if (!modifications)
+                            a.Client.Revert(item.FullPath, ra);
                     }
                 });
             }

@@ -188,23 +188,28 @@ namespace Ankh.Scc
                     if (Client.Status(newName, sa,
                                   delegate(object sender, SvnStatusEventArgs e)
                                   {
-                                      if (e.LocalPropertyStatus != SvnStatus.Normal
-                                          && e.LocalPropertyStatus != SvnStatus.None)
+                                      if (e.Conflicted ||
+                                          (e.LocalPropertyStatus != SvnStatus.Normal
+                                          && e.LocalPropertyStatus != SvnStatus.None))
                                       {
                                           e.Cancel = modifications = true;
                                       }
-                                      else if (e.FullPath != newName)
-                                          switch (e.LocalNodeStatus)
-                                          {
-                                              case SvnStatus.None:
-                                              case SvnStatus.Modified: // Text only change is ok
-                                              case SvnStatus.Ignored:
-                                              case SvnStatus.External:
-                                                  break;
-                                              default:
-                                                  e.Cancel = modifications = true;
-                                                  break;
-                                          }
+                                      else if (e.FullPath == newName)
+                                          return;
+
+                                      switch (e.LocalNodeStatus)
+                                      {
+                                          case SvnStatus.None:
+                                          case SvnStatus.Normal:
+                                          case SvnStatus.Modified: // Text only change is ok
+                                          case SvnStatus.Ignored:
+                                          case SvnStatus.External:
+                                          case SvnStatus.NotVersioned:
+                                              break;
+                                          default:
+                                              e.Cancel = modifications = true;
+                                              break;
+                                      }
                                   })
                         && !modifications)
                     {
