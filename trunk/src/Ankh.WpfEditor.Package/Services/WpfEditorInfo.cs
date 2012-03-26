@@ -23,23 +23,19 @@ namespace Ankh.WpfPackage.Services
         sealed class TheWpfEditorInfo : WpfEditorInfo
         {
             readonly IAnkhServiceProvider _context;
-            readonly IComponentModel _componentModel;
             readonly IVsEditorAdaptersFactoryService _adapterFactory;
             readonly IVsTextView _textView;
 
-            public TheWpfEditorInfo(IAnkhServiceProvider context, IComponentModel componentModel, IVsEditorAdaptersFactoryService adapterFactory, IVsTextView textView)
+            public TheWpfEditorInfo(IAnkhServiceProvider context, IVsEditorAdaptersFactoryService adapterFactory, IVsTextView textView)
             {
                 if (context == null)
                     throw new ArgumentNullException("context");
-                else if (componentModel == null)
-                    throw new ArgumentNullException("componentModel");
                 else if (adapterFactory == null)
                     throw new ArgumentNullException("adapterFactory");
                 else if (textView == null)
                     throw new ArgumentNullException("textView");
 
                 _context = context;
-                _componentModel = componentModel;
                 _textView = textView;
                 _adapterFactory = adapterFactory;
             }
@@ -122,7 +118,7 @@ namespace Ankh.WpfPackage.Services
             if (factory != null)
             {
                 if (factory.GetWpfTextView(textView) != null)
-                    return new TheWpfEditorInfo(this, componentModel, factory, textView);
+                    return new TheWpfEditorInfo(this, factory, textView);
             }
 
             return null;
