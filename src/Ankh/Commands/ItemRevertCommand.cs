@@ -146,7 +146,7 @@ namespace Ankh.Commands
                         }
                     }
 
-                    SvnRevertArgs ra = new SvnRevertArgs();
+                    ra = new SvnRevertArgs();
                     ra.AddExpectedError(SvnErrorCode.SVN_ERR_WC_NOT_DIRECTORY);
                     ra.Depth = SvnDepth.Infinity;
                     foreach (SvnItem item in toRevertWithInfinity)
