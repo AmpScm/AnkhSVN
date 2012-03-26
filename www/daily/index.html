@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11017</title>
+          AnkhSVN-Daily Update - 2.3.11022</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,20 +16,32 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5919/AnkhSvn-Daily-2.3.11017.1251.msi">AnkhSVN 2.3.11017</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5921/AnkhSvn-Daily-2.3.11022.1252.msi">AnkhSVN 2.3.11022</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11017">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11022">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2012-03-26</td></tr>
+<tr><td> </td><td class="r"><a id="11020" href="http://ankhsvn.net/rev/11020">
+            [r11020]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> Native/SolutionExplorerDataItem.cs, Ankh.Scc.csproj, ProjectTracker.Rename.cs, ProjectTracker.Add.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Replace the original 'mostly working' code to detect solution explorer copy&amp;paste
+with code that really reads the proper information from the clipboard.<br>
+The code used is from the
+"Visual Studio UML Link elements to slides, Word, files, diagrams" sample of the
+Visual Studio 2010 SDK sample library.</td></tr>
+<tr><td> </td><td class="r"><a id="11019" href="http://ankhsvn.net/rev/11019">
+            [r11019]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.Projects.cs, ProjectTracker.Remove.cs, AnkhSccProvider.FileMap.cs, ProjectTracker.Rename.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix the ugly handling of C# project renames: These renames are broadcasted as a
+delete, followed by a rename.</td></tr>
 <tr class="d"><td colspan="4">2012-03-25</td></tr>
 <tr><td> </td><td class="r"><a id="11014" href="http://ankhsvn.net/rev/11014">
             [r11014]
