@@ -394,9 +394,6 @@ namespace Ankh.Scc
                         return; // No need to do anything for this case (e.g. solution folders)
 
                     SccStore.OnProjectRenamed(oldLocation, newLocation);
-
-                    if (string.Equals(newData.ProjectFile, data.ProjectFile, StringComparison.OrdinalIgnoreCase))
-                        return; // Project rename, without renaming the project file (C++ project for instance)
                 }
             }
             finally
@@ -578,6 +575,13 @@ namespace Ankh.Scc
             }
         }
 
+        /// <summary>
+        /// The node may be just removed from the project. Check later.
+        /// Some projects delete the file before (C#) and some after (C++) calling OnProjectFileRemoved
+        ///
+        /// And when renaming a C# project (VS11 Beta) we sometimes even get a delete before a rename.
+        /// </summary>
+        /// <param name="path"></param>
         internal void AddDelayedDelete(string path)
         {
             if (string.IsNullOrEmpty(path))

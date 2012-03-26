@@ -165,6 +165,11 @@ namespace Ankh.Scc
 
         private bool MaybeProcessAncestorRename(string oldName, string newName)
         {
+            // If the name of the node itself doesn't change in a rename, it's most likely
+            // a parent rename.
+            if (!string.Equals(Path.GetFileName(oldName), Path.GetFileName(newName)))
+                return false;
+
             string oldNode = SvnTools.GetNormalizedDirectoryName(oldName);
             string newNode = SvnTools.GetNormalizedDirectoryName(newName);
 

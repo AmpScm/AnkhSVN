@@ -87,22 +87,6 @@ namespace Ankh.Scc
             data.RemovePath(filename);
         }
 
-        internal void SccDelete(string path)
-        {
-            if (SvnItem.PathExists(path))
-            {
-                // The node may be just removed from the project. Check later
-                // Some projects delete the file before (C#) and some after (C++) calling OnProjectFileRemoved
-
-                AddDelayedDelete(path);
-            }
-            else if (StatusCache[path].IsVersioned)
-                using (SvnSccContext svn = new SvnSccContext(Context))
-                {
-                    svn.MetaDelete(path);
-                }
-        }
-
         /// <summary>
         /// Called when a directory is added to a project
         /// </summary>
