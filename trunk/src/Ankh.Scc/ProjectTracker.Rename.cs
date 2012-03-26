@@ -243,7 +243,10 @@ namespace Ankh.Scc
                 newDoc = SvnTools.GetNormalizedFullPath(newDoc);
                 origDoc = SvnTools.GetNormalizedFullPath(origDoc);
 
-                _fileOrigins[newDoc] = (newDoc != origDoc) ? origDoc : null;
+                if (newDoc != origDoc)
+                    _fileOrigins[newDoc] = origDoc;
+                else if (!_fileOrigins.ContainsKey(newDoc))
+                    _fileOrigins[newDoc] = null;
             }
 
             if (pSummaryResult != null)
