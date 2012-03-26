@@ -757,47 +757,26 @@ namespace Ankh.Settings
         /// <value>The solution filter.</value>
         public string SolutionFilter
         {
-            // TODO: Find a way to fetch the real list
             get
             {
                 if (_solutionFilter != null)
                     return _solutionFilter;
 
                 _solutionFilter = "*.sln;*.dsw"; // Hardcoded default :(
-                ILocalRegistry3 lr = GetService<ILocalRegistry3>(typeof(SLocalRegistry));
 
-                if (lr == null)
-                    return _solutionFilter;
+                IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
 
-                string root;
-                if (!ErrorHandler.Succeeded(lr.GetLocalRegistryRoot(out root)))
-                    return _solutionFilter;
-
-                RegistryKey baseKey = Registry.LocalMachine;
-
-                // Simple hack via 2005 api to support 2008+ RANU cases.
-                if (root.EndsWith("\\UserSettings"))
+                if (solution != null)
                 {
-                    root = root.Substring(0, root.Length - 13) + "\\Configuration";
-                    baseKey = Registry.CurrentUser;
-                }
+                    object filter;
 
-                using (RegistryKey rk = baseKey.OpenSubKey(root))
-                {
-                    if (rk != null)
+                    // The VS11+ official route
+                    if (ErrorHandler.Succeeded(solution.GetProperty(-8037 /* VSPROPID_SolutionFileExt */, out filter)))
                     {
-                        string ext = rk.GetValue("SolutionFileExt") as string;
-
-                        if (!string.IsNullOrEmpty(ext))
-                        {
-                            if (!ext.StartsWith("."))
-                                return _solutionFilter = "*." + ext; // Normal case for standalone shell
-                            else
-                                return _solutionFilter = "*" + ext;
-                        }
+                        _solutionFilter = "*" + (string)filter;
                     }
                 }
-
+               
                 return _solutionFilter;
             }
         }
