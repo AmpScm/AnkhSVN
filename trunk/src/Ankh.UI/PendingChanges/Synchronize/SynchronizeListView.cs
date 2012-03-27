@@ -67,19 +67,19 @@ namespace Ankh.UI.PendingChanges.Synchronize
 
         void Initialize()
         {
-            SmartColumn path = new SmartColumn(this, PCStrings.PathColumn, 288, "Path");
-            SmartColumn project = new SmartColumn(this, PCStrings.ProjectColumn, 76, "Project");
-            SmartColumn localChange = new SmartColumn(this, PCStrings.LocalChangeColumn, 102, "LocalChange");
-            SmartColumn remoteChange = new SmartColumn(this, PCStrings.RemoteChangeColumn, 102, "RemoteChange");
-            SmartColumn fullPath = new SmartColumn(this, PCStrings.FullPathColumn, 327, "FullPath");
+            SmartColumn path = new SmartColumn(this, PCResources.PathColumn, 288, "Path");
+            SmartColumn project = new SmartColumn(this, PCResources.ProjectColumn, 76, "Project");
+            SmartColumn localChange = new SmartColumn(this, PCResources.LocalChangeColumn, 102, "LocalChange");
+            SmartColumn remoteChange = new SmartColumn(this, PCResources.RemoteChangeColumn, 102, "RemoteChange");
+            SmartColumn fullPath = new SmartColumn(this, PCResources.FullPathColumn, 327, "FullPath");
 
-            SmartColumn changeList = new SmartColumn(this, PCStrings.ChangeListColumn, 76, "ChangeList");
-            SmartColumn folder = new SmartColumn(this, PCStrings.FolderColumn, 196, "Folder");
-            SmartColumn locked = new SmartColumn(this, PCStrings.LockedColumn, 38, "Locked");
-            SmartColumn modified = new SmartColumn(this, PCStrings.ModifiedColumn, 76, "Modified");
-            SmartColumn name = new SmartColumn(this, PCStrings.NameColumn, 76, "Name");
-            SmartColumn type = new SmartColumn(this, PCStrings.TypeColumn, 76, "Type");
-            SmartColumn workingCopy = new SmartColumn(this, PCStrings.WorkingCopyColumn, 76, "WorkingCopy");
+            SmartColumn changeList = new SmartColumn(this, PCResources.ChangeListColumn, 76, "ChangeList");
+            SmartColumn folder = new SmartColumn(this, PCResources.FolderColumn, 196, "Folder");
+            SmartColumn locked = new SmartColumn(this, PCResources.LockedColumn, 38, "Locked");
+            SmartColumn modified = new SmartColumn(this, PCResources.ModifiedColumn, 76, "Modified");
+            SmartColumn name = new SmartColumn(this, PCResources.NameColumn, 76, "Name");
+            SmartColumn type = new SmartColumn(this, PCResources.TypeColumn, 76, "Type");
+            SmartColumn workingCopy = new SmartColumn(this, PCResources.WorkingCopyColumn, 76, "WorkingCopy");
 
             Columns.AddRange(new ColumnHeader[]
             {

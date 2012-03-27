@@ -178,7 +178,7 @@ namespace Ankh.UI.PendingChanges
 
                     if (showIssueBox)
                     {
-                        issueLabel.Text = pcs.IssueLabel ?? PCStrings.IssueLabelText;
+                        issueLabel.Text = pcs.IssueLabel ?? PCResources.IssueLabelText;
                     }
 
                     _issueNummeric = pcs.NummericIssueIds;

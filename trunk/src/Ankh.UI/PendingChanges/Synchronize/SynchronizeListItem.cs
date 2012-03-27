@@ -75,7 +75,7 @@ namespace Ankh.UI.PendingChanges.Synchronize
                 _item.Directory,
                 _item.FullPath,
                 _localStatus.PendingCommitText,
-                (_status.RemoteLock != null) ? PCStrings.LockedValue : "", // Locked
+                (_status.RemoteLock != null) ? PCResources.LockedValue : "", // Locked
                 SafeDate(_item.Modified),
                 _item.Name,
                 GetRelativePath(_item),

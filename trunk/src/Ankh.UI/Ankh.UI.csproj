@@ -263,10 +263,10 @@
     <Compile Include="PendingChanges\LogMessageEditor.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PendingChanges\PCStrings.Designer.cs">
+    <Compile Include="PendingChanges\PCResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>PCStrings.resx</DependentUpon>
+      <DependentUpon>PCResources.resx</DependentUpon>
     </Compile>
     <Compile Include="PendingChanges\PendingActivationPage.cs">
       <SubType>UserControl</SubType>
@@ -958,9 +958,9 @@
       <LastGenOutput>VersionStrings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PendingChanges\PCStrings.resx">
+    <EmbeddedResource Include="PendingChanges\PCResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>PCStrings.Designer.cs</LastGenOutput>
+      <LastGenOutput>PCResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PropertyEditors\NeedsLockPropertyEditor.resx">
@@ -1215,6 +1215,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="PendingChanges\Resources\SourceFiles.pdn" />
     <None Include="Resources\TabSourceFiles.png" />
   </ItemGroup>
   <ItemGroup>
@@ -1293,6 +1294,14 @@
     <Content Include="MergeWizard\WizardFramework\images\message_info.gif" />
     <Content Include="MergeWizard\WizardFramework\images\message_warning.gif" />
     <Content Include="MergeWizard\WizardFramework\README.txt" />
+    <None Include="PendingChanges\Resources\SourceFiles.png" />
+    <None Include="PendingChanges\Resources\ConflictsOld.png" />
+    <None Include="PendingChanges\Resources\IssuesOld.png" />
+    <None Include="PendingChanges\Resources\RecentChangesOld.png" />
+    <None Include="PendingChanges\Resources\SourceFilesOld.png" />
+    <None Include="PendingChanges\Resources\Conflicts.png" />
+    <None Include="PendingChanges\Resources\Issues.png" />
+    <None Include="PendingChanges\Resources\RecentChanges.png" />
     <Content Include="PropertyEditors\Images\Properties.ico" />
     <Content Include="Resources\TabConflicts.png" />
     <None Include="SvnLog\Plus.png" />
