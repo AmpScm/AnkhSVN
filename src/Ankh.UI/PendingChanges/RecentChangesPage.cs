@@ -297,7 +297,7 @@ namespace Ankh.UI.PendingChanges
 
                 syncView.Items.AddRange(items.ToArray());
             }
-            updateTime.Text = string.Format(PCStrings.RefreshTimeX, DateTime.Now.ToShortTimeString());
+            updateTime.Text = string.Format(PCResources.RefreshTimeX, DateTime.Now.ToShortTimeString());
         }
 
         /// <summary>

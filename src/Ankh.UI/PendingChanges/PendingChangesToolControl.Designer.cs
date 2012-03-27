@@ -44,75 +44,75 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         private void InitializeComponent()
         {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PendingChangesToolControl));
-			this.pendingChangesTabs = new System.Windows.Forms.ToolStrip();
-			this.fileChangesButton = new System.Windows.Forms.ToolStripButton();
-			this.issuesButton = new System.Windows.Forms.ToolStripButton();
-			this.recentChangesButton = new System.Windows.Forms.ToolStripButton();
-			this.conflictsButton = new System.Windows.Forms.ToolStripButton();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.pendingChangesTabs.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// pendingChangesTabs
-			// 
-			resources.ApplyResources(this.pendingChangesTabs, "pendingChangesTabs");
-			this.pendingChangesTabs.GripMargin = new System.Windows.Forms.Padding(0, 2, 0, 2);
-			this.pendingChangesTabs.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-			this.pendingChangesTabs.ImageScalingSize = new System.Drawing.Size(32, 32);
-			this.pendingChangesTabs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PendingChangesToolControl));
+            this.pendingChangesTabs = new System.Windows.Forms.ToolStrip();
+            this.fileChangesButton = new System.Windows.Forms.ToolStripButton();
+            this.issuesButton = new System.Windows.Forms.ToolStripButton();
+            this.recentChangesButton = new System.Windows.Forms.ToolStripButton();
+            this.conflictsButton = new System.Windows.Forms.ToolStripButton();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.pendingChangesTabs.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // pendingChangesTabs
+            // 
+            resources.ApplyResources(this.pendingChangesTabs, "pendingChangesTabs");
+            this.pendingChangesTabs.GripMargin = new System.Windows.Forms.Padding(0, 2, 0, 2);
+            this.pendingChangesTabs.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.pendingChangesTabs.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.pendingChangesTabs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileChangesButton,
             this.issuesButton,
             this.recentChangesButton,
             this.conflictsButton});
-			this.pendingChangesTabs.Name = "pendingChangesTabs";
-			this.pendingChangesTabs.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-			this.pendingChangesTabs.TabStop = true;
-			// 
-			// fileChangesButton
-			// 
-			this.fileChangesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			resources.ApplyResources(this.fileChangesButton, "fileChangesButton");
-			this.fileChangesButton.Name = "fileChangesButton";
-			this.fileChangesButton.Click += new System.EventHandler(this.fileChangesButton_Click);
-			// 
-			// issuesButton
-			// 
-			this.issuesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			resources.ApplyResources(this.issuesButton, "issuesButton");
-			this.issuesButton.Name = "issuesButton";
-			this.issuesButton.Click += new System.EventHandler(this.issuesButton_Click);
-			// 
-			// recentChangesButton
-			// 
-			this.recentChangesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			resources.ApplyResources(this.recentChangesButton, "recentChangesButton");
-			this.recentChangesButton.Name = "recentChangesButton";
-			this.recentChangesButton.Click += new System.EventHandler(this.recentChangesButton_Click);
-			// 
-			// conflictsButton
-			// 
-			this.conflictsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			resources.ApplyResources(this.conflictsButton, "conflictsButton");
-			this.conflictsButton.Name = "conflictsButton";
-			this.conflictsButton.Click += new System.EventHandler(this.conflictsButton_Click);
-			// 
-			// panel1
-			// 
-			resources.ApplyResources(this.panel1, "panel1");
-			this.panel1.Name = "panel1";
-			// 
-			// PendingChangesToolControl
-			// 
-			resources.ApplyResources(this, "$this");
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.panel1);
-			this.Controls.Add(this.pendingChangesTabs);
-			this.Name = "PendingChangesToolControl";
-			this.pendingChangesTabs.ResumeLayout(false);
-			this.pendingChangesTabs.PerformLayout();
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.pendingChangesTabs.Name = "pendingChangesTabs";
+            this.pendingChangesTabs.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.pendingChangesTabs.TabStop = true;
+            // 
+            // fileChangesButton
+            // 
+            this.fileChangesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.fileChangesButton, "fileChangesButton");
+            this.fileChangesButton.Name = "fileChangesButton";
+            this.fileChangesButton.Click += new System.EventHandler(this.fileChangesButton_Click);
+            // 
+            // issuesButton
+            // 
+            this.issuesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.issuesButton, "issuesButton");
+            this.issuesButton.Name = "issuesButton";
+            this.issuesButton.Click += new System.EventHandler(this.issuesButton_Click);
+            // 
+            // recentChangesButton
+            // 
+            this.recentChangesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.recentChangesButton, "recentChangesButton");
+            this.recentChangesButton.Name = "recentChangesButton";
+            this.recentChangesButton.Click += new System.EventHandler(this.recentChangesButton_Click);
+            // 
+            // conflictsButton
+            // 
+            this.conflictsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.conflictsButton, "conflictsButton");
+            this.conflictsButton.Name = "conflictsButton";
+            this.conflictsButton.Click += new System.EventHandler(this.conflictsButton_Click);
+            // 
+            // panel1
+            // 
+            resources.ApplyResources(this.panel1, "panel1");
+            this.panel1.Name = "panel1";
+            // 
+            // PendingChangesToolControl
+            // 
+            resources.ApplyResources(this, "$this");
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.pendingChangesTabs);
+            this.Name = "PendingChangesToolControl";
+            this.pendingChangesTabs.ResumeLayout(false);
+            this.pendingChangesTabs.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

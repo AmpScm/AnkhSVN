@@ -58,6 +58,11 @@ namespace Ankh.UI.PendingChanges
             _pages.Add(_issuesPage);
             _pages.Add(_changesPage);
             _pages.Add(_conflictsPage);
+
+            fileChangesButton.Image = VSVersion.VS11OrLater ? PCResources.SourceFiles : PCResources.SourceFilesOld;
+            issuesButton.Image = VSVersion.VS11OrLater ? PCResources.Issues : PCResources.IssuesOld;
+            recentChangesButton.Image = VSVersion.VS11OrLater ? PCResources.RecentChanges : PCResources.RecentChangesOld;
+            conflictsButton.Image = VSVersion.VS11OrLater ? PCResources.Conflicts : PCResources.ConflictsOld;
         }
 
         protected override void OnLoad(EventArgs e)

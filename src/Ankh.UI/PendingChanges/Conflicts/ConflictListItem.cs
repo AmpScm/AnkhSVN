@@ -60,7 +60,7 @@ namespace Ankh.UI.PendingChanges.Conflicts
                 PendingChange.ChangeList,
                 GetDirectory(item),
                 PendingChange.FullPath,
-                item.IsLocked ? PCStrings.LockedValue : "", // Locked
+                item.IsLocked ? PCResources.LockedValue : "", // Locked
                 SafeDate(item.Modified), // Modified
                 PendingChange.Name,
                 PendingChange.RelativePath,

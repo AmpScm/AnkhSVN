@@ -72,7 +72,7 @@ namespace Ankh.UI.WorkingCopyExplorer
                 Modified.ToString("g"),
                 View.Context.GetService<IFileIconMapper>().GetFileType(SvnItem),
                 _chg.ExplorerText,
-                SvnItem.Status.IsLockedLocal ? Ankh.UI.PendingChanges.PCStrings.LockedValue : "",
+                SvnItem.Status.IsLockedLocal ? Ankh.UI.PendingChanges.PCResources.LockedValue : "",
                 SvnItem.Status.Revision.ToString(),
                 SvnItem.Status.LastChangeTime.ToLocalTime().ToString(),
                 SvnItem.Status.LastChangeRevision.ToString(),
