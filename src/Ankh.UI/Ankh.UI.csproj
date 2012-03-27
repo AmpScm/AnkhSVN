@@ -1215,6 +1215,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="PendingChanges\Resources\RecentChanges.pdn" />
     <None Include="PendingChanges\Resources\SourceFiles.pdn" />
     <None Include="Resources\TabSourceFiles.png" />
   </ItemGroup>
