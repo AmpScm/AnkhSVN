@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Scc
 {
@@ -63,6 +64,17 @@ namespace Ankh.Scc
     public sealed class BatchStartedEventArgs : EventArgs, IDisposable
     {
         Stack<AnkhAction> _closers = new Stack<AnkhAction>();
+        IAnkhServiceProvider _ctx;
+        IVsThreadedWaitDialog _dlg;
+        int _ctr;
+        bool _initDone;
+
+        public BatchStartedEventArgs(IAnkhServiceProvider context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            _ctx = context;
+        }
 
         public event AnkhAction Disposers
         {
@@ -77,23 +89,47 @@ namespace Ankh.Scc
             }
         }
 
-        public void Dispose()
+        public void Tick()
         {
-            if (_closers.Count == 0)
+            if ((_ctr++ & 63) != 63)
                 return;
 
-            try
+            if (!_initDone)
             {
-                _closers.Pop()();
+                _initDone = true;
+                IVsThreadedWaitDialog dlg = _ctx.GetService<IVsThreadedWaitDialog>(typeof(SVsThreadedWaitDialog));
+
+                if (dlg != null && (dlg.StartWaitDialog(PendingChangeText.WaitCaption, PendingChangeText.WaitMessage, "...", 0, null, null) >= 0))
+                    _dlg = dlg;
             }
-            finally
+            else if ((_ctr & 511) == 511 && _dlg != null)
             {
-                if (_closers.Count > 0)
-                    Dispose();
+                int bCancel;
+                _dlg.GiveTimeSlice(null, null, 0, out bCancel);
             }
         }
-    }
 
+
+        public void Dispose()
+        {
+            while (_closers.Count > 0)
+            {
+                AnkhAction action = _closers.Pop();
+                try
+                {
+                    action();
+                }
+                catch { }
+            }
+
+            if (_dlg != null)
+            {
+                int bCanceled = 0;
+                _dlg.EndWaitDialog(ref bCanceled);
+            }
+        }
+
+    }
     /// <summary>
     /// 
     /// </summary>

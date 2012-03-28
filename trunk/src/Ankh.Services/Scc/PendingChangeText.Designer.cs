@@ -203,5 +203,23 @@ namespace Ankh.Scc {
                 return ResourceManager.GetString("StateWrongCasing", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating Pending Changes.
+        /// </summary>
+        internal static string WaitCaption {
+            get {
+                return ResourceManager.GetString("WaitCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking Subversion status of your Working Copy..
+        /// </summary>
+        internal static string WaitMessage {
+            get {
+                return ResourceManager.GetString("WaitMessage", resourceCulture);
+            }
+        }
     }
 }

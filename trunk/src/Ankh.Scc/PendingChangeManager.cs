@@ -97,7 +97,7 @@ namespace Ankh.Scc
         internal void OnTickRefresh()
         {
             List<string> toRefresh;
-            bool fullRefresh = true;
+            bool fullRefresh;
             lock (_toRefresh)
             {
                 _refreshScheduled = false;
@@ -123,17 +123,19 @@ namespace Ankh.Scc
                 InnerRefresh();
             else
             {
-                using (SmartRefresh(toRefresh.Count))
+                using (BatchStartedEventArgs br = SmartRefresh(toRefresh.Count))
                 {
                     foreach (string path in toRefresh)
                     {
+                        if (br != null)
+                            br.Tick();
                         ItemRefresh(path);
                     }
                 }
             }
         }
 
-        private IDisposable SmartRefresh(int itemsToRefresh)
+        private BatchStartedEventArgs SmartRefresh(int itemsToRefresh)
         {
             if (itemsToRefresh < 32)
                 return null;
@@ -141,9 +143,9 @@ namespace Ankh.Scc
             return BatchRefresh();
         }
 
-        private IDisposable BatchRefresh()
+        private BatchStartedEventArgs BatchRefresh()
         {
-            BatchStartedEventArgs ba = new BatchStartedEventArgs();
+            BatchStartedEventArgs ba = new BatchStartedEventArgs(this);
             OnBatchUpdateStarted(ba);
             return ba;
         }
