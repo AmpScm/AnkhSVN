@@ -165,4 +165,10 @@
   <data name="StateWrongCasing" xml:space="preserve">
     <value>Casing Conflict</value>
   </data>
+  <data name="WaitCaption" xml:space="preserve">
+    <value>Updating Pending Changes</value>
+  </data>
+  <data name="WaitMessage" xml:space="preserve">
+    <value>Checking Subversion status of your Working Copy.</value>
+  </data>
 </root>

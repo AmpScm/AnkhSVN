@@ -68,7 +68,7 @@ namespace Ankh.Scc
         {
             PendingChangeEventArgs pceMe = new PendingChangeEventArgs(this, null);
 
-            using (BatchRefresh())
+            using (BatchStartedEventArgs br = BatchRefresh())
             {
                 bool wasClean = (_pendingChanges.Count == 0);
                 Dictionary<string, PendingChange> mapped = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
@@ -77,6 +77,7 @@ namespace Ankh.Scc
 
                 foreach (string file in Mapper.GetAllFilesOfAllProjects())
                 {
+                    br.Tick();
                     _extraFiles.Remove(file); // If we find it here; it is no longer 'extra'!
 
                     SvnItem item = cache[file];
@@ -92,6 +93,7 @@ namespace Ankh.Scc
 
                 foreach (string file in new List<string>(_extraFiles))
                 {
+                    br.Tick();
                     SvnItem item = cache[file];
 
                     if (item == null)
@@ -108,6 +110,7 @@ namespace Ankh.Scc
 
                 for (int i = 0; i < _pendingChanges.Count; i++)
                 {
+                    br.Tick();
                     PendingChange pc = _pendingChanges[i];
 
                     if (mapped.ContainsKey(pc.FullPath))
