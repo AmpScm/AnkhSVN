@@ -19,7 +19,7 @@ using Ankh.Commands;
 
 namespace Ankh.Scc.Commands
 {
-    [Command(AnkhCommand.TickRefreshPendingTasks, AlwaysAvailable=true)]
+    [Command(AnkhCommand.TickRefreshPendingTasks, AlwaysAvailable = true)]
     sealed class PendingChangeTicker : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
@@ -28,14 +28,15 @@ namespace Ankh.Scc.Commands
         }
 
         IAnkhCommandService _commandService;
-        PendingChangeManager _pendingChanges;        
+        PendingChangeManager _pendingChanges;
 
         public void OnExecute(CommandEventArgs e)
         {
             if (_commandService == null)
+            {
                 _commandService = e.GetService<IAnkhCommandService>();
-            if (_pendingChanges == null)
-                _pendingChanges = e.GetService<PendingChangeManager>(typeof(IPendingChangesManager));            
+                _pendingChanges = e.GetService<PendingChangeManager>(typeof(IPendingChangesManager));
+            }
 
             _commandService.TockCommand(e.Command);
 
