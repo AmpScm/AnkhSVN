@@ -99,7 +99,7 @@ namespace Ankh.Scc
                 _initDone = true;
                 IVsThreadedWaitDialog dlg = _ctx.GetService<IVsThreadedWaitDialog>(typeof(SVsThreadedWaitDialog));
 
-                if (dlg != null && (dlg.StartWaitDialog(PendingChangeText.WaitCaption, PendingChangeText.WaitMessage, "...", 0, null, null) >= 0))
+                if (dlg != null && (dlg.StartWaitDialog(PendingChangeText.WaitCaption, PendingChangeText.WaitMessage, "...", (int)__VSTWDFLAGS.VSTWDFLAGS_TOPMOST, null, null) >= 0))
                     _dlg = dlg;
             }
             else if ((_ctr & 511) == 511 && _dlg != null)
