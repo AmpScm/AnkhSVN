@@ -85,5 +85,12 @@ namespace Ankh.Scc
         /// <param name="inSolution"></param>
         /// <param name="sccExcluded"></param>
         void SetSolutionContained(string path, bool inSolution, bool sccExcluded);
+
+        /// <summary>
+        /// Like this[], but without the normalization step
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        SvnItem GetAlreadyNormalizedItem(string path);
     }
 }

@@ -1068,7 +1068,7 @@ namespace Ankh
                 IFileStatusCache cache = StatusCache;
 
                 if (cache != null)
-                    return cache[parentDir];
+                    return cache.GetAlreadyNormalizedItem(parentDir);
                 else
                     return null;
             }
