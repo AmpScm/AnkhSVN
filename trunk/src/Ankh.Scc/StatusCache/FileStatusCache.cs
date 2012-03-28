@@ -702,22 +702,30 @@ namespace Ankh.Scc.StatusCache
 
                 path = SvnTools.GetNormalizedFullPath(path);
 
-                lock (_lock)
+                return GetAlreadyNormalizedItem(path);
+            }
+        }
+
+        public SvnItem GetAlreadyNormalizedItem(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            lock (_lock)
+            {
+                SvnItem item;
+
+                if (!_map.TryGetValue(path, out item))
                 {
-                    SvnItem item;
+                    string truePath = SvnTools.GetTruePath(path, true);
 
-                    if (!_map.TryGetValue(path, out item))
-                    {
-                        string truePath = SvnTools.GetTruePath(path, true);
+                    // Just create an item based on his name. Delay the svn calls as long as we can
+                    StoreItem(item = new SvnItem(this, truePath ?? path, NoSccStatus.Unknown, SvnNodeKind.Unknown));
 
-                        // Just create an item based on his name. Delay the svn calls as long as we can
-                        StoreItem(item = new SvnItem(this, truePath ?? path, NoSccStatus.Unknown, SvnNodeKind.Unknown));
-
-                        //item.MarkDirty(); // Load status on first access
-                    }
-
-                    return item;
+                    //item.MarkDirty(); // Load status on first access
                 }
+
+                return item;
             }
         }
 
