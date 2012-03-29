@@ -16,8 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Shell.Interop;
+using Ankh.UI;
 
 namespace Ankh.Scc
 {
@@ -64,16 +63,16 @@ namespace Ankh.Scc
     public sealed class BatchStartedEventArgs : EventArgs, IDisposable
     {
         Stack<AnkhAction> _closers = new Stack<AnkhAction>();
-        IAnkhServiceProvider _ctx;
-        IVsThreadedWaitDialog _dlg;
+        IAnkhThreadedWaitService _svc;
+        IAnkhThreadedWaitDialog _dlg;
         int _ctr;
         bool _initDone;
+        DateTime _snap;
 
-        public BatchStartedEventArgs(IAnkhServiceProvider context)
+        public BatchStartedEventArgs(IAnkhThreadedWaitService svc)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-            _ctx = context;
+            _svc = svc;
+            _snap = DateTime.Now;
         }
 
         public event AnkhAction Disposers
@@ -91,41 +90,36 @@ namespace Ankh.Scc
 
         public void Tick()
         {
-            if ((_ctr++ & 63) != 63)
+            _ctr++;
+            if ((_ctr & 31) != 0)
                 return;
 
             if (!_initDone)
             {
                 _initDone = true;
-                IVsThreadedWaitDialog dlg = _ctx.GetService<IVsThreadedWaitDialog>(typeof(SVsThreadedWaitDialog));
-
-                if (dlg != null && (dlg.StartWaitDialog(PendingChangeText.WaitCaption, PendingChangeText.WaitMessage, "...", (int)__VSTWDFLAGS.VSTWDFLAGS_TOPMOST, null, null) >= 0))
-                    _dlg = dlg;
+                if (_svc != null)
+                    _dlg = _svc.Start(PendingChangeText.WaitCaption, PendingChangeText.WaitMessage);
             }
-            else if ((_ctr & 511) == 511 && _dlg != null)
+            else if ((_ctr & 255) == 0 && _dlg != null)
             {
-                int bCancel;
-                _dlg.GiveTimeSlice(null, null, 0, out bCancel);
+                _dlg.Tick();
             }
         }
 
 
         public void Dispose()
         {
-            while (_closers.Count > 0)
+            using (_dlg) // Closes dialog if needed
             {
-                AnkhAction action = _closers.Pop();
-                try
+                while (_closers.Count > 0)
                 {
-                    action();
+                    AnkhAction action = _closers.Pop();
+                    try
+                    {
+                        action();
+                    }
+                    catch { }
                 }
-                catch { }
-            }
-
-            if (_dlg != null)
-            {
-                int bCanceled = 0;
-                _dlg.EndWaitDialog(ref bCanceled);
             }
         }
 

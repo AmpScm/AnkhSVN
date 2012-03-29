@@ -143,9 +143,15 @@ namespace Ankh.Scc
             return BatchRefresh();
         }
 
+        Ankh.UI.IAnkhThreadedWaitService _tws;
+        Ankh.UI.IAnkhThreadedWaitService ThreadedWaitService
+        {
+            get { return _tws ?? (_tws = GetService<Ankh.UI.IAnkhThreadedWaitService>()); }
+        }
+
         private BatchStartedEventArgs BatchRefresh()
         {
-            BatchStartedEventArgs ba = new BatchStartedEventArgs(this);
+            BatchStartedEventArgs ba = new BatchStartedEventArgs(ThreadedWaitService);
             OnBatchUpdateStarted(ba);
             return ba;
         }
