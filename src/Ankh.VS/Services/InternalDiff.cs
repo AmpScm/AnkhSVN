@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.Scc.UI;
 
-namespace Ankh.VS.Diff
+namespace Ankh.VS.Services
 {
     [GlobalService(typeof(IAnkhInternalDiff), AllowPreRegistered = true, MinVersion = VSInstance.VS11)]
     sealed class InternalDiff : AnkhService, IAnkhInternalDiff
