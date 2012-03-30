@@ -57,28 +57,6 @@ namespace Ankh.VS.SolutionExplorer
             }
         }
 
-        internal void Initialize()
-        {
-            AnkhServiceEvents ev = Context.GetService<AnkhServiceEvents>();
-            IAnkhCommandStates states = Context.GetService<IAnkhCommandStates>();
-
-            bool shouldActivate = false;
-
-            if (states != null)
-            {
-                if (!states.UIShellAvailable)
-                {
-                    ev.UIShellActivate += new EventHandler(OnUIShellActivate);
-                    shouldActivate = false;
-                }
-                else
-                    shouldActivate = states.SccProviderActive;
-            }
-
-            if (shouldActivate)
-                MaybeEnsure();
-        }
-
         void MaybeEnsure()
         {
             if (_hookImageList && SolutionExplorerFrame.IsVisible() == VSConstants.S_OK)
