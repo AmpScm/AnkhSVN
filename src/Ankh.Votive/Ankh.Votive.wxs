@@ -42,6 +42,9 @@
     <Icon Id="ICON_AnkhSvn" SourceFile="$(sys.SOURCEFILEDIR)..\Ankh.Package\Resources\Package.ico"/>
 
     <Media Id="1" Cabinet="AnkhSVN.cab" EmbedCab="yes" CompressionLevel="high"/>
+    <PropertyRef Id="VS100DEVENV"/>
+    <PropertyRef Id="VS110DEVENV"/>
+
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="APPLICATIONFOLDER" Name="AnkhSVN 2">
