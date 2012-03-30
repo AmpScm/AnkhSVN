@@ -69,7 +69,6 @@ namespace Ankh.VS.SolutionExplorer
             }
             catch (COMException)
             {
-                // for VS2010 - WPF Shell compatibility (we cannot find the solutionexplorer frame there)
                 return;
             }
 
