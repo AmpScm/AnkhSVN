@@ -71,6 +71,8 @@ namespace Ankh.VSPackage
     //[ProvideKeyBindingTable(AnkhId.PendingChangeViewContext, 503)] // Won't work at this time
     [ProvideKeyBindingTable(AnkhId.SccExplorerViewContext, 504)]
 
+    [ProvideAnkhExtensionRedirect()]
+
     [CLSCompliant(false)]
     [ProvideSourceControlProvider(AnkhId.SccProviderTitle, "#100")]
     [ProvideService(typeof(ITheAnkhSvnSccProvider), ServiceName = AnkhId.SubversionSccName)]

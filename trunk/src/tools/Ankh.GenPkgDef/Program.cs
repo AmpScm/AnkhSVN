@@ -35,6 +35,11 @@ namespace Ankh.GenPkgDef
                             ra.Register(ctx);
                         }
                     }
+                    using (PkgDefContext ctx = new PkgDefContext(pkgdef, null))
+                        foreach (RegistrationAttribute ra in asm.GetCustomAttributes(typeof(RegistrationAttribute), true))
+                        {
+                            ra.Register(ctx);
+                        }
                 }
             }
         }
