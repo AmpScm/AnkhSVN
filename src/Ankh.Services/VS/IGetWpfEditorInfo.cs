@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Ankh.VS
 {
+    [CLSCompliant(false)]
     public interface IGetWpfEditorInfo
     {
         WpfEditorInfo GetWpfInfo(IVsTextView textView);
