@@ -8,6 +8,7 @@
   <Fragment>
     <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Services.TargetDir)">
       <Component Id="C_Ankh.ExtensionPoints.dll" Guid="173DFEC9-E396-4884-94EE-127D4C7D1D20">
+        <!-- CF_[assemblyname].dll is used in ProvideAnkhExtensionRedirectAttribute -->
         <File Id="CF_Ankh.ExtensionPoints.dll" Name="Ankh.ExtensionPoints.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
         <?ifdef Ankh_Pdb?>
         <File Id="CF_Ankh.ExtensionPoints.pdb" Name="Ankh.ExtensionPoints.pdb" Checksum="yes" Vital="yes" />
