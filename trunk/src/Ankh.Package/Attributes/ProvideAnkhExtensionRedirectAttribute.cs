@@ -22,7 +22,7 @@ namespace Ankh.VSPackage.Attributes
                 if (context.GetType().Name.ToUpperInvariant().Contains("PKGDEF"))
                     key.SetValue("codeBase", Path.Combine("$PackageFolder$", name.Name + ".dll"));
                 else
-                    key.SetValue("codeBase", "[CF_Ankh.ExtensionPoints.dll]");
+                    key.SetValue("codeBase", "[APP_bin]\\" + name.Name + ".dll");
             }
         }
 
