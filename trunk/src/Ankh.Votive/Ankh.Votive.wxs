@@ -43,7 +43,9 @@
 
     <Media Id="1" Cabinet="AnkhSVN.cab" EmbedCab="yes" CompressionLevel="high"/>
     <PropertyRef Id="VS100DEVENV"/>
+    <PropertyRef Id="VS100_ROOT_FOLDER"/>
     <PropertyRef Id="VS110DEVENV"/>
+    <PropertyRef Id="VS110_ROOT_FOLDER"/>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
