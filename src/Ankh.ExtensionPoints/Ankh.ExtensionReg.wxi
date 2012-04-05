@@ -10,7 +10,7 @@
   <!-- This version number is defined by Ankh.Votive.wixproj, so this is just a placeholder -->
   <?define ExtensionPointsVersion=2.0.0.1?>
   <?endif?>
-  
+
   <!-- *************************************************************************
        * Change the version number of AnkhExtensionPointsMinVersion to disable *
        * the automatic upgrading of Ankh.ExtensionPoints.dll releases.         *
@@ -64,23 +64,38 @@
     <u:XmlConfig File="$(var.DevEnvConfig)" Id="$(var.extId)_TC_BindingRedirect_newVersion"
                ElementId="$(var.extId)_TC_BindingRedirect" Name="newVersion" Value="$(var.AnkhExtensionPointsVersion)" />
   </u:XmlConfig>
-  
+
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="30"
+             Id="$(var.extId)_TC_CodeBase" Action="create" On="install"
+             ElementPath="//configuration/runtime/assemblyBinding/dependentAssembly[\[]@id='[UpgradeCode]'[\]]"
+             Node="element" Name="codeBase">
+
+    <u:XmlConfig File="$(var.DevEnvConfig)" Id="$(var.extId)_TC_CodeBase_version"
+               ElementId="$(var.extId)_TC_CodeBase" Name="version" Value="$(var.AnkhExtensionPointsVersion)" />
+    <u:XmlConfig File="$(var.DevEnvConfig)" Id="$(var.extId)_TC_CodeBase_href"
+               ElementId="$(var.extId)_TC_CodeBase" Name="href" Value="[#CF_Ankh.ExtensionPoints.dll]" />
+  </u:XmlConfig>
+
   <!-- And now fix the xml namespaces -->
-  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="900" 
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="900"
              Id="$(var.extId)_TC_DependentAssemblyIdentityNs" Action="create" On="install"
              ElementPath="//configuration/runtime/assemblyBinding/dependentAssembly[\[]@id='[UpgradeCode]'[\]]/assemblyIdentity"
              Node="value" Name="xmlns" Value="urn:schemas-microsoft-com:asm.v1"/>
-  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="910" 
-             Id="$(var.extId)_TC_DependentAssemblyBindingNs" Action="create" On="install"
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="910"
+             Id="$(var.extId)_TC_DependentBindingRedirectNs" Action="create" On="install"
              ElementPath="//configuration/runtime/assemblyBinding/dependentAssembly[\[]@id='[UpgradeCode]'[\]]/bindingRedirect"
              Node="value" Name="xmlns" Value="urn:schemas-microsoft-com:asm.v1"/>
-  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="920" 
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="920"
+             Id="$(var.extId)_TC_DependentCodeBaseNs" Action="create" On="install"
+             ElementPath="//configuration/runtime/assemblyBinding/dependentAssembly[\[]@id='[UpgradeCode]'[\]]/codeBase"
+             Node="value" Name="xmlns" Value="urn:schemas-microsoft-com:asm.v1"/>
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="990"
              Id="$(var.extId)_TC_DependentAssemblyNs" Action="create" On="install"
              ElementPath="//configuration/runtime/assemblyBinding/dependentAssembly[\[]@id='[UpgradeCode]'[\]]"
              Node="value" Name="xmlns" Value="urn:schemas-microsoft-com:asm.v1"/>
-  
+
   <!-- And register that we remove on uninstall-->
-  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="4000" 
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="4000"
              Id="$(var.extId)_TC_DependentAssemblyDelete" Action="delete" On="uninstall"
              ElementPath="//configuration/runtime/assemblyBinding"
              Node="element"
