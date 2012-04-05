@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <Fragment>
+      <CustomAction Id="VS90SetupNoVSTemplates" Property="VS90DEVENV" ExeCommand="/setup /NoSetupVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
+      <PropertyRef Id="VS90DEVENV" />
+
+      <InstallExecuteSequence>
+          <Custom Action="VS90SetupNoVSTemplates" Before="InstallFinalize" Overridable="yes">VS90DEVENV</Custom>
+      </InstallExecuteSequence>
+  </Fragment>
+
+  <Fragment>
+    <CustomAction Id="VS2010SetupNoVSTemplates" Property="VS2010DEVENV" ExeCommand="/setup /NoSetupVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
+    <PropertyRef Id="VS2010DEVENV" />
+
+    <InstallExecuteSequence>
+      <Custom Action="VS2010SetupNoVSTemplates" Before="InstallFinalize" Overridable="yes">VS2010DEVENV</Custom>
+    </InstallExecuteSequence>
+  </Fragment>
+
+  <Fragment>
+    <CustomAction Id="VS11SetupNoVSTemplates" Property="VS11DEVENV" ExeCommand="/setup /NoSetupVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
+    <PropertyRef Id="VS11DEVENV" />
+
+    <InstallExecuteSequence>
+      <Custom Action="VS11SetupNoVSTemplates" Before="InstallFinalize" Overridable="yes">VS11DEVENV</Custom>
+    </InstallExecuteSequence>
+  </Fragment>
+  
+</Wix>

@@ -75,7 +75,7 @@
     <Compile Include="Ankh.WpfEditor.Package\Ankh.WpfEditor.Package.wxs" />
     <Compile Include="Ankh\Ankh.wxs" />
     <Compile Include="Ankh.Votive\Ankh.Votive.wxs" />
-    <Compile Include="Ankh.Votive\VSExtension.wxs" />
+    <Compile Include="Ankh.Votive\AnkhVSExtension.wxs" />
     <Compile Include="autolib\SharpSvn\SharpSvn.wxs" />
     <Compile Include="autolib\SharpSvn\Licenses\SharpSvn-Licenses.wxs" />
   </ItemGroup>
