@@ -207,7 +207,7 @@ namespace Ankh.Commands
                 _assembliesLoaded.Add(asm);
                 foreach (Type type in asm.GetTypes())
                 {
-                    if (!type.IsClass || type.IsAbstract || !Attribute.IsDefined(type, typeof(CommandAttribute), false))
+                    if (!type.IsClass || type.IsAbstract || type.IsNested || !Attribute.IsDefined(type, typeof(CommandAttribute), false))
                         continue;
 
                     if (!typeof(ICommandHandler).IsAssignableFrom(type))

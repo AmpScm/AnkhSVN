@@ -236,7 +236,7 @@ namespace Ankh
             object[] constructorArgs = null;
             foreach (Type type in assembly.GetTypes())
             {
-                if (!Attribute.IsDefined(type, typeof(GlobalServiceAttribute), false))
+                if (!type.IsClass || type.IsAbstract || type.IsNested || !Attribute.IsDefined(type, typeof(GlobalServiceAttribute), false))
                     continue;
 
                 if (!typeof(IAnkhServiceImplementation).IsAssignableFrom(type))
