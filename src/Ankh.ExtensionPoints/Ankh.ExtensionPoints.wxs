@@ -8,7 +8,7 @@
   <Fragment>
     <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Services.TargetDir)">
       <Component Id="C_Ankh.ExtensionPoints.dll" Guid="173DFEC9-E396-4884-94EE-127D4C7D1D20">
-        <!-- CF_[assemblyname].dll is used in ProvideAnkhExtensionRedirectAttribute -->
+        <!-- CF_[assemblyname].dll is used in ProvideAnkhExtensionRedirectAttribute and Ankh.ExtensionReg.wxi -->
         <File Id="CF_Ankh.ExtensionPoints.dll" Name="Ankh.ExtensionPoints.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
         <?ifdef Ankh_Pdb?>
         <File Id="CF_Ankh.ExtensionPoints.pdb" Name="Ankh.ExtensionPoints.pdb" Checksum="yes" Vital="yes" />
@@ -23,65 +23,44 @@
     <ComponentGroup Id="Extension2005">
       <ComponentRef Id="C_Extension2005"/>
     </ComponentGroup>
-    <PropertyRef Id="VS2005_ROOT_FOLDER"/>
+    <PropertyRef Id="VS2005DEVENV"/>
     <DirectoryRef Id="TARGETDIR">
-      <Directory Id="VS2005_ROOT_FOLDER">
-        <Directory Name="Common7" Id="Common7_2005">
-          <Directory Name="IDE" Id="VSIDE_2005">
-            <Directory Name="PublicAssemblies" Id="PublicAssemblies_2005">
-              <Component Id="C_Extension2005" Guid="EB729FDC-9A5C-4F70-8556-BFFFF31F4E76">
-                <Condition>VS2005DEVENV</Condition>
-                <CopyFile Id="CF_Extension2005" FileId="CF_Ankh.ExtensionPoints.dll" DestinationProperty="PublicAssemblies_2005" />
-                <CopyFile Id="CF_Extension2005Xml" FileId="CF_Ankh.ExtensionPoints.xml" DestinationProperty="PublicAssemblies_2005" />
-                <?define extId=VS2005DEVENV ?>
-                <?include $(var.Ankh.ExtensionPoints.ProjectDir)\Ankh.ExtensionReg.wxi?>
-              </Component>
-            </Directory>
-          </Directory>
-        </Directory>
-      </Directory>
+      <Component Id="C_Extension2005" Guid="5169A935-C86F-4A84-B2F2-D97ED2EAF090">
+        <Condition>VS2005DEVENV</Condition>
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Ext-VS2005" Value="1" Type="integer" KeyPath="yes" />
+        <?define extId=VS2005DEVENV ?>
+        <?include $(var.Ankh.ExtensionPoints.ProjectDir)\Ankh.ExtensionReg.wxi?>
+      </Component>
     </DirectoryRef>
   </Fragment>
   <Fragment>
     <ComponentGroup Id="Extension2008">
       <ComponentRef Id="C_Extension2008"/>
     </ComponentGroup>
-    <PropertyRef Id="VS90_ROOT_FOLDER"/>
+    <PropertyRef Id="VS90DEVENV"/>
     <DirectoryRef Id="TARGETDIR">
-      <Directory Id="VS90_ROOT_FOLDER">
-        <Directory Name="Common7" Id="Common7_2008">
-          <Directory Name="IDE" Id="VSIDE_2008">
-            <Directory Name="PublicAssemblies" Id="PublicAssemblies_2008">
-              <Component Id="C_Extension2008" Guid="F147C06C-3F77-42A2-AD68-D2FA838385D7">
-                <Condition>VS90DEVENV</Condition>
-                <CopyFile Id="CF_Extension2008" FileId="CF_Ankh.ExtensionPoints.dll" DestinationProperty="PublicAssemblies_2008" />
-                <CopyFile Id="CF_Extension2008Xml" FileId="CF_Ankh.ExtensionPoints.xml" DestinationProperty="PublicAssemblies_2008" />
-                <?undef extId?>
-                <?define extId=VS90DEVENV ?>
-                <?include $(var.Ankh.ExtensionPoints.ProjectDir)\Ankh.ExtensionReg.wxi?>
-              </Component>
-            </Directory>
-          </Directory>
-        </Directory>
-      </Directory>
+      <Component Id="C_Extension2008" Guid="BE5C2DCF-90F7-42EE-B2EA-0C3AE47F1C10">
+        <Condition>VS90DEVENV</Condition>
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Ext-VS2008" Value="1" Type="integer" KeyPath="yes" />
+        <?undef extId?>
+        <?define extId=VS90DEVENV ?>
+        <?include $(var.Ankh.ExtensionPoints.ProjectDir)\Ankh.ExtensionReg.wxi?>
+      </Component>
     </DirectoryRef>
   </Fragment>
   <Fragment>
     <ComponentGroup Id="Extension2010">
       <ComponentRef Id="C_Extension2010"/>
     </ComponentGroup>
-    <PropertyRef Id="VS2010_ROOT_FOLDER"/>
-    <DirectoryRef Id="VSIDE_2010">
-      <Directory Name="PublicAssemblies" Id="PublicAssemblies_2010">
-        <Component Id="C_Extension2010" Guid="56E444E1-541C-44C2-8DF6-1F48B06B4E06">
-          <Condition>VS2010DEVENV</Condition>
-          <CopyFile Id="CF_Extension2010" FileId="CF_Ankh.ExtensionPoints.dll" DestinationProperty="PublicAssemblies_2010" />
-          <CopyFile Id="CF_Extension2010Xml" FileId="CF_Ankh.ExtensionPoints.xml" DestinationProperty="PublicAssemblies_2010" />
-          <?undef extId?>
-          <?define extId=VS2010DEVENV ?>
-          <?include $(var.Ankh.ExtensionPoints.ProjectDir)\Ankh.ExtensionReg.wxi?>
-        </Component>
-      </Directory>
+    <PropertyRef Id="VS2010DEVENV"/>
+    <DirectoryRef Id="TARGETDIR">
+      <Component Id="C_Extension2010" Guid="86C257D5-AAF0-4782-B633-EED35052B33B">
+        <Condition>VS2010DEVENV</Condition>
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Ext-VS2010" Value="1" Type="integer" KeyPath="yes" />
+        <?undef extId?>
+        <?define extId=VS2010DEVENV ?>
+        <?include $(var.Ankh.ExtensionPoints.ProjectDir)\Ankh.ExtensionReg.wxi?>
+      </Component>
     </DirectoryRef>
   </Fragment>
 </Wix>
