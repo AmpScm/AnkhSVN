@@ -42,10 +42,10 @@
     <Icon Id="ICON_AnkhSvn" SourceFile="$(sys.SOURCEFILEDIR)..\Ankh.Package\Resources\Package.ico"/>
 
     <Media Id="1" Cabinet="AnkhSVN.cab" EmbedCab="yes" CompressionLevel="high"/>
-    <PropertyRef Id="VS100DEVENV"/>
-    <PropertyRef Id="VS100_ROOT_FOLDER"/>
-    <PropertyRef Id="VS110DEVENV"/>
-    <PropertyRef Id="VS110_ROOT_FOLDER"/>
+    <PropertyRef Id="VS2010DEVENV"/>
+    <PropertyRef Id="VS2010_ROOT_FOLDER"/>
+    <PropertyRef Id="VS11DEVENV"/>
+    <PropertyRef Id="VS11_ROOT_FOLDER"/>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
@@ -87,7 +87,7 @@
           </Directory>
         </Directory>
       </Directory>
-      <Directory Id="VS100_ROOT_FOLDER">
+      <Directory Id="VS2010_ROOT_FOLDER">
         <Directory Name="Common7" Id="Common7_2010">
           <Directory Name="IDE" Id="VSIDE_2010">
             <Directory Name="Extensions" Id="EXTENSIONS_2010">
@@ -95,7 +95,7 @@
                 <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_ANKH_2010">
                   <Directory Name="2.0" Id="ANKHSVN_EXTENSION_2010">
                     <Component Id="C_Reg2010" Guid="2AF423CF-2FA7-4232-9A4E-F701022DCAF8">
-                      <Condition>VS100DEVENV</Condition>
+                      <Condition>VS2010DEVENV</Condition>
                       <CopyFile Id="Vsix_Mnf2010" FileId="CF_VSIXMANIFEST10" DestinationDirectory="ANKHSVN_EXTENSION_2010" DestinationName="extension.VsixManifest"/>
                       <CopyFile Id="Vsix_Lic2010" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
                       <CopyFile Id="Vsix_Ico2010" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
@@ -108,7 +108,7 @@
           </Directory>
         </Directory>
       </Directory>
-      <Directory Id="VS110_ROOT_FOLDER">
+      <Directory Id="VS11_ROOT_FOLDER">
         <Directory Name="Common7" Id="Common7_11">
           <Directory Name="IDE" Id="VSIDE_11">
             <Directory Name="Extensions" Id="EXTENSIONS_11">
@@ -116,7 +116,7 @@
                 <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_ANKH_11">
                   <Directory Name="2.0" Id="ANKHSVN_EXTENSION_11">
                     <Component Id="C_Reg11" Guid="1A91E814-7713-4C3C-8DCF-8F7D599F2841">
-                      <Condition>VS110DEVENV</Condition>
+                      <Condition>VS11DEVENV</Condition>
                       <CopyFile Id="Vsix_Mnf_11" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
                       <CopyFile Id="Vsix_Lic_11" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
                       <CopyFile Id="Vsix_Ico_11" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
@@ -133,8 +133,8 @@
     <!-- Make sure the packages are set up in The VS Environment -->
     <CustomActionRef Id="VS2005Setup"/>
     <CustomActionRef Id="VS90SetupNoVSTemplates"/>
-    <CustomActionRef Id="VS100SetupNoVSTemplates"/>
-    <CustomActionRef Id="VS110SetupNoVSTemplates"/>
+    <CustomActionRef Id="VS2010Setup"/>
+    <CustomActionRef Id="VS11Setup"/>
     <UI>
       <InstallUISequence>
         <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
@@ -142,8 +142,8 @@
       </InstallUISequence>
       <ProgressText Action="VS2005Setup" Template="[1]">Updating Visual Studio 2005 registration</ProgressText>
       <ProgressText Action="VS90SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
-      <ProgressText Action="VS100SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
-      <ProgressText Action="VS110SetupNoVSTemplates" Template="[1]">Updating Visual Studio 11 registration</ProgressText>
+      <ProgressText Action="VS2010Setup" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
+      <ProgressText Action="VS11Setup" Template="[1]">Updating Visual Studio 11 registration</ProgressText>
     </UI>
 
     <InstallExecuteSequence>

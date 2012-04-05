@@ -9,7 +9,7 @@ Usage of the Ankh build environment requires at least:
   
 And if you wish to build your own installers:
 
-  * Votive 3.5 (Including Wix 3.5)
+  * Votive 3.6 (Including Wix 3.6)
 
 Now you are ready to check out Ankh itself. Type the following:
 
