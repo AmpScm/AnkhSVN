@@ -88,6 +88,14 @@
           </Directory>
         </Directory>
       </Directory>
+      <Directory Name="Common Files" Id="CommonFilesFolder">
+        <Directory Name="Microsoft Shared" Id="CommonFiles_MsShared">
+          <Directory Name="MSEnv" Id="CommonFiles_MsShared_MsEnv">
+            <Directory Name="PublicAssemblies" Id="CommonFiles_MsShared_MsEnv_PublicAssemblies">
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
       <Directory Name="Extensions" Id="VS2010_EXTENSIONS_DIR">
         <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_2010">
           <Directory Name="2.X" Id="ANKHSVN_EXTENSION_2010">

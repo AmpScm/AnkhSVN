@@ -3,6 +3,7 @@
     <ComponentGroup Id="Ankh.ExtensionPoints">
       <ComponentRef Id="C_Ankh.ExtensionPoints.dll"/>
       <ComponentRef Id="C_Ankh.ExtensionPoints.xml"/>
+      <ComponentRef Id="C_Common_Ankh.ExtensionPoints.dll"/>
     </ComponentGroup>
   </Fragment>
   <Fragment>
@@ -16,6 +17,12 @@
       </Component>
       <Component Id="C_Ankh.ExtensionPoints.xml" Guid="755CDB02-E44B-4FD4-B926-52D737A1FD28">
         <File Id="CF_Ankh.ExtensionPoints.xml" Name="Ankh.ExtensionPoints.xml" Vital="yes" />
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="CommonFiles_MsShared_MsEnv_PublicAssemblies" FileSource="$(var.Ankh.Services.TargetDir)">
+      <Component Id="C_Common_Ankh.ExtensionPoints.dll" Guid="CFD655BB-0AA7-4A55-A597-34C3344186E0">
+        <CopyFile Id="CF_Common_Ankh.ExtensionPoints.dll" FileId="CF_Ankh.ExtensionPoints.dll" DestinationProperty="CommonFiles_MsShared_MsEnv_PublicAssemblies" />
+        <CopyFile Id="CF_Common_Ankh.ExtensionPoints.xml" FileId="CF_Ankh.ExtensionPoints.xml" DestinationProperty="CommonFiles_MsShared_MsEnv_PublicAssemblies" />
       </Component>
     </DirectoryRef>
   </Fragment>
