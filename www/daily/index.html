@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11063</title>
+          AnkhSVN-Daily Update - 2.3.11065</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,20 +16,25 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5959/AnkhSvn-Daily-2.3.11063.1267.msi">AnkhSVN 2.3.11063</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5961/AnkhSvn-Daily-2.3.11065.1268.msi">AnkhSVN 2.3.11065</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11063">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11065">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2012-04-05</td></tr>
+<tr><td> </td><td class="r"><a id="11065" href="http://ankhsvn.net/rev/11065">
+            [r11065]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Votive/Ankh.Votive.wxs, BUILD.txt, Ankh.Votive/VSExtension.wxs, Ankh.ExtensionPoints/Ankh.ExtensionPoints.wxs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Assume a WixToolset install of 3.6 or higher. This allows reusing several
+custom actions that we otherwise have to define ourselves.</td></tr>
 <tr class="d"><td colspan="4">2012-03-30</td></tr>
 <tr><td> </td><td class="r"><a id="11048" href="http://ankhsvn.net/rev/11048">
             [r11048]
@@ -280,24 +285,6 @@ when the solution is reopened. This fixes the known usecases for .vcxproj files.
             [r10861]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/Scc/PendingChange.cs, Ankh/Commands/AddItemCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Don't handle files that are 'scc excluded' by calling into the DTE-SourceControl
 api as status 'New' or 'Deleted-New', but do handle them as part of the solution.</td></tr>
-<tr><td> </td><td class="r"><a id="10859" href="http://ankhsvn.net/rev/10859">
-            [r10859]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.Projects.cs, Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh.Scc/AnkhSccProvider.FileMap.cs, Ankh.Scc/Ankh.Scc.csproj, Ankh.Scc/ProjectMap/SccProjectFile.cs, Ankh.Services/Scc/IFileStatusCache.cs, Ankh.Scc/AnkhSccProvider.SourceControl.cs, Ankh.Services/Scc/IProjectFileMapper.cs, Ankh.Services/Scc/SvnItem.State.cs, Ankh.Services/Scc/SvnItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement the EnvDTE level SourceControl and SourceControl2 interfaces for
-AnkhSVN, as that is the api that Visual C++ uses to tell SCC that certain
-files should not be added to source control, but should be part of the
-solution since Visual Studio 2010. (How ugly!)<br>
-But ok, it is still a regression since older Visual Studio versions.<br>
-The current implementation is not persistent, unlike TFS/SCC. But for the only
-really important use-case (.vcxproj) this works ok. We can always implement the
-storage later as we can not assume storage of the flag anyway.</td></tr>
-<tr><td> </td><td class="r"><a id="10858" href="http://ankhsvn.net/rev/10858">
-            [r10858]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/SvnInfoGrid:</strong> SvnInfoGridControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the Subversion info grid follow theme changes.</td></tr>
-<tr class="d"><td colspan="4">2012-03-06</td></tr>
-<tr><td> </td><td class="r"><a id="10856" href="http://ankhsvn.net/rev/10856">
-            [r10856]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/PendingChanges/PendingChangesPage.cs, Ankh.Package/AnkhSvnPackage.ToolWindows.cs, Ankh.UI/PendingChanges/PendingChangesToolControl.cs, Ankh.Services/UI/AnkhToolWindowControl.cs, Ankh.Services/Scc/UI/IAnkhToolWindowControl.cs, Ankh.Services/AnkhServiceEvents.cs, Ankh.Scc/ProjectNotifier.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Forward Visual Studio (and Windows) theme change events to our toolwindows to
-allow clean switching, like the common Visual Studio UI.</td></tr>
 
 </table>
 <!--/Recent changes-->
