@@ -109,17 +109,17 @@
           </Directory>
         </Directory>
       </Directory>
-    </Directory>
-    <Directory Name="Extensions" Id="VS11_EXTENSIONS_DIR">
-      <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_11">
-        <Directory Name="2.X" Id="ANKHSVN_EXTENSION_11">
-          <Component Id="C_Reg11" Guid="06D5D441-6469-49B5-9FA7-FF8B2FD7382E">
-            <Condition>VS11DEVENV</Condition>
-            <CopyFile Id="Vsix_Mnf_11" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
-            <CopyFile Id="Vsix_Lic_11" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
-            <CopyFile Id="Vsix_Ico_11" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
-            <CopyFile Id="Vsix_Pvw_11" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
-          </Component>
+      <Directory Name="Extensions" Id="VS11_EXTENSIONS_DIR">
+        <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_11">
+          <Directory Name="2.X" Id="ANKHSVN_EXTENSION_11">
+            <Component Id="C_Reg11" Guid="06D5D441-6469-49B5-9FA7-FF8B2FD7382E">
+              <Condition>VS11DEVENV</Condition>
+              <CopyFile Id="Vsix_Mnf_11" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
+              <CopyFile Id="Vsix_Lic_11" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
+              <CopyFile Id="Vsix_Ico_11" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
+              <CopyFile Id="Vsix_Pvw_11" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
+            </Component>
+          </Directory>
         </Directory>
       </Directory>
     </Directory>
