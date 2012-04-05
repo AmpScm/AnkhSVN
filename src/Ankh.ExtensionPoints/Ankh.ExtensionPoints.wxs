@@ -70,15 +70,15 @@
     <ComponentGroup Id="Extension2010">
       <ComponentRef Id="C_Extension2010"/>
     </ComponentGroup>
-    <PropertyRef Id="VS100_ROOT_FOLDER"/>
+    <PropertyRef Id="VS2010_ROOT_FOLDER"/>
     <DirectoryRef Id="VSIDE_2010">
       <Directory Name="PublicAssemblies" Id="PublicAssemblies_2010">
         <Component Id="C_Extension2010" Guid="56E444E1-541C-44C2-8DF6-1F48B06B4E06">
-          <Condition>VS100DEVENV</Condition>
+          <Condition>VS2010DEVENV</Condition>
           <CopyFile Id="CF_Extension2010" FileId="CF_Ankh.ExtensionPoints.dll" DestinationProperty="PublicAssemblies_2010" />
           <CopyFile Id="CF_Extension2010Xml" FileId="CF_Ankh.ExtensionPoints.xml" DestinationProperty="PublicAssemblies_2010" />
           <?undef extId?>
-          <?define extId=VS100DEVENV ?>
+          <?define extId=VS2010DEVENV ?>
           <?include $(var.Ankh.ExtensionPoints.ProjectDir)\Ankh.ExtensionReg.wxi?>
         </Component>
       </Directory>
