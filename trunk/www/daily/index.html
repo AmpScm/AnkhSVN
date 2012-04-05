@@ -1,11 +1,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11070</title>
+          AnkhSVN-Daily Update - 2.3.11076</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
 <p>If you don't want to upgrade to Subversion 1.7, you can use an <a href="/daily/2.2.x">
-           AnkhSVN 2.2 daily</a> for Subversion 1.6 and an<a href="/daily/2.0.x">AnkhSVN 2.0 daily</a>
+           AnkhSVN 2.2 daily</a> for Subversion 1.6 and an <a href="/daily/2.0.x">AnkhSVN 2.0 daily</a>
            for the latest daily build based on Subversion 1.5</p>
 <p>
           The AnkhSVN project provides Daily builds of the current development tree. These versions
@@ -16,14 +16,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5965/AnkhSvn-Daily-2.3.11070.1270.msi">AnkhSVN 2.3.11070</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5967/AnkhSvn-Daily-2.3.11076.1271.msi">AnkhSVN 2.3.11076</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11070">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11076">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -31,6 +31,17 @@
 <h2>Recent changes</h2>
 <table>
 <tr class="d"><td colspan="4">2012-04-05</td></tr>
+<tr><td> </td><td class="r"><a id="11074" href="http://ankhsvn.net/rev/11074">
+            [r11074]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Votive/Ankh.Votive.wxs, Ankh.ExtensionPoints/Ankh.ExtensionPoints.wxs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Install our extension library in
+%PROGRAMFILES%\Common Files\Microsoft Shared\MSEnv\PublicAssemblies
+where it is automatically used by all Visual Studio versions' add reference
+dialogs. In the old location it was added multiple times for the more recent
+Visual Studio versions.</td></tr>
+<tr><td> </td><td class="r"><a id="11073" href="http://ankhsvn.net/rev/11073">
+            [r11073]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Votive/Ankh.Votive.wxs, Ankh.Votive.wixproj, Ankh.Votive/VSExtension.wxs, Ankh.Votive/AnkhVSExtension.wxs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Start devenv.exe /setup /NoSetupVSTemplates, like before as it appears to still
+make a difference in setup performance. Remove unused directory references.</td></tr>
 <tr><td> </td><td class="r"><a id="11070" href="http://ankhsvn.net/rev/11070">
             [r11070]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints:</strong> Ankh.ExtensionReg.wxi</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Register the extension redirect with a codebase to allow removing the copying
