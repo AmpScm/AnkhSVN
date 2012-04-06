@@ -96,15 +96,19 @@ namespace Ankh.Scc
         public int OnBeforeCloseSolution(object pUnkReserved)
         {
             _solutionLoaded = false;
-            SccProvider.OnStartedSolutionClose();
+            if (SccProvider.IsActive)
+                SccProvider.OnStartedSolutionClose();
 
             return VSConstants.S_OK;
         }
 
         public int OnAfterCloseSolution(object pUnkReserved)
         {
-            SccProvider.OnSolutionClosed();
-            SccStore.OnSolutionClosed();
+            if (SccProvider.IsActive)
+            {
+                SccProvider.OnSolutionClosed();
+                SccStore.OnSolutionClosed();
+            }
 
             GetService<IAnkhServiceEvents>().OnSolutionClosed(EventArgs.Empty);
 
@@ -113,6 +117,9 @@ namespace Ankh.Scc
 
         public int OnAfterLoadProject(IVsHierarchy pStubHierarchy, IVsHierarchy pRealHierarchy)
         {
+            if (!SccProvider.IsActive)
+                return VSConstants.S_OK;
+
             IVsSccProject2 project = pRealHierarchy as IVsSccProject2;
 
             if (project != null)
@@ -125,6 +132,9 @@ namespace Ankh.Scc
 
         public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
         {
+            if (!SccProvider.IsActive)
+                return VSConstants.S_OK;
+
             IVsSccProject2 project = pHierarchy as IVsSccProject2;
 
             if (project != null)
@@ -141,6 +151,9 @@ namespace Ankh.Scc
 
         public int OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved)
         {
+            if (!SccProvider.IsActive)
+                return VSConstants.S_OK;
+
             IVsSccProject2 project = pHierarchy as IVsSccProject2;
 
             if (project != null)
@@ -153,6 +166,9 @@ namespace Ankh.Scc
 
         public int OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
         {
+            if (!SccProvider.IsActive)
+                return VSConstants.S_OK;
+
             IVsSccProject2 project = pRealHierarchy as IVsSccProject2;
 
             if (project != null)
@@ -220,6 +236,9 @@ namespace Ankh.Scc
 
         public int OnAfterAsynchOpenProject(IVsHierarchy pHierarchy, int fAdded)
         {
+            if (!SccProvider.IsActive)
+                return VSConstants.S_OK;
+
             IVsSccProject2 project = pHierarchy as IVsSccProject2;
 
             if (project != null)
@@ -237,6 +256,9 @@ namespace Ankh.Scc
 
         public int OnAfterRenameProject(IVsHierarchy pHierarchy)
         {
+            if (!SccProvider.IsActive)
+                return VSConstants.S_OK;
+
             IVsSccProject2 project = pHierarchy as IVsSccProject2;
 
             if (project != null)
@@ -271,13 +293,16 @@ namespace Ankh.Scc
         /// </returns>
         public int OnAfterUpgradeProject(IVsHierarchy pHierarchy, uint fUpgradeFlag, string bstrCopyLocation, SYSTEMTIME stUpgradeTime, IVsUpgradeLogger pLogger)
         {
+            if (!SccProvider.IsActive)
+                return VSConstants.S_OK;
+
             IProjectFileMapper mapper = GetService<IProjectFileMapper>();
             IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
 
             if(monitor == null || mapper == null)
                 return VSConstants.S_OK;
 
-            if (!string.IsNullOrEmpty(bstrCopyLocation))
+            if (SccProvider.IsSafeSccPath(bstrCopyLocation))
                 monitor.ScheduleSvnStatus(bstrCopyLocation);
                 
             IVsSccProject2 project = pHierarchy as IVsSccProject2;
