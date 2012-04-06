@@ -17,15 +17,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.Commands;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
-using Ankh.VS;
 using System.IO;
 using SharpSvn;
 
@@ -194,27 +191,8 @@ namespace Ankh.Scc
                     if (!SvnTools.IsBelowManagedPath(dir))
                         return; // Not for us
 
-                    // AnkhSVN 0.x and 1.x place Ankh.Load files to trigger loading
-                    if (File.Exists(Path.Combine(dir, "Ankh.Load")))
-                    {
-                        // Ok there is no (other) Scc provider active and there is an Ankh.load
-
-                        if (!IsActive)
-                            RegisterAsPrimarySccProvider(); // Make us active (Yes!)
-
-                        SetProjectManaged(null, true);
-
-                        Debug.Assert(IsActive, "We should be active now!");
-                    }
-                    else if (File.Exists(Path.Combine(dir, "Ankh.NoLoad")))
-                        return; // Explicit don't load Ankh, can be overridden from the .sln
-                    else
-                    {
-                        if (!IsActive)
-                            RegisterAsPrimarySccProvider(); // Set us active; we know there is a .svn
-
-                        // Ask the user whether we should be registered in the solution?
-                    }
+                    if (!IsActive)
+                        RegisterAsPrimarySccProvider(); // Set us active; we know there is a .svn
 
                     // BH: Many users seem to have .load and .noload files checked in
                     // so we can't just remove them without issues.
@@ -223,11 +201,6 @@ namespace Ankh.Scc
 
             if (!IsActive)
                 return;
-
-            IAnkhSolutionExplorerWindow window = GetService<IAnkhSolutionExplorerWindow>();
-
-            if (window != null)
-                window.EnableAnkhIcons(true);
 
             foreach (SccProjectData data in _projectMap.Values)
             {
@@ -317,14 +290,6 @@ namespace Ankh.Scc
         /// <remarks>At this time the closing can not be canceled.</remarks>
         internal void OnStartedSolutionClose()
         {
-            if (IsActive)
-            {
-                IAnkhSolutionExplorerWindow window = GetService<IAnkhSolutionExplorerWindow>();
-
-                if (window != null)
-                    window.EnableAnkhIcons(false);
-            }
-
             foreach (SccProjectData pd in _projectMap.Values)
             {
                 pd.Dispose();

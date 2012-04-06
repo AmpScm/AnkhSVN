@@ -23,10 +23,11 @@ using Ankh.Commands;
 
 namespace Ankh.VS.SolutionExplorer
 {
+    interface IAnkhSolutionExplorerWindow { }
     /// <summary>
     /// 
     /// </summary>
-    [GlobalService(typeof(IAnkhSolutionExplorerWindow))]
+    [GlobalService(typeof(IAnkhSolutionExplorerWindow), MaxVersion=VSInstance.VS2010)]
     sealed class SolutionExplorerWindow : AnkhService, IVsWindowFrameNotify, IVsWindowFrameNotify2, IAnkhSolutionExplorerWindow
     {
         readonly SolutionTreeViewManager _manager;
@@ -58,6 +59,8 @@ namespace Ankh.VS.SolutionExplorer
 
                 ev.SccProviderActivated += OnSccProviderActivated;
                 ev.SccProviderDeactivated += OnSccProviderDeactivated;
+                ev.SolutionClosed += OnSolutionClosed;
+                ev.SolutionOpened += OnSolutionOpened;
             }
         }
 
@@ -72,6 +75,17 @@ namespace Ankh.VS.SolutionExplorer
         private void OnSccProviderDeactivated(object sender, EventArgs e)
         {
             EnableAnkhIcons(false);
+        }
+
+        private void OnSolutionClosed(object sender, EventArgs e)
+        {
+            EnableAnkhIcons(false);
+        }
+
+        private void OnSolutionOpened(object sender, EventArgs e)
+        {
+            if (GetService<ITheAnkhSccProvider
+                EnableAnkhIcons(false);
         }
 
         void MaybeEnsure()
@@ -190,12 +204,6 @@ namespace Ankh.VS.SolutionExplorer
         }
 
         #region IAnkhSolutionExplorerToolWindow Members
-        public void Show()
-        {
-            if (SolutionExplorerFrame != null)
-                Marshal.ThrowExceptionForHR(SolutionExplorerFrame.Show());
-        }
-
         public void EnableAnkhIcons(bool enabled)
         {
             if (_hookImageList)
