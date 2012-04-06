@@ -20,11 +20,9 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
-
 using Ankh.Commands;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
-using Ankh.VS;
 
 namespace Ankh.Scc
 {
