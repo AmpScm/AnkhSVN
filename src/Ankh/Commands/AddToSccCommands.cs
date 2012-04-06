@@ -30,21 +30,21 @@ using System.Diagnostics;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.FileSccAddProjectToSubversion, HideWhenDisabled = false)]
-    [Command(AnkhCommand.FileSccAddSolutionToSubversion, AlwaysAvailable = true, HideWhenDisabled = false)]
+    [Command(AnkhCommand.FileSccAddProjectToSubversion)]
+    [Command(AnkhCommand.FileSccAddSolutionToSubversion, AlwaysAvailable = true)]
     sealed class AddToSccCommands : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             if (!e.State.SolutionExists || (e.Command == AnkhCommand.FileSccAddProjectToSubversion && e.State.EmptySolution))
             {
-                e.Visible = e.Enabled = false;
+                e.Enabled = false;
                 return;
             }
 
             if (e.State.OtherSccProviderActive)
             {
-                e.Visible = e.Enabled = false;
+                e.Enabled = false;
                 return; // Only one scc provider can be active at a time
             }
 
@@ -52,7 +52,7 @@ namespace Ankh.Commands
             IFileStatusCache cache = e.GetService<IFileStatusCache>();
             if (scc == null || cache == null)
             {
-                e.Visible = e.Enabled = false;
+                e.Enabled = false;
                 return;
             }
 
@@ -65,7 +65,7 @@ namespace Ankh.Commands
             {
                 if (solutionFilename == null || scc.IsSolutionManaged)
                 {
-                    e.Visible = e.Enabled = false; // Already handled
+                    e.Enabled = false; // Already handled
                     return;
                 }
                 SvnItem item = cache[solutionFilename];
@@ -73,7 +73,7 @@ namespace Ankh.Commands
                 if (!item.Exists || !item.IsFile || item.ParentDirectory.NeedsWorkingCopyUpgrade)
                 {
                     // Decide where you store the .sln first
-                    e.Visible = e.Enabled = false;
+                    e.Enabled = false;
                     return;
                 }
 
@@ -124,7 +124,7 @@ namespace Ankh.Commands
                     break;
             }
 
-            e.Visible = e.Enabled = false;
+            e.Enabled = false;
         }
 
         private static IEnumerable<SvnProject> GetSelection(ISelectionContext iSelectionContext)
@@ -151,6 +151,16 @@ namespace Ankh.Commands
 
             if (cache == null || e.Selection.SolutionFilename == null)
                 return;
+
+            if (!e.State.SccProviderActive)
+            {
+                // Ok, we should now enable ourselves as the SCC provider to get
+                // our state loaded
+                IAnkhSccService sccService = e.GetService<IAnkhSccService>();
+                
+                sccService.RegisterAsPrimarySccProvider();
+                sccService.EnsureLoaded();
+            }
 
             SvnItem item = cache[e.Selection.SolutionFilename];
 
