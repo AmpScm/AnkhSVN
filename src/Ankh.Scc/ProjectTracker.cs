@@ -35,7 +35,8 @@ namespace Ankh.Scc
     [GlobalService(typeof(IAnkhProjectDocumentTracker))]
     partial class ProjectTracker : AnkhService, IAnkhProjectDocumentTracker, IVsTrackProjectDocumentsEvents2, IVsTrackProjectDocumentsEvents3
     {
-        bool _hooked;
+        bool _hookedSolution;
+        bool _hookedProjects;
         uint _projectCookie;
         uint _documentCookie;
         AnkhSccProvider _sccProvider;
@@ -67,12 +68,12 @@ namespace Ankh.Scc
 
         private void OnSccProviderDeactivated(object sender, EventArgs e)
         {
-            Hook(false);
+            Hook(true, false);
         }
 
         private void OnSccProviderActivated(object sender, EventArgs e)
         {
-            Hook(true);
+            Hook(true, true);
             LoadInitial();
         }
 
@@ -82,7 +83,7 @@ namespace Ankh.Scc
             {
                 if (disposing)
                 {
-                    Hook(false);
+                    Hook(false, false);
                 }
             }
             finally
@@ -138,35 +139,42 @@ namespace Ankh.Scc
             }
 
             _solutionLoaded = true;
-            SccProvider.OnSolutionOpened(true);
+            SccProvider.OnSolutionOpened(false);
         }
 
-        public void Hook(bool enable)
+        public void Hook(bool enableSolution, bool enableProjects)
         {
-            if (enable == _hooked)
-                return;
-
-            IVsTrackProjectDocuments2 tracker = GetService<IVsTrackProjectDocuments2>(typeof(SVsTrackProjectDocuments));
-            IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
-            if (enable)
+            if (enableSolution != _hookedSolution)
             {
-                if (tracker != null)
+                IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
+
+                if (enableSolution && solution != null)
+                {
+                    Marshal.ThrowExceptionForHR(solution.AdviseSolutionEvents(this, out _documentCookie));
+                    _hookedSolution = true;
+                }
+                else if (_hookedSolution)
+                {
+                    Marshal.ThrowExceptionForHR(solution.UnadviseSolutionEvents(_documentCookie));
+                    _hookedSolution = false;
+                }
+            }
+
+            if (enableProjects != _hookedProjects)
+            {
+                IVsTrackProjectDocuments2 tracker = GetService<IVsTrackProjectDocuments2>(typeof(SVsTrackProjectDocuments));
+
+                if (enableProjects && tracker != null)
+                {
                     Marshal.ThrowExceptionForHR(tracker.AdviseTrackProjectDocumentsEvents(this, out _projectCookie));
 
-                _hooked = true;
-
-                if (solution != null)
-                    Marshal.ThrowExceptionForHR(solution.AdviseSolutionEvents(this, out _documentCookie));
-            }
-            else
-            {
-                if (tracker != null)
+                    _hookedProjects = true;
+                }
+                else if (_hookedProjects)
+                {
                     Marshal.ThrowExceptionForHR(tracker.UnadviseTrackProjectDocumentsEvents(_projectCookie));
-
-                _hooked = false;
-
-                if (solution != null)
-                    Marshal.ThrowExceptionForHR(solution.UnadviseSolutionEvents(_documentCookie));
+                    _hookedProjects = false;
+                }
             }
         }
 
