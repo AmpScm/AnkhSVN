@@ -83,27 +83,32 @@ namespace Ankh.UI
             if (Context == null)
                 return;
 
-            IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
-
-            if (colorSvc != null)
+            IWinFormsThemingService wfts = Context.GetService<IWinFormsThemingService>();
+            if (wfts != null)
+                wfts.ThemeControl(this);
+            else
             {
-                Color color;
-                if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
-                    BackColor = color;
+                IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
 
-                if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_TEXT, out color))
-                    ForeColor = color;
-            }
+                if (colorSvc != null)
+                {
+                    Color color;
+                    if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
+                        BackColor = color;
 
+                    if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_TEXT, out color))
+                        ForeColor = color;
+                }
 
-            IUIService uis = Context.GetService<IUIService>();
+                IUIService uis = Context.GetService<IUIService>();
 
-            if (uis != null)
-            {
-                Font f = (Font)uis.Styles["DialogFont"];
+                if (uis != null)
+                {
+                    Font f = (Font)uis.Styles["DialogFont"];
 
-                if (f != null)
-                    this.Font = f;
+                    if (f != null)
+                        this.Font = f;
+                }
             }
         }
 

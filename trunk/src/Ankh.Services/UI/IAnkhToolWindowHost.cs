@@ -15,10 +15,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Shell;
-using System.ComponentModel;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.UI.Services;
 
