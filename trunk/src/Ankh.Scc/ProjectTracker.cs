@@ -56,6 +56,22 @@ namespace Ankh.Scc
         {
             base.OnInitialize();
 
+            AnkhServiceEvents ev = GetService<AnkhServiceEvents>();
+
+            ev.SccProviderActivated += OnSccProviderActivated;
+            ev.SccProviderDeactivated += OnSccProviderDeactivated;
+
+            if (SccProvider.IsActive)
+                OnSccProviderActivated(this, EventArgs.Empty);
+        }
+
+        private void OnSccProviderDeactivated(object sender, EventArgs e)
+        {
+            Hook(false);
+        }
+
+        private void OnSccProviderActivated(object sender, EventArgs e)
+        {
             Hook(true);
             LoadInitial();
         }
@@ -130,8 +146,8 @@ namespace Ankh.Scc
             if (enable == _hooked)
                 return;
 
-            IVsTrackProjectDocuments2 tracker = (IVsTrackProjectDocuments2)Context.GetService(typeof(SVsTrackProjectDocuments));
-            IVsSolution solution = (IVsSolution)Context.GetService(typeof(SVsSolution));
+            IVsTrackProjectDocuments2 tracker = GetService<IVsTrackProjectDocuments2>(typeof(SVsTrackProjectDocuments));
+            IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
             if (enable)
             {
                 if (tracker != null)
@@ -140,17 +156,17 @@ namespace Ankh.Scc
                 _hooked = true;
 
                 if (solution != null)
-                    solution.AdviseSolutionEvents(this, out _documentCookie);
+                    Marshal.ThrowExceptionForHR(solution.AdviseSolutionEvents(this, out _documentCookie));
             }
             else
             {
                 if (tracker != null)
-                    tracker.UnadviseTrackProjectDocumentsEvents(_projectCookie);
+                    Marshal.ThrowExceptionForHR(tracker.UnadviseTrackProjectDocumentsEvents(_projectCookie));
 
                 _hooked = false;
 
                 if (solution != null)
-                    solution.UnadviseSolutionEvents(_documentCookie);
+                    Marshal.ThrowExceptionForHR(solution.UnadviseSolutionEvents(_documentCookie));
             }
         }
 

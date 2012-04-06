@@ -153,20 +153,8 @@ namespace Ankh.Scc
                 }
             }
 
-            _ensureIcons = true;
-            RegisterForSccCleanup();
-
-            IAnkhCommandStates states = GetService<IAnkhCommandStates>();
-
-            //if (states.UIShellAvailable)
-            //{
-            //    IAnkhMigrationService migrate = GetService<IAnkhMigrationService>();
-            //
-            //    if (migrate != null)
-            //        migrate.MaybeMigrate();
-            //}
-
             GetService<IAnkhServiceEvents>().OnSccProviderActivated(EventArgs.Empty);
+            RegisterForSccCleanup();
 
             return VSConstants.S_OK;
         }
@@ -182,14 +170,7 @@ namespace Ankh.Scc
             if (_active)
             {
                 _active = false;
-
-                // Disable our custom glyphs before an other SCC provider is initialized!
-                IAnkhSolutionExplorerWindow solutionExplorer = GetService<IAnkhSolutionExplorerWindow>();
-
-                if (solutionExplorer != null)
-                    solutionExplorer.EnableAnkhIcons(false);
-
-                // If VS asked us for c ustom glyphs, we can release the handle now
+                // If VS asked us for custom glyphs, we can release the handle now
                 if (_glyphList != null)
                 {
                     _glyphList.Dispose();
@@ -197,12 +178,18 @@ namespace Ankh.Scc
                 }
 
                 // Remove all glyphs currently set
-                foreach (SccProjectData pd in _projectMap.Values)
+                foreach (SccProjectData pd in new List<SccProjectData>(_projectMap.Values))
                 {
                     pd.NotifyGlyphsChanged();
+                    pd.Dispose();
                 }
 
                 ClearSolutionGlyph();
+
+                _projectMap.Clear();
+                _fileMap.Clear();
+                _unreloadable.Clear();
+                _sccExcluded.Clear();
             }
 
             GetService<IAnkhServiceEvents>().OnSccProviderDeactivated(EventArgs.Empty);
