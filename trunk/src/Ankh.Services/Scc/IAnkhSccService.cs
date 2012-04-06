@@ -125,6 +125,12 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The project.</param>
         void EnsureCheckOutReference(SvnProject project);
+
+        /// <summary>
+        /// Ensure that all project state is loaded
+        /// </summary>
+        /// <remarks>Only used after enabling ourself as SCC provider</remarks>
+        void EnsureLoaded();
     }
 
     /// <summary>

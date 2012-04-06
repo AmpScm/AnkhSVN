@@ -541,13 +541,7 @@ namespace Ankh.Scc
         {
             _registeredSccCleanup = false;
 
-            if (_syncMap)
-            {
-                _syncMap = false;
-
-                foreach (SccProjectData pd in _projectMap.Values)
-                    pd.Load();
-            }
+            EnsureLoaded();
 
             if (_delayedDelete != null)
             {
@@ -562,6 +556,17 @@ namespace Ankh.Scc
                             svn.MetaDelete(node);
                     }
                 }
+            }
+        }
+
+        public void EnsureLoaded()
+        {
+            if (_syncMap)
+            {
+                _syncMap = false;
+
+                foreach (SccProjectData pd in _projectMap.Values)
+                    pd.Load();
             }
         }
 
