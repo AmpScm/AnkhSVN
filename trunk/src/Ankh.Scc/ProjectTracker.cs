@@ -28,7 +28,6 @@ namespace Ankh.Scc
 {
     interface IAnkhProjectDocumentTracker
     {
-        void Hook(bool enable);
     }
 
     //[CLSCompliant(false)]

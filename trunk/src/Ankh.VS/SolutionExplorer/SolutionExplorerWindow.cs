@@ -20,6 +20,7 @@ using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Ankh.Commands;
+using Ankh.Scc;
 
 namespace Ankh.VS.SolutionExplorer
 {
@@ -84,8 +85,8 @@ namespace Ankh.VS.SolutionExplorer
 
         private void OnSolutionOpened(object sender, EventArgs e)
         {
-            if (GetService<ITheAnkhSccProvider
-                EnableAnkhIcons(false);
+            if (GetService<IAnkhSccService>().IsActive)
+                EnableAnkhIcons(true);
         }
 
         void MaybeEnsure()
