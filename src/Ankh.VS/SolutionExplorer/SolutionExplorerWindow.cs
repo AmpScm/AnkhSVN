@@ -15,19 +15,10 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using System.Diagnostics;
-using System.ComponentModel;
-using Microsoft.VisualStudio.OLE.Interop;
-using IServiceProvider = System.IServiceProvider;
-using Microsoft.VisualStudio.Shell;
-using Ankh.UI;
-using Ankh.VS;
 using Ankh.Commands;
 
 namespace Ankh.VS.SolutionExplorer
@@ -36,7 +27,7 @@ namespace Ankh.VS.SolutionExplorer
     /// 
     /// </summary>
     [GlobalService(typeof(IAnkhSolutionExplorerWindow))]
-    sealed class SolutionExplorerWindow : AnkhService, IVsWindowFrameNotify, IVsWindowFrameNotify2, IDisposable, IAnkhSolutionExplorerWindow
+    sealed class SolutionExplorerWindow : AnkhService, IVsWindowFrameNotify, IVsWindowFrameNotify2, IAnkhSolutionExplorerWindow
     {
         readonly SolutionTreeViewManager _manager;
         
@@ -55,6 +46,32 @@ namespace Ankh.VS.SolutionExplorer
                 _hookImageList = true;
                 _manager = new SolutionTreeViewManager(Context);
             }
+        }
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+
+            if (_hookImageList)
+            {
+                AnkhServiceEvents ev = GetService<AnkhServiceEvents>();
+
+                ev.SccProviderActivated += OnSccProviderActivated;
+                ev.SccProviderDeactivated += OnSccProviderDeactivated;
+            }
+        }
+
+        private void OnSccProviderActivated(object sender, EventArgs e)
+        {
+            // _manager is available or we wouldn't have hooked
+            _manager.SetAnkhIcons(true);
+
+            GetService<IAnkhCommandService>().PostIdleAction(MaybeEnsure);
+        }
+
+        private void OnSccProviderDeactivated(object sender, EventArgs e)
+        {
+            EnableAnkhIcons(false);
         }
 
         void MaybeEnsure()
@@ -115,8 +132,8 @@ namespace Ankh.VS.SolutionExplorer
                                 uint cookie;
                                 Marshal.ThrowExceptionForHR(solutionExplorer2.Advise(this, out cookie));
                                 _cookie = cookie;
+                                _solutionExplorer2 = solutionExplorer2;
                             }
-                            _solutionExplorer2 = solutionExplorer2;
                         }
                     }
                 }
