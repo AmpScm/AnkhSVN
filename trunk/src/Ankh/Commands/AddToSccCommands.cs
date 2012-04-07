@@ -482,7 +482,7 @@ namespace Ankh.Commands
                         Debug.Assert(parentDir != null);
 
                         DialogResult rslt = mb.Show(string.Format(CommandResources.AddXToExistingWcY,
-                                                                  Path.GetFileName(projInfo.ProjectName),
+                                                                  projInfo.ProjectName,
                                                                   parentDir.FullPath), AnkhId.PlkProduct, MessageBoxButtons.YesNoCancel);
 
                         switch (rslt)
