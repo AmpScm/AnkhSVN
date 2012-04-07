@@ -39,7 +39,6 @@ namespace Ankh.UI.SccManagement
             this.pendingList = new Ankh.UI.PendingChanges.Commits.PendingCommitsView(this.components);
             this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.label1 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -117,7 +116,6 @@ namespace Ankh.UI.SccManagement
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
