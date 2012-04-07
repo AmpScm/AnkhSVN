@@ -338,6 +338,11 @@ namespace Ankh.VS.Selection
             get { return (_twPendingChanges ?? (_twPendingChanges = GetCache(AnkhId.PendingChangeContextGuid))).Active; }
         }
 
+        public bool ShiftDown
+        {
+            get { return (0 != (System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift)); }
+        }
+
         sealed class CmdStateCacheItem
         {
             readonly uint _cookie;
