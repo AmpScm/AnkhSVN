@@ -295,6 +295,15 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unlock Files.
+        /// </summary>
+        internal static string UnlockTitle {
+            get {
+                return ResourceManager.GetString("UnlockTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update Folder.
         /// </summary>
         internal static string UpdateFolder {
