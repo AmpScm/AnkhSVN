@@ -43,12 +43,14 @@ namespace Ankh.Commands
                 return; // Always enabled
 
             bool mustOnly = (e.Command == AnkhCommand.LockMustLock);
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(e.Command != AnkhCommand.LockMustLock))
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
+                if (mustOnly && !item.IsReadOnlyMustLock)
+                    continue;
+
                 if (item.IsFile && item.IsVersioned && !item.IsLocked)
                 {
-                    if (!mustOnly || item.IsReadOnlyMustLock)
-                        return;
+                    return;
                 }
             }
             e.Enabled = false;
@@ -61,67 +63,44 @@ namespace Ankh.Commands
             if (e.Command == AnkhCommand.SccLock && items == null)
                 return;
 
-            PathSelectorInfo psi = new PathSelectorInfo("Select Files to Lock",
-                                                        items ?? e.Selection.GetSelectedSvnItems(true));
-            psi.VisibleFilter += delegate(SvnItem item)
-                                     {
-                                         return item.IsFile && item.IsVersioned && !item.IsLocked;
-                                     };
+            if (items == null)
+            {
+                List<SvnItem> choices = new List<SvnItem>();
 
-            psi.CheckedFilter += delegate(SvnItem item)
-                                     {
-                                         return item.IsFile && item.IsVersioned && !item.IsLocked;
-                                     };
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+                {
+                    if (item.IsFile && item.IsVersioned && !item.IsLocked)
+                        choices.Add(item);
+                }
 
-            PathSelectorResult psr;
+                items = choices;
+            }
+
             bool stealLocks = false;
             string comment = "";
 
-            IAnkhConfigurationService cs = e.GetService<IAnkhConfigurationService>();
-            AnkhConfig config = cs.Instance;
+            AnkhConfig config = e.GetService<IAnkhConfigurationService>().Instance;
 
-            IEnumerable<SvnItem> selectedItems = null;
-
-            if (!config.SuppressLockingUI || e.PromptUser)
+            if (!e.DontPrompt && (e.PromptUser || (!Shift || !config.SuppressLockingUI)))
             {
-                if (e.PromptUser || !(Shift || e.DontPrompt))
+                using (LockDialog dlg = new LockDialog())
                 {
-                    using (LockDialog dlg = new LockDialog(psi))
-                    {
-                        bool succeeded = (dlg.ShowDialog(e.Context) == DialogResult.OK);
-                        psr = new PathSelectorResult(succeeded, dlg.CheckedItems);
-                        stealLocks = dlg.StealLocks;
-                        comment = dlg.Message;
-                    }
+                    dlg.Context = e.Context;
+                    dlg.LoadItems(items);
 
+                    if (dlg.ShowDialog(e.Context) != DialogResult.OK)
+                        return;
+
+                    items = new List<SvnItem>(dlg.GetCheckedItems());
+                    stealLocks = dlg.StealLocks;
+                    comment = dlg.Message;
                 }
-                else
-                {
-                    psr = psi.DefaultResult;
-                }
-                if (!psr.Succeeded)
-                {
-                    return;
-                }
-                selectedItems = psr.Selection;
             }
 
-
-            if (selectedItems == null)
-                selectedItems = psi.DefaultResult.Selection;
-
-            List<string> files = new List<string>();
-            foreach (SvnItem item in selectedItems)
-            {
-                if (item.IsFile) // svn lock is only for files
-                {
-                    files.Add(item.FullPath);
-                }
-            }
+            ICollection<string> files = SvnItem.GetPaths(items);
 
             if (files.Count == 0)
                 return;
-
 
             SortedList<string, string> alreadyLockedFiles = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
             e.GetService<IProgressRunner>().RunModal(
@@ -136,7 +115,12 @@ namespace Ankh.Commands
                                       {
                                           if (notifyArgs.Action == SvnNotifyAction.LockFailedLock)
                                           {
-                                              alreadyLockedFiles.Add(notifyArgs.FullPath, GuessUserFromError(notifyArgs.Error.Message));
+                                              string userName = "?";
+
+                                              if (notifyArgs.Lock != null)
+                                                  userName = notifyArgs.Lock.Owner;
+
+                                              alreadyLockedFiles.Add(notifyArgs.FullPath, userName);
                                           }
                                       };
                      ee.Client.Lock(files, la);
@@ -178,27 +162,6 @@ namespace Ankh.Commands
                          ee.Client.Lock(files, la);
                      });
             }
-        }
-
-        Regex _guessRx;
-        private string GuessUserFromError(string message)
-        {
-            // Parses errors in the formats:
-            // "Path '%s' is already locked by user '%s' in filesystem '%s'" (Used by most languages)
-            // "Pfad »%s« ist bereits vom Benutzer »%s« im Dateisystem »%s« gesperrt" (German)
-            //
-            // Ordering is used in both FS backends and unlikely to change over versions
-            // but additional fields might be added later
-            if (_guessRx == null)
-                _guessRx = new Regex("^[^']+ ['»](?<path>.*?)['«][^']+ ['»](?<user>.*?)['«][^']+( ['»].*?['«][^']*)*$", RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Singleline);
-
-            Match m = _guessRx.Match(message);
-
-            string user = null;
-            if (m.Success)
-                user = m.Groups["user"].Value;
-
-            return user ?? "";
         }
     }
 }

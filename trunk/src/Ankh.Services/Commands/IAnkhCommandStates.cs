@@ -91,5 +91,7 @@ namespace Ankh.Commands
         bool ClassViewerActive { get; }
 
         bool PendingChangesActive { get; }
+
+        bool ShiftDown { get; }
     }
 }

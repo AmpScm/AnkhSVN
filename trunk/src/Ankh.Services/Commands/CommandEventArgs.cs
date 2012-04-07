@@ -61,6 +61,16 @@ namespace Ankh.Commands
         {
             get { return _promptUser; }
         }
+
+        public bool ShouldPrompt(bool suppressWithShift)
+        {
+            if (PromptUser || DontPrompt)
+                return PromptUser;
+            else if (suppressWithShift && State.ShiftDown)
+                return false;
+
+            return true;
+        }
     }
 
 }

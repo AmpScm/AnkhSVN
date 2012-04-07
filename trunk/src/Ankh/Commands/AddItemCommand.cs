@@ -51,7 +51,7 @@ namespace Ankh.Commands
 
             if (string.IsNullOrEmpty(argumentFile))
             {
-                if (e.PromptUser || (!e.DontPrompt && !Shift))
+                if (e.ShouldPrompt(true))
                 {
                     selection.AddRange(e.Selection.GetSelectedSvnItems(true));
 
