@@ -225,4 +225,7 @@
   <data name="ImportingTitle" xml:space="preserve">
     <value>Importing</value>
   </data>
+  <data name="UnlockTitle" xml:space="preserve">
+    <value>Unlock Files</value>
+  </data>
 </root>

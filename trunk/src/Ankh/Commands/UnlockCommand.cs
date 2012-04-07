@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using SharpSvn;
 
-using Ankh.Scc;
+using Ankh.Configuration;
 using Ankh.UI;
 using Ankh.UI.PathSelector;
 
@@ -27,12 +27,12 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to unlock the selected items.
     /// </summary>
-    [Command(AnkhCommand.Unlock, HideWhenDisabled = true)]
+    [Command(AnkhCommand.Unlock)]
     class UnlockCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 if (item.IsLocked)
                     return;
@@ -43,50 +43,47 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            PathSelectorInfo info = new PathSelectorInfo("Select Files to Unlock", e.Selection.GetSelectedSvnItems(true));
+            AnkhConfig config = e.GetService<IAnkhConfigurationService>().Instance;
+            ICollection<SvnItem> targets;
 
-            info.VisibleFilter += delegate(SvnItem item)
-                                     {
-                                         return item.IsLocked;
-                                     };
-
-            info.CheckedFilter += delegate(SvnItem item)
-                                     {
-                                         return item.IsLocked;
-                                     };
-
-            PathSelectorResult result;
-            if (!Shift)
+            if (!e.DontPrompt && (e.PromptUser || (!Shift && !config.SuppressLockingUI)))
             {
-                using (PathSelector selector = new PathSelector(info))
+                using (PendingChangeSelector selector = new PendingChangeSelector())
                 {
-                    selector.Context = e.Context;
+                    selector.Text = CommandStrings.UnlockTitle;
+                    selector.PreserveWindowPlacement = true;
 
-                    bool succeeded = selector.ShowDialog(e.Context) == DialogResult.OK;
-                    result = new PathSelectorResult(succeeded, selector.CheckedItems);
-                    result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
-                    result.RevisionStart = selector.RevisionStart;
-                    result.RevisionEnd = selector.RevisionEnd;
+                    selector.LoadItems(new List<SvnItem>(e.Selection.GetSelectedSvnItems(true)),
+                                       delegate(SvnItem i) { return i.IsLocked; },
+                                       delegate(SvnItem i) { return i.IsLocked; });
+
+                    if (selector.ShowDialog(e.Context) != DialogResult.OK)
+                        return;
+
+                    targets = new List<SvnItem>(selector.GetSelectedItems());
                 }
             }
             else
-                result = info.DefaultResult;
+            {
+                List<SvnItem> toUnlock = new List<SvnItem>();
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+                {
+                    if (item.IsLocked)
+                        toUnlock.Add(item);
+                }
+                targets = toUnlock;
+            }
 
-            if (!result.Succeeded)
+            if (targets.Count == 0)
                 return;
 
-            List<string> files = new List<string>();
-
-            foreach (SvnItem item in result.Selection)
-            {
-                files.Add(item.FullPath);
-            }
+            List<string> files = new List<string>(SvnItem.GetPaths(targets));
 
             if (files.Count == 0)
                 return;
 
             e.GetService<IProgressRunner>().RunModal(
-                "Unlocking",
+                CommandStrings.UnlockTitle,
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     SvnUnlockArgs ua = new SvnUnlockArgs();
