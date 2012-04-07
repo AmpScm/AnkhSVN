@@ -197,6 +197,130 @@ namespace Ankh.VS.Selection
             get { return (_ankhActiveScc ?? (_ankhActiveScc = GetCache(AnkhId.SccProviderGuid))).Active; }
         }
 
+        CmdStateCacheItem _sccManagerLoaded;
+        public bool SccManagerLoaded
+        {
+            get { return (_sccManagerLoaded ?? (_sccManagerLoaded = GetCache(typeof(ISccManagerLoaded).GUID))).Active; }
+        }
+
+        CmdStateCacheItem _sccEnlistingInProject;
+        public bool SccEnlistingInProject
+        {
+            get { return (_sccEnlistingInProject ?? (_sccEnlistingInProject = GetCache(typeof(IEnlistingInProject).GUID))).Active; }
+        }
+
+        CmdStateCacheItem _sccEnableOpenFromScc;
+        public bool SccEnableOpenFromScc
+        {
+            get { return (_sccEnableOpenFromScc ?? (_sccEnableOpenFromScc = GetCache(new Guid("795635A1-4522-11d1-8DCE-00AA00A3F593")))).Active; }
+        }
+
+        CmdStateCacheItem _notBuildingAndNotDebugging;
+        public bool NotBuildingAndNotDebugging
+        {
+            get { return (_notBuildingAndNotDebugging ?? (_notBuildingAndNotDebugging = GetCache(new Guid("48EA4A80-F14E-4107-88FA-8D0016F30B9C")))).Active; }
+        }
+
+        CmdStateCacheItem _solutionOrProjectUpgrading;
+        public bool SolutionOrProjectUpgrading
+        {
+            get { return (_solutionOrProjectUpgrading ?? (_solutionOrProjectUpgrading = GetCache(new Guid("EF4F870B-7B85-4F29-9D15-CE1ABFBE733B")))).Active; }
+        }
+
+        /*CmdStateCacheItem _dataSourceWindowSupported;
+        public bool DataSourceWindowSupported
+        {
+            get { return (_dataSourceWindowSupported ?? (_dataSourceWindowSupported = GetCache(new Guid("95C314C4-660B-4627-9F82-1BAF1C764BBF")))).Active; }
+        }*/
+
+        CmdStateCacheItem _dataSourceWindowAutoVisible;
+        public bool DataSourceWindowAutoVisible
+        {
+            get { return (_dataSourceWindowAutoVisible ?? (_dataSourceWindowAutoVisible = GetCache(new Guid("2E78870D-AC7C-4460-A4A1-3FE37D00EF81")))).Active; }
+        }
+
+        CmdStateCacheItem _toolboxInitialized;
+        public bool ToolboxInitialized
+        {
+            get { return (_toolboxInitialized ?? (_toolboxInitialized = GetCache(new Guid("DC5DB425-F0FD-4403-96A1-F475CDBA9EE0")))).Active; }
+        }
+
+        CmdStateCacheItem _solutionExistsAndNotBuildingAndNotDebugging;
+        public bool SolutionExistsAndNotBuildingAndNotDebugging
+        {
+            get { return (_solutionExistsAndNotBuildingAndNotDebugging ?? (_solutionExistsAndNotBuildingAndNotDebugging = GetCache(new Guid("D0E4DEEC-1B53-4CDA-8559-D454583AD23B")))).Active; }
+        }
+        
+        CmdStateCacheItem _solutionExistsAndFullyLoaded;
+        public bool SolutionExistsAndFullyLoaded
+        {
+            // VS2010+
+            get { return (_solutionExistsAndFullyLoaded ?? (_solutionExistsAndFullyLoaded = GetCache(new Guid("10534154-102D-46E2-ABA8-A6BFA25BA0BE")))).Active; }
+        }
+
+        CmdStateCacheItem _solutionOpening;
+        public bool SolutionOpening
+        {
+            // VS2010+
+            get { return (_solutionOpening ?? (_solutionOpening = GetCache(new Guid("D2567162-F94F-4091-8798-A096E61B8B50")))).Active; }
+        }
+
+        CmdStateCacheItem _projectRetargeting;
+        public bool ProjectRetargeting
+        {
+            // VS2010+
+            get { return (_projectRetargeting ?? (_projectRetargeting = GetCache(new Guid("DE039A0E-C18F-490c-944A-888B8E86DA4B")))).Active; }
+        }
+
+        CmdStateCacheItem _historicalDebugging;
+        public bool HistoricalDebugging
+        {
+            // VS2010+
+            get { return (_historicalDebugging ?? (_historicalDebugging = GetCache(new Guid("D1B1E38F-1A7E-4236-AF55-6FA8F5FA76E6")))).Active; }
+        }
+
+        /*CmdStateCacheItem _dataSourceWizardSuppressed;
+        public bool DataSourceWizardSuppressed
+        {
+            // VS2010+
+            get { return (_dataSourceWizardSuppressed ?? (_dataSourceWizardSuppressed = GetCache(new Guid("5705AD15-40EE-4426-AD3E-BA750610D599")))).Active; }
+        }*/
+
+        /*CmdStateCacheItem _standardPreviewerConfigurationChanging;
+        public bool StandardPreviewerConfigurationChanging
+        {
+            // VS11+
+            get { return (_standardPreviewerConfigurationChanging ?? (_standardPreviewerConfigurationChanging = GetCache(new Guid("6D3CAD8E-9129-4ec0-929E-69B6F5D4400D")))).Active; }
+        }*/
+
+        CmdStateCacheItem _solutionHasImmersiveProject;
+        public bool SolutionHasImmersiveProject
+        {
+            // VS11+
+            get { return (_solutionHasImmersiveProject ?? (_solutionHasImmersiveProject = GetCache(new Guid("7CAC4AE1-2E6B-4B02-A91C-71611E86F273")))).Active; }
+        }
+
+        CmdStateCacheItem _firstLaunchSetup;
+        public bool FirstLaunchSetup
+        {
+            // VS11+
+            get { return (_firstLaunchSetup ?? (_firstLaunchSetup = GetCache(new Guid("E7B2B2DB-973B-4CE9-A8D7-8498895DEA73")))).Active; }
+        }
+
+        CmdStateCacheItem _osWindows8OrHigher;
+        public bool OsWindows8OrHigher
+        {
+            // VS11+
+            get { return (_osWindows8OrHigher ?? (_osWindows8OrHigher = GetCache(new Guid("67CFF80C-0863-4202-A4E4-CE80FDF8506E")))).Active; }
+        }
+
+        CmdStateCacheItem _backgroundProjectLoad;
+        public bool BackgroundProjectLoad
+        {
+            get { return (_backgroundProjectLoad ?? (_backgroundProjectLoad = GetCache(new Guid("DC769521-31A2-41A5-9BBB-210B5D63568D")))).Active; }
+        }
+
+
         sealed class CmdStateCacheItem
         {
             readonly uint _cookie;
@@ -278,6 +402,7 @@ namespace Ankh.VS.Selection
                             if (iManaging != 0)
                                 return true;
                         }
+                        break;
                     }
                 }
             }
