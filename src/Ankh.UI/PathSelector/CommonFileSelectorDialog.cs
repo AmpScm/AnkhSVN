@@ -279,7 +279,7 @@ namespace Ankh.UI.PathSelector
         }
 
 
-        public PathSelectorOptions Options
+        internal PathSelectorOptions Options
         {
             get { return this._options; }
             set
