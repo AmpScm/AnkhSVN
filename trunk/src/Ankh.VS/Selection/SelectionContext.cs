@@ -41,7 +41,6 @@ namespace Ankh.VS.Selection
     partial class SelectionContext : AnkhService, IVsSelectionEvents, ISelectionContext, ISelectionContextEx, ISccProjectWalker
     {
         IFileStatusCache _cache;
-        SolutionExplorerWindow _solutionExplorer;
         bool _disposed;
         uint _cookie;
 
@@ -85,7 +84,6 @@ namespace Ankh.VS.Selection
         protected override void OnInitialize()
         {
             _cache = GetService<IFileStatusCache>();
-            _solutionExplorer = GetService<SolutionExplorerWindow>(typeof(IAnkhSolutionExplorerWindow));
 
             IVsMonitorSelection monitor = GetService<IVsMonitorSelection>();
 
@@ -252,14 +250,24 @@ namespace Ankh.VS.Selection
 
         #endregion
 
+        IVsUIHierarchyWindow _solutionExplorerWindow;
+        IVsUIHierarchyWindow SolutionExplorerWindow
+        {
+            get
+            {
+                return _solutionExplorerWindow ?? (_solutionExplorerWindow = VsShellUtilities.GetUIHierarchyWindow(Context, new Guid(ToolWindowGuids80.SolutionExplorer)));
+            }
+        }
+
+
         protected bool MightBeSolutionExplorerSelection
         {
             get
             {
-                if (!_isSolutionExplorer.HasValue && _solutionExplorer != null)
+                if (!_isSolutionExplorer.HasValue)
                 {
                     _isSolutionExplorer = false;
-                    IVsUIHierarchyWindow hw = _solutionExplorer.HierarchyWindow;
+                    IVsUIHierarchyWindow hw = SolutionExplorerWindow;
                     IntPtr hierarchy;
                     IVsMultiItemSelect ms;
                     uint itemId;
