@@ -26,7 +26,7 @@ using System.Xml;
 using Microsoft.Win32;
 
 using Ankh.UI;
-using Ankh.VS;
+using Ankh.UI.SccManagement;
 using System.Text.RegularExpressions;
 
 /*****************************************************************
@@ -272,7 +272,7 @@ namespace Ankh.Commands
             string title = args[0], header = args[1], description = args[2], url = args[3],
                 urltext = args[4], version = args[5], newVersion = args[6], tag = args[7];
 
-            using (UI.SccManagement.UpdateAvailableDialog uad = new UI.SccManagement.UpdateAvailableDialog())
+            using (UpdateAvailableDialog uad = new UpdateAvailableDialog())
             {
                 try
                 {
