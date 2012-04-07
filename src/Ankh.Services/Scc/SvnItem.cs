@@ -673,7 +673,7 @@ namespace Ankh
                         return Exists;
                     case SvnStatus.NotVersioned:
                         return false;
-                    default:
+                    default: // Includes Conflicted
                         return true;
                 }
             }
