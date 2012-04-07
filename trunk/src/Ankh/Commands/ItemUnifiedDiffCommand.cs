@@ -58,19 +58,20 @@ namespace Ankh.Commands
             // should we show the path selector?
             if (!Shift)
             {
-                using (PathSelector selector = new PathSelector())
+                using (CommonFileSelectorDialog dlg = new CommonFileSelectorDialog())
                 {
-                    selector.Items = items;
-                    selector.RevisionStart = start;
-                    selector.RevisionEnd = end;
+                    dlg.Text = CommandStrings.UnifiedDiffTitle;
+                    dlg.Items = items;
+                    dlg.RevisionStart = start;
+                    dlg.RevisionEnd = end;
 
-                    if (selector.ShowDialog(e.Context) != DialogResult.OK)
+                    if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                         return;
 
                     items.Clear();
-                    items.AddRange(selector.GetCheckedItems());
-                    start = selector.RevisionStart;
-                    end = selector.RevisionEnd;
+                    items.AddRange(dlg.GetCheckedItems());
+                    start = dlg.RevisionStart;
+                    end = dlg.RevisionEnd;
                 }
             }
 
@@ -92,7 +93,7 @@ namespace Ankh.Commands
 
             using (MemoryStream stream = new MemoryStream())
             {
-                e.Context.GetService<IProgressRunner>().RunModal("Diffing",
+                e.Context.GetService<IProgressRunner>().RunModal(CommandStrings.RunningDiff,
                     delegate(object sender, ProgressWorkerArgs ee)
                     {
                         foreach (SvnItem item in items)

@@ -124,6 +124,15 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compare Files.
+        /// </summary>
+        internal static string CompareFilesTitle {
+            get {
+                return ResourceManager.GetString("CompareFilesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Patch.
         /// </summary>
         internal static string CreatePatchTitle {
@@ -277,6 +286,15 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comparing Files.
+        /// </summary>
+        internal static string RunningDiff {
+            get {
+                return ResourceManager.GetString("RunningDiff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The conflict in &apos;{0}&apos; is already resolved..
         /// </summary>
         internal static string TheConflictInXIsAlreadyResolved {
@@ -295,11 +313,29 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unified Diff.
+        /// </summary>
+        internal static string UnifiedDiffTitle {
+            get {
+                return ResourceManager.GetString("UnifiedDiffTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unlock Files.
         /// </summary>
         internal static string UnlockTitle {
             get {
                 return ResourceManager.GetString("UnlockTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Files.
+        /// </summary>
+        internal static string UpdateFilesTitle {
+            get {
+                return ResourceManager.GetString("UpdateFilesTitle", resourceCulture);
             }
         }
         

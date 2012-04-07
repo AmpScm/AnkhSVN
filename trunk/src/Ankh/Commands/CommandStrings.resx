@@ -225,7 +225,19 @@
   <data name="ImportingTitle" xml:space="preserve">
     <value>Importing</value>
   </data>
+  <data name="CompareFilesTitle" xml:space="preserve">
+    <value>Compare Files</value>
+  </data>
+  <data name="RunningDiff" xml:space="preserve">
+    <value>Comparing Files</value>
+  </data>
+  <data name="UnifiedDiffTitle" xml:space="preserve">
+    <value>Unified Diff</value>
+  </data>
   <data name="UnlockTitle" xml:space="preserve">
     <value>Unlock Files</value>
+  </data>
+  <data name="UpdateFilesTitle" xml:space="preserve">
+    <value>Update Files</value>
   </data>
 </root>

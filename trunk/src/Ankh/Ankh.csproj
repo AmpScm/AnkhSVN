@@ -189,7 +189,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\UnlockCommand.cs" />
-    <Compile Include="Commands\UpdateItemCommand.cs">
+    <Compile Include="Commands\UpdateFiles.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\RepositoryExplorer\ViewInVSNetCommand.cs">

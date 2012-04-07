@@ -642,8 +642,8 @@
     <Compile Include="OptionsPages\ToolArgumentDialog.Designer.cs">
       <DependentUpon>ToolArgumentDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathSelector\PathSelector.Designer.cs">
-      <DependentUpon>PathSelector.cs</DependentUpon>
+    <Compile Include="PathSelector\CommonFileSelectorDialog.Designer.cs">
+      <DependentUpon>CommonFileSelectorDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="PendingChanges\Commands\CommitPendingChanges.cs" />
     <Compile Include="PendingChanges\Commands\PasteToEditorList.cs" />
@@ -790,7 +790,7 @@
     <Compile Include="OptionsPages\ToolArgumentDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PathSelector\PathSelector.cs">
+    <Compile Include="PathSelector\CommonFileSelectorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ProgressDialog.cs">
@@ -849,8 +849,8 @@
       <DependentUpon>LockDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathSelector\PathSelector.resx">
-      <DependentUpon>PathSelector.cs</DependentUpon>
+    <EmbeddedResource Include="PathSelector\CommonFileSelectorDialog.resx">
+      <DependentUpon>CommonFileSelectorDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressDialog.resx">
