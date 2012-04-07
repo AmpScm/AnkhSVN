@@ -236,7 +236,7 @@
     <Content Include="Gui\menu\RevertToVersion.png" />
     <Content Include="Gui\menu\SaveToFile.png" />
     <Content Include="Gui\menu\Switch.png" />
-    <Content Include="Gui\menu\Unlock.png" />
+    <Content Include="Gui\Scc\Legacy\Unlock.png" />
     <Content Include="Gui\menu\ViewInVSNet.png" />
     <Content Include="Gui\menu\ViewInWindows.png" />
     <Content Include="Gui\PendingChanges\ApplyPatch.png" />
@@ -476,6 +476,7 @@
     <Content Include="Gui\Scc\TreeView.png" />
     <Content Include="Gui\Scc\Undo.png" />
     <Content Include="Gui\Scc\UndoCheckout.png" />
+    <Content Include="Gui\Scc\Unlock.png" />
     <Content Include="Gui\Scc\ViewHistory.png" />
     <Content Include="Gui\Scc\ViewPendingCheckins.png" />
     <Content Include="Resources\Package.ico" />

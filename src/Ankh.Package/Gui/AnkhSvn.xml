@@ -449,7 +449,7 @@
               toolTip="Lock the selected item." iconFile="Scc/Lock.png" />
           <Button id="Cmd_Unlock" name="Unlock" priority="0x50" defaultInvisible="true"
               text="U&amp;nlock..."
-              toolTip="Unlock the selected items." iconFile="menu/Unlock.png"/>
+              toolTip="Unlock the selected items." iconFile="Scc/Unlock.png"/>
         </Group>
         <Group id="Grp_SccItemAction" priority="0x3000">
 
