@@ -36,10 +36,10 @@ namespace Ankh
         readonly SvnNodeKind _nodeKind;
         readonly string _changeList;
         readonly SvnStatus _localNodeStatus;
-        readonly SvnStatus _localContentStatus;
+        readonly SvnStatus _localTextStatus;
+        readonly SvnStatus _localPropertyStatus;
         readonly bool _localCopied;
         readonly bool _localLocked;
-        readonly SvnStatus _localPropertyStatus;
         readonly Uri _uri;
 
         readonly DateTime _lastChangeTime;
@@ -55,9 +55,9 @@ namespace Ankh
 
             _nodeKind = status.NodeKind;
             _localNodeStatus = status.LocalNodeStatus;
-            _localContentStatus = status.LocalContentStatus;
-            _localCopied = status.LocalCopied;
+            _localTextStatus = status.LocalTextStatus;
             _localPropertyStatus = status.LocalPropertyStatus;
+            _localCopied = status.LocalCopied;
             _uri = status.Uri;
             _localFileExists = (status.FileLength >= 0);
 
@@ -81,7 +81,7 @@ namespace Ankh
         private AnkhStatus(SvnStatus allStatuses)
         {
             _localNodeStatus = allStatuses;
-            _localContentStatus = allStatuses;
+            _localTextStatus = SvnStatus.None;
             _localPropertyStatus = SvnStatus.None;
             //_localLocked = false;
             //_localCopied = false;
@@ -118,9 +118,9 @@ namespace Ankh
         /// <summary>
         /// Content status in working copy
         /// </summary>
-        public SvnStatus LocalContentStatus
+        public SvnStatus LocalTextStatus
         {
-            get { return _localContentStatus; }
+            get { return _localTextStatus; }
         }
 
         /// <summary>
@@ -135,13 +135,20 @@ namespace Ankh
         {
             get
             {
-                switch(_localContentStatus)
+                switch(_localNodeStatus)
                 {
                     // High priority statuses on the content
                     case SvnStatus.Obstructed:
                     case SvnStatus.Missing:
                     case SvnStatus.Incomplete: 
-                        return _localContentStatus;
+                        return _localNodeStatus;
+                }
+
+                switch (_localTextStatus)
+                {
+                    // High priority on the text
+                    case SvnStatus.Conflicted:
+                        return _localPropertyStatus;
                 }
 
                 switch(_localPropertyStatus)
@@ -151,12 +158,14 @@ namespace Ankh
                         return _localPropertyStatus;
                 }
 
-                if (_localContentStatus != SvnStatus.Normal)
-                    return _localContentStatus;
-                else if (_localPropertyStatus != SvnStatus.None)
+                if (_localNodeStatus != SvnStatus.Normal)
+                    return _localNodeStatus;
+                else if (_localTextStatus != SvnStatus.None && _localTextStatus != SvnStatus.Normal)
+                    return _localTextStatus;
+                else if (_localPropertyStatus != SvnStatus.None && _localPropertyStatus != SvnStatus.Normal)
                     return _localPropertyStatus;
                 else
-                    return _localContentStatus;
+                    return _localTextStatus;
             }
         }
 

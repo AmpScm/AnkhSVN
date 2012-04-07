@@ -207,7 +207,7 @@ namespace Ankh.Scc
         PendingChangeStatus GetStatus(RefreshContext context, SvnItem item)
         {
             AnkhStatus status = item.Status;
-            _kind = CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, item.IsTreeConflicted, item);
+            _kind = CombineStatus(status.LocalNodeStatus, status.LocalPropertyStatus, item.IsTreeConflicted, item);
 
             if (_kind != PendingChangeKind.None)
                 return new PendingChangeStatus(_kind);
@@ -378,20 +378,20 @@ namespace Ankh.Scc
         /// <summary>
         /// Combines the statuses to a single PendingChangeKind status for UI purposes
         /// </summary>
-        /// <param name="contentStatus">The content status.</param>
+        /// <param name="nodeStatus">The content status.</param>
         /// <param name="propertyStatus">The property status.</param>
         /// <param name="treeConflict">if set to <c>true</c> [tree conflict].</param>
         /// <param name="item">The item or null if no on disk representation is availavke</param>
         /// <returns></returns>
-        public static PendingChangeKind CombineStatus(SvnStatus contentStatus, SvnStatus propertyStatus, bool treeConflict, SvnItem item)
+        public static PendingChangeKind CombineStatus(SvnStatus nodeStatus, SvnStatus propertyStatus, bool treeConflict, SvnItem item)
         {
             // item can be null!
             if (treeConflict || (item != null && item.IsTreeConflicted))
                 return PendingChangeKind.TreeConflict;
-            else if (contentStatus == SvnStatus.Conflicted || propertyStatus == SvnStatus.Conflicted)
+            else if (nodeStatus == SvnStatus.Conflicted || propertyStatus == SvnStatus.Conflicted)
                 return PendingChangeKind.Conflicted;
 
-            switch (contentStatus)
+            switch (nodeStatus)
             {
                 case SvnStatus.NotVersioned:
                     if (item != null)
@@ -408,7 +408,12 @@ namespace Ankh.Scc
                     return PendingChangeKind.Replaced;
                 case SvnStatus.Added:
                     if (item != null && item.HasCopyableHistory)
-                        return PendingChangeKind.Copied;
+                    {
+                        if (item.Status.LocalTextStatus == SvnStatus.Normal)
+                            return PendingChangeKind.Copied;
+                        else
+                            return PendingChangeKind.ModifiedCopy;
+                    }
 
                     return PendingChangeKind.Added;
                 case SvnStatus.Deleted:
@@ -436,7 +441,7 @@ namespace Ankh.Scc
                 case SvnStatus.Conflicted:
                 case SvnStatus.Merged:
                 default: // Give error on missed values
-                    throw new ArgumentOutOfRangeException("contentStatus", contentStatus, "Invalid content status");
+                    throw new ArgumentOutOfRangeException("contentStatus", nodeStatus, "Invalid content status");
             }
 
             switch (propertyStatus)
