@@ -951,7 +951,7 @@
             </Group>
           </Menu>
           <Button id="Cmd_ItemRevertBase" name="Revert" priority="0x400" defaultDisabled="true"
-                  text="&amp;Revert to BASE Version" iconFile="Scc/Undo.png"/>
+                  text="&amp;Revert Local Changes" iconFile="Scc/Undo.png"/>
         </Group>
         <Group id="Grp_PendingChangesAdmin" priority="0x400">
           <!--Menu id="Menu_ItemIgnore" priority="0x100" name="Ignore" type="MenuController">
