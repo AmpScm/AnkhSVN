@@ -187,16 +187,6 @@ namespace AnkhSvn_UnitTestProject.Mocks
             }
 
             #endregion
-
-			#region ISelectionContext Members
-
-
-			public bool IsSolutionExplorerSelection
-			{
-				get { return false; }
-			}
-
-			#endregion
 		}
     }
 }
