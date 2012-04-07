@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Ankh.UI.PathSelector
 {
-    partial class PathSelector
+    partial class CommonFileSelectorDialog
     {
         #region Windows Form Designer generated code
         /// <summary>
@@ -30,7 +30,7 @@ namespace Ankh.UI.PathSelector
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PathSelector));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommonFileSelectorDialog));
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.suppressLabel = new System.Windows.Forms.Label();

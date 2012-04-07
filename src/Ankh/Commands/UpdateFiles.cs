@@ -31,7 +31,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.UpdateItemLatest)]
     [Command(AnkhCommand.UpdateItemLatestRecursive)]
     [Command(AnkhCommand.UpdateProjectFileSpecific)]
-    class UpdateItem : CommandBase
+    sealed class UpdateFiles : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -88,16 +88,17 @@ namespace Ankh.Commands
                         items.Add(item);
                 }
 
-                using (PathSelector selector = new PathSelector())
+                using (CommonFileSelectorDialog dlg = new CommonFileSelectorDialog())
                 {
-                    selector.Items = items;
-                    selector.RevisionStart = updateTo;
+                    dlg.Text = CommandStrings.UpdateFilesTitle;
+                    dlg.Items = items;
+                    dlg.RevisionStart = updateTo;
 
-                    if (selector.ShowDialog(e.Context) != DialogResult.OK)
+                    if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                         return;
 
-                    files.AddRange(SvnItem.GetPaths(selector.GetCheckedItems()));
-                    updateTo = selector.RevisionStart;
+                    files.AddRange(SvnItem.GetPaths(dlg.GetCheckedItems()));
+                    updateTo = dlg.RevisionStart;
                 }
             }
             else

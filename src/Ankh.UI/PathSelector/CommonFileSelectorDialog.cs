@@ -26,7 +26,7 @@ using Ankh.UI.PendingChanges.Commits;
 
 namespace Ankh.UI.PathSelector
 {
-    public enum PathSelectorOptions
+    enum PathSelectorOptions
     {
         NoRevision,
         DisplaySingleRevision,
@@ -36,11 +36,11 @@ namespace Ankh.UI.PathSelector
     /// <summary>
     /// Summary description for PathSelector.
     /// </summary>
-    public partial class PathSelector : VSDialogForm
+    public partial class CommonFileSelectorDialog : VSDialogForm
     {
         PathSelectorOptions _options;
         
-        public PathSelector()
+        public CommonFileSelectorDialog()
         {
             //
             // Required for Windows Form Designer support

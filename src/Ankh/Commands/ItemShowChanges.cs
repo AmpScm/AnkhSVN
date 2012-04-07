@@ -153,19 +153,20 @@ namespace Ankh.Commands
                 // should we show the path selector?
                 if (e.PromptUser || !Shift)
                 {
-                    using (PathSelector selector = new PathSelector())
+                    using (CommonFileSelectorDialog dlg = new CommonFileSelectorDialog())
                     {
-                        selector.Items = selectedFiles;
-                        selector.RevisionStart = start;
-                        selector.RevisionEnd = end;
+                        dlg.Text = CommandStrings.CompareFilesTitle;
+                        dlg.Items = selectedFiles;
+                        dlg.RevisionStart = start;
+                        dlg.RevisionEnd = end;
 
-                        if (selector.ShowDialog(e.Context) != DialogResult.OK)
+                        if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                             return;
 
                         selectedFiles.Clear();
-                        selectedFiles.AddRange(selector.GetCheckedItems());
-                        start = selector.RevisionStart;
-                        end = selector.RevisionEnd;
+                        selectedFiles.AddRange(dlg.GetCheckedItems());
+                        start = dlg.RevisionStart;
+                        end = dlg.RevisionEnd;
                     }
                 }
 
