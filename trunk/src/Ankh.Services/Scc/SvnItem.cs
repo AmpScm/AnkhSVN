@@ -1002,7 +1002,7 @@ namespace Ankh
                 while (parent != null && !j.IsBelowPath(parent.FullPath))
                     parent = parent.Parent;
 
-                if (j == null)
+                if (parent == null)
                     return null;
             }
 
