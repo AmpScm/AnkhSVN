@@ -91,7 +91,6 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             List<SvnItem> selectedFiles = new List<SvnItem>();
-            bool selectionHasDeleted = false;
 
             if (e.Command == AnkhCommand.DocumentShowChanges)
             {
@@ -116,9 +115,10 @@ namespace Ankh.Commands
                             continue;
                     }
 
-                    if (e.Command == AnkhCommand.DiffLocalItem)
+                    if (e.Command == AnkhCommand.DiffLocalItem
+                        && !NotDeletedFilter(item))
                     {
-                        selectionHasDeleted |= !NotDeletedFilter(item);
+                        continue;
                     }
 
                     selectedFiles.Add(item);
@@ -147,52 +147,29 @@ namespace Ankh.Commands
 
             if (e.PromptUser || selectedFiles.Count > 1 || revRange == null)
             {
-                PathSelectorInfo info = new PathSelectorInfo("Select item for Diff", selectedFiles);
-                info.SingleSelection = false;
-                info.RevisionStart = revRange == null ? SvnRevision.Base : revRange.StartRevision;
-                info.RevisionEnd = revRange == null ? SvnRevision.Working : revRange.EndRevision;
-                if (selectionHasDeleted)
-                {
-                    // do not allow selecting deleted items if the revision combination includes SvnRevision.Working
-                    info.CheckableFilter += new PathSelectorInfo.SelectableFilter(delegate(SvnItem item, SvnRevision from, SvnRevision to)
-                    {
-                        if (item != null
-                            && (from == SvnRevision.Working
-                                || to == SvnRevision.Working
-                                )
-                            )
-                        {
-                            return NotDeletedFilter(item);
-                        }
-                        return true;
-                    });
-                }
-                info.EnableRecursive = false;
-                info.Depth = SvnDepth.Infinity;
+                SvnRevision start = revRange == null ? SvnRevision.Base : revRange.StartRevision;
+                SvnRevision end = revRange == null ? SvnRevision.Working : revRange.EndRevision;
 
-                PathSelectorResult result;
                 // should we show the path selector?
                 if (e.PromptUser || !Shift)
                 {
-                    using (PathSelector selector = new PathSelector(info))
+                    using (PathSelector selector = new PathSelector())
                     {
-                        selector.Context = e.Context;
+                        selector.Items = selectedFiles;
+                        selector.RevisionStart = start;
+                        selector.RevisionEnd = end;
 
-                        bool succeeded = selector.ShowDialog(e.Context) == DialogResult.OK;
-                        result = new PathSelectorResult(succeeded, selector.CheckedItems);
-                        result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
-                        result.RevisionStart = selector.RevisionStart;
-                        result.RevisionEnd = selector.RevisionEnd;
+                        if (selector.ShowDialog(e.Context) != DialogResult.OK)
+                            return;
+
+                        selectedFiles.Clear();
+                        selectedFiles.AddRange(selector.GetCheckedItems());
+                        start = selector.RevisionStart;
+                        end = selector.RevisionEnd;
                     }
-                    if (!result.Succeeded)
-                        return;
                 }
-                else
-                    result = info.DefaultResult;
 
-                selectedFiles.Clear();
-                selectedFiles.AddRange(result.Selection);
-                revRange = new SvnRevisionRange(result.RevisionStart, result.RevisionEnd);
+                revRange = new SvnRevisionRange(start, end);
             }
 
             if (revRange.EndRevision.RevisionType == SvnRevisionType.Working ||

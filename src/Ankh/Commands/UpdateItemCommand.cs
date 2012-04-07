@@ -74,90 +74,35 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             SvnRevision updateTo;
-            SvnDepth depth;
             List<string> files = new List<string>();
+
             if (e.Command == AnkhCommand.UpdateItemSpecific
                 || e.Command == AnkhCommand.UpdateProjectFileSpecific)
             {
-                PathSelectorInfo info = new PathSelectorInfo("Select Items to Update",
-                    e.Selection.GetSelectedSvnItems(true));
+                updateTo = SvnRevision.Head;
+                List<SvnItem> items = new List<SvnItem>();
 
-                info.CheckedFilter += delegate(SvnItem item) { return item.IsVersioned; };
-                info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned; };
-                info.EnableRecursive = true;
-                info.RevisionStart = SvnRevision.Head;
-                info.Depth = SvnDepth.Infinity;
-
-                PathSelectorResult result;
-
-                if (Shift)
-                    result = info.DefaultResult;
-                else
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
                 {
-                    using (PathSelector selector = new PathSelector(info))
-                    {
-                        selector.Context = e.Context;
-
-                        bool succeeded = selector.ShowDialog(e.Context) == DialogResult.OK;
-                        result = new PathSelectorResult(succeeded, selector.CheckedItems);
-                        result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
-                        result.RevisionStart = selector.RevisionStart;
-                        result.RevisionEnd = selector.RevisionEnd;
-                    }
+                    if (item.IsFile && item.IsVersioned)
+                        items.Add(item);
                 }
 
-                if (!result.Succeeded)
-                    return;
-
-                updateTo = result.RevisionStart;
-                depth = result.Depth;
-                List<SvnItem> dirs = new List<SvnItem>();
-
-                foreach (SvnItem item in result.Selection)
+                using (PathSelector selector = new PathSelector())
                 {
-                    if (!item.IsVersioned)
-                        continue;
+                    selector.Items = items;
+                    selector.RevisionStart = updateTo;
 
-                    if (item.IsDirectory)
-                    {
-                        if (result.Depth < SvnDepth.Infinity)
-                        {
-                            AnkhMessageBox mb = new AnkhMessageBox(e.Context);
+                    if (selector.ShowDialog(e.Context) != DialogResult.OK)
+                        return;
 
-                            DialogResult dr = mb.Show(CommandStrings.CantUpdateDirectoriesNonRecursive, "", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning);
-
-                            if (dr != DialogResult.Yes)
-                                return;
-
-                            depth = SvnDepth.Infinity;
-                        }
-                    }
-
-                    bool found = false;
-                    foreach (SvnItem dir in dirs)
-                    {
-                        if (item.IsBelowPath(dir))
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (found)
-                        continue;
-
-                    files.Add(item.FullPath);
-
-                    if (item.IsDirectory)
-                        dirs.Add(item);
+                    files.AddRange(SvnItem.GetPaths(selector.GetCheckedItems()));
+                    updateTo = selector.RevisionStart;
                 }
-
-
             }
             else
             {
                 updateTo = SvnRevision.Head;
-                depth = SvnDepth.Infinity;
                 List<SvnItem> dirs = new List<SvnItem>();
 
                 foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
@@ -198,7 +143,7 @@ namespace Ankh.Commands
                                                          delegate(object sender, ProgressWorkerArgs ee)
                                                          {
                                                              SvnUpdateArgs ua = new SvnUpdateArgs();
-                                                             ua.Depth = depth;
+                                                             ua.Depth = SvnDepth.Infinity;
                                                              ua.Revision = updateTo;
                                                              e.GetService<IConflictHandler>().
                                                                  RegisterConflictHandler(ua, ee.Synchronizer);

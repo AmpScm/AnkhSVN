@@ -22,6 +22,7 @@ using System.Windows.Forms;
 using SharpSvn;
 using System.Collections.Generic;
 using Ankh.Scc;
+using Ankh.UI.PendingChanges.Commits;
 
 namespace Ankh.UI.PathSelector
 {
@@ -37,10 +38,9 @@ namespace Ankh.UI.PathSelector
     /// </summary>
     public partial class PathSelector : VSDialogForm
     {
-        PathSelectorInfo _info;
         PathSelectorOptions _options;
         
-        protected PathSelector()
+        public PathSelector()
         {
             //
             // Required for Windows Form Designer support
@@ -52,79 +52,166 @@ namespace Ankh.UI.PathSelector
 
         int _revStartOffset;
         int _revEndOffset;
-        int _suppressOffset;
         int _buttonOffset;
         int _bottomSpacing;
 
         private void SaveSizes()
         {
-            _revStartOffset = fromPanel.Top - pathSelectionTreeView.Bottom;
+            _revStartOffset = fromPanel.Top - pendingList.Bottom;
             _revEndOffset = toPanel.Top - fromPanel.Bottom;
-            _suppressOffset = suppressGroupBox.Top - toPanel.Bottom;
-            _buttonOffset = bottomPanel.Top - suppressGroupBox.Bottom;
+            _buttonOffset = bottomPanel.Top - toPanel.Bottom;
             _bottomSpacing = ClientSize.Height - bottomPanel.Bottom;
-        }
-
-        public PathSelector(PathSelectorInfo info)
-            : this()
-        {
-            _info = info;
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            if (!DesignMode)
-            {
-                SaveSizes();
+            if (DesignMode)
+                return;
+            
+            SaveSizes();
 
-                EnsureSelection();
-                UpdateLayout();                
+            EnsureSelection();
+            UpdateLayout();
+
+            LoadItems(_items);
+
+            UpdateOkButton();
+        }
+
+        private void UpdateOkButton()
+        {
+            okButton.Enabled = (pendingList.CheckedItems.Count > 0);
+        }
+
+        class ItemLister : AnkhService, IEnumerable<PendingChange>
+        {
+            readonly IEnumerable<SvnItem> _items;
+
+            IPendingChangesManager _pcm;
+            readonly PendingChange.RefreshContext _rc;
+            public ItemLister(IAnkhServiceProvider context, IEnumerable<SvnItem> items)
+                : base(context)
+            {
+                if (items == null)
+                    throw new ArgumentNullException("items");
+                _items = items;
+                _rc = new PendingChange.RefreshContext(context);
             }
+
+            #region IEnumerable<PendingChange> Members
+
+            IPendingChangesManager Manager
+            {
+                get { return _pcm ?? (_pcm = GetService<IPendingChangesManager>()); }
+            }
+
+            readonly Dictionary<string, PendingChange> _pcs = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
+
+            public IEnumerator<PendingChange> GetEnumerator()
+            {
+                foreach (SvnItem item in _items)
+                {
+                    if (item.IsFile && !item.IsLocked)
+                    {
+                        PendingChange pc = Manager[item.FullPath];
+
+                        if (pc == null && !_pcs.TryGetValue(item.FullPath, out pc))
+                        {
+                            pc = new PendingChange(_rc, item);
+                        }
+
+                        if (pc == null)
+                            yield break; // Not a pending change
+
+                        _pcs[item.FullPath] = pc;
+
+                        yield return pc;
+                    }
+                }
+            }
+
+            #endregion
+
+            #region IEnumerable Members
+
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            #endregion
+        }
+
+        public void LoadItems(IEnumerable<SvnItem> iEnumerable)
+        {
+            LoadChanges(new ItemLister(Context, iEnumerable));
+        }
+
+        public void LoadChanges(IEnumerable<Ankh.Scc.PendingChange> changeWalker)
+        {
+            if (changeWalker == null)
+                throw new ArgumentNullException("changeWalker");
+
+            if (pendingList.Context == null && Context != null)
+            {
+                pendingList.Context = Context;
+                pendingList.SelectionPublishServiceProvider = Context;
+                pendingList.OpenPendingChangeOnDoubleClick = true;
+            }
+
+            _changeEnumerator = changeWalker;
+            Reload();
+        }
+
+        private void Reload()
+        {
+            Dictionary<PendingChange, PendingCommitItem> chk = null;
+
+            if (pendingList.Items.Count > 0)
+            {
+                chk = new Dictionary<PendingChange, PendingCommitItem>();
+
+                foreach (PendingCommitItem it in pendingList.Items)
+                {
+                    chk.Add(it.PendingChange, it);
+                    it.Group = null;
+                }
+            }
+
+            pendingList.ClearItems();
+
+            foreach (PendingChange pc in _changeEnumerator)
+            {
+                PendingCommitItem pi;
+                if (chk != null && chk.TryGetValue(pc, out pi))
+                {
+                    pendingList.Items.Add(pi);
+                    pi.RefreshText(Context);
+                }
+                else
+                    pendingList.Items.Add(new PendingCommitItem(pendingList, pc));
+            }
+
+            EnsureSelection();
         }
 
         void EnsureSelection()
         {
-            EnableRecursive = _info.EnableRecursive;
-            Items = _info.VisibleItems;
             //selector.CheckedFilter = _info.CheckedFilter;
-            Recursive = _info.Depth == SvnDepth.Infinity;
-            SingleSelection = _info.SingleSelection;
-            Caption = _info.Caption;
-
             // do we need go get a revision range?
-            if (_info.RevisionStart == null && _info.RevisionEnd == null)
+            if (RevisionStart == null && RevisionEnd == null)
             {
                 Options = PathSelectorOptions.NoRevision;
             }
-            else if (_info.RevisionEnd == null)
+            else if (RevisionEnd == null)
             {
-                RevisionStart = _info.RevisionStart;
                 Options = PathSelectorOptions.DisplaySingleRevision;
             }
             else
             {
-                RevisionStart = _info.RevisionStart;
-                RevisionEnd = _info.RevisionEnd;
                 Options = PathSelectorOptions.DisplayRevisionRange;
-            }
-            pathSelectionTreeView.CheckedFilter += _info.EvaluateChecked;
-            if (fromPanel.Visible)
-            {
-                this.revisionPickerStart.Changed += new EventHandler(RevisionChanged);
-            }
-            else
-            {
-                this.revisionPickerStart.Changed -= new EventHandler(RevisionChanged);
-            }
-            if (toPanel.Visible)
-            {
-                this.revisionPickerEnd.Changed += new EventHandler(RevisionChanged);
-            }
-            else
-            {
-                this.revisionPickerEnd.Changed -= new EventHandler(RevisionChanged);
             }
         }
 
@@ -134,23 +221,12 @@ namespace Ankh.UI.PathSelector
 
             revisionPickerStart.Context = Context;
             revisionPickerEnd.Context = Context;
-            pathSelectionTreeView.Context = Context;
+            pendingList.Context = Context;
+            pendingList.SelectionPublishServiceProvider = Context;
         }
 
-        /// <summary>
-        /// The text to display in the label area.
-        /// </summary>
-        public string Caption
-        {
-            get
-            {
-                return this.Text;
-            }
-            set
-            {
-                this.Text = value;
-            }
-        }
+        List<SvnItem> _items = new List<SvnItem>();
+        private IEnumerable<PendingChange> _changeEnumerator;
 
         /// <summary>
         /// The items to put in the treeview.
@@ -158,13 +234,17 @@ namespace Ankh.UI.PathSelector
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ICollection<SvnItem> Items
         {
-            get { return this.pathSelectionTreeView.Items; }
+            get { return _items; }
             set
             {
-                this.pathSelectionTreeView.Items = value;
+                _items.Clear();
+                if (value != null)
+                    _items.AddRange(value);
+                // TODO: Update the revisionpicker origin
+
                 if (value != null)
                 {
-                    SvnItem parent = SvnItem.GetCommonParent(value);
+                    SvnItem parent = SvnItem.GetCommonParent(_items);
 
                     if (parent != null && parent.IsVersioned)
                         revisionPickerEnd.SvnOrigin = revisionPickerStart.SvnOrigin = new SvnOrigin(parent);
@@ -176,39 +256,11 @@ namespace Ankh.UI.PathSelector
         /// The items checked in the treeview.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IEnumerable<SvnItem> CheckedItems
+        public IEnumerable<SvnItem> GetCheckedItems()
         {
-            get { return this.pathSelectionTreeView.CheckedItems; }
-        }
-
-        /// <summary>
-        /// Whether the "Recursive" checkbox should be enabled
-        /// </summary>
-        public bool EnableRecursive
-        {
-            get { return this.recursiveCheckBox.Enabled; }
-            set { this.recursiveCheckBox.Visible = this.recursiveCheckBox.Enabled = value; }
-        }
-
-        /// <summary>
-        /// Whether only a single item can be checked.
-        /// </summary>
-        public bool SingleSelection
-        {
-            get { return this.pathSelectionTreeView.SingleCheck; }
-            set { this.pathSelectionTreeView.SingleCheck = value; }
-        }
-
-        /// <summary>
-        /// Whether the selection in the treeview is recursive.
-        /// </summary>
-        public bool Recursive
-        {
-            get { return this.recursiveCheckBox.Checked; }
-            set
+            foreach (PendingCommitItem pci in pendingList.CheckedItems)
             {
-                this.recursiveCheckBox.Checked = value;
-                this.pathSelectionTreeView.Recursive = value;
+                yield return pci.PendingChange.SvnItem;
             }
         }
 
@@ -242,10 +294,12 @@ namespace Ankh.UI.PathSelector
                     case PathSelectorOptions.DisplaySingleRevision:
                         fromPanel.Visible = fromPanel.Enabled = true;
                         toPanel.Visible = toPanel.Enabled = false;
+                        fromLabel.Visible = fromLabel.Enabled = false;
                         break;
                     case PathSelectorOptions.DisplayRevisionRange:
                         fromPanel.Visible = fromPanel.Enabled = true;
                         toPanel.Visible = toPanel.Enabled = true;
+                        fromLabel.Visible = fromLabel.Enabled = true;
                         break;
                     default:
                         throw new ArgumentException("Invalid value for Options");
@@ -268,14 +322,6 @@ namespace Ankh.UI.PathSelector
                 y = bottomPanel.Top - _bottomSpacing;
             }
 
-            if (suppressGroupBox.Visible)
-            {
-                if (y != suppressGroupBox.Bottom)
-                    suppressGroupBox.Top = y - suppressGroupBox.Height;
-
-                y = suppressGroupBox.Top - _suppressOffset;
-            }
-
             if (toPanel.Visible)
             {
                 if (y != toPanel.Bottom)
@@ -294,55 +340,8 @@ namespace Ankh.UI.PathSelector
 
             y -= _revStartOffset;
 
-            if (y != pathSelectionTreeView.Bottom)
-            {
-                int n = pathSelectionTreeView.Bottom - y;
-                pathSelectionTreeView.Height -= n;                
-
-                if (n < 0)
-                {
-                    Height += n;
-                }
-            }
-
-            int nv = pathSelectionTreeView.VisibleCount;
-
-            if(nv > 5 && nv > _info.VisibleItems.Count * 2)
-            {
-                int height = (pathSelectionTreeView.Height * 3) / 2  / nv;
-
-                height = Math.Max(5, _info.VisibleItems.Count+3) * height;
-
-                if(height < pathSelectionTreeView.Height)
-                    Height -= pathSelectionTreeView.Height - height;
-            }
+            pendingList.Height = y - pendingList.Top;
         }
-
-        internal PathSelectionTreeView TreeView
-        {
-            get { return this.pathSelectionTreeView; }
-        }
-
-        protected Button OkButton
-        {
-            get { return this.okButton; }
-        }
-
-        protected Button DoCancelButton
-        {
-            get { return this.cancelButton; }
-        }
-
-        protected VersionSelector RevisionPickerStart
-        {
-            get { return this.revisionPickerStart; }
-        }
-
-        protected VersionSelector RevisionPickerEnd
-        {
-            get { return this.revisionPickerEnd; }
-        }
-
 
         /// <summary>
         /// Clean up any resources being used.
@@ -359,57 +358,21 @@ namespace Ankh.UI.PathSelector
             base.Dispose(disposing);
         }
 
-        private void RecursiveCheckedChanged(object sender, System.EventArgs e)
+        private void pendingList_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            this.pathSelectionTreeView.Recursive = this.recursiveCheckBox.Checked;
+            if (pendingList.CheckedItems.Count > 0)
+            {
+                SvnItem parent = SvnItem.GetCommonParent(GetCheckedItems());
+
+                if (parent != null && parent.IsVersioned)
+                    revisionPickerEnd.SvnOrigin = revisionPickerStart.SvnOrigin = new SvnOrigin(parent);
+            }
+            UpdateOkButton();
         }
 
-        /// <summary>
-        /// Evaluates the item to see if item is selectable with the current RevisionStart and RevisionEnd,
-        /// Cancels the action if the filter evaluates to false.
-        /// For example: do not allow checking a deleted item if start revision OR end revision is SvnRevision.Working
-        /// </summary>
-        void BeforePathCheck(object sender, System.Windows.Forms.TreeViewCancelEventArgs e)
+        private void suppressLabel_Click(object sender, EventArgs e)
         {
-            if (_info != null)
-            {
-                TreeNode node = e.Node;
-                SvnItem si = node == null ? null : node.Tag as SvnItem;
-                if (si != null
-                    && !node.Checked
-                    && !_info.EvaluateCheckable(si, RevisionStart, RevisionEnd)
-                    )
-                {
-                    // TODO: Show an indicator why check attempt is rejected ???
-                    e.Cancel = true;
-                }
-            }
-        }
 
-        void RevisionChanged(object sender, EventArgs e)
-        {
-            if (_info != null)
-            {
-                EvaluateCheckedNodes(pathSelectionTreeView.Nodes);
-            }
-        }
-
-        /// <summary>
-        /// Make sure all the checked items are valid for the new selection of revisions.
-        /// </summary>
-        private void EvaluateCheckedNodes(TreeNodeCollection nodes)
-        {
-            foreach (TreeNode node in nodes)
-            {
-                if (node.Checked)
-                {
-                    if (!_info.EvaluateCheckable(node.Tag as SvnItem, RevisionStart, RevisionEnd))
-                    {
-                        node.Checked = false;
-                    }
-                }
-                EvaluateCheckedNodes(node.Nodes);
-            }
         }
     }
 }

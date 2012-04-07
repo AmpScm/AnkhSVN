@@ -24,6 +24,7 @@ using Ankh.Scc.UI;
 using Ankh.Selection;
 using Ankh.UI.PathSelector;
 using Ankh.VS;
+using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
@@ -43,108 +44,20 @@ namespace Ankh.Commands
             get { return _tempFileCollection; }
         }
 
-        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection)
+        private static string DoExternalDiff(IAnkhServiceProvider context, IEnumerable<SvnItem> selection, SvnRevision start, SvnRevision end)
         {
-            return GetDiff(
-                context,
-                selection,
-                null);
-        }
-        /// <summary>
-        /// Generates the diff from the current selection.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="selection"></param>
-        /// <param name="revisions"></param>
-        /// <returns>The diff as a string.</returns>
-        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions)
-        {
-            return GetDiff(
-                context,
-                selection,
-                revisions,
-                delegate(SvnItem item)
-                {
-                    return item.IsVersioned;
-                });
-        }
-        /// <summary>
-        /// Generates the diff from the current selection.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="selection"></param>
-        /// <param name="revisions"></param>
-        /// <param name="visibleFilter"></param>
-        /// <returns>The diff as a string.</returns>
-        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions, Predicate<SvnItem> visibleFilter)
-        {
-            if (selection == null)
-                throw new ArgumentNullException("selection");
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            bool foundModified = false;
-            foreach (SvnItem item in selection.GetSelectedSvnItems(true))
-            {
-                if (item.IsModified || item.IsDocumentDirty)
-                {
-                    foundModified = true;
-                    break; // no need (yet) to keep searching
-                }
-            }
-
-            PathSelectorInfo info = new PathSelectorInfo("Select items for diffing", selection.GetSelectedSvnItems(true));
-            info.VisibleFilter += visibleFilter;
-            if (foundModified)
-                info.CheckedFilter += delegate(SvnItem item) { return item.IsFile && (item.IsModified || item.IsDocumentDirty); };
-
-            info.RevisionStart = revisions == null ? SvnRevision.Base : revisions.StartRevision;
-            info.RevisionEnd = revisions == null ? SvnRevision.Working : revisions.EndRevision;
-
-            PathSelectorResult result;
-            // should we show the path selector?
-            if (!Shift && (revisions == null || !foundModified))
-            {
-                using (PathSelector selector = new PathSelector(info))
-                {
-                    selector.Context = context;
-
-                    bool succeeded = selector.ShowDialog(context) == DialogResult.OK;
-                    result = new PathSelectorResult(succeeded, selector.CheckedItems);
-                    result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
-                    result.RevisionStart = selector.RevisionStart;
-                    result.RevisionEnd = selector.RevisionEnd;
-                }
-
-                if (!result.Succeeded)
-                    return null;
-            }
-            else
-                result = info.DefaultResult;
-
-            if (!result.Succeeded)
-                return null;
-
-            SaveAllDirtyDocuments(selection, context);
-
-            return DoExternalDiff(context, result);
-        }
-
-        private static string DoExternalDiff(IAnkhServiceProvider context, PathSelectorResult info)
-        {
-            foreach (SvnItem item in info.Selection)
+            foreach (SvnItem item in selection)
             {
                 // skip unmodified for a diff against the textbase
-                if (info.RevisionStart == SvnRevision.Base &&
-                    info.RevisionEnd == SvnRevision.Working && !item.IsModified)
+                if (start == SvnRevision.Base && end == SvnRevision.Working && !item.IsModified)
                     continue;
 
                 string tempDir = context.GetService<IAnkhTempDirManager>().GetTempDir();
 
                 AnkhDiffArgs da = new AnkhDiffArgs();
 
-                da.BaseFile = GetPath(context, info.RevisionStart, item, tempDir);
-                da.MineFile = GetPath(context, info.RevisionEnd, item, tempDir);
+                da.BaseFile = GetPath(context, start, item, tempDir);
+                da.MineFile = GetPath(context, end, item, tempDir);
 
 
                 context.GetService<IAnkhDiffHandler>().RunDiff(da);
