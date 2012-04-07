@@ -24,6 +24,7 @@ using SharpSvn;
 using Ankh.Scc;
 using Ankh.UI.PathSelector;
 using Ankh.VS;
+using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
@@ -43,11 +44,40 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            PathSelectorResult result = ShowDialog(e);
-            if (!result.Succeeded)
+            List<SvnItem> items = new List<SvnItem>();
+
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            {
+                if (item.IsModified || item.IsDocumentDirty)
+                    items.Add(item);
+            }
+
+            SvnRevision start = SvnRevision.Base;
+            SvnRevision end = SvnRevision.Working;
+
+            // should we show the path selector?
+            if (!Shift)
+            {
+                using (PathSelector selector = new PathSelector())
+                {
+                    selector.Items = items;
+                    selector.RevisionStart = start;
+                    selector.RevisionEnd = end;
+
+                    if (selector.ShowDialog(e.Context) != DialogResult.OK)
+                        return;
+
+                    items.Clear();
+                    items.AddRange(selector.GetCheckedItems());
+                    start = selector.RevisionStart;
+                    end = selector.RevisionEnd;
+                }
+            }
+
+            if (items.Count == 0)
                 return;
 
-            SvnRevisionRange revRange = new SvnRevisionRange(result.RevisionStart, result.RevisionEnd);
+            SvnRevisionRange revRange = new SvnRevisionRange(start, end);
 
             IAnkhTempFileManager tempfiles = e.GetService<IAnkhTempFileManager>();
             string tempFile = tempfiles.GetTempFile(".patch");
@@ -59,14 +89,13 @@ namespace Ankh.Commands
             SvnDiffArgs args = new SvnDiffArgs();
             args.IgnoreAncestry = true;
             args.NoDeleted = false;
-            args.Depth = result.Depth;
 
             using (MemoryStream stream = new MemoryStream())
             {
                 e.Context.GetService<IProgressRunner>().RunModal("Diffing",
                     delegate(object sender, ProgressWorkerArgs ee)
                     {
-                        foreach (SvnItem item in result.Selection)
+                        foreach (SvnItem item in items)
                         {
                             SvnWorkingCopy wc;
                             if (!string.IsNullOrEmpty(slndir) &&
@@ -89,33 +118,6 @@ namespace Ankh.Commands
                     VsShellUtilities.OpenDocument(e.Context, tempFile);
                 }
             }
-        }
-
-        static PathSelectorResult ShowDialog(CommandEventArgs e)
-        {
-            PathSelectorInfo info = new PathSelectorInfo("Select items for diffing", e.Selection.GetSelectedSvnItems(true));
-            info.VisibleFilter += delegate { return true; };
-            info.CheckedFilter += delegate(SvnItem item) { return item.IsFile && (item.IsModified || item.IsDocumentDirty); };
-
-            info.RevisionStart = SvnRevision.Base;
-            info.RevisionEnd = SvnRevision.Working;
-
-            // should we show the path selector?
-            if (!Shift)
-            {
-                using (PathSelector selector = new PathSelector(info))
-                {
-                    selector.Context = e.Context;
-
-                    bool succeeded = selector.ShowDialog(e.Context) == DialogResult.OK;
-                    PathSelectorResult result = new PathSelectorResult(succeeded, selector.CheckedItems);
-                    result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
-                    result.RevisionStart = selector.RevisionStart;
-                    result.RevisionEnd = selector.RevisionEnd;
-                    return result;
-                }
-            }
-            return info.DefaultResult;
         }
     }
 }

@@ -226,8 +226,6 @@
     <Compile Include="OptionsPages\SvnProxyEditor.Designer.cs">
       <DependentUpon>SvnProxyEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathSelector\PathSelectorInfo.cs" />
-    <Compile Include="PathSelector\PathSelectorResult.cs" />
     <Compile Include="PathSelector\RevisionSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -644,9 +642,6 @@
     <Compile Include="OptionsPages\ToolArgumentDialog.Designer.cs">
       <DependentUpon>ToolArgumentDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathSelector\PathSelectionTreeView.Designer.cs">
-      <DependentUpon>PathSelectionTreeView.cs</DependentUpon>
-    </Compile>
     <Compile Include="PathSelector\PathSelector.Designer.cs">
       <DependentUpon>PathSelector.cs</DependentUpon>
     </Compile>
@@ -795,14 +790,8 @@
     <Compile Include="OptionsPages\ToolArgumentDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PathSelector\PathSelectionTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="PathSelector\PathSelector.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PathSelector\PathTreeView.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="ProgressDialog.cs">
       <SubType>Form</SubType>
@@ -860,16 +849,8 @@
       <DependentUpon>LockDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathSelector\PathSelectionTreeView.resx">
-      <DependentUpon>PathSelectionTreeView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="PathSelector\PathSelector.resx">
       <DependentUpon>PathSelector.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PathSelector\PathTreeView.resx">
-      <DependentUpon>PathTreeView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressDialog.resx">

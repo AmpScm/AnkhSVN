@@ -112,9 +112,369 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="okButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="okButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>375, 0</value>
+  </data>
+  <data name="okButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="okButton.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="okButton.Text" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="&gt;&gt;okButton.Name" xml:space="preserve">
+    <value>okButton</value>
+  </data>
+  <data name="&gt;&gt;okButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;okButton.Parent" xml:space="preserve">
+    <value>bottomPanel</value>
+  </data>
+  <data name="&gt;&gt;okButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="cancelButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="cancelButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>456, 0</value>
+  </data>
+  <data name="cancelButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="cancelButton.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="cancelButton.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.Name" xml:space="preserve">
+    <value>cancelButton</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.Parent" xml:space="preserve">
+    <value>bottomPanel</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="suppressLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="suppressLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 5</value>
+  </data>
+  <data name="suppressLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>284, 13</value>
+  </data>
+  <data name="suppressLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="suppressLabel.Text" xml:space="preserve">
+    <value>You can suppress this dialog by holding down the Shift key</value>
+  </data>
+  <data name="&gt;&gt;suppressLabel.Name" xml:space="preserve">
+    <value>suppressLabel</value>
+  </data>
+  <data name="&gt;&gt;suppressLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;suppressLabel.Parent" xml:space="preserve">
+    <value>bottomPanel</value>
+  </data>
+  <data name="&gt;&gt;suppressLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bottomPanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left, Right</value>
+  </data>
+  <data name="bottomPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 292</value>
+  </data>
+  <data name="bottomPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="bottomPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>531, 23</value>
+  </data>
+  <data name="bottomPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;bottomPanel.Name" xml:space="preserve">
+    <value>bottomPanel</value>
+  </data>
+  <data name="&gt;&gt;bottomPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bottomPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;bottomPanel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="fromLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fromLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="fromLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>33, 13</value>
+  </data>
+  <data name="fromLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="fromLabel.Text" xml:space="preserve">
+    <value>&amp;From:</value>
+  </data>
+  <data name="&gt;&gt;fromLabel.Name" xml:space="preserve">
+    <value>fromLabel</value>
+  </data>
+  <data name="&gt;&gt;fromLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fromLabel.Parent" xml:space="preserve">
+    <value>fromPanel</value>
+  </data>
+  <data name="&gt;&gt;fromLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="toLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="toLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="toLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 13</value>
+  </data>
+  <data name="toLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="toLabel.Text" xml:space="preserve">
+    <value>&amp;To:</value>
+  </data>
+  <data name="&gt;&gt;toLabel.Name" xml:space="preserve">
+    <value>toLabel</value>
+  </data>
+  <data name="&gt;&gt;toLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toLabel.Parent" xml:space="preserve">
+    <value>toPanel</value>
+  </data>
+  <data name="&gt;&gt;toLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="fromPanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerStart.Name" xml:space="preserve">
+    <value>revisionPickerStart</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerStart.Type" xml:space="preserve">
+    <value>Ankh.UI.PathSelector.VersionSelector, Ankh.UI, Version=2.3.4480.11208, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerStart.Parent" xml:space="preserve">
+    <value>fromPanel</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerStart.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="fromPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 213</value>
+  </data>
+  <data name="fromPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fromPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>531, 38</value>
+  </data>
+  <data name="fromPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;fromPanel.Name" xml:space="preserve">
+    <value>fromPanel</value>
+  </data>
+  <data name="&gt;&gt;fromPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fromPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;fromPanel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="revisionPickerStart.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="revisionPickerStart.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 11</value>
+  </data>
+  <data name="revisionPickerStart.Size" type="System.Drawing.Size, System.Drawing">
+    <value>524, 24</value>
+  </data>
+  <data name="revisionPickerStart.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerStart.Name" xml:space="preserve">
+    <value>revisionPickerStart</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerStart.Type" xml:space="preserve">
+    <value>Ankh.UI.PathSelector.VersionSelector, Ankh.UI, Version=2.3.4480.11208, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerStart.Parent" xml:space="preserve">
+    <value>fromPanel</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerStart.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="toPanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerEnd.Name" xml:space="preserve">
+    <value>revisionPickerEnd</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerEnd.Type" xml:space="preserve">
+    <value>Ankh.UI.PathSelector.VersionSelector, Ankh.UI, Version=2.3.4480.11208, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerEnd.Parent" xml:space="preserve">
+    <value>toPanel</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerEnd.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="toPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 251</value>
+  </data>
+  <data name="toPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="toPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>531, 38</value>
+  </data>
+  <data name="toPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;toPanel.Name" xml:space="preserve">
+    <value>toPanel</value>
+  </data>
+  <data name="&gt;&gt;toPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;toPanel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="revisionPickerEnd.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="revisionPickerEnd.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 11</value>
+  </data>
+  <data name="revisionPickerEnd.Size" type="System.Drawing.Size, System.Drawing">
+    <value>524, 24</value>
+  </data>
+  <data name="revisionPickerEnd.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerEnd.Name" xml:space="preserve">
+    <value>revisionPickerEnd</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerEnd.Type" xml:space="preserve">
+    <value>Ankh.UI.PathSelector.VersionSelector, Ankh.UI, Version=2.3.4480.11208, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerEnd.Parent" xml:space="preserve">
+    <value>toPanel</value>
+  </data>
+  <data name="&gt;&gt;revisionPickerEnd.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="pendingList.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="pendingList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 12</value>
+  </data>
+  <data name="pendingList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>531, 198</value>
+  </data>
+  <data name="pendingList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;pendingList.Name" xml:space="preserve">
+    <value>pendingList</value>
+  </data>
+  <data name="&gt;&gt;pendingList.Type" xml:space="preserve">
+    <value>Ankh.UI.PendingChanges.Commits.PendingCommitsView, Ankh.UI, Version=2.3.4480.11208, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  </data>
+  <data name="&gt;&gt;pendingList.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;pendingList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="label1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>33, 13</value>
+  </data>
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>&amp;From:</value>
+  </data>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
+  </data>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>552, 324</value>
+  </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>100, 38</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>PathSelector</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>PathSelector</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>Ankh.UI.VSDialogForm, Ankh.Services, Version=2.3.4479.37783, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
+  </data>
 </root>
