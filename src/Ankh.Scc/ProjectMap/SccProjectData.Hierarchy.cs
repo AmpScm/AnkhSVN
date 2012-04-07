@@ -141,6 +141,15 @@ namespace Ankh.Scc.ProjectMap
 
         public int OnPropertyChanged(uint itemid, int propid, uint flags)
         {
+            if (itemid == VSConstants.VSITEMID_ROOT)
+            {
+                _uniqueName = null;
+                _projectDirectory = null;
+                _projectName = null;
+                _projectFile = null;
+                _projectLocation = null;
+                _sccBaseDirectory = null;
+            }
             return VSConstants.S_OK;
         }
     }
