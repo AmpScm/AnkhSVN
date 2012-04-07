@@ -81,7 +81,7 @@
     <Compile Include="Commands\ApplyPatch.cs" />
     <Compile Include="Commands\ItemAddToPending.cs">
     </Compile>
-    <Compile Include="Commands\ItemCreatePatch.cs" />
+    <Compile Include="Commands\CreatePatch.cs" />
     <Compile Include="Commands\ItemDelete.cs" />
     <Compile Include="Commands\ItemMoveToChangeList.cs" />
     <Compile Include="Commands\ItemResolveCasing.cs" />

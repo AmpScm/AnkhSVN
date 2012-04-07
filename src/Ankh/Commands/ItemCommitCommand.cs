@@ -37,15 +37,8 @@ namespace Ankh.Commands
 
             foreach (SvnItem i in e.Selection.GetSelectedSvnItems(recursive))
             {
-                if (i.IsVersioned)
-                {
-                    if (i.IsModified || i.IsDocumentDirty)
-                        return; // There might be a new version of this file
-                }
-                else if (i.IsIgnored)
-                    continue;
-                else if (i.InSolution && i.IsVersionable && !i.ParentDirectory.NeedsWorkingCopyUpgrade)
-                    return; // The file is 'to be added'
+                if (PendingChange.IsPending(i))
+                    return;
             }
 
             e.Enabled = false;
@@ -61,7 +54,8 @@ namespace Ankh.Commands
 
                 pcd.PreserveWindowPlacement = true;
 
-                pcd.LoadItems(e.Selection.GetSelectedSvnItems(true));
+                bool recursive = (e.Command != AnkhCommand.CommitProjectFile);
+                pcd.LoadItems(e.Selection.GetSelectedSvnItems(recursive));
 
                 DialogResult dr = pcd.ShowDialog(e.Context);
 
@@ -73,7 +67,6 @@ namespace Ankh.Commands
 
                 PendingChangeCommitArgs pca = new PendingChangeCommitArgs();
                 pca.StoreMessageOnError = true;
-                // TODO: Commit it!
                 List<PendingChange> toCommit = new List<PendingChange>(pcd.GetSelection());
                 pcd.FillArgs(pca);
 

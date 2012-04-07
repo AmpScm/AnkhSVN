@@ -25,21 +25,27 @@ using Ankh.UI.PathSelector;
 namespace Ankh.Commands
 {
     [Command(AnkhCommand.CreatePatch)]
-    class ItemCreatePatch : CommandBase
+    class CreatePatch : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            PendingChange.RefreshContext rc = null;
             foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
             {
-                if (i.IsVersioned)
+                if (PendingChange.IsPending(i))
                 {
-                    if (i.IsModified || i.IsDocumentDirty)
-                        return; // There might be a new version of this file
+                    PendingChange pc;
+
+                    if (rc == null)
+                        rc = new PendingChange.RefreshContext(e.Context);
+
+                    if (PendingChange.CreateIfPending(rc, i, out pc))
+                    {
+                        if (pc.IsNoChangeForPatching())
+                            continue;
+                    }
+                    return;
                 }
-                else if (i.IsIgnored)
-                    continue;
-                else if (i.InSolution && i.IsVersionable && !i.ParentDirectory.NeedsWorkingCopyUpgrade)
-                    return; // The file is 'to be added'
             }
             e.Enabled = false;
         }
@@ -47,48 +53,32 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             IPendingChangesManager pcm = e.GetService<IPendingChangesManager>();
-            Dictionary<string, PendingChange> changes = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
 
-            foreach (PendingChange pc in pcm.GetAll())
-            {
-                if (!changes.ContainsKey(pc.FullPath))
-                    changes.Add(pc.FullPath, pc);
-            }
-
-            Dictionary<string, SvnItem> selectedChanges = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
+            PendingChange.RefreshContext rc = new PendingChange.RefreshContext(e.Context);
+            Dictionary<string, PendingChange> selectedChanges = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
+            List<SvnItem> resources = new List<SvnItem>();
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                if (changes.ContainsKey(item.FullPath) &&
-                    !selectedChanges.ContainsKey(item.FullPath))
+                PendingChange pc;
+
+                if (PendingChange.CreateIfPending(rc, item, out pc))
                 {
-                    selectedChanges.Add(item.FullPath, item);
+                    if (!pc.IsNoChangeForPatching())
+                    {
+                        selectedChanges.Add(pc.FullPath, pc);
+                        resources.Add(pc.SvnItem);
+                    }
                 }
             }
 
-            Collection<SvnItem> resources = new Collection<SvnItem>();
-            List<SvnItem> selectedItems = new List<SvnItem>(selectedChanges.Values);
-
-            // TODO: Give the whole list to a refreshable dialog!
-            foreach (SvnItem item in selectedItems)
-            {
-                PendingChange pc = changes[item.FullPath];
-
-                if (pc.IsNoChangeForPatching())
-                    continue;
-
-                resources.Add(item);
-            }
             if (resources.Count == 0)
                 return;
 
             using (PendingChangeSelector pcs = new PendingChangeSelector())
             {
-                pcs.Context = e.Context;
                 pcs.Text = CommandStrings.CreatePatchTitle;
-
                 pcs.PreserveWindowPlacement = true;
-
-                pcs.LoadItems(e.Selection.GetSelectedSvnItems(true));
+                pcs.LoadItems(resources);
 
                 DialogResult dr = pcs.ShowDialog(e.Context);
 
