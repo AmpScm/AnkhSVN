@@ -34,6 +34,12 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            if (e.State.SolutionBuilding || e.State.Debugging || e.State.SolutionOpening)
+            {
+                e.Enabled = false;
+                return;
+            }
+
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
                 if (item.IsModified || (item.IsVersioned && item.IsDocumentDirty) || item.IsConflicted)

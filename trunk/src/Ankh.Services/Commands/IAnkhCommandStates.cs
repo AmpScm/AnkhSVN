@@ -46,10 +46,44 @@ namespace Ankh.Commands
 
         bool SolutionHasSingleProject { get; }
 
+        bool SccManagerLoaded { get; }
+
         bool SccProviderActive { get; }
 
         bool OtherSccProviderActive { get; }
 
-        bool GetRawOtherSccProviderActive();
+        bool SccEnlistingInProject { get; }
+
+        bool SccEnableOpenFromScc { get; }
+
+        bool NotBuildingAndNotDebugging { get; }
+
+        bool SolutionOrProjectUpgrading { get; }
+
+        // bool DataSourceWindowSupported { get; }
+
+        bool DataSourceWindowAutoVisible { get; }
+
+        bool ToolboxInitialized { get; }
+
+        bool SolutionExistsAndNotBuildingAndNotDebugging { get; }
+
+        /// <summary>VS2010+</summary>
+        bool SolutionExistsAndFullyLoaded { get; }
+
+        /// <summary>VS2010+</summary>
+        bool SolutionOpening { get; }
+
+        /// <summary>VS2010+</summary>
+        bool ProjectRetargeting { get; }
+
+        /// <summary>VS2010+</summary>
+        bool HistoricalDebugging { get; }
+
+        /// <summary>VS11+</summary>
+        bool FirstLaunchSetup { get; }
+
+        /// <summary>VS11+</summary>
+        bool BackgroundProjectLoad { get; }
     }
 }

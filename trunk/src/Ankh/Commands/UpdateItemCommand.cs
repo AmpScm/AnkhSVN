@@ -37,6 +37,13 @@ namespace Ankh.Commands
         {
             bool hasDirectory = false;
             bool hasFile = false;
+
+            if (e.State.SolutionBuilding || e.State.Debugging || e.State.SolutionOpening)
+            {
+                e.Enabled = false;
+                return;
+            }
+
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 if (item.IsDirectory)

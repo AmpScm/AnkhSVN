@@ -84,6 +84,12 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            if (e.State.SolutionBuilding || e.State.Debugging || e.State.SolutionOpening)
+            {
+                e.Enabled = false;
+                return;
+            }
+
             if (IsSolutionCommand(e.Command))
             {
                 IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
