@@ -42,8 +42,8 @@ namespace Ankh.Commands
                 enable = node.Exists;
             else if (e.Command == AnkhCommand.ItemSelectInSolutionExplorer)
             {
-                if (e.Selection.IsSolutionExplorerSelection)
-                    e.Visible = enable = false;
+                if (e.State.SolutionExplorerActive)
+                    enable = false;
                 else if (!node.InSolution)
                     enable = false;
             }

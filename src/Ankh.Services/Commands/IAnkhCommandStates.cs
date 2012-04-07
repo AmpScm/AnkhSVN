@@ -85,5 +85,11 @@ namespace Ankh.Commands
 
         /// <summary>VS11+</summary>
         bool BackgroundProjectLoad { get; }
+
+        bool SolutionExplorerActive { get; }
+
+        bool ClassViewerActive { get; }
+
+        bool PendingChangesActive { get; }
     }
 }

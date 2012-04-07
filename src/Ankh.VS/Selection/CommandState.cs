@@ -320,6 +320,23 @@ namespace Ankh.VS.Selection
             get { return (_backgroundProjectLoad ?? (_backgroundProjectLoad = GetCache(new Guid("DC769521-31A2-41A5-9BBB-210B5D63568D")))).Active; }
         }
 
+        CmdStateCacheItem _twSolutionExplorer;
+        public bool SolutionExplorerActive
+        {
+            get { return (_twSolutionExplorer ?? (_twSolutionExplorer = GetCache(new Guid(ToolWindowGuids80.SolutionExplorer)))).Active; }
+        }
+
+        CmdStateCacheItem _twClassViewer;
+        public bool ClassViewerActive
+        {
+            get { return (_twClassViewer ?? (_twClassViewer = GetCache(new Guid(ToolWindowGuids80.ClassView)))).Active; }
+        }
+
+        CmdStateCacheItem _twPendingChanges;
+        public bool PendingChangesActive
+        {
+            get { return (_twPendingChanges ?? (_twPendingChanges = GetCache(AnkhId.PendingChangeContextGuid))).Active; }
+        }
 
         sealed class CmdStateCacheItem
         {
