@@ -655,7 +655,7 @@ namespace Ankh
         {
             get
             {
-                if (!IsVersioned)
+                if (!IsFile || !IsVersioned)
                     return false;
                 if (!IsModified)
                     return IsDocumentDirty;
@@ -667,7 +667,7 @@ namespace Ankh
                         return IsDocumentDirty;
                     case SvnStatus.Added:
                     case SvnStatus.Replaced:
-                        return HasCopyableHistory;
+                        return HasCopyableHistory && ((Status.LocalTextStatus != SvnStatus.Normal) || IsDocumentDirty);
                     case SvnStatus.Deleted:
                         // To be replaced
                         return Exists;
