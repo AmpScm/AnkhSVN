@@ -1037,7 +1037,7 @@
             priority="0" type="Context" notInTBList="true">
         <Group id="Grp_PendingChangesLogMessageCommands" priority="0x100">
           <Button id="Cmd_PcLogEditorPasteFileList" name="PasteFiles" priority="0x100"
-                  text="Paste &amp;Filename List" iconFile="PendingChanges/GenerateMessage.png" dynamicVisibility="true"/>
+                  text="Paste &amp;Filename List" iconFile="Scc/PasteFilenames.png" dynamicVisibility="true"/>
           <Button id="Cmd_PcLogEditorPasteRecentLog" name="PasteRecent" priority="0x200"
                   text="Paste &amp;Recent Message" dynamicVisibility="true" />
         </Group>
