@@ -62,7 +62,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             string name = string.IsNullOrEmpty(SvnItem.Name) ? SvnItem.FullPath : SvnItem.Name;
 
             AnkhStatus status = SvnItem.Status;
-            PendingChangeKind kind = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, SvnItem.IsTreeConflicted, SvnItem);
+            PendingChangeKind kind = PendingChange.CombineStatus(status.LocalNodeStatus, status.LocalPropertyStatus, SvnItem.IsTreeConflicted, SvnItem);
 
             if (_chg == null || _chg.State != kind)
                 _chg = new PendingChangeStatus(kind);
@@ -77,7 +77,7 @@ namespace Ankh.UI.WorkingCopyExplorer
                 SvnItem.Status.LastChangeTime.ToLocalTime().ToString(),
                 SvnItem.Status.LastChangeRevision.ToString(),
                 SvnItem.Status.LastChangeAuthor,
-                SvnItem.Status.LocalContentStatus.ToString(),
+                SvnItem.Status.LocalNodeStatus.ToString(),
                 SvnItem.Status.LocalPropertyStatus.ToString(),
                 SvnItem.Status.IsCopied.ToString(),
                 SvnItem.IsConflicted.ToString(),

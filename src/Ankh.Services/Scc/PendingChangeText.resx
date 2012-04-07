@@ -147,6 +147,9 @@
   <data name="StateModified" xml:space="preserve">
     <value>Modified</value>
   </data>
+  <data name="StateModifiedCopy" xml:space="preserve">
+    <value>Copied and Modified</value>
+  </data>
   <data name="StateNew" xml:space="preserve">
     <value>New</value>
   </data>

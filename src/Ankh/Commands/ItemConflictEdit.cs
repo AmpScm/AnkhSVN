@@ -38,7 +38,7 @@ namespace Ankh.Commands
             else
                 foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
                 {
-                    if (item.IsConflicted && item.Status.LocalContentStatus == SvnStatus.Conflicted)
+                    if (item.IsConflicted && item.Status.LocalTextStatus == SvnStatus.Conflicted)
                         return;
                 }
 
@@ -71,7 +71,7 @@ namespace Ankh.Commands
                 return;
 
             conflict.MarkDirty();
-            if (conflict.Status.LocalContentStatus != SvnStatus.Conflicted)
+            if (conflict.Status.LocalTextStatus != SvnStatus.Conflicted)
             {
                 AnkhMessageBox mb = new AnkhMessageBox(e.Context);
 

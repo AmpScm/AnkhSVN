@@ -259,7 +259,7 @@ namespace Ankh
                 case SvnStatus.Conflicted:
                     {
                         bool done = false;
-                        switch (status.LocalContentStatus)
+                        switch (status.LocalTextStatus)
                         {
                             case SvnStatus.Modified:
                                 SetState(managed | SvnItemState.Modified, unset);
@@ -300,7 +300,7 @@ namespace Ankh
                     SetState(managed, unset);
                     break;
                 default:
-                    Trace.WriteLine(string.Format("Ignoring undefined status {0} in SvnItem.Refresh()", status.LocalContentStatus));
+                    Trace.WriteLine(string.Format("Ignoring undefined status {0} in SvnItem.Refresh()", status.LocalNodeStatus));
                     provideDiskInfo = false; // Can't trust an unknown status
                     goto case SvnStatus.Normal;
                 case SvnStatus.Normal:

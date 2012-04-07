@@ -151,6 +151,15 @@ namespace Ankh.Scc {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copied and Modified.
+        /// </summary>
+        internal static string StateModifiedCopy {
+            get {
+                return ResourceManager.GetString("StateModifiedCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New.
         /// </summary>
         internal static string StateNew {

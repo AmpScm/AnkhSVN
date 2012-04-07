@@ -85,7 +85,7 @@ namespace Ankh.UI.PendingChanges.Commits
                     else
                         clr = System.Drawing.Color.DarkRed;
                 }
-                else if (item.Status.IsCopied || item.Status.CombinedStatus == SharpSvn.SvnStatus.Added)
+                else if (item.Status.IsCopied || item.Status.LocalNodeStatus == SharpSvn.SvnStatus.Added)
                     clr = System.Drawing.Color.FromArgb(100, 0, 100);
                 else if (!item.IsVersioned)
                 {

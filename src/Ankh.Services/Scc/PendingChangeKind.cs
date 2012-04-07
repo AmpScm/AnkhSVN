@@ -105,7 +105,11 @@ namespace Ankh.Scc
         /// <summary>
         /// The node has an invalid casing (FileName -> FILEname)
         /// </summary>
-        WrongCasing
+        WrongCasing,
 
+        /// <summary>
+        /// The node was copied and has local changes
+        /// </summary>
+        ModifiedCopy,
     }
 }

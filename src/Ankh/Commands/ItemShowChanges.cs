@@ -61,7 +61,7 @@ namespace Ankh.Commands
                     e.Enabled = false;
                     return;
                 }
-                if (item.IsVersioned && (item.Status.CombinedStatus != SvnStatus.Added || item.Status.IsCopied))
+                if (item.IsVersioned && (item.Status.LocalNodeStatus != SvnStatus.Added || item.Status.IsCopied))
                 {
                     if (e.Command == AnkhCommand.ItemCompareBase 
                         || e.Command == AnkhCommand.ItemShowChanges
@@ -103,7 +103,7 @@ namespace Ankh.Commands
             else
                 foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
                 {
-                    if (!item.IsVersioned || (item.Status.CombinedStatus == SvnStatus.Added && !item.Status.IsCopied))
+                    if (!item.IsVersioned || (item.Status.LocalNodeStatus == SvnStatus.Added && !item.Status.IsCopied))
                         continue;
 
                     if ( e.Command == AnkhCommand.ItemCompareBase
