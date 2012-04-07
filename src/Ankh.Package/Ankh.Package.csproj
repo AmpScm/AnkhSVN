@@ -262,7 +262,7 @@
     <Content Include="Gui\PendingChanges\SolutionExplorer.png" />
     <Content Include="Gui\PendingChanges\SortAscending.png" />
     <Content Include="Gui\PendingChanges\SortDescending.png" />
-    <Content Include="Gui\PendingChanges\Switch.png" />
+    <Content Include="Gui\Scc\Legacy\Switch.png" />
     <Content Include="Gui\PendingChanges\WCExplorer.png" />
     <Content Include="Gui\Scc\AddItem.png" />
     <Content Include="Gui\Scc\AddItemstoFolder.png" />
@@ -420,6 +420,7 @@
     <Content Include="Gui\Scc\ShowAll.png" />
     <Content Include="Gui\Scc\Sort.png" />
     <Content Include="Gui\Scc\SourceControlManager.png" />
+    <Content Include="Gui\Scc\Switch.png" />
     <Content Include="Gui\Scc\TfsAddFilesToSourceControl.png" />
     <Content Include="Gui\Scc\TfsAddSelectedProjectsToSourceControl.png" />
     <Content Include="Gui\Scc\TfsAddSolutionToSourceControl.png" />
