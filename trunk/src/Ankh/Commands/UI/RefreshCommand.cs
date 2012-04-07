@@ -16,7 +16,7 @@
 
 using Ankh.Scc;
 
-namespace Ankh.Commands
+namespace Ankh.Commands.UI
 {
     /// <summary>
     /// Command to refresh this view.
