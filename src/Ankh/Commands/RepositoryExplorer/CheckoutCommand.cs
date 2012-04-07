@@ -22,7 +22,7 @@ using SharpSvn;
 using Ankh.Scc;
 using Ankh.UI.Commands;
 
-namespace Ankh.Commands
+namespace Ankh.Commands.RepositoryExplorer
 {
     /// <summary>
     /// Command to checkout a Subversion repository.

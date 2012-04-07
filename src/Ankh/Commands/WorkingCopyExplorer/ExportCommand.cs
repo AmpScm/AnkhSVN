@@ -19,7 +19,7 @@ using SharpSvn;
 
 using Ankh.UI.Commands;
 
-namespace Ankh.Commands
+namespace Ankh.Commands.WorkingCopyExplorer
 {
     /// <summary>
     /// Command to export a Subversion repository or local folder.
@@ -31,7 +31,7 @@ namespace Ankh.Commands
         {
             SvnItem i = EnumTools.GetSingle(e.Selection.GetSelectedSvnItems(false));
 
-            if (i == null)
+            if (i == null || !i.IsVersioned)
                 e.Enabled = false;
         }
         public override void OnExecute(CommandEventArgs e)

@@ -139,7 +139,7 @@
     <Compile Include="Commands\ItemAnnotateCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\CheckoutCommand.cs">
+    <Compile Include="Commands\RepositoryExplorer\CheckoutCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\CleanupCommand.cs">
@@ -155,7 +155,7 @@
     <Compile Include="Commands\ItemShowChanges.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\ExportCommand.cs">
+    <Compile Include="Commands\WorkingCopyExplorer\ExportCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\LocalDiffCommandBase.cs">
@@ -168,7 +168,7 @@
     <Compile Include="Commands\RepositoryExplorer\CreateDirectoryCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\RefreshCommand.cs">
+    <Compile Include="Commands\UI\RefreshCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\RepositoryExplorer\RefreshRepositoryItemCommand.cs">
@@ -182,7 +182,7 @@
     <Compile Include="Commands\RepositoryExplorer\SaveToFileCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\ShowToolWindows.cs">
+    <Compile Include="Commands\UI\ShowToolWindows.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\SwitchItemCommand.cs">
@@ -232,6 +232,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

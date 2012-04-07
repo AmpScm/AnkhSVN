@@ -18,7 +18,7 @@ using Ankh.UI;
 using Ankh.UI.RepositoryExplorer;
 using Ankh.VS;
 
-namespace Ankh.Commands
+namespace Ankh.Commands.UI
 {
     /// <summary>
     /// Command implementation of the show toolwindow commands
