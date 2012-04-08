@@ -216,7 +216,6 @@
     <None Include="Gui\Gui-To-Vsct.xsl" />
     <None Include="Gui\Gui-Common.xsl" />
     <Content Include="Gui\menu\Add.png" />
-    <Content Include="Gui\menu\AddFolder.png" />
     <Content Include="Gui\menu\AddUrl.png" />
     <Content Include="Gui\menu\CopyUrlToClipboard.png" />
     <Content Include="Gui\menu\Export.png" />
