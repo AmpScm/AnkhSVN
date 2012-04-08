@@ -289,7 +289,7 @@
         </Group>
         <Group id="Grp_SccSlnBranch" priority="0x9000">
           <Button id="Cmd_SolutionBranch" priority="0x100" name="BranchSolution"
-                  text="&amp;Branch Solution..." iconFile="Scc/TfsContextExplorerBranch.png" defaultInvisible="true" />
+                  text="&amp;Branch Solution..." iconFile="Scc/Branch.png" defaultInvisible="true" />
           <ButtonRef id="Cmd_SolutionSwitchDialog" priority="0x300" />
           <Button id="Cmd_SolutionMerge" priority="0x400" name="MergeSolution"
               text="&amp;Merge Solution..." iconFile="Scc/Merge.png" defaultInvisible="true"/>
@@ -357,7 +357,7 @@
         </Group>
         <Group id="Grp_SccProjectBranch" priority="0x9000">
           <Button id="Cmd_ProjectBranch" priority="0x100" name="BranchProject"
-                  text="&amp;Branch Project..." iconFile="Scc/TfsContextExplorerBranch.png" defaultInvisible="true" />
+                  text="&amp;Branch Project..." iconFile="Scc/Branch.png" defaultInvisible="true" />
           <Button id="Cmd_SwitchProject" name="SwitchProject" priority="0x300" defaultInvisible="true"
                 text="&amp;Switch Project..." allowParams="true"
                 toolTip="Switch this project to a different Url." iconFile="Scc/Switch.png"/>
@@ -591,9 +591,9 @@
           <Button id="Cmd_ReposMoveTo" priority="0x200"
                   name="SvnCopyTo" text="&amp;Move To..."
                   iconFile="PendingChanges/MoveTo.png" defaultInvisible="true" />
-          <Button id="Cmd_NewDirectory" name="NewDirectory" priority="0x500"
-                text="Ne&amp;w Directory..."
-                toolTip="Create a new directory here." iconFile="menu/MakeDirectory.png" defaultInvisible="true" />
+          <Button id="Cmd_NewFolder" name="NewFolder" priority="0x500"
+                text="Ne&amp;w Folder..."
+                toolTip="Create a new folder here." iconFile="Scc/NewFolder.png" defaultInvisible="true" />
           <Button id="Cmd_SaveToFile" name="SaveToFile" priority="0xA00"
               text="Save to &amp;File"
               toolTip="Save the file to disk." iconFile="menu/SaveToFile.png" defaultInvisible="true" />
@@ -658,7 +658,7 @@
         <Group id="Grp_WorkingCopyExplorerToolBar" priority="0x100">
           <Button id="Cmd_WorkingCopyAdd" name="Svn.WorkingCopyAdd" priority="0x100"
               text="A&amp;dd New Root..."
-              toolTip="Add a new root to the Working Copy Explorer." iconFile="menu/AddFolder.png" allowParams="true" />
+              toolTip="Add a new root to the Working Copy Explorer." iconFile="Scc/NewFolder.png" allowParams="true" />
           <Button id="Cmd_RemoveWorkingCopyExplorerRoot" name="RemoveWorkingCopyExplorerRoot" priority="0x200"
               text="&amp;Remove Root"
               toolTip="Remove this root from the Working Copy Explorer." iconFile="menu/RemoveFolder.png"/>

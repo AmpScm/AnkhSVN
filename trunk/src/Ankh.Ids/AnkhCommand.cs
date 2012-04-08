@@ -100,7 +100,7 @@ namespace Ankh
         Lock,
         Log,
         LogItem,
-        NewDirectory,
+        NewFolder,
         Refresh,
         RefreshRepositoryItem,
         RemoveRepositoryRoot,
