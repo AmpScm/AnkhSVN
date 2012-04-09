@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11113</title>
+          AnkhSVN-Daily Update - 2.3.11116</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,20 +16,24 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5975/AnkhSvn-Daily-2.3.11113.1275.msi">AnkhSVN 2.3.11113</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5977/AnkhSvn-Daily-2.3.11116.1276.msi">AnkhSVN 2.3.11116</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11113">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11116">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2012-04-08</td></tr>
+<tr><td> </td><td class="r"><a id="11116" href="http://ankhsvn.net/rev/11116">
+            [r11116]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh.Package/Gui/menu/AddFolder.png, Ankh/Commands/RepositoryExplorer/CreateDirectoryCommand.cs, Ankh.Ids/AnkhCommand.cs, Ankh.Package/Ankh.Package.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">More UI updates: Use the proper new folder icon.</td></tr>
 <tr class="d"><td colspan="4">2012-04-07</td></tr>
 <tr><td> </td><td class="r"><a id="11106" href="http://ankhsvn.net/rev/11106">
             [r11106]
@@ -289,18 +293,6 @@ issue.</td></tr>
             [r10928]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/Dialogs:</strong> VSDocumentFormPane.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the Visual Studio document/pane infrastructure register itself in our document
 hosting. This hooks the service provider in a cleaner way.</td></tr>
-<tr class="d"><td colspan="4">2012-03-11</td></tr>
-<tr><td> </td><td class="r"><a id="10921" href="http://ankhsvn.net/rev/10921">
-            [r10921]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/Selection/CachedEnumerable.cs, Ankh.VS/Selection/SelectionContext.cs, Ankh.UI/VSSelectionControls/SelectionItemMap.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Revert the accidental commits of <a href="http://ankhsvn.net/rev/10920">r10920</a>.</td></tr>
-<tr><td> </td><td class="r"><a id="10917" href="http://ankhsvn.net/rev/10917">
-            [r10917]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/Dialogs:</strong> VSDocumentFormPane.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">In the document pane: also try fetching services directly from the package.</td></tr>
-<tr><td> </td><td class="r"><a id="10910" href="http://ankhsvn.net/rev/10910">
-            [r10910]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/Selection:</strong> SelectionContext.cs, SelectionContext.Active.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure the selection context can never use an id with a different hierarchy
-then the one defining this id. I can't prove that this failed, but when it does
-it probably causes segfaults for unmanaged projects.</td></tr>
 
 </table>
 <!--/Recent changes-->
