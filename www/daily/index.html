@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11116</title>
+          AnkhSVN-Daily Update - 2.3.11117</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,14 +16,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5977/AnkhSvn-Daily-2.3.11116.1276.msi">AnkhSVN 2.3.11116</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/5979/AnkhSvn-Daily-2.3.11117.1277.msi">AnkhSVN 2.3.11117</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11116">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11117">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -277,22 +277,6 @@ the high glyphs there breaks all our common glyphs in the solution explorer.</td
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> PendingCommitsPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Collect new pending change files when performing a batch update, to allow
 adding them at once instead of one at a time, to avoid the performance penalty
 of several window messages for each of them separately.</td></tr>
-<tr class="d"><td colspan="4">2012-03-12</td></tr>
-<tr><td> </td><td class="r"><a id="10940" href="http://ankhsvn.net/rev/10940">
-            [r10940]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.Glyphs.cs, Ankh.Services/Scc/ISccHierarchyWalker.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Temporary workaround: Return low status glyph indexes when the class viewer is
-currently selected in Visual Studio 2010 and 11. This should fix the class
-viewer navigation slowdowns.</td></tr>
-<tr><td> </td><td class="r"><a id="10929" href="http://ankhsvn.net/rev/10929">
-            [r10929]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> Annotate/AnnotateEditorControl.cs, VSSelectionControls/SelectionItemMap.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Refactor the SelectionItemMap infrastructure to allow publishing only an
-ISelectionContainer. This allows using a more efficient selection model in the
-annotate viewer, which in turn works around a Visual Studio 11 Beta selection
-issue.</td></tr>
-<tr><td> </td><td class="r"><a id="10928" href="http://ankhsvn.net/rev/10928">
-            [r10928]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/Dialogs:</strong> VSDocumentFormPane.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the Visual Studio document/pane infrastructure register itself in our document
-hosting. This hooks the service provider in a cleaner way.</td></tr>
 
 </table>
 <!--/Recent changes-->
