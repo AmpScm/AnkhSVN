@@ -90,7 +90,6 @@
     <Folder Include="Ankh.VS\" />
     <Folder Include="Ankh.WpfEditor.Package\" />
     <Folder Include="Ankh\" />
-    <Folder Include="lib\" />
     <Folder Include="autolib\" />
     <Folder Include="autolib\SharpSvn\" />
     <Folder Include="autolib\SharpSvn\Licenses\" />

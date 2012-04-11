@@ -2,28 +2,21 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <?ifndef ankhVersion ?>
   <?define ankhVersion=2.0.0.1 ?>
-  <?endif?>
-  <Product Id="*" Name="AnkhSVN $(var.ankhVersion)" Language="1033"
-         Version="$(var.ankhVersion)" Manufacturer="AnkhSVN Team" UpgradeCode="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
-    <Package InstallerVersion="300" Compressed="yes" InstallPrivileges="elevated"
-         Platform="x86" Languages="1033" />
+  <?endif ?>
+  <Product Id="*" Name="AnkhSVN $(var.ankhVersion)" Language="1033" Version="$(var.ankhVersion)" Manufacturer="AnkhSVN Team" UpgradeCode="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
+    <Package InstallerVersion="300" Compressed="yes" InstallPrivileges="elevated" Platform="x86" Languages="1033" />
 
     <!-- AnkhSVN 2.0 daily builds before 2008-06-18 -->
     <Upgrade Id="40880177-2453-4EC7-8EEF-744EC101B688">
-      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0.0" Maximum="2.9999.0.0"
-              IncludeMinimum="yes" IncludeMaximum="yes" MigrateFeatures="no" />
+      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0.0" Maximum="2.9999.0.0" IncludeMinimum="yes" IncludeMaximum="yes" MigrateFeatures="no" />
     </Upgrade>
 
     <!-- AnkhSVN 0.5-1.0.3 and Ankh 2.0 and higher -->
     <Upgrade Id="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
-      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="0.5.0" Maximum="2.0.0"
-              IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="no" />
-      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0" Maximum="$(var.ankhVersion)"
-              IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="yes" />
-      <UpgradeVersion Property="EXACTVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="$(var.ankhVersion)"
-              IncludeMinimum="yes" IncludeMaximum="yes" />
-      <UpgradeVersion Property="NEWERVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="99.0.0.0"
-              IncludeMinimum="no" IncludeMaximum="yes" />
+      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="0.5.0" Maximum="2.0.0" IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="no" />
+      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0" Maximum="$(var.ankhVersion)" IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="yes" />
+      <UpgradeVersion Property="EXACTVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="$(var.ankhVersion)" IncludeMinimum="yes" IncludeMaximum="yes" />
+      <UpgradeVersion Property="NEWERVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="99.0.0.0" IncludeMinimum="no" IncludeMaximum="yes" />
     </Upgrade>
 
     <Property Id="ShortProductName" Value="AnkhSVN" />
@@ -39,14 +32,14 @@
     <CustomAction Id="ERRCA_CANCELNEWERVERSION" Error="[VSDVERSIONMSG]" />
     <CustomAction Id="ERRCA_CANCELEXACTVERSION" Error="[VSDVERSIONMSG]" />
     <CustomAction Id="ERRCA_UIANDADVERTISED" Error="[VSDUIANDADVERTISED]" />
-    <Icon Id="ICON_AnkhSvn" SourceFile="$(sys.SOURCEFILEDIR)..\Ankh.Package\Resources\Package.ico"/>
+    <Icon Id="ICON_AnkhSvn" SourceFile="$(sys.SOURCEFILEDIR)..\Ankh.Package\Resources\Package.ico" />
 
-    <Media Id="1" Cabinet="AnkhSVN.cab" EmbedCab="yes" CompressionLevel="high"/>
-    <PropertyRef Id="VS2010DEVENV"/>
-    <PropertyRef Id="VS2010_EXTENSIONS_DIR"/>
+    <Media Id="1" Cabinet="AnkhSVN.cab" EmbedCab="yes" CompressionLevel="high" />
+    <PropertyRef Id="VS2010DEVENV" />
+    <PropertyRef Id="VS2010_EXTENSIONS_DIR" />
 
-    <PropertyRef Id="VS11DEVENV"/>
-    <PropertyRef Id="VS11_EXTENSIONS_DIR"/>
+    <PropertyRef Id="VS11DEVENV" />
+    <PropertyRef Id="VS11_EXTENSIONS_DIR" />
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
@@ -70,20 +63,20 @@
               <File Id="CF_NOTICE.txt" Name="NOTICE.txt" />
             </Component>
             <Component Id="C_PKGDEF" Guid="E1ABF0EB-ADDA-4158-95A0-46B3B977768E">
-              <File Id="Ankh.pkgdef" Name="Ankh.Pkgdef" Vital="yes" />
+              <File Id="Ankh.pkgdef" Name="Ankh.Pkgdef" />
             </Component>
             <Component Id="C_VSIXMANIFEST" Guid="F88724B3-9B13-4BF7-9AD6-E6FBFF4E725E">
-              <File Id="CF_VSIXMANIFEST" Name="extension.VsixManifest" Vital="yes" />
+              <File Id="CF_VSIXMANIFEST" Name="extension.VsixManifest" />
             </Component>
             <Component Id="C_VSIXICO" Guid="62E7DE1D-4516-4742-B1E7-A867D41C164F">
-              <File Id="CF_VSIXICO" Name="AnkhSVN-Icon.png" Vital="yes" Source="Ankh.Votive\AnkhSVN-Icon.png"/>
+              <File Id="CF_VSIXICO" Source="Ankh.Votive\AnkhSVN-Icon.png" />
             </Component>
             <Component Id="C_VSIXPREVIEW" Guid="1F77F7F1-9CF0-4A75-B924-B81D191652DE">
-              <File Id="CF_VSIXPREVIEW" Name="AnkhSVN-Preview.png" Vital="yes" Source="Ankh.Votive\AnkhSVN-Preview.png"/>
+              <File Id="CF_VSIXPREVIEW" Source="Ankh.Votive\AnkhSVN-Preview.png" />
             </Component>
             <!-- All assemblies are placed here -->
             <Component Id="C_VSIXMANIFEST10" Guid="56F2C5B8-DAD2-4C11-9ECE-F9C827242073">
-              <File Id="CF_VSIXMANIFEST10" Name="extension.VsixManifest-vs2010" Vital="yes" />
+              <File Id="CF_VSIXMANIFEST10" Name="extension.VsixManifest-vs2010" />
             </Component>
           </Directory>
         </Directory>
@@ -91,8 +84,7 @@
       <Directory Name="Common Files" Id="CommonFilesFolder">
         <Directory Name="Microsoft Shared" Id="CommonFiles_MsShared">
           <Directory Name="MSEnv" Id="CommonFiles_MsShared_MsEnv">
-            <Directory Name="PublicAssemblies" Id="CommonFiles_MsShared_MsEnv_PublicAssemblies">
-            </Directory>
+            <Directory Name="PublicAssemblies" Id="CommonFiles_MsShared_MsEnv_PublicAssemblies" />
           </Directory>
         </Directory>
       </Directory>
@@ -101,10 +93,10 @@
           <Directory Name="2.X" Id="ANKHSVN_EXTENSION_2010">
             <Component Id="C_Reg2010" Guid="CE0855C9-C174-4A6D-B278-780232106323">
               <Condition>VS2010DEVENV</Condition>
-              <CopyFile Id="Vsix_Mnf2010" FileId="CF_VSIXMANIFEST10" DestinationDirectory="ANKHSVN_EXTENSION_2010" DestinationName="extension.VsixManifest"/>
-              <CopyFile Id="Vsix_Lic2010" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
-              <CopyFile Id="Vsix_Ico2010" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
-              <CopyFile Id="Vsix_Pvw2010" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_2010"/>
+              <CopyFile Id="Vsix_Mnf2010" FileId="CF_VSIXMANIFEST10" DestinationDirectory="ANKHSVN_EXTENSION_2010" DestinationName="extension.VsixManifest" />
+              <CopyFile Id="Vsix_Lic2010" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2010" />
+              <CopyFile Id="Vsix_Ico2010" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2010" />
+              <CopyFile Id="Vsix_Pvw2010" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_2010" />
             </Component>
           </Directory>
         </Directory>
@@ -114,20 +106,20 @@
           <Directory Name="2.X" Id="ANKHSVN_EXTENSION_11">
             <Component Id="C_Reg11" Guid="06D5D441-6469-49B5-9FA7-FF8B2FD7382E">
               <Condition>VS11DEVENV</Condition>
-              <CopyFile Id="Vsix_Mnf_11" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
-              <CopyFile Id="Vsix_Lic_11" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
-              <CopyFile Id="Vsix_Ico_11" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
-              <CopyFile Id="Vsix_Pvw_11" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_11"/>
+              <CopyFile Id="Vsix_Mnf_11" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_11" />
+              <CopyFile Id="Vsix_Lic_11" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_11" />
+              <CopyFile Id="Vsix_Ico_11" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_11" />
+              <CopyFile Id="Vsix_Pvw_11" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_11" />
             </Component>
           </Directory>
         </Directory>
       </Directory>
     </Directory>
     <!-- Make sure the packages are set up in The VS Environment -->
-    <CustomActionRef Id="VS2005Setup"/>
-    <CustomActionRef Id="VS90SetupNoVSTemplates"/>
-    <CustomActionRef Id="VS2010SetupNoVSTemplates"/>
-    <CustomActionRef Id="VS11SetupNoVSTemplates"/>
+    <CustomActionRef Id="VS2005Setup" />
+    <CustomActionRef Id="VS90SetupNoVSTemplates" />
+    <CustomActionRef Id="VS2010SetupNoVSTemplates" />
+    <CustomActionRef Id="VS11SetupNoVSTemplates" />
     <UI>
       <InstallUISequence>
         <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
@@ -150,16 +142,16 @@
     <Property Id="ApplicationFolderName" Value="AnkhSVN 2" />
     <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
 
-    <WixVariable Id="WixUIDialogBmp" Value="Ankh.Votive/SetupPage.bmp"/>
-    <WixVariable Id="WixUIBannerBmp" Value="Ankh.Votive/SetupHeader.bmp"/>
+    <WixVariable Id="WixUIDialogBmp" Value="Ankh.Votive/SetupPage.bmp" />
+    <WixVariable Id="WixUIBannerBmp" Value="Ankh.Votive/SetupHeader.bmp" />
     <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
 
     <WixVariable Id="WixUISupportPerUser" Value="0" />
-    <UIRef Id="WixUI_Advanced"/>
+    <UIRef Id="WixUI_Advanced" />
 
     <Feature Id="ProductFeature" Title="AnkhSVN $(var.ankhVersion)" Level="1" ConfigurableDirectory="APPLICATIONFOLDER" AllowAdvertise="no" Display="expand">
-      <ComponentGroupRef Id="Ankh.Package"/>
-      <ComponentRef Id="C_CONTRIBUTORS"/>
+      <ComponentGroupRef Id="Ankh.Package" />
+      <ComponentRef Id="C_CONTRIBUTORS" />
       <ComponentRef Id="C_LICENSE" />
       <ComponentRef Id="C_NOTICE" />
       <ComponentRef Id="C_PKGDEF" />
@@ -167,32 +159,28 @@
       <ComponentRef Id="C_VSIXMANIFEST10" />
       <ComponentRef Id="C_VSIXICO" />
       <ComponentRef Id="C_VSIXPREVIEW" />
-      <ComponentGroupRef Id="SharpSvn_LICENSES"/>
-      <MergeRef Id="CRT"/>
-      <MergeRef Id="CRT_Policy"/>
-      <Feature Id="RegVS8" Title="Register in Microsoft Visual Studio 2005"
-               Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2005" Level="1" AllowAdvertise="no">
-        <ComponentGroupRef Id="PkgReg2005"/>
-        <ComponentGroupRef Id="Extension2005"/>
+      <ComponentGroupRef Id="SharpSvn_LICENSES" />
+      <MergeRef Id="CRT" />
+      <MergeRef Id="CRT_Policy" />
+      <Feature Id="RegVS8" Title="Register in Microsoft Visual Studio 2005" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2005" Level="1" AllowAdvertise="no">
+        <ComponentGroupRef Id="PkgReg2005" />
+        <ComponentGroupRef Id="Extension2005" />
       </Feature>
-      <Feature Id="RegVS9" Title="Register in Microsoft Visual Studio 2008"
-               Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2008" Level="1" AllowAdvertise="no">
-        <ComponentGroupRef Id="PkgReg2008"/>
-        <ComponentGroupRef Id="Extension2008"/>
+      <Feature Id="RegVS9" Title="Register in Microsoft Visual Studio 2008" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2008" Level="1" AllowAdvertise="no">
+        <ComponentGroupRef Id="PkgReg2008" />
+        <ComponentGroupRef Id="Extension2008" />
       </Feature>
-      <Feature Id="RegVS10" Title="Register in Microsoft Visual Studio 2010"
-               Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2010" Level="1" AllowAdvertise="no">
-        <ComponentGroupRef Id="PkgReg2010"/>
-        <ComponentGroupRef Id="PkgWpfReg2010"/>
-        <ComponentGroupRef Id="Extension2010"/>
-        <ComponentRef Id="C_Reg2010"/>
+      <Feature Id="RegVS10" Title="Register in Microsoft Visual Studio 2010" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2010" Level="1" AllowAdvertise="no">
+        <ComponentGroupRef Id="PkgReg2010" />
+        <ComponentGroupRef Id="PkgWpfReg2010" />
+        <ComponentGroupRef Id="Extension2010" />
+        <ComponentRef Id="C_Reg2010" />
       </Feature>
-      <Feature Id="RegVS11" Title="Register in Microsoft Visual Studio 11"
-               Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2010" Level="1" AllowAdvertise="no">
-        <ComponentGroupRef Id="PkgReg11"/>
-        <ComponentGroupRef Id="PkgWpfReg11"/>
+      <Feature Id="RegVS11" Title="Register in Microsoft Visual Studio 11" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2010" Level="1" AllowAdvertise="no">
+        <ComponentGroupRef Id="PkgReg11" />
+        <ComponentGroupRef Id="PkgWpfReg11" />
         <!-- VS11 allows binding redirects in the registry, so no Extension11 -->
-        <ComponentRef Id="C_Reg11"/>
+        <ComponentRef Id="C_Reg11" />
       </Feature>
     </Feature>
   </Product>
