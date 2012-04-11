@@ -15,7 +15,7 @@ namespace Ankh.VS.Services
         IVsWindowFrame2 _frame2;
         uint _frameCookie;
         bool _frameHooked;
-        bool _mergeHooked = true;
+        bool _mergeHooked;
 
 
         public DiffMergeInstance(IAnkhServiceProvider context, IVsWindowFrame frame)
@@ -48,12 +48,12 @@ namespace Ankh.VS.Services
                     if (_mergeHooked)
                     {
                         _mergeHooked = false;
-                    
+
                         UnregisterHandler unregister = _unregister;
 
                         IAnkhCommandService cs = GetService<IAnkhCommandService>();
                         if (cs != null)
-                            cs.PostIdleAction(delegate 
+                            cs.PostIdleAction(delegate
                                     {
                                         unregister(_mergeCookie);
                                     });
