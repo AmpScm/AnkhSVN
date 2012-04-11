@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\DiffMergeInstance.cs" />
     <Compile Include="Services\InternalDiff.cs" />
     <Compile Include="Services\ThreadedWaitService.cs" />
     <Compile Include="LanguageServices\Core\AnkhEditorFactory.cs" />
