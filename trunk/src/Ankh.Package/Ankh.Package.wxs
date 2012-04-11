@@ -1,35 +1,33 @@
-﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <?ifndef ankhVersion ?>
   <?define ankhVersion=2.0.0.1 ?>
-  <?endif?>
+  <?endif ?>
   <Fragment>
     <ComponentGroup Id="Ankh.Package">
-      <ComponentGroupRef Id="Ankh.Ids"/>
-      <ComponentGroupRef Id="Ankh.Services"/>
-      <ComponentGroupRef Id="Ankh"/>
-      <ComponentGroupRef Id="Ankh.Scc"/>
-      <ComponentGroupRef Id="Ankh.UI"/>
-      <ComponentGroupRef Id="Ankh.VS"/>
-      <ComponentGroupRef Id="Ankh.Diff"/>
-      <ComponentGroupRef Id="Ankh.ExtensionPoints"/>
-      <ComponentRef Id="C_Ankh.Package.dll"/>
+      <ComponentGroupRef Id="Ankh.Ids" />
+      <ComponentGroupRef Id="Ankh.Services" />
+      <ComponentGroupRef Id="Ankh" />
+      <ComponentGroupRef Id="Ankh.Scc" />
+      <ComponentGroupRef Id="Ankh.UI" />
+      <ComponentGroupRef Id="Ankh.VS" />
+      <ComponentGroupRef Id="Ankh.Diff" />
+      <ComponentGroupRef Id="Ankh.ExtensionPoints" />
+      <ComponentRef Id="C_Ankh.Package.dll" />
     </ComponentGroup>
     <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Package.TargetDir)">
       <Component Id="C_Ankh.Package.dll" Guid="5B34B841-F029-4019-9B97-1C9FC098F178">
         <!-- File must be called File_$(Ankh.Package.TargetName).dll for the following includes-->
-        <File Id="File_Ankh.Package.dll" Name="Ankh.Package.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
-        <?ifdef Ankh_Pdb?>
-        <File Id="CF_Ankh.Package.pdb" Name="Ankh.Package.pdb" Checksum="yes" Vital="yes" />
-        <?endif?>
+        <File Id="File_Ankh.Package.dll" Name="Ankh.Package.dll" Checksum="yes" KeyPath="yes" />
         <!-- Allow checking if AnkhSVN is installed -->
         <RegistryKey Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\CurrentVersion\Installation">
-          <RegistryValue Name="CurrentVersion" Value="$(var.ankhVersion)" Type="string"/>
-          <RegistryValue Name="InstallLocation" Value="[APP_bin]" Type="string"/>
+          <RegistryValue Name="CurrentVersion" Value="$(var.ankhVersion)" Type="string" />
+          <RegistryValue Name="InstallLocation" Value="[APP_bin]" Type="string" />
         </RegistryKey>
         <!-- The 2.0 in the next line MUST match the MainVersion field in AnkhId -->
         <RegistryKey Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0">
-          <RegistryValue Name="CurrentVersion" Value="$(var.ankhVersion)" Type="string"/>
-          <RegistryValue Name="InstallLocation" Value="[APP_bin]" Type="string"/>
+          <RegistryValue Name="CurrentVersion" Value="$(var.ankhVersion)" Type="string" />
+          <RegistryValue Name="InstallLocation" Value="[APP_bin]" Type="string" />
         </RegistryKey>
         <!-- This allows detecting AnkhSVN with conditional comments in Internet Explorer -->
         <RegistryKey Root="HKLM" Key="Software\Microsoft\Internet Explorer\Version Vector">
@@ -55,20 +53,20 @@
       </Component>
     </DirectoryRef>
     <ComponentGroup Id="PkgReg2005">
-      <ComponentGroupRef Id="Ankh.Package"/>
-      <ComponentRef Id="CR_Pkg_2005"/>      
+      <ComponentGroupRef Id="Ankh.Package" />
+      <ComponentRef Id="CR_Pkg_2005" />
     </ComponentGroup>
     <ComponentGroup Id="PkgReg2008">
-      <ComponentGroupRef Id="Ankh.Package"/>
-      <ComponentRef Id="CR_Pkg_2008"/>
+      <ComponentGroupRef Id="Ankh.Package" />
+      <ComponentRef Id="CR_Pkg_2008" />
     </ComponentGroup>
     <ComponentGroup Id="PkgReg2010">
-      <ComponentGroupRef Id="Ankh.Package"/>
-      <ComponentRef Id="CR_Pkg_2010"/>
+      <ComponentGroupRef Id="Ankh.Package" />
+      <ComponentRef Id="CR_Pkg_2010" />
     </ComponentGroup>
     <ComponentGroup Id="PkgReg11">
-      <ComponentGroupRef Id="Ankh.Package"/>
-      <ComponentRef Id="CR_Pkg_11"/>
+      <ComponentGroupRef Id="Ankh.Package" />
+      <ComponentRef Id="CR_Pkg_11" />
     </ComponentGroup>
   </Fragment>
 </Wix>
