@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.Scc.UI;
+using System.IO;
 
 namespace Ankh.VS.Services
 {
@@ -63,7 +64,13 @@ namespace Ankh.VS.Services
 
             IVsWindowFrame frame = OpenComparisonWindow2(args.BaseFile, args.MineFile, args.Caption ?? args.MineTitle, "", args.BaseTitle, args.MineTitle, args.Label ?? "", null, 0);
 
-            return (frame != null);
+            if (frame != null)
+            {
+                GC.KeepAlive(new DiffMergeInstance(this, frame));
+                return true;
+            }
+
+            return false;
         }
         #endregion
 
@@ -105,7 +112,7 @@ namespace Ankh.VS.Services
         }
 
         delegate IVsWindowFrame Merge_OpenAndRegisterMergeWindow([In] string leftFileMoniker, [In] string rightFileMoniker, [In] string baseFileMoniker, [In] string resultFileMoniker, [In] string leftFileTag, [In] string rightFileTag, [In] string baseFileTag, [In] string resultFileTag, [In] string leftFileLabel, [In] string rightFileLabel, [In] string baseFileLabel, [In] string resultFileLabel, [In] string serverGuid, [In] string leftFileSpec, [In] string rightFileSpec, out int cookie);
-        delegate void Merge_UnregisterMergeWindow([In] int cookie);
+        internal delegate void Merge_UnregisterMergeWindow([In] int cookie);
         delegate void Merge_QueryMergeWindowState([In] int cookie, out int pfState, out string errorAndWarningMsg);
         public bool RunMerge(AnkhMergeArgs args)
         {
@@ -124,14 +131,19 @@ namespace Ankh.VS.Services
             int cookie;
 
             IVsWindowFrame frame = OpenAndRegisterMergeWindow(args.TheirsFile, args.MineFile, args.BaseFile, args.MergedFile,
-                                                              args.TheirsFile, args.MineFile, args.BaseFile, args.MergedFile,
+                                                              Path.GetFileName(args.TheirsFile), Path.GetFileName(args.MineFile),
+                                                              Path.GetFileName(args.BaseFile), Path.GetFileName(args.MergedFile),
                                                               args.TheirsTitle, args.MineTitle, args.BaseTitle, args.MergedTitle,
                                                               Guid.Empty.ToString(), null, null, out cookie);
 
             if (frame != null)
-                UnregisterMergeWindow(cookie);
+            {
+                GC.KeepAlive(new DiffMergeInstance(this, frame, UnregisterMergeWindow, cookie));
 
-            return (frame != null);
+                return true;
+            }
+
+            return false;
         }
 
         #endregion
