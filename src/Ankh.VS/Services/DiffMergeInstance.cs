@@ -89,6 +89,7 @@ namespace Ankh.VS.Services
 
         public int OnClose(ref uint pgrfSaveOptions)
         {
+            _mergeHooked = false; // avoid closing from the close handler
             if (_isMerge)
             {
                 // Prompt for handled, etc?
