@@ -1,4 +1,5 @@
 ﻿using System;
+using Ankh.Commands;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using UnregisterHandler = Ankh.VS.Services.InternalDiff.Merge_UnregisterMergeWindow;
@@ -47,8 +48,17 @@ namespace Ankh.VS.Services
                     if (_mergeHooked)
                     {
                         _mergeHooked = false;
-                        _unregister(_mergeCookie);
+                    
+                        UnregisterHandler unregister = _unregister;
+
+                        IAnkhCommandService cs = GetService<IAnkhCommandService>();
+                        if (cs != null)
+                            cs.PostIdleAction(delegate 
+                                    {
+                                        unregister(_mergeCookie);
+                                    });
                     }
+
                     if (_frameHooked)
                     {
                         _frameHooked = false;
@@ -79,6 +89,8 @@ namespace Ankh.VS.Services
 
         public int OnShow(int fShow)
         {
+            if (fShow == (int)__FRAMESHOW.FRAMESHOW_WinClosed)
+                Dispose(true);
             return VSConstants.S_OK;
         }
 
@@ -89,12 +101,10 @@ namespace Ankh.VS.Services
 
         public int OnClose(ref uint pgrfSaveOptions)
         {
-            _mergeHooked = false; // avoid closing from the close handler
             if (_isMerge)
             {
                 // Prompt for handled, etc?
             }
-            Dispose(true);
             return VSConstants.S_OK;
         }
 
