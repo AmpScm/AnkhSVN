@@ -11,6 +11,7 @@ namespace Ankh.VSPackage.Attributes
 	{
 		readonly Guid _projectType;
 		SccProjectFlags _flags;
+        string _name;
 
 		public ProvideProjectTypeSettingsAttribute(string projectType, SccProjectFlags flags)
 		{
@@ -32,6 +33,8 @@ namespace Ankh.VSPackage.Attributes
 		{
 			using (Key key = context.CreateKey(KeyName))
 			{
+                if (!string.IsNullOrEmpty(Name))
+                    key.SetValue("", Name);
 				key.SetValue("flags", (int)_flags);
 			}
 		}
@@ -40,5 +43,11 @@ namespace Ankh.VSPackage.Attributes
 		{
 			context.RemoveKey(KeyName);
 		}
+
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
 	}
 }
