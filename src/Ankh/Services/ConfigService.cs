@@ -419,6 +419,8 @@ namespace Ankh.Configuration
 
             if (rootKey == null)
                 return null;
+            else if (string.IsNullOrEmpty(name))
+                return rootKey;
 
             using (rootKey)
             {
