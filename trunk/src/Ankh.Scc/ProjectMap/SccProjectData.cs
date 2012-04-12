@@ -26,6 +26,8 @@ using SharpSvn;
 using System.IO;
 using Ankh.VS;
 using Ankh.Commands;
+using Microsoft.Win32;
+using Ankh.UI;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -39,6 +41,13 @@ namespace Ankh.Scc.ProjectMap
         WebSite,
     }
 
+	[Flags]
+	public enum SccProjectFlags
+	{
+		None,
+		ForceSccGlyphChange = 0x100,
+	}
+
     [DebuggerDisplay("Project={ProjectName}, ProjectType={_projectType}")]
     sealed partial class SccProjectData : IDisposable
     {
@@ -47,6 +56,7 @@ namespace Ankh.Scc.ProjectMap
         readonly IVsHierarchy _hierarchy;
         readonly IVsProject _vsProject;
         readonly SccProjectType _projectType;
+        readonly SccProjectFlags _projectFlags;
         readonly SccProjectFileCollection _files;
         SccTranslateData _translateData;
         bool _isManaged;
@@ -78,6 +88,7 @@ namespace Ankh.Scc.ProjectMap
             _vsProject = (IVsProject)project; // A project must be a VS project
 
             _projectType = GetProjectType(project);
+			_projectFlags = GetProjectFlags(ProjectTypeGuid);
             _files = new SccProjectFileCollection();
         }
 
@@ -599,7 +610,7 @@ namespace Ankh.Scc.ProjectMap
                 reference = new SccProjectFileReference(_context, this, Scc.GetFile(path));
                 _files.Add(reference);
 
-                if (_loaded)
+                if (_loaded && !_inLoad)
                     GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(path);
             }
 
@@ -707,6 +718,63 @@ namespace Ankh.Scc.ProjectMap
 
             return SccProjectType.Normal;
         }
+
+		// Switch to dictionary when we have more than a handfull of items
+		static SortedList<Guid, SccProjectFlags> _projectFlagMap = new SortedList<Guid, SccProjectFlags>();
+		static bool _projectFlagMapLoaded;
+		SccProjectFlags GetProjectFlags(Guid projectId)
+		{
+			lock (_projectFlagMap)
+			{
+				if (!_projectFlagMapLoaded)
+					LoadProjectFlagMap();
+
+				SccProjectFlags flags;
+				if (!_projectFlagMap.TryGetValue(projectId, out flags))
+					return SccProjectFlags.None;
+
+				return flags;
+			}
+		}
+
+		void LoadProjectFlagMap()
+		{
+			_projectFlagMapLoaded = true;
+
+			IAnkhConfigurationService configService = GetService<IAnkhConfigurationService>();
+
+			if (configService == null)
+				return;
+
+			using (RegistryKey projectHandlingKey = configService.OpenVSInstanceKey("Extensions\\AnkhSVN\\ProjectHandling"))
+			{
+				if (projectHandlingKey == null)
+					return;
+
+				foreach (string typeValue in projectHandlingKey.GetSubKeyNames())
+				{
+					if (typeValue.Length != 38) // No proper guid
+						continue;
+
+					try
+					{
+						using (RegistryKey projectTypeKey = projectHandlingKey.OpenSubKey(typeValue))
+						{
+							object v = projectTypeKey.GetValue("flags");
+
+							if (!(v is int))
+								continue;
+
+							Guid projectType = new Guid(typeValue);
+							SccProjectFlags flags = (SccProjectFlags)(int)v;
+							_projectFlagMap.Add(projectType, flags);
+						}
+					}
+					catch
+					{ /* Parse Error */ }
+				}
+			}
+		}
         #endregion
 
         /// <summary>
