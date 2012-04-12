@@ -105,6 +105,9 @@ namespace Ankh.UI
 
         bool GetWarningBool(AnkhWarningBool ankhWarningBool);
         void SetWarningBool(AnkhWarningBool ankhWarningBool, bool value);
-    }
+
+		RegistryKey OpenVSInstanceKey(string name);
+		RegistryKey OpenVSUserKey(string name);
+	}
 }
 

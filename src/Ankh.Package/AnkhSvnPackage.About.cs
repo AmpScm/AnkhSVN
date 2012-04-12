@@ -23,6 +23,7 @@ using System.Reflection;
 using SharpSvn;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
+using Ankh.UI;
 
 namespace Ankh.VSPackage
 {
@@ -51,25 +52,12 @@ namespace Ankh.VSPackage
             // We can't use our services here to help us :(
             // This code might be used from devenv.exe /setup
 
-            ILocalRegistry3 lr = GetService<ILocalRegistry3>(typeof(SLocalRegistry));
+            IAnkhConfigurationService configService = GetService<IAnkhConfigurationService>();
 
-            if(lr == null)
+            if(configService == null)
                 return null;
 
-            string root;
-            if (!ErrorHandler.Succeeded(lr.GetLocalRegistryRoot(out root)))
-                return null;
-            
-            RegistryKey baseKey = Registry.LocalMachine;
-
-            // Simple hack via 2005 api to support 2008+ RANU cases.
-            if (root.EndsWith("\\UserSettings"))
-            {
-                root = root.Substring(0, root.Length - 13) + "\\Configuration";
-                baseKey = Registry.CurrentUser;
-            }
-
-            using (RegistryKey rk = baseKey.OpenSubKey(root + "\\Packages\\" + typeof(AnkhSvnPackage).GUID.ToString("b"), RegistryKeyPermissionCheck.ReadSubTree))
+            using (RegistryKey rk = configService.OpenVSInstanceKey("Packages\\" + typeof(AnkhSvnPackage).GUID.ToString("b")))
             {
                 if(rk == null)
                     return null;

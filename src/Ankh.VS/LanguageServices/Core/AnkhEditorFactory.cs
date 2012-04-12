@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Win32;
 using IServiceProvider = System.IServiceProvider;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using Ankh.UI;
 
 namespace Ankh.VS.LanguageServices.Core
 {
@@ -517,42 +518,32 @@ namespace Ankh.VS.LanguageServices.Core
             if (AnkhEditorFactory.languageExtensions != null)
                 return AnkhEditorFactory.languageExtensions;
 
+            IAnkhConfigurationService configService = site.GetService(typeof(IAnkhConfigurationService)) as IAnkhConfigurationService;
             StringDictionary extensions = new StringDictionary();
-            ILocalRegistry3 localRegistry = site.GetService(typeof(SLocalRegistry)) as ILocalRegistry3;
-            string root = null;
-            if (localRegistry != null)
-            {
-                Marshal.ThrowExceptionForHR(localRegistry.GetLocalRegistryRoot(out root));
-            }
-            using (RegistryKey rootKey = Registry.LocalMachine.OpenSubKey(root))
-            {
-                if (rootKey != null)
-                {
 
-                    string relpath = "Languages\\File Extensions";
-                    using (RegistryKey key = rootKey.OpenSubKey(relpath, false))
+            if (configService != null)
+                using (RegistryKey key = configService.OpenVSInstanceKey("Languages\\File Extensions"))
+                {
+                    if (key != null)
                     {
-                        if (key != null)
+                        foreach (string ext in key.GetSubKeyNames())
                         {
-                            foreach (string ext in key.GetSubKeyNames())
+                            using (RegistryKey extkey = key.OpenSubKey(ext, false))
                             {
-                                using (RegistryKey extkey = key.OpenSubKey(ext, false))
+                                if (extkey != null)
                                 {
-                                    if (extkey != null)
+                                    string fe = ext;
+                                    string guid = extkey.GetValue(null) as string; // get default value
+                                    if (!extensions.ContainsKey(fe))
                                     {
-                                        string fe = ext;
-                                        string guid = extkey.GetValue(null) as string; // get default value
-                                        if (!extensions.ContainsKey(fe))
-                                        {
-                                            extensions.Add(fe, guid);
-                                        }
+                                        extensions.Add(fe, guid);
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
+
             return AnkhEditorFactory.languageExtensions = extensions;
         }
 
@@ -562,54 +553,43 @@ namespace Ankh.VS.LanguageServices.Core
                 return AnkhEditorFactory.editors;
 
             Hashtable editors = new Hashtable();
-            ILocalRegistry3 localRegistry = site.GetService(typeof(SLocalRegistry)) as ILocalRegistry3;
+            IAnkhConfigurationService configService = site.GetService(typeof(IAnkhConfigurationService)) as IAnkhConfigurationService;
             string root = null;
-            if (localRegistry == null)
-            {
+            if (configService == null)
                 return editors;
-            }
-            Marshal.ThrowExceptionForHR(localRegistry.GetLocalRegistryRoot(out root));
-            using (RegistryKey rootKey = Registry.LocalMachine.OpenSubKey(root))
+
+            using (RegistryKey editorsKey = configService.OpenVSInstanceKey("Editors"))
             {
-                if (rootKey != null)
-                {
-                    RegistryKey editorsKey = rootKey.OpenSubKey("Editors", false);
-                    if (editorsKey != null)
+                if (editorsKey != null)
+                    foreach (string editorGuid in editorsKey.GetSubKeyNames())
                     {
-                        using (editorsKey)
+                        Guid guid = GetGuid(editorGuid);
+                        using (RegistryKey editorKey = editorsKey.OpenSubKey(editorGuid, false))
                         {
-                            foreach (string editorGuid in editorsKey.GetSubKeyNames())
+                            object value = editorKey.GetValue(null);
+                            string name = (value != null) ? value.ToString() : editorGuid.ToString();
+                            RegistryKey extensions = editorKey.OpenSubKey("Extensions", false);
+                            if (extensions != null)
                             {
-                                Guid guid = GetGuid(editorGuid);
-                                using (RegistryKey editorKey = editorsKey.OpenSubKey(editorGuid, false))
+                                foreach (string s in extensions.GetValueNames())
                                 {
-                                    object value = editorKey.GetValue(null);
-                                    string name = (value != null) ? value.ToString() : editorGuid.ToString();
-                                    RegistryKey extensions = editorKey.OpenSubKey("Extensions", false);
-                                    if (extensions != null)
+                                    if (!string.IsNullOrEmpty(s))
                                     {
-                                        foreach (string s in extensions.GetValueNames())
+                                        EditorInfo ei = new EditorInfo();
+                                        ei.Name = name;
+                                        ei.Guid = guid;
+                                        object obj = extensions.GetValue(s);
+                                        if (obj is int)
                                         {
-                                            if (!string.IsNullOrEmpty(s))
-                                            {
-                                                EditorInfo ei = new EditorInfo();
-                                                ei.Name = name;
-                                                ei.Guid = guid;
-                                                object obj = extensions.GetValue(s);
-                                                if (obj is int)
-                                                {
-                                                    ei.Priority = (int)obj;
-                                                }
-                                                string ext = (s == "*") ? s : "." + s;
-                                                AddEditorInfo(editors, ext, ei);
-                                            }
+                                            ei.Priority = (int)obj;
                                         }
+                                        string ext = (s == "*") ? s : "." + s;
+                                        AddEditorInfo(editors, ext, ei);
                                     }
                                 }
                             }
                         }
                     }
-                }
             }
             return AnkhEditorFactory.editors = editors;
         }
@@ -645,41 +625,15 @@ namespace Ankh.VS.LanguageServices.Core
 
         StringDictionary GetFileExtensionMappings()
         {
-            ILocalRegistry3 localRegistry = site.GetService(typeof(SLocalRegistry)) as ILocalRegistry3;
-            string root = null;
-            if (localRegistry != null)
-            {
-                Marshal.ThrowExceptionForHR(localRegistry.GetLocalRegistryRoot(out root));
-            }
-            StringDictionary map = new StringDictionary();
-            RegistryKey key = Registry.CurrentUser.OpenSubKey(root + "\\Default Editors", false);
-            if (key != null)
-            {
-                using (key)
-                {
-                    foreach (string name in key.GetSubKeyNames())
-                    {
-                        using (RegistryKey extkey = key.OpenSubKey(name, false))
-                        {
-                            if (extkey != null)
-                            {
-                                object obj = extkey.GetValue("Custom");
-                                if (obj is string)
-                                {
-                                    string ext = "." + name;
-                                    map[ext] = obj.ToString(); // extension -> editor.
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            IAnkhConfigurationService configService = site.GetService(typeof(IAnkhConfigurationService)) as IAnkhConfigurationService;
 
-            // Also pick up the "default editors" information
-            key = Registry.CurrentUser.OpenSubKey(root + "\\Default Editors", false);
-            if (key != null)
+            StringDictionary map = new StringDictionary();
+            if (configService == null)
+                return map;
+
+            using (RegistryKey key = configService.OpenVSInstanceKey("Default Editors"))
             {
-                using (key)
+                if (key != null)
                 {
                     foreach (string name in key.GetSubKeyNames())
                     {
