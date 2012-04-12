@@ -16,11 +16,14 @@
 
 using System;
 using System.Collections.Generic;
-using Ankh.UI;
-using Microsoft.Win32;
 using System.ComponentModel;
-using Ankh.VS;
+using System.Runtime.InteropServices;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.Win32;
 
+using Ankh.UI;
+using Ankh.VS;
 
 namespace Ankh.Configuration
 {
@@ -242,7 +245,7 @@ namespace Ankh.Configuration
 
         public void SaveColumnsWidths(Type controlType, IDictionary<string, int> widths)
         {
-            if(controlType == null)
+            if (controlType == null)
                 throw new ArgumentNullException("controlType");
 
             if (widths == null || widths.Count == 0)
@@ -336,7 +339,7 @@ namespace Ankh.Configuration
             return values;
         }
 
-		public bool GetWarningBool(AnkhWarningBool ankhWarningBool)
+        public bool GetWarningBool(AnkhWarningBool ankhWarningBool)
         {
             using (RegistryKey rk = OpenHKCUKey("Warnings\\Bools"))
             {
@@ -365,6 +368,107 @@ namespace Ankh.Configuration
                     rk.DeleteValue(ankhWarningBool.ToString());
             }
         }
+
+        #endregion
+
+
+        #region IAnkhConfigurationService Members
+
+        [Guid("5C45B909-E820-4ACC-B894-0A013C6DA212"), InterfaceType(1)]
+        [ComImport]
+        public interface IMyLocalRegistry4
+        {
+            int RegisterClassObject([ComAliasName("Microsoft.VisualStudio.OLE.Interop.REFCLSID")] [In] ref Guid rclsid, [ComAliasName("Microsoft.VisualStudio.OLE.Interop.DWORD")] out uint pdwCookie);
+            int RevokeClassObject([ComAliasName("Microsoft.VisualStudio.OLE.Interop.DWORD")] uint dwCookie);
+            int RegisterInterface([ComAliasName("Microsoft.VisualStudio.OLE.Interop.REFIID")] [In] ref Guid riid);
+            int GetLocalRegistryRootEx([ComAliasName("Microsoft.VisualStudio.Shell.Interop.VSLOCALREGISTRYTYPE")] [In] uint dwRegType, [ComAliasName("Microsoft.VisualStudio.Shell.Interop.VSLOCALREGISTRYROOTHANDLE")] out uint pdwRegRootHandle, [MarshalAs(19)] out string pbstrRoot);
+        }
+
+        public RegistryKey OpenVSInstanceKey(string name)
+        {
+            RegistryKey rootKey = null;
+            if (VSVersion.VS2005)
+            {
+                ILocalRegistry3 lr3 = GetService<ILocalRegistry3>(typeof(SLocalRegistry));
+
+                if (lr3 == null)
+                    return null;
+
+                string root;
+
+                if (!ErrorHandler.Succeeded(lr3.GetLocalRegistryRoot(out root)))
+                    return null;
+
+                rootKey = Registry.LocalMachine.OpenSubKey(root);
+            }
+            else
+            {
+                IMyLocalRegistry4 lr4 = GetService<IMyLocalRegistry4>(typeof(SLocalRegistry));
+
+                if (lr4 == null)
+                    return null;
+
+                uint type;
+                const uint VsLocalRegistryRootHandle_CURRENT_USER = unchecked((uint)-2147483647);
+                string root;
+                if (!ErrorHandler.Succeeded(lr4.GetLocalRegistryRootEx(2 /* _VsLocalRegistryType.Configuration */, out type, out root)))
+                    return null;
+
+                rootKey = ((type == VsLocalRegistryRootHandle_CURRENT_USER) ? Registry.CurrentUser : Registry.LocalMachine).OpenSubKey(root);
+            }
+
+            if (rootKey == null)
+                return null;
+
+            using (rootKey)
+            {
+                return rootKey.OpenSubKey(name);
+            }
+        }
+
+		public RegistryKey OpenVSUserKey(string name)
+		{
+			RegistryKey rootKey = null;
+			if (VSVersion.VS2005)
+			{
+				ILocalRegistry3 lr3 = GetService<ILocalRegistry3>(typeof(SLocalRegistry));
+
+				if (lr3 == null)
+					return null;
+
+				string root;
+
+				if (!ErrorHandler.Succeeded(lr3.GetLocalRegistryRoot(out root)))
+					return null;
+
+				rootKey = Registry.CurrentUser.OpenSubKey(root);
+			}
+			else
+			{
+				IMyLocalRegistry4 lr4 = GetService<IMyLocalRegistry4>(typeof(SLocalRegistry));
+
+				if (lr4 == null)
+					return null;
+
+				uint type;
+				const uint VsLocalRegistryRootHandle_CURRENT_USER = unchecked((uint)-2147483647);
+				string root;
+				if (!ErrorHandler.Succeeded(lr4.GetLocalRegistryRootEx(1 /* _VsLocalRegistryType.UserSettings */, out type, out root)))
+					return null;
+
+				rootKey = ((type == VsLocalRegistryRootHandle_CURRENT_USER) ? Registry.CurrentUser : Registry.LocalMachine).OpenSubKey(root);
+			}
+
+			if (rootKey == null)
+				return null;
+			else if (string.IsNullOrEmpty(name))
+				return rootKey;
+
+			using (rootKey)
+			{
+				return rootKey.OpenSubKey(name);
+			}
+		}
 
         #endregion
     }

@@ -8,6 +8,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Win32;
+using Ankh.UI;
 
 namespace Ankh.VS.LanguageServices.Core
 {
@@ -153,22 +154,17 @@ namespace Ankh.VS.LanguageServices.Core
         /// <include file='doc\PropertySheet.uex' path='docs/doc[@for="LanguagePreferences.Init"]/*' />
         public virtual void Init()
         {
-            ILocalRegistry3 localRegistry = GetService<ILocalRegistry3>(typeof(SLocalRegistry));
-            string root = null;
-            if (localRegistry != null)
+            IAnkhConfigurationService configService = GetService<IAnkhConfigurationService>();
+
+            if (configService != null)
             {
-                Marshal.ThrowExceptionForHR(localRegistry.GetLocalRegistryRoot(out root));
-            }
-            if (root != null)
-            {
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(root, false))
+
+                using (RegistryKey key = configService.OpenVSInstanceKey(null))
                 {
                     if (key != null)
-                    {
                         InitMachinePreferences(key, name);
-                    }
                 }
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(root, false))
+                using (RegistryKey key = configService.OpenVSUserKey(null))
                 {
                     if (key != null)
                     {
