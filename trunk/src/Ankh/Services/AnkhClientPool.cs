@@ -115,6 +115,8 @@ namespace Ankh.Services
 
             AnkhSvnPoolClient client = new AnkhSvnPoolClient(this, hookUI, _returnCookie);
 
+            client.Configuration.KeepAllExtensionsOnConflict = SvnOverride.WhenNotSet;
+
             if (hookUI)
                 HookUI(client);
 
