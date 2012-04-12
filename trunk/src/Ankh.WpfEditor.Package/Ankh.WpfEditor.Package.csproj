@@ -4,7 +4,7 @@
   <Import Project="../tools/Ankh-Common.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D3FFD86D-B2AC-4659-86DD-559E42844BD0}</ProjectGuid>
     <OutputType>Library</OutputType>
