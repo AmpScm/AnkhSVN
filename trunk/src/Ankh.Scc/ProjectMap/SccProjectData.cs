@@ -404,10 +404,20 @@ namespace Ankh.Scc.ProjectMap
             get
             {
                 if (_svnProjectInstance == null)
-                    _svnProjectInstance = new SvnProject(ProjectFile, SccProject);
+                {
+                    if ((_projectFlags & SccProjectFlags.ForceSccGlyphChange) == SccProjectFlags.ForceSccGlyphChange)
+                        _svnProjectInstance = new SccSvnProject(this);
+                    else
+                        _svnProjectInstance = new SvnProject(ProjectFile, SccProject);
+                }
 
                 return _svnProjectInstance;
             }
+        }
+
+        public SccProjectFlags SccFlags
+        {
+            get { return _projectFlags; }
         }
 
         /// <summary>
@@ -856,14 +866,53 @@ namespace Ankh.Scc.ProjectMap
             set { _unloading = value; }
         }
 
-        [DebuggerNonUserCode]
-        public void NotifyGlyphsChanged()
-        {
-            try
-            {
-                SccProject.SccGlyphChanged(0, null, null, null);
-            }
-            catch { }
-        }
-    }
+		[DebuggerNonUserCode]
+		public void NotifyGlyphsChanged()
+		{
+			try
+			{
+				if ((_projectFlags & SccProjectFlags.ForceSccGlyphChange) == 0)
+					SccProject.SccGlyphChanged(0, null, null, null);
+				else
+					ForceGlyphChanges();
+			}
+			catch { }
+		}
+
+		IVsSccManager2 _sccManager;
+		internal void ForceGlyphChanges()
+		{
+			uint[] idsArray;
+			string[] namesArray;
+			{
+				List<uint> ids = new List<uint>(_files.Count);
+				List<string> names = new List<string>(_files.Count);
+
+				foreach (SccProjectFileReference r in _files)
+				{
+					uint id = r.ProjectItemId;
+					if (id == VSConstants.VSITEMID_NIL)
+						continue;
+
+					string name = r.ProjectFile.FullPath;
+					if (string.IsNullOrEmpty(name))
+						continue;
+
+					ids.Add(id);
+					names.Add(name);
+				}
+				idsArray = ids.ToArray();
+				namesArray = names.ToArray();
+			}
+
+			if (_sccManager == null)
+				_sccManager = GetService<IVsSccManager2>(typeof(ITheAnkhSvnSccProvider));
+
+			VsStateIcon[] newGlyphs = new VsStateIcon[idsArray.Length];
+			uint[] sccState = new uint[idsArray.Length];
+
+			if (0 == _sccManager.GetSccGlyph(idsArray.Length, namesArray, newGlyphs, sccState))
+				SccProject.SccGlyphChanged(idsArray.Length, idsArray, newGlyphs, sccState);
+		}
+	}
 }
