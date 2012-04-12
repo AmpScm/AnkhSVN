@@ -554,7 +554,6 @@ namespace Ankh.VS.LanguageServices.Core
 
             Hashtable editors = new Hashtable();
             IAnkhConfigurationService configService = site.GetService(typeof(IAnkhConfigurationService)) as IAnkhConfigurationService;
-            string root = null;
             if (configService == null)
                 return editors;
 
