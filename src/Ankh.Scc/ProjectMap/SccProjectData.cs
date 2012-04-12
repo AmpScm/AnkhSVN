@@ -88,7 +88,7 @@ namespace Ankh.Scc.ProjectMap
             _vsProject = (IVsProject)project; // A project must be a VS project
 
             _projectType = GetProjectType(project);
-			_projectFlags = GetProjectFlags(ProjectTypeGuid);
+            _projectFlags = GetProjectFlags(ProjectTypeGuid);
             _files = new SccProjectFileCollection();
         }
 
