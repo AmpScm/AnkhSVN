@@ -348,13 +348,10 @@ namespace Ankh.Services.IssueTracker
             }
         }
 
+		IIssueTrackerSettings _settings;
         private IIssueTrackerSettings Settings
         {
-            get
-            {
-                IIssueTrackerSettings settings = Context == null ? null : Context.GetService<IIssueTrackerSettings>();
-                return settings;
-            }
+            get { return _settings ?? (_settings = GetService<IIssueTrackerSettings>()); }
         }
 
         /// <summary>
