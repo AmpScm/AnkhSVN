@@ -122,13 +122,16 @@
     <Compile Include="Native\ICOMPropertyBag.cs" />
     <Compile Include="Native\SolutionExplorerDataItem.cs" />
     <Compile Include="ProjectMap\SccProjectData.ProjectRefresh.cs" />
+    <Compile Include="ProjectMap\SccSvnProject.cs" />
     <Compile Include="SccUI\Commands\MakeNonSccFileWritableCommand.cs" />
     <Compile Include="SccUI\SccEditReadOnlyFileDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccUI\SccEditReadOnlyFileDialog.Designer.cs">
       <DependentUpon>SccEditReadOnlyFileDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccUI\SccFilesystemWarningDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccUI\SccFilesystemWarningDialog.Designer.cs">
       <DependentUpon>SccFilesystemWarningDialog.cs</DependentUpon>
@@ -139,6 +142,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="SccUI\SccQuerySaveReadonlyDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccUI\SccQuerySaveReadonlyDialog.Designer.cs">
       <DependentUpon>SccQuerySaveReadonlyDialog.cs</DependentUpon>
@@ -149,6 +153,7 @@
     <Compile Include="ProjectMap\SccTranslateData.cs" />
     <Compile Include="AnkhSccSettingStorage.cs" />
     <Compile Include="SccUI\ChangeSourceControl.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccUI\ChangeSourceControl.Designer.cs">
       <DependentUpon>ChangeSourceControl.cs</DependentUpon>
@@ -156,6 +161,7 @@
     <Compile Include="SccUI\ChangeSourceControlRow.cs" />
     <Compile Include="SccUI\Commands\ChangeSourceControlCommand.cs" />
     <Compile Include="SccUI\ChangeSolutionRoot.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccUI\ChangeSolutionRoot.Designer.cs">
       <DependentUpon>ChangeSolutionRoot.cs</DependentUpon>
