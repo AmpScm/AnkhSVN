@@ -177,10 +177,8 @@ namespace Ankh.Scc.ProjectMap
             {
                 if (!_projectTypeGuid.HasValue)
                 {
-                    IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
-
                     Guid value;
-                    if (ErrorHandler.Succeeded(solution.GetProjectTypeGuid(0, ProjectFile, out value)))
+                    if (ErrorHandler.Succeeded(_hierarchy.GetGuidProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_TypeGuid, out value)))
                         _projectTypeGuid = value;
                 }
 
