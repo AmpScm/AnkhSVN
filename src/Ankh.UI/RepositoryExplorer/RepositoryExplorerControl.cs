@@ -17,19 +17,19 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-
-using SharpSvn;
-using Ankh.VS;
-using Ankh.UI.VSSelectionControls;
-using Ankh.Commands;
-using Microsoft.VisualStudio;
 using System.ComponentModel.Design;
-using Ankh.Scc;
+using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using Microsoft.VisualStudio;
+using SharpSvn;
 using SharpSvn.Remote;
+using Ankh.Commands;
+using Ankh.Configuration;
+using Ankh.Scc;
+using Ankh.UI.VSSelectionControls;
+using Ankh.VS;
 
 namespace Ankh.UI.RepositoryExplorer
 {

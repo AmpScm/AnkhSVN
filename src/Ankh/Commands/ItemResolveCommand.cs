@@ -20,6 +20,7 @@ using SharpSvn;
 
 using Ankh.Scc;
 using Ankh.UI;
+using Ankh.Configuration;
 
 namespace Ankh.Commands
 {

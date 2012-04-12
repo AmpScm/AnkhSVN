@@ -16,23 +16,19 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using SharpSvn;
-using System.Threading;
-using Ankh.VS;
 using System.IO;
-using Microsoft.Win32;
-using System.Security;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.Diagnostics;
-using Ankh.UI.RepositoryExplorer;
-using Microsoft.VisualStudio.Shell.Interop;
+using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.Win32;
+using SharpSvn;
 using SharpSvn.Remote;
+using Ankh.Configuration;
+using Ankh.UI.RepositoryExplorer;
+using Ankh.VS;
 
 namespace Ankh.UI.RepositoryOpen
 {

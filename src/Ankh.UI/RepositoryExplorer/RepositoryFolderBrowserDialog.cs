@@ -15,15 +15,10 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
+using Ankh.Configuration;
 using Ankh.VS;
-using Ankh.Commands;
-using Ankh.Scc;
 
 namespace Ankh.UI.RepositoryExplorer
 {

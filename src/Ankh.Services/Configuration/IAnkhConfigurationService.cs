@@ -16,10 +16,9 @@
 
 using System;
 using System.Collections.Generic;
-using Ankh.Configuration;
 using Microsoft.Win32;
 
-namespace Ankh.UI
+namespace Ankh.Configuration
 {
     public enum AnkhWarningBool
     {

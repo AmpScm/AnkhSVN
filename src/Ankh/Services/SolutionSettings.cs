@@ -21,14 +21,11 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text.RegularExpressions;
-using Microsoft.Win32;
-using FileVersionInfo = System.Diagnostics.FileVersionInfo;
-
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-
+using Microsoft.Win32;
 using SharpSvn;
-
+using Ankh.Configuration;
 using Ankh.Scc;
 using Ankh.Selection;
 using Ankh.UI;

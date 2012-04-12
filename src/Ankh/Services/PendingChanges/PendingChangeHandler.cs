@@ -21,11 +21,10 @@ using System.Windows.Forms;
 using System.IO;
 using SharpSvn;
 using Ankh.Scc;
-using Ankh.UI;
-using Ankh.Services.PendingChanges;
 using Ankh.VS;
 using Ankh.UI.SccManagement;
 using Ankh.ExtensionPoints.IssueTracker;
+using Ankh.Configuration;
 
 namespace Ankh.Services.PendingChanges
 {

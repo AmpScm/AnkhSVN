@@ -21,7 +21,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-
+using Ankh.Configuration;
 using Ankh.VS;
 
 namespace Ankh.UI

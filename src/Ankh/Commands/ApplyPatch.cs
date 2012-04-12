@@ -14,10 +14,11 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using Ankh.VS;
-using Ankh.UI;
-using Ankh.Scc.UI;
+using System;
 using System.Windows.Forms;
+using Ankh.Configuration;
+using Ankh.Scc.UI;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {

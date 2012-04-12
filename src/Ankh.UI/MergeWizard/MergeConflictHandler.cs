@@ -22,6 +22,7 @@ using System.Windows.Forms.Design;
 using System.Windows.Forms;
 using Ankh.Scc.UI;
 using System.IO;
+using Ankh.Configuration;
 
 namespace Ankh.UI.MergeWizard
 {

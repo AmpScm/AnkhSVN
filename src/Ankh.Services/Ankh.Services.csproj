@@ -99,7 +99,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\IAnkhDynamicEditorFactory.cs" />
-    <Compile Include="UI\RegistryLifoList.cs" />
+    <Compile Include="Configuration\RegistryLifoList.cs" />
     <Compile Include="Scc\IPendingChangeHandler.cs" />
     <Compile Include="UI\IAnkhToolWindowHost.cs" />
     <Compile Include="IAnkhScheduler.cs" />
@@ -164,7 +164,7 @@
     </Compile>
     <Compile Include="Selection\ISelectionContext.cs" />
     <Compile Include="Selection\SvnProject.cs" />
-    <Compile Include="UI\IAnkhConfigurationService.cs" />
+    <Compile Include="Configuration\IAnkhConfigurationService.cs" />
     <Compile Include="UI\IAnkhUIHost.cs" />
     <Compile Include="UI\VSContainerForm.cs">
       <SubType>Form</SubType>

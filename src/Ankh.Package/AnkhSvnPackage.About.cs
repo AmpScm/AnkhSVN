@@ -23,6 +23,7 @@ using System.Reflection;
 using SharpSvn;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
+using Ankh.Configuration;
 using Ankh.UI;
 
 namespace Ankh.VSPackage

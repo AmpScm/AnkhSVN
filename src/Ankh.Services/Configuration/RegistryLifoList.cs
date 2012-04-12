@@ -16,13 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.Win32;
-using Ankh.VS;
-using Ankh.UI;
 using System.Globalization;
+using Microsoft.Win32;
 
-namespace Ankh.UI
+namespace Ankh.Configuration
 {
     /// <summary>
     /// 

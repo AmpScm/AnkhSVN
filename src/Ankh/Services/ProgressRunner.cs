@@ -16,18 +16,15 @@
 
 using System;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
-
 using SharpSvn;
-
+using Ankh.Configuration;
 using Ankh.UI;
 using Ankh.VS;
-using System.Text;
-using System.IO;
 using Ankh.VS.OutputPane;
-using System.Runtime.InteropServices;
 
 namespace Ankh
 {
