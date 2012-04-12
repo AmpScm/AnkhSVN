@@ -715,7 +715,7 @@ namespace Ankh.Settings
             catch (SecurityException)
             { /* Ignore no read only access; stupid sysadmins */ }
 
-            IAnkhConfigurationService configSvc = Context.GetService<IAnkhConfigurationService>();
+            IAnkhConfigurationService configSvc = GetService<IAnkhConfigurationService>();
             if (configSvc != null)
             {
                 foreach (string u in configSvc.GetRecentReposUrls())
