@@ -245,19 +245,10 @@ namespace Ankh.Scc
             {
                 foreach (SvnProject project in dirtyProjects)
                 {
-                    if (project.RawHandle == null)
-                    {
-                        if (project.IsSolution)
-                            provider.UpdateSolutionGlyph();
-
-                        continue; // All IVsSccProjects have a RawHandle
-                    }
-
-                    try
-                    {
-                        project.RawHandle.SccGlyphChanged(0, null, null, null);
-                    }
-                    catch { }
+                    if (project.IsSolution)
+                        provider.UpdateSolutionGlyph();
+                    else
+                        project.NotifyGlyphChanged();
                 }
             }
 

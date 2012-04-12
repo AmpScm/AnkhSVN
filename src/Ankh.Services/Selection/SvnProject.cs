@@ -15,8 +15,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Selection
@@ -58,7 +56,7 @@ namespace Ankh.Selection
             // fullpath or rawHandle must be non-null
 
             // rawHandle = a IVsSccProject2 instance
-            // fullPath = a file in the
+            // fullPath = a file in the project
 
             _fullPath = fullPath;
             _rawHandle = rawHandle;
@@ -142,5 +140,16 @@ namespace Ankh.Selection
 
             return FullPath.GetHashCode();
         }
-    }
+
+        public virtual void NotifyGlyphChanged()
+        {
+            if (IsSolution)
+                throw new InvalidOperationException();
+            try
+            {
+                RawHandle.SccGlyphChanged(0, null, null, null);
+            }
+            catch { }
+        }
+	}
 }
