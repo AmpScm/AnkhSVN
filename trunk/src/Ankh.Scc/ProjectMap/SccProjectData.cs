@@ -877,7 +877,6 @@ namespace Ankh.Scc.ProjectMap
 			catch { }
 		}
 
-		IVsSccManager2 _sccManager;
 		internal void ForceGlyphChanges()
 		{
 			uint[] idsArray;
@@ -903,13 +902,10 @@ namespace Ankh.Scc.ProjectMap
 				namesArray = names.ToArray();
 			}
 
-			if (_sccManager == null)
-				_sccManager = GetService<IVsSccManager2>(typeof(ITheAnkhSvnSccProvider));
-
 			VsStateIcon[] newGlyphs = new VsStateIcon[idsArray.Length];
 			uint[] sccState = new uint[idsArray.Length];
 
-			if (0 == _sccManager.GetSccGlyph(idsArray.Length, namesArray, newGlyphs, sccState))
+			if (0 == Scc.GetSccGlyph(idsArray.Length, namesArray, newGlyphs, sccState))
 				SccProject.SccGlyphChanged(idsArray.Length, idsArray, newGlyphs, sccState);
 		}
 	}
