@@ -77,7 +77,7 @@ namespace Ankh
         void FlushAllClients();
     }
 
-    public sealed class SvnClientAction
+    public sealed class SvnClientAction : IComparable<SvnClientAction>
     {
         readonly string _path;
         bool _recursive;
@@ -129,6 +129,16 @@ namespace Ankh
         {
             get { return _oldRevision; }
             set { _oldRevision = value; }
+        }
+
+        public override int GetHashCode()
+        {
+            return StringComparer.OrdinalIgnoreCase.GetHashCode(FullPath);
+        }
+
+        public int CompareTo(SvnClientAction other)
+        {
+            return StringComparer.OrdinalIgnoreCase.Compare(FullPath, other.FullPath);
         }
     }
 

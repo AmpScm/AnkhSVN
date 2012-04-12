@@ -564,19 +564,23 @@ namespace Ankh.Scc
             CommandService.PostIdleAction(
                 delegate
                 {
+                    bool sorted = false;
                     foreach (SccProjectData project in _projectMap.Values)
                     {
                         if (project.RequiresForcedRefresh() && !string.IsNullOrEmpty(project.ProjectDirectory))
                         {
                             string dir = project.ProjectDirectory;
 
-                            if (!dir.EndsWith("\\"))
-                                dir += "\\";
-
                             foreach (SvnClientAction action in sccRefreshItems)
                             {
-                                if (action.FullPath.StartsWith(dir, StringComparison.OrdinalIgnoreCase))
+                                if (SvnItem.IsBelowRoot(action.FullPath, dir))
                                 {
+                                    if (!sorted)
+                                    {
+                                        sorted = true;
+                                        sccRefreshItems.Sort();
+                                    }
+
                                     project.PerformRefresh(sccRefreshItems);
                                     break;
                                 }
