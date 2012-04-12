@@ -668,6 +668,14 @@ namespace Ankh.UI.VSSelectionControls
 
             int IVsHierarchy.GetGuidProperty(uint itemid, int propid, out Guid pguid)
             {
+                object v;
+
+                if (GetProperty(itemid, propid, out v) == 0 && v is Guid)
+                {
+                    pguid = (Guid)v;
+                    return VSConstants.S_OK;
+                }
+
                 pguid = Guid.Empty;
                 return VSConstants.E_FAIL;
             }
