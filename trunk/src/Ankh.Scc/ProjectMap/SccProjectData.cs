@@ -16,18 +16,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Shell.Interop;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
-using Ankh.Selection;
-using System.Diagnostics;
-using SharpSvn;
-using System.IO;
-using Ankh.VS;
-using Ankh.Commands;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
-using Ankh.UI;
+using SharpSvn;
+using Ankh.Configuration;
+using Ankh.Selection;
+using Ankh.VS;
+
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -605,7 +603,7 @@ namespace Ankh.Scc.ProjectMap
                 }
             }
 
-            if (!_inLoad && GetService<Ankh.UI.IAnkhConfigurationService>().Instance.AutoAddEnabled)
+            if (!_inLoad && GetService<IAnkhConfigurationService>().Instance.AutoAddEnabled)
             {
                 GetService<IFileStatusMonitor>().ScheduleAddFile(path);
             }

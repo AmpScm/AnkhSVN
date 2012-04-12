@@ -3,15 +3,14 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
 using System.Runtime.InteropServices;
-
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Win32;
-using IServiceProvider = System.IServiceProvider;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-using Ankh.UI;
+using IServiceProvider = System.IServiceProvider;
+using Ankh.Configuration;
 
 namespace Ankh.VS.LanguageServices.Core
 {

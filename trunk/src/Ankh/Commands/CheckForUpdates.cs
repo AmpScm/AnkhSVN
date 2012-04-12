@@ -22,12 +22,13 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using Microsoft.Win32;
-
+using Ankh.Configuration;
 using Ankh.UI;
 using Ankh.UI.SccManagement;
-using System.Text.RegularExpressions;
+
 
 /*****************************************************************
  * This command performs update checks by calling our webservice

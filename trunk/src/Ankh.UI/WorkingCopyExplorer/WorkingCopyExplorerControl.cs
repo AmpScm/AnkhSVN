@@ -18,15 +18,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-
 using Ankh.Commands;
+using Ankh.Configuration;
 using Ankh.Scc;
 using Ankh.UI.WorkingCopyExplorer.Nodes;
 using Ankh.VS;
-using System.Windows.Forms.Design;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {

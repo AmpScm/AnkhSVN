@@ -15,18 +15,14 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
-using SharpSvn;
-using Ankh.VS;
 using System.Collections.ObjectModel;
-using Ankh.Scc;
+using System.ComponentModel;
+using System.IO;
+using System.Windows.Forms;
+using SharpSvn;
+using Ankh.Configuration;
 using Ankh.UI.RepositoryExplorer;
+using Ankh.VS;
 
 namespace Ankh.UI.SccManagement
 {

@@ -16,14 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio;
-using Ankh.Scc;
-using Ankh.IssueTracker;
 using System.Diagnostics;
-using Ankh.UI;
+using Ankh.Configuration;
 using Ankh.VS.LanguageServices.Core;
+using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Ankh.VS.LanguageServices.LogMessages
 {

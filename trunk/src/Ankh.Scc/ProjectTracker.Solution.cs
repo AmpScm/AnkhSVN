@@ -21,10 +21,11 @@ using System.Windows.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
+using Ankh.Configuration;
 using Ankh.Scc.SccUI;
 using Ankh.Selection;
-using Ankh.UI;
 using Ankh.VS;
+
 
 
 namespace Ankh.Scc

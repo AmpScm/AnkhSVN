@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
+using Ankh.Configuration;
 using Ankh.UI;
 using Ankh.UI.OptionsPages;
 
