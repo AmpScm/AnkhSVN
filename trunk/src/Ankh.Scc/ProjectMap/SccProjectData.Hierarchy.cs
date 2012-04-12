@@ -149,6 +149,7 @@ namespace Ankh.Scc.ProjectMap
                 _projectFile = null;
                 _projectLocation = null;
                 _sccBaseDirectory = null;
+                _checkedProjectFile = false;
             }
             return VSConstants.S_OK;
         }
