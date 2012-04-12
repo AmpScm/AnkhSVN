@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11128</title>
+          AnkhSVN-Daily Update - 2.3.11139</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,20 +16,44 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6008/AnkhSvn-Daily-2.3.11128.1282.msi">AnkhSVN 2.3.11128</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6010/AnkhSvn-Daily-2.3.11139.1283.msi">AnkhSVN 2.3.11139</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11128">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11139">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2012-04-12</td></tr>
+<tr><td> </td><td class="r"><a id="11138" href="http://ankhsvn.net/rev/11138">
+            [r11138]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/ProjectMap/SccProjectData.cs, Ankh.Package/AnkhSvnPackage.Scc.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Mark a few more SQL server project types with the ForceSccGlyphChange flag.</td></tr>
+<tr><td> </td><td class="r"><a id="11137" href="http://ankhsvn.net/rev/11137">
+            [r11137]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc/ProjectMap:</strong> SccSvnProject.cs, SccProjectData.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement a full project forced glyph update for projects that don't like to
+lazily update the status glyphs.<br>
+This fixes the focus stealing of the SSIS project, which thinks it should
+rebuild the visual project tree when it should really just flush its glyph
+cache. (For completeness: It doesn't even have a real glyph cache in VS2008, so
+the glyphs we just retrieved for setting are just ignored here)</td></tr>
+<tr><td> </td><td class="r"><a id="11135" href="http://ankhsvn.net/rev/11135">
+            [r11135]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Package:</strong> Attributes/ProvideProjectTypeSettings.cs, AnkhSvnPackage.Scc.cs, Ankh.Package.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow registering some per project type flags to use a common system to work
+around glyph update bugs.</td></tr>
+<tr><td> </td><td class="r"><a id="11134" href="http://ankhsvn.net/rev/11134">
+            [r11134]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/UI/IAnkhConfigurationService.cs, Ankh.VS/LanguageServices/Core/AnkhEditorFactory.cs, Ankh.Package/AnkhSvnPackage.About.cs, Ankh/Services/ConfigService.cs, Ankh.VS/LanguageServices/Core/AnkhLanguagePreferences.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make it easier to access the Visual Studio registry key by adding a proper helper
+that really opens the right location in all debug scenarios.
+(Required for per project flag handling)</td></tr>
+<tr><td> </td><td class="r"><a id="11130" href="http://ankhsvn.net/rev/11130">
+            [r11130]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> Ankh.Scc.csproj, ProjectNotifier.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">In direct add mode: Don't add Scc excluded files.</td></tr>
 <tr class="d"><td colspan="4">2012-04-11</td></tr>
 <tr><td> </td><td class="r"><a id="11128" href="http://ankhsvn.net/rev/11128">
             [r11128]
