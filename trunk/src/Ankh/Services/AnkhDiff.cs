@@ -309,7 +309,7 @@ namespace Ankh.Services
                 _monitorDir = monitorDir;
                 _toMonitor = monitor;
 
-                IVsFileChangeEx fx = context.GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
+                IVsFileChangeEx fx = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
 
                 _cookie = 0;
                 if (fx == null)
@@ -479,9 +479,9 @@ namespace Ankh.Services
             return _re.Replace(arguments, new Replacer(this, diffArgs, toolMode).Replace).TrimEnd();
         }
 
-        sealed class Replacer
+        sealed class Replacer : AnkhService
         {
-            readonly AnkhDiff _context;
+            readonly AnkhDiff _diff;
             readonly AnkhDiffToolArgs _toolArgs;
             readonly AnkhDiffArgs _diffArgs;
             readonly AnkhMergeArgs _mergeArgs;
@@ -489,13 +489,14 @@ namespace Ankh.Services
             readonly DiffToolMode _toolMode;
 
             public Replacer(AnkhDiff context, AnkhDiffToolArgs args, DiffToolMode toolMode)
+				: base(context)
             {
                 if (context == null)
                     throw new ArgumentNullException("context");
                 else if (args == null)
                     throw new ArgumentNullException("args");
 
-                _context = context;
+                _diff = context;
                 _toolArgs = args;
                 _diffArgs = args as AnkhDiffArgs;
                 _mergeArgs = args as AnkhMergeArgs;
@@ -543,7 +544,7 @@ namespace Ankh.Services
                     
                     value = value.Replace("''", "'").Replace("\"\"", "\"");
 
-                    return _context.SubstituteArguments(value, _diffArgs, _toolMode);
+                    return _diff.SubstituteArguments(value, _diffArgs, _toolMode);
                 }
                 else
                     return match.Value; // Don't replace if not matched
@@ -633,12 +634,12 @@ namespace Ankh.Services
                             return false;
                         break;
                     case "APPPATH":
-                        v = _context.GetAppPath(arg, _toolMode);
-                        value = _context.SubstituteArguments(v ?? "", DiffArgs, _toolMode);
+                        v = _diff.GetAppPath(arg, _toolMode);
+                        value = _diff.SubstituteArguments(v ?? "", DiffArgs, _toolMode);
                         break;
                     case "APPTEMPLATE":
-                        v = _context.GetAppTemplate(arg, _toolMode);
-                        value = _context.SubstituteArguments(v ?? "", DiffArgs, _toolMode);
+                        v = _diff.GetAppTemplate(arg, _toolMode);
+                        value = _diff.SubstituteArguments(v ?? "", DiffArgs, _toolMode);
                         break;
                     case "PROGRAMFILES":
                         // Return the environment variable if using environment variable style
@@ -659,7 +660,7 @@ namespace Ankh.Services
                             value = "";
                         break;
                     case "VSHOME":
-                        IVsSolution sol = _context.GetService<IVsSolution>(typeof(SVsSolution));
+                        IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
                         if (sol == null)
                             return false;
                         object val;
