@@ -217,7 +217,7 @@ namespace Ankh.Scc
             HybridCollection<string> dirtyCheck;
             HybridCollection<string> maybeAdd;
 
-            AnkhSccProvider provider = Context.GetService<AnkhSccProvider>();
+            AnkhSccProvider provider = GetService<AnkhSccProvider>();
 
             lock (_lock)
             {
@@ -276,7 +276,7 @@ namespace Ankh.Scc
                         // * and just to be sure: that are still part of the solution
                         if (item.IsFile && !item.IsVersioned &&
                             item.IsVersionable && !item.IsIgnored &&
-                            item.InSolution)
+                            item.InSolution && !item.IsSccExcluded)
                         {
                             SvnAddArgs aa = new SvnAddArgs();
                             aa.ThrowOnError = false; // Just ignore errors here; make the user add them themselves
