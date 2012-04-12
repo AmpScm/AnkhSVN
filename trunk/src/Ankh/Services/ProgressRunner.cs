@@ -83,9 +83,8 @@ namespace Ankh
         /// Used to run lengthy operations in a separate thread while 
         /// displaying a modal progress dialog in the main thread.
         /// </summary>
-        sealed class ProgressRunner
+        sealed class ProgressRunner : AnkhService
         {
-            readonly IAnkhServiceProvider _context;
             readonly EventHandler<ProgressWorkerArgs> _action;
             Form _invoker;
             bool _cancelled;
@@ -99,13 +98,11 @@ namespace Ankh
             /// <param name="context">The context.</param>
             /// <param name="action">The action.</param>
             public ProgressRunner(IAnkhServiceProvider context, EventHandler<ProgressWorkerArgs> action)
+				: base(context)
             {
-                if (context == null)
-                    throw new ArgumentNullException("context");
-                else if (action == null)
+                if (action == null)
                     throw new ArgumentNullException("action");
 
-                _context = context;
                 _action = action;
             }
 
@@ -132,8 +129,8 @@ namespace Ankh
             public void Start(string caption)
             {
                 Thread thread = new Thread(new ParameterizedThreadStart(this.Run));
-                ISvnClientPool pool = _context.GetService<ISvnClientPool>();
-                IAnkhDialogOwner dialogOwner = _context.GetService<IAnkhDialogOwner>();
+                ISvnClientPool pool = GetService<ISvnClientPool>();
+                IAnkhDialogOwner dialogOwner = GetService<IAnkhDialogOwner>();
 
                 using (ProgressDialog dialog = new ProgressDialog())
                 using (SvnClient client = pool.GetClient())
@@ -142,7 +139,7 @@ namespace Ankh
                 {
                     _sync = dialog;
                     dialog.Caption = caption;
-                    dialog.Context = _context;
+                    dialog.Context = this;
                     thread.Name = "AnkhSVN Worker";
                     bool threadStarted = false;
 
@@ -160,7 +157,7 @@ namespace Ankh
                     {
                         if (!_closed)
                         {
-                            dialog.ShowDialog(_context);
+                            dialog.ShowDialog(this);
                         }
                         else
                             Application.DoEvents();
@@ -184,7 +181,7 @@ namespace Ankh
 
             private IDisposable BindOutputPane(SvnClient client)
             {
-                return new OutputPaneReporter(_context, client);
+                return new OutputPaneReporter(this, client);
             }
 
             private void Run(object arg)
@@ -192,7 +189,7 @@ namespace Ankh
                 SvnClient client = (SvnClient)arg;
                 try
                 {
-                    ProgressWorkerArgs awa = new ProgressWorkerArgs(_context, client, _sync);
+                    ProgressWorkerArgs awa = new ProgressWorkerArgs(this, client, _sync);
                     _action(null, awa);
 
                     if (_exception == null && awa.Exception != null)
@@ -227,14 +224,14 @@ namespace Ankh
             IAnkhDialogOwner _dialogOwner;
             IAnkhDialogOwner DialogOwner
             {
-                get { return _dialogOwner ?? (_dialogOwner = _context.GetService<IAnkhDialogOwner>()); }
+                get { return _dialogOwner ?? (_dialogOwner = GetService<IAnkhDialogOwner>()); }
             }
             
 
             IAnkhConfigurationService _configService;
             IAnkhConfigurationService ConfigService
             {
-                get { return _configService ?? (_configService = _context.GetService<IAnkhConfigurationService>()); }
+                get { return _configService ?? (_configService = GetService<IAnkhConfigurationService>()); }
             }
 
             private void OnDone(object sender, EventArgs e)
@@ -278,17 +275,16 @@ namespace Ankh
             }
         }
         
-        sealed class OutputPaneReporter : IDisposable
+        sealed class OutputPaneReporter : AnkhService
         {
             readonly IOutputPaneManager _mgr;
             readonly SvnClientReporter _reporter;
             readonly StringBuilder _sb;
 
             public OutputPaneReporter(IAnkhServiceProvider context, SvnClient client)
+				: base(context)
             {
-                if (context == null)
-                    throw new ArgumentNullException("context");
-                else if (client == null)
+                if (client == null)
                     throw new ArgumentNullException("client");
 
                 _mgr = context.GetService<IOutputPaneManager>();
@@ -296,16 +292,19 @@ namespace Ankh
                 _reporter = new SvnClientReporter(client, _sb);
             }
 
-            public void Dispose()
-            {
+			protected override void Dispose(bool disposing)
+			{
                 try
                 {
-                    _sb.AppendLine();
-                    _mgr.WriteToPane(_sb.ToString());
+					using (_reporter)
+					{
+						_sb.AppendLine();
+						_mgr.WriteToPane(_sb.ToString());
+					}
                 }
                 finally
                 {
-                    _reporter.Dispose();
+					base.Dispose(disposing);
                 }
             }
         }
