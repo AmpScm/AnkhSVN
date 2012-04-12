@@ -172,6 +172,7 @@
   <ItemGroup>
     <Compile Include="AnkhEditorFactories.cs" />
     <Compile Include="Attributes\ProvideOutputWindow.cs" />
+    <Compile Include="Attributes\ProvideProjectTypeSettings.cs" />
     <Compile Include="OptionPages\EnvironmentSettingsPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -203,6 +204,9 @@
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
     <Compile Include="AnkhSvnPackage.OleComponent.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSvnPackage.Scc.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
     <Compile Include="Attributes\ProvideLanguageSettings.cs" />
