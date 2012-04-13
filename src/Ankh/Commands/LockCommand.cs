@@ -17,15 +17,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-
 using SharpSvn;
-
 using Ankh.Configuration;
 using Ankh.UI;
 using Ankh.UI.SccManagement;
-using Ankh.UI.PathSelector;
 
 namespace Ankh.Commands
 {
@@ -48,10 +44,8 @@ namespace Ankh.Commands
                 if (mustOnly && !item.IsReadOnlyMustLock)
                     continue;
 
-                if (item.IsFile && item.IsVersioned && !item.IsLocked)
-                {
+                if (item.IsFile && item.IsVersioned && !item.IsNewAddition && !item.IsLocked)
                     return;
-                }
             }
             e.Enabled = false;
         }
@@ -66,15 +60,17 @@ namespace Ankh.Commands
             if (items == null)
             {
                 List<SvnItem> choices = new List<SvnItem>();
-
                 foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
                 {
-                    if (item.IsFile && item.IsVersioned && !item.IsLocked)
+                    if (item.IsFile && item.IsVersioned && !item.IsNewAddition && !item.IsLocked)
                         choices.Add(item);
                 }
 
                 items = choices;
             }
+
+            if (EnumTools.IsEmpty(items))
+                return;
 
             bool stealLocks = false;
             string comment = "";
@@ -104,7 +100,7 @@ namespace Ankh.Commands
 
             SortedList<string, string> alreadyLockedFiles = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
             e.GetService<IProgressRunner>().RunModal(
-                "Locking",
+                CommandStrings.LockingTitle,
                  delegate(object sender, ProgressWorkerArgs ee)
                  {
                      SvnLockArgs la = new SvnLockArgs();
