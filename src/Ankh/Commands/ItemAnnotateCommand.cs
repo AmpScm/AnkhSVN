@@ -50,7 +50,7 @@ namespace Ankh.Commands
                 case AnkhCommand.ItemAnnotate:
                     foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
                     {
-                        if (item.IsVersioned && item.IsFile)
+                        if (item.IsFile && item.IsVersioned && item.HasCopyableHistory)
                             return;
                     }
                     break;
@@ -84,7 +84,7 @@ namespace Ankh.Commands
                     endRev = SvnRevision.Working;
                     foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
                     {
-                        if (i.IsVersionable)
+                        if (i.IsFile && i.IsVersioned && i.HasCopyableHistory)
                             targets.Add(new SvnOrigin(i));
                     }
                     break;
@@ -141,6 +141,13 @@ namespace Ankh.Commands
                     return;
 
                 target = new SvnOrigin(one);
+            }
+
+            if (startRev == SvnRevision.Working || endRev == SvnRevision.Working && target.Target is SvnPathTarget)
+            {
+                IAnkhOpenDocumentTracker tracker = e.GetService<IAnkhOpenDocumentTracker>();
+                if (tracker != null)
+                    tracker.SaveDocument(((SvnPathTarget)target.Target).FullPath);
             }
 
             DoBlame(e, target, startRev, endRev, ignoreEols, ignoreSpacing, retrieveMergeInfo);
