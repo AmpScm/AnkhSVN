@@ -81,6 +81,8 @@ namespace Ankh.VSPackage
                 }
                 pqsspSave[0] = result;
             }
+            else
+                pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
 
             return VSConstants.S_OK;
         }
