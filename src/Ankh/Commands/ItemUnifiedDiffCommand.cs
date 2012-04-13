@@ -15,16 +15,15 @@
 //  limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell;
 using SharpSvn;
-
 using Ankh.Scc;
 using Ankh.UI.PathSelector;
 using Ankh.VS;
-using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
@@ -37,6 +36,8 @@ namespace Ankh.Commands
             {
                 if (item.IsVersioned)
                     return;
+                else if (item.IsFile && item.IsVersionable && item.InSolution && !item.IsIgnored && !item.IsSccExcluded)
+                    return; // New files can be added
             }
 
             e.Enabled = false;
@@ -44,25 +45,33 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
+            List<string> toAdd = new List<string>();
             List<SvnItem> items = new List<SvnItem>();
 
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                if (item.IsModified || item.IsDocumentDirty)
+                if (!item.IsVersioned && item.IsVersionable && item.InSolution && !item.IsIgnored && !item.IsSccExcluded)
+                {
+                    toAdd.Add(item.FullPath); // Add new files  ### Alternative: Show them as added
+                    items.Add(item);
+                }
+                else if (item.IsModified || item.IsDocumentDirty)
                     items.Add(item);
             }
+
+            if (items.Count == 0)
+                return;
 
             SvnRevision start = SvnRevision.Base;
             SvnRevision end = SvnRevision.Working;
 
             // should we show the path selector?
-            if (!Shift)
+            if (e.ShouldPrompt(true))
             {
                 using (CommonFileSelectorDialog dlg = new CommonFileSelectorDialog())
                 {
                     dlg.Text = CommandStrings.UnifiedDiffTitle;
-                    dlg.Items = items;
-                    dlg.RevisionStart = start;
+                    dlg.Items = items;dlg.RevisionStart = start;
                     dlg.RevisionEnd = end;
 
                     if (dlg.ShowDialog(e.Context) != DialogResult.OK)
@@ -85,29 +94,43 @@ namespace Ankh.Commands
 
             IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
             string slndir = ss.ProjectRoot;
-            string slndirP = slndir + "\\";
-
-            SvnDiffArgs args = new SvnDiffArgs();
-            args.IgnoreAncestry = true;
-            args.NoDeleted = false;
 
             using (MemoryStream stream = new MemoryStream())
             {
                 e.Context.GetService<IProgressRunner>().RunModal(CommandStrings.RunningDiff,
                     delegate(object sender, ProgressWorkerArgs ee)
                     {
+                        SvnAddArgs aa = new SvnAddArgs();
+                        aa.ThrowOnError = false;
+                        aa.AddParents = false;
+                        foreach (string item in toAdd)
+                        {
+                            ee.Client.Add(item, aa);
+                        }
+
+                        SvnDiffArgs diffArgs = new SvnDiffArgs();
+                        diffArgs.IgnoreAncestry = true;
+                        diffArgs.NoDeleted = false;
+                        diffArgs.ThrowOnError = false;
+
                         foreach (SvnItem item in items)
                         {
                             SvnWorkingCopy wc;
-                            if (!string.IsNullOrEmpty(slndir) &&
-                                item.FullPath.StartsWith(slndirP, StringComparison.OrdinalIgnoreCase))
-                                args.RelativeToPath = slndir;
+                            if (!string.IsNullOrEmpty(slndir) && item.IsBelowPath(slndir))
+                                diffArgs.RelativeToPath = slndir;
                             else if ((wc = item.WorkingCopy) != null)
-                                args.RelativeToPath = wc.FullPath;
+                                diffArgs.RelativeToPath = wc.FullPath;
                             else
-                                args.RelativeToPath = null;
+                                diffArgs.RelativeToPath = null;
 
-                            ee.Client.Diff(item.FullPath, revRange, args, stream);
+                            if (!ee.Client.Diff(item.FullPath, revRange, diffArgs, stream) && diffArgs.LastException != null)
+                            {
+                                StreamWriter sw = new StreamWriter(stream);
+                                sw.WriteLine();
+                                sw.WriteLine(string.Format("# {0}: {1}", item.FullPath, diffArgs.LastException.Message));
+                                sw.Flush();
+                                // Don't dispose the writer as that might close the stream
+                            }
                         }
 
                         stream.Flush();
