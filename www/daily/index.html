@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11149</title>
+          AnkhSVN-Daily Update - 2.3.11154</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,14 +16,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6014/AnkhSvn-Daily-2.3.11149.1285.msi">AnkhSVN 2.3.11149</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6016/AnkhSvn-Daily-2.3.11154.1286.msi">AnkhSVN 2.3.11154</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11149">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11154">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -31,6 +31,9 @@
 <h2>Recent changes</h2>
 <table>
 <tr class="d"><td colspan="4">2012-04-12</td></tr>
+<tr><td> </td><td class="r"><a id="11153" href="http://ankhsvn.net/rev/11153">
+            [r11153]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/SvnLog/Commands/ChangeLogMessage.cs, Ankh/Services/ProgressRunner.cs, Ankh/Services/PendingChanges/PendingChangeHandler.cs, Ankh.UI/RepositoryExplorer/AddRepositoryRootDialog.cs, Ankh.UI/SccManagement/AddToSubversion.cs, Ankh/Services/AnkhDiff.cs, Ankh/Commands/ItemResolveCommand.cs, Ankh.UI/RepositoryOpen/RepositoryOpenDialog.cs, Ankh.Package/OptionPages/UserToolsSettingsPage.cs, Ankh.UI/PendingChanges/PendingChangesPage.cs, Ankh.Scc/ProjectTracker.Solution.cs, Ankh.VS/LanguageServices/LogMessages/LogMessageColorizer.cs, Ankh/Commands/ApplyPatch.cs, Ankh/Commands/CheckForUpdates.cs (and 17 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Move the IAnkhConfigurationService to the Ankh.Configuration namespace.</td></tr>
 <tr><td> </td><td class="r"><a id="11149" href="http://ankhsvn.net/rev/11149">
             [r11149]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Services/AnkhClientPool.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update SharpSvn reference and enable the KeepAllExtensionsOnConflict option
@@ -297,25 +300,6 @@ again after the commit.</td></tr>
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/VS/IGetWpfEditorInfo.cs, Ankh.WpfEditor.Package/Ankh.WpfEditor.Package.csproj, Ankh.UI/Annotate/AnnotateEditorControl.cs, Ankh.VS/TextEditor/TheVSTextEditor.cs, Ankh.WpfEditor.Package/Services, Ankh.WpfEditor.Package/Services/WpfEditorInfo.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Checkpoint the code to enable the navigation bar of the Annotate Editor in
 Visual Studio 2010 and later. This might break compilation on Visual Studio
 2010.</td></tr>
-<tr class="d"><td colspan="4">2012-03-15</td></tr>
-<tr><td> </td><td class="r"><a id="10949" href="http://ankhsvn.net/rev/10949">
-            [r10949]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> AnkhSvn.2008.sln, Utils</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove unused project</td></tr>
-<tr><td> </td><td class="r"><a id="10946" href="http://ankhsvn.net/rev/10946">
-            [r10946]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.Glyphs.cs, Ankh.Services/Scc/ISccHierarchyWalker.cs, Ankh.VS/Selection/SelectionContext.Active.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Disable the extended (16+) scc status glyphs for Visual Studio 2010 unless
-the Solution Navigator package (of the Productivity Power tools VSIX package)
-is installed.<br>
-This should make AnkhSVN less likely to trigger the reported crashes and
-slowdowns of the Class Viewer.<br>
-The issue should be fixed for Visual Studio 11 post beta and disabling
-the high glyphs there breaks all our common glyphs in the solution explorer.</td></tr>
-<tr class="d"><td colspan="4">2012-03-14</td></tr>
-<tr><td> </td><td class="r"><a id="10945" href="http://ankhsvn.net/rev/10945">
-            [r10945]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> PendingCommitsPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Collect new pending change files when performing a batch update, to allow
-adding them at once instead of one at a time, to avoid the performance penalty
-of several window messages for each of them separately.</td></tr>
 
 </table>
 <!--/Recent changes-->
