@@ -24,11 +24,12 @@ namespace Ankh.VS.LanguageServices.LogMessages
     /// <summary>
     /// Implements a simple VS Languageservice to implement syntaxcoloring on our LogMessages
     /// </summary>
-    [Guid(AnkhId.LogMessageLanguageServiceId), ComVisible(true), CLSCompliant(false)]
+    [Guid(AnkhId.LogMessageLanguageServiceId), ComVisible(true)]
     [ComDefaultInterface(typeof(IVsLanguageInfo))]
     [GlobalService(typeof(LogMessageLanguage), true)]
     public sealed class LogMessageLanguage : AnkhLanguage
     {
+        public const string RegistryName = AnkhId.LogMessageRegistryName;
         public const string ServiceName = AnkhId.LogMessageServiceName;
 
         public LogMessageLanguage(IAnkhServiceProvider context)
@@ -37,6 +38,7 @@ namespace Ankh.VS.LanguageServices.LogMessages
             DefaultContextMenu = AnkhCommandMenu.LogMessageEditorContextMenu;
         }
 
+        [CLSCompliant(false)]
         protected override AnkhColorizer CreateColorizer(IVsTextLines textLines)
         {
             return new LogMessageColorizer(this, textLines);
