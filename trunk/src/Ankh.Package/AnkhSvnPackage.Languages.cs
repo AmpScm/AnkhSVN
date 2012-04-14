@@ -35,12 +35,14 @@ namespace Ankh.VSPackage
         ShowMatchingBrace = true,
         SingleCodeWindowOnly = true)]
     [ProvideLanguageSettings(typeof(LogMessageLanguage), LogMessageLanguage.ServiceName, LogMessageLanguage.ServiceName, LogMessageLanguage.ServiceName, 305)]
+    [ProvideAutomationObject(LogMessageLanguage.ServiceName, Description = LogMessageLanguage.ServiceName)]
     [ProvideService(typeof(LogMessageLanguage), ServiceName = AnkhId.LogMessageServiceName)]
     [ProvideLanguageService(typeof(UnifiedDiffLanguage), UnifiedDiffLanguage.ServiceName, 304,
         CodeSense = false,
         ShowDropDownOptions = true,
         RequestStockColors = true)]
     [ProvideLanguageSettings(typeof(UnifiedDiffLanguage), UnifiedDiffLanguage.ServiceName, UnifiedDiffLanguage.ServiceName, UnifiedDiffLanguage.ServiceName, 306)]
+    [ProvideAutomationObject(UnifiedDiffLanguage.ServiceName, Description=UnifiedDiffLanguage.ServiceName)]
     [ProvideLanguageExtension(typeof(UnifiedDiffLanguage), ".patch")]
     [ProvideLanguageExtension(typeof(UnifiedDiffLanguage), ".diff")]
     [ProvideService(typeof(UnifiedDiffLanguage), ServiceName = AnkhId.UnifiedDiffServiceName)]
