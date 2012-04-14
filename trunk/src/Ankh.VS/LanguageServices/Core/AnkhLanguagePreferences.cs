@@ -10,8 +10,30 @@ using Ankh.Configuration;
 
 namespace Ankh.VS.LanguageServices.Core
 {
-    [ComVisible(true), Guid(AnkhId.LanguagePreferencesId), ComDefaultInterface(typeof(IVsTextManagerEvents2))]
-    public class AnkhLanguagePreferences : AnkhService, IVsTextManagerEvents2
+    [ComVisible(true), Guid(AnkhId.LanguagePreferencesId), InterfaceType(ComInterfaceType.InterfaceIsDual)]
+    interface IAnkhLanguagePreferences
+    {
+        // These members of AnkhLanguagePreferences are stored and loaded by ex-/import settings.
+        bool AutoListMembers { get; set; }
+        bool HideAdvancedMembers { get; set; }
+        bool ParameterInformation { get; set; }
+        bool VirtualSpace { get; set; }
+        bool WordWrap { get; set; }
+        bool WordWrapGlyphs { get; set; }
+        bool CutCopyBlankLines { get; set; }
+        bool LineNumbers { get; set; }
+        bool EnableLeftClickForURLs { get; set; }
+
+        vsIndentStyle IndentStyle { get; set; }
+        int TabSize { get; set; }
+        int IndentSize { get; set; }
+        bool InsertTabs { get; set; }
+        bool ShowNavigationBar { get; set; }
+        bool AutoOutlining { get; set; }
+    }
+
+    [ComVisible(true), Guid(AnkhId.LanguagePreferencesId), ClassInterface(ClassInterfaceType.AutoDual), ComDefaultInterface(typeof(IAnkhLanguagePreferences))]
+    public class AnkhLanguagePreferences : AnkhService, IAnkhLanguagePreferences, IVsTextManagerEvents2
     {
         Guid langSvc;
         LANGPREFERENCES2 prefs;
