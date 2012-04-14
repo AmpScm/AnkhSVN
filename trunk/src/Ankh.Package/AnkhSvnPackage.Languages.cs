@@ -34,15 +34,15 @@ namespace Ankh.VSPackage
         ShowHotURLs = true,
         ShowMatchingBrace = true,
         SingleCodeWindowOnly = true)]
-    [ProvideLanguageSettings(typeof(LogMessageLanguage), LogMessageLanguage.ServiceName, LogMessageLanguage.ServiceName, LogMessageLanguage.ServiceName, 305)]
-    [ProvideAutomationObject(LogMessageLanguage.ServiceName, Description = LogMessageLanguage.ServiceName)]
+    [ProvideLanguageSettings(typeof(LogMessageLanguage), LogMessageLanguage.ServiceName, LogMessageLanguage.RegistryName, LogMessageLanguage.ServiceName, 305)]
+    [ProvideAutomationObject(LogMessageLanguage.RegistryName, Description = LogMessageLanguage.ServiceName)]
     [ProvideService(typeof(LogMessageLanguage), ServiceName = AnkhId.LogMessageServiceName)]
     [ProvideLanguageService(typeof(UnifiedDiffLanguage), UnifiedDiffLanguage.ServiceName, 304,
         CodeSense = false,
         ShowDropDownOptions = true,
         RequestStockColors = true)]
-    [ProvideLanguageSettings(typeof(UnifiedDiffLanguage), UnifiedDiffLanguage.ServiceName, UnifiedDiffLanguage.ServiceName, UnifiedDiffLanguage.ServiceName, 306)]
-    [ProvideAutomationObject(UnifiedDiffLanguage.ServiceName, Description=UnifiedDiffLanguage.ServiceName)]
+    [ProvideLanguageSettings(typeof(UnifiedDiffLanguage), UnifiedDiffLanguage.ServiceName, UnifiedDiffLanguage.RegistryName, UnifiedDiffLanguage.ServiceName, 306)]
+    [ProvideAutomationObject(UnifiedDiffLanguage.RegistryName, Description = UnifiedDiffLanguage.ServiceName)]
     [ProvideLanguageExtension(typeof(UnifiedDiffLanguage), ".patch")]
     [ProvideLanguageExtension(typeof(UnifiedDiffLanguage), ".diff")]
     [ProvideService(typeof(UnifiedDiffLanguage), ServiceName = AnkhId.UnifiedDiffServiceName)]

@@ -24,11 +24,12 @@ using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Ankh.VS.LanguageServices.UnifiedDiff
 {
-    [Guid(AnkhId.UnifiedDiffLanguageServiceId), ComVisible(true), CLSCompliant(false)]
+    [Guid(AnkhId.UnifiedDiffLanguageServiceId), ComVisible(true)]
     [ComDefaultInterface(typeof(IVsLanguageInfo))]
     [GlobalService(typeof(UnifiedDiffLanguage), true)]
     public sealed class UnifiedDiffLanguage : AnkhLanguage
     {
+        public const string RegistryName = AnkhId.UnifiedDiffRegistryName;
         public const string ServiceName = AnkhId.UnifiedDiffServiceName;
 
         public UnifiedDiffLanguage(IAnkhServiceProvider context)
@@ -41,6 +42,7 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
             get { return ServiceName; }
         }
 
+        [CLSCompliant(false)]
         protected override AnkhColorizer CreateColorizer(IVsTextLines lines)
         {
             return new UnifiedDiffColorizer(this, lines);
