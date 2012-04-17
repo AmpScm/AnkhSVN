@@ -86,10 +86,9 @@ namespace Ankh.Commands
             }
             else if (rootUri == null)
             {
-                if (!e.GetService<IProgressRunner>().RunModal("Retrieving Repository Root",
+                if (!e.GetService<IProgressRunner>().RunModal(CommandStrings.RetrievingRepositoryRoot,
                     delegate(object sender, ProgressWorkerArgs a)
                     {
-
                         rootUri = a.Client.GetRepositoryRoot(selectedUri);
 
                     }).Succeeded)
@@ -161,7 +160,7 @@ namespace Ankh.Commands
         {
             IProgressRunner runner = e.GetService<IProgressRunner>();
 
-            runner.RunModal("Checking Out Solution", 
+            runner.RunModal(CommandStrings.CheckingOutSolution, 
                 delegate(object sender, ProgressWorkerArgs ee)
                     {
                         PerformCheckout(ee, checkoutLocation, revision, localDir);

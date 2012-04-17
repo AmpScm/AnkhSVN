@@ -754,7 +754,7 @@ namespace Ankh.Services
             if (target.NodeKind != SvnNodeKind.File)
                 throw new InvalidOperationException("Can't create a tempfile from a directory");
 
-            ProgressRunnerResult r = GetService<IProgressRunner>().RunModal("Getting file",
+            ProgressRunnerResult r = GetService<IProgressRunner>().RunModal(ServiceStrings.RetrievingFileForComparison,
                 delegate(object sender, ProgressWorkerArgs aa)
                 {
                     SvnWriteArgs wa = new SvnWriteArgs();
@@ -783,7 +783,7 @@ namespace Ankh.Services
             string file = GetTempPath(target.FileName, revision);
             bool unrelated = false;
 
-            ProgressRunnerResult r = GetService<IProgressRunner>().RunModal("Getting file",
+            ProgressRunnerResult r = GetService<IProgressRunner>().RunModal(ServiceStrings.RetrievingFileForComparison,
                 delegate(object sender, ProgressWorkerArgs aa)
                 {
                     SvnWriteArgs wa = new SvnWriteArgs();
@@ -825,7 +825,7 @@ namespace Ankh.Services
                 f2 = GetTempPath(target.FileName, to);
 
                 int n = 0;
-                ProgressRunnerResult r = Context.GetService<IProgressRunner>().RunModal("Getting revisions",
+                ProgressRunnerResult r = Context.GetService<IProgressRunner>().RunModal(ServiceStrings.RetrievingMultipleVersionsOfFile,
                     delegate(object sender, ProgressWorkerArgs e)
                     {
                         SvnFileVersionsArgs ea = new SvnFileVersionsArgs();

@@ -823,7 +823,7 @@ namespace Ankh.UI.RepositoryExplorer
                 Uri newDir = SvnTools.AppendPathSuffix(u, dialog.NewDirectoryName);
 
                 Context.GetService<IProgressRunner>().RunModal(
-                    "Creating Directory",
+                    RepositoryStrings.CreatingDirectory,
                     delegate(object sender, ProgressWorkerArgs a)
                     {
                         SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs();

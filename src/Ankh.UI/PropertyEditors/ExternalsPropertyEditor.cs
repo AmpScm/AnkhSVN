@@ -396,7 +396,7 @@ namespace Ankh.UI.PropertyEditors
                     if (repoRoot == null)
                     {
                         if (context.GetService<IProgressRunner>().RunModal(
-                            "Retrieving Repository Root",
+                            PropertyEditStrings.RetrievingRepositoryRoot,
                             delegate(object sender, ProgressWorkerArgs a)
                             {
                                 repoRoot = a.Client.GetRepositoryRoot(selectedUri);

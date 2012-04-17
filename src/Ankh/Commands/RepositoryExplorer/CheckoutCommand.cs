@@ -60,7 +60,7 @@ namespace Ankh.Commands.RepositoryExplorer
                 if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                     return;
 
-                e.GetService<IProgressRunner>().RunModal("Checking Out", 
+                e.GetService<IProgressRunner>().RunModal(CommandStrings.CheckingOut, 
                     delegate(object sender, ProgressWorkerArgs a)
                     {
                         SvnCheckOutArgs args = new SvnCheckOutArgs();

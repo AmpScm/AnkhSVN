@@ -126,7 +126,7 @@ namespace Ankh.UI.SvnLog.Commands
             {
                 SvnMergeArgs ma = new SvnMergeArgs();
 
-                progressRunner.RunModal("Reverting",
+                progressRunner.RunModal(LogStrings.Reverting,
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     foreach (SvnOrigin item in logWindow.Origins)

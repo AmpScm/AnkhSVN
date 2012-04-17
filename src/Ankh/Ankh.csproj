@@ -76,6 +76,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Services\ServiceStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ServiceStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="Ankh.snk" />
     <None Include="Ankh.wxs" />
     <Compile Include="Commands\ApplyPatch.cs" />
@@ -103,6 +107,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PccStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\ServiceStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ServiceStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\SolutionSettings.Commit.cs">
       <DependentUpon>SolutionSettings.cs</DependentUpon>
     </Compile>
@@ -120,11 +129,6 @@
     <Compile Include="Commands\OpenInXExplorer.cs" />
     <Compile Include="Commands\SolutionCommitCommand.cs" />
     <Compile Include="AnkhModule.cs" />
-    <Compile Include="CommandResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CommandResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Commands\AddItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -216,11 +220,6 @@
     <Compile Include="Services\SolutionSettings.IssueRepository.cs">
       <DependentUpon>SolutionSettings.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="CommandResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>CommandResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Commands\CommandStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CommandStrings.Designer.cs</LastGenOutput>

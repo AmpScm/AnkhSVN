@@ -172,7 +172,7 @@ namespace Ankh.UI.PendingChanges
                 if (showProgressDialog)
                 {
                     IProgressRunner pr = Context.GetService<IProgressRunner>();
-                    if (pr.RunModal("Retrieving remote status",
+                    if (pr.RunModal(PCResources.RetrievingRemoteStatus,
                         delegate(object sender, ProgressWorkerArgs e)
                         {
                             SvnStatusArgs sa = new SvnStatusArgs();
