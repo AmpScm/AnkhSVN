@@ -163,7 +163,7 @@ namespace Ankh.Commands
                 dialog.Context = e.Context;
 
                 SortedList<string, PropertyEditItem> editItems = new SortedList<string, PropertyEditItem>();
-                if (!e.GetService<IProgressRunner>().RunModal("Retrieving Properties",
+                if (!e.GetService<IProgressRunner>().RunModal(CommandStrings.ReadingProperties,
                     delegate(object Sender, ProgressWorkerArgs wa)
                     {
                         // Retrieve base properties
@@ -223,7 +223,7 @@ namespace Ankh.Commands
                     if (!hasChanges)
                         return;
 
-                    e.GetService<IProgressRunner>().RunModal("Applying property changes",
+                    e.GetService<IProgressRunner>().RunModal(CommandStrings.StoringPropertyValues,
                         delegate(object sender, ProgressWorkerArgs wa)
                         {
                             foreach (PropertyEditItem ei in items)

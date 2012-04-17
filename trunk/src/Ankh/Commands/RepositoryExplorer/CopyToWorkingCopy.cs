@@ -91,7 +91,7 @@ namespace Ankh.Commands.RepositoryExplorer
                         // We prompted to confirm; remove the file!
 
                         if (fileItem.IsVersioned)
-                            e.GetService<IProgressRunner>().RunModal("Copying",
+                            e.GetService<IProgressRunner>().RunModal(CommandStrings.Copying,
                                 delegate(object sender, ProgressWorkerArgs a)
                                 {
                                     SvnDeleteArgs da = new SvnDeleteArgs();
@@ -111,7 +111,7 @@ namespace Ankh.Commands.RepositoryExplorer
 
             if (!suggestExport)
             {
-                e.GetService<IProgressRunner>().RunModal("Copying",
+                e.GetService<IProgressRunner>().RunModal(CommandStrings.Copying,
                     delegate(object sender, ProgressWorkerArgs a)
                     {
                         SvnCopyArgs ca = new SvnCopyArgs();
@@ -129,7 +129,7 @@ namespace Ankh.Commands.RepositoryExplorer
                 if (DialogResult.Yes == mb.Show(CommandStrings.NotInWorkingCopyExportInstead,
                     CommandStrings.NotInWorkingCopyTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Information))
                 {
-                    e.GetService<IProgressRunner>().RunModal("Exporting",
+                    e.GetService<IProgressRunner>().RunModal(CommandStrings.Exporting,
                     delegate(object sender, ProgressWorkerArgs a)
                     {
                         SvnExportArgs ea = new SvnExportArgs();

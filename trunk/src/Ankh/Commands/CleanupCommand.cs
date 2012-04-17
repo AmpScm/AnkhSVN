@@ -41,7 +41,7 @@ namespace Ankh.Commands
         {
             List<SvnItem> items = new List<SvnItem>(e.Selection.GetSelectedSvnItems(true));
 
-            e.GetService<IProgressRunner>().RunModal("Running Cleanup",
+            e.GetService<IProgressRunner>().RunModal(CommandStrings.CleaningWorkingCopy,
                 delegate(object sender, ProgressWorkerArgs a)
                 {
                     HybridCollection<string> wcs = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);

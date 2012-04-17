@@ -208,7 +208,7 @@ namespace Ankh.Commands
             }
 
             if (!confirmed && !e.DontPrompt && !e.IsInAutomation &&
-                DialogResult.Yes != mb.Show(string.Format(CommandResources.MarkXAsManaged,
+                DialogResult.Yes != mb.Show(string.Format(CommandStrings.MarkXAsManaged,
                 Path.GetFileName(e.Selection.SolutionFilename)), "", MessageBoxButtons.YesNo))
             {
                 return false;
@@ -244,7 +244,7 @@ namespace Ankh.Commands
                     return true;
                 }
 
-                DialogResult rslt = mb.Show(string.Format(CommandResources.AddXToExistingWcY,
+                DialogResult rslt = mb.Show(string.Format(CommandStrings.AddXToExistingWcY,
                                                           Path.GetFileName(e.Selection.SolutionFilename),
                                                           parentDir.FullPath), AnkhId.PlkProduct, MessageBoxButtons.YesNoCancel);
 
@@ -481,7 +481,7 @@ namespace Ankh.Commands
                         SvnItem parentDir = GetVersionedParent(projectDir);
                         Debug.Assert(parentDir != null);
 
-                        DialogResult rslt = mb.Show(string.Format(CommandResources.AddXToExistingWcY,
+                        DialogResult rslt = mb.Show(string.Format(CommandStrings.AddXToExistingWcY,
                                                                   projInfo.ProjectName,
                                                                   parentDir.FullPath), AnkhId.PlkProduct, MessageBoxButtons.YesNoCancel);
 
@@ -572,9 +572,9 @@ namespace Ankh.Commands
             string txt = sb.ToString();
             int li = txt.LastIndexOf("', '");
             if (li > 0)
-                txt = txt.Substring(0, li + 1) + CommandResources.FileAnd + txt.Substring(li + 3);
+                txt = txt.Substring(0, li + 1) + CommandStrings.FileAnd + txt.Substring(li + 3);
 
-            return DialogResult.Yes == mb.Show(string.Format(CommandResources.MarkXAsManaged,
+            return DialogResult.Yes == mb.Show(string.Format(CommandStrings.MarkXAsManaged,
                 txt), AnkhId.PlkProduct, MessageBoxButtons.YesNo);
         }
 

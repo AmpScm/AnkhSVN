@@ -240,4 +240,59 @@
   <data name="UpdateFilesTitle" xml:space="preserve">
     <value>Update Files</value>
   </data>
+  <data name="AddSolutionXToSubversion" xml:space="preserve">
+    <value>Would you like to add '{0}' to Subversion and mark it as managed?</value>
+  </data>
+  <data name="AddXToExistingWcY" xml:space="preserve">
+    <value>Would you like to add'{0}' to existing working copy '{1}'? 
+Click Yes to add to the current working copy, and no to create a new working copy.</value>
+  </data>
+  <data name="CheckingOut" xml:space="preserve">
+    <value>Checking Out</value>
+  </data>
+  <data name="CheckingOutSolution" xml:space="preserve">
+    <value>Checking out Solution</value>
+  </data>
+  <data name="CleaningWorkingCopy" xml:space="preserve">
+    <value>Cleaning Working Copy</value>
+  </data>
+  <data name="Copying" xml:space="preserve">
+    <value>Copying</value>
+  </data>
+  <data name="CreatingBranch" xml:space="preserve">
+    <value>Creating Branch</value>
+  </data>
+  <data name="Deleting" xml:space="preserve">
+    <value>Deleting</value>
+  </data>
+  <data name="FileAnd" xml:space="preserve">
+    <value> and </value>
+  </data>
+  <data name="MarkXAsManaged" xml:space="preserve">
+    <value>Would you like to mark '{0}' as managed by Subversion?</value>
+  </data>
+  <data name="Moving" xml:space="preserve">
+    <value>Moving</value>
+  </data>
+  <data name="ReadingProperties" xml:space="preserve">
+    <value>Reading Properties</value>
+  </data>
+  <data name="RelocatingTitle" xml:space="preserve">
+    <value>Relocating</value>
+  </data>
+  <data name="RetrievingConflictDetails" xml:space="preserve">
+    <value>Retrieving Conflict Details</value>
+  </data>
+  <data name="RetrievingFileForComparison" xml:space="preserve">
+    <value>Retrieving File for Comparison</value>
+  </data>
+  <data name="RetrievingRepositoryRoot" xml:space="preserve">
+    <value>Retrieving Repository Root</value>
+  </data>
+  <data name="StoringPropertyValues" xml:space="preserve">
+    <value>Storing Property Values</value>
+  </data>
+  <data name="SwitchingTitle" xml:space="preserve">
+    <value>Switching</value>
+  </data>
 </root>

@@ -181,8 +181,7 @@ namespace Ankh.Commands
             using (lck.MonitorChangesForReload())
             {
                 Uri newRepositoryRoot = null;
-                e.GetService<IProgressRunner>().RunModal(
-                    "Switching",
+                e.GetService<IProgressRunner>().RunModal(CommandStrings.SwitchingTitle,
                     delegate(object sender, ProgressWorkerArgs a)
                     {
                         SvnSwitchArgs args = new SvnSwitchArgs();
@@ -232,7 +231,7 @@ namespace Ankh.Commands
                     try
                     {
                         e.GetService<IProgressRunner>().RunModal(
-                            "Relocating",
+                            CommandStrings.RelocatingTitle,
                             delegate(object sender, ProgressWorkerArgs a)
                             {
                                 a.Client.Relocate(path, pathItem.WorkingCopy.RepositoryRoot, newRepositoryRoot);
@@ -252,7 +251,7 @@ namespace Ankh.Commands
                     {
                         // Try to switch again
                         e.GetService<IProgressRunner>().RunModal(
-                        "Switching",
+                        CommandStrings.SwitchingTitle,
                         delegate(object sender, ProgressWorkerArgs a)
                         {
                             SvnSwitchArgs args = new SvnSwitchArgs();
