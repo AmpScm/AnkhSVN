@@ -55,13 +55,9 @@ namespace Ankh.VSPackage
                 return obj;
 
             // Look for setting objects that must be accessible by their automation name for setting persistence.
-
-            System.ComponentModel.AttributeCollection attributes = System.ComponentModel.TypeDescriptor.GetAttributes(this);
-            foreach (Attribute attr in attributes)
+            foreach (ProvideLanguageSettingsAttribute ps in GetType().GetCustomAttributes(typeof(ProvideLanguageSettingsAttribute), true))
             {
-                ProvideLanguageSettingsAttribute ps = attr as ProvideLanguageSettingsAttribute;
-
-                if (ps != null && name == ps.Name)
+                if (name == ps.Name)
                 {
                     AnkhLanguage language = GetService<AnkhLanguage>(ps.Type);
 
