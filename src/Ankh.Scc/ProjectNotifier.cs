@@ -44,8 +44,31 @@ namespace Ankh.Scc
             : base(context)
         {
             uint cookie;
-            if (ErrorHandler.Succeeded(context.GetService<IVsShell>(typeof(SVsShell)).AdviseBroadcastMessages(this, out cookie)))
+            if (ErrorHandler.Succeeded(Shell.AdviseBroadcastMessages(this, out cookie)))
                 _cookie = cookie;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (_cookie != 0)
+                {
+                    uint cookie = _cookie;
+                    _cookie = 0;
+                    Shell.UnadviseBroadcastMessages(cookie);
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
+
+        IVsShell _shell;
+        IVsShell Shell
+        {
+            get { return _shell ?? (_shell = GetService<IVsShell>(typeof(SVsShell))); }
         }
 
         IAnkhCommandService _commandService;
