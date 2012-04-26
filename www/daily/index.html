@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11178</title>
+          AnkhSVN-Daily Update - 2.3.11179</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,14 +16,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6056/AnkhSvn-Daily-2.3.11178.1301.msi">AnkhSVN 2.3.11178</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6058/AnkhSvn-Daily-2.3.11179.1302.msi">AnkhSVN 2.3.11179</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11178">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11179">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -201,20 +201,6 @@ in a not already installed Visual Studio.</td></tr>
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.WpfEditor.Package/Ankh.WpfEditor.Package.csproj, Ankh.WpfEditor.Package/Services/ThreadedWaitService.cs, Ankh.Services/Scc/IPendingChangesManager.cs, Ankh.Scc/PendingChangeManager.cs, Ankh.Services/Ankh.Services.csproj, Ankh.Services/UI/IAnkhThreadedWaitService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use the VS2010+ interface to the threaded wait service to simplify showing the
 dialog only after 2 seconds. In a followup commit we can add a similar feature
 for VS2005/2008 using the older threadwait dialog service.</td></tr>
-<tr class="d"><td colspan="4">2012-03-28</td></tr>
-<tr><td> </td><td class="r"><a id="11039" href="http://ankhsvn.net/rev/11039">
-            [r11039]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/Scc/PendingChangeText.resx, Ankh.Scc/PendingChangeManager.Map.cs, Ankh.Services/Scc/PendingChangeText.Designer.cs, Ankh.Services/Scc/IPendingChangesManager.cs, Ankh.Scc/PendingChangeManager.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Show a Visual Studio threaded wait dialog if updating the pending changes
-takes more time than a user would normally accept as a hick-up of Visual Studio.</td></tr>
-<tr><td> </td><td class="r"><a id="11034" href="http://ankhsvn.net/rev/11034">
-            [r11034]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update SharpSvn reference to use the performance improvements in
-SvnTools.GetNormalizedFullPath() that were just committed. This should
-noticable improve the performance of our status and menu command resolution.</td></tr>
-<tr><td> </td><td class="r"><a id="11033" href="http://ankhsvn.net/rev/11033">
-            [r11033]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh.Services/Scc/IFileStatusCache.cs, Ankh.Services/Scc/SvnItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Avoid calling SvnTools.GetNormalizedFullPath() when obtaining the parent of
-an SvnItem.</td></tr>
 
 </table>
 <!--/Recent changes-->
