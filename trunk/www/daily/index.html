@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11189</title>
+          AnkhSVN-Daily Update - 2.3.11190</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,14 +16,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6077/AnkhSvn-Daily-2.3.11189.1309.msi">AnkhSVN 2.3.11189</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6079/AnkhSvn-Daily-2.3.11190.1310.msi">AnkhSVN 2.3.11190</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11189">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11190">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -169,26 +169,6 @@ disabled to reduce our performance impact on the no ankhsvn situation.</td></tr>
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> UI/AnkhToolWindowControl.cs, UI/IWinFormsThemingService.cs, UI/IAnkhToolWindowHost.cs, Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Delegate styling of toolwindows to a IWinFormsThemingService if there is an
 implementation available.
 (I'm working on an implementation for VS11)</td></tr>
-<tr class="d"><td colspan="4">2012-04-05</td></tr>
-<tr><td> </td><td class="r"><a id="11074" href="http://ankhsvn.net/rev/11074">
-            [r11074]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Votive/Ankh.Votive.wxs, Ankh.ExtensionPoints/Ankh.ExtensionPoints.wxs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Install our extension library in
-%PROGRAMFILES%\Common Files\Microsoft Shared\MSEnv\PublicAssemblies
-where it is automatically used by all Visual Studio versions' add reference
-dialogs. In the old location it was added multiple times for the more recent
-Visual Studio versions.</td></tr>
-<tr><td> </td><td class="r"><a id="11073" href="http://ankhsvn.net/rev/11073">
-            [r11073]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Votive/Ankh.Votive.wxs, Ankh.Votive.wixproj, Ankh.Votive/VSExtension.wxs, Ankh.Votive/AnkhVSExtension.wxs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Start devenv.exe /setup /NoSetupVSTemplates, like before as it appears to still
-make a difference in setup performance. Remove unused directory references.</td></tr>
-<tr><td> </td><td class="r"><a id="11070" href="http://ankhsvn.net/rev/11070">
-            [r11070]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints:</strong> Ankh.ExtensionReg.wxi</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Register the extension redirect with a codebase to allow removing the copying
-to all Visual Studio installations in a followup commit.</td></tr>
-<tr><td> </td><td class="r"><a id="11065" href="http://ankhsvn.net/rev/11065">
-            [r11065]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Votive/Ankh.Votive.wxs, BUILD.txt, Ankh.Votive/VSExtension.wxs, Ankh.ExtensionPoints/Ankh.ExtensionPoints.wxs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Assume a WixToolset install of 3.6 or higher. This allows reusing several
-custom actions that we otherwise have to define ourselves.</td></tr>
 
 </table>
 <!--/Recent changes-->
