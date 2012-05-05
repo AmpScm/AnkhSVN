@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11190</title>
+          AnkhSVN-Daily Update - 2.3.11191</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,14 +16,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6079/AnkhSvn-Daily-2.3.11190.1310.msi">AnkhSVN 2.3.11190</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6081/AnkhSvn-Daily-2.3.11191.1311.msi">AnkhSVN 2.3.11191</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11190">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11191">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -140,35 +140,6 @@ by using the pending change selector in its ui.</td></tr>
             [r11088]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Commands/UpdateItemCommand.cs, Ankh/Commands/ItemRevertCommand.cs, Ankh.VS/Selection/CommandState.cs, Ankh/Commands/SolutionUpdateCommand.cs, Ankh.Services/Commands/IAnkhCommandStates.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Disable the Update and Revert commands while building, debugging and opening
 solutions.</td></tr>
-<tr class="d"><td colspan="4">2012-04-06</td></tr>
-<tr><td> </td><td class="r"><a id="11085" href="http://ankhsvn.net/rev/11085">
-            [r11085]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> ProjectTracker.Solution.cs, ProjectTracker.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Following up on recent changes: When the Scc provider is not active do track
-the solution events to find out when we should enable on a not connected
-project, but don't handle the project item events.</td></tr>
-<tr><td> </td><td class="r"><a id="11084" href="http://ankhsvn.net/rev/11084">
-            [r11084]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.Projects.cs, Ankh.VS/SolutionExplorer/SolutionExplorerWindow.cs, Ankh.Services/VS/IAnkhSolutionExplorerWindow.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Move the last bits of solution explorer glyph handling to the specific
-service to allow disabling the entire service in VS11.</td></tr>
-<tr><td> </td><td class="r"><a id="11082" href="http://ankhsvn.net/rev/11082">
-            [r11082]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.Projects.cs, Ankh/Commands/AddToSccCommands.cs, Ankh.Services/Scc/IAnkhSccService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">When adding a Solution to Subversion, when AnkhSVN is not the active SCC
-provider: make us the active scc provider to ensure we know all the projects.
-Since <a href="http://ankhsvn.net/rev/11081">r11081</a>, this state is no longer available if AnkhSVN was not the active
-scc provider.</td></tr>
-<tr><td> </td><td class="r"><a id="11081" href="http://ankhsvn.net/rev/11081">
-            [r11081]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.Projects.cs, Ankh.Scc/ProjectTracker.cs, Ankh.VS/SolutionExplorer/SolutionExplorerWindow.cs, Ankh.Scc/AnkhSccProvider.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Move most of the Solution Explorer specific glyph handling code for VS2005-2010
-to the SolutionExplorerWindow service. Our event service code allows access
-to the necessary events and we don't need all this in future VS versions, so
-don't make new versions take a penalty for supporting older versions.<br>
-Also disable the project item add-remove checking when the scc provider is
-disabled to reduce our performance impact on the no ankhsvn situation.</td></tr>
-<tr><td> </td><td class="r"><a id="11080" href="http://ankhsvn.net/rev/11080">
-            [r11080]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> UI/AnkhToolWindowControl.cs, UI/IWinFormsThemingService.cs, UI/IAnkhToolWindowHost.cs, Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Delegate styling of toolwindows to a IWinFormsThemingService if there is an
-implementation available.
-(I'm working on an implementation for VS11)</td></tr>
 
 </table>
 <!--/Recent changes-->
