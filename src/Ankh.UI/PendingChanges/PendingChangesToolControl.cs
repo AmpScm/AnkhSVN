@@ -116,7 +116,7 @@ namespace Ankh.UI.PendingChanges
             System.Windows.Forms.Design.IUIService ds = Context.GetService<System.Windows.Forms.Design.IUIService>();
             if (ds != null)
             {
-                renderer = ds.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
+                renderer = ds.Styles["VsRenderer"] as ToolStripRenderer;
             }
 
             if (renderer != null)
