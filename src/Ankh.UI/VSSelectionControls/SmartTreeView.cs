@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.UI.VSSelectionControls
 {
-    public class SmartTreeView : TreeView
+    public class SmartTreeView : TreeView, ISupportsVSTheming
     {
         ImageList _stateImageList;
         ImageList _realStateImageList;
@@ -113,7 +113,7 @@ namespace Ankh.UI.VSSelectionControls
             if (_stateImageList != null)
                 SetStateList();
 
-            if (SmartListView.IsXPPlus)
+            if (SmartListView.IsXPPlus && (!UseVSTheming || !VSVersion.SupportsTheming))
             {
                 if (VSVersion.VS2010OrLater)
                     NativeMethods.SetWindowTheme(Handle, "Explorer", null);
@@ -216,6 +216,11 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
+        void ISupportsVSTheming.OnThemeChange(System.Windows.Forms.Design.IUIService ui)
+        {
+            
+        }
+
         static class NativeMethods
         {
             [DllImport("user32.dll")]
@@ -223,6 +228,14 @@ namespace Ankh.UI.VSSelectionControls
 
             [DllImport("uxtheme.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]
             public static extern int SetWindowTheme(IntPtr hWnd, String pszSubAppName, String pszSubIdList);
+        }
+
+        bool _useVsTheming;
+        [DefaultValue(false)]
+        public bool UseVSTheming
+        {
+            get { return _useVsTheming; }
+            set { _useVsTheming = value; }
         }
     }
 }

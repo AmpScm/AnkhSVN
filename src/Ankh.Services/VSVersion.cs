@@ -103,5 +103,12 @@ namespace Ankh
         {
             get { return VS2010OrLater || VistaOrLater; }
         }
+
+        static readonly Version _vS11BetaVersion = new Version(11, 0, 50323);
+
+        public static bool SupportsTheming
+        {
+            get { return FullVersion > _vS11BetaVersion; }
+        }
     }
 }

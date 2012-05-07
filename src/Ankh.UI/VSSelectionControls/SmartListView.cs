@@ -32,7 +32,7 @@ namespace Ankh.UI.VSSelectionControls
         Descending
     }
 
-    public class SmartListView : ListView
+    public class SmartListView : ListView, ISupportsVSTheming
     {
         readonly Collection<SmartColumn> _groupColumns = new Collection<SmartColumn>();
         readonly Collection<SmartColumn> _sortColumns = new Collection<SmartColumn>();
@@ -90,7 +90,13 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-
+        bool _useVsTheming;
+        [DefaultValue(false)]
+        public bool UseVSTheming
+        {
+            get { return _useVsTheming; }
+            set { _useVsTheming = value; }
+        }
         /// <summary>
         /// Gets or sets how items are displayed in the control.
         /// </summary>
@@ -505,7 +511,7 @@ namespace Ankh.UI.VSSelectionControls
 
             UpdateSortGlyphs();
 
-            if (IsXPPlus && !OwnerDraw)
+            if (IsXPPlus && !OwnerDraw && (!UseVSTheming || !VSVersion.SupportsTheming))
             {
                 if (VSVersion.VS2010OrLater)
                     NativeMethods.SetWindowTheme(Handle, "Explorer", null);
@@ -1252,6 +1258,12 @@ namespace Ankh.UI.VSSelectionControls
             lvItem.stateMask = NativeMethods.LVIS_SELECTED;
 
             NativeMethods.SendMessage(Handle, NativeMethods.LVM_SETITEMSTATE, (IntPtr)i.Index, ref lvItem);
+        }
+
+
+        public void OnThemeChange(System.Windows.Forms.Design.IUIService ui)
+        {
+            
         }
     }
 }
