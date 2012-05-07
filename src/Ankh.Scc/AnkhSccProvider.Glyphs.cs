@@ -205,7 +205,8 @@ namespace Ankh.Scc
             {
                 for (int i = 0; i < cFiles; i++)
                 {
-                    rgsiGlyphs[i] = VsStateIcon.STATEICON_NOSTATEICON;
+                    if (rgsiGlyphs != null)
+                        rgsiGlyphs[i] = VsStateIcon.STATEICON_NOSTATEICON;
                     if (rgdwSccStatus != null)
                         rgdwSccStatus[i] = (uint)SccStatus.SCC_STATUS_NOTCONTROLLED;
                 }
