@@ -78,6 +78,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UI\IAnkhThreadedWaitService.cs" />
+    <Compile Include="UI\ISupportsVSTheming.cs" />
     <Compile Include="UI\IWinFormsThemingService.cs" />
     <Compile Include="VS\IAnkhMigrationService.cs" />
     <Compile Include="IAnkhServiceImplementation.cs" />
