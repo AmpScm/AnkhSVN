@@ -135,23 +135,18 @@ namespace Ankh.Scc
         /// </returns>
         public int SetActive()
         {
-            if (!_active)
-            {
-                _active = true;
+            _active = true;
 
-                // Delayed flush all glyphs of all projects when a user enables us.
-                IFileStatusMonitor pn = GetService<IFileStatusMonitor>();
-
-                if (pn != null)
-                {
-                    List<SvnProject> allProjects = new List<SvnProject>(GetAllProjects());
-                    allProjects.Add(SvnProject.Solution);
-
-                    pn.ScheduleGlyphOnlyUpdate(allProjects);
-                }
-            }
-
+            // Send activate before scheduling glyphs to make sure the project data is
+            // loaded
             GetService<IAnkhServiceEvents>().OnSccProviderActivated(EventArgs.Empty);
+
+            // Delayed flush all glyphs of all projects when a user enables us.
+
+            List<SvnProject> allProjects = new List<SvnProject>(GetAllProjects());
+            allProjects.Add(SvnProject.Solution);
+            Monitor.ScheduleGlyphOnlyUpdate(allProjects);
+
             RegisterForSccCleanup();
 
             return VSConstants.S_OK;
