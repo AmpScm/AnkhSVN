@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Ankh.UI;
 using Ankh.VS;
-using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell.Interop;
 
-#if NOT
 namespace Ankh.WpfPackage.Services
 {
     enum EnvironmentColor
@@ -58,13 +56,6 @@ namespace Ankh.WpfPackage.Services
         SelectedItemInactiveGlyphBrush,
         SelectedItemInactiveGlyphMouseOverColor,
         SelectedItemInactiveGlyphMouseOverBrush,
-    }
-
-    enum StyleType
-    {
-        Unknown,
-        ToolWindow,
-        Dialog
     }
 
     [GlobalService(typeof(IWinFormsThemingService), MinVersion = VSInstance.VS11)]
@@ -168,36 +159,67 @@ namespace Ankh.WpfPackage.Services
             return GetColor(color, false);
         }
 
-        public void ThemeControl(System.Windows.Forms.Control control)
-        {
-            StyleType type = StyleType.Unknown;
-            if (control is AnkhToolWindowControl)
-                type = StyleType.ToolWindow;
+        delegate bool ThemeWindowDelegate(IntPtr handle);
+        ThemeWindowDelegate _twd;
 
-            ThemeControl(control, type);
+        bool VSThemeWindow(IntPtr handle)
+        {
+            if (_twd == null)
+            {
+                // Create a Linq expression for the call, as the IVsUIShell5 interface is not stable yet.
+                object uiShell = GetService(typeof(SVsUIShell));
+                Type IVsUIShell5Type = Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+
+                ParameterExpression prmHandle = Expression.Parameter(typeof(IntPtr), "handle");
+                MethodInfo minfo = IVsUIShell5Type.GetMethod("ThemeWindow");
+                MethodCallExpression mce = Expression.Call(Expression.Convert(Expression.Constant(uiShell), IVsUIShell5Type), minfo, prmHandle);
+
+                _twd = Expression.Lambda<ThemeWindowDelegate>(mce, prmHandle).Compile();
+            }
+
+            return _twd(handle);
         }
 
-        void ThemeControl(System.Windows.Forms.Control control, StyleType type)
+        IUIService _ui;
+        IUIService UI
         {
-            bool ok =
-                MaybeTheme<ToolStrip>(ThemeOne, control, type)
-                || MaybeTheme<Label>(ThemeOne, control, type)
-                || MaybeTheme<TextBox>(ThemeOne, control, type)
-                || MaybeTheme<ListView>(ThemeOne, control, type)
-                || MaybeTheme<UserControl>(ThemeOne, control, type);
+            get { return _ui ?? (_ui = GetService<IUIService>()); }
+        }
+
+        public void ThemeControl(System.Windows.Forms.Control control)
+        {
+            ISupportsVSTheming themeControl = control as ISupportsVSTheming;
+
+            if (themeControl == null || themeControl.UseVSTheming)
+            {
+                VSThemeWindow(control.Handle);
+
+                bool ok =
+                    MaybeTheme<ToolStrip>(ThemeOne, control)
+                    || MaybeTheme<Label>(ThemeOne, control)
+                    || MaybeTheme<TextBox>(ThemeOne, control)
+                    || MaybeTheme<ListView>(ThemeOne, control)
+                    || MaybeTheme<TreeView>(ThemeOne, control)
+                    || MaybeTheme<UserControl>(ThemeOne, control);
+
+                if (themeControl != null)
+                    themeControl.OnThemeChange(UI);
+            }
+            else if (themeControl != null)
+                return; // No recurse!
 
             foreach (Control c in control.Controls)
             {
-                ThemeControl(c, type);
+                ThemeControl(c);
             }
         }
 
-        bool MaybeTheme<T>(Action<T, StyleType> how, Control control, StyleType type) where T : Control
+        bool MaybeTheme<T>(Action<T> how, Control control) where T : Control
         {
             T value = control as T;
             if (value != null)
             {
-                how(value, type);
+                how(value);
                 return true;
             }
             return false;
@@ -221,7 +243,7 @@ namespace Ankh.WpfPackage.Services
             get { return _dialogFont ?? (_dialogFont = (Font)UIService.Styles["DialogFont"]); }
         }
 
-        void ThemeOne(Label label, StyleType type)
+        void ThemeOne(Label label)
         {
             if (label.Font != DialogFont)
                 label.Font = DialogFont;
@@ -233,7 +255,7 @@ namespace Ankh.WpfPackage.Services
                 label.ForeColor = label.Parent.ForeColor;
         }
 
-        void ThemeOne(TextBox textBox, StyleType type)
+        void ThemeOne(TextBox textBox)
         {
             if (textBox.Font != DialogFont)
                 textBox.Font = DialogFont;
@@ -245,22 +267,45 @@ namespace Ankh.WpfPackage.Services
                 textBox.ForeColor = textBox.Parent.ForeColor;
         }
 
-        void ThemeOne(ListView listView, StyleType type)
+        void ThemeOne(ListView listView)
         {
             if (listView.Font != DialogFont)
                 listView.Font = DialogFont;
 
-            Color color;
-            //if (ColorSvc.TryGetColor(__VSSYSCOLOREX.
             if (listView.BackColor != listView.Parent.BackColor)
                 listView.BackColor = listView.Parent.BackColor;
 
             if (listView.ForeColor != listView.Parent.ForeColor)
                 listView.ForeColor = listView.Parent.ForeColor;
+
+            IntPtr header = NativeMethods.SendMessage(listView.Handle, NativeMethods.LVM_GETHEADER, IntPtr.Zero, IntPtr.Zero);
+
+            if (header != IntPtr.Zero)
+            {
+                VSThemeWindow(header);
+
+                // TODO: Force colors?
+            }
+            VSThemeWindow(listView.Handle);
         }
 
-        void ThemeOne(UserControl userControl, StyleType type)
+        void ThemeOne(TreeView treeView)
         {
+            if (treeView.Font != DialogFont)
+                treeView.Font = DialogFont;
+
+            if (treeView.BackColor != treeView.Parent.BackColor)
+                treeView.BackColor = treeView.Parent.BackColor;
+
+            if (treeView.ForeColor != treeView.Parent.ForeColor)
+                treeView.ForeColor = treeView.Parent.ForeColor;
+        }
+
+        void ThemeOne(UserControl userControl)
+        {
+            if (userControl.Parent != null && userControl.Font != userControl.Parent.Font)
+                userControl.Font = userControl.Parent.Font;
+
             Color color;
             if (ColorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
             {
@@ -273,37 +318,25 @@ namespace Ankh.WpfPackage.Services
                 if (userControl.ForeColor != color)
                     userControl.ForeColor = color;
             }
-
-            if (userControl.Font != DialogFont)
-                userControl.Font = DialogFont;
         }
 
-        void ThemeOne(ToolStrip toolBar, StyleType type)
+        void ThemeOne(ToolStrip toolBar)
         {
-            ToolStripRenderer renderer = UIService.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
+            if (toolBar.Font != toolBar.Parent.Font)
+                toolBar.Font = toolBar.Parent.Font;
+
+            ToolStripRenderer renderer = UIService.Styles["VsRenderer"] as ToolStripRenderer;
 
             if (renderer != null)
                 toolBar.Renderer = renderer;
+        }
 
-            if (!SystemInformation.HighContrast)
-            {
-                // We should use the VS colors instead of the ones provided by the OS
-                IAnkhVSColor colorSvc = GetService<IAnkhVSColor>();
+        static class NativeMethods
+        {
+            public const Int32 LVM_GETHEADER = 0x1000 + 31; // LVM_FIRST + 31
 
-                Color color;
-                if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
-                {
-                    toolBar.BackColor = color;
-                    toolBar.OverflowButton.BackColor = color;
-                }
-
-                if (renderer == null && colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
-                {
-                    toolBar.ForeColor = color;
-                    toolBar.OverflowButton.ForeColor = color;
-                }
-            }
+            [DllImport("user32.dll")]
+            public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
         }
     }
 }
-#endif
