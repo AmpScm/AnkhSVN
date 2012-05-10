@@ -594,6 +594,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="VSSelectionControls\SmartListViewItem.cs" />
+    <Compile Include="VSSelectionControls\SmartSplitter.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="VSSelectionControls\SmartTreeView.cs">
       <SubType>Component</SubType>
     </Compile>

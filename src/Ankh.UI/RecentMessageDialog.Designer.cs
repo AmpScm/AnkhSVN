@@ -46,7 +46,7 @@ namespace Ankh.UI
         {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RecentMessageDialog));
-			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
 			this.logMessageList = new System.Windows.Forms.ListView();
 			this.previewBox = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
 			this.okButton = new System.Windows.Forms.Button();
@@ -119,7 +119,7 @@ namespace Ankh.UI
 
         #endregion
 
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer1;
         private System.Windows.Forms.ListView logMessageList;
         private Ankh.UI.PendingChanges.LogMessageEditor previewBox;
         private System.Windows.Forms.Button okButton;
