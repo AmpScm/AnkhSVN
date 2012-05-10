@@ -2,14 +2,17 @@
 using Ankh.Commands;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-using UnregisterHandler = Ankh.VS.Services.InternalDiff.UnregisterMergeWindow;
 
 namespace Ankh.VS.Services
 {
+    using UnregisterHandler = InternalDiff.UnregisterMergeWindow;
+    using QueryHandler = InternalDiff.QueryMergeWindowState;
+
     sealed class DiffMergeInstance : AnkhService, IVsWindowFrameNotify, IVsWindowFrameNotify2, IVsWindowFrameNotify3, IDisposable
     {
         readonly bool _isMerge;
         UnregisterHandler _unregister;
+        QueryHandler _query;
         int _mergeCookie;
         IVsWindowFrame _frame;
         IVsWindowFrame2 _frame2;
@@ -30,11 +33,12 @@ namespace Ankh.VS.Services
             }
         }
 
-        public DiffMergeInstance(IAnkhServiceProvider context, IVsWindowFrame frame, UnregisterHandler handler, int mergeCookie)
+        public DiffMergeInstance(IAnkhServiceProvider context, IVsWindowFrame frame, UnregisterHandler unRegisterhandler, QueryHandler queryHandler, int mergeCookie)
             : this(context, frame)
         {
             _isMerge = true;
-            _unregister = handler;
+            _unregister = unRegisterhandler;
+            _query = queryHandler;
             _mergeCookie = mergeCookie;
             _mergeHooked = true;
         }
