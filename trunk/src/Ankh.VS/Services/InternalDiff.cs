@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.Scc.UI;
 using System.IO;
+using SharpSvn;
 
 namespace Ankh.VS.Services
 {
@@ -49,6 +50,12 @@ namespace Ankh.VS.Services
             }
         }
 
+        string _tempPath;
+        string TempPath
+        {
+            get { return _tempPath ?? (_tempPath = SvnTools.GetNormalizedFullPath(Path.GetTempPath())); }
+        }
+
         delegate IVsWindowFrame OpenComparisonWindow2([In] string leftFileMoniker, [In] string rightFileMoniker, [In] string caption, [In] string Tooltip, [In] string leftLabel, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string rightLabel, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string inlineLabel, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string roles, [In] uint grfDiffOptions);
         OpenComparisonWindow2 _ocw2;
         public bool RunDiff(AnkhDiffArgs args)
@@ -64,7 +71,17 @@ namespace Ankh.VS.Services
             if (_ocw2 == null)
                 return false;
 
-            IVsWindowFrame frame = _ocw2(args.BaseFile, args.MineFile, args.Caption ?? args.MineTitle, "", args.BaseTitle, args.MineTitle, args.Label ?? "", null, 0);
+            uint flags = 0;
+
+            if (TempPath != null)
+            {
+                if (SvnItem.IsBelowRoot(args.BaseFile, TempPath))
+                    flags |= 0x00000010; // VSDIFFOPT_LeftFileIsTemporary
+                if (SvnItem.IsBelowRoot(args.MineFile, TempPath))
+                    flags |= 0x00000020; // VSDIFFOPT_RightFileIsTemporary
+            }
+
+            IVsWindowFrame frame = _ocw2(args.BaseFile, args.MineFile, args.Caption ?? args.MineTitle, "", args.BaseTitle, args.MineTitle, args.Label ?? "", null, flags);
 
             if (frame != null)
             {
@@ -111,7 +128,7 @@ namespace Ankh.VS.Services
 
         delegate IVsWindowFrame OpenAndRegisterMergeWindow([In] string leftFileMoniker, [In] string rightFileMoniker, [In] string baseFileMoniker, [In] string resultFileMoniker, [In] string leftFileTag, [In] string rightFileTag, [In] string baseFileTag, [In] string resultFileTag, [In] string leftFileLabel, [In] string rightFileLabel, [In] string baseFileLabel, [In] string resultFileLabel, [In] string serverGuid, [In] string leftFileSpec, [In] string rightFileSpec, out int cookie);
         internal delegate void UnregisterMergeWindow([In] int cookie);
-        delegate void QueryMergeWindowState([In] int cookie, out int pfState, out string errorAndWarningMsg);
+        internal delegate void QueryMergeWindowState([In] int cookie, out int pfState, out string errorAndWarningMsg);
         OpenAndRegisterMergeWindow _ormw;
         UnregisterMergeWindow _umw;
         QueryMergeWindowState _qmws;
@@ -142,7 +159,7 @@ namespace Ankh.VS.Services
 
             if (frame != null)
             {
-                GC.KeepAlive(new DiffMergeInstance(this, frame, _umw, cookie));
+                GC.KeepAlive(new DiffMergeInstance(this, frame, _umw, _qmws, cookie));
 
                 return true;
             }
