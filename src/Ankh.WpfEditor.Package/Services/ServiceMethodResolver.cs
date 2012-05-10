@@ -23,7 +23,7 @@ namespace Ankh.WpfPackage.Services
             if (fromInterface == null)
                 throw new ArgumentNullException("fromInterface");
             else if (ob == null)
-                throw new ArgumentNullException("onService");
+                throw new ArgumentNullException("ob");
             
             Type type = typeof(TDelegate);
 
