@@ -33,7 +33,7 @@ namespace Ankh.UI.RepositoryExplorer
         {
             this.components = new System.ComponentModel.Container();
             this.toolbarImageList = new System.Windows.Forms.ImageList(this.components);
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.splitContainer = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
             this.treeView = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.toolFolders = new System.Windows.Forms.ToolStrip();
             this.foldersLabel = new System.Windows.Forms.ToolStripLabel();

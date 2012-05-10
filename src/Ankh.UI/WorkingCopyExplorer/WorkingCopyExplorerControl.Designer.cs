@@ -29,7 +29,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorkingCopyExplorerControl));
 			this.explorerPanel = new System.Windows.Forms.Panel();
-			this.splitContainer = new System.Windows.Forms.SplitContainer();
+			this.splitContainer = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
 			this.folderTree = new Ankh.UI.WorkingCopyExplorer.FileSystemTreeView();
 			this.foldersStrip = new System.Windows.Forms.ToolStrip();
 			this.foldersLabel = new System.Windows.Forms.ToolStripLabel();

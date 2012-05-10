@@ -46,9 +46,9 @@ namespace Ankh.UI.SvnLog
         {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogControl));
-			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
 			this.logRevisionControl1 = new Ankh.UI.SvnLog.LogRevisionControl(this.components);
-			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+			this.splitContainer2 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
 			this.logChangedPaths1 = new Ankh.UI.SvnLog.LogChangedPaths(this.components);
 			this.logMessageView1 = new Ankh.UI.SvnLog.LogMessageView(this.components);
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -123,8 +123,8 @@ namespace Ankh.UI.SvnLog
         #endregion
 
         private LogRevisionControl logRevisionControl1;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.SplitContainer splitContainer2;
+        private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer1;
+        private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer2;
         private LogChangedPaths logChangedPaths1;
         private LogMessageView logMessageView1;
 
