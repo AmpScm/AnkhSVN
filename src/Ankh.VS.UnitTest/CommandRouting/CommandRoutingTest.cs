@@ -258,7 +258,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                Assert.That(CommandTester.TestExecution(AnkhCommand.NewDirectory), Is.False);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.NewFolder), Is.False);
             }
         }
 
