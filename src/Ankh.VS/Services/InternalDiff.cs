@@ -49,7 +49,8 @@ namespace Ankh.VS.Services
             }
         }
 
-        delegate IVsWindowFrame Diff_OpenComparisonWindow2([In] string leftFileMoniker, [In] string rightFileMoniker, [In] string caption, [In] string Tooltip, [In] string leftLabel, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string rightLabel, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string inlineLabel, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string roles, [In] uint grfDiffOptions);
+        delegate IVsWindowFrame OpenComparisonWindow2([In] string leftFileMoniker, [In] string rightFileMoniker, [In] string caption, [In] string Tooltip, [In] string leftLabel, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string rightLabel, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string inlineLabel, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string roles, [In] uint grfDiffOptions);
+        OpenComparisonWindow2 _ocw2;
         public bool RunDiff(AnkhDiffArgs args)
         {
             if (args == null)
@@ -57,12 +58,13 @@ namespace Ankh.VS.Services
             else if (!HasDiff)
                 throw new InvalidOperationException();
 
-            Diff_OpenComparisonWindow2 OpenComparisonWindow2 = GetInterfaceMethod<Diff_OpenComparisonWindow2>(_type_IVsDifferenceService, _vsDifferenceService);
+            if (_ocw2 == null)
+                _ocw2 = GetInterfaceDelegate<OpenComparisonWindow2>(_type_IVsDifferenceService, _vsDifferenceService);
 
-            if (OpenComparisonWindow2 == null)
+            if (_ocw2 == null)
                 return false;
 
-            IVsWindowFrame frame = OpenComparisonWindow2(args.BaseFile, args.MineFile, args.Caption ?? args.MineTitle, "", args.BaseTitle, args.MineTitle, args.Label ?? "", null, 0);
+            IVsWindowFrame frame = _ocw2(args.BaseFile, args.MineFile, args.Caption ?? args.MineTitle, "", args.BaseTitle, args.MineTitle, args.Label ?? "", null, 0);
 
             if (frame != null)
             {
@@ -87,10 +89,6 @@ namespace Ankh.VS.Services
                 {
                     _triedFindMerge = true;
 
-                    // This interface is implemented as .Net object, instead of COM so we have to reference the interop dll
-                    // or do this the hard way with reflection...
-                    // Let's do it the hard way in order not to break VS 2005-2010.
-
                     _type_IVsFileMergeService = Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsFileMergeService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
                     if (_type_IVsFileMergeService == null)
                         return false;
@@ -111,9 +109,12 @@ namespace Ankh.VS.Services
             }
         }
 
-        delegate IVsWindowFrame Merge_OpenAndRegisterMergeWindow([In] string leftFileMoniker, [In] string rightFileMoniker, [In] string baseFileMoniker, [In] string resultFileMoniker, [In] string leftFileTag, [In] string rightFileTag, [In] string baseFileTag, [In] string resultFileTag, [In] string leftFileLabel, [In] string rightFileLabel, [In] string baseFileLabel, [In] string resultFileLabel, [In] string serverGuid, [In] string leftFileSpec, [In] string rightFileSpec, out int cookie);
-        internal delegate void Merge_UnregisterMergeWindow([In] int cookie);
-        delegate void Merge_QueryMergeWindowState([In] int cookie, out int pfState, out string errorAndWarningMsg);
+        delegate IVsWindowFrame OpenAndRegisterMergeWindow([In] string leftFileMoniker, [In] string rightFileMoniker, [In] string baseFileMoniker, [In] string resultFileMoniker, [In] string leftFileTag, [In] string rightFileTag, [In] string baseFileTag, [In] string resultFileTag, [In] string leftFileLabel, [In] string rightFileLabel, [In] string baseFileLabel, [In] string resultFileLabel, [In] string serverGuid, [In] string leftFileSpec, [In] string rightFileSpec, out int cookie);
+        internal delegate void UnregisterMergeWindow([In] int cookie);
+        delegate void QueryMergeWindowState([In] int cookie, out int pfState, out string errorAndWarningMsg);
+        OpenAndRegisterMergeWindow _ormw;
+        UnregisterMergeWindow _umw;
+        QueryMergeWindowState _qmws;
         public bool RunMerge(AnkhMergeArgs args)
         {
             if (args == null)
@@ -121,24 +122,27 @@ namespace Ankh.VS.Services
             else if (!HasMerge)
                 throw new InvalidOperationException();
 
-            Merge_OpenAndRegisterMergeWindow OpenAndRegisterMergeWindow = GetInterfaceMethod<Merge_OpenAndRegisterMergeWindow>(_type_IVsFileMergeService, _vsFileMergeService);
-            Merge_UnregisterMergeWindow UnregisterMergeWindow = GetInterfaceMethod<Merge_UnregisterMergeWindow>(_type_IVsFileMergeService, _vsFileMergeService);
+            if (_ormw == null)
+            {
+                _ormw = GetInterfaceDelegate<OpenAndRegisterMergeWindow>(_type_IVsFileMergeService, _vsFileMergeService);
+                _umw = GetInterfaceDelegate<UnregisterMergeWindow>(_type_IVsFileMergeService, _vsFileMergeService);
+                _qmws = GetInterfaceDelegate<QueryMergeWindowState>(_type_IVsFileMergeService, _vsFileMergeService);
+            }
 
-            if (OpenAndRegisterMergeWindow == null || UnregisterMergeWindow == null)
+            if (_ormw == null || _umw == null || _qmws == null)
                 return false;
-
 
             int cookie;
 
-            IVsWindowFrame frame = OpenAndRegisterMergeWindow(args.TheirsFile, args.MineFile, args.BaseFile, args.MergedFile,
-                                                              Path.GetFileName(args.TheirsFile), Path.GetFileName(args.MineFile),
-                                                              Path.GetFileName(args.BaseFile), Path.GetFileName(args.MergedFile),
-                                                              args.TheirsTitle, args.MineTitle, args.BaseTitle, args.MergedTitle,
-                                                              Guid.Empty.ToString(), null, null, out cookie);
+            IVsWindowFrame frame = _ormw(args.TheirsFile, args.MineFile, args.BaseFile, args.MergedFile,
+                                         Path.GetFileName(args.TheirsFile), Path.GetFileName(args.MineFile),
+                                         Path.GetFileName(args.BaseFile), Path.GetFileName(args.MergedFile),
+                                         args.TheirsTitle, args.MineTitle, args.BaseTitle, args.MergedTitle,
+                                         Guid.Empty.ToString(), null, null, out cookie);
 
             if (frame != null)
             {
-                GC.KeepAlive(new DiffMergeInstance(this, frame, UnregisterMergeWindow, cookie));
+                GC.KeepAlive(new DiffMergeInstance(this, frame, _umw, cookie));
 
                 return true;
             }
@@ -146,39 +150,6 @@ namespace Ankh.VS.Services
             return false;
         }
 
-        #endregion
-
-        #region Delegate helpers
-        Dictionary<Type, Delegate> _interfaceMethods;
-        T GetInterfaceMethod<T>(Type fromInterface, object onService) where T : class
-        {
-            if (fromInterface == null)
-                throw new ArgumentNullException("fromInterface");
-            else if (onService == null)
-                throw new ArgumentNullException("onService");
-
-            if (_interfaceMethods == null)
-                _interfaceMethods = new Dictionary<Type, Delegate>();
-
-            Type type = typeof(T);
-            Delegate dlg;
-
-            if (!_interfaceMethods.TryGetValue(type, out dlg))
-            {
-                string name = type.Name;
-                name = name.Substring(name.IndexOf('_') + 1);
-
-                MethodInfo method = fromInterface.GetMethod(name);
-
-                if (method == null)
-                    return default(T);
-
-                dlg = Delegate.CreateDelegate(type, onService, method, false);
-                _interfaceMethods.Add(type, dlg);
-            }
-
-            return dlg as T;
-        }
         #endregion
     }
 }
