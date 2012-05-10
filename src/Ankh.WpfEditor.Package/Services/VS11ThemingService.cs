@@ -177,6 +177,9 @@ namespace Ankh.WpfPackage.Services
 
         public void ThemeControl(System.Windows.Forms.Control control)
         {
+            if (!control.IsHandleCreated)
+                return;
+
             ISupportsVSTheming themeControl = control as ISupportsVSTheming;
 
             if (themeControl == null || themeControl.UseVSTheming)
