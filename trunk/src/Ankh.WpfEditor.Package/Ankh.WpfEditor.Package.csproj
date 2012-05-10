@@ -103,6 +103,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="AnkhSvnWpfPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ServiceMethodResolver.cs" />
     <Compile Include="Services\ThreadedWaitService.cs" />
     <Compile Include="Services\VS11ThemingService.cs" />
     <Compile Include="Services\WpfEditorInfo.cs" />

@@ -2,7 +2,7 @@
 using Ankh.Commands;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-using UnregisterHandler = Ankh.VS.Services.InternalDiff.Merge_UnregisterMergeWindow;
+using UnregisterHandler = Ankh.VS.Services.InternalDiff.UnregisterMergeWindow;
 
 namespace Ankh.VS.Services
 {

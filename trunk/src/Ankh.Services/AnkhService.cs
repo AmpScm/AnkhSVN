@@ -26,6 +26,8 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using IOleConnectionPoint = Microsoft.VisualStudio.OLE.Interop.IConnectionPoint;
 using IOleConnectionPointContainer = Microsoft.VisualStudio.OLE.Interop.IConnectionPointContainer;
 
+using Ankh.VS;
+
 namespace Ankh
 {
     /// <summary>
@@ -403,6 +405,38 @@ namespace Ankh
         }
 
         #endregion
+
+
+        public T GetInterfaceDelegate<T>(Type fromInterface, object ob) where T : class/*, Delegate*/
+        {
+            if (fromInterface == null)
+                throw new ArgumentNullException("fromInterface");
+            else if (ob == null)
+                throw new ArgumentNullException("onService");
+
+            Type type = typeof(T);
+
+            if (!typeof(Delegate).IsAssignableFrom(type))
+                return null;
+
+            System.Reflection.MethodInfo method = fromInterface.GetMethod(type.Name);
+
+            if (method == null)
+                return null;
+
+            if (!Marshal.IsComObject(ob))
+            {
+                // The Simple case: Compatible with .Net 2.0+
+                return Delegate.CreateDelegate(type, ob, method, true) as T;
+            }
+
+            // Ok, for COM we need more work. Delegate to the .Net 4.0 code
+            ILinqInterfaceDelegateService svc = GetService<ILinqInterfaceDelegateService>();
+            if (svc != null)
+                return svc.GetInterfaceDelegate<T>(fromInterface, method, ob);
+
+            return null;
+        }
 
         public delegate int HR_Func();
         public delegate int HR_Func<T>(T a1);

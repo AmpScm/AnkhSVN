@@ -159,24 +159,13 @@ namespace Ankh.WpfPackage.Services
             return GetColor(color, false);
         }
 
-        delegate bool ThemeWindowDelegate(IntPtr handle);
-        ThemeWindowDelegate _twd;
+        delegate bool ThemeWindow(IntPtr handle);
+        ThemeWindow _twd;
 
         bool VSThemeWindow(IntPtr handle)
         {
             if (_twd == null)
-            {
-                // Create a Linq expression for the call, as the IVsUIShell5 interface is not stable yet.
-                object uiShell = GetService(typeof(SVsUIShell));
-                Type IVsUIShell5Type = Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
-
-                ParameterExpression prmHandle = Expression.Parameter(typeof(IntPtr), "handle");
-                MethodInfo minfo = IVsUIShell5Type.GetMethod("ThemeWindow");
-                MethodCallExpression mce = Expression.Call(Expression.Convert(Expression.Constant(uiShell), IVsUIShell5Type), minfo, prmHandle);
-
-                _twd = Expression.Lambda<ThemeWindowDelegate>(mce, prmHandle).Compile();
-            }
-
+                _twd = GetInterfaceDelegate<ThemeWindow>(Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), GetService(typeof(SVsUIShell)));
             return _twd(handle);
         }
 
