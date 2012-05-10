@@ -46,7 +46,7 @@ namespace Ankh.UI.SccManagement
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProjectCommitDialog));
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
             this.pendingList = new Ankh.UI.PendingChanges.Commits.PendingCommitsView(this.components);
             this.issueNumberBox = new System.Windows.Forms.TextBox();
             this.issueLabel = new System.Windows.Forms.Label();
@@ -159,7 +159,7 @@ namespace Ankh.UI.SccManagement
 
         #endregion
 
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer1;
         private Ankh.UI.PendingChanges.Commits.PendingCommitsView pendingList;
         private Ankh.UI.PendingChanges.LogMessageEditor logMessage;
         private System.Windows.Forms.Label label1;
