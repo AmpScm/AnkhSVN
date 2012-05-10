@@ -46,7 +46,7 @@ namespace Ankh.UI.PendingChanges
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PendingCommitsPage));
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.splitContainer = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.issueLabel = new System.Windows.Forms.Label();
@@ -176,7 +176,7 @@ namespace Ankh.UI.PendingChanges
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label issueLabel;
         private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor;
-        private System.Windows.Forms.SplitContainer splitContainer;
+        private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer;
         private System.Windows.Forms.Panel panel1;
         private Ankh.UI.PendingChanges.Commits.PendingCommitsView pendingCommits;
         private System.Windows.Forms.Label lastRevLabel;

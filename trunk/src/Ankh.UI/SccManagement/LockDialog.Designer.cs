@@ -35,7 +35,7 @@ namespace Ankh.UI.SccManagement
             this.btnCancel = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.stealLocksCheckBox = new System.Windows.Forms.CheckBox();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
             this.pendingList = new Ankh.UI.PendingChanges.Commits.PendingCommitsView(this.components);
             this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.label1 = new System.Windows.Forms.Label();
@@ -132,7 +132,7 @@ namespace Ankh.UI.SccManagement
         protected System.Windows.Forms.Button btnCancel;
         protected System.Windows.Forms.Button okButton;
         private System.Windows.Forms.CheckBox stealLocksCheckBox;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer1;
         private PendingChanges.Commits.PendingCommitsView pendingList;
         private PendingChanges.LogMessageEditor logMessage;
         private System.Windows.Forms.Label label1;

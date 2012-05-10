@@ -47,7 +47,7 @@ namespace Ankh.UI.Annotate
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
             this.blameMarginControl1 = new Ankh.UI.Annotate.AnnotateMarginControl();
             this.editor = new Ankh.UI.VSTextEditor(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
@@ -115,6 +115,6 @@ namespace Ankh.UI.Annotate
 
         private AnnotateMarginControl blameMarginControl1;
         private VSTextEditor editor;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer1;
     }
 }

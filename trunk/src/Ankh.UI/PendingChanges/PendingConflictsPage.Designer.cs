@@ -44,12 +44,11 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PendingConflictsPage));
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.conflictHeader = new System.Windows.Forms.Label();
-            this.conflictEditSplitter = new System.Windows.Forms.SplitContainer();
+            this.conflictEditSplitter = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
             this.conflictView = new Ankh.UI.PendingChanges.Conflicts.ConflictListView();
             this.resolvePanel = new System.Windows.Forms.FlowLayoutPanel();
             this.resolveButton0 = new System.Windows.Forms.Button();
@@ -63,10 +62,12 @@ namespace Ankh.UI.PendingChanges
             this.resolveTopLabel = new System.Windows.Forms.Label();
             this.resolveBottomLabel = new System.Windows.Forms.Label();
             this.resolveLinkLabel = new System.Windows.Forms.LinkLabel();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.conflictEditSplitter)).BeginInit();
             this.conflictEditSplitter.Panel1.SuspendLayout();
             this.conflictEditSplitter.Panel2.SuspendLayout();
             this.conflictEditSplitter.SuspendLayout();
@@ -119,6 +120,7 @@ namespace Ankh.UI.PendingChanges
             this.conflictView.Context = null;
             resources.ApplyResources(this.conflictView, "conflictView");
             this.conflictView.Name = "conflictView";
+            this.conflictView.UseVSTheming = true;
             // 
             // resolvePanel
             // 
@@ -140,49 +142,42 @@ namespace Ankh.UI.PendingChanges
             // resolveButton0
             // 
             resources.ApplyResources(this.resolveButton0, "resolveButton0");
-            this.resolveButton0.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton0.Name = "resolveButton0";
             this.resolveButton0.UseVisualStyleBackColor = true;
             // 
             // resolveButton1
             // 
             resources.ApplyResources(this.resolveButton1, "resolveButton1");
-            this.resolveButton1.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton1.Name = "resolveButton1";
             this.resolveButton1.UseVisualStyleBackColor = true;
             // 
             // resolveButton2
             // 
             resources.ApplyResources(this.resolveButton2, "resolveButton2");
-            this.resolveButton2.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton2.Name = "resolveButton2";
             this.resolveButton2.UseVisualStyleBackColor = true;
             // 
             // resolveButton3
             // 
             resources.ApplyResources(this.resolveButton3, "resolveButton3");
-            this.resolveButton3.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton3.Name = "resolveButton3";
             this.resolveButton3.UseVisualStyleBackColor = true;
             // 
             // resolveButton4
             // 
             resources.ApplyResources(this.resolveButton4, "resolveButton4");
-            this.resolveButton4.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton4.Name = "resolveButton4";
             this.resolveButton4.UseVisualStyleBackColor = true;
             // 
             // resolveButton5
             // 
             resources.ApplyResources(this.resolveButton5, "resolveButton5");
-            this.resolveButton5.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton5.Name = "resolveButton5";
             this.resolveButton5.UseVisualStyleBackColor = true;
             // 
             // resolveButton6
             // 
             resources.ApplyResources(this.resolveButton6, "resolveButton6");
-            this.resolveButton6.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton6.Name = "resolveButton6";
             this.resolveButton6.UseVisualStyleBackColor = true;
             // 
@@ -190,7 +185,6 @@ namespace Ankh.UI.PendingChanges
             // 
             resources.ApplyResources(this.resolveButton7, "resolveButton7");
             this.resolvePanel.SetFlowBreak(this.resolveButton7, true);
-            this.resolveButton7.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton7.Name = "resolveButton7";
             this.resolveButton7.UseVisualStyleBackColor = true;
             // 
@@ -219,10 +213,12 @@ namespace Ankh.UI.PendingChanges
             this.Name = "PendingConflictsPage";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.conflictEditSplitter.Panel1.ResumeLayout(false);
             this.conflictEditSplitter.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.conflictEditSplitter)).EndInit();
             this.conflictEditSplitter.ResumeLayout(false);
             this.resolvePanel.ResumeLayout(false);
             this.resolvePanel.PerformLayout();
@@ -232,9 +228,9 @@ namespace Ankh.UI.PendingChanges
 
         #endregion
 
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.SplitContainer conflictEditSplitter;
+        private Ankh.UI.VSSelectionControls.SmartSplitContainer conflictEditSplitter;
         private Ankh.UI.PendingChanges.Conflicts.ConflictListView conflictView;
         private System.Windows.Forms.FlowLayoutPanel resolvePanel;
         private System.Windows.Forms.Button resolveButton0;
