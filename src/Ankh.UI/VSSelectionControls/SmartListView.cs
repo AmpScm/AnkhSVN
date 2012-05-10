@@ -1260,10 +1260,14 @@ namespace Ankh.UI.VSSelectionControls
             NativeMethods.SendMessage(Handle, NativeMethods.LVM_SETITEMSTATE, (IntPtr)i.Index, ref lvItem);
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new ListView.ColumnHeaderCollection Columns
+        {
+            get { return base.Columns; }
+        }
 
         public void OnThemeChange(System.Windows.Forms.Design.IUIService ui)
         {
-            
         }
     }
 }
