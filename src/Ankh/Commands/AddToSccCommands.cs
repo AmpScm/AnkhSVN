@@ -58,7 +58,7 @@ namespace Ankh.Commands
 
             string solutionFilename = e.Selection.SolutionFilename;
 
-            if (!SvnItem.IsValidPath(solutionFilename))
+            if (string.IsNullOrEmpty(solutionFilename) || !SvnItem.IsValidPath(solutionFilename))
                 solutionFilename = null;
 
             if (e.Command == AnkhCommand.FileSccAddSolutionToSubversion)
