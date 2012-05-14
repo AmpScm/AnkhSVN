@@ -19,7 +19,7 @@ using System.Text;
 using System.Windows.Forms;
 using Ankh.Configuration;
 
-namespace Ankh.UI
+namespace Ankh.UI.Commands
 {
     public partial class RecentMessageDialog : VSContainerForm
     {
