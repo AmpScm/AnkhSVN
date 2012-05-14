@@ -31,6 +31,11 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            if (!e.State.SolutionExists || e.State.SolutionBuilding || e.State.Debugging || e.State.SolutionOpening)
+            {
+                e.Enabled = false;
+                return;
+            }
             SvnItem item = GetRoot(e);
 
             if(item == null || !item.IsVersioned || item.IsDeleteScheduled || item.Status.LocalNodeStatus == SvnStatus.Added || item.Uri == null)
