@@ -20,8 +20,6 @@ using System.Text;
 
 namespace Ankh
 {
-    // This class is defined in Ankh.Ids, because its implementation is in Ankh.Trigger, which has
-    // no other external dependencies than Ankh.Ids
     public interface IAnkhScheduler
     {
         /// <summary>
