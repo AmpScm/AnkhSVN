@@ -21,6 +21,7 @@ using Ankh.Commands;
 using Ankh.Scc;
 using System.Windows.Forms;
 using Ankh.UI.PendingChanges.Commits;
+using Ankh.UI.Commands;
 
 namespace Ankh.UI.PendingChanges.Commands
 {

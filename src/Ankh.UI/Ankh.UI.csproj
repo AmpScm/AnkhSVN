@@ -292,10 +292,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PropertyEditStrings.resx</DependentUpon>
     </Compile>
-    <Compile Include="RecentMessageDialog.cs">
+    <Compile Include="Commands\RecentMessageDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RecentMessageDialog.Designer.cs">
+    <Compile Include="Commands\RecentMessageDialog.Designer.cs">
       <DependentUpon>RecentMessageDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\ConfirmDeleteDialog.cs">
@@ -956,7 +956,7 @@
       <LastGenOutput>PropertyEditStrings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RecentMessageDialog.resx">
+    <EmbeddedResource Include="Commands\RecentMessageDialog.resx">
       <DependentUpon>RecentMessageDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
