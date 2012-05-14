@@ -31,6 +31,11 @@ namespace Ankh.Commands
         string issueId;
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            if (!e.State.SolutionExists || e.State.SolutionBuilding || e.State.Debugging || e.State.SolutionOpening)
+            {
+                e.Enabled = false;
+                return;
+            }
             e.Enabled = !EnumTools.IsEmpty(GetChanges(e));
         }
 

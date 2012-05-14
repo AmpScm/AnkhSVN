@@ -29,8 +29,14 @@ namespace Ankh.UI.PendingChanges.Commands
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            PendingCommitsPage commitPage = e.Context.GetService<PendingCommitsPage>();
-            PendingIssuesPage issuesPage = e.Context.GetService<PendingIssuesPage>();
+            if (e.State.SolutionBuilding || e.State.Debugging || e.State.SolutionOpening)
+            {
+                e.Enabled = false;
+                return;
+            }
+
+            PendingCommitsPage commitPage = e.GetService<PendingCommitsPage>();
+            PendingIssuesPage issuesPage = e.GetService<PendingIssuesPage>();
             if (commitPage == null)
             {
                 e.Enabled = false;
