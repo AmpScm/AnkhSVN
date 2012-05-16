@@ -36,6 +36,17 @@ namespace Ankh.UI.MergeWizard
             InitializeComponent();
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (DesignMode)
+                return;
+
+            wcPath.Text = MergeTarget.FullPath;
+            wcUri.Text = MergeTarget.Uri.ToString();
+        }
+
         /// <summary>
         /// Gets/Sets the first merge source.
         /// </summary>
