@@ -48,6 +48,8 @@ namespace Ankh.Services
             _syncher.Visible = false;
             _syncher.Text = "AnkhSVN Synchronizer";
             GC.KeepAlive(_syncher.Handle); // Ensure the window is created
+
+            SvnClientConfiguration.DisableMemoryPressureReporting(); // Disable GC.AddMemoryPressure() calls
         }
 
         IAnkhDialogOwner _dialogOwner;
