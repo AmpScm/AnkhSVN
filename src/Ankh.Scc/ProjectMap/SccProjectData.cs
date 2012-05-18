@@ -572,7 +572,9 @@ namespace Ankh.Scc.ProjectMap
 
         internal void AddPath(string path)
         {
-            if (_loaded && IsWebSite)
+            bool alreadyLoaded = _loaded && !_inLoad;
+
+            if (alreadyLoaded && IsWebSite)
             {
                 uint fid = VSConstants.VSITEMID_NIL;
 
@@ -603,7 +605,7 @@ namespace Ankh.Scc.ProjectMap
                 }
             }
 
-            if (!_inLoad && GetService<IAnkhConfigurationService>().Instance.AutoAddEnabled)
+            if (alreadyLoaded && GetService<IAnkhConfigurationService>().Instance.AutoAddEnabled)
             {
                 GetService<IFileStatusMonitor>().ScheduleAddFile(path);
             }
@@ -616,7 +618,7 @@ namespace Ankh.Scc.ProjectMap
                 reference = new SccProjectFileReference(_context, this, Scc.GetFile(path));
                 _files.Add(reference);
 
-                if (_loaded && !_inLoad)
+                if (alreadyLoaded)
                     GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(path);
             }
 
@@ -625,7 +627,7 @@ namespace Ankh.Scc.ProjectMap
                 reference.IsProjectFile = true;
             }
 
-            if (!_inLoad && _loaded && !string.IsNullOrEmpty(ProjectFile))
+            if (alreadyLoaded && !string.IsNullOrEmpty(ProjectFile))
             {
                 ISccProjectWalker walker = GetService<ISccProjectWalker>();
 
