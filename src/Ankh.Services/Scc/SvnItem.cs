@@ -920,7 +920,13 @@ namespace Ankh
         {
             get
             {
-                if (GetState(SvnItemState.Ignored) != 0)
+                SvnItemState state;
+
+                if (TryGetState(SvnItemState.Versioned, out state) && state != 0)
+                    return false;
+                else if (TryGetState(SvnItemState.Versionable, out state) && state == 0)
+                    return false;
+                else if (GetState(SvnItemState.Ignored) != 0)
                     return true;
                 else if (IsVersioned)
                     return false;
