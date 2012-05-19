@@ -152,10 +152,10 @@ namespace Ankh.Scc
 
         private string GetRelativePath(RefreshContext context)
         {
-            string projectRoot = context.SolutionSettings.ProjectRootWithSeparator;
+            string projectRoot = context.SolutionSettings.ProjectRoot;
 
-            if (!string.IsNullOrEmpty(projectRoot) && FullPath.StartsWith(projectRoot, StringComparison.OrdinalIgnoreCase))
-                return FullPath.Substring(projectRoot.Length).Replace('\\', '/');
+            if (!string.IsNullOrEmpty(projectRoot) && SvnItem.IsBelowPath(projectRoot))
+                return SvnItem.SubPath(FullPath, projectRoot).Replace('\\', '/');
             else
                 return FullPath;
         }

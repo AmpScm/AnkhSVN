@@ -492,19 +492,6 @@ namespace Ankh.Settings
             _cache = null;
         }
 
-        public string ProjectRootWithSeparator
-        {
-            get
-            {
-                string pr = ProjectRoot;
-
-                if (!string.IsNullOrEmpty(pr) && pr[pr.Length - 1] != Path.DirectorySeparatorChar)
-                    return pr + Path.DirectorySeparatorChar;
-                else
-                    return pr;
-            }
-        }
-
         public Uri ProjectRootUri
         {
             get

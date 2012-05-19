@@ -144,10 +144,10 @@ namespace Ankh.UI.PendingChanges.Synchronize
         {
             IAnkhSolutionSettings ss = Context.GetService<IAnkhSolutionSettings>();
 
-            string path = ss.ProjectRootWithSeparator;
+            string path = ss.ProjectRoot;
 
-            if (!string.IsNullOrEmpty(path) && item.FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase))
-                return item.FullPath.Substring(path.Length).Replace('\\', '/');
+            if (!string.IsNullOrEmpty(path) && item.IsBelowPath(path))
+                return SvnItem.SubPath(item.FullPath, path);
 
             return item.FullPath;
         }
