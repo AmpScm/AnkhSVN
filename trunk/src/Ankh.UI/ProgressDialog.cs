@@ -198,7 +198,7 @@ namespace Ankh.UI
                     IAnkhSolutionSettings ss = Context.GetService<IAnkhSolutionSettings>();
 
                     if (ss != null)
-                        _splitRoot = ss.ProjectRootWithSeparator;
+                        _splitRoot = ss.ProjectRoot;
 
                     if (string.IsNullOrEmpty(_splitRoot))
                         _splitRoot = "";
@@ -249,11 +249,8 @@ namespace Ankh.UI
                         else if (!string.IsNullOrEmpty(path))
                         {
                             string sr = SplitRoot;
-                            if (!string.IsNullOrEmpty(sr))
-                            {
-                                if (path.StartsWith(sr, StringComparison.OrdinalIgnoreCase))
-                                    path = path.Substring(sr.Length).Replace(Path.DirectorySeparatorChar, '/');
-                            }
+                            if (!string.IsNullOrEmpty(sr) && SvnItem.IsBelowRoot(path, sr))
+                                path = SvnItem.SubPath(path, sr).Replace(Path.DirectorySeparatorChar, '/');
 
                             item.SubItems.Add(path);
                         }

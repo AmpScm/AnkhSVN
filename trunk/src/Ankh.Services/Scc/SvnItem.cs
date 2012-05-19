@@ -1368,6 +1368,23 @@ namespace Ankh
             return (n == 0);
         }
 
+        public static string SubPath(string path, string root)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+            else if (string.IsNullOrEmpty(root))
+                throw new ArgumentNullException("root");
+
+            if (path.Length < root.Length)
+                return "";
+            else if (path.Length == root.Length)
+                return ".";
+            else if (path[root.Length] == '\\')
+                return path.Substring(root.Length + 1);
+            else
+                return path.Substring(root.Length);
+        }
+
         /// <summary>
         /// Determines whether the current instance is below the specified path
         /// </summary>
