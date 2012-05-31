@@ -50,13 +50,15 @@ namespace Ankh.Commands
 
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                if (!item.IsVersioned && item.IsVersionable && item.InSolution && !item.IsIgnored && !item.IsSccExcluded)
+                if (item.IsVersioned)
+                {
+                    items.Add(item);
+                }
+                else if (item.IsFile && item.IsVersionable && item.InSolution && !item.IsIgnored && !item.IsSccExcluded)
                 {
                     toAdd.Add(item.FullPath); // Add new files  ### Alternative: Show them as added
                     items.Add(item);
                 }
-                else if (item.IsModified || item.IsDocumentDirty)
-                    items.Add(item);
             }
 
             if (items.Count == 0)
