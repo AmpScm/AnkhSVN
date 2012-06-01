@@ -40,7 +40,7 @@ debug command of the AnkhSvn project by performing the following:
 
 Experimental Hive Options
 
-VS11:
+VS2012:
    Default path to devenv: "%programfiles%\Microsoft Visual Studio 11.0\Common7\IDE\devenv.exe"
    Default arguments: /rootSuffix Exp
 
