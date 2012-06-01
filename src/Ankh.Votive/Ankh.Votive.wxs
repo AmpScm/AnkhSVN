@@ -128,7 +128,7 @@
       <ProgressText Action="VS2005Setup" Template="[1]">Updating Visual Studio 2005 registration</ProgressText>
       <ProgressText Action="VS90SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
       <ProgressText Action="VS2010SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
-      <ProgressText Action="VS11SetupNoVSTemplates" Template="[1]">Updating Visual Studio 11 registration</ProgressText>
+      <ProgressText Action="VS11SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2012 registration</ProgressText>
     </UI>
 
     <InstallExecuteSequence>
@@ -176,10 +176,10 @@
         <ComponentGroupRef Id="Extension2010" />
         <ComponentRef Id="C_Reg2010" />
       </Feature>
-      <Feature Id="RegVS11" Title="Register in Microsoft Visual Studio 11" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2010" Level="1" AllowAdvertise="no">
+      <Feature Id="RegVS11" Title="Register in Microsoft Visual Studio 2012" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2012" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg11" />
         <ComponentGroupRef Id="PkgWpfReg11" />
-        <!-- VS11 allows binding redirects in the registry, so no Extension11 -->
+        <!-- VS2012 allows binding redirects in the registry, so no Extension11 -->
         <ComponentRef Id="C_Reg11" />
       </Feature>
     </Feature>
