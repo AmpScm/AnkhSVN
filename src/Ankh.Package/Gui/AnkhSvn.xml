@@ -403,7 +403,7 @@
       <ButtonRef id="Cmd_CommitItem" priority="0x1500" />
       <Button id="Cmd_LockMustLock" name="LockMustLock" priority="0x1650" defaultInvisible="true"
               text="Loc&amp;k..."
-              toolTip="Lock the selected item." iconFile="Scc/Lock.png" />
+              toolTip="Lock the selected item." iconFile="Scc/LockControls.png" />
       <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1700" />
       <Button id="Cmd_ItemShowChanges" name="Svn.Compare" priority="0x1800"
                 text="Show C&amp;hanges"
@@ -446,7 +446,7 @@
         <Group id="Grp_SccLock" priority="0x2000">
           <Button id="Cmd_Lock" name="Lock" priority="0x45" defaultInvisible="true"
               text="Loc&amp;k..."
-              toolTip="Lock the selected item." iconFile="Scc/Lock.png" />
+              toolTip="Lock the selected item." iconFile="Scc/LockControls.png" />
           <Button id="Cmd_Unlock" name="Unlock" priority="0x50" defaultInvisible="true"
               text="U&amp;nlock..."
               toolTip="Unlock the selected items." iconFile="Scc/Unlock.png"/>
