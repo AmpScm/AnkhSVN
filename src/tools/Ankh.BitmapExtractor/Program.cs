@@ -117,8 +117,15 @@ namespace Ankh.BitmapExtractor
                     if (_transparentHack)
                         bm.MakeTransparent(transparentColor);
 
-                    Console.WriteLine("Writing {0}", name);
-                    bm.Save(Path.Combine(dir, name + ".png"), ImageFormat.Png);
+                    try
+                    {
+                        bm.Save(Path.Combine(dir, name + ".png"), ImageFormat.Png);
+                        Console.WriteLine("Writing {0}. Succeeded", name);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Writing {0}. Failed", name);
+                    }
                 }
             }
             Console.WriteLine("Done");
