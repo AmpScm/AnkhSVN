@@ -67,7 +67,7 @@
 }
 
 #welcome-table {
-  border: 2px solid #AC8;
+  border: 2px solid #D4E4F4;
 }
 
 #welcome-table td {
@@ -120,4 +120,8 @@
 #lightbox-overlay-text-about
 {
   display:none;
+}
+
+.h2 h2, .h3 h3 {
+  background-color: #D4E4F4;
 }
