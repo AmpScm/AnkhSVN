@@ -12,10 +12,21 @@
   <h3>Changes:</h3>
 
   <ul>
-    <li>Compiled against Subversion 1.7.5</li>
-    <li>Support for Visual Studio 2012 RC</li>
-    <li>Removed old style file selection control</li>
-    <li>Performance improvements</li>
+    <li>Compiled against Subversion 1.7.5.</li>
+    <li>Support for Visual Studio 2012 RC, including a UI refresh.</li>
+    <li>Removed old style file selection control, replacing it with the common selection dialog</li>
+    <li>Many performance improvements in AnkhSVN and SharpSvn (Several privately reported cases via CollabNet and their partners)</li>
+    <li>Directly record copies and moves in Subversion instead of moving files around via temporary locations</li>
+    <li>Disable commands that could cause unrelated reloads files during opening the solution, building and debugging</li>
+    <li>Enable the navigation bar in the annotate viewer of Visual Studio 2010 and 2012</li>
+    <li>Resolve a focus stealing issue in several Sql server related project types, by using a slower glyph update for these projects</li>
+    <li>Improve stability of the Visual Studio Class View in Visual Studio 2010, when the Solution Navigator is not installed</li>
+    <li>Show a VS wait dialog when we are slowing down Visual Studio for too long on Pending changes initialization</li>
+    <li>Fix copy recording directly below the working copy root</li>
+    <li>Fix 'Scc Files' / 'Scc Excluded' handing on C++ projects in Visual Studio 2010 and later</li>
+    <li>Add option to immediately import a project on adding it to Subversion, to avoid a double commit</li>
+    <li>Properly mark new files over deleted files as pending changes</li>
+    <li>Record and reload recent urls in the add to subversion dialog</li>
   </ul>
 
 	<div class="h2"><h2>AnkhSVN 2.3.10838</h2></div>
