@@ -67,7 +67,7 @@
 }
 
 #welcome-table {
-  border: 2px solid #D4E4F4;
+  border: 2px solid #336699;
 }
 
 #welcome-table td {
@@ -122,6 +122,11 @@
   display:none;
 }
 
-.h2 h2, .h3 h3 {
+.h2 h2 {
+  background-color: #D4E4F4;
+	border-top: 1px solid #336699;
+}
+
+.h3 h3 {
   background-color: #D4E4F4;
 }
