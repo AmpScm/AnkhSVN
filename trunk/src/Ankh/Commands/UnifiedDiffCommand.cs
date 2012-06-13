@@ -28,7 +28,7 @@ using Ankh.VS;
 namespace Ankh.Commands
 {
     [Command(AnkhCommand.UnifiedDiff)]
-    class ItemUnifiedDiffCommand : CommandBase
+    class UnifiedDiffCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -73,7 +73,8 @@ namespace Ankh.Commands
                 using (CommonFileSelectorDialog dlg = new CommonFileSelectorDialog())
                 {
                     dlg.Text = CommandStrings.UnifiedDiffTitle;
-                    dlg.Items = items;dlg.RevisionStart = start;
+                    dlg.Items = items;
+                    dlg.RevisionStart = start;
                     dlg.RevisionEnd = end;
 
                     if (dlg.ShowDialog(e.Context) != DialogResult.OK)
