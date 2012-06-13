@@ -32,6 +32,9 @@ namespace Ankh.UI.SccManagement
     /// <summary>
     /// The dialog to lock SVN items.
     /// </summary>
+    /// <remarks>Note that unlike the commit dialog, the initial focus should be on the paths,
+    /// not on the log message editor. The only other option is making it configurable as users
+    /// are relying on this behavior</remarks>
     public partial class LockDialog : VSContainerForm
     {
         public LockDialog()
@@ -47,7 +50,6 @@ namespace Ankh.UI.SccManagement
             if (DesignMode)
                 return;
 
-            logMessage.Select();
             Message = _originalText;
 
             VSCommandHandler.Install(Context, logMessage, new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.OPENLINEABOVE), new EventHandler<CommandEventArgs>(OnLock));
