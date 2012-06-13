@@ -109,7 +109,7 @@ namespace Ankh.UI.PathSelector
                 if (_currentRevType != null)
                     return _currentRevType.CurrentValue;
                 else
-                    return null;
+                    return _newValue;
             }
             set
             {
