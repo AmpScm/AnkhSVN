@@ -77,7 +77,7 @@ namespace Ankh.Commands
 
             AnkhConfig config = e.GetService<IAnkhConfigurationService>().Instance;
 
-            if (!e.DontPrompt && (e.PromptUser || (!Shift || !config.SuppressLockingUI)))
+            if (!e.DontPrompt && (e.PromptUser || !(Shift || config.SuppressLockingUI)))
             {
                 using (LockDialog dlg = new LockDialog())
                 {
