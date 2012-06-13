@@ -133,7 +133,7 @@
     <value>284, 13</value>
   </data>
   <data name="suppressLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="suppressLabel.Text" xml:space="preserve">
     <value>You can suppress this dialog by holding down the Shift key</value>
@@ -163,7 +163,7 @@
     <value>75, 24</value>
   </data>
   <data name="btnCancel.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="btnCancel.Text" xml:space="preserve">
     <value>Cancel</value>
@@ -190,7 +190,7 @@
     <value>75, 24</value>
   </data>
   <data name="okButton.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="okButton.Text" xml:space="preserve">
     <value>OK</value>
@@ -220,7 +220,7 @@
     <value>82, 17</value>
   </data>
   <data name="stealLocksCheckBox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="stealLocksCheckBox.Text" xml:space="preserve">
     <value>&amp;Steal Locks</value>
@@ -262,7 +262,7 @@
     <value>pendingList</value>
   </data>
   <data name="&gt;&gt;pendingList.Type" xml:space="preserve">
-    <value>Ankh.UI.PendingChanges.Commits.PendingCommitsView, Ankh.UI, Version=2.3.4479.34284, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.PendingChanges.Commits.PendingCommitsView, Ankh.UI, Version=2.3.4547.22653, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;pendingList.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -298,7 +298,7 @@
     <value>logMessage</value>
   </data>
   <data name="&gt;&gt;logMessage.Type" xml:space="preserve">
-    <value>Ankh.UI.PendingChanges.LogMessageEditor, Ankh.UI, Version=2.3.4479.34284, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.PendingChanges.LogMessageEditor, Ankh.UI, Version=2.3.4547.22653, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;logMessage.Parent" xml:space="preserve">
     <value>splitContainer1.Panel2</value>
@@ -355,13 +355,13 @@
     <value>183</value>
   </data>
   <data name="splitContainer1.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>0</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Name" xml:space="preserve">
     <value>splitContainer1</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>Ankh.UI.VSSelectionControls.SmartSplitContainer, Ankh.UI, Version=2.3.4547.22653, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -379,7 +379,7 @@
     <value>624, 400</value>
   </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>100, 38</value>
+    <value>100, 39</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Lock</value>
@@ -388,6 +388,6 @@
     <value>LockDialog</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.VSContainerForm, Ankh.Services, Version=2.3.4479.34000, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
+    <value>Ankh.UI.VSContainerForm, Ankh.Services, Version=2.3.4547.22651, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
   </data>
 </root>
