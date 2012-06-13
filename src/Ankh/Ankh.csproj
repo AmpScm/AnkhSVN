@@ -125,7 +125,7 @@
     <Compile Include="Commands\ItemEditPropertiesCommand.cs" />
     <Compile Include="Commands\ItemConflictEdit.cs" />
     <Compile Include="Commands\ItemIgnore.cs" />
-    <Compile Include="Commands\ItemUnifiedDiffCommand.cs" />
+    <Compile Include="Commands\UnifiedDiffCommand.cs" />
     <Compile Include="Commands\OpenInXExplorer.cs" />
     <Compile Include="Commands\SolutionCommitCommand.cs" />
     <Compile Include="AnkhModule.cs" />
