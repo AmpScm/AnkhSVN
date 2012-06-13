@@ -139,7 +139,7 @@ namespace Ankh.Commands
                 cmdf |= OLECMDF.OLECMDF_NINCHED;
 
             if (!Visible)
-                cmdf |= OLECMDF.OLECMDF_INVISIBLE;
+                cmdf |= OLECMDF.OLECMDF_INVISIBLE | OLECMDF.OLECMDF_DEFHIDEONCTXTMENU;
 
             if (HideOnContextMenu)
                 cmdf |= OLECMDF.OLECMDF_DEFHIDEONCTXTMENU;
