@@ -14,12 +14,14 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System;
+using System.Collections.Generic;
+
 using Ankh.Commands;
 using Ankh.ExtensionPoints.IssueTracker;
 using Ankh.VS;
 using Ankh.Scc;
 using Ankh.IssueTracker;
-using System.Collections.Generic;
 
 namespace Ankh.UI.IssueTracker
 {
@@ -77,7 +79,7 @@ namespace Ankh.UI.IssueTracker
 
         #endregion
 
-        private bool DeleteIssueRepositoryProperties(AnkhContext context, SvnItem item)
+        private bool DeleteIssueRepositoryProperties(IAnkhServiceProvider context, SvnItem item)
         {
             return context.GetService<IProgressRunner>().RunModal("Removing Issue Repository settings",
                 delegate(object sender, ProgressWorkerArgs wa)
@@ -90,7 +92,7 @@ namespace Ankh.UI.IssueTracker
                 }).Succeeded;
         }
 
-        private bool SetIssueRepositoryProperties(AnkhContext context, SvnItem item, IssueRepositorySettings settings)
+        private bool SetIssueRepositoryProperties(IAnkhServiceProvider context, SvnItem item, IssueRepositorySettings settings)
         {
             return context.GetService<IProgressRunner>().RunModal("Applying Issue Repository settings",
                 delegate(object sender, ProgressWorkerArgs wa)
