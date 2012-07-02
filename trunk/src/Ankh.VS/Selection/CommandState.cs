@@ -24,6 +24,7 @@ using Ankh.Commands;
 using Microsoft.Win32;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using Ankh.Selection;
+using Ankh.Configuration;
 
 namespace Ankh.VS.Selection
 {
@@ -45,6 +46,7 @@ namespace Ankh.VS.Selection
             base.OnInitialize();
 
             GetService<SelectionContext>(typeof(ISelectionContext)).CmdUIContextChanged += OnCmdUIContextChanged;
+            GetService<AnkhServiceEvents>().ThemeChanged += OnThemeChanged;
 
             IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
 
@@ -343,6 +345,123 @@ namespace Ankh.VS.Selection
             get { return (0 != (System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift)); }
         }
 
+        #region Theme State
+        bool? _themed;
+        bool _themeDark;
+        bool _themeLight;
+        
+        void OnThemeChanged(object sender, EventArgs e)
+        {
+            _themed = null;
+        }
+
+        public bool ThemeDark
+        {
+            get
+            {
+                if (!_themed.HasValue)
+                    LoadThemeData();
+
+                return _themeDark;
+            }
+        }
+
+        public bool ThemeLight
+        {
+            get
+            {
+                if (!_themed.HasValue)
+                    LoadThemeData();
+
+                return _themeLight;
+            }
+        }
+
+        public bool ThemeDefined
+        {
+            get
+            {
+                if (!_themed.HasValue)
+                    LoadThemeData();
+
+                return _themed.Value;
+            }
+        }
+
+
+        void LoadThemeData()
+        {
+            if (!VSVersion.VS11OrLater)
+            {
+                _themed = false;
+                return;
+            }
+
+            _themeLight = _themeDark = false;
+
+            IAnkhConfigurationService config = GetService<IAnkhConfigurationService>();
+
+            if (config == null)
+            {
+                _themed = false;
+                return;
+            }
+
+            string currentTheme;
+            Guid themeGuid = Guid.Empty;
+
+            using (RegistryKey rk = config.OpenVSUserKey("General"))
+            {
+                if (rk != null)
+                    currentTheme = rk.GetValue("CurrentTheme") as string;
+                else
+                    currentTheme = null;
+            }
+
+            try
+            {
+                if (!string.IsNullOrEmpty(currentTheme))
+                    themeGuid = new Guid(currentTheme);
+                else
+                    currentTheme = null;
+            }
+            catch
+            {
+                currentTheme = null;
+            }
+
+            if (currentTheme == null)
+            {
+                _themed = false;
+                return;
+            }
+                
+            using (RegistryKey rk = config.OpenVSInstanceKey("Extensions\\AnkhSVN\\Themes"))
+            {
+                object v;
+
+                if (rk != null)
+                    v = rk.GetValue(themeGuid.ToString("B"));
+                else
+                    v = null;
+
+                if (v is int)
+                {
+                    _themed = true;
+                    int vv = (int)v;
+
+                    _themeLight = (vv & 0x01) != 0;
+                    _themeDark = (vv & 0x02) != 0;
+                }
+                else
+                    _themed = true;
+            }
+        }
+
+        
+        #endregion
+
+        #region Cache Item
         sealed class CmdStateCacheItem
         {
             readonly uint _cookie;
@@ -369,8 +488,9 @@ namespace Ankh.VS.Selection
                 set { _active = value; }
             }
         }
+        #endregion
 
-        #region IAnkhCommandStates Members
+        #region Scc State
 
         bool? _otherSccProviderActive;
         public bool OtherSccProviderActive

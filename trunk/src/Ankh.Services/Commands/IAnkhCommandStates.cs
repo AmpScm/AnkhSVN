@@ -92,6 +92,15 @@ namespace Ankh.Commands
 
         bool PendingChangesActive { get; }
 
+        /// <summary>VS11+</summary>
+        bool ThemeLight { get; }
+
+        /// <summary>VS11+</summary>
+        bool ThemeDark { get; }
+
+        /// <summary>VS11+</summary>
+        bool ThemeDefined { get; }
+
         bool ShiftDown { get; }
     }
 }

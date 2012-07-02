@@ -77,7 +77,7 @@ namespace Ankh
         void OnUIShellActivate(EventArgs e);
 
         /// <summary>
-        /// Raises the <see cref="TheneChanged"/> event.
+        /// Raises the <see cref="ThemeChanged"/> event.
         /// </summary>
         /// <param name="e"></param>
         void OnThemeChanged(EventArgs e);
