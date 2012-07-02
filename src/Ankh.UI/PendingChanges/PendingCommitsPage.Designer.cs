@@ -47,7 +47,7 @@ namespace Ankh.UI.PendingChanges
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PendingCommitsPage));
             this.splitContainer = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.borderPanel = new System.Windows.Forms.Panel();
             this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.issueLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -56,14 +56,15 @@ namespace Ankh.UI.PendingChanges
             this.issueNumberBox = new System.Windows.Forms.TextBox();
             this.lastRevLabel = new System.Windows.Forms.Label();
             this.lastRevBox = new System.Windows.Forms.TextBox();
-            this.pathColumn = new System.Windows.Forms.ColumnHeader();
-            this.projectColumn = new System.Windows.Forms.ColumnHeader();
-            this.changeColumn = new System.Windows.Forms.ColumnHeader();
-            this.fullPathColumn = new System.Windows.Forms.ColumnHeader();
+            this.pathColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.projectColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.changeColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.fullPathColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.borderPanel.SuspendLayout();
             this.topLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,18 +75,18 @@ namespace Ankh.UI.PendingChanges
             // 
             // splitContainer.Panel1
             // 
-            this.splitContainer.Panel1.Controls.Add(this.panel1);
+            this.splitContainer.Panel1.Controls.Add(this.borderPanel);
             // 
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.pendingCommits);
             // 
-            // panel1
+            // borderPanel
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.topLayoutPanel);
-            resources.ApplyResources(this.panel1, "panel1");
-            this.panel1.Name = "panel1";
+            this.borderPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.borderPanel.Controls.Add(this.topLayoutPanel);
+            resources.ApplyResources(this.borderPanel, "borderPanel");
+            this.borderPanel.Name = "borderPanel";
             // 
             // topLayoutPanel
             // 
@@ -125,9 +126,9 @@ namespace Ankh.UI.PendingChanges
             this.pendingCommits.Name = "pendingCommits";
             this.pendingCommits.ShowItemToolTips = true;
             this.pendingCommits.ShowSelectAllCheckBox = true;
-            this.pendingCommits.UseVSTheming = true;
-            this.pendingCommits.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pendingCommits_KeyUp);
+            this.pendingCommits.UseVSTheming = false;
             this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.Commits.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
+            this.pendingCommits.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pendingCommits_KeyUp);
             // 
             // issueNumberBox
             // 
@@ -157,8 +158,9 @@ namespace Ankh.UI.PendingChanges
             this.Name = "PendingCommitsPage";
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
+            this.borderPanel.ResumeLayout(false);
             this.topLayoutPanel.ResumeLayout(false);
             this.topLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -177,7 +179,7 @@ namespace Ankh.UI.PendingChanges
         private System.Windows.Forms.Label issueLabel;
         private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor;
         private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel borderPanel;
         private Ankh.UI.PendingChanges.Commits.PendingCommitsView pendingCommits;
         private System.Windows.Forms.Label lastRevLabel;
         private System.Windows.Forms.TextBox lastRevBox;
