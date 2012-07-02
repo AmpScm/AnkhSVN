@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using Ankh.Scc;
 using Ankh.VS;
 using Ankh.UI.VSSelectionControls;
+using Ankh.Commands;
 
 namespace Ankh.UI.PendingChanges.Commits
 {
@@ -72,7 +73,10 @@ namespace Ankh.UI.PendingChanges.Commits
                 PendingChange.FileType,
                 SafeWorkingCopy(item));
 
-            if (!SystemInformation.HighContrast)
+            IAnkhCommandStates states = context.GetService<IAnkhCommandStates>();
+
+            if (!SystemInformation.HighContrast
+                && (!states.ThemeDefined || states.ThemeLight))
             {
                 System.Drawing.Color clr = System.Drawing.Color.Black;
 
