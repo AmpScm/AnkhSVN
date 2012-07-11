@@ -287,7 +287,7 @@ namespace Ankh.WpfPackage.Services
 
                 // TODO: Force colors?
             }
-            VSThemeWindow(listView.Handle);
+            //VSThemeWindow(listView.Handle);
         }
 
         void ThemeOne(TreeView treeView)
