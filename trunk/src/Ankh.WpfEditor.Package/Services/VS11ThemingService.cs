@@ -9,6 +9,7 @@ using System.Windows.Forms.Design;
 using Ankh.UI;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
+using Ankh.Commands;
 
 namespace Ankh.WpfPackage.Services
 {
@@ -176,29 +177,37 @@ namespace Ankh.WpfPackage.Services
         }
 
         public void ThemeControl(System.Windows.Forms.Control control)
+        {            
+            DoThemeControl(control, true);
+        }
+
+        void DoThemeControl(System.Windows.Forms.Control control, bool delay)
         {
             if (!control.IsHandleCreated)
+            {
+                if (delay)
+                    GetService<IAnkhCommandService>().PostIdleAction(
+                        delegate
+                        {
+                            ThemeControl(control);
+                        });
                 return;
+            }
 
             ISupportsVSTheming themeControl = control as ISupportsVSTheming;
 
             if (themeControl == null || themeControl.UseVSTheming)
             {
-                VSThemeWindow(control.Handle);
-
-                bool ok =
-                    MaybeTheme<ToolStrip>(ThemeOne, control)
-                    || MaybeTheme<Label>(ThemeOne, control)
-                    || MaybeTheme<TextBox>(ThemeOne, control)
-                    || MaybeTheme<ListView>(ThemeOne, control)
-                    || MaybeTheme<TreeView>(ThemeOne, control)
-                    || MaybeTheme<UserControl>(ThemeOne, control);
+                VSThemeWindow(control);
 
                 if (themeControl != null)
                     themeControl.OnThemeChange(UI);
             }
             else if (themeControl != null)
+            {
+                themeControl.OnThemeChange(UI);
                 return; // No recurse!
+            }
 
             foreach (Control c in control.Controls)
             {
@@ -329,6 +338,19 @@ namespace Ankh.WpfPackage.Services
 
             [DllImport("user32.dll")]
             public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        }
+
+        public void VSThemeWindow(Control control)
+        {
+            VSThemeWindow(control.Handle);
+
+            bool ok =
+                MaybeTheme<ToolStrip>(ThemeOne, control)
+                || MaybeTheme<Label>(ThemeOne, control)
+                || MaybeTheme<TextBox>(ThemeOne, control)
+                || MaybeTheme<ListView>(ThemeOne, control)
+                || MaybeTheme<TreeView>(ThemeOne, control)
+                || MaybeTheme<UserControl>(ThemeOne, control);
         }
     }
 }

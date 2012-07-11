@@ -113,7 +113,7 @@ namespace Ankh.UI.VSSelectionControls
             if (_stateImageList != null)
                 SetStateList();
 
-            if (SmartListView.IsXPPlus && (!UseVSTheming || !VSVersion.SupportsTheming))
+            if (SmartListView.IsXPPlus)
             {
                 if (VSVersion.VS2010OrLater)
                     NativeMethods.SetWindowTheme(Handle, "Explorer", null);
