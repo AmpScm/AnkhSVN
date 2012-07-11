@@ -315,5 +315,38 @@ namespace Ankh.UI.PendingChanges.Commits
         {
             get { return Context == null ? null : Context.GetService<IAnkhCommandService>(); }
         }
+
+        bool _themedOnce;
+        public override void OnThemeChange(System.Windows.Forms.Design.IUIService ui)
+        {
+            base.OnThemeChange(ui);
+
+            if (!VSVersion.VS11OrLater || !VSVersion.SupportsTheming || Context == null)
+                return;
+
+            IAnkhCommandStates cs = Context.GetService<IAnkhCommandStates>();
+            IWinFormsThemingService wts = Context.GetService<IWinFormsThemingService>();
+
+            if (cs == null || wts == null)
+                return;
+
+            if (!_themedOnce && (!cs.ThemeDefined || cs.ThemeLight))
+                return;
+
+            _themedOnce = true;
+            wts.VSThemeWindow(this);
+        }
+
+        public override bool UseVSTheming
+        {
+            get
+            {
+                return false;
+            }
+            set
+            {
+                
+            }
+        }
     }
 }
