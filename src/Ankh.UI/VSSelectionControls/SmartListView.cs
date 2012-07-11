@@ -90,12 +90,12 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        bool _useVsTheming;
-        [DefaultValue(false)]
-        public bool UseVSTheming
+        bool _dontUseVsTheming;
+        [DefaultValue(true)]
+        public virtual bool UseVSTheming
         {
-            get { return _useVsTheming; }
-            set { _useVsTheming = value; }
+            get { return !_dontUseVsTheming; }
+            set { _dontUseVsTheming = !value; }
         }
         /// <summary>
         /// Gets or sets how items are displayed in the control.
@@ -1266,7 +1266,7 @@ namespace Ankh.UI.VSSelectionControls
             get { return base.Columns; }
         }
 
-        public void OnThemeChange(System.Windows.Forms.Design.IUIService ui)
+        public virtual void OnThemeChange(System.Windows.Forms.Design.IUIService ui)
         {
         }
     }
