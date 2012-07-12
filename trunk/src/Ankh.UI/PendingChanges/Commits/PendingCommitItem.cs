@@ -22,6 +22,7 @@ using Ankh.Scc;
 using Ankh.VS;
 using Ankh.UI.VSSelectionControls;
 using Ankh.Commands;
+using System.ComponentModel;
 
 namespace Ankh.UI.PendingChanges.Commits
 {
@@ -170,6 +171,24 @@ namespace Ankh.UI.PendingChanges.Commits
         internal string LastChangeList
         {
             get { return _lastChangeList; }
+        }
+
+        [DefaultValue(false)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        public new bool Checked
+        {
+            get
+            {
+                try
+                {
+                    return base.Checked;
+                }
+                catch (ArgumentException)
+                {
+                    return false;
+                }
+            }
+            set { base.Checked = value; }
         }
     }
 }
