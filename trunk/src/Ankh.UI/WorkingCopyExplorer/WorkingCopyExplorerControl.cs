@@ -48,6 +48,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         protected override void OnContextChanged(EventArgs e)
         {
+            base.OnContextChanged(e);
             folderTree.Context = Context;
             fileList.Context = Context;
         }
