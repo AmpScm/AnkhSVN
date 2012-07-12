@@ -227,13 +227,10 @@
     <Content Include="Gui\menu\IssueRepository.png" />
     <Content Include="Gui\PendingChanges\FolderUp.png" />
     <Content Include="Gui\Scc\CompareProperties.png" />
-    <Content Include="Gui\menu\MakeDirectory.png" />
-    <Content Include="Gui\menu\Merge.png" />
     <Content Include="Gui\menu\PBAlpha.png" />
     <Content Include="Gui\menu\PBCatego.png" />
     <Content Include="Gui\menu\PBPage.png" />
     <Content Include="Gui\Scc\Legacy\CompareProperties.png" />
-    <Content Include="Gui\menu\RemoveFolder.png" />
     <Content Include="Gui\menu\RemoveUrl.png" />
     <Content Include="Gui\menu\Revert.png" />
     <Content Include="Gui\menu\RevertToVersion.png" />
