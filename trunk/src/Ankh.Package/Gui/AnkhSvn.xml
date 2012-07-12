@@ -953,12 +953,9 @@
         <Group id="Grp_PendingChangesAdmin" priority="0x400">
           <!--Menu id="Menu_ItemIgnore" priority="0x100" name="Ignore" type="MenuController">
             <Group id="Menu_ItemIgnore" priority="0x100">
-              <Button id="Cmd_ItemIgnoreFile" name="IgnoreFile" priority="0x100"
-                  text="Ignore &amp;File" iconFile="PendingChanges/Ignore.png"/>
-              <Button id="Cmd_ItemIgnoreFileType" name="IgnoreFileType" priority="0x200" textChanges="true"
-                  text="Ignore File &amp;Type" />
-              <Button id="Cmd_ItemIgnoreFilesInFolder" name="IgnoreFilesInFolder" priority="0x300" textChanges="true"
-                  text="Ignore &amp;All Files in ..." />
+              <ButtonRef id="Cmd_ItemIgnoreFile" priority="0x100" />
+              <ButtonRef id="Cmd_ItemIgnoreFileType" priority="0x200" />
+              <ButtonRef id="Cmd_ItemIgnoreFilesInFolder" priority="0x300" />
             </Group>
           </Menu-->
           <Button id="Cmd_RefreshPendingChanges" name="RefreshPendingChanges" priority="0x200"
