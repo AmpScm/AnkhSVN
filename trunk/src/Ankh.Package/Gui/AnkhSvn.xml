@@ -659,9 +659,6 @@
           <Button id="Cmd_WorkingCopyAdd" name="Svn.WorkingCopyAdd" priority="0x100"
               text="A&amp;dd New Root..."
               toolTip="Add a new root to the Working Copy Explorer." iconFile="Scc/NewFolder.png" allowParams="true" />
-          <Button id="Cmd_RemoveWorkingCopyExplorerRoot" name="RemoveWorkingCopyExplorerRoot" priority="0x200"
-              text="&amp;Remove Root"
-              toolTip="Remove this root from the Working Copy Explorer." iconFile="menu/RemoveFolder.png"/>
         </Group>
         <Group id="Grp_WceUpdate" priority="0x2000">
           <Button id="Cmd_UpdateItemLatestRecursive" name="UpdateItemLatest" priority="0x100"

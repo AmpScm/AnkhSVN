@@ -234,16 +234,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.fileList.SetDirectory(item);
         }
 
-        public bool IsWcRootSelected()
-        {
-            return false;
-        }
-
-        public void RemoveRoot()
-        {
-            //
-        }
-
         IFileStatusCache _cache;
         protected internal IFileStatusCache StatusCache
         {
