@@ -230,12 +230,12 @@ namespace Ankh.UI.VSSelectionControls
             public static extern int SetWindowTheme(IntPtr hWnd, String pszSubAppName, String pszSubIdList);
         }
 
-        bool _useVsTheming;
-        [DefaultValue(false)]
+        bool _noVsTheming;
+        [DefaultValue(true)]
         public bool UseVSTheming
         {
-            get { return _useVsTheming; }
-            set { _useVsTheming = value; }
+            get { return !_noVsTheming; }
+            set { _noVsTheming = !value; }
         }
     }
 }
