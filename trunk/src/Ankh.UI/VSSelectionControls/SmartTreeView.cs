@@ -216,9 +216,9 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        void ISupportsVSTheming.OnThemeChange(System.Windows.Forms.Design.IUIService ui)
+        void ISupportsVSTheming.OnThemeChange(System.Windows.Forms.Design.IUIService ui, IAnkhServiceProvider context)
         {
-            
+            RecreateHandle();
         }
 
         static class NativeMethods

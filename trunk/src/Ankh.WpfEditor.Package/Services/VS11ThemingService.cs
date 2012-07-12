@@ -198,14 +198,14 @@ namespace Ankh.WpfPackage.Services
 
             if (themeControl == null || themeControl.UseVSTheming)
             {
-                VSThemeWindow(control);
-
                 if (themeControl != null)
-                    themeControl.OnThemeChange(UI);
+                    themeControl.OnThemeChange(UI, this);
+
+                VSThemeWindow(control);
             }
             else if (themeControl != null)
             {
-                themeControl.OnThemeChange(UI);
+                themeControl.OnThemeChange(UI, this);
                 return; // No recurse!
             }
 
@@ -287,11 +287,12 @@ namespace Ankh.WpfPackage.Services
 
                 // TODO: Force colors?
             }
-            //VSThemeWindow(listView.Handle);
         }
 
         void ThemeOne(TreeView treeView)
         {
+            VSThemeWindow(treeView.Handle);
+
             if (treeView.Font != DialogFont)
                 treeView.Font = DialogFont;
 
@@ -342,8 +343,6 @@ namespace Ankh.WpfPackage.Services
 
         public void VSThemeWindow(Control control)
         {
-            VSThemeWindow(control.Handle);
-
             bool ok =
                 MaybeTheme<ToolStrip>(ThemeOne, control)
                 || MaybeTheme<Label>(ThemeOne, control)
