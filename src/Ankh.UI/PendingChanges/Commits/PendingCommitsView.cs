@@ -317,15 +317,15 @@ namespace Ankh.UI.PendingChanges.Commits
         }
 
         bool _themedOnce;
-        public override void OnThemeChange(System.Windows.Forms.Design.IUIService ui)
+        public override void OnThemeChange(System.Windows.Forms.Design.IUIService ui, IAnkhServiceProvider context)
         {
-            base.OnThemeChange(ui);
+            //base.OnThemeChange(ui, context);
 
-            if (!VSVersion.VS11OrLater || !VSVersion.SupportsTheming || Context == null)
+            if (!VSVersion.VS11OrLater || !VSVersion.SupportsTheming)
                 return;
 
-            IAnkhCommandStates cs = Context.GetService<IAnkhCommandStates>();
-            IWinFormsThemingService wts = Context.GetService<IWinFormsThemingService>();
+            IAnkhCommandStates cs = context.GetService<IAnkhCommandStates>();
+            IWinFormsThemingService wts = context.GetService<IWinFormsThemingService>();
 
             if (cs == null || wts == null)
                 return;
