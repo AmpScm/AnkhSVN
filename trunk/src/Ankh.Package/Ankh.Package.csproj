@@ -235,7 +235,6 @@
     <Content Include="Gui\menu\Revert.png" />
     <Content Include="Gui\menu\RevertToVersion.png" />
     <Content Include="Gui\menu\SaveToFile.png" />
-    <Content Include="Gui\menu\Switch.png" />
     <Content Include="Gui\Scc\Legacy\LockControls.png" />
     <Content Include="Gui\Scc\Legacy\Unlock.png" />
     <Content Include="Gui\menu\ViewInVSNet.png" />
