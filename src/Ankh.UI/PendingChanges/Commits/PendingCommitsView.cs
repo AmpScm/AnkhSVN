@@ -330,6 +330,45 @@ namespace Ankh.UI.PendingChanges.Commits
             if (cs == null || wts == null)
                 return;
 
+            if (_themedOnce && cs.ThemeLight)
+            {
+                List<ListViewItem> savedItems = new List<ListViewItem>();
+
+                BeginUpdate();
+                try
+                {
+                    foreach (ListViewItem lvi in Items)
+                        savedItems.Add(lvi);
+                    Items.Clear();
+                }
+                finally
+                {
+                    EndUpdate();
+                }
+
+                base.OnParentChanged(EventArgs.Empty); /* Recreate handle while keeping state lists valid */
+                _themedOnce = false;
+
+                if (BackColor != Parent.BackColor)
+                    BackColor = Parent.BackColor;
+
+                if (ForeColor != Parent.ForeColor)
+                    ForeColor = Parent.ForeColor;
+
+
+                BeginUpdate();
+                try
+                {
+                    this.Items.AddRange(savedItems.ToArray());
+                }
+                finally
+                {
+                    EndUpdate();
+                }
+
+                return;
+            }
+
             if (!_themedOnce && (!cs.ThemeDefined || cs.ThemeLight))
                 return;
 
