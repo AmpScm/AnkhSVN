@@ -229,8 +229,8 @@
     <Content Include="Gui\menu\RemoveUrl.png" />
     <Content Include="Gui\PendingChanges\FolderUp.png" />
     <Content Include="Gui\Scc\CompareProperties.png" />
-    <Content Include="Gui\menu\PBAlpha.png" />
-    <Content Include="Gui\menu\PBCatego.png" />
+    <Content Include="Gui\Scc\Legacy\SortPropertiesAlphabetically.png" />
+    <Content Include="Gui\Scc\Legacy\SortPropertiesByCategory.png" />
     <Content Include="Gui\menu\PBPage.png" />
     <Content Include="Gui\Scc\Legacy\CompareProperties.png" />
     <Content Include="Gui\menu\Legacy\RemoveUrl.png" />
@@ -243,8 +243,6 @@
     <Content Include="Gui\menu\ViewInWindows.png" />
     <Content Include="Gui\PendingChanges\ApplyPatch.png" />
     <Content Include="Gui\PendingChanges\Blank.png" />
-    <Content Include="Gui\PendingChanges\Branch.png" />
-    <Content Include="Gui\PendingChanges\BrowseRefresh.png" />
     <Content Include="Gui\PendingChanges\CleanUp.png" />
     <Content Include="Gui\PendingChanges\CopyTo.png" />
     <Content Include="Gui\PendingChanges\CreatePatch.png" />
@@ -419,6 +417,8 @@
     <Content Include="Gui\Scc\Share.png" />
     <Content Include="Gui\Scc\ShowAll.png" />
     <Content Include="Gui\Scc\Sort.png" />
+    <Content Include="Gui\Scc\SortPropertiesAlphabetically.png" />
+    <Content Include="Gui\Scc\SortPropertiesByCategory.png" />
     <Content Include="Gui\Scc\SourceControlManager.png" />
     <Content Include="Gui\Scc\Switch.png" />
     <Content Include="Gui\Scc\TfsAddFilesToSourceControl.png" />
@@ -514,6 +514,9 @@
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
       <Name>Ankh</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Gui\PendingChanges\Legacy\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v11.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '11.0'" />
