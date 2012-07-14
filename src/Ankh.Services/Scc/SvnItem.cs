@@ -1481,5 +1481,22 @@ namespace Ankh
                 return status.Uri;
             }
         }
+
+        /// <summary>
+        /// Gets this node as a directory or NULL if it is no directory on disk
+        /// </summary>
+        /// <returns></returns>
+        public SvnDirectory AsDirectory()
+        {
+            if (!IsDirectory)
+                return null;
+
+            IFileStatusCache cache = StatusCache;
+
+            if (cache == null)
+                return null;
+
+            return cache.GetDirectory(FullPath);
+        }
     }
 }
