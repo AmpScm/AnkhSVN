@@ -165,7 +165,7 @@ While this working copy is not upgraded all files in this working copy will appe
 
 When a working copy is upgraded it can no longer be used by Subversion clients that weren't designed for this (or later) working copy formats.
 
-Further working copy upgrade required warnings are suppressed until after you restart Visual Studio.</value>
+Further working copy upgrade required warnings are suppressed until after you restart Visual Studio or upgrade a working copy.</value>
   </data>
   <data name="YourMergeToolSavedXWouldYouLikeItMarkedAsResolved" xml:space="preserve">
     <value>Your external merge tool saved '{0}'.
