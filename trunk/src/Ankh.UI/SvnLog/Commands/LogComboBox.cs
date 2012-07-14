@@ -75,7 +75,7 @@ namespace Ankh.UI.SvnLog.Commands
             {
                 string selected = e.Argument as string;
 
-                if (selected != null)
+                if (selected != null && origins.Count > 1)
                     foreach (SvnOrigin o in origins)
                     {
                         if (selected == o.Target.FileName)
