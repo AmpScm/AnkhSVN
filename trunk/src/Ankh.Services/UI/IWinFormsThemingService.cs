@@ -9,5 +9,7 @@ namespace Ankh.UI
 
         // 
         void VSThemeWindow(Control control);
+
+        bool TryGetIcon(string path, out IntPtr hIcon);
     }
 }

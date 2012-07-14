@@ -6,10 +6,13 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using Hashtable = System.Collections.Hashtable;
+using Microsoft.VisualStudio.Shell.Interop;
+
 using Ankh.UI;
 using Ankh.VS;
-using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Commands;
+using Microsoft.VisualStudio;
 
 namespace Ankh.WpfPackage.Services
 {
@@ -169,6 +172,72 @@ namespace Ankh.WpfPackage.Services
                 _twd = GetInterfaceDelegate<ThemeWindow>(Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), GetService(typeof(SVsUIShell)));
             return _twd(handle);
         }
+
+        delegate IVsUIObject GetIconForFile(string filename, __VSUIDATAFORMAT desiredFormat);
+        GetIconForFile _giff;
+
+        delegate IVsUIObject GetIconForFileEx(string filename, __VSUIDATAFORMAT desiredFormat, out uint iconSource);
+        GetIconForFileEx _giffEx;
+
+        public bool TryGetIcon(string path, out IntPtr hIcon)
+        {
+            hIcon = IntPtr.Zero;
+
+            if (_giff == null)
+            {
+                Type type_SVsImageService = Type.GetType("Microsoft.VisualStudio.Shell.Interop.SVsImageService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+
+                if (type_SVsImageService == null)
+                    return false;
+
+                object service = GetService(type_SVsImageService);
+
+                if (service == null)
+                    return false;
+
+                _giff = GetInterfaceDelegate<GetIconForFile>(Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsImageService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), service);
+
+                if (_giff == null)
+                    return false;
+
+                _giffEx = GetInterfaceDelegate<GetIconForFileEx>(Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsImageService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), service);
+            }
+
+            try
+            {
+                IVsUIObject uiOb;
+                uint src = 0;
+
+                if (_giffEx != null)
+                    uiOb = _giffEx(path, __VSUIDATAFORMAT.VSDF_WIN32, out src);
+                else
+                    uiOb = _giff(path, __VSUIDATAFORMAT.VSDF_WIN32);
+
+                if (src == 2)
+                    return false; // Just use the os directly then. (Allows caching)
+
+                object data;
+                if (!ErrorHandler.Succeeded(uiOb.get_Data(out data)))
+                    return false;
+
+                IVsUIWin32Icon vsIcon = data as IVsUIWin32Icon;
+
+                if (vsIcon == null)
+                    return false;
+
+                int iconHandle;
+                if (!ErrorHandler.Succeeded(vsIcon.GetHICON(out iconHandle)))
+                    return false;
+
+                hIcon = (IntPtr)iconHandle;
+
+                return (iconHandle != 0);
+            }
+            catch { }
+
+            return false;
+        }
+
 
         IUIService _ui;
         IUIService UI
