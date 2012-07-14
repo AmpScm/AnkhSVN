@@ -23,11 +23,12 @@ using System.Runtime.InteropServices;
 using System.IO;
 using Microsoft.VisualStudio;
 using System.Diagnostics;
+using Ankh.UI;
 
 namespace Ankh.VS.SolutionExplorer
 {
     [GlobalService(typeof(IFileIconMapper))]
-    class FileIconMapper : AnkhService, IFileIconMapper
+    sealed class FileIconMapper : AnkhService, IFileIconMapper
     {
         readonly ImageList _imageList;
         readonly Dictionary<ProjectIconReference, int> _iconMap;
@@ -53,6 +54,9 @@ namespace Ankh.VS.SolutionExplorer
             EnsureSpecialImages();
 
             int icon = GetProjectIcon(path);
+
+            if (icon == -1 && VSVersion.SupportsTheming)
+                icon = GetThemeIcon(path);
 
             if (icon == -1)
                 icon = GetOsIcon(path);
@@ -141,6 +145,19 @@ namespace Ankh.VS.SolutionExplorer
                 return null;
 
             return fileinfo.szTypeName;
+        }
+
+        IWinFormsThemingService themeService;
+        int GetThemeIcon(string path)
+        {
+            if (themeService == null)
+                themeService = GetService<IWinFormsThemingService>();
+
+            IntPtr hIcon;
+            if (!themeService.TryGetIcon(path, out hIcon))
+                return -1;
+
+            return ResolveReference(new ProjectIconReference(hIcon));
         }
 
         int GetOsIcon(string path)
