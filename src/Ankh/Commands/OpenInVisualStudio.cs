@@ -28,7 +28,6 @@ using Ankh.Scc;
 namespace Ankh.Commands
 {
     [Command(AnkhCommand.ItemOpenVisualStudio)]
-    [Command(AnkhCommand.ItemOpenSolutionExplorer)]
     [Command(AnkhCommand.ItemOpenTextEditor)]
     [Command(AnkhCommand.ItemOpenWindows)]
     class OpenInVisualStudio : CommandBase
@@ -52,17 +51,13 @@ namespace Ankh.Commands
                         }
                         first = false;
                         break;
-                    case AnkhCommand.ItemOpenSolutionExplorer:
-                        if (!item.InSolution)
-                            continue;
-                        goto default;
                     default:
                         if (!first)
                         {
                             e.Enabled = false;
                             return;
                         }
-                        
+
                         first = false;
                         break;
                 }
@@ -78,6 +73,8 @@ namespace Ankh.Commands
                 if (!item.Exists)
                     continue;
 
+                bool selectInSolutionExplorer = false;
+
                 try
                 {
                     switch (e.Command)
@@ -86,7 +83,10 @@ namespace Ankh.Commands
                             IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
 
                             if (mapper.IsProjectFileOrSolution(item.FullPath))
-                                goto case AnkhCommand.ItemOpenSolutionExplorer;
+                            {
+                                selectInSolutionExplorer = true;
+                                break;
+                            }
                             if (item.IsDirectory)
                             {
                                 System.Diagnostics.Process.Start(item.FullPath);
@@ -115,39 +115,6 @@ namespace Ankh.Commands
                             psi.Verb = "open";
                             System.Diagnostics.Process.Start(psi);
                             break;
-
-                        case AnkhCommand.ItemOpenSolutionExplorer:
-                            IVsUIHierarchyWindow hierWindow = VsShellUtilities.GetUIHierarchyWindow(e.Context, new Guid(ToolWindowGuids80.SolutionExplorer));
-
-                            IVsProject project = VsShellUtilities.GetProject(e.Context, item.FullPath) as IVsProject;
-
-                            if (hierWindow != null)
-                            {
-                                int found;
-                                uint id;
-                                VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
-                                if (project != null && ErrorHandler.Succeeded(project.IsDocumentInProject(item.FullPath, out found, prio, out id)) && found != 0)
-                                {
-                                    hierWindow.ExpandItem(project as IVsUIHierarchy, id, EXPANDFLAGS.EXPF_SelectItem);
-                                }
-                                else if (string.Equals(item.FullPath, e.Selection.SolutionFilename, StringComparison.OrdinalIgnoreCase))
-                                    hierWindow.ExpandItem(e.GetService<IVsUIHierarchy>(typeof(SVsSolution)), VSConstants.VSITEMID_ROOT, EXPANDFLAGS.EXPF_SelectItem);
-
-                                // Now try to activate the solution explorer
-                                IVsWindowFrame solutionExplorer;
-                                Guid solutionExplorerGuid = new Guid(ToolWindowGuids80.SolutionExplorer);
-                                IVsUIShell shell = e.GetService<IVsUIShell>(typeof(SVsUIShell));
-
-                                if (shell != null)
-                                {
-                                    shell.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fForceCreate, ref solutionExplorerGuid, out solutionExplorer);
-
-                                    if (solutionExplorer != null)
-                                        solutionExplorer.Show();
-                                }
-
-                            }
-                            break;
                     }
                 }
                 catch (IOException ee)
@@ -167,6 +134,38 @@ namespace Ankh.Commands
                     mb.Show(ee.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
+                if (selectInSolutionExplorer)
+                {
+                    IVsUIHierarchyWindow hierWindow = VsShellUtilities.GetUIHierarchyWindow(e.Context, new Guid(ToolWindowGuids80.SolutionExplorer));
+
+                    IVsProject project = VsShellUtilities.GetProject(e.Context, item.FullPath) as IVsProject;
+
+                    if (hierWindow != null)
+                    {
+                        int found;
+                        uint id;
+                        VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
+                        if (project != null && ErrorHandler.Succeeded(project.IsDocumentInProject(item.FullPath, out found, prio, out id)) && found != 0)
+                        {
+                            hierWindow.ExpandItem(project as IVsUIHierarchy, id, EXPANDFLAGS.EXPF_SelectItem);
+                        }
+                        else if (string.Equals(item.FullPath, e.Selection.SolutionFilename, StringComparison.OrdinalIgnoreCase))
+                            hierWindow.ExpandItem(e.GetService<IVsUIHierarchy>(typeof(SVsSolution)), VSConstants.VSITEMID_ROOT, EXPANDFLAGS.EXPF_SelectItem);
+
+                        // Now try to activate the solution explorer
+                        IVsWindowFrame solutionExplorer;
+                        Guid solutionExplorerGuid = new Guid(ToolWindowGuids80.SolutionExplorer);
+                        IVsUIShell shell = e.GetService<IVsUIShell>(typeof(SVsUIShell));
+
+                        if (shell != null)
+                        {
+                            shell.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fForceCreate, ref solutionExplorerGuid, out solutionExplorer);
+
+                            if (solutionExplorer != null)
+                                solutionExplorer.Show();
+                        }
+                    }
+                }
             }
         }
     }

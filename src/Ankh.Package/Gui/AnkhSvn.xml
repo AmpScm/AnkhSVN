@@ -253,7 +253,7 @@
       <Button id="Cmd_SolutionIssueTrackerSetup" name="IssueTrackerSetup" priority="0x1400"
                   text="&amp;Issue Tracker Setup"
                   toolTip="Associate your solution with an Issue Repository"
-                  iconFile="menu/IssueRepository.png" defaultInvisible="true"/>
+                  iconFile="Scc/Linkto.png" defaultInvisible="true"/>
       <Button id="Cmd_SolutionUpdateLatest" name="UpdateLatest" priority="0x100"
                   text="U&amp;pdate Solution to Latest Version"
                   toolTip="Update your solution to the HEAD version"
@@ -512,22 +512,25 @@
         <Group id="Grp_SccCleanupRefresh" priority="0xE000">
           <Button id="Cmd_Cleanup" name="Cleanup" priority="0x100" defaultInvisible="true"
               text="Cl&amp;eanup"
-              toolTip="Cleanup the working copy." iconFile="PendingChanges/Cleanup.png"/>
+              toolTip="Cleanup the working copy." iconFile="Scc/Brush.png"/>
           <Button id="Cmd_Refresh" name="SvnRefreshStatus" priority="0x120" defaultInvisible="true"
                 text="Refres&amp;h Status"
                 toolTip="Refresh this view." iconFile="Scc/TfsRefreshStatus.png"/>
         </Group>
         <Group id="Grp_SccExplore" priority="0xF000">
           <Button id="Cmd_ItemSelectInSolutionExplorer" name="OpenInSolutionExplorer" priority="0x100"
-                      text="Select in So&amp;lution Explorer" defaultInvisible="true">
+                      text="Select in So&amp;lution Explorer" defaultInvisible="true"
+                      iconFile="Scc/SolutionExplorer.png">
             <Visibility context="Ankh_SccProviderGuid"/>
           </Button>
           <Button id="Cmd_ItemSelectInRepositoryExplorer" name="OpenInRepositoryExplorer" priority="0x200"
-                      text="Select in &amp;Repository Explorer" defaultInvisible="true">
+                      text="Select in &amp;Repository Explorer" defaultInvisible="true"
+                      iconFile="PendingChanges/RepositoryExplorer.png">
             <Visibility context="Ankh_SccProviderGuid"/>
           </Button>
           <Button id="Cmd_ItemSelectInWorkingCopyExplorer" name="OpenInWorkingCopyExplorer" priority="0x300"
-                      text="Select in &amp;Working Copy Explorer" defaultInvisible="true">
+                      text="Select in &amp;Working Copy Explorer" defaultInvisible="true"
+                      iconFile="Scc/FindInFiles.png">
             <Visibility context="Ankh_SccProviderGuid"/>
           </Button>
         </Group>
@@ -955,8 +958,7 @@
             </Group>
             <Group id="Grp_PendingChangesOpenEx" priority="0x200">
               <ButtonRef id="guidVSStd2K:cmdidExploreFolderInWindows" priority="0x100" />
-              <Button id="Cmd_ItemOpenSolutionExplorer" name="FindInSolutionExplorer" priority="0x200"
-                  text="Select in Solution E&amp;xplorer" iconFile="PendingChanges/SolutionExplorer.png"/>
+              <ButtonRef id="Cmd_ItemSelectInSolutionExplorer" priority="0x200" />
               <ButtonRef id="Cmd_ItemSelectInWorkingCopyExplorer" priority="0x300" />
               <ButtonRef id="Cmd_ItemSelectInRepositoryExplorer" priority="0x400" />
             </Group>
