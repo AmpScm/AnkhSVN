@@ -18,17 +18,22 @@ using System;
 using Ankh.UI;
 using Ankh.UI.WorkingCopyExplorer;
 using System.Windows.Forms;
+using Ankh.Commands;
 
-namespace Ankh.Commands
+namespace Ankh.UI.WorkingCopyExplorer.Commands
 {
     /// <summary>
     /// Command to add a new root to the Working Copy Explorer.
     /// </summary>
     [Command(AnkhCommand.WorkingCopyBrowse, ArgumentDefinition="d")]
     [Command(AnkhCommand.WorkingCopyAdd, ArgumentDefinition = "d")]
-    class AddWorkingCopyExplorerRootCommand : CommandBase
+    class AddWorkingCopyExplorerRootCommand : ICommandHandler
     {
-        public override void OnExecute(CommandEventArgs e)
+        public void OnUpdate(CommandUpdateEventArgs e)
+        {
+        }
+
+        public void OnExecute(CommandEventArgs e)
         {
             string info;
 

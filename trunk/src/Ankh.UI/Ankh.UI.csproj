@@ -317,6 +317,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PropertyEditStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="RepositoryExplorer\Commands\RemoveRepositoryRootCommand.cs" />
+    <Compile Include="RepositoryExplorer\Commands\RepositoryBrowseCommand.cs" />
+    <Compile Include="RepositoryExplorer\Commands\RepositoryExplorerLocation.cs" />
     <Compile Include="RepositoryExplorer\Dialogs\ConfirmDeleteDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -633,6 +636,8 @@
     <Compile Include="ErrorDialog.Designer.cs">
       <DependentUpon>ErrorDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="WorkingCopyExplorer\Commands\WCExplorerLocation.cs" />
+    <Compile Include="WorkingCopyExplorer\Commands\WorkingCopyBrowseCommand.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDetailsView.cs">
       <SubType>Component</SubType>
     </Compile>

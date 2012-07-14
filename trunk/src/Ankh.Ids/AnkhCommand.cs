@@ -308,5 +308,11 @@ namespace Ankh
         SvnInfoCategorized,
         SvnInfoAlphabetical,
         SvnInfoPropertyPages,
+
+
+        WCExplorerComboBox,
+        WCExplorerComboBoxFill,
+        RepositoryExplorerComboBox,
+        RepositoryExplorerComboBoxFill,
     }
 }
