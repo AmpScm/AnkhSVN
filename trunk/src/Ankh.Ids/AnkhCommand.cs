@@ -166,9 +166,10 @@ namespace Ankh
         ItemOpenVisualStudio,
         ItemOpenWindows,
         ItemOpenTextEditor,
-        ItemOpenFolder, // Unused
-        ItemOpenSolutionExplorer,
-        ItemOpenInRepositoryExplorer, // Unused
+
+        SvnLogRefresh, // Unused
+        SvnLogComboBox,
+        SvnLogComboBoxFill,
 
         ItemRevertBase,
         PendingChangesSpacer, // Whitespace command to move all buttons a bit
@@ -307,8 +308,5 @@ namespace Ankh
         SvnInfoCategorized,
         SvnInfoAlphabetical,
         SvnInfoPropertyPages,
-
-        SvnLogComboBox,
-        SvnLogComboBoxFill
     }
 }

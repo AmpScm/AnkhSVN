@@ -361,7 +361,7 @@ namespace Ankh.UI.WorkingCopyExplorer
                 // Ok, the user selected the current solution file or an open project
                 // Let's jump to it in the solution explorer
 
-                svc.ExecCommand(AnkhCommand.ItemOpenSolutionExplorer);
+                svc.ExecCommand(AnkhCommand.ItemSelectInSolutionExplorer);
                 return;
             }
 
