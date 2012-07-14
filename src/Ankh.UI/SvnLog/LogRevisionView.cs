@@ -50,7 +50,7 @@ namespace Ankh.UI.SvnLog
         SmartColumn _messageColumn;
         void Init()
         {
-            _expand = new SmartColumn(this, "\x02D9", "&Expand Merges", 12, HorizontalAlignment.Left);
+            _expand = new SmartColumn(this, "\x00A0", "&Expand Merges", 12, HorizontalAlignment.Left);
             _revisionColumn = new SmartColumn(this, "&Revision", 64, HorizontalAlignment.Right);
             SmartColumn author = new SmartColumn(this, "&Author", 73);
             SmartColumn date = new SmartColumn(this, "&Date", 118);
