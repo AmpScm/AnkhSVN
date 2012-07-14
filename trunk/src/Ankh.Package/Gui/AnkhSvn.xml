@@ -230,7 +230,7 @@
       </Button>
       <Button id="Cmd_ShowWorkingCopyExplorer" name="WorkingCopyExplorer" priority="0x902"
           text="&amp;Working Copy Explorer"
-          toolTip="Show the Working Copy Explorer window." iconFile="PendingChanges/WCExplorer.png" defaultInvisible="true">
+          toolTip="Show the Working Copy Explorer window." iconFile="Scc/FindInFiles.png" defaultInvisible="true">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="w"/>
       </Button>
     </GroupRef>
@@ -1144,14 +1144,14 @@
   <BitmapStrips>
     <Strip name="ToolWindows" bitmap24="..\obj\ToolWindows.bmp" type="Ankh.AnkhToolWindow" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll">
       <StripIcon id="RepositoryExplorer" iconFile="PendingChanges/RepositoryExplorer.png" />
-      <StripIcon id="WorkingCopyExplorer" iconFile="PendingChanges/WCExplorer.png"/>
+      <StripIcon id="WorkingCopyExplorer" iconFile="Scc/FindInFiles.png"/>
       <StripIcon id="PendingChanges" iconFile="Scc/TfsContextViewPendingChanges.png"/>
       <StripIcon id="Log" iconFile="Scc/TfsHistory.png"/>
       <StripIcon id="SvnInfo" iconFile="Scc/CompareProperties.png"/>
     </Strip>
     <Strip name="ToolWindows" bitmap24="..\obj\ToolWindows-Legacy.bmp" type="Ankh.AnkhToolWindow" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll">
-      <StripIcon id="RepositoryExplorer" iconFile="PendingChanges/RepositoryExplorer.png" />
-      <StripIcon id="WorkingCopyExplorer" iconFile="PendingChanges/WCExplorer.png"/>
+      <StripIcon id="RepositoryExplorer" iconFile="PendingChanges/Legacy/RepositoryExplorer.png" />
+      <StripIcon id="WorkingCopyExplorer" iconFile="Scc/Legacy/FindInFiles.png"/>
       <StripIcon id="PendingChanges" iconFile="Scc/Legacy/TfsContextViewPendingChanges.png"/>
       <StripIcon id="Log" iconFile="Scc/Legacy/TfsHistory.png"/>
       <StripIcon id="SvnInfo" iconFile="Scc/Legacy/CompareProperties.png"/>
