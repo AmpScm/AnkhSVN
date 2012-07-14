@@ -22,6 +22,7 @@ using System.Diagnostics;
 using Ankh.Scc.UI;
 using SharpSvn;
 using Ankh.Scc;
+using System.ComponentModel.Design;
 
 namespace Ankh.UI.SvnLog
 {
@@ -57,6 +58,19 @@ namespace Ankh.UI.SvnLog
             ToolWindowHost.CommandContext = AnkhId.LogContextGuid;
             ToolWindowHost.KeyboardContext = AnkhId.LogContextGuid;
             logControl.Context = Context;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            IServiceContainer container = Context.GetService<IServiceContainer>();
+
+            if (container != null)
+            {
+                if (null == container.GetService(typeof(LogToolWindowControl)))
+                    container.AddService(typeof(LogToolWindowControl), this);
+            }
+
+            base.OnLoad(e);
         }
 
         public IList<SvnOrigin> Origins

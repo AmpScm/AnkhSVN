@@ -709,18 +709,32 @@
     </GroupRef>
     <GroupRef id="ToolBar_LogViewer">
       <Menu id="ToolBar_LogViewer" name="LogViewer" priority="0" type="ToolWindowToolbar">
-
-        <Group id="Grp_LogViewerToolbar" priority="0x10">
-          <Button id="Cmd_LogStrictNodeHistory" name="StrictNodeHistory" text="Strict node history" textOnly="true" priority="0x100"
-                  toolTip="Stop on copy." />
-          <Button id="Cmd_LogIncludeMergedRevisions" name="IncludeMergedRevisions" text="Include merged revisions" textOnly="true" priority="0x200"
-                  toolTip="Include merged revisions." />
+        <Group id="Grp_SvnLogTarget" priority="0x100">
+          <ComboBox id="Cmd_SvnLogComboBox" type="DropDownCombo" width="220" priority="0x100"
+                fillCommand="Cmd_SvnLogComboBoxFill"
+                caseSensitive="true"
+                stretchHorizontally="true"
+                toolTip="Target"
+                text="Target:"
+                dynamicVisibility="true"
+                iconAndText="true"
+                />
+        </Group>
+        <Group id="Grp_SvnLogShow" priority="0x200">
           <Button id="Cmd_LogShowLogMessage" name="LogShowLogMessage" priority="0x300"
                   text="Show log message"
                   toolTip="Show log message." iconFile="Scc/Comments.png"/>
           <Button id="Cmd_LogShowChangedPaths" name="LogShowChangedPaths" priority="0x301"
-                  text="Show changed paths" iconAndText="true"
+                  text="Show changed paths"
                   toolTip="Show changed paths." iconFile="PendingChanges/ShowChangedPaths.png"/>
+        </Group>
+        <Group id="Grp_SvnLogOptions" priority="0x300">
+          <Button id="Cmd_LogFollowCopies" name="FollowCopies" text="F&amp;ollow Copies" textOnly="true" priority="0x100"
+                  toolTip="Follow copies." />
+          <Button id="Cmd_LogIncludeMergedRevisions" name="IncludeMergedRevisions" text="Include Merged" textOnly="true" priority="0x200"
+                  toolTip="Include merged revisions." />
+        </Group>
+        <Group id="Grp_SvnLogCommands" priority="0x400">
           <Button id="Cmd_LogFetchAll" name="LogFetchAll" priority="0x400"
                   text="Fetch all" iconAndText="true"
                   toolTip="Retrieve all revisions." iconFile="PendingChanges/FetchAll.png"/>

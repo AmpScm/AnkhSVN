@@ -242,7 +242,7 @@ namespace Ankh
         ItemAddToPending,
         ItemRemoveFromPending,
 
-        LogStrictNodeHistory,
+        LogFollowCopies,
         LogIncludeMergedRevisions,
         LogFetchAll,
         LogShowChangedPaths,
@@ -307,5 +307,8 @@ namespace Ankh
         SvnInfoCategorized,
         SvnInfoAlphabetical,
         SvnInfoPropertyPages,
+
+        SvnLogComboBox,
+        SvnLogComboBoxFill
     }
 }

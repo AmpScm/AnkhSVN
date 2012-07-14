@@ -22,8 +22,8 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogStrictNodeHistory, AlwaysAvailable = true)]
-    class LogStrictNodeHistory : ICommandHandler
+    [Command(AnkhCommand.LogFollowCopies, AlwaysAvailable = true)]
+    class LogFollowCopies : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -35,7 +35,7 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
             }
 
-            e.Checked = lc.StrictNodeHistory;
+            e.Checked = !lc.StrictNodeHistory;
         }
 
         public void OnExecute(CommandEventArgs e)
