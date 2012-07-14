@@ -92,6 +92,14 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         protected override void OnLoad(EventArgs e)
         {
+            IServiceContainer container = Context.GetService<IServiceContainer>();
+
+            if (container != null)
+            {
+                if (null == container.GetService(typeof(WorkingCopyExplorerControl)))
+                    container.AddService(typeof(WorkingCopyExplorerControl), this);
+            }
+
             base.OnLoad(e);
 
 			fileList.ColumnWidthChanged += new ColumnWidthChangedEventHandler(fileList_ColumnWidthChanged);
@@ -425,6 +433,18 @@ namespace Ankh.UI.WorkingCopyExplorer
                 return;
 
             this.fileList.SetDirectory(item);
+        }
+
+        public string SelectedDirectory
+        {
+            get
+            {
+                WCDirectoryNode item = this.folderTree.SelectedItem as WCDirectoryNode;
+                if (item == null)
+                    return null;
+
+                return item.SvnItem.FullPath;
+            }
         }
     }
 }

@@ -120,6 +120,14 @@ namespace Ankh.UI.RepositoryExplorer
 
         protected override void OnLoad(EventArgs e)
         {
+            IServiceContainer container = Context.GetService<IServiceContainer>();
+
+            if (container != null)
+            {
+                if (null == container.GetService(typeof(RepositoryExplorerControl)))
+                    container.AddService(typeof(RepositoryExplorerControl), this);
+            }
+
             base.OnLoad(e);
             treeView.Context = Context;
             fileView.Context = Context;

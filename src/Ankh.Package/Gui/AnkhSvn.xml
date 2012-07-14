@@ -557,11 +557,17 @@
           <Button id="Cmd_RemoveRepositoryRoot" name="RemoveRepositoryRoot" priority="0x200"
                 text="&amp;Remove Repository URL"
                 toolTip="Remove a URL from the Repository Explorer." iconFile="menu/RemoveUrl.png"/>
-          <Button id="Cmd_ExplorerUp" name="ExplorerUp" priority="0xF000"
+          <Button id="Cmd_ExplorerUp" name="ExplorerUp" priority="0x7F0"
                   text="&amp;Up" toolTip="Up" iconFile="PendingChanges/FolderUp.png">
             <KeyBinding key1="VK_UP" mod1="alt" editor="Ankh_SccExplorerContextGuid"/>
-            <KeyBinding key1="VK_BACK" editor="Ankh_SccExplorerContextGuid"/>
           </Button>
+          <ComboBox id="Cmd_RepositoryExplorerComboBox" type="DropDownCombo" width="200" priority="0x800"
+                fillCommand="Cmd_RepositoryExplorerComboBoxFill"
+                caseSensitive="true"
+                toolTip="Location"
+                text="Location:"
+                iconAndText="true"
+                />
         </Group>
         <Group id="Grp_RepositoryExplorerTbEdit" priority="0x200">
           <ButtonRef id="guidVSStd97:cmdidCopy" priority="0x100" />
@@ -662,6 +668,14 @@
           <Button id="Cmd_WorkingCopyAdd" name="Svn.WorkingCopyAdd" priority="0x100"
               text="A&amp;dd New Root..."
               toolTip="Add a new root to the Working Copy Explorer." iconFile="Scc/NewFolder.png" allowParams="true" />
+          <ButtonRef id="Cmd_ExplorerUp" priority="0x7F0" />
+          <ComboBox id="Cmd_WCExplorerComboBox" type="DropDownCombo" width="200" priority="0x800"
+                fillCommand="Cmd_WCExplorerComboBoxFill"
+                caseSensitive="true"
+                toolTip="Location"
+                text="Location:"
+                iconAndText="true"
+                />
         </Group>
         <Group id="Grp_WceUpdate" priority="0x2000">
           <Button id="Cmd_UpdateItemLatestRecursive" name="UpdateItemLatest" priority="0x100"
