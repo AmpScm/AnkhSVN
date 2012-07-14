@@ -77,7 +77,7 @@ namespace Ankh
         PendingCommitsGroupActions,
         PendingCommitsActions,
 
-        LogMessageCommands,
+        SvnLogCommands,
 
         FileFileOpen, // File->Open->*
         FileFileAdd, // File->Add->*
@@ -193,5 +193,9 @@ namespace Ankh
         SvnInfoComboTB,
         SvnInfoGridOps1,
         SvnInfoGridOps2,
+
+        SvnLogTarget,
+        SvnLogShow,
+        SvnLogOptions,
     }
 }
