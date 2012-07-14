@@ -26,6 +26,8 @@ namespace Ankh.Commands
                 SvnDirectory dir = item.ParentDirectory;
                 if (dir != null && dir.NeedsWorkingCopyUpgrade)
                     return;
+                else if (item.IsDirectory && item.AsDirectory().NeedsWorkingCopyUpgrade)
+                    return;
             }
             e.Enabled = false;
         }
@@ -39,6 +41,8 @@ namespace Ankh.Commands
                 SvnDirectory dir = i.ParentDirectory;
                 if (dir != null && dir.NeedsWorkingCopyUpgrade && !dirs.Contains(dir.FullPath))
                     dirs.Add(dir.FullPath);
+                else if (i.IsDirectory && i.AsDirectory().NeedsWorkingCopyUpgrade && !dirs.Contains(i.FullPath))
+                    dirs.Add(i.FullPath);
             }
 
             e.GetService<IProgressRunner>().RunModal(CommandStrings.UpgradingWorkingCopy,
