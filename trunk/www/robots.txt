@@ -1,6 +1,0 @@
-User-agent: CEE
-Disallow: 
-
-User-agent: *
-Disallow: /source/
-Disallow: /search/
