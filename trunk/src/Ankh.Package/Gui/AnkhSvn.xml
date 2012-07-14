@@ -710,7 +710,7 @@
     <GroupRef id="ToolBar_LogViewer">
       <Menu id="ToolBar_LogViewer" name="LogViewer" priority="0" type="ToolWindowToolbar">
         <Group id="Grp_SvnLogTarget" priority="0x100">
-          <ComboBox id="Cmd_SvnLogComboBox" type="DropDownCombo" width="220" priority="0x100"
+          <ComboBox id="Cmd_SvnLogComboBox" type="DropDownCombo" width="140" priority="0x100"
                 fillCommand="Cmd_SvnLogComboBoxFill"
                 caseSensitive="true"
                 stretchHorizontally="true"
