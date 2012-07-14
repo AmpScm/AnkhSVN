@@ -339,8 +339,11 @@ namespace Ankh.Scc.StatusCache
                                 if (updateDir != null)
                                     updateDir.SetNeedsUpgrade();
 
-                                if (CommandService != null)
+                                if (!_sendUpgrade && CommandService != null)
+                                {
+                                    _sendUpgrade = true;
                                     CommandService.PostExecCommand(AnkhCommand.NotifyUpgradeRequired, walkPath);
+                                }
                                 break;
                             case SvnErrorCode.SVN_ERR_WC_NOT_WORKING_COPY:
                                 // Status only reports this error if there is no ancestor working copy
@@ -481,6 +484,12 @@ namespace Ankh.Scc.StatusCache
             }
 
             // Note: There is a lock(_lock) around this in our caller
+        }
+
+        bool _sendUpgrade;
+        public void ResetUpgradeWarning()
+        {
+            _sendUpgrade = false;
         }
 
         bool _postedCleanup;
