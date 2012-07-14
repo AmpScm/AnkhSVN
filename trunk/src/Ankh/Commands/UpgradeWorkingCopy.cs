@@ -89,6 +89,9 @@ namespace Ankh.Commands
                         }
                     }
                 });
+
+            if (dirs.Count > 0)
+                StatusCache.ResetUpgradeWarning();
         }
 
         event EventHandler IComponent.Disposed

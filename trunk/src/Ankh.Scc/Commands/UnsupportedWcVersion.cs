@@ -32,7 +32,6 @@ namespace Ankh.Scc.Commands
         }
 
         bool _skipToNew;
-        bool _skipUpgradeRequired;
         public void OnExecute(CommandEventArgs e)
         {
             if (e.Command == AnkhCommand.NotifyWcToNew)
@@ -48,10 +47,6 @@ namespace Ankh.Scc.Commands
             }
             else if (e.Command == AnkhCommand.NotifyUpgradeRequired)
             {
-                if (_skipUpgradeRequired) // Only show this message once!
-                    return;
-
-                _skipUpgradeRequired = true;
                 using (AnkhMessageBox mb = new AnkhMessageBox(e.Context))
                 {
                     mb.Show(string.Format(Resources.UpgradeRequired, e.Argument));

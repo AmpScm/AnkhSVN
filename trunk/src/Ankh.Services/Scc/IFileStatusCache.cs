@@ -92,5 +92,7 @@ namespace Ankh.Scc
         /// <param name="path"></param>
         /// <returns></returns>
         SvnItem GetAlreadyNormalizedItem(string path);
+
+        void ResetUpgradeWarning();
     }
 }
