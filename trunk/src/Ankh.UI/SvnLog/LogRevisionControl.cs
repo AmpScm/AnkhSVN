@@ -286,7 +286,7 @@ namespace Ankh.UI.SvnLog
             ExtendList();
         }
 
-        private void logView_KeyPress(object sender, KeyEventArgs e)
+        private void logView_KeyPress(object sender, KeyPressEventArgs e)
         {
             ExtendList();
         }
