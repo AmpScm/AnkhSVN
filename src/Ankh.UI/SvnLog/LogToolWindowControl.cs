@@ -111,12 +111,27 @@ namespace Ankh.UI.SvnLog
             StartLog(new SvnOrigin[] { target }, start, end);
         }
 
+        SvnRevision _rqStart;
+        SvnRevision _rqEnd;
+
+        public SvnRevision LastStartRevision
+        {
+            get { return _rqStart; }
+        }
+
+        public SvnRevision LastEndRevision
+        {
+            get { return _rqEnd; }
+        }
+
         public void StartLog(ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
         {
             if (targets == null)
                 throw new ArgumentNullException("targets");
 
             _origins = new List<SvnOrigin>(targets);
+            _rqStart = start;
+            _rqEnd = end;
 
             UpdateTitle();
 
