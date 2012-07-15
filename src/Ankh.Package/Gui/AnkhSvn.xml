@@ -558,7 +558,7 @@
                 text="&amp;Remove Repository URL"
                 toolTip="Remove a URL from the Repository Explorer." iconFile="menu/RemoveUrl.png"/>
           <Button id="Cmd_ExplorerUp" name="ExplorerUp" priority="0x7F0"
-                  text="&amp;Up" toolTip="Up" iconFile="PendingChanges/FolderUp.png">
+                  text="&amp;Up" toolTip="Up" iconFile="Scc/MoveUp.png">
             <KeyBinding key1="VK_UP" mod1="alt" editor="Ankh_SccExplorerContextGuid"/>
           </Button>
           <ComboBox id="Cmd_RepositoryExplorerComboBox" type="DropDownCombo" width="200" priority="0x800"
