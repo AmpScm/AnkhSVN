@@ -224,6 +224,10 @@
     <Content Include="Gui\menu\Legacy\AddUrl.png" />
     <Content Include="Gui\menu\Legacy\CopyUrlToClipboard.png" />
     <Content Include="Gui\menu\Export.png" />
+    <Content Include="Gui\PendingChanges\Legacy\FetchAll.png" />
+    <Content Include="Gui\PendingChanges\Legacy\ShowChangedPaths.png" />
+    <Content Include="Gui\PendingChanges\SortDescending.png" />
+    <Content Include="Gui\PendingChanges\SortAscending.png" />
     <Content Include="Gui\Scc\Legacy\Linkto.png" />
     <Content Include="Gui\menu\AddUrl.png" />
     <Content Include="Gui\menu\RemoveUrl.png" />
@@ -264,8 +268,8 @@
     <Content Include="Gui\Scc\Legacy\ShowAll.png" />
     <Content Include="Gui\PendingChanges\ShowChangedPaths.png" />
     <Content Include="Gui\Scc\Legacy\SolutionExplorer.png" />
-    <Content Include="Gui\PendingChanges\SortAscending.png" />
-    <Content Include="Gui\PendingChanges\SortDescending.png" />
+    <Content Include="Gui\PendingChanges\Legacy\SortAscending.png" />
+    <Content Include="Gui\PendingChanges\Legacy\SortDescending.png" />
     <Content Include="Gui\Scc\Legacy\Switch.png" />
     <Content Include="Gui\Scc\Legacy\FindInFiles.png" />
     <Content Include="Gui\Scc\AddItem.png" />
