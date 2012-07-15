@@ -358,10 +358,10 @@ namespace Ankh.Scc
             }
             else if (!maybeInfo.Exists)
             {
-                // Handles Delete followed by add?
+                // Handles Delete followed by add. Triggered from Cut&Paste
                 SvnItem svnItem = StatusCache[maybeInfo.FullName];
 
-                if (svnItem.IsVersioned && svnItem.IsDeleteScheduled)
+                if (svnItem.IsVersioned)
                 {
                     _fileOrigins[newItem] = maybeFrom;
                 }
