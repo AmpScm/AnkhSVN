@@ -224,6 +224,7 @@
     <Content Include="Gui\menu\Legacy\AddUrl.png" />
     <Content Include="Gui\menu\Legacy\CopyUrlToClipboard.png" />
     <Content Include="Gui\menu\Export.png" />
+    <Content Include="Gui\PendingChanges\Legacy\EditConflict.png" />
     <Content Include="Gui\PendingChanges\Legacy\FetchAll.png" />
     <Content Include="Gui\PendingChanges\Legacy\ShowChangedPaths.png" />
     <Content Include="Gui\PendingChanges\SortDescending.png" />
@@ -264,7 +265,6 @@
     <Content Include="Gui\PendingChanges\MoveTo.png" />
     <Content Include="Gui\Scc\Legacy\Open.png" />
     <Content Include="Gui\PendingChanges\Legacy\RepositoryExplorer.png" />
-    <Content Include="Gui\PendingChanges\RevisionGraph.png" />
     <Content Include="Gui\Scc\Legacy\ShowAll.png" />
     <Content Include="Gui\PendingChanges\ShowChangedPaths.png" />
     <Content Include="Gui\Scc\Legacy\SolutionExplorer.png" />
