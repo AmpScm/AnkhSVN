@@ -81,7 +81,12 @@ namespace Ankh.Scc
         /// </returns>
         public int AddProjectFromSourceControl(string pszProjectStoreUrl)
         {
-            return VSConstants.E_NOTIMPL;
+            if (string.IsNullOrEmpty(pszProjectStoreUrl))
+                return VSConstants.E_POINTER;
+
+            CommandResult cr = CommandService.ExecCommand(AnkhCommand.FileFileAddFromSubversion, false, pszProjectStoreUrl);
+
+            return cr.Success ? VSConstants.S_OK : VSConstants.S_FALSE;
         }
 
         /// <summary>
