@@ -323,6 +323,9 @@ namespace Ankh.WpfPackage.Services
 
             if (label.ForeColor != label.Parent.ForeColor)
                 label.ForeColor = label.Parent.ForeColor;
+
+            if (label.BorderStyle == BorderStyle.Fixed3D)
+                label.BorderStyle = BorderStyle.FixedSingle;
         }
 
         void ThemeOne(TextBox textBox)
@@ -335,6 +338,9 @@ namespace Ankh.WpfPackage.Services
 
             if (textBox.ForeColor != textBox.Parent.ForeColor)
                 textBox.ForeColor = textBox.Parent.ForeColor;
+
+            if (textBox.BorderStyle == BorderStyle.Fixed3D)
+                textBox.BorderStyle = BorderStyle.FixedSingle;
         }
 
         void ThemeOne(ListView listView)
@@ -347,6 +353,9 @@ namespace Ankh.WpfPackage.Services
 
             if (listView.ForeColor != listView.Parent.ForeColor)
                 listView.ForeColor = listView.Parent.ForeColor;
+
+            if (listView.BorderStyle == BorderStyle.Fixed3D)
+                listView.BorderStyle = BorderStyle.FixedSingle;
 
             IntPtr header = NativeMethods.SendMessage(listView.Handle, NativeMethods.LVM_GETHEADER, IntPtr.Zero, IntPtr.Zero);
 
@@ -370,6 +379,9 @@ namespace Ankh.WpfPackage.Services
 
             if (treeView.ForeColor != treeView.Parent.ForeColor)
                 treeView.ForeColor = treeView.Parent.ForeColor;
+
+            if (treeView.BorderStyle == BorderStyle.Fixed3D)
+                treeView.BorderStyle = BorderStyle.FixedSingle;
         }
 
         void ThemeOne(UserControl userControl)
@@ -389,6 +401,31 @@ namespace Ankh.WpfPackage.Services
                 if (userControl.ForeColor != color)
                     userControl.ForeColor = color;
             }
+
+            if (userControl.BorderStyle == BorderStyle.Fixed3D)
+                userControl.BorderStyle = BorderStyle.FixedSingle;
+        }
+
+        void ThemeOne(Panel panel)
+        {
+            if (panel.Parent != null && panel.Font != panel.Parent.Font)
+                panel.Font = panel.Parent.Font;
+
+            Color color;
+            if (ColorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
+            {
+                if (panel.BackColor != color)
+                    panel.BackColor = color;
+            }
+
+            if (ColorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_TEXT, out color))
+            {
+                if (panel.ForeColor != color)
+                    panel.ForeColor = color;
+            }
+
+            if (panel.BorderStyle == BorderStyle.Fixed3D)
+                panel.BorderStyle = BorderStyle.FixedSingle;
         }
 
         void ThemeOne(ToolStrip toolBar)
@@ -418,6 +455,7 @@ namespace Ankh.WpfPackage.Services
                 || MaybeTheme<TextBox>(ThemeOne, control)
                 || MaybeTheme<ListView>(ThemeOne, control)
                 || MaybeTheme<TreeView>(ThemeOne, control)
+                || MaybeTheme<Panel>(ThemeOne, control)
                 || MaybeTheme<UserControl>(ThemeOne, control);
         }
     }
