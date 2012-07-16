@@ -82,6 +82,11 @@ namespace Ankh.Services
             return ExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), verifyEnabled);
         }
 
+        public CommandResult ExecCommand(AnkhCommand command, bool verifyEnabled, object argument)
+        {
+            return ExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), verifyEnabled, argument);
+        }
+
         public CommandResult ExecCommand(System.ComponentModel.Design.CommandID command)
         {
             return ExecCommand(command, true);

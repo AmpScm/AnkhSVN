@@ -119,6 +119,16 @@ namespace Ankh.Commands
         CommandResult ExecCommand(CommandID command, bool verifyEnabled);
 
         /// <summary>
+        /// Executes the specified command synchronously
+        /// </summary>
+        CommandResult ExecCommand(System.ComponentModel.Design.CommandID command, bool verifyEnabled, object argument);
+
+        /// <summary>
+        /// Executes the specified command synchronously
+        /// </summary>
+        CommandResult ExecCommand(AnkhCommand command, bool verifyEnabled, object argument);
+
+        /// <summary>
         /// Directly calls the ankh command handler.
         /// </summary>
         /// <param name="command">The command.</param>
