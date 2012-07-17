@@ -769,6 +769,16 @@ namespace Ankh.Settings
 
         public void OpenProjectFile(string projectFile)
         {
+            OpenOrAddProjectFile(projectFile, false);
+        }
+
+        public void AddProjectFile(string projectFile)
+        {
+            OpenOrAddProjectFile(projectFile, true);
+        }
+
+        public void OpenOrAddProjectFile(string projectFile, bool add)
+        {
             if (string.IsNullOrEmpty(projectFile))
                 throw new ArgumentNullException("projectFile");
 
@@ -786,7 +796,7 @@ namespace Ankh.Settings
             IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
 
             int hr;
-            if (isSolution)
+            if (isSolution && !add)
                 hr = solution.OpenSolutionFile(0, projectFile);
             else
             {

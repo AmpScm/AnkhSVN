@@ -113,5 +113,7 @@ namespace Ankh.VS
         /// </summary>
         /// <param name="projectFile">The project file.</param>
         void OpenProjectFile(string projectFile);
+
+        void AddProjectFile(string projectFile);
     }
 }
