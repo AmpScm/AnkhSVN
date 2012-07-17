@@ -439,6 +439,52 @@ namespace Ankh.WpfPackage.Services
                 toolBar.Renderer = renderer;
         }
 
+        void ThemeOne(PropertyGrid grid)
+        {
+            IAnkhVSColor colorSvc = GetService<IAnkhVSColor>();
+
+            const int VSCOLOR_BRANDEDUI_TITLE = -187;
+            const int VSCOLOR_BRANDEDUI_BORDER = -188;
+            const int VSCOLOR_BRANDEDUI_TEXT = -189;
+            const int VSCOLOR_BRANDEDUI_BACKGROUND = -190;
+            const int VSCOLOR_BRANDEDUI_FILL = -191;
+            const int VSCOLOR_GRAYTEXT = -201;
+
+            Color clrTitle, clrBorder, clrText, clrBackground, clrFill, clrGrayText;
+
+            if (!colorSvc.TryGetColor((__VSSYSCOLOREX)VSCOLOR_BRANDEDUI_TITLE, out clrTitle))
+                clrTitle = SystemColors.WindowText;
+            if (!colorSvc.TryGetColor((__VSSYSCOLOREX)VSCOLOR_BRANDEDUI_BORDER, out clrBorder))
+                clrBorder = SystemColors.WindowFrame;
+            if (!colorSvc.TryGetColor((__VSSYSCOLOREX)VSCOLOR_BRANDEDUI_TEXT, out clrText))
+                clrText = SystemColors.WindowText;
+            if (!colorSvc.TryGetColor((__VSSYSCOLOREX)VSCOLOR_BRANDEDUI_BACKGROUND, out clrBackground))
+                clrBackground = SystemColors.WindowFrame;
+            if (!colorSvc.TryGetColor((__VSSYSCOLOREX)VSCOLOR_BRANDEDUI_FILL, out clrFill))
+                clrFill = SystemColors.WindowText;
+            if (!colorSvc.TryGetColor((__VSSYSCOLOREX)VSCOLOR_GRAYTEXT, out clrGrayText))
+                clrGrayText = SystemColors.WindowText;
+
+            grid.BackColor = clrFill;
+
+            grid.HelpBackColor = clrFill;
+            grid.HelpBorderColor = clrFill;
+            grid.ViewBackColor = clrFill;
+            grid.ViewBorderColor = clrFill;
+
+            grid.ViewForeColor = clrText;
+            grid.HelpForeColor = clrText;
+            grid.DisabledItemForeColor = clrGrayText;
+
+            grid.CategorySplitterColor = clrBackground;
+            grid.LineColor = clrBackground;
+            grid.CategoryForeColor = clrTitle;
+
+            // The OS glyphs don't work in the dark theme. VS uses the same trick. (Unavailable in 4.0)
+            if (VSVersion.VS11OrLater)
+                typeof(PropertyGrid).GetProperty("CanShowVisualStyleGlyphs").SetValue(grid, false);
+        }
+
         static class NativeMethods
         {
             public const Int32 LVM_GETHEADER = 0x1000 + 31; // LVM_FIRST + 31
@@ -456,7 +502,8 @@ namespace Ankh.WpfPackage.Services
                 || MaybeTheme<ListView>(ThemeOne, control)
                 || MaybeTheme<TreeView>(ThemeOne, control)
                 || MaybeTheme<Panel>(ThemeOne, control)
-                || MaybeTheme<UserControl>(ThemeOne, control);
+                || MaybeTheme<UserControl>(ThemeOne, control)
+                || MaybeTheme<PropertyGrid>(ThemeOne, control);
         }
     }
 }
