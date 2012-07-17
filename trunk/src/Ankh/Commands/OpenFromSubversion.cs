@@ -238,6 +238,7 @@ namespace Ankh.Commands
                                 ma.MetaDataOnly = true;
                                 cl.Copy(tmpDir, localDir, ma);
                                 SvnItem.DeleteDirectory(tmpDir, true);
+                                cache.MarkDirtyRecursive(localDir);
                             }
                             break;
                         case ProjectAddMode.Unversioned:
