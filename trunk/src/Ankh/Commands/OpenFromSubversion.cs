@@ -157,6 +157,11 @@ namespace Ankh.Commands
             string projectFile = SvnTools.GetNormalizedFullPath(Path.Combine(localDir, SvnTools.UriPartToPath(file.ToString())));
 
             AddProject(e, projectFile);
+
+            using (ProjectAddInfoDialog pai = new ProjectAddInfoDialog())
+            {
+                pai.ShowDialog(e.Context);
+            }
         }
 
         private static void OpenSolution(CommandEventArgs e, CheckoutProject dlg)
