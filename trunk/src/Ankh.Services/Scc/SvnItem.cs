@@ -1370,6 +1370,11 @@ namespace Ankh
 
         public static string SubPath(string path, string root)
         {
+            return SubPath(path, root, false);
+        }
+
+        public static string SubPath(string path, string root, bool fullSelf)
+        {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
             else if (string.IsNullOrEmpty(root))
@@ -1378,7 +1383,7 @@ namespace Ankh
             if (path.Length < root.Length)
                 return "";
             else if (path.Length == root.Length)
-                return ".";
+                return (fullSelf || (path != root)) ? path : ".";
             else if (path[root.Length] == '\\')
                 return path.Substring(root.Length + 1);
             else

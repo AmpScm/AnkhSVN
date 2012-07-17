@@ -250,7 +250,7 @@ namespace Ankh.UI
                         {
                             string sr = SplitRoot;
                             if (!string.IsNullOrEmpty(sr) && SvnItem.IsBelowRoot(path, sr))
-                                path = SvnItem.SubPath(path, sr).Replace(Path.DirectorySeparatorChar, '/');
+                                path = SvnItem.SubPath(path, sr, true).Replace(Path.DirectorySeparatorChar, '/');
 
                             item.SubItems.Add(path);
                         }
