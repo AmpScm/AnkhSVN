@@ -23,6 +23,7 @@ using Ankh.VS;
 using SharpSvn;
 using System.IO;
 using Ankh.Scc;
+using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
@@ -160,7 +161,107 @@ namespace Ankh.Commands
 
             using (ProjectAddInfoDialog pai = new ProjectAddInfoDialog())
             {
-                pai.ShowDialog(e.Context);
+                IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
+                IFileStatusCache cache = e.GetService<IFileStatusCache>();
+                SvnItem rootItem;
+
+                pai.EnableSlnConnection = false;
+
+                if (ss == null || cache == null 
+                    || string.IsNullOrEmpty(ss.ProjectRoot)
+                    || !SvnItem.IsBelowRoot(localDir, ss.ProjectRoot)
+                    || null == (rootItem = cache[localDir]))
+                {
+                    pai.EnableExternal = false;
+                    pai.EnableCopy = false;
+                }
+                else
+                {
+                    SvnItem dir = rootItem.Parent;
+
+                    if (ss.ProjectRootSvnItem != null
+                        && ss.ProjectRootSvnItem.IsVersioned)
+                    {
+                        HybridCollection<string> dirs = new HybridCollection<string>();
+                        SvnItem exDir = dir;
+
+                        while (exDir != null && exDir.IsBelowPath(ss.ProjectRoot))
+                        {
+                            if (exDir.IsVersioned && exDir.WorkingCopy == ss.ProjectRootSvnItem.WorkingCopy)
+                                dirs.Add(exDir.FullPath);
+
+                            exDir = exDir.Parent;
+                        }
+                        pai.SetExternalDirs(dirs);
+                        pai.EnableExternal = true;
+                    }
+                    else
+                        pai.EnableExternal = false;
+
+                    if (rootItem.WorkingCopy != null && dir.WorkingCopy != null)
+                    {
+                        pai.EnableCopy = (rootItem.WorkingCopy.RepositoryRoot == dir.WorkingCopy.RepositoryRoot)
+                                         && (rootItem.WorkingCopy.RepositoryId == dir.WorkingCopy.RepositoryId);
+                    }
+                    else
+                        pai.EnableCopy = false;
+                }
+
+                if (pai.ShowDialog(e.Context) == DialogResult.OK)
+                {
+                    switch (pai.SelectedMode)
+                    {
+                        case ProjectAddMode.External:
+                            using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
+                            {
+                                string externals;
+                                if (!cl.TryGetProperty(pai.ExternalLocation, SvnPropertyNames.SvnExternals, out externals))
+                                    externals = "";
+
+                                SvnExternalItem sei;
+                                if (pai.ExternalLocked)
+                                    sei = new SvnExternalItem(SvnItem.SubPath(localDir, pai.ExternalLocation), checkoutLocation.Uri, revision, revision);
+                                else
+                                    sei = new SvnExternalItem(SvnItem.SubPath(localDir, pai.ExternalLocation), checkoutLocation.Uri);
+
+                                externals = sei.ToString(true) + Environment.NewLine + externals;
+                                cl.SetProperty(pai.ExternalLocation, SvnPropertyNames.SvnExternals, externals);
+                            }
+                            break;
+                        case ProjectAddMode.Copy:
+                            using (SvnWorkingCopyClient cl = e.GetService<ISvnClientPool>().GetWcClient())
+                            {
+                                try
+                                {
+                                    string tmpDir = localDir + "\\-Src-copyTmp";
+                                    Directory.CreateDirectory(tmpDir);
+                                    Directory.Move(Path.Combine(localDir, SvnClient.AdministrativeDirectoryName), Path.Combine(tmpDir, SvnClient.AdministrativeDirectoryName));
+                                    SvnWorkingCopyCopyArgs ma = new SvnWorkingCopyCopyArgs();
+                                    ma.MetaDataOnly = true;
+                                    cl.Copy(tmpDir, localDir, ma);
+                                    SvnItem.DeleteDirectory(tmpDir, true);
+                                }
+                                catch (Exception ex)
+                                {
+                                    IAnkhErrorHandler eh = e.GetService<IAnkhErrorHandler>();
+
+                                    if (eh != null && eh.IsEnabled(ex))
+                                    {
+                                        eh.OnError(ex, e);
+                                        return;// true; // If we return false VS shows another error box!
+                                    }
+
+                                    throw;
+                                }
+                            }
+                            break;
+                        case ProjectAddMode.Unversioned:
+                            cache.MarkDirtyRecursive(localDir);
+                            SvnItem.DeleteDirectory(Path.Combine(localDir, SvnClient.AdministrativeDirectoryName), true);
+                            e.GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(projectFile); // And everything else in the project
+                            break;
+                    }
+                }
             }
         }
 

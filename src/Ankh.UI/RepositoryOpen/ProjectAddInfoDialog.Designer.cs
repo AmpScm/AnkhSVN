@@ -34,26 +34,30 @@
             this.label1 = new System.Windows.Forms.Label();
             this.externalPropLocations = new System.Windows.Forms.ComboBox();
             this.externalBlock = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.externalDefInfo = new System.Windows.Forms.Label();
-            this.copyRadio = new System.Windows.Forms.RadioButton();
             this.lockExternal = new System.Windows.Forms.CheckBox();
+            this.externalDefInfo = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.copyRadio = new System.Windows.Forms.RadioButton();
             this.copyBlock = new System.Windows.Forms.Panel();
+            this.copyDefInfo = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.slnRadio = new System.Windows.Forms.RadioButton();
             this.slnBlock = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.unconnectedBlock = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.unconnectedRadio = new System.Windows.Forms.RadioButton();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.copyDefInfo = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.notVersionedRadio = new System.Windows.Forms.RadioButton();
             this.externalBlock.SuspendLayout();
             this.copyBlock.SuspendLayout();
             this.slnBlock.SuspendLayout();
             this.unconnectedBlock.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // projectLabel
@@ -77,6 +81,7 @@
             // externalPropLocations
             // 
             resources.ApplyResources(this.externalPropLocations, "externalPropLocations");
+            this.externalPropLocations.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.externalPropLocations.FormattingEnabled = true;
             this.externalPropLocations.Name = "externalPropLocations";
             // 
@@ -90,22 +95,6 @@
             this.externalBlock.Controls.Add(this.externalPropLocations);
             this.externalBlock.Name = "externalBlock";
             // 
-            // label2
-            // 
-            resources.ApplyResources(this.label2, "label2");
-            this.label2.Name = "label2";
-            // 
-            // externalDefInfo
-            // 
-            resources.ApplyResources(this.externalDefInfo, "externalDefInfo");
-            this.externalDefInfo.Name = "externalDefInfo";
-            // 
-            // copyRadio
-            // 
-            resources.ApplyResources(this.copyRadio, "copyRadio");
-            this.copyRadio.Name = "copyRadio";
-            this.copyRadio.UseVisualStyleBackColor = true;
-            // 
             // lockExternal
             // 
             resources.ApplyResources(this.lockExternal, "lockExternal");
@@ -113,12 +102,33 @@
             this.lockExternal.UseVisualStyleBackColor = true;
             this.lockExternal.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
+            // externalDefInfo
+            // 
+            resources.ApplyResources(this.externalDefInfo, "externalDefInfo");
+            this.externalDefInfo.Name = "externalDefInfo";
+            // 
+            // label2
+            // 
+            resources.ApplyResources(this.label2, "label2");
+            this.label2.Name = "label2";
+            // 
+            // copyRadio
+            // 
+            resources.ApplyResources(this.copyRadio, "copyRadio");
+            this.copyRadio.Name = "copyRadio";
+            this.copyRadio.UseVisualStyleBackColor = true;
+            // 
             // copyBlock
             // 
             resources.ApplyResources(this.copyBlock, "copyBlock");
             this.copyBlock.Controls.Add(this.copyDefInfo);
             this.copyBlock.Controls.Add(this.label6);
             this.copyBlock.Name = "copyBlock";
+            // 
+            // copyDefInfo
+            // 
+            resources.ApplyResources(this.copyDefInfo, "copyDefInfo");
+            this.copyDefInfo.Name = "copyDefInfo";
             // 
             // label6
             // 
@@ -138,15 +148,15 @@
             this.slnBlock.Controls.Add(this.label4);
             this.slnBlock.Name = "slnBlock";
             // 
-            // label4
-            // 
-            resources.ApplyResources(this.label4, "label4");
-            this.label4.Name = "label4";
-            // 
             // label5
             // 
             resources.ApplyResources(this.label5, "label5");
             this.label5.Name = "label5";
+            // 
+            // label4
+            // 
+            resources.ApplyResources(this.label4, "label4");
+            this.label4.Name = "label4";
             // 
             // unconnectedBlock
             // 
@@ -168,6 +178,7 @@
             // okButton
             // 
             resources.ApplyResources(this.okButton, "okButton");
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Name = "okButton";
             this.okButton.UseVisualStyleBackColor = true;
             // 
@@ -178,14 +189,30 @@
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
-            // copyDefInfo
+            // panel1
             // 
-            resources.ApplyResources(this.copyDefInfo, "copyDefInfo");
-            this.copyDefInfo.Name = "copyDefInfo";
+            resources.ApplyResources(this.panel1, "panel1");
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Name = "panel1";
             // 
-            // RepositoryAddInfo
+            // label3
             // 
+            resources.ApplyResources(this.label3, "label3");
+            this.label3.Name = "label3";
+            // 
+            // notVersionedRadio
+            // 
+            resources.ApplyResources(this.notVersionedRadio, "notVersionedRadio");
+            this.notVersionedRadio.Name = "notVersionedRadio";
+            this.notVersionedRadio.UseVisualStyleBackColor = true;
+            // 
+            // ProjectAddInfoDialog
+            // 
+            this.AcceptButton = this.okButton;
             resources.ApplyResources(this, "$this");
+            this.CancelButton = this.cancelButton;
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.notVersionedRadio);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.unconnectedBlock);
@@ -197,7 +224,7 @@
             this.Controls.Add(this.externalBlock);
             this.Controls.Add(this.externalRadio);
             this.Controls.Add(this.projectLabel);
-            this.Name = "RepositoryAddInfo";
+            this.Name = "ProjectAddInfoDialog";
             this.externalBlock.ResumeLayout(false);
             this.externalBlock.PerformLayout();
             this.copyBlock.ResumeLayout(false);
@@ -206,6 +233,8 @@
             this.slnBlock.PerformLayout();
             this.unconnectedBlock.ResumeLayout(false);
             this.unconnectedBlock.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -234,5 +263,8 @@
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label copyDefInfo;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.RadioButton notVersionedRadio;
     }
 }

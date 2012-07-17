@@ -148,7 +148,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;projectLabel.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>12</value>
   </data>
   <data name="externalRadio.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -175,7 +175,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;externalRadio.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>11</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -211,7 +211,7 @@
     <value>6, 16</value>
   </data>
   <data name="externalPropLocations.Size" type="System.Drawing.Size, System.Drawing">
-    <value>457, 21</value>
+    <value>470, 21</value>
   </data>
   <data name="externalPropLocations.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -230,6 +230,63 @@
   </data>
   <data name="externalBlock.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;lockExternal.Name" xml:space="preserve">
+    <value>lockExternal</value>
+  </data>
+  <data name="&gt;&gt;lockExternal.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lockExternal.Parent" xml:space="preserve">
+    <value>externalBlock</value>
+  </data>
+  <data name="&gt;&gt;lockExternal.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;externalDefInfo.Name" xml:space="preserve">
+    <value>externalDefInfo</value>
+  </data>
+  <data name="&gt;&gt;externalDefInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;externalDefInfo.Parent" xml:space="preserve">
+    <value>externalBlock</value>
+  </data>
+  <data name="&gt;&gt;externalDefInfo.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;label2.Name" xml:space="preserve">
+    <value>label2</value>
+  </data>
+  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+    <value>externalBlock</value>
+  </data>
+  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="externalBlock.Location" type="System.Drawing.Point, System.Drawing">
+    <value>46, 57</value>
+  </data>
+  <data name="externalBlock.Size" type="System.Drawing.Size, System.Drawing">
+    <value>479, 101</value>
+  </data>
+  <data name="externalBlock.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;externalBlock.Name" xml:space="preserve">
+    <value>externalBlock</value>
+  </data>
+  <data name="&gt;&gt;externalBlock.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;externalBlock.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;externalBlock.ZOrder" xml:space="preserve">
+    <value>10</value>
   </data>
   <data name="lockExternal.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -273,6 +330,9 @@
   <data name="externalDefInfo.Text" xml:space="preserve">
     <value>(Only available when checked out in the Project Tree)</value>
   </data>
+  <data name="externalDefInfo.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="&gt;&gt;externalDefInfo.Name" xml:space="preserve">
     <value>externalDefInfo</value>
   </data>
@@ -312,27 +372,6 @@
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="externalBlock.Location" type="System.Drawing.Point, System.Drawing">
-    <value>46, 57</value>
-  </data>
-  <data name="externalBlock.Size" type="System.Drawing.Size, System.Drawing">
-    <value>466, 101</value>
-  </data>
-  <data name="externalBlock.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;externalBlock.Name" xml:space="preserve">
-    <value>externalBlock</value>
-  </data>
-  <data name="&gt;&gt;externalBlock.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;externalBlock.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;externalBlock.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
   <data name="copyRadio.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -358,10 +397,55 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;copyRadio.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>9</value>
   </data>
   <data name="copyBlock.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;copyDefInfo.Name" xml:space="preserve">
+    <value>copyDefInfo</value>
+  </data>
+  <data name="&gt;&gt;copyDefInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;copyDefInfo.Parent" xml:space="preserve">
+    <value>copyBlock</value>
+  </data>
+  <data name="&gt;&gt;copyDefInfo.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;label6.Name" xml:space="preserve">
+    <value>label6</value>
+  </data>
+  <data name="&gt;&gt;label6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label6.Parent" xml:space="preserve">
+    <value>copyBlock</value>
+  </data>
+  <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="copyBlock.Location" type="System.Drawing.Point, System.Drawing">
+    <value>43, 187</value>
+  </data>
+  <data name="copyBlock.Size" type="System.Drawing.Size, System.Drawing">
+    <value>482, 42</value>
+  </data>
+  <data name="copyBlock.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;copyBlock.Name" xml:space="preserve">
+    <value>copyBlock</value>
+  </data>
+  <data name="&gt;&gt;copyBlock.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;copyBlock.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;copyBlock.ZOrder" xml:space="preserve">
+    <value>8</value>
   </data>
   <data name="copyDefInfo.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -377,6 +461,9 @@
   </data>
   <data name="copyDefInfo.Text" xml:space="preserve">
     <value>(Only available when checked out in the Project Tree)</value>
+  </data>
+  <data name="copyDefInfo.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="&gt;&gt;copyDefInfo.Name" xml:space="preserve">
     <value>copyDefInfo</value>
@@ -417,27 +504,6 @@
   <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="copyBlock.Location" type="System.Drawing.Point, System.Drawing">
-    <value>43, 187</value>
-  </data>
-  <data name="copyBlock.Size" type="System.Drawing.Size, System.Drawing">
-    <value>469, 42</value>
-  </data>
-  <data name="copyBlock.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;copyBlock.Name" xml:space="preserve">
-    <value>copyBlock</value>
-  </data>
-  <data name="&gt;&gt;copyBlock.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;copyBlock.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;copyBlock.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
   <data name="slnRadio.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -463,7 +529,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;slnRadio.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>7</value>
   </data>
   <data name="slnBlock.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
@@ -526,7 +592,7 @@
     <value>43, 258</value>
   </data>
   <data name="slnBlock.Size" type="System.Drawing.Size, System.Drawing">
-    <value>469, 45</value>
+    <value>482, 45</value>
   </data>
   <data name="slnBlock.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -541,10 +607,43 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;slnBlock.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>6</value>
   </data>
   <data name="unconnectedBlock.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;label8.Name" xml:space="preserve">
+    <value>label8</value>
+  </data>
+  <data name="&gt;&gt;label8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label8.Parent" xml:space="preserve">
+    <value>unconnectedBlock</value>
+  </data>
+  <data name="&gt;&gt;label8.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="unconnectedBlock.Location" type="System.Drawing.Point, System.Drawing">
+    <value>43, 332</value>
+  </data>
+  <data name="unconnectedBlock.Size" type="System.Drawing.Size, System.Drawing">
+    <value>482, 23</value>
+  </data>
+  <data name="unconnectedBlock.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;unconnectedBlock.Name" xml:space="preserve">
+    <value>unconnectedBlock</value>
+  </data>
+  <data name="&gt;&gt;unconnectedBlock.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;unconnectedBlock.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;unconnectedBlock.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
   <data name="label8.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -573,27 +672,6 @@
   <data name="&gt;&gt;label8.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="unconnectedBlock.Location" type="System.Drawing.Point, System.Drawing">
-    <value>43, 332</value>
-  </data>
-  <data name="unconnectedBlock.Size" type="System.Drawing.Size, System.Drawing">
-    <value>469, 23</value>
-  </data>
-  <data name="unconnectedBlock.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;unconnectedBlock.Name" xml:space="preserve">
-    <value>unconnectedBlock</value>
-  </data>
-  <data name="&gt;&gt;unconnectedBlock.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;unconnectedBlock.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;unconnectedBlock.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="unconnectedRadio.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -619,7 +697,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;unconnectedRadio.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="okButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -628,13 +706,13 @@
     <value>NoControl</value>
   </data>
   <data name="okButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>356, 368</value>
+    <value>369, 421</value>
   </data>
   <data name="okButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
   </data>
   <data name="okButton.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
+    <value>11</value>
   </data>
   <data name="okButton.Text" xml:space="preserve">
     <value>OK</value>
@@ -649,7 +727,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;okButton.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="cancelButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -658,13 +736,13 @@
     <value>NoControl</value>
   </data>
   <data name="cancelButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>437, 368</value>
+    <value>450, 421</value>
   </data>
   <data name="cancelButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
   </data>
   <data name="cancelButton.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
+    <value>12</value>
   </data>
   <data name="cancelButton.Text" xml:space="preserve">
     <value>Cancel</value>
@@ -679,6 +757,102 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cancelButton.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="panel1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;label3.Name" xml:space="preserve">
+    <value>label3</value>
+  </data>
+  <data name="&gt;&gt;label3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>43, 381</value>
+  </data>
+  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>482, 23</value>
+  </data>
+  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="label3.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 0</value>
+  </data>
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>345, 13</value>
+  </data>
+  <data name="label3.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="label3.Text" xml:space="preserve">
+    <value>Don't use a Subversion working Copy. Allows committing as new project</value>
+  </data>
+  <data name="&gt;&gt;label3.Name" xml:space="preserve">
+    <value>label3</value>
+  </data>
+  <data name="&gt;&gt;label3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="notVersionedRadio.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="notVersionedRadio.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="notVersionedRadio.Location" type="System.Drawing.Point, System.Drawing">
+    <value>29, 358</value>
+  </data>
+  <data name="notVersionedRadio.Size" type="System.Drawing.Size, System.Drawing">
+    <value>85, 17</value>
+  </data>
+  <data name="notVersionedRadio.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="notVersionedRadio.Text" xml:space="preserve">
+    <value>&amp;Unversioned</value>
+  </data>
+  <data name="&gt;&gt;notVersionedRadio.Name" xml:space="preserve">
+    <value>notVersionedRadio</value>
+  </data>
+  <data name="&gt;&gt;notVersionedRadio.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;notVersionedRadio.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;notVersionedRadio.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -688,13 +862,13 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>524, 403</value>
+    <value>537, 456</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Project Registration</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>RepositoryAddInfo</value>
+    <value>ProjectAddInfoDialog</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>Ankh.UI.VSDialogForm, Ankh.Services, Version=2.3.4581.30911, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
