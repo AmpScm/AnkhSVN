@@ -13,6 +13,7 @@ using Ankh.UI;
 using Ankh.VS;
 using Ankh.Commands;
 using Microsoft.VisualStudio;
+using System.Diagnostics;
 
 namespace Ankh.WpfPackage.Services
 {
@@ -468,21 +469,34 @@ namespace Ankh.WpfPackage.Services
             grid.BackColor = clrFill;
 
             grid.HelpBackColor = clrFill;
-            grid.HelpBorderColor = clrFill;
             grid.ViewBackColor = clrFill;
-            grid.ViewBorderColor = clrFill;
+            
 
             grid.ViewForeColor = clrText;
             grid.HelpForeColor = clrText;
-            grid.DisabledItemForeColor = clrGrayText;
-
-            grid.CategorySplitterColor = clrBackground;
             grid.LineColor = clrBackground;
             grid.CategoryForeColor = clrTitle;
 
-            // The OS glyphs don't work in the dark theme. VS uses the same trick. (Unavailable in 4.0)
             if (VSVersion.VS11OrLater)
-                typeof(PropertyGrid).GetProperty("CanShowVisualStyleGlyphs").SetValue(grid, false);
+            {
+                // New in 4.5 properties. Properly added for VS2012.
+                SetProperty(grid, "HelpBorderColor", clrFill);
+                SetProperty(grid, "ViewBorderColor", clrFill);
+                SetProperty(grid, "DisabledItemForeColor", clrGrayText);
+                SetProperty(grid, "CategorySplitterColor", clrBackground);
+
+                // The OS glyphs don't work in the dark theme. VS uses the same trick. (Unavailable in 4.0)
+                SetProperty(grid, "CanShowVisualStyleGlyphs", false);
+            }
+        }
+
+        private void SetProperty(PropertyGrid grid, string propertyName, object value)
+        {
+            PropertyInfo pi = typeof(PropertyGrid).GetProperty(propertyName);
+
+            Debug.Assert(pi != null, "Grid Property exists");
+            if (pi != null)
+                pi.SetValue(grid, value, null);
         }
 
         static class NativeMethods
