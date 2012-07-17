@@ -68,7 +68,7 @@ namespace Ankh.Commands
                 using (RepositoryOpenDialog dlg = new RepositoryOpenDialog())
                 {
                     if (addingProject)
-                        dlg.Text =CommandStrings.AddProjectFromSubversion;
+                        dlg.Text = CommandStrings.AddProjectFromSubversion;
 
                     dlg.Filter = settings.OpenProjectFilterName + "|" + settings.AllProjectExtensionsFilter + "|All Files (*.*)|*";
 
@@ -167,7 +167,7 @@ namespace Ankh.Commands
 
                 pai.EnableSlnConnection = false;
 
-                if (ss == null || cache == null 
+                if (ss == null || cache == null
                     || string.IsNullOrEmpty(ss.ProjectRoot)
                     || !SvnItem.IsBelowRoot(localDir, ss.ProjectRoot)
                     || null == (rootItem = cache[localDir]))
@@ -231,28 +231,13 @@ namespace Ankh.Commands
                         case ProjectAddMode.Copy:
                             using (SvnWorkingCopyClient cl = e.GetService<ISvnClientPool>().GetWcClient())
                             {
-                                try
-                                {
-                                    string tmpDir = localDir + "\\-Src-copyTmp";
-                                    Directory.CreateDirectory(tmpDir);
-                                    Directory.Move(Path.Combine(localDir, SvnClient.AdministrativeDirectoryName), Path.Combine(tmpDir, SvnClient.AdministrativeDirectoryName));
-                                    SvnWorkingCopyCopyArgs ma = new SvnWorkingCopyCopyArgs();
-                                    ma.MetaDataOnly = true;
-                                    cl.Copy(tmpDir, localDir, ma);
-                                    SvnItem.DeleteDirectory(tmpDir, true);
-                                }
-                                catch (Exception ex)
-                                {
-                                    IAnkhErrorHandler eh = e.GetService<IAnkhErrorHandler>();
-
-                                    if (eh != null && eh.IsEnabled(ex))
-                                    {
-                                        eh.OnError(ex, e);
-                                        return;// true; // If we return false VS shows another error box!
-                                    }
-
-                                    throw;
-                                }
+                                string tmpDir = localDir + "-Src-copyTmp";
+                                Directory.CreateDirectory(tmpDir);
+                                Directory.Move(Path.Combine(localDir, SvnClient.AdministrativeDirectoryName), Path.Combine(tmpDir, SvnClient.AdministrativeDirectoryName));
+                                SvnWorkingCopyCopyArgs ma = new SvnWorkingCopyCopyArgs();
+                                ma.MetaDataOnly = true;
+                                cl.Copy(tmpDir, localDir, ma);
+                                SvnItem.DeleteDirectory(tmpDir, true);
                             }
                             break;
                         case ProjectAddMode.Unversioned:
