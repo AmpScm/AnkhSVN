@@ -46,6 +46,9 @@ namespace Ankh.UI.RepositoryOpen
         {
             base.OnContextChanged(e);
 
+            if (Context == null)
+                return;
+
             IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
 
             dirView.SmallImageList = mapper.ImageList;

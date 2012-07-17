@@ -295,4 +295,7 @@ Click Yes to add to the current working copy, and no to create a new working cop
   <data name="SwitchingTitle" xml:space="preserve">
     <value>Switching</value>
   </data>
+  <data name="AddProjectFromSubversion" xml:space="preserve">
+    <value>Add Project from Subversion</value>
+  </data>
 </root>

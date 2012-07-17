@@ -46,6 +46,9 @@ namespace Ankh.Commands
             Uri selectedUri = null;
             Uri rootUri = null;
 
+            bool addingProject = (e.Command == AnkhCommand.FileFileAddFromSubversion
+                                  || e.Command == AnkhCommand.FileSccAddFromSubversion);
+
             if (e.Argument is string && Uri.TryCreate((string)e.Argument, UriKind.Absolute, out selectedUri))
             { }
             else if (e.Argument is SvnOrigin)
@@ -63,19 +66,13 @@ namespace Ankh.Commands
             {
                 using (RepositoryOpenDialog dlg = new RepositoryOpenDialog())
                 {
-                    dlg.Context = e.Context;
+                    if (addingProject)
+                        dlg.Text =CommandStrings.AddProjectFromSubversion;
+
                     dlg.Filter = settings.OpenProjectFilterName + "|" + settings.AllProjectExtensionsFilter + "|All Files (*.*)|*";
 
                     if (selectedUri != null)
                         dlg.SelectedUri = selectedUri;
-
-                    if (e.Command != AnkhCommand.FileFileOpenFromSubversion && e.Command != AnkhCommand.FileSccOpenFromSubversion)
-                    {
-                        foreach (string ext in settings.SolutionFilter.Split(';'))
-                        {
-                            dlg.Filter = dlg.Filter.Replace(ext.Trim() + ';', "");
-                        }
-                    }
 
                     if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                         return;
@@ -97,7 +94,15 @@ namespace Ankh.Commands
                 }
             }
 
-            string path = settings.NewProjectLocation;
+            string defaultPath = settings.NewProjectLocation;
+
+            if (addingProject)
+            {
+                IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
+
+                if (!string.IsNullOrEmpty(ss.ProjectRoot))
+                    defaultPath = ss.ProjectRoot;
+            }
 
             string name = Path.GetFileNameWithoutExtension(SvnTools.GetFileName(selectedUri));
 
@@ -105,7 +110,7 @@ namespace Ankh.Commands
             int n = 0;
             do
             {
-                newPath = Path.Combine(path, name);
+                newPath = Path.Combine(defaultPath, name);
                 if (n > 0)
                     newPath += string.Format("({0})", n);
                 n++;
@@ -115,6 +120,9 @@ namespace Ankh.Commands
             using (CheckoutProject dlg = new CheckoutProject())
             {
                 dlg.Context = e.Context;
+
+                if (addingProject)
+                    dlg.Text = CommandStrings.AddProjectFromSubversion;
                 dlg.ProjectUri = selectedUri;
                 dlg.RepositoryRootUri = rootUri;
                 dlg.SelectedPath = newPath;
@@ -127,31 +135,56 @@ namespace Ankh.Commands
                 if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                     return;
 
-                IVsSolution2 sol = e.GetService<IVsSolution2>(typeof(SVsSolution));
+                if (!addingProject)
+                    OpenSolution(e, dlg);
+                else
+                    CheckOutAndOpenProject(e, dlg.ProjectTop, dlg.Revision, dlg.ProjectTop, dlg.SelectedPath, dlg.ProjectUri);
+            }
+        }
 
-                if (sol != null)
+        private static void CheckOutAndOpenProject(CommandEventArgs e, SvnUriTarget checkoutLocation, SvnRevision revision, Uri projectTop, string localDir, Uri projectUri)
+        {
+            IProgressRunner runner = e.GetService<IProgressRunner>();
+
+            runner.RunModal(CommandStrings.CheckingOutSolution,
+                delegate(object sender, ProgressWorkerArgs ee)
                 {
-                    sol.CloseSolutionElement(VSConstants.VSITEMID_ROOT, null, 0); // Closes the current solution
-                }
+                    PerformCheckout(ee, checkoutLocation, revision, localDir);
+                });
 
-                IAnkhSccService scc = e.GetService<IAnkhSccService>();
+            Uri file = projectTop.MakeRelativeUri(projectUri);
 
-                if (scc != null)
-                    scc.RegisterAsPrimarySccProvider(); // Make us the current SCC provider!
+            string projectFile = SvnTools.GetNormalizedFullPath(Path.Combine(localDir, SvnTools.UriPartToPath(file.ToString())));
 
-                CheckOutAndOpenSolution(e, dlg.ProjectTop, dlg.Revision, dlg.ProjectTop, dlg.SelectedPath, dlg.ProjectUri);
+            AddProject(e, projectFile);
+        }
 
-                sol = e.GetService<IVsSolution2>(typeof(SVsSolution));
+        private static void OpenSolution(CommandEventArgs e, CheckoutProject dlg)
+        {
+            IVsSolution2 sol = e.GetService<IVsSolution2>(typeof(SVsSolution));
 
-                if (sol != null)
+            if (sol != null)
+            {
+                sol.CloseSolutionElement(VSConstants.VSITEMID_ROOT, null, 0); // Closes the current solution
+            }
+
+            IAnkhSccService scc = e.GetService<IAnkhSccService>();
+
+            if (scc != null)
+                scc.RegisterAsPrimarySccProvider(); // Make us the current SCC provider!
+
+            CheckOutAndOpenSolution(e, dlg.ProjectTop, dlg.Revision, dlg.ProjectTop, dlg.SelectedPath, dlg.ProjectUri);
+
+            sol = e.GetService<IVsSolution2>(typeof(SVsSolution));
+
+            if (sol != null)
+            {
+                string file, user, dir;
+
+                if (ErrorHandler.Succeeded(sol.GetSolutionInfo(out dir, out file, out user))
+                    && !string.IsNullOrEmpty(file))
                 {
-                    string file, user, dir;
-
-                    if (ErrorHandler.Succeeded(sol.GetSolutionInfo(out dir, out file, out user))
-                        && !string.IsNullOrEmpty(file))
-                    {
-                        scc.SetProjectManaged(null, true);
-                    }
+                    scc.SetProjectManaged(null, true);
                 }
             }
         }
@@ -160,11 +193,11 @@ namespace Ankh.Commands
         {
             IProgressRunner runner = e.GetService<IProgressRunner>();
 
-            runner.RunModal(CommandStrings.CheckingOutSolution, 
+            runner.RunModal(CommandStrings.CheckingOutSolution,
                 delegate(object sender, ProgressWorkerArgs ee)
-                    {
-                        PerformCheckout(ee, checkoutLocation, revision, localDir);
-                    });
+                {
+                    PerformCheckout(ee, checkoutLocation, revision, localDir);
+                });
 
             Uri file = projectTop.MakeRelativeUri(projectUri);
 
@@ -178,6 +211,13 @@ namespace Ankh.Commands
             IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
 
             ss.OpenProjectFile(projectFile);
+        }
+
+        private static void AddProject(CommandEventArgs e, string projectFile)
+        {
+            IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
+
+            ss.AddProjectFile(projectFile);
         }
 
         private static void PerformCheckout(ProgressWorkerArgs e, SvnUriTarget projectTop, SvnRevision revision, string localDir)
