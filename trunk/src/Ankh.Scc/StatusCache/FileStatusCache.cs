@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Ankh.Commands;
-using Ankh.Scc;
 using SharpSvn;
 
 namespace Ankh.Scc.StatusCache
@@ -34,7 +33,6 @@ namespace Ankh.Scc.StatusCache
     {
         readonly object _lock = new object();
         readonly SvnClient _client;
-        readonly SvnWorkingCopyClient _wcClient;
         readonly Dictionary<string, SvnItem> _map; // Maps from full-normalized paths to SvnItems
         readonly Dictionary<string, SvnDirectory> _dirMap;
         IAnkhCommandService _commandService;
@@ -47,7 +45,6 @@ namespace Ankh.Scc.StatusCache
                 throw new ArgumentNullException("context");
 
             _client = new SvnClient();
-            _wcClient = new SvnWorkingCopyClient();
             _map = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
             _dirMap = new Dictionary<string, SvnDirectory>(StringComparer.OrdinalIgnoreCase);
             InitializeShellMonitor();
@@ -108,36 +105,19 @@ namespace Ankh.Scc.StatusCache
             Debug.Assert(item.NodeKind == SvnNodeKind.Directory);
 
             // We retrieve nesting information by walking the entry data of the parent directory
-
-            SvnItem dir = item.Parent;
-
-            if (dir == null)
-            {
-                // A root directory can't be a nested working copy!
-                ((ISvnItemUpdate)item).SetState(SvnItemState.None, SvnItemState.IsNested);
-                return;
-            }
-
             lock (_lock)
             {
                 ISvnItemUpdate oi = (ISvnItemUpdate)item;
 
-                SvnWorkingCopyEntriesArgs a = new SvnWorkingCopyEntriesArgs();
-                a.ThrowOnError = false;
+                string root = _client.GetWorkingCopyRoot(item.FullPath);
 
-                if (_wcClient.ListEntries(dir.FullPath, a, OnLoadEntry))
+                if (string.Equals(root, item.FullPath, StringComparison.OrdinalIgnoreCase))
                 {
-                    SvnItemState st;
-
-                    if (!oi.TryGetState(SvnItemState.IsNested, out st))
-                    {
-                        // The item was not found as entry in the parent -> Nested working copy
-                        oi.SetState(SvnItemState.IsNested, SvnItemState.None);
-                    }
+                    // The item is a working copy root -> Nested working copy
+                    oi.SetState(SvnItemState.IsNested, SvnItemState.None);
                 }
                 else
                 {
-                    // The parent directory is not a valid workingcopy -> not nested
                     oi.SetState(SvnItemState.None, SvnItemState.IsNested);
                 }
             }
