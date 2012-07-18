@@ -367,6 +367,22 @@ namespace Ankh.UI
 
         }
 
+        // Handle Ctrl+(Shift+)Tab and Ctrl+Return as without Ctrl
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            Keys key = keyData & Keys.KeyCode;
+            if (key == Keys.Tab && (keyData & Keys.Alt) == Keys.None)
+            {
+                keyData = keyData & ~Keys.Control;
+            }
+            else if (key == Keys.Return && (keyData & Keys.Modifiers) == Keys.Control)
+            {
+                keyData = keyData & ~Keys.Control;
+            }
+            return base.ProcessDialogKey(keyData);
+        }
+
+
         #region IAnkhServiceProvider Members
 
         /// <summary>
