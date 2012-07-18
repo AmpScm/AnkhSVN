@@ -78,8 +78,6 @@ namespace Ankh.UI.SccManagement
             pendingList.ColumnWidthChanged += new ColumnWidthChangedEventHandler(pendingList_ColumnWidthChanged);
             IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
             pendingList.SetColumnWidths(widths);
-
-            VSCommandHandler.Install(Context, logMessage, new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.OPENLINEABOVE), new EventHandler<CommandEventArgs>(OnCommit));
         }
 
         protected void pendingList_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
@@ -118,12 +116,7 @@ namespace Ankh.UI.SccManagement
             }
         }
 
-        void OnCommit(object sender, CommandEventArgs e)
-        {
-            DialogResult = DialogResult.OK;
-        }
-
-        public IEnumerable<PendingChange> GetSelection()
+       public IEnumerable<PendingChange> GetSelection()
         {
             foreach (PendingCommitItem it in pendingList.Items)
             {

@@ -51,13 +51,6 @@ namespace Ankh.UI.SccManagement
                 return;
 
             Message = _originalText;
-
-            VSCommandHandler.Install(Context, logMessage, new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.OPENLINEABOVE), new EventHandler<CommandEventArgs>(OnLock));
-        }
-
-        void OnLock(object sender, CommandEventArgs e)
-        {
-            DialogResult = DialogResult.OK;
         }
 
         public IEnumerable<SvnItem> GetCheckedItems()
