@@ -419,56 +419,22 @@ namespace Ankh.VS.TextEditor
         /// <returns>Always returns true</returns>
         protected override bool IsInputKey(Keys keyData)
         {
-            Keys key = (keyData & ~Keys.Modifiers);
+            Keys key = (keyData & Keys.KeyCode);
 
             switch (key)
             {
                 case Keys.Tab:
+                case Keys.Return:
                     {
                         if (_readOnly)
                             return false; // Allow using tab for dialog navigation
 
-                        if ((keyData & (Keys.Control | Keys.Alt)) == Keys.Control)
+                        if ((keyData & Keys.Modifiers & ~Keys.Shift) == Keys.Control)
                         {
-                            if (TopLevelControl is Form)
-                            {
-                                Control c = this;
-                                bool found = false;
+                            Form f = TopLevelControl as Form;
 
-                                bool forward = (keyData & Keys.Shift) == 0;
-
-                                while (!found && c != null)
-                                {
-                                    ContainerControl cc = c.GetContainerControl() as ContainerControl;
-
-                                    if (cc == null)
-                                        break;
-                                    else if (cc == c)
-                                    {
-                                        c = c.Parent;
-                                        cc = c as ContainerControl;
-
-                                        if (cc == null)
-                                            continue;
-                                    }
-
-                                    if (cc.SelectNextControl(this, forward, true, true, false))
-                                    {
-                                        found = true;
-                                    }
-
-                                    c = cc;
-                                }
-
-                                if (!found)
-                                {
-                                    ContainerControl cc = this.TopLevelControl as ContainerControl;
-
-                                    if (cc != null)
-                                        cc.SelectNextControl(this, forward, true, true, true);
-                                }
-                            }
-                            return false;
+                            if (f != null && f.Modal)
+                                return false; // Ctrl+Return should be the default button
                         }
                     }
                     break;
@@ -594,6 +560,36 @@ namespace Ankh.VS.TextEditor
                 }
 
             return false;
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            Keys key = keyData & Keys.KeyCode;
+            if (key == Keys.Tab && (keyData & Keys.Alt) == Keys.None)
+            {
+                keyData = keyData & ~Keys.Control;
+            }
+            else if (key == Keys.Return && (keyData & Keys.Modifiers) == Keys.Control)
+            {
+                keyData = keyData & ~Keys.Control;
+            }
+            bool b = base.ProcessCmdKey(ref msg, keyData);
+
+            return b;
+        }
+
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            Keys key = keyData & Keys.KeyCode;
+            if (key == Keys.Tab && (keyData & Keys.Alt) == Keys.None)
+            {
+                keyData = keyData & ~Keys.Control;
+            }
+            else if (key == Keys.Return && (keyData & Keys.Modifiers) == Keys.Control)
+            {
+                keyData = keyData & ~Keys.Control;
+            }
+            return base.ProcessDialogKey(keyData);
         }
 
         #region IVSTextEditorImplementation Members
