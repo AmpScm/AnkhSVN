@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11385</title>
+          AnkhSVN-Daily Update - 2.3.11393</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,20 +16,32 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6338/AnkhSvn-Daily-2.3.11385.1393.msi">AnkhSVN 2.3.11385</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6341/AnkhSvn-Daily-2.3.11393.1394.msi">AnkhSVN 2.3.11393</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11385">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11393">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2012-07-18</td></tr>
+<tr><td> </td><td class="r"><a id="11392" href="http://ankhsvn.net/rev/11392">
+            [r11392]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/Dialogs:</strong> VSCommandRouting.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update our VSCommandDialog routing to stop translating Ctrl+(Shift+)Tab,
+Ctrl+Return and system keys like Alt+F4. This (combined with the few previous)
+patches should make our dialogs handle selection and closing via Alt+F4
+like normal dialogs do.</td></tr>
+<tr><td> </td><td class="r"><a id="11389" href="http://ankhsvn.net/rev/11389">
+            [r11389]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/TextEditor:</strong> TheVSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Stop trying to handle Ctrl+Tab and Ctrl+Shift+Tab in the editor control. We
+should properly pass them to the container control instead to allow it to
+handle all selection scenarios properly.</td></tr>
 <tr class="d"><td colspan="4">2012-07-17</td></tr>
 <tr><td> </td><td class="r"><a id="11379" href="http://ankhsvn.net/rev/11379">
             [r11379]
