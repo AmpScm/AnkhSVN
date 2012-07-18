@@ -101,7 +101,7 @@ namespace Ankh.UI.SvnLog
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
-            OnScrolled(e);
+            OnViewPositionChanged(e);
         }
 
         protected override void WndProc(ref Message m)
@@ -109,14 +109,14 @@ namespace Ankh.UI.SvnLog
             base.WndProc(ref m);
 
             if (m.Msg == 0x115) // WM_VSCROLL
-                OnScrolled(EventArgs.Empty);
+                OnViewPositionChanged(EventArgs.Empty);
         }
 
-        public event EventHandler Scrolled;
-        private void OnScrolled(EventArgs e)
+        public event EventHandler ViewPositionChanged;
+        private void OnViewPositionChanged(EventArgs e)
         {
-            if (Scrolled != null)
-                Scrolled(this, e);
+            if (ViewPositionChanged != null)
+                ViewPositionChanged(this, e);
         }   
 
         protected override void OnSizeChanged(EventArgs e)
@@ -125,6 +125,8 @@ namespace Ankh.UI.SvnLog
 
             if (!DesignMode && _messageColumn != null)
                 ResizeColumnsToFit(_messageColumn);
+
+            OnViewPositionChanged(e);
         }
     }
 }

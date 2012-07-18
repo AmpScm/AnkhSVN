@@ -210,13 +210,13 @@ namespace Ankh.VS.Dialogs
             const int WM_IME_KEYLAST = 0x010F;
 
             const int WM_KEYDOWN = 0x0100;
-            //const int WM_KEYUP = 0x0101;
+            const int WM_KEYUP = 0x0101;
             //const int WM_CHAR = 0x0102;
 
             if (m.Msg < WM_KEYFIRST || m.Msg > WM_IME_KEYLAST)
                 return false; // Only key translation below
 
-            if (m.Msg == WM_KEYDOWN)
+            if (m.Msg == WM_KEYDOWN || m.Msg == WM_KEYUP)
                 switch ((int)m.WParam)
                 {
                     case '\t':

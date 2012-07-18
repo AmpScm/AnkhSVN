@@ -59,7 +59,7 @@ namespace Ankh.UI.SvnLog
             this.logView.Size = new System.Drawing.Size(552, 324);
             this.logView.Sorting = System.Windows.Forms.SortOrder.None;
             this.logView.TabIndex = 0;
-            this.logView.Scrolled += new System.EventHandler(this.logView_Scrolled);
+            this.logView.ViewPositionChanged += new System.EventHandler(this.logView_Scrolled);
             this.logView.ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.logRevisionControl1_ShowContextMenu);
             this.logView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.logRevisionControl1_ItemSelectionChanged);
             this.logView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.logView_KeyPress);
