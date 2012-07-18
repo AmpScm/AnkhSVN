@@ -439,10 +439,12 @@ namespace Ankh.VS.TextEditor
                     }
                     break;
                 case Keys.Escape:
-                    Form f = TopLevelControl as Form;
+                    {
+                        Form f = TopLevelControl as Form;
 
-                    if (f != null && f.Modal)
-                        return false; // Escape should close a dialog
+                        if (f != null && f.Modal)
+                            return false; // Escape should close a dialog
+                    }
                     break;
             }
 
