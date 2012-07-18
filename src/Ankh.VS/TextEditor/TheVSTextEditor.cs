@@ -462,7 +462,7 @@ namespace Ankh.VS.TextEditor
 
                                 if (!found)
                                 {
-                                    ContainerControl cc = c.TopLevelControl as ContainerControl;
+                                    ContainerControl cc = this.TopLevelControl as ContainerControl;
 
                                     if (cc != null)
                                         cc.SelectNextControl(this, forward, true, true, true);
