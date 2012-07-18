@@ -324,15 +324,15 @@ namespace Ankh.VS.Selection
         {
             Control ctrl = ActiveDialogOrFrameControl;
 
-            ContainerControl cc;
+            IContainerControl cc;
 
-            while (null != (cc = ctrl as ContainerControl))
+            while (null != (cc = ctrl as IContainerControl))
             {
                 ctrl = cc.ActiveControl;
 
                 if (ctrl == null || ctrl == cc)
                 {
-                    ctrl = cc;
+                    ctrl = cc as Control;
                     break;
                 }
             }
