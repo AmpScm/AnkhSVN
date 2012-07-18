@@ -97,33 +97,4 @@ namespace Ankh.VS
         /// <returns></returns>
         string GetLogSummary(string message);
     }
-
-    public class IssueMarker
-    {
-        readonly int _index;
-        readonly int _length;
-        readonly string _value;
-
-        public IssueMarker(int index, int length, string value)
-        {
-            _index = index;
-            _length = length;
-            _value = value;
-        }
-
-        public int Index
-        {
-            get { return _index; }
-        }
-
-        public int Length
-        {
-            get { return _length; }
-        }
-
-        public string Value
-        {
-            get { return _value; }
-        }
-    }
 }
