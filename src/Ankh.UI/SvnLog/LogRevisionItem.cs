@@ -68,9 +68,12 @@ namespace Ankh.UI.SvnLog
             {
                 if (!issueList.Contains(issue.Value))
                 {
-                    if (sb == null) { sb = new StringBuilder(); }
-                    else { sb.Append(","); }
-                    sb.Append(issue);
+                    if (sb == null)
+                        sb = new StringBuilder();
+                    else
+                        sb.Append(',');
+
+                    sb.Append(issue.Value);
                     issueList.Add(issue.Value);
                 }
             }
