@@ -212,21 +212,40 @@ namespace Ankh.VS.Dialogs
             const int WM_KEYDOWN = 0x0100;
             const int WM_KEYUP = 0x0101;
             //const int WM_CHAR = 0x0102;
+            //const int WM_DEADCHAR = 0x0103;
+            const int WM_SYSKEYDOWN = 0x0104;
+            const int WM_SYSKEYUP = 0x0105;
+            //const int WM_SYSCHAR = 0x0106;
+            //const int WM_SYSDEADCHAR = 0x0107;
+            //const int WM_UNICHAR = 0x0109;
 
             if (m.Msg < WM_KEYFIRST || m.Msg > WM_IME_KEYLAST)
                 return false; // Only key translation below
 
+            VSContainerMode mode = _vsForm.ContainerMode;
+
             if (m.Msg == WM_KEYDOWN || m.Msg == WM_KEYUP)
-                switch ((int)m.WParam)
+                switch ((Keys)(int)m.WParam)
                 {
-                    case '\t':
+                    case Keys.Tab:
                         if ((Control.ModifierKeys & Keys.Control) != 0)
-                            return false;
+                            return false; // Navigation
                         break;
-                    case 27:
+                    case Keys.Return:
+                        if (Control.ModifierKeys == Keys.Control)
+                            mode = VSContainerMode.Default; // No translate
+                        break;
+                    case Keys.Escape:
                         // Escape key should exit dialog
                         return false;
                 }
+            if (m.Msg == WM_SYSKEYDOWN || m.Msg == WM_SYSKEYUP)
+                switch ((Keys)(int)m.WParam)
+                {
+                    case Keys.F4:
+                        return false; // Should close dialog
+                }
+
 
             MSG[] messages = new MSG[1];
             messages[0].hwnd = m.HWnd;
@@ -234,7 +253,6 @@ namespace Ankh.VS.Dialogs
             messages[0].wParam = m.WParam;
             messages[0].message = (uint)m.Msg;
 
-            VSContainerMode mode = _vsForm.ContainerMode;
             if (_fKeys != null && 0 != (mode & (VSContainerMode.TranslateKeys | VSContainerMode.UseTextEditorScope)))
             {
                 Guid cmdGuid;
@@ -274,6 +292,15 @@ namespace Ankh.VS.Dialogs
             }
 
             Control c = _form.ActiveControl;
+            {
+                IContainerControl cc;
+                Control ac;
+
+                while (null != (cc = c as IContainerControl) && null != (ac = cc.ActiveControl) && ac != cc)
+                {
+                    c = ac;
+                }
+            }
 
             while (c != null)
             {
@@ -282,12 +309,7 @@ namespace Ankh.VS.Dialogs
                 if (filter != null && filter.PreFilterMessage(ref m))
                     return true;
 
-                ContainerControl cc = c as ContainerControl;
-
-                if (cc == null)
-                    break;
-
-                c = cc.ActiveControl;
+                c = c.Parent;
             }
 
             return false;
