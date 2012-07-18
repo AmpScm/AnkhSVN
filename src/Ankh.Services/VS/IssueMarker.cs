@@ -20,7 +20,6 @@ using System.Text;
 
 namespace Ankh.VS
 {
-    public interface IProjectCommitSettings
     public class IssueMarker
     {
         readonly int _index;
