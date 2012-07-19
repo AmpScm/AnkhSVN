@@ -34,7 +34,7 @@ namespace Ankh.UI.SvnLog
     {
         readonly IAnkhServiceProvider _context;
         readonly SvnLoggingEventArgs _args;
-        public LogRevisionItem(LogRevisionView listView, IAnkhServiceProvider context, SvnLoggingEventArgs e)
+        public LogRevisionItem(LogRevisionControl listView, IAnkhServiceProvider context, SvnLoggingEventArgs e)
             : base(listView)
         {
             _args = e;

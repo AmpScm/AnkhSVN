@@ -44,24 +44,24 @@ namespace Ankh.UI.SvnLog
         /// </summary>
         private void InitializeComponent()
         {
-			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogToolWindowControl));
-			this.logControl = new Ankh.UI.SvnLog.LogControl(this.components);
-			this.SuspendLayout();
-			// 
-			// logControl
-			// 
-			resources.ApplyResources(this.logControl, "logControl");
-			this.logControl.Mode = Ankh.UI.SvnLog.LogMode.Log;
-			this.logControl.Name = "logControl";
-			// 
-			// LogToolWindowControl
-			// 
-			resources.ApplyResources(this, "$this");
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.logControl);
-			this.Name = "LogToolWindowControl";
-			this.ResumeLayout(false);
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogToolWindowControl));
+            this.logControl = new Ankh.UI.SvnLog.LogControl(this.components);
+            this.SuspendLayout();
+            // 
+            // logControl
+            // 
+            resources.ApplyResources(this.logControl, "logControl");
+            this.logControl.Mode = Ankh.UI.SvnLog.LogMode.Log;
+            this.logControl.Name = "logControl";
+            // 
+            // LogToolWindowControl
+            // 
+            resources.ApplyResources(this, "$this");
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.logControl);
+            this.Name = "LogToolWindowControl";
+            this.ResumeLayout(false);
 
         }
 

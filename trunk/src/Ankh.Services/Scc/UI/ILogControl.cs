@@ -24,7 +24,7 @@ namespace Ankh.Scc.UI
     {
         bool ShowChangedPaths { get; set; }
         bool ShowLogMessage { get; set; }
-        bool StrictNodeHistory { get; set; }
+        bool StopOnCopy { get; set; }
         bool IncludeMergedRevisions { get; set; }
         void FetchAll();
         void Restart();

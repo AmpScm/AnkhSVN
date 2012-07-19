@@ -43,7 +43,7 @@ namespace Ankh.UI.MergeWizard
 
             logToolControl1.SelectionChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(logToolControl1_SelectionChanged);
 
-            logToolControl1.StrictNodeHistory = true;
+            logToolControl1.StopOnCopy = true;
         }
 
         /// <summary>
@@ -206,10 +206,10 @@ namespace Ankh.UI.MergeWizard
             set { logToolControl1.ShowLogMessage = value; }
         }
 
-        bool ILogControl.StrictNodeHistory
+        bool ILogControl.StopOnCopy
         {
-            get { return logToolControl1.StrictNodeHistory; }
-            set { logToolControl1.StrictNodeHistory = value; }
+            get { return logToolControl1.StopOnCopy; }
+            set { logToolControl1.StopOnCopy = value; }
         }
 
         bool ILogControl.IncludeMergedRevisions

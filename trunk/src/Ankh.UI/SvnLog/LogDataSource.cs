@@ -90,7 +90,7 @@ namespace Ankh.UI.SvnLog
         }
 
         bool _strictNodeHistory, _includeMerged;
-        public bool StrictNodeHistory
+        public bool StopOnCopy
         {
             get { return _strictNodeHistory; }
             set { _strictNodeHistory = value; }

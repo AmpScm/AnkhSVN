@@ -17,12 +17,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
-using System.Diagnostics;
-using Ankh.Scc.UI;
-using SharpSvn;
-using Ankh.Scc;
 using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Text;
+using SharpSvn;
+
+using Ankh.Scc;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog
 {
@@ -235,15 +236,15 @@ namespace Ankh.UI.SvnLog
             }
         }
 
-        public bool StrictNodeHistory
+        public bool StopOnCopy
         {
             [DebuggerStepThrough]
-            get { return logControl.StrictNodeHistory; }
+            get { return logControl.StopOnCopy; }
             set
             {
-                if (value != StrictNodeHistory)
+                if (value != StopOnCopy)
                 {
-                    logControl.StrictNodeHistory = value;
+                    logControl.StopOnCopy = value;
                     logControl.Restart();
                 }
             }

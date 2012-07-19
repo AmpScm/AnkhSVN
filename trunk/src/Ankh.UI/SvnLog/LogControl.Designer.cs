@@ -44,89 +44,110 @@ namespace Ankh.UI.SvnLog
         /// </summary>
         private void InitializeComponent()
         {
-			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogControl));
-			this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
-			this.logRevisionControl1 = new Ankh.UI.SvnLog.LogRevisionControl(this.components);
-			this.splitContainer2 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
-			this.logChangedPaths1 = new Ankh.UI.SvnLog.LogChangedPaths(this.components);
-			this.logMessageView1 = new Ankh.UI.SvnLog.LogMessageView(this.components);
-			this.splitContainer1.Panel1.SuspendLayout();
-			this.splitContainer1.Panel2.SuspendLayout();
-			this.splitContainer1.SuspendLayout();
-			this.splitContainer2.Panel1.SuspendLayout();
-			this.splitContainer2.Panel2.SuspendLayout();
-			this.splitContainer2.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// splitContainer1
-			// 
-			resources.ApplyResources(this.splitContainer1, "splitContainer1");
-			this.splitContainer1.Name = "splitContainer1";
-			// 
-			// splitContainer1.Panel1
-			// 
-			this.splitContainer1.Panel1.Controls.Add(this.logRevisionControl1);
-			// 
-			// splitContainer1.Panel2
-			// 
-			this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-			// 
-			// logRevisionControl1
-			// 
-			resources.ApplyResources(this.logRevisionControl1, "logRevisionControl1");
-			this.logRevisionControl1.LogSource = null;
-			this.logRevisionControl1.Name = "logRevisionControl1";
-			// 
-			// splitContainer2
-			// 
-			resources.ApplyResources(this.splitContainer2, "splitContainer2");
-			this.splitContainer2.Name = "splitContainer2";
-			// 
-			// splitContainer2.Panel1
-			// 
-			this.splitContainer2.Panel1.Controls.Add(this.logChangedPaths1);
-			// 
-			// splitContainer2.Panel2
-			// 
-			this.splitContainer2.Panel2.Controls.Add(this.logMessageView1);
-			// 
-			// logChangedPaths1
-			// 
-			resources.ApplyResources(this.logChangedPaths1, "logChangedPaths1");
-			this.logChangedPaths1.ItemSource = this.logRevisionControl1;
-			this.logChangedPaths1.LogSource = null;
-			this.logChangedPaths1.Name = "logChangedPaths1";
-			// 
-			// logMessageView1
-			// 
-			resources.ApplyResources(this.logMessageView1, "logMessageView1");
-			this.logMessageView1.ItemSource = this.logRevisionControl1;
-			this.logMessageView1.Name = "logMessageView1";
-			// 
-			// LogControl
-			// 
-			resources.ApplyResources(this, "$this");
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.splitContainer1);
-			this.Name = "LogControl";
-			this.splitContainer1.Panel1.ResumeLayout(false);
-			this.splitContainer1.Panel2.ResumeLayout(false);
-			this.splitContainer1.ResumeLayout(false);
-			this.splitContainer2.Panel1.ResumeLayout(false);
-			this.splitContainer2.Panel2.ResumeLayout(false);
-			this.splitContainer2.ResumeLayout(false);
-			this.ResumeLayout(false);
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogControl));
+            this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
+            this.revisionBox = new Ankh.UI.SvnLog.LogRevisionControl(this.components);
+            this.splitContainer2 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
+            this.logBox = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.changedPathBox = new Ankh.UI.SvnLog.LogChangedPathsView(this.components);
+            this.label2 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // splitContainer1
+            // 
+            resources.ApplyResources(this.splitContainer1, "splitContainer1");
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.revisionBox);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
+            // 
+            // logRevisionControl1
+            // 
+            resources.ApplyResources(this.revisionBox, "logRevisionControl1");
+            this.revisionBox.LogSource = null;
+            this.revisionBox.Name = "logRevisionControl1";
+            // 
+            // splitContainer2
+            // 
+            resources.ApplyResources(this.splitContainer2, "splitContainer2");
+            this.splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.changedPathBox);
+            this.splitContainer2.Panel1.Controls.Add(this.label2);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.logBox);
+            this.splitContainer2.Panel2.Controls.Add(this.label1);
+            // 
+            // logMessageEditor
+            // 
+            this.logBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.logBox, "logMessageEditor");
+            this.logBox.Name = "logMessageEditor";
+            this.logBox.ReadOnly = true;
+            // 
+            // label1
+            // 
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.Name = "label1";
+            // 
+            // changedPaths
+            // 
+            this.changedPathBox.LogSource = null;
+            resources.ApplyResources(this.changedPathBox, "changedPaths");
+            this.changedPathBox.HideSelection = false;
+            this.changedPathBox.Name = "changedPaths";
+            // 
+            // label2
+            // 
+            resources.ApplyResources(this.label2, "label2");
+            this.label2.Name = "label2";
+            // 
+            // LogControl
+            // 
+            resources.ApplyResources(this, "$this");
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.splitContainer1);
+            this.Name = "LogControl";
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private LogRevisionControl logRevisionControl1;
+        private LogRevisionControl revisionBox;
         private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer1;
         private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer2;
-        private LogChangedPaths logChangedPaths1;
-        private LogMessageView logMessageView1;
+        private PendingChanges.LogMessageEditor logBox;
+        private System.Windows.Forms.Label label1;
+        private LogChangedPathsView changedPathBox;
+        private System.Windows.Forms.Label label2;
 
     }
 }

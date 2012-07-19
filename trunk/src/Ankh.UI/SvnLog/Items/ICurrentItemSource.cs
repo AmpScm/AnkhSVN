@@ -20,7 +20,7 @@ using System.Text;
 using SharpSvn;
 using System.Collections.ObjectModel;
 
-namespace Ankh.UI
+namespace Ankh.UI.SvnLog
 {
     /// <summary>
     /// To be implemented by the provider of focus/selection
