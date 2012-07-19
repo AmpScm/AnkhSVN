@@ -24,7 +24,7 @@ using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog
 {
-    sealed partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ICurrentItemDestination<ISvnLogItem>
+    sealed partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ICurrentItemDestination<ISvnLogItem>, ISupportsVSTheming
     {
         public LogControl()
             : this(null)
@@ -245,5 +245,24 @@ namespace Ankh.UI.SvnLog
         }
 
         #endregion
+
+        public bool UseVSTheming
+        {
+            get { return true; }
+        }
+
+        public void OnThemeChange(System.Windows.Forms.Design.IUIService ui, IAnkhServiceProvider context)
+        {
+            if (VSVersion.VS11OrLater)
+            {
+                // Remove the chrome
+                revisionBox.BorderStyle = BorderStyle.None;
+                changedPathBox.BorderStyle = BorderStyle.None;
+                logBox.BorderStyle = BorderStyle.None;
+
+                changedPathLabel.Enabled = changedPathLabel.Visible = false;
+                logLabel.Enabled = logLabel.Visible = false;
+            }
+        }
     }
 }

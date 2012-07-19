@@ -128,29 +128,29 @@
   <data name="splitContainer1.Orientation" type="System.Windows.Forms.Orientation, System.Windows.Forms">
     <value>Horizontal</value>
   </data>
-  <data name="logRevisionControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="revisionBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="logRevisionControl1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="revisionBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="logRevisionControl1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="revisionBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>744, 308</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="logRevisionControl1.TabIndex" type="System.Int32, mscorlib">
+  <data name="revisionBox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;logRevisionControl1.Name" xml:space="preserve">
-    <value>logRevisionControl1</value>
+  <data name="&gt;&gt;revisionBox.Name" xml:space="preserve">
+    <value>revisionBox</value>
   </data>
-  <data name="&gt;&gt;logRevisionControl1.Type" xml:space="preserve">
-    <value>Ankh.UI.SvnLog.LogRevisionControl, Ankh.UI, Version=2.3.4583.21942, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  <data name="&gt;&gt;revisionBox.Type" xml:space="preserve">
+    <value>Ankh.UI.SvnLog.LogRevisionControl, Ankh.UI, Version=2.3.4583.25240, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
-  <data name="&gt;&gt;logRevisionControl1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;revisionBox.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
   </data>
-  <data name="&gt;&gt;logRevisionControl1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;revisionBox.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Panel1.Name" xml:space="preserve">
@@ -171,64 +171,64 @@
   <data name="splitContainer2.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="changedPaths.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="changedPathBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="changedPaths.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="changedPathBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 16</value>
   </data>
-  <data name="changedPaths.Size" type="System.Drawing.Size, System.Drawing">
-    <value>352, 119</value>
+  <data name="changedPathBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>352, 121</value>
   </data>
-  <data name="changedPaths.TabIndex" type="System.Int32, mscorlib">
+  <data name="changedPathBox.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="&gt;&gt;changedPaths.Name" xml:space="preserve">
-    <value>changedPaths</value>
+  <data name="&gt;&gt;changedPathBox.Name" xml:space="preserve">
+    <value>changedPathBox</value>
   </data>
-  <data name="&gt;&gt;changedPaths.Type" xml:space="preserve">
-    <value>Ankh.UI.SvnLog.LogChangedPathsView, Ankh.UI, Version=2.3.4583.21942, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  <data name="&gt;&gt;changedPathBox.Type" xml:space="preserve">
+    <value>Ankh.UI.SvnLog.LogChangedPathsView, Ankh.UI, Version=2.3.4583.25240, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
-  <data name="&gt;&gt;changedPaths.Parent" xml:space="preserve">
+  <data name="&gt;&gt;changedPathBox.Parent" xml:space="preserve">
     <value>splitContainer2.Panel1</value>
   </data>
-  <data name="&gt;&gt;changedPaths.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;changedPathBox.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="label2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="changedPathLabel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
   </data>
-  <data name="label2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="changedPathLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="changedPathLabel.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="label2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="changedPathLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
-  <data name="label2.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="changedPathLabel.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 1, 1, 1</value>
   </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="changedPathLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>352, 16</value>
   </data>
-  <data name="label2.TabIndex" type="System.Int32, mscorlib">
+  <data name="changedPathLabel.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="label2.Text" xml:space="preserve">
+  <data name="changedPathLabel.Text" xml:space="preserve">
     <value>Changed paths:</value>
   </data>
-  <data name="&gt;&gt;label2.Name" xml:space="preserve">
-    <value>label2</value>
+  <data name="&gt;&gt;changedPathLabel.Name" xml:space="preserve">
+    <value>changedPathLabel</value>
   </data>
-  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+  <data name="&gt;&gt;changedPathLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+  <data name="&gt;&gt;changedPathLabel.Parent" xml:space="preserve">
     <value>splitContainer2.Panel1</value>
   </data>
-  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;changedPathLabel.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="&gt;&gt;splitContainer2.Panel1.Name" xml:space="preserve">
@@ -243,67 +243,67 @@
   <data name="&gt;&gt;splitContainer2.Panel1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="logMessageEditor.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="logBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="logMessageEditor.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="logBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 16</value>
   </data>
-  <data name="logMessageEditor.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="logBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="logMessageEditor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>388, 119</value>
+  <data name="logBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>390, 121</value>
   </data>
-  <data name="logMessageEditor.TabIndex" type="System.Int32, mscorlib">
+  <data name="logBox.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="&gt;&gt;logMessageEditor.Name" xml:space="preserve">
-    <value>logMessageEditor</value>
+  <data name="&gt;&gt;logBox.Name" xml:space="preserve">
+    <value>logBox</value>
   </data>
-  <data name="&gt;&gt;logMessageEditor.Type" xml:space="preserve">
-    <value>Ankh.UI.PendingChanges.LogMessageEditor, Ankh.UI, Version=2.3.4583.21942, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  <data name="&gt;&gt;logBox.Type" xml:space="preserve">
+    <value>Ankh.UI.PendingChanges.LogMessageEditor, Ankh.UI, Version=2.3.4583.25240, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
-  <data name="&gt;&gt;logMessageEditor.Parent" xml:space="preserve">
+  <data name="&gt;&gt;logBox.Parent" xml:space="preserve">
     <value>splitContainer2.Panel2</value>
   </data>
-  <data name="&gt;&gt;logMessageEditor.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;logBox.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="label1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="logLabel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
   </data>
-  <data name="label1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="logLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="logLabel.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="logLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="label1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="logLabel.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 1, 1, 1</value>
   </data>
-  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>388, 16</value>
+  <data name="logLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>390, 16</value>
   </data>
-  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+  <data name="logLabel.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="label1.Text" xml:space="preserve">
+  <data name="logLabel.Text" xml:space="preserve">
     <value>Log message:</value>
   </data>
-  <data name="&gt;&gt;label1.Name" xml:space="preserve">
-    <value>label1</value>
+  <data name="&gt;&gt;logLabel.Name" xml:space="preserve">
+    <value>logLabel</value>
   </data>
-  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+  <data name="&gt;&gt;logLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;logLabel.Parent" xml:space="preserve">
     <value>splitContainer2.Panel2</value>
   </data>
-  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;logLabel.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="&gt;&gt;splitContainer2.Panel2.Name" xml:space="preserve">
@@ -319,7 +319,7 @@
     <value>1</value>
   </data>
   <data name="splitContainer2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>744, 135</value>
+    <value>744, 137</value>
   </data>
   <data name="splitContainer2.SplitterDistance" type="System.Int32, mscorlib">
     <value>352</value>
@@ -331,7 +331,7 @@
     <value>splitContainer2</value>
   </data>
   <data name="&gt;&gt;splitContainer2.Type" xml:space="preserve">
-    <value>Ankh.UI.VSSelectionControls.SmartSplitContainer, Ankh.UI, Version=2.3.4583.21942, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.VSSelectionControls.SmartSplitContainer, Ankh.UI, Version=2.3.4583.25240, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;splitContainer2.Parent" xml:space="preserve">
     <value>splitContainer1.Panel2</value>
@@ -364,7 +364,7 @@
     <value>splitContainer1</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Type" xml:space="preserve">
-    <value>Ankh.UI.VSSelectionControls.SmartSplitContainer, Ankh.UI, Version=2.3.4583.21942, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.VSSelectionControls.SmartSplitContainer, Ankh.UI, Version=2.3.4583.25240, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Parent" xml:space="preserve">
     <value>$this</value>
