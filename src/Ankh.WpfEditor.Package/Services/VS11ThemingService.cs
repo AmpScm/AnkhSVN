@@ -500,6 +500,18 @@ namespace Ankh.WpfPackage.Services
             }
         }
 
+        void ThemeOne(ComboBox combo)
+        {
+            if (combo.Font != DialogFont)
+                combo.Font = DialogFont;
+
+            if (combo.BackColor != combo.Parent.BackColor)
+                combo.BackColor = combo.Parent.BackColor;
+
+            if (combo.ForeColor != combo.Parent.ForeColor)
+                combo.ForeColor = combo.Parent.ForeColor;
+        }
+
         void ThemeOne(IHasSplitterColor splitter)
         {
             Color clrBackground;
@@ -538,6 +550,7 @@ namespace Ankh.WpfPackage.Services
                 || MaybeTheme<Panel>(ThemeOne, control)
                 || MaybeTheme<UserControl>(ThemeOne, control)
                 || MaybeTheme<PropertyGrid>(ThemeOne, control)
+                || MaybeTheme<ComboBox>(ThemeOne, control)
                 || MaybeTheme<IHasSplitterColor>(ThemeOne, control);
         }
     }
