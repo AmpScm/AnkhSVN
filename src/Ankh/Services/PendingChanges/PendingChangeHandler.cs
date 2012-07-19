@@ -238,8 +238,12 @@ namespace Ankh.Services.PendingChanges
 
                         if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'again'
                             return false;
+
+                        if (!PreCommit_VerifyTargetsVersioned(state))
+                            return false;
                         // if(!PreCommit_....())
                         //  return;
+
 
                         bool ok = false;
                         using (DocumentLock dl = GetService<IAnkhOpenDocumentTracker>().LockDocuments(state.CommitPaths, DocumentLockType.NoReload))
@@ -307,13 +311,13 @@ namespace Ankh.Services.PendingChanges
 
                     if (wc == null)
                         wc = w;
-                    else if (w != null && w != wc)
+                    else if (w != null && w != wc && w.RepositoryRoot != wc.RepositoryRoot)
                     {
                         StringBuilder sb = new StringBuilder();
                         sb.AppendLine(PccStrings.CommitSingleWc);
-                        sb.AppendFormat(PccStrings.WorkingCopyX, wc.FullPath);
+                        sb.AppendFormat(PccStrings.WorkingCopyXFromRepositoryY, wc.FullPath, wc.RepositoryRoot);
                         sb.AppendLine();
-                        sb.AppendFormat(PccStrings.WorkingCopyX, w.FullPath);
+                        sb.AppendFormat(PccStrings.WorkingCopyXFromRepositoryY, w.FullPath, wc.RepositoryRoot);
                         sb.AppendLine();
 
                         state.MessageBox.Show(sb.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -567,6 +571,20 @@ namespace Ankh.Services.PendingChanges
             return true;
         }
 
+        private bool PreCommit_VerifyTargetsVersioned(PendingCommitState state)
+        {
+            Queue<string> toAdd = new Queue<string>();
+            foreach (PendingChange pc in state.Changes)
+            {
+                if (!pc.SvnItem.IsVersioned)
+                {
+                    state.MessageBox.Show(string.Format(PccStrings.CantCommitUnversionedTargetX, pc.FullPath), "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                    return false;
+                }
+            }
+            return true;
+        }
+
         static string GetSvnCasing(SvnItem item)
         {
             string name = null;
@@ -600,11 +618,7 @@ namespace Ankh.Services.PendingChanges
             bool ok = false;
             SvnCommitResult rslt = null;
 
-            SvnDepth depth = state.CalculateCommitDepth();
             bool enableHooks = GetService<IAnkhConfigurationService>().Instance.EnableTortoiseSvnHooks;
-
-            if (depth == SvnDepth.Unknown)
-                return false;
 
             bool outOfDateError = false;
             bool otherError = false;
@@ -615,7 +629,7 @@ namespace Ankh.Services.PendingChanges
                 {
                     string itemPath = null;
                     SvnCommitArgs ca = new SvnCommitArgs();
-                    ca.Depth = depth;
+                    ca.Depth = SvnDepth.Empty;
                     ca.KeepLocks = state.KeepLocks;
                     ca.KeepChangeLists = state.KeepChangeLists;
                     ca.LogMessage = state.LogMessage;

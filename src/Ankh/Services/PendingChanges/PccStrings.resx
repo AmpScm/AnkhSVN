@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CommitSingleWc" xml:space="preserve">
-    <value>You can only commit from one working copy at a time</value>
+    <value>You can only commit to one repository at a time</value>
   </data>
   <data name="CommittedPrefix" xml:space="preserve">
     <value>Committed:</value>
@@ -150,8 +150,8 @@
   <data name="ShouldNotCommitX" xml:space="preserve">
     <value>Not to commit: {0}</value>
   </data>
-  <data name="WorkingCopyX" xml:space="preserve">
-    <value>Working Copy: {0}</value>
+  <data name="WorkingCopyXFromRepositoryY" xml:space="preserve">
+    <value>Working Copy: {0} (from repository {1})</value>
   </data>
   <data name="YouCanDownloadAnkh" xml:space="preserve">
     <value>You can download the latest AnkhSVN release on http://ankhsvn.net/downloads</value>
@@ -174,5 +174,8 @@ Are you sure you want to commit without an issue number?</value>
   </data>
   <data name="WhileCommittingX" xml:space="preserve">
     <value>While committing: {0}</value>
+  </data>
+  <data name="CantCommitUnversionedTargetX" xml:space="preserve">
+    <value>The commit processing can't commit '{0}', because it is not managed by Subversion. Maybe you should refresh the status after applying changes with another client?</value>
   </data>
 </root>
