@@ -41,7 +41,7 @@ namespace Ankh.UI.MergeWizard
             SelectionChanged += new EventHandler<EventArgs>(MergeRevisionsSelectionPage_SelectionChanged);
             InitializeComponent();
 
-            logToolControl1.SelectionChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(logToolControl1_SelectionChanged);
+            logToolControl1.SelectionChanged += new EventHandler(logToolControl1_SelectionChanged);
 
             logToolControl1.StopOnCopy = true;
         }
@@ -122,7 +122,7 @@ namespace Ankh.UI.MergeWizard
 
         public event EventHandler<EventArgs> SelectionChanged;
 
-        void logToolControl1_SelectionChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
+        void logToolControl1_SelectionChanged(object sender, EventArgs e)
         {
             OnSelectionChanged(EventArgs.Empty);
         }

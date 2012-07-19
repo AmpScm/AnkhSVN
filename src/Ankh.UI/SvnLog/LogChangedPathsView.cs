@@ -105,14 +105,12 @@ namespace Ankh.UI.SvnLog
             {
                 if (itemSource != null)
                 {
-                    itemSource.SelectionChanged -= new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(SelectionChanged);
-                    itemSource.FocusChanged -= new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(FocusChanged);
+                    itemSource.FocusChanged -= new EventHandler(FocusChanged);
                 }
                 itemSource = value;
                 if (itemSource != null)
                 {
-                    itemSource.SelectionChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(SelectionChanged);
-                    itemSource.FocusChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(FocusChanged);
+                    itemSource.FocusChanged += new EventHandler(FocusChanged);
                 }
 
             }
@@ -120,17 +118,11 @@ namespace Ankh.UI.SvnLog
 
         #endregion
 
-
-
-        void SelectionChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
-        {
-        }
-
-        void FocusChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
+        void FocusChanged(object sender, EventArgs e)
         {
             Items.Clear();
 
-            ISvnLogItem item = e.Source.FocusedItem;
+            ISvnLogItem item = ItemSource.FocusedItem;
 
             if (item != null && item.ChangedPaths != null)
             {

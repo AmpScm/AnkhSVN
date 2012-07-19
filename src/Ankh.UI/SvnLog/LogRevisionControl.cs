@@ -55,11 +55,6 @@ namespace Ankh.UI.SvnLog
             Sorting = SortOrder.None;
             Init();
             _logAction = new Action<SvnLogArgs>(DoFetch);
-
-            ViewPositionChanged += new System.EventHandler(this.logView_Scrolled);
-            ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.logRevisionControl1_ShowContextMenu);
-            ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.logRevisionControl1_ItemSelectionChanged);
-            KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.logView_KeyPress);
         }
 
         LogDataSource _dataSource;
@@ -204,7 +199,7 @@ namespace Ankh.UI.SvnLog
                 }
                 HideBusyIndicator();
             }
-        }       
+        }
 
         void OnReceivedItem(object sender, SvnLoggingEventArgs e)
         {
@@ -289,18 +284,15 @@ namespace Ankh.UI.SvnLog
                 BeginInvoke(new AnkhAction(HideBusyIndicator));
                 return;
             }
-            
+
             if (_busyOverlay != null)
                 _busyOverlay.Hide();
         }
 
-        private void logView_Scrolled(object sender, EventArgs e)
+        protected override void OnKeyPress(KeyPressEventArgs e)
         {
-            ExtendList();
-        }
+            base.OnKeyPress(e);
 
-        private void logView_KeyPress(object sender, KeyPressEventArgs e)
-        {
             ExtendList();
         }
 
@@ -395,10 +387,7 @@ namespace Ankh.UI.SvnLog
             }
         }
 
-        #region ICurrentItemSource<ISvnLogItem> Members
-        public event EventHandler<CurrentItemEventArgs<ISvnLogItem>> SelectionChanged;
-
-        public event EventHandler<CurrentItemEventArgs<ISvnLogItem>> FocusChanged;
+        public event EventHandler FocusChanged;
 
         ISvnLogItem ICurrentItemSource<ISvnLogItem>.FocusedItem
         {
@@ -411,43 +400,38 @@ namespace Ankh.UI.SvnLog
             }
         }
 
-        readonly IList<ISvnLogItem> _selectedItems = new List<ISvnLogItem>();
-        IList<ISvnLogItem> ICurrentItemSource<ISvnLogItem>.SelectedItems
+        readonly List<ISvnLogItem> _selectedLogItems = new List<ISvnLogItem>();
+        public IList<ISvnLogItem> SelectedLogItems
         {
             get
             {
-                return _selectedItems;
+                _selectedLogItems.Clear();
+                foreach (LogRevisionItem lri in SelectedItems)
+                    _selectedLogItems.Add(new LogItem(lri, LogSource.RepositoryRoot));
+
+                return _selectedLogItems.AsReadOnly();
             }
         }
 
-        #endregion
-
-        private void logRevisionControl1_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        protected override void OnItemSelectionChanged(ListViewItemSelectionChangedEventArgs e)
         {
-            if (FocusChanged != null)
-                FocusChanged(this, new CurrentItemEventArgs<ISvnLogItem>(this));
+            base.OnItemSelectionChanged(e);
 
-            FireSelectionChanged();
+            OnFocusChanged(e);
 
             ExtendList();
         }
 
-        void FireSelectionChanged()
+        protected virtual void OnFocusChanged(EventArgs e)
         {
-            _selectedItems.Clear();
-            foreach (int i in SelectedIndices)
-                _selectedItems.Add(new LogItem((LogRevisionItem)Items[i], LogSource.RepositoryRoot));
-
-            OnSelectionChanged(new CurrentItemEventArgs<ISvnLogItem>(this));
-        }
-        protected virtual void OnSelectionChanged(CurrentItemEventArgs<ISvnLogItem> e)
-        {
-            if (SelectionChanged != null)
-                SelectionChanged(this, e);
+            if (FocusChanged != null)
+                FocusChanged(this, e);
         }
 
-        private void logRevisionControl1_ShowContextMenu(object sender, MouseEventArgs e)
+        public override void OnShowContextMenu(MouseEventArgs e)
         {
+            base.OnShowContextMenu(e);
+
             if (Context == null)
                 return;
 
@@ -535,7 +519,7 @@ namespace Ankh.UI.SvnLog
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
-            OnViewPositionChanged(e);
+            ExtendList();
         }
 
         protected override void WndProc(ref Message m)
@@ -543,15 +527,8 @@ namespace Ankh.UI.SvnLog
             base.WndProc(ref m);
 
             if (m.Msg == 0x115) // WM_VSCROLL
-                OnViewPositionChanged(EventArgs.Empty);
+                ExtendList();
         }
-
-        public event EventHandler ViewPositionChanged;
-        private void OnViewPositionChanged(EventArgs e)
-        {
-            if (ViewPositionChanged != null)
-                ViewPositionChanged(this, e);
-        }   
 
         protected override void OnSizeChanged(EventArgs e)
         {
@@ -560,7 +537,20 @@ namespace Ankh.UI.SvnLog
             if (!DesignMode && _messageColumn != null)
                 ResizeColumnsToFit(_messageColumn);
 
-            OnViewPositionChanged(e);
+            ExtendList();
+        }
+
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+            Point mp = PointToClient(MousePosition);
+            ListViewHitTestInfo info = HitTest(mp);
+            LogRevisionItem lvi = info.Item as LogRevisionItem;
+            if (lvi != null && Context != null)
+            {
+                IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
+                cmdSvc.PostExecCommand(AnkhCommand.LogShowChanges);
+            }
         }
     }
 }
