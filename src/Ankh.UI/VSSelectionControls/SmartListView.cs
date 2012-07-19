@@ -501,6 +501,7 @@ namespace Ankh.UI.VSSelectionControls
 
         private const int LVM_FIRST = 0x1000;
         private const int LVM_SETEXTENDEDLISTVIEWSTYLE = LVM_FIRST + 54;
+        private const int LVS_EX_DOUBLEBUFFER = 0x00010000;
         private bool _setHeaderStyle;
 
         protected override void OnHandleCreated(EventArgs e)
@@ -517,7 +518,7 @@ namespace Ankh.UI.VSSelectionControls
                     NativeMethods.SetWindowTheme(Handle, "Explorer", null);
 
                 if (VSVersion.VS2010OrVistaOrLater)
-                    NativeMethods.SendMessage(Handle, LVM_SETEXTENDEDLISTVIEWSTYLE, (IntPtr)0x00010000, (IntPtr)0x00010000);
+                    NativeMethods.SendMessage(Handle, LVM_SETEXTENDEDLISTVIEWSTYLE, (IntPtr)LVS_EX_DOUBLEBUFFER, (IntPtr)LVS_EX_DOUBLEBUFFER);
             }
         }
 
