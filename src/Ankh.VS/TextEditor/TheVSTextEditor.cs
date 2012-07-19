@@ -38,7 +38,7 @@ namespace Ankh.VS.TextEditor
     /// This class is used to implement CodeEditorUserControl
     /// </summary>
     /// <seealso cref="UserControl"/>
-    partial class TheVSTextEditor : Control, IAnkhPreFilterMessage, IAnkhHasVsTextView, IVSTextEditorImplementation
+    partial class TheVSTextEditor : Control, IAnkhHasVsTextView, IVSTextEditorImplementation, IAnkhLegacyKeyMessageSuppressFilter
     {
         CodeEditorWindow _nativeWindow;
         IAnkhServiceProvider _context;
@@ -535,33 +535,31 @@ namespace Ankh.VS.TextEditor
             get { return _nativeWindow.TextView; }
         }
 
-        public bool PreFilterMessage(ref Message msg)
+        public bool PreFilterKeyMessage(Keys keyData)
         {
-            const int WM_KEYDOWN = 0x100;
-            const int WM_KEYUP = 0x101;
-            //const int WM_CHAR = 0x0102;
+            System.Dia.Debug.Assert(_wpfEditorInfo == null); // No filtering necessary in VS2010+
 
-            if (msg.Msg == WM_KEYDOWN || msg.Msg == WM_KEYUP)
-                switch ((Keys)msg.WParam)
-                {
-                    case Keys.Up:
-                    case Keys.Right:
-                    case Keys.Down:
-                    case Keys.Left:
-                    case Keys.Back:
-                    case Keys.Home:
-                    case Keys.End:
-                    case Keys.PageUp:
-                    case Keys.PageDown:
-                    case Keys.Insert:
-                    case Keys.Delete:
-                    case Keys.Return:
-                        return true;
-                    default:
+            switch (keyData)
+            {
+                case Keys.Up:
+                case Keys.Right:
+                case Keys.Down:
+                case Keys.Left:
+                case Keys.Back:
+                case Keys.Home:
+                case Keys.End:
+                case Keys.PageUp:
+                case Keys.PageDown:
+                case Keys.Insert:
+                case Keys.Delete:
+                    return true;
+                case Keys.Return:
+                    if (ModifierKeys == Keys.Control && TopLevelControl is Form)
                         return false;
-                }
-
-            return false;
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -864,9 +862,6 @@ namespace Ankh.VS.TextEditor
                                 if (items[0].fHorzScrollbar != 0 && (lp == null || lp[0].fWordWrap == 0))
                                 {
                                     height += SystemInformation.HorizontalScrollBarHeight;
-
-                                    if (VSVersion.VS2010OrLater)
-                                        height += 2; // WPF control uses 2 exta pixels for dropdown.
                                 }
                             }
                         }

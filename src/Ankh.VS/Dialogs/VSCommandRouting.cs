@@ -291,25 +291,30 @@ namespace Ankh.VS.Dialogs
                 }
             }
 
-            Control c = _form.ActiveControl;
+            if (!_vsWpf &&
+                (m.Msg == WM_KEYDOWN || m.Msg == WM_KEYUP || m.Msg == WM_SYSKEYDOWN || m.Msg == WM_SYSKEYUP))
             {
-                IContainerControl cc;
-                Control ac;
+                // The old text editor handled commands and then forwarded them anyway
+                // With VS2010+ we assume that this is no longer a problem
 
-                while (null != (cc = c as IContainerControl) && null != (ac = cc.ActiveControl) && ac != cc)
+                Control c = _form.ActiveControl;
                 {
-                    c = ac;
+                    IContainerControl cc;
+                    Control ac;
+
+                    while (null != (cc = c as IContainerControl) && null != (ac = cc.ActiveControl) && ac != cc)
+                    {
+                        c = ac;
+                    }
                 }
-            }
 
-            while (c != null)
-            {
-                IAnkhPreFilterMessage filter = c as IAnkhPreFilterMessage;
+                if (c != null)
+                {
+                    IAnkhLegacyKeyMessageSuppressFilter filter = c as IAnkhLegacyKeyMessageSuppressFilter;
 
-                if (filter != null && filter.PreFilterMessage(ref m))
-                    return true;
-
-                c = c.Parent;
+                    if (filter != null && filter.PreFilterKeyMessage((Keys)(int)m.WParam))
+                        return true;
+                }
             }
 
             return false;

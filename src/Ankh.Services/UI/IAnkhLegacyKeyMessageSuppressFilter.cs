@@ -21,8 +21,8 @@ using System.Windows.Forms;
 
 namespace Ankh.UI
 {
-    public interface IAnkhPreFilterMessage
+    public interface IAnkhLegacyKeyMessageSuppressFilter
     {
-        bool PreFilterMessage(ref Message msg);
+        bool PreFilterKeyMessage(Keys keyData);
     }
 }
