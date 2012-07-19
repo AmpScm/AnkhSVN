@@ -36,6 +36,12 @@ namespace Ankh.UI.PendingChanges
         public PendingCommitsPage()
         {
             InitializeComponent();
+
+            if (VSVersion.VS11OrLater)
+            {
+                pendingCommits.BorderStyle = BorderStyle.None;
+                borderPanel.BorderStyle = BorderStyle.None;
+            }
         }
 
         AnkhConfig Config
@@ -76,7 +82,7 @@ namespace Ankh.UI.PendingChanges
             SvnItem one = EnumTools.GetSingle(e.Selection.GetSelectedSvnItems(false));
 
             if (one == null || !one.Exists)
-                e.Enabled = false;            
+                e.Enabled = false;
         }
 
         private void OnOpenFolder(object sender, CommandEventArgs e)
@@ -123,7 +129,7 @@ namespace Ankh.UI.PendingChanges
             if (!_manager.IsActive)
             {
                 _manager.IsActive = true;
-                _manager.FullRefresh(false); 
+                _manager.FullRefresh(false);
             }
             else
                 PerformInitialUpdate(_manager);
