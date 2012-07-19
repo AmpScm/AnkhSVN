@@ -453,6 +453,7 @@ namespace Ankh.WpfPackage.Services
         const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_BACKGROUND = (__VSSYSCOLOREX)__VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_BACKGROUND;
         const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_FILL = (__VSSYSCOLOREX)__VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_FILL;
         const __VSSYSCOLOREX VSCOLOR_GRAYTEXT = (__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_GRAYTEXT;
+        const __VSSYSCOLOREX VSCOLOR_COMMANDBAR_TOOLBAR_SEPARATOR = (__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_COMMANDBAR_TOOLBAR_SEPARATOR;
 
         IAnkhVSColor _vsColors;
         IAnkhVSColor VSColors
@@ -514,12 +515,12 @@ namespace Ankh.WpfPackage.Services
 
         void ThemeOne(IHasSplitterColor splitter)
         {
-            Color clrBackground;
+            Color clrSplitter;
 
-            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_BACKGROUND, out clrBackground))
-                clrBackground = SystemColors.InactiveBorder;
+            if (!VSColors.TryGetColor(VSCOLOR_COMMANDBAR_TOOLBAR_SEPARATOR, out clrSplitter))
+                clrSplitter = SystemColors.InactiveBorder;
 
-            splitter.SplitterColor = clrBackground;
+            splitter.SplitterColor = clrSplitter;
         }
 
         private void SetProperty(PropertyGrid grid, string propertyName, object value)
