@@ -246,12 +246,7 @@ namespace Ankh.UI.SvnLog
 
         #endregion
 
-        public bool UseVSTheming
-        {
-            get { return true; }
-        }
-
-        public void OnThemeChange(IAnkhServiceProvider context)
+        public void OnThemeChange(IAnkhServiceProvider sender, CancelEventArgs e)
         {
             if (VSVersion.VS11OrLater)
             {

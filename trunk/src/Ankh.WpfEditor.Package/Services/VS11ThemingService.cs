@@ -12,6 +12,7 @@ using Ankh.VS;
 using Ankh.Commands;
 using Microsoft.VisualStudio;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Ankh.WpfPackage.Services
 {
@@ -263,11 +264,11 @@ namespace Ankh.WpfPackage.Services
             }
 
             ISupportsVSTheming themeControl = control as ISupportsVSTheming;
-
+            CancelEventArgs ca = new CancelEventArgs(false);
             if (themeControl != null)
-                themeControl.OnThemeChange(this);
+                themeControl.OnThemeChange(this, ca);
 
-            if (themeControl != null && !themeControl.UseVSTheming)
+            if (ca.Cancel)
                 return; // No recurse!
 
             VSThemeWindow(control);
@@ -341,7 +342,7 @@ namespace Ankh.WpfPackage.Services
         {
             Color clrFill, clrText;
 
-            if (!VSColors.TryGetColor((__VSSYSCOLOREX)VSCOLOR_BRANDEDUI_FILL, out clrFill))
+            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_FILL, out clrFill))
                 clrFill = SystemColors.Control;
             if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_TEXT, out clrText))
                 clrText = SystemColors.WindowText;

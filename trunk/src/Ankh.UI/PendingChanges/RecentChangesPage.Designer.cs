@@ -68,7 +68,6 @@ namespace Ankh.UI.PendingChanges
             this.syncView.Context = null;
             resources.ApplyResources(this.syncView, "syncView");
             this.syncView.Name = "syncView";
-            this.syncView.UseVSTheming = true;
             // 
             // topLayoutPanel
             // 
