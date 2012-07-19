@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
 namespace Ankh.UI.VSSelectionControls
 {
-    public class SmartSplitContainer : SplitContainer, ISupportInitialize
+    public class SmartSplitContainer : SplitContainer, ISupportInitialize, IHasSplitterColor
     {
         void ISupportInitialize.BeginInit()
         {
@@ -38,6 +39,30 @@ namespace Ankh.UI.VSSelectionControls
                 keyData = keyData & ~Keys.Control;
             }
             return base.ProcessDialogKey(keyData);
+        }
+
+        bool _hasSplitterColor;
+        Color _splitterColor;
+
+        [DefaultValue(typeof(Color),"Transparent")]
+        public System.Drawing.Color SplitterColor
+        {
+            get { return _hasSplitterColor ? _splitterColor : Color.Transparent; }
+            set
+            {
+                _hasSplitterColor = true;
+                _splitterColor = value;
+            }
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            base.OnPaintBackground(e);
+            if (_hasSplitterColor)
+            {
+                using (SolidBrush sb = new SolidBrush(SplitterColor))
+                    e.Graphics.FillRectangle(sb, SplitterRectangle);
+            }
         }
     }
 }

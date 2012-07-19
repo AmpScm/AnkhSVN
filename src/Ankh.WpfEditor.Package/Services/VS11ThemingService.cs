@@ -285,7 +285,7 @@ namespace Ankh.WpfPackage.Services
             }
         }
 
-        bool MaybeTheme<T>(Action<T> how, Control control) where T : Control
+        bool MaybeTheme<T>(Action<T> how, Control control) where T : class
         {
             T value = control as T;
             if (value != null)
@@ -346,14 +346,21 @@ namespace Ankh.WpfPackage.Services
 
         void ThemeOne(ListView listView)
         {
+            Color clrFill, clrText;
+
+            if (!VSColors.TryGetColor((__VSSYSCOLOREX)VSCOLOR_BRANDEDUI_FILL, out clrFill))
+                clrFill = SystemColors.Control;
+            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_TEXT, out clrText))
+                clrText = SystemColors.WindowText;
+
             if (listView.Font != DialogFont)
                 listView.Font = DialogFont;
 
-            if (listView.BackColor != listView.Parent.BackColor)
-                listView.BackColor = listView.Parent.BackColor;
+            if (listView.BackColor != clrFill)
+                listView.BackColor = clrFill;
 
-            if (listView.ForeColor != listView.Parent.ForeColor)
-                listView.ForeColor = listView.Parent.ForeColor;
+            if (listView.ForeColor != clrText)
+                listView.ForeColor = clrText;
 
             if (listView.BorderStyle == BorderStyle.Fixed3D)
                 listView.BorderStyle = BorderStyle.FixedSingle;
@@ -440,37 +447,40 @@ namespace Ankh.WpfPackage.Services
                 toolBar.Renderer = renderer;
         }
 
+        const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_TITLE = (__VSSYSCOLOREX)__VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_TITLE;
+        const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_BORDER = (__VSSYSCOLOREX)__VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_BORDER;
+        const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_TEXT = (__VSSYSCOLOREX)__VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_TEXT;
+        const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_BACKGROUND = (__VSSYSCOLOREX)__VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_BACKGROUND;
+        const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_FILL = (__VSSYSCOLOREX)__VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_FILL;
+        const __VSSYSCOLOREX VSCOLOR_GRAYTEXT = (__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_GRAYTEXT;
+
+        IAnkhVSColor _vsColors;
+        IAnkhVSColor VSColors
+        {
+            get { return _vsColors ?? (_vsColors = GetService<IAnkhVSColor>()); }
+        }
+
         void ThemeOne(PropertyGrid grid)
         {
-            IAnkhVSColor colorSvc = GetService<IAnkhVSColor>();
-
-            const int VSCOLOR_BRANDEDUI_TITLE = -187;
-            const int VSCOLOR_BRANDEDUI_BORDER = -188;
-            const int VSCOLOR_BRANDEDUI_TEXT = -189;
-            const int VSCOLOR_BRANDEDUI_BACKGROUND = -190;
-            const int VSCOLOR_BRANDEDUI_FILL = -191;
-            const int VSCOLOR_GRAYTEXT = -201;
-
             Color clrTitle, clrBorder, clrText, clrBackground, clrFill, clrGrayText;
 
-            if (!colorSvc.TryGetColor((__VSSYSCOLOREX)VSCOLOR_BRANDEDUI_TITLE, out clrTitle))
+            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_TITLE, out clrTitle))
                 clrTitle = SystemColors.WindowText;
-            if (!colorSvc.TryGetColor((__VSSYSCOLOREX)VSCOLOR_BRANDEDUI_BORDER, out clrBorder))
+            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_BORDER, out clrBorder))
                 clrBorder = SystemColors.WindowFrame;
-            if (!colorSvc.TryGetColor((__VSSYSCOLOREX)VSCOLOR_BRANDEDUI_TEXT, out clrText))
+            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_TEXT, out clrText))
                 clrText = SystemColors.WindowText;
-            if (!colorSvc.TryGetColor((__VSSYSCOLOREX)VSCOLOR_BRANDEDUI_BACKGROUND, out clrBackground))
-                clrBackground = SystemColors.WindowFrame;
-            if (!colorSvc.TryGetColor((__VSSYSCOLOREX)VSCOLOR_BRANDEDUI_FILL, out clrFill))
-                clrFill = SystemColors.WindowText;
-            if (!colorSvc.TryGetColor((__VSSYSCOLOREX)VSCOLOR_GRAYTEXT, out clrGrayText))
+            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_BACKGROUND, out clrBackground))
+                clrBackground = SystemColors.InactiveBorder;
+            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_FILL, out clrFill))
+                clrFill = SystemColors.Control;
+            if (!VSColors.TryGetColor(VSCOLOR_GRAYTEXT, out clrGrayText))
                 clrGrayText = SystemColors.WindowText;
 
             grid.BackColor = clrFill;
 
             grid.HelpBackColor = clrFill;
             grid.ViewBackColor = clrFill;
-            
 
             grid.ViewForeColor = clrText;
             grid.HelpForeColor = clrText;
@@ -488,6 +498,16 @@ namespace Ankh.WpfPackage.Services
                 // The OS glyphs don't work in the dark theme. VS uses the same trick. (Unavailable in 4.0)
                 SetProperty(grid, "CanShowVisualStyleGlyphs", false);
             }
+        }
+
+        void ThemeOne(IHasSplitterColor splitter)
+        {
+            Color clrBackground;
+
+            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_BACKGROUND, out clrBackground))
+                clrBackground = SystemColors.InactiveBorder;
+
+            splitter.SplitterColor = clrBackground;
         }
 
         private void SetProperty(PropertyGrid grid, string propertyName, object value)
@@ -517,7 +537,8 @@ namespace Ankh.WpfPackage.Services
                 || MaybeTheme<TreeView>(ThemeOne, control)
                 || MaybeTheme<Panel>(ThemeOne, control)
                 || MaybeTheme<UserControl>(ThemeOne, control)
-                || MaybeTheme<PropertyGrid>(ThemeOne, control);
+                || MaybeTheme<PropertyGrid>(ThemeOne, control)
+                || MaybeTheme<IHasSplitterColor>(ThemeOne, control);
         }
     }
 }
