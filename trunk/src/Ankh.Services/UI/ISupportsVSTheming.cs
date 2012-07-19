@@ -7,6 +7,6 @@ namespace Ankh.UI
     public interface ISupportsVSTheming
     {
         bool UseVSTheming { get; }
-        void OnThemeChange(IUIService ui, IAnkhServiceProvider context);
+        void OnThemeChange(IAnkhServiceProvider context);
     }
 }

@@ -1267,7 +1267,7 @@ namespace Ankh.UI.VSSelectionControls
             get { return base.Columns; }
         }
 
-        public virtual void OnThemeChange(System.Windows.Forms.Design.IUIService ui, IAnkhServiceProvider context)
+        public virtual void OnThemeChange(IAnkhServiceProvider context)
         {
             base.OnParentChanged(EventArgs.Empty); // Recreate handle, keeping state
 
