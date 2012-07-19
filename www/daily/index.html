@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11411</title>
+          AnkhSVN-Daily Update - 2.3.11418</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,14 +16,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6350/AnkhSvn-Daily-2.3.11411.1397.msi">AnkhSVN 2.3.11411</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6352/AnkhSvn-Daily-2.3.11418.1398.msi">AnkhSVN 2.3.11418</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11411">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11418">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -31,6 +31,21 @@
 <h2>Recent changes</h2>
 <table>
 <tr class="d"><td colspan="4">2012-07-19</td></tr>
+<tr><td> </td><td class="r"><a id="11418" href="http://ankhsvn.net/rev/11418">
+            [r11418]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/PendingChanges/PendingCommitsPage.Designer.cs, Ankh.UI/SvnLog/LogControl.cs, Ankh.WpfEditor.Package/Services/VS11ThemingService.cs, Ankh.UI/VSSelectionControls/SmartListView.cs, Ankh.UI/VSSelectionControls/SmartSplitter.cs, Ankh.Services/UI/ISupportsVSTheming.cs, Ankh.UI/PendingChanges/PendingConflictsPage.Designer.cs, Ankh.UI/PendingChanges/RecentChangesPage.Designer.cs, Ankh.UI/PendingChanges/Commits/PendingCommitsView.cs, Ankh.UI/VSSelectionControls/SmartTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Reduce the theming api to be implemented by customized controls to a single
+function.</td></tr>
+<tr><td> </td><td class="r"><a id="11415" href="http://ankhsvn.net/rev/11415">
+            [r11415]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh.Services/Scc/IFileStatusCache.cs, Ankh.Services/Scc/SvnWorkingCopy.cs, Ankh.Services/Scc/SvnItem.State.cs, Ankh.Services/Scc/SvnItem.cs, Ankh.Services/Scc/SvnItemState.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the calculate working copy root code in our status cache infrastructure
+fully use the wc-ng knowledge of obtaining a wcroot.</td></tr>
+<tr><td> </td><td class="r"><a id="11413" href="http://ankhsvn.net/rev/11413">
+            [r11413]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Services/PendingChanges:</strong> PendingChangeHandler.cs, PccStrings.resx, PccStrings.Designer.cs, PendingCommitState.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Hopefully resolve two commit failure reasons with a better error message:
+Report paths that are still unversioned after applying changes to the working
+copy instead of making Subversion throw an ugly error.<br>
+Also allow deleting directories with depth empty, as Subversion no longer
+denies that.</td></tr>
 <tr><td> </td><td class="r"><a id="11406" href="http://ankhsvn.net/rev/11406">
             [r11406]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/UI/IAnkhLegacyKeyMessageSuppressFilter.cs, Ankh.VS/TextEditor/TheVSTextEditor.cs, Ankh.VS/Dialogs/VSCommandRouting.cs, Ankh.Services/UI/IAnkhPreFilterMessage.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove more unneeded legacy support from Visual Studio 2010 and 2012 code
