@@ -111,13 +111,13 @@ namespace Ankh
                 Debug.Assert((~_validState & MaskTextFile) == 0, "UpdateTextFile() set all attributes it should");
             }
 
-            if (0 != (unavailable & MaskNested))
+            if (0 != (unavailable & MaskWCRoot))
             {
-                UpdateNested();
+                UpdateWCRoot();
 
                 unavailable = flagsToGet & ~_validState;
 
-                Debug.Assert((~_validState & MaskNested) == 0, "UpdateNested() set all attributes it should");
+                Debug.Assert((~_validState & MaskWCRoot) == 0, "UpdateWCRoot() set all attributes it should");
             }
 
             if (0 != (unavailable & MaskIsAdministrativeArea))
@@ -417,31 +417,16 @@ namespace Ankh
         #endregion
 
         #region Nested Info
-        const SvnItemState MaskNested = SvnItemState.IsNested;
-        static readonly Uri parentRefUri = new Uri("../", UriKind.Relative);
-
-        void UpdateNested()
+        const SvnItemState MaskWCRoot = SvnItemState.IsWCRoot;
+        void UpdateWCRoot()
         {
-            SvnItem parentItem;
-
-            if (IsDirectory && IsVersioned &&
-                null != (parentItem = Parent) && parentItem.IsVersioned)
+            if (IsDirectory && IsVersioned)
             {
-                StatusCache.RefreshNested(this);
-
-                SvnItemState r;
-
-                bool foundNestedState = TryGetState(SvnItemState.IsNested, out r);
-
-                Debug.Assert(foundNestedState, "StatusCache.RefreshNested() should have updated status");
-
-                if (foundNestedState)
-                    return;
-
-                // Fall through to at least have some state
+                StatusCache.RefreshWCRoot(this);
+                return;
             }
 
-            SetState(SvnItemState.None, SvnItemState.IsNested);
+            SetState(SvnItemState.None, SvnItemState.IsWCRoot);
         }
         #endregion
 

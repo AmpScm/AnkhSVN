@@ -62,7 +62,7 @@ namespace Ankh.Scc
         /// Refreshes the nested status of the <see cref="SvnItem"/>
         /// </summary>
         /// <param name="item"></param>
-        void RefreshNested(SvnItem item);
+        void RefreshWCRoot(SvnItem item);
 
         /// <summary>
         /// Gets the <see cref="SvnDirectory"/> of the specified path
