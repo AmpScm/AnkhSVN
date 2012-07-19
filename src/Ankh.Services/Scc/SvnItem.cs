@@ -200,7 +200,7 @@ namespace Ankh
 
                     // Extract useful information we got anyway
 
-                    SetState(SvnItemState.Exists | SvnItemState.Versionable | SvnItemState.IsDiskFolder,
+                    SetState(SvnItemState.Exists | SvnItemState.Versionable | SvnItemState.IsDiskFolder | SvnItemState.IsNested,
                                 SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.IsTextFile);
 
                     return;
@@ -387,11 +387,9 @@ namespace Ankh
             {
                 case SvnStatus.NotVersioned:
                 case SvnStatus.Ignored:
+                case SvnStatus.Obstructed:
                     return true;
 
-                // TODO: Handle obstructed and tree conflicts!
-                // Obstructed can be directory on file location
-                // Tree conflict can apply on non versioned item
                 default:
                     return false;
             }
