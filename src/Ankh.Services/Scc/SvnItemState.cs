@@ -152,9 +152,9 @@ namespace Ankh.Scc
         #endregion
 
         /// <summary>
-        /// The item is the root of a nested working copy
+        /// The item is the root of a working copy
         /// </summary>
-        IsNested                = 0x01000000,
+        IsWCRoot                = 0x01000000,
 
         /// <summary>
         /// The item is a textfile

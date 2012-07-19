@@ -136,7 +136,7 @@ namespace Ankh
                 | SvnItemState.Deleted | SvnItemState.ContentConflicted | SvnItemState.Ignored
                 | SvnItemState.Obstructed | SvnItemState.Replaced | SvnItemState.Versioned
                 | SvnItemState.SvnDirty | SvnItemState.PropertyModified | SvnItemState.PropertiesConflicted | SvnItemState.Conflicted
-                | SvnItemState.Obstructed | SvnItemState.MustLock | SvnItemState.IsNested
+                | SvnItemState.Obstructed | SvnItemState.MustLock | SvnItemState.IsWCRoot
                 | SvnItemState.HasProperties | SvnItemState.HasLockToken | SvnItemState.HasCopyOrigin;
 
             switch (status)
@@ -200,10 +200,14 @@ namespace Ankh
 
                     // Extract useful information we got anyway
 
-                    SetState(SvnItemState.Exists | SvnItemState.Versionable | SvnItemState.IsDiskFolder | SvnItemState.IsNested,
-                                SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.IsTextFile);
+                    SetState(SvnItemState.Exists | SvnItemState.Versionable | SvnItemState.Versioned | SvnItemState.IsWCRoot | SvnItemState.IsDiskFolder,
+                             SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.IsTextFile);
 
                     return;
+                }
+                else
+                {
+                    SetState(SvnItemState.None, SvnItemState.IsWCRoot);
                 }
                 // Fall through
             }
@@ -908,9 +912,9 @@ namespace Ankh
         /// <value>
         /// 	<c>true</c> if this instance is nested working copy; otherwise, <c>false</c>.
         /// </value>
-        public bool IsNestedWorkingCopy
+        public bool IsWCRoot
         {
-            get { return GetState(SvnItemState.IsNested) != 0; }
+            get { return GetState(SvnItemState.IsWCRoot) != 0; }
         }
 
         /// <summary>

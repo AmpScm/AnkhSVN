@@ -97,41 +97,50 @@ namespace Ankh.Scc.StatusCache
             Debug.Assert(updateItem.IsStatusClean(), "The item requesting to be updated is updated");
         }
 
-        void Ankh.Scc.IFileStatusCache.RefreshNested(SvnItem item)
+        void Ankh.Scc.IFileStatusCache.RefreshWCRoot(SvnItem svnItem)
         {
-            if (item == null)
-                throw new ArgumentNullException("item");
+            if (svnItem == null)
+                throw new ArgumentNullException("svnItem");
 
-            Debug.Assert(item.NodeKind == SvnNodeKind.Directory);
+            Debug.Assert(svnItem.NodeKind == SvnNodeKind.Directory);
 
             // We retrieve nesting information by walking the entry data of the parent directory
             lock (_lock)
             {
-                ISvnItemUpdate oi = (ISvnItemUpdate)item;
+                string root;
 
-                string root = _client.GetWorkingCopyRoot(item.FullPath);
-
-                if (string.Equals(root, item.FullPath, StringComparison.OrdinalIgnoreCase))
+                try
                 {
-                    // The item is a working copy root -> Nested working copy
-                    oi.SetState(SvnItemState.IsNested, SvnItemState.None);
+                    root = _client.GetWorkingCopyRoot(svnItem.FullPath);
                 }
+                catch { root = null; }
+
+                if (root == null)
+                {
+                    ((ISvnItemUpdate)svnItem).SetState(SvnItemState.None, SvnItemState.IsWCRoot);
+                    return;
+                }
+
+                // Set all nodes between this node and the root to not-a-wcroot
+                ISvnItemUpdate oi;
+                while (root.Length < svnItem.FullPath.Length)
+                {
+                    oi = (ISvnItemUpdate)svnItem;
+
+                    oi.SetState(SvnItemState.None, SvnItemState.IsWCRoot);
+                    svnItem = svnItem.Parent;
+
+                    if (svnItem == null)
+                        return;
+                }
+
+                oi = svnItem;
+
+                if (svnItem.FullPath == root)
+                    oi.SetState(SvnItemState.IsWCRoot, SvnItemState.None); 
                 else
-                {
-                    oi.SetState(SvnItemState.None, SvnItemState.IsNested);
-                }
+                    oi.SetState(SvnItemState.None, SvnItemState.IsWCRoot);
             }
-        }
-
-        void OnLoadEntry(object sender, SvnWorkingCopyEntryEventArgs e)
-        {
-            if (e.NodeKind != SvnNodeKind.Directory || string.IsNullOrEmpty(e.Path))
-                return; // Files and the walked directory are not nested from this base
-
-            // Set not-nested on all items that are certainly not nested
-            SvnItem item;
-            if (_map.TryGetValue(e.FullPath, out item))
-                ((ISvnItemUpdate)item).SetState(SvnItemState.None, SvnItemState.IsNested);
         }
 
         SvnItem CreateItem(string fullPath, AnkhStatus status)

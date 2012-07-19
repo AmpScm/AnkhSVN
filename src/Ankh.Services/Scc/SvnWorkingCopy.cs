@@ -155,7 +155,7 @@ namespace Ankh.Scc
                 if (!svnItem.IsVersioned)
                     return parent;
 
-                if (parent.IsVersioned && !svnItem.IsNestedWorkingCopy)
+                if (parent.IsVersioned && !svnItem.IsWCRoot)
                     return parent;
             }
 
