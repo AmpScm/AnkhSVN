@@ -25,6 +25,7 @@ using Ankh.Commands;
 using Ankh.Configuration;
 using Ankh.Scc;
 using Ankh.UI.VSSelectionControls;
+using Ankh.VS;
 
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -317,75 +318,54 @@ namespace Ankh.UI.PendingChanges.Commits
         }
 
         bool _themedOnce;
-        public override void OnThemeChange(IAnkhServiceProvider context)
+        public override void OnThemeChange(IAnkhServiceProvider sender, CancelEventArgs e)
         {
-            //base.OnThemeChange(ui, context);
-
-            if (!VSVersion.VS11OrLater || !VSVersion.SupportsTheming)
-                return;
-
-            IAnkhCommandStates cs = context.GetService<IAnkhCommandStates>();
-            IWinFormsThemingService wts = context.GetService<IWinFormsThemingService>();
-
-            if (cs == null || wts == null)
-                return;
-
-            if (_themedOnce && cs.ThemeLight)
+            IAnkhCommandStates states;
+            
+            if (!VSVersion.VS11OrLater || !VSVersion.SupportsTheming
+                || null == (states = sender.GetService<IAnkhCommandStates>()))
             {
-                List<ListViewItem> savedItems = new List<ListViewItem>();
+                base.OnThemeChange(sender, e);
+                return;
+            }
 
-                BeginUpdate();
-                try
+            if (_themedOnce && states.ThemeLight)
+            {
+                e.Cancel = true; // Don't ask VS to theme the header
+                base.OnThemeChange(sender, e); /* Recreate handle while keeping state lists valid */
+
+                // But apply the colors anyway
                 {
-                    foreach (ListViewItem lvi in Items)
-                        savedItems.Add(lvi);
-                    Items.Clear();
-                }
-                finally
-                {
-                    EndUpdate();
+                    Color clrFill, clrText;
+                    IAnkhVSColor VSColors = sender.GetService<IAnkhVSColor>();
+                    const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_FILL = (__VSSYSCOLOREX)(-191); // __VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_FILL;
+                    const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_TEXT = (__VSSYSCOLOREX)(-189); // __VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_TEXT;
+
+                    if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_FILL, out clrFill))
+                        clrFill = SystemColors.Control;
+                    if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_TEXT, out clrText))
+                        clrText = SystemColors.WindowText;
+
+                    ForeColor = clrText;
+                    BackColor = clrFill;
                 }
 
-                base.OnParentChanged(EventArgs.Empty); /* Recreate handle while keeping state lists valid */
                 _themedOnce = false;
 
-                if (BackColor != Parent.BackColor)
-                    BackColor = Parent.BackColor;
-
-                if (ForeColor != Parent.ForeColor)
-                    ForeColor = Parent.ForeColor;
-
-
-                BeginUpdate();
-                try
-                {
-                    this.Items.AddRange(savedItems.ToArray());
-                }
-                finally
-                {
-                    EndUpdate();
-                }
+                // Re-enable after undoing theming
+                ShowSelectAllCheckBox = true;
 
                 return;
             }
 
-            if (!_themedOnce && (!cs.ThemeDefined || cs.ThemeLight))
+            if (!_themedOnce && (!states.ThemeDefined || states.ThemeLight))
+            {
+                e.Cancel = true;
                 return;
+            }
 
             _themedOnce = true;
-            wts.VSThemeWindow(this);
-        }
-
-        public override bool UseVSTheming
-        {
-            get
-            {
-                return false;
-            }
-            set
-            {
-                
-            }
+            base.OnThemeChange(sender, e);
         }
     }
 }

@@ -90,13 +90,6 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        bool _dontUseVsTheming;
-        [DefaultValue(true)]
-        public virtual bool UseVSTheming
-        {
-            get { return !_dontUseVsTheming; }
-            set { _dontUseVsTheming = !value; }
-        }
         /// <summary>
         /// Gets or sets how items are displayed in the control.
         /// </summary>
@@ -505,6 +498,7 @@ namespace Ankh.UI.VSSelectionControls
         private const int LVS_EX_DOUBLEBUFFER = 0x00010000;
         private bool _setHeaderStyle;
 
+        bool _isThemed;
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
@@ -513,9 +507,9 @@ namespace Ankh.UI.VSSelectionControls
 
             UpdateSortGlyphs();
 
-            if (IsXPPlus && !OwnerDraw && (!UseVSTheming || !VSVersion.SupportsTheming))
+            if (IsXPPlus && !OwnerDraw)
             {
-                if (VSVersion.VS2010OrLater)
+                if (VSVersion.VS2010OrLater && !_isThemed)
                     NativeMethods.SetWindowTheme(Handle, "Explorer", null);
 
                 if (VSVersion.VS2010OrVistaOrLater)
@@ -893,7 +887,7 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         int _nInUpdates;
-        bool _updateAllBox = false;
+        bool _updateAllBox; /* = false */
         public new void BeginUpdate()
         {
             try
@@ -932,7 +926,7 @@ namespace Ankh.UI.VSSelectionControls
 
         protected virtual void OnEndUpdate(EventArgs e)
         {
-            if (_updateAllBox)
+            if (_updateAllBox && CheckBoxes && ShowSelectAllCheckBox)
             {
                 _updateAllBox = false;
 
@@ -1268,14 +1262,12 @@ namespace Ankh.UI.VSSelectionControls
             get { return base.Columns; }
         }
 
-        public virtual void OnThemeChange(IAnkhServiceProvider context)
+        public virtual void OnThemeChange(IAnkhServiceProvider sender, CancelEventArgs e)
         {
+            ShowSelectAllCheckBox = false; // Not supported by VS theming. Disable to avoid problems and unnecessary work :(
+
+            _isThemed = !e.Cancel;
             base.OnParentChanged(EventArgs.Empty); // Recreate handle, keeping state
-
-            IWinFormsThemingService ws = context.GetService<IWinFormsThemingService>();
-
-            if (UseVSTheming && ws != null)
-                ws.VSThemeWindow(this);
         }
     }
 }

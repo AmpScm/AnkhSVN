@@ -120,7 +120,6 @@ namespace Ankh.UI.PendingChanges
             this.conflictView.Context = null;
             resources.ApplyResources(this.conflictView, "conflictView");
             this.conflictView.Name = "conflictView";
-            this.conflictView.UseVSTheming = true;
             // 
             // resolvePanel
             // 

@@ -72,7 +72,7 @@ namespace Ankh.UI.VSSelectionControls
                     _splitterColor = value;
                 }
                 else
-                    _hasSplitterColor = value;
+                    _hasSplitterColor = false;
             }
         }
 
