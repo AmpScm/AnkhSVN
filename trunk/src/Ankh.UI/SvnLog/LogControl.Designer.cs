@@ -79,6 +79,7 @@ namespace Ankh.UI.SvnLog
             // revisionBox
             // 
             resources.ApplyResources(this.revisionBox, "revisionBox");
+            this.revisionBox.HideSelection = false;
             this.revisionBox.LogSource = null;
             this.revisionBox.Name = "revisionBox";
             this.revisionBox.Sorting = System.Windows.Forms.SortOrder.None;
