@@ -329,38 +329,30 @@ namespace Ankh.UI.PendingChanges.Commits
                 return;
             }
 
-            if (_themedOnce && states.ThemeLight)
+            if (states.ThemeLight)
             {
                 e.Cancel = true; // Don't ask VS to theme the header
                 base.OnThemeChange(sender, e); /* Recreate handle while keeping state lists valid */
 
                 // But apply the colors anyway
-                {
-                    Color clrFill, clrText;
-                    IAnkhVSColor VSColors = sender.GetService<IAnkhVSColor>();
-                    const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_FILL = (__VSSYSCOLOREX)(-191); // __VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_FILL;
-                    const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_TEXT = (__VSSYSCOLOREX)(-189); // __VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_TEXT;
+                Color clrFill, clrText;
+                IAnkhVSColor VSColors = sender.GetService<IAnkhVSColor>();
+                const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_FILL = (__VSSYSCOLOREX)(-191); // __VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_FILL;
+                const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_TEXT = (__VSSYSCOLOREX)(-189); // __VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_TEXT;
 
-                    if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_FILL, out clrFill))
-                        clrFill = SystemColors.Control;
-                    if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_TEXT, out clrText))
-                        clrText = SystemColors.WindowText;
+                if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_FILL, out clrFill))
+                    clrFill = SystemColors.Control;
+                if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_TEXT, out clrText))
+                    clrText = SystemColors.WindowText;
 
-                    ForeColor = clrText;
-                    BackColor = clrFill;
-                }
+                ForeColor = clrText;
+                BackColor = clrFill;
 
                 _themedOnce = false;
 
                 // Re-enable after undoing theming
                 ShowSelectAllCheckBox = true;
 
-                return;
-            }
-
-            if (!_themedOnce && (!states.ThemeDefined || states.ThemeLight))
-            {
-                e.Cancel = true;
                 return;
             }
 
