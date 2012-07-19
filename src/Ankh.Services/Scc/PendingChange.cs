@@ -255,16 +255,11 @@ namespace Ankh.Scc
         }
 
         /// <summary>
-        /// Dtermines if a change list name is one of the "Ignore On Commit" change lists
+        /// Determines if a change list name is one of the "Ignore On Commit" change lists
         /// </summary>
         public static bool IsIgnoreOnCommitChangeList(string name)
         {
-            return !string.IsNullOrEmpty(name)
-                && ( false
-                     || string.Equals(name, "ignore-on-commit")
-                     // TODO other "ignore on commit" change lists 
-                   )
-                ;
+            return !string.IsNullOrEmpty(name) && name.StartsWith("ignore-", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
