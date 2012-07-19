@@ -134,7 +134,6 @@
     <Compile Include="Scc\UI\ILogControl.cs" />
     <Compile Include="UI\AnkhMessageBox.cs" />
     <Compile Include="Scc\PendingChange.cs" />
-    <Compile Include="UI\ICurrentItemSource.cs" />
     <Compile Include="UI\IProgressRunner.cs" />
     <Compile Include="UI\VSCommandHandler.cs" />
     <Compile Include="UI\VSEditorControl.cs">

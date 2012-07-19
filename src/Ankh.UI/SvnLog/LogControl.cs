@@ -27,16 +27,25 @@ namespace Ankh.UI.SvnLog
     sealed partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ICurrentItemDestination<ISvnLogItem>
     {
         public LogControl()
+            : this(null)
         {
+        }
+
+        public LogControl(IContainer container)
+        {
+            if (container != null)
+                container.Add(this);
+
             InitializeComponent();
-            ItemSource = logRevisionControl1;
-            logRevisionControl1.BatchDone += logRevisionControl1_BatchDone;
+            ItemSource = revisionBox;
+            revisionBox.BatchDone += logRevisionControl1_BatchDone;
 
             LogSource = new LogDataSource();
             LogSource.Synchronizer = this;
 
-            logChangedPaths1.LogSource = LogSource;
-            logRevisionControl1.LogSource = LogSource;
+            changedPathBox.LogSource = LogSource;
+            changedPathBox.ItemSource = revisionBox;
+            revisionBox.LogSource = LogSource;
         }
 
         LogDataSource _dataSource;
@@ -52,13 +61,6 @@ namespace Ankh.UI.SvnLog
                 BatchFinished(sender, e);
         }
 
-
-        public LogControl(IContainer container)
-            : this()
-        {
-            container.Add(this);
-        }
-
         IAnkhServiceProvider _context;
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IAnkhServiceProvider Context
@@ -68,8 +70,8 @@ namespace Ankh.UI.SvnLog
             {
                 _context = value;
 
-                logRevisionControl1.Context = value;
-                logChangedPaths1.Context = value;
+                revisionBox.Context = value;
+                changedPathBox.Context = value;
             }
         }
 
@@ -81,6 +83,13 @@ namespace Ankh.UI.SvnLog
             set { _mode = value; }
         }
 
+        void Reset()
+        {
+            revisionBox.Reset();
+            changedPathBox.Items.Clear();
+            logBox.Text = "";
+        }
+
         public void StartLog(ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
         {
             if (targets == null)
@@ -90,12 +99,9 @@ namespace Ankh.UI.SvnLog
             LogSource.Start = start;
             LogSource.End = end;
 
-            logRevisionControl1.Reset();
-            logChangedPaths1.Reset();
-            logMessageView1.Reset();
-            logRevisionControl1.Start(LogMode.Log);
+            Reset();
+            revisionBox.Start(LogMode.Log);
         }
-
 
         /// <summary>
         /// Starts the merges eligible logger. Checking whick revisions of source (Commonly Uri) 
@@ -115,10 +121,8 @@ namespace Ankh.UI.SvnLog
 
             LogSource.Targets = new SvnOrigin[] { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
             LogSource.MergeTarget = target;
-            logRevisionControl1.Reset();
-            logChangedPaths1.Reset();
-            logMessageView1.Reset();
-            logRevisionControl1.Start(LogMode.MergesEligible);
+            Reset();
+            revisionBox.Start(LogMode.MergesEligible);
         }
 
         public void StartMergesMerged(IAnkhServiceProvider context, SvnOrigin target, SvnTarget source)
@@ -132,23 +136,19 @@ namespace Ankh.UI.SvnLog
 
             LogSource.Targets = new SvnOrigin[] { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
             LogSource.MergeTarget = target;
-            logRevisionControl1.Reset();
-            logChangedPaths1.Reset();
-            logMessageView1.Reset();
-            logRevisionControl1.Start(LogMode.MergesMerged);
+            Reset();
+            revisionBox.Start(LogMode.MergesMerged);
         }
 
         internal void FetchAll()
         {
-            logRevisionControl1.FetchAll();
+            revisionBox.FetchAll();
         }
 
         public void Restart()
         {
-            logRevisionControl1.Reset();
-            logChangedPaths1.Reset();
-            logMessageView1.Reset();
-            logRevisionControl1.Start(Mode);
+            Reset();
+            revisionBox.Start(Mode);
         }
 
         [DefaultValue(false)]
@@ -159,10 +159,10 @@ namespace Ankh.UI.SvnLog
         }
 
         [DefaultValue(false)]
-        public bool StrictNodeHistory
+        public bool StopOnCopy
         {
-            get { return LogSource.StrictNodeHistory; }
-            set { LogSource.StrictNodeHistory = value; }
+            get { return LogSource.StopOnCopy; }
+            set { LogSource.StopOnCopy = value; }
         }
 
         bool _logMessageHidden;
@@ -230,6 +230,12 @@ namespace Ankh.UI.SvnLog
         {
             if (FocusChanged != null)
                 FocusChanged(sender, e);
+
+            string text = "";
+            if (ItemSource.FocusedItem != null)
+                text = ItemSource.FocusedItem.LogMessage;
+
+            logBox.Text = text;
         }
 
         void OnSelectionChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)

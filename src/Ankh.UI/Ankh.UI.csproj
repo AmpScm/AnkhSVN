@@ -413,17 +413,17 @@
     <Compile Include="SvnLog\Commands\LogComboBox.cs" />
     <Compile Include="SvnLog\Commands\RevertChanges.cs" />
     <Compile Include="SvnLog\Commands\ShowRevisionProperties.cs" />
+    <Compile Include="SvnLog\Items\ICurrentItemSource.cs" />
+    <Compile Include="SvnLog\Items\PathListViewItem.cs" />
+    <Compile Include="SvnLog\Items\RevisionItems.cs" />
     <Compile Include="SvnLog\LogDataSource.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SvnLog\LogDataSource.Designer.cs">
       <DependentUpon>LogDataSource.cs</DependentUpon>
     </Compile>
-    <Compile Include="SvnLog\LogIssuesView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SvnLog\LogRequest.cs" />
-    <Compile Include="SvnLog\LogRevisionItem.cs" />
+    <Compile Include="SvnLog\Items\LogRequest.cs" />
+    <Compile Include="SvnLog\Items\LogRevisionItem.cs" />
     <Compile Include="SvnLog\LogViewerDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -590,12 +590,6 @@
     </Compile>
     <Compile Include="MergeWizard\UIUtils.cs" />
     <Compile Include="SvnLog\LogRevisionControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SvnLog\LogRevisionControl.Designer.cs">
-      <DependentUpon>LogRevisionControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SvnLog\LogRevisionView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SvnInfoGrid\SvnInfoGridControl.cs">
@@ -790,18 +784,6 @@
     </Compile>
     <Compile Include="SccManagement\LockDialog.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SvnLog\LogChangedPaths.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SvnLog\LogChangedPaths.Designer.cs">
-      <DependentUpon>LogChangedPaths.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SvnLog\LogMessageView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SvnLog\LogMessageView.Designer.cs">
-      <DependentUpon>LogMessageView.cs</DependentUpon>
     </Compile>
     <Compile Include="OptionsPages\ToolArgumentDialog.cs">
       <SubType>Form</SubType>
@@ -1107,10 +1089,6 @@
       <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnLog\LogRevisionControl.resx">
-      <DependentUpon>LogRevisionControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="SvnLog\LogToolWindowControl.resx">
       <DependentUpon>LogToolWindowControl.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1121,14 +1099,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OptionsPages\UserToolSettingsControl.resx">
       <DependentUpon>UserToolSettingsControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SvnLog\LogChangedPaths.resx">
-      <DependentUpon>LogChangedPaths.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SvnLog\LogMessageView.resx">
-      <DependentUpon>LogMessageView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OptionsPages\ToolArgumentDialog.resx">

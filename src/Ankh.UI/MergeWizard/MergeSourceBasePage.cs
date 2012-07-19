@@ -175,7 +175,7 @@ namespace Ankh.UI.MergeWizard
         {
             using (LogViewerDialog dialog = new LogViewerDialog(new SvnOrigin(MergeTarget)))
             {
-                dialog.LogControl.StrictNodeHistory = true;
+                dialog.LogControl.StopOnCopy = true;
 
                 dialog.ShowDialog(Context);
             }

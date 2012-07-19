@@ -58,7 +58,7 @@ namespace Ankh.UI.MergeWizard
             this.logToolControl1.ShowLogMessage = true;
             this.logToolControl1.Mode = Ankh.UI.SvnLog.LogMode.Log;
             this.logToolControl1.Name = "logToolControl1";
-            this.logToolControl1.StrictNodeHistory = false;
+            this.logToolControl1.StopOnCopy = true;
             this.logToolControl1.BatchFinished += new System.EventHandler<Ankh.UI.SvnLog.BatchFinishedEventArgs>(this.logToolControl1_BatchFinished);
             // 
             // MergeRevisionsSelectionPageControl

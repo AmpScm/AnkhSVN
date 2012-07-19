@@ -193,7 +193,7 @@ namespace Ankh.UI.MergeWizard
 
             using (LogViewerDialog dialog = new LogViewerDialog(new SvnOrigin(Context, new Uri(target), null)))
             {
-                dialog.LogControl.StrictNodeHistory = true;
+                dialog.LogControl.StopOnCopy = true;
 
                 if (dialog.ShowDialog(Context) == DialogResult.OK)
                 {
@@ -384,7 +384,7 @@ namespace Ankh.UI.MergeWizard
         {
             using (LogViewerDialog dialog = new LogViewerDialog(new SvnOrigin(MergeTarget)))
             {
-                dialog.LogControl.StrictNodeHistory = true;
+                dialog.LogControl.StopOnCopy = true;
 
                 dialog.ShowDialog(Context);
             }

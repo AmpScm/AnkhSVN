@@ -26,13 +26,14 @@ using SharpSvn;
 using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.UI.RepositoryExplorer;
+using Ankh.UI.VSSelectionControls;
 
 namespace Ankh.UI.SvnLog
 {
     /// <summary>
     /// 
     /// </summary>
-    partial class LogRevisionControl : UserControl, ICurrentItemSource<ISvnLogItem>
+    partial class LogRevisionControl : ListViewWithSelection<LogRevisionItem>, ICurrentItemSource<ISvnLogItem>
     {
         readonly Action<SvnLogArgs> _logAction;
         readonly object _instanceLock = new object();
@@ -42,21 +43,30 @@ namespace Ankh.UI.SvnLog
         BusyOverlay _busyOverlay;
 
         public LogRevisionControl()
+            : this(null)
         {
-            InitializeComponent();
-            _logAction = new Action<SvnLogArgs>(DoFetch);
         }
+
         public LogRevisionControl(IContainer container)
-            : this()
         {
-            container.Add(this);
+            if (container != null)
+                container.Add(this);
+
+            Sorting = SortOrder.None;
+            Init();
+            _logAction = new Action<SvnLogArgs>(DoFetch);
+
+            ViewPositionChanged += new System.EventHandler(this.logView_Scrolled);
+            ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.logRevisionControl1_ShowContextMenu);
+            ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.logRevisionControl1_ItemSelectionChanged);
+            KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.logView_KeyPress);
         }
 
         LogDataSource _dataSource;
         public LogDataSource LogSource
         {
             get { return _dataSource; }
-            set { _dataSource = value; logView.LogSource = value; }
+            set { _dataSource = value; }
         }
 
         IAnkhServiceProvider _context;
@@ -73,7 +83,7 @@ namespace Ankh.UI.SvnLog
 
         private void OnContextChanged()
         {
-            logView.SelectionPublishServiceProvider = Context;
+            SelectionPublishServiceProvider = Context;
         }
 
         public void Start(LogMode mode)
@@ -89,7 +99,7 @@ namespace Ankh.UI.SvnLog
                 if (args.End == null || args.End.RevisionType == SvnRevisionType.None)
                     args.Limit = 10;
 
-                args.StrictNodeHistory = LogSource.StrictNodeHistory;
+                args.StrictNodeHistory = LogSource.StopOnCopy;
                 args.RetrieveMergedRevisions = LogSource.IncludeMergedRevisions;
 
                 StartFetch(args);
@@ -98,6 +108,9 @@ namespace Ankh.UI.SvnLog
 
         void StartFetch(SvnLogArgs args)
         {
+            if (DesignMode)
+                return;
+
             fetchCount += args.Limit;
             _logAction.BeginInvoke(args, null, null);
         }
@@ -116,7 +129,7 @@ namespace Ankh.UI.SvnLog
             }
 
             _logItems.Clear();
-            logView.Items.Clear();
+            Items.Clear();
             _lastRevision = -1;
             fetchCount = 0;
 
@@ -200,7 +213,7 @@ namespace Ankh.UI.SvnLog
 
             e.Detach();
 
-            LogRevisionItem lri = new LogRevisionItem(logView, _context, e);
+            LogRevisionItem lri = new LogRevisionItem(this, _context, e);
             bool post;
 
             lock (_logItems)
@@ -232,7 +245,7 @@ namespace Ankh.UI.SvnLog
 
             if (items != null)
             {
-                logView.Items.AddRange(items);
+                Items.AddRange(items);
                 _lastRevision = items[items.Length - 1].Revision;
             }
         }
@@ -249,7 +262,7 @@ namespace Ankh.UI.SvnLog
                 FetchAll();
 
             if (BatchDone != null)
-                BatchDone(this, new BatchFinishedEventArgs(rq, logView.Items.Count, _logItems.Count));
+                BatchDone(this, new BatchFinishedEventArgs(rq, Items.Count, _logItems.Count));
 
             ExtendList();
         }
@@ -265,7 +278,7 @@ namespace Ankh.UI.SvnLog
             }
 
             if (_busyOverlay == null)
-                _busyOverlay = new BusyOverlay(logView, AnchorStyles.Bottom | AnchorStyles.Right);
+                _busyOverlay = new BusyOverlay(this, AnchorStyles.Bottom | AnchorStyles.Right);
             _busyOverlay.Show();
         }
 
@@ -294,7 +307,7 @@ namespace Ankh.UI.SvnLog
         bool _extending;
         void ExtendList()
         {
-            if (logView.VScrollPos < logView.VScrollMax - 30)
+            if (VScrollPos < VScrollMax - 30)
                 return;
 
             if (!_extending)
@@ -314,11 +327,13 @@ namespace Ankh.UI.SvnLog
 
         void DoExtendList()
         {
+            if (DesignMode)
+                return;
             try
             {
                 lock (_instanceLock)
                 {
-                    if (!_running && logView.Items.Count == fetchCount)
+                    if (!_running && Items.Count == fetchCount)
                     {
                         _running = true;
 
@@ -326,13 +341,14 @@ namespace Ankh.UI.SvnLog
                         args.Start = _lastRevision - 1;
                         args.End = LogSource.End;
                         args.Limit = 20;
-                        args.StrictNodeHistory = LogSource.StrictNodeHistory;
+                        args.StrictNodeHistory = LogSource.StopOnCopy;
                         args.RetrieveMergedRevisions = LogSource.IncludeMergedRevisions;
 
                         StartFetch(args);
                     }
                 }
             }
+            catch { }
             finally
             {
                 _extending = false;
@@ -372,7 +388,7 @@ namespace Ankh.UI.SvnLog
                     }
                 }
                 args.End = LogSource.End;
-                args.StrictNodeHistory = LogSource.StrictNodeHistory;
+                args.StrictNodeHistory = LogSource.StopOnCopy;
                 args.RetrieveMergedRevisions = LogSource.IncludeMergedRevisions;
 
                 StartFetch(args);
@@ -384,19 +400,19 @@ namespace Ankh.UI.SvnLog
 
         public event EventHandler<CurrentItemEventArgs<ISvnLogItem>> FocusChanged;
 
-        public ISvnLogItem FocusedItem
+        ISvnLogItem ICurrentItemSource<ISvnLogItem>.FocusedItem
         {
             get
             {
-                if (logView.FocusedItem == null)
+                if (FocusedItem == null)
                     return null;
 
-                return new LogItem((LogRevisionItem)logView.FocusedItem, LogSource.RepositoryRoot);
+                return new LogItem((LogRevisionItem)FocusedItem, LogSource.RepositoryRoot);
             }
         }
 
         readonly IList<ISvnLogItem> _selectedItems = new List<ISvnLogItem>();
-        public IList<ISvnLogItem> SelectedItems
+        IList<ISvnLogItem> ICurrentItemSource<ISvnLogItem>.SelectedItems
         {
             get
             {
@@ -419,8 +435,8 @@ namespace Ankh.UI.SvnLog
         void FireSelectionChanged()
         {
             _selectedItems.Clear();
-            foreach (int i in logView.SelectedIndices)
-                _selectedItems.Add(new LogItem((LogRevisionItem)logView.Items[i], LogSource.RepositoryRoot));
+            foreach (int i in SelectedIndices)
+                _selectedItems.Add(new LogItem((LogRevisionItem)Items[i], LogSource.RepositoryRoot));
 
             OnSelectionChanged(new CurrentItemEventArgs<ISvnLogItem>(this));
         }
@@ -441,59 +457,110 @@ namespace Ankh.UI.SvnLog
 
             if (e.X == -1 && e.Y == -1)
             {
-                if (logView.SelectedItems.Count > 0)
+                if (SelectedItems.Count > 0)
                 {
-                    screen = logView.PointToScreen(logView.SelectedItems[logView.SelectedItems.Count - 1].Position);
+                    screen = PointToScreen(SelectedItems[SelectedItems.Count - 1].Position);
                 }
                 else
                 {
                     headerContextMenu = true;
-                    screen = logView.PointToScreen(new Point(1, 1));
+                    screen = PointToScreen(new Point(1, 1));
                 }
             }
             else
             {
-                headerContextMenu = (logView.PointToClient(e.Location).Y < logView.HeaderHeight);
+                headerContextMenu = (PointToClient(e.Location).Y < HeaderHeight);
                 screen = e.Location;
             }
 
             IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
             cs.ShowContextMenu(headerContextMenu ? AnkhCommandMenu.ListViewHeader : AnkhCommandMenu.LogViewerContextMenu, screen);
-        }        
-    }
-
-    public sealed class BatchFinishedEventArgs : EventArgs
-    {
-        readonly int _batchCount;
-        readonly int _totalCount;
-        readonly LogRequest _rq;
-        internal BatchFinishedEventArgs(LogRequest rq, int totalCount, int batchCount)
-        {
-            _rq = rq;
-            _totalCount = totalCount;
-            _batchCount = batchCount;
         }
 
-        public int TotalCount
+        readonly List<LogRevisionItem> _items = new List<LogRevisionItem>();
+
+        SmartColumn _expand;
+        SmartColumn _revisionColumn;
+        SmartColumn _messageColumn;
+        void Init()
         {
-            get { return _totalCount; }
+            _expand = new SmartColumn(this, "\x00A0", "&Expand Merges", 12, HorizontalAlignment.Left);
+            _revisionColumn = new SmartColumn(this, "&Revision", 64, HorizontalAlignment.Right);
+            SmartColumn author = new SmartColumn(this, "&Author", 73);
+            SmartColumn date = new SmartColumn(this, "&Date", 118);
+            SmartColumn issue = new SmartColumn(this, "&Issue", 60);
+            _messageColumn = new SmartColumn(this, "&Message", 300);
+
+            _expand.Hideable = false;
+            _expand.Sortable = _revisionColumn.Sortable = author.Sortable = date.Sortable = issue.Sortable = _messageColumn.Sortable = false;
+
+            AllColumns.Add(_expand);
+            AllColumns.Add(_revisionColumn);
+            AllColumns.Add(author);
+
+            AllColumns.Add(date);
+            AllColumns.Add(issue);
+            AllColumns.Add(_messageColumn);
+
+            // The listview can't align the first column right. We switch their display position
+            // to work around this
+            Columns.AddRange(
+                new ColumnHeader[]
+                {
+                    _expand,
+                    _revisionColumn,
+                    author,
+                    date,
+                    _messageColumn
+                });
         }
 
-        public int BatchCount
+        protected override void OnRetrieveSelection(RetrieveSelectionEventArgs e)
         {
-            get { return _batchCount; }
+            e.SelectionItem = new LogItem(e.Item, LogSource.RepositoryRoot);
+            base.OnRetrieveSelection(e);
         }
 
-        internal LogRequest Request
+        protected override void OnResolveItem(ResolveItemEventArgs e)
         {
-            get { return _rq; }
+            e.Item = ((LogItem)e.SelectionItem).ListViewItem;
+            base.OnResolveItem(e);
         }
-    }
 
-    public enum LogMode
-    {
-        Log,
-        MergesEligible,
-        MergesMerged
+        public List<LogRevisionItem> VirtualItems
+        {
+            get { return _items; }
+        }
+
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            base.OnMouseWheel(e);
+            OnViewPositionChanged(e);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+
+            if (m.Msg == 0x115) // WM_VSCROLL
+                OnViewPositionChanged(EventArgs.Empty);
+        }
+
+        public event EventHandler ViewPositionChanged;
+        private void OnViewPositionChanged(EventArgs e)
+        {
+            if (ViewPositionChanged != null)
+                ViewPositionChanged(this, e);
+        }   
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+
+            if (!DesignMode && _messageColumn != null)
+                ResizeColumnsToFit(_messageColumn);
+
+            OnViewPositionChanged(e);
+        }
     }
 }

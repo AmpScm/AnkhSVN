@@ -21,6 +21,8 @@ using SharpSvn;
 using Ankh.Scc;
 using System.ComponentModel;
 using System.Drawing;
+using System.Collections.Generic;
+using Ankh.Commands;
 
 namespace Ankh.UI.SvnLog
 {
@@ -38,11 +40,11 @@ namespace Ankh.UI.SvnLog
             container.Add(this);
         }
 
-        LogDataSource _dataSource;
-        public LogDataSource DataSource
+        LogDataSource _logSource;
+        public LogDataSource LogSource
         {
-            get { return _dataSource; }
-            set { _dataSource = value; }
+            get { return _logSource; }
+            set { _logSource = value; }
         }
 
         void Init()
@@ -81,238 +83,143 @@ namespace Ankh.UI.SvnLog
             e.Item = ((PathItem)e.SelectionItem).ListViewItem;
             base.OnResolveItem(e);
         }
-    }
 
-    sealed class PathListViewItem : SmartListViewItem
-    {
-        readonly ISvnLogItem _logItem;
-        readonly SvnChangeItem _change;
-        readonly bool _isInSelection;
-        readonly SvnOrigin _origin;
-
-        public PathListViewItem(LogChangedPathsView view, ISvnLogItem logItem, SvnChangeItem change, Uri reposRoot, bool isInSelection)
-            : base(view)
+        IAnkhServiceProvider _context;
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IAnkhServiceProvider Context
         {
-            if (logItem == null)
-                throw new ArgumentNullException("logItem");
-            if (change == null)
-                throw new ArgumentNullException("change");
-            _logItem = logItem;
-            _change = change;
-            _isInSelection = isInSelection;
-            Uri uri;
-
-            string path = change.Path.TrimStart('/');
-
-            if (string.IsNullOrEmpty(path))
-                uri = reposRoot;
-            else
-                uri = SvnTools.AppendPathSuffix(reposRoot, path);
-
-            _origin = new SvnOrigin(new SvnUriTarget(uri, logItem.Revision), reposRoot);
-
-            RefreshText();
-            UpdateColors();
-        }
-
-        public SvnOrigin Origin
-        {
-            get { return _origin; }
-        }
-
-        void RefreshText()
-        {
-            SetValues(
-                _change.Action.ToString(),
-                NodeKind == SvnNodeKind.Directory ? EnsureEndSlash(_change.Path) : _change.Path,
-                _change.CopyFromPath ?? "",
-                _change.CopyFromPath != null ? _change.CopyFromRevision.ToString() : ""
-            );
-        }
-
-        private string EnsureEndSlash(string p)
-        {
-            if (!p.EndsWith("/", StringComparison.Ordinal))
-                return p + "/";
-
-            return p;
-        }
-
-        void UpdateColors()
-        {
-            if (SystemInformation.HighContrast)
-                return;
-            if (!_isInSelection)
-                ForeColor = Color.Gray;
-            else
+            get { return _context; }
+            set
             {
-                switch (_change.Action)
-                {
-                    case SvnChangeAction.Add:
-                        ForeColor = Color.FromArgb(100, 0, 100);
-                        break;
-                    case SvnChangeAction.Delete:
-                        ForeColor = Color.DarkRed;
-                        break;
-                    case SvnChangeAction.Modify:
-                        ForeColor = Color.DarkBlue;
-                        break;
-                }
+                _context = value;
+                SelectionPublishServiceProvider = value;
             }
         }
 
-        internal SvnChangeAction Action
+        #region ICurrentItemDestination<ISvnLogItem> Members
+        ICurrentItemSource<ISvnLogItem> itemSource;
+        public ICurrentItemSource<ISvnLogItem> ItemSource
         {
-            get { return _change.Action; }
+            get { return itemSource; }
+            set
+            {
+                if (itemSource != null)
+                {
+                    itemSource.SelectionChanged -= new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(SelectionChanged);
+                    itemSource.FocusChanged -= new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(FocusChanged);
+                }
+                itemSource = value;
+                if (itemSource != null)
+                {
+                    itemSource.SelectionChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(SelectionChanged);
+                    itemSource.FocusChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(FocusChanged);
+                }
+
+            }
         }
 
-        internal string Path
+        #endregion
+
+
+
+        void SelectionChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
         {
-            get { return _change.Path; }
         }
 
-        internal string CopyFromPath
+        void FocusChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
         {
-            get { return _change.CopyFromPath; }
+            Items.Clear();
+
+            ISvnLogItem item = e.Source.FocusedItem;
+
+            if (item != null && item.ChangedPaths != null)
+            {
+                List<PathListViewItem> paths = new List<PathListViewItem>();
+
+                List<string> origins = new List<string>();
+                foreach (SvnOrigin o in LogSource.Targets)
+                {
+                    string origin = SvnTools.UriPartToPath(o.RepositoryRoot.MakeRelativeUri(o.Uri).ToString()).Replace('\\', '/');
+                    if (origin.Length == 0 || origin[0] != '/')
+                        origin = "/" + origin;
+
+                    origins.Add(origin.TrimEnd('/'));
+                }
+
+                foreach (SvnChangeItem i in item.ChangedPaths)
+                {
+                    paths.Add(new PathListViewItem(this, item, i, item.RepositoryRoot, HasFocus(origins, i.Path)));
+                }
+
+                Items.AddRange(paths.ToArray());
+            }
         }
 
-        internal long CopyFromRevision
+        static bool HasFocus(IEnumerable<string> originPaths, string itemPath)
         {
-            get { return _change.CopyFromRevision; }
+            foreach (string origin in originPaths)
+            {
+                if (!itemPath.StartsWith(origin))
+                    continue;
+
+                int n = itemPath.Length - origin.Length;
+
+                if (n == 0)
+                    return true;
+
+                if (n > 0)
+                {
+                    if (itemPath[origin.Length] == '/')
+                        return true;
+                }
+            }
+
+            return false;
         }
 
-        internal ISvnLogItem LogItem
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
-            get { return _logItem; }
+            base.OnMouseDoubleClick(e);
+            Point mp = PointToClient(MousePosition);
+            ListViewHitTestInfo info = HitTest(mp);
+            PathListViewItem lvi = info.Item as PathListViewItem;
+            if (lvi != null && Context != null)
+            {
+                IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
+                cmdSvc.PostExecCommand(AnkhCommand.LogShowChanges);
+            }
         }
 
-        internal SvnNodeKind NodeKind
+        public override void OnShowContextMenu(MouseEventArgs e)
         {
-            get { return _change.NodeKind; }
-        }
-    }
+            base.OnShowContextMenu(e);
 
-    sealed class PathItem : AnkhPropertyGridItem, ISvnLogChangedPathItem
-    {
-        readonly PathListViewItem _lvi;
-        public PathItem(PathListViewItem lvi)
-        {
-            if (lvi == null)
-                throw new ArgumentNullException("lvi");
-            _lvi = lvi;
-        }
+            if (Context == null)
+                return;
 
-        [Browsable(false)]
-        public SvnOrigin Origin
-        {
-            get { return _lvi.Origin; }
-        }
+            Point screen;
+            bool isHeaderContextMenu = false;
 
-        internal PathListViewItem ListViewItem
-        {
-            get { return _lvi; }
-        }
+            if (e.X == -1 && e.Y == -1)
+            {
+                if (SelectedItems.Count > 0)
+                {
+                    screen = PointToScreen(SelectedItems[SelectedItems.Count - 1].Position);
+                }
+                else
+                {
+                    screen = PointToScreen(new Point(1, 1));
+                    isHeaderContextMenu = true;
+                }
+            }
+            else
+            {
+                isHeaderContextMenu = PointToClient(e.Location).Y < HeaderHeight;
+                screen = e.Location;
+            }
 
-        [Category("Subversion")]
-        [DisplayName("Action")]
-        public SvnChangeAction Action
-        {
-            get { return _lvi.Action; }
-        }
-
-        [Category("Origin")]
-        [DisplayName("Copied from path")]
-        public string CopyFromPath
-        {
-            get { return _lvi.CopyFromPath; }
-        }
-
-        [Category("Origin")]
-        [DisplayName("Copied from revision")]
-        public long CopyFromRevision
-        {
-            get { return _lvi.CopyFromRevision; }
-        }
-
-        [DisplayName("Name")]
-        public string Name
-        {
-            get { return _lvi.Origin.Target.FileName; }
-        }
-
-        [DisplayName("Path")]
-        public string Path
-        {
-            get { return _lvi.Path; }
-        }
-
-        [Category("Subversion")]
-        [DisplayName("Url")]
-        public Uri Uri
-        {
-            get { return _lvi.Origin.Uri; }
-        }
-
-        [Category("Subversion")]
-        [DisplayName("Last Revision")]
-        [Description("Revision number of the Last Commit")]
-        public long Revision
-        {
-            get { return _lvi.LogItem.Revision; }
-        }
-
-        [Category("Subversion")]
-        [DisplayName("Last Author")]
-        [Description("Author of the Last Commit")]
-        public string Author
-        {
-            get { return _lvi.LogItem.Author; }
-        }
-
-        [Category("Subversion")]
-        [DisplayName("Last Committed")]
-        [Description("Time of the Last Commit")]
-        public DateTime LastCommitted
-        {
-            get { return _lvi.LogItem.CommitDate.ToLocalTime(); }
-        }
-
-        /// <summary>
-        /// Gets the light/second name shown in the gridview header
-        /// </summary>
-        /// <value></value>
-        protected override string ClassName
-        {
-            get { return "Changed Path"; }
-        }
-
-        /// <summary>
-        /// Gets the bold/first name shown in the gridview header
-        /// </summary>
-        /// <value></value>
-        protected override string ComponentName
-        {
-            get { return Origin.Target.FileName; }
-        }
-
-        SvnRevision ISvnRepositoryItem.Revision
-        {
-            get { return Revision; }
-        }
-
-        SvnNodeKind ISvnRepositoryItem.NodeKind
-        {
-            get { return _lvi.NodeKind; }
-        }
-
-        SvnOrigin ISvnRepositoryItem.Origin
-        {
-            // We don't have a repository item when we are deleted!
-            get { return (Action != SvnChangeAction.Delete) ? Origin : null; }
-        }
-
-        void ISvnRepositoryItem.RefreshItem(bool refreshParent)
-        {
+            IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
+            cs.ShowContextMenu(isHeaderContextMenu ? AnkhCommandMenu.ListViewHeader : AnkhCommandMenu.LogChangedPathsContextMenu, screen);
         }
     }
 }

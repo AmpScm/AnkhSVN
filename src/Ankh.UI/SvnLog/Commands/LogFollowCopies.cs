@@ -35,7 +35,7 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
             }
 
-            e.Checked = !lc.StrictNodeHistory;
+            e.Checked = lc.StopOnCopy;
         }
 
         public void OnExecute(CommandEventArgs e)
@@ -45,7 +45,7 @@ namespace Ankh.UI.SvnLog.Commands
             if (lc == null)
                 return;
 
-            lc.StrictNodeHistory = !lc.StrictNodeHistory;
+            lc.StopOnCopy = !lc.StopOnCopy;
         }
     }
 }

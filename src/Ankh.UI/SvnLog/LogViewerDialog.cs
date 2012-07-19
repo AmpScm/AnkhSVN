@@ -93,10 +93,10 @@ namespace Ankh.UI.SvnLog
             set { LogControl.ShowLogMessage = value; }
         }
 
-        public bool StrictNodeHistory
+        public bool StopOnCopy
         {
-            get { return LogControl.StrictNodeHistory; }
-            set { LogControl.StrictNodeHistory = value; }
+            get { return LogControl.StopOnCopy; }
+            set { LogControl.StopOnCopy = value; }
         }
 
         public bool IncludeMergedRevisions
