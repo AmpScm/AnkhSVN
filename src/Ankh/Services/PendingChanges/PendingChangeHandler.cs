@@ -703,24 +703,32 @@ namespace Ankh.Services.PendingChanges
         private void PostCommit_IssueTracker(PendingCommitState state, SvnCommitResult result)
         {
             IAnkhIssueService iService = GetService<IAnkhIssueService>();
-            if (iService != null)
-            {
-                IssueRepository iRepo = iService.CurrentIssueRepository;
-                if (iRepo != null)
-                {
-                    List<Uri> uris = new List<Uri>();
-                    foreach (PendingChange pc in state.Changes)
-                    {
-                        uris.Add(pc.Uri);
-                    }
+            if (iService == null)
+                return;
+            
+            IssueRepository iRepo = iService.CurrentIssueRepository;
+            if (iRepo == null)
+                return;
 
-                    PostCommitArgs pca = new PostCommitArgs(uris.ToArray(), result.Revision, state.LogMessage);
-                    try
-                    {
-                        iRepo.PostCommit(pca);
-                    }
-                    catch { };
-                }
+            List<Uri> uris = new List<Uri>();
+            foreach (PendingChange pc in state.Changes)
+            {
+                uris.Add(pc.Uri);
+            }
+
+            PostCommitArgs pca = new PostCommitArgs(uris.ToArray(), result.Revision, state.LogMessage);
+            try
+            {
+                iRepo.PostCommit(pca);
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
+
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
+                else
+                    throw;
             }
         }
     }
