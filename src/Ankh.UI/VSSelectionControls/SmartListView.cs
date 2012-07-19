@@ -283,6 +283,7 @@ namespace Ankh.UI.VSSelectionControls
             public const Int32 HDM_GETITEM = 0x1200 + 11;  // HDM_FIRST + 11
             public const Int32 HDM_SETITEM = 0x1200 + 12;  // HDM_FIRST + 12
 
+            public const int WM_CONTEXTMENU = 0x007B;
             public const int WM_NOTIFY = 0x004E;
             public const int OCM_NOTIFY = 0x204E;
 
@@ -764,7 +765,7 @@ namespace Ankh.UI.VSSelectionControls
             {
                 switch (m.Msg)
                 {
-                    case 123: // WM_CONTEXTMENU
+                    case NativeMethods.WM_CONTEXTMENU:
                         {
                             uint pos = unchecked((uint)m.LParam);
 
