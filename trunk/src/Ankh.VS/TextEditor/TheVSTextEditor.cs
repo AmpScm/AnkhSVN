@@ -537,7 +537,7 @@ namespace Ankh.VS.TextEditor
 
         public bool PreFilterKeyMessage(Keys keyData)
         {
-            System.Dia.Debug.Assert(_wpfEditorInfo == null); // No filtering necessary in VS2010+
+            System.Diagnostics.Debug.Assert(_wpfEditorInfo == null); // No filtering necessary in VS2010+
 
             switch (keyData)
             {
