@@ -8,6 +8,22 @@ namespace Ankh.UI.VSSelectionControls
 {
     public class SmartSplitContainer : SplitContainer, ISupportInitialize, IHasSplitterColor
     {
+        public SmartSplitContainer()
+        {
+            InitializeComponent();
+        }
+
+        public SmartSplitContainer(IContainer container)
+        {
+            container.Add(this);
+            InitializeComponent();
+        }
+
+        void InitializeComponent()
+        {
+            base.SplitterWidth = 2;
+        }
+
         void ISupportInitialize.BeginInit()
         {
             // Ignored for .Net 2.0 compatibility
@@ -63,6 +79,14 @@ namespace Ankh.UI.VSSelectionControls
                 using (SolidBrush sb = new SolidBrush(SplitterColor))
                     e.Graphics.FillRectangle(sb, SplitterRectangle);
             }
+        }
+
+        [DefaultValue(2)]
+        [Localizable(true)]
+        public new int SplitterWidth
+        {
+            get { return base.SplitterWidth; }
+            set { base.SplitterWidth = value; }
         }
     }
 }
