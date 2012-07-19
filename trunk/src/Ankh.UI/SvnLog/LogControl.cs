@@ -24,7 +24,7 @@ using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog
 {
-    sealed partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ICurrentItemDestination<ISvnLogItem>, ISupportsVSTheming
+    sealed partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ISupportsVSTheming
     {
         public LogControl()
             : this(null)
@@ -37,7 +37,6 @@ namespace Ankh.UI.SvnLog
                 container.Add(this);
 
             InitializeComponent();
-            ItemSource = revisionBox;
             revisionBox.BatchDone += logRevisionControl1_BatchDone;
 
             LogSource = new LogDataSource();
@@ -46,6 +45,8 @@ namespace Ankh.UI.SvnLog
             changedPathBox.LogSource = LogSource;
             changedPathBox.ItemSource = revisionBox;
             revisionBox.LogSource = LogSource;
+            revisionBox.FocusChanged += OnFocusChanged;
+            revisionBox.ItemSelectionChanged += new EventHandler(revisionBox_SelectionChanged);
         }
 
         LogDataSource _dataSource;
@@ -197,54 +198,43 @@ namespace Ankh.UI.SvnLog
 
         public event EventHandler<BatchFinishedEventArgs> BatchFinished;
 
-        public event EventHandler<CurrentItemEventArgs<ISvnLogItem>> SelectionChanged;
-
-        public event EventHandler<CurrentItemEventArgs<ISvnLogItem>> FocusChanged;
+        public event EventHandler FocusChanged;
 
         public ISvnLogItem FocusedItem
         {
-            get { return ItemSource == null ? null : ItemSource.FocusedItem; }
+            get { return revisionBox.FocusedItem as ISvnLogItem; }
         }
 
         public IList<ISvnLogItem> SelectedItems
         {
-            get { return ItemSource == null ? null : ItemSource.SelectedItems; }
+            get { return revisionBox.SelectedLogItems; }
         }
 
-        #region ICurrentItemDestination<ISvnLogItem> Members
-
-        ICurrentItemSource<ISvnLogItem> _itemSource;
-        public ICurrentItemSource<ISvnLogItem> ItemSource
-        {
-            [DebuggerStepThrough]
-            get { return _itemSource; }
-            set
-            {
-                _itemSource = value;
-                value.FocusChanged += OnFocusChanged;
-                value.SelectionChanged += OnSelectionChanged;
-            }
-        }
-
-        void OnFocusChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
+        void OnFocusChanged(object sender, EventArgs e)
         {
             if (FocusChanged != null)
                 FocusChanged(sender, e);
 
             string text = "";
-            if (ItemSource.FocusedItem != null)
-                text = ItemSource.FocusedItem.LogMessage;
+
+            LogRevisionItem lri = revisionBox.FocusedItem as LogRevisionItem;
+            if (lri != null)
+                text = lri.LogMessage;
 
             logBox.Text = text;
         }
 
-        void OnSelectionChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
+        void revisionBox_SelectionChanged(object sender, EventArgs e)
         {
-            if (SelectionChanged != null)
-                SelectionChanged(sender, e);
+            OnSelectionChanged(e);
         }
 
-        #endregion
+        public event EventHandler SelectionChanged;
+        void OnSelectionChanged(EventArgs e)
+        {
+            if (SelectionChanged != null)
+                SelectionChanged(this, e);
+        }
 
         public void OnThemeChange(IAnkhServiceProvider sender, CancelEventArgs e)
         {
