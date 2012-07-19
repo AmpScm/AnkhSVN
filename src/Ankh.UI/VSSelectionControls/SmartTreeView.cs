@@ -217,7 +217,7 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         bool _inVSTheming;
-        void ISupportsVSTheming.OnThemeChange(System.Windows.Forms.Design.IUIService ui, IAnkhServiceProvider context)
+        void ISupportsVSTheming.OnThemeChange(IAnkhServiceProvider context)
         {
             _inVSTheming = true;
             RecreateHandle();

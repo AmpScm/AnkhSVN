@@ -266,18 +266,13 @@ namespace Ankh.WpfPackage.Services
 
             ISupportsVSTheming themeControl = control as ISupportsVSTheming;
 
-            if (themeControl == null || themeControl.UseVSTheming)
-            {
-                if (themeControl != null)
-                    themeControl.OnThemeChange(UI, this);
+            if (themeControl != null)
+                themeControl.OnThemeChange(this);
 
-                VSThemeWindow(control);
-            }
-            else if (themeControl != null)
-            {
-                themeControl.OnThemeChange(UI, this);
+            if (themeControl != null && !themeControl.UseVSTheming)
                 return; // No recurse!
-            }
+
+            VSThemeWindow(control);
 
             foreach (Control c in control.Controls)
             {

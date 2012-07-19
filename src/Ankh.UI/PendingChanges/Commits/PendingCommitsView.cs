@@ -317,7 +317,7 @@ namespace Ankh.UI.PendingChanges.Commits
         }
 
         bool _themedOnce;
-        public override void OnThemeChange(System.Windows.Forms.Design.IUIService ui, IAnkhServiceProvider context)
+        public override void OnThemeChange(IAnkhServiceProvider context)
         {
             //base.OnThemeChange(ui, context);
 

@@ -251,7 +251,7 @@ namespace Ankh.UI.SvnLog
             get { return true; }
         }
 
-        public void OnThemeChange(System.Windows.Forms.Design.IUIService ui, IAnkhServiceProvider context)
+        public void OnThemeChange(IAnkhServiceProvider context)
         {
             if (VSVersion.VS11OrLater)
             {
