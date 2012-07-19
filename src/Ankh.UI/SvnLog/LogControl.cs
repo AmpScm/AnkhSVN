@@ -46,7 +46,7 @@ namespace Ankh.UI.SvnLog
             changedPathBox.ItemSource = revisionBox;
             revisionBox.LogSource = LogSource;
             revisionBox.FocusChanged += OnFocusChanged;
-            revisionBox.ItemSelectionChanged += new EventHandler(revisionBox_SelectionChanged);
+            revisionBox.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler(revisionBox_ItemSelectionChanged);
         }
 
         LogDataSource _dataSource;
@@ -224,7 +224,7 @@ namespace Ankh.UI.SvnLog
             logBox.Text = text;
         }
 
-        void revisionBox_SelectionChanged(object sender, EventArgs e)
+        void revisionBox_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             OnSelectionChanged(e);
         }

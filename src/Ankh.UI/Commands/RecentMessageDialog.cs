@@ -78,7 +78,7 @@ namespace Ankh.UI.Commands
         }
 
         string _selectedText;
-        private void logMessageList_SelectedIndexChanged(object sender, EventArgs e)
+        private void logMessageList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             string text = "";
 

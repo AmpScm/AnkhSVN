@@ -79,7 +79,7 @@ namespace Ankh.UI.Commands
             this.logMessageList.Name = "logMessageList";
             this.logMessageList.UseCompatibleStateImageBehavior = false;
             this.logMessageList.View = System.Windows.Forms.View.Details;
-            this.logMessageList.SelectedIndexChanged += new System.EventHandler(this.logMessageList_SelectedIndexChanged);
+            this.logMessageList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(logMessageList_ItemSelectionChanged);
             // 
             // previewBox
             // 
@@ -118,7 +118,6 @@ namespace Ankh.UI.Commands
             this.ResumeLayout(false);
 
         }
-
         #endregion
 
         private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer1;
