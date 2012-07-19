@@ -66,8 +66,13 @@ namespace Ankh.UI.VSSelectionControls
             get { return _hasSplitterColor ? _splitterColor : Color.Transparent; }
             set
             {
-                _hasSplitterColor = true;
-                _splitterColor = value;
+                if (value != Color.Transparent)
+                {
+                    _hasSplitterColor = true;
+                    _splitterColor = value;
+                }
+                else
+                    _hasSplitterColor = value;
             }
         }
 
