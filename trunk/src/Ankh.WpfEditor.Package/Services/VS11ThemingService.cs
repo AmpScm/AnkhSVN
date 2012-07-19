@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using Hashtable = System.Collections.Hashtable;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.UI;
