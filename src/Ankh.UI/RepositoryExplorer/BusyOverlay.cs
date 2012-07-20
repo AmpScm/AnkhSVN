@@ -56,15 +56,16 @@ namespace Ankh.UI.RepositoryExplorer
         public Control Parent
         {
             get { return _parent; }
-            set 
+            set
             {
                 if (_parent == value)
                     return;
 
                 if (_parent != null)
                 {
-                    _parent.SizeChanged -= new EventHandler(OnParentChanged);
-                    _parent.VisibleChanged -= new EventHandler(OnParentChanged);
+                    _parent.SizeChanged -= new EventHandler(OnParentSizeChanged);
+                    _parent.VisibleChanged -= new EventHandler(OnParentVisibleChanged);
+                    _parent.HandleCreated -= new EventHandler(OnParentHandleCreated);
                     _parent.HandleDestroyed -= new EventHandler(OnParentHandleDestroyed);
                     _parent = value;
                 }
@@ -85,7 +86,7 @@ namespace Ankh.UI.RepositoryExplorer
                     _pb.Parent = value;
                 }
 
-                if(_parent != null)
+                if (_parent != null)
                 {
                     Control p = _parent;
 
@@ -95,14 +96,15 @@ namespace Ankh.UI.RepositoryExplorer
                     if (p != value)
                         _top = p;
                 }
-                    
+
                 UpdatePosition();
 
                 if (_parent != null)
                 {
                     _parent.HandleDestroyed += new EventHandler(OnParentHandleDestroyed);
-                    _parent.VisibleChanged += new EventHandler(OnParentChanged);
-                    _parent.SizeChanged += new EventHandler(OnParentChanged);
+                    _parent.HandleCreated += new EventHandler(OnParentHandleCreated);
+                    _parent.VisibleChanged += new EventHandler(OnParentVisibleChanged);
+                    _parent.SizeChanged += new EventHandler(OnParentSizeChanged);
                 }
 
                 if (_top != null)
@@ -141,8 +143,16 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
+        void OnParentHandleCreated(object sender, EventArgs e)
+        {
+            UpdatePosition();
+        }
+
         void OnParentHandleDestroyed(object sender, EventArgs e)
         {
+            if (Parent.RecreatingHandle)
+                return;
+
             if (_pb != null)
             {
                 _pb.Dispose();
@@ -150,7 +160,12 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
-        void OnParentChanged(object sender, EventArgs e)
+        void OnParentSizeChanged(object sender, EventArgs e)
+        {
+            UpdatePosition();
+        }
+
+        void OnParentVisibleChanged(object sender, EventArgs e)
         {
             UpdatePosition();
         }
@@ -221,15 +236,15 @@ namespace Ankh.UI.RepositoryExplorer
 
         public void Hide()
         {
-            if(_show > 0)
+            if (_show > 0)
             {
                 _show--;
 
-                if(_show == 0 && _pb != null)
+                if (_show == 0 && _pb != null)
                 {
                     _pb.Dispose();
                     _pb = null;
-                }                    
+                }
             }
         }
     }
