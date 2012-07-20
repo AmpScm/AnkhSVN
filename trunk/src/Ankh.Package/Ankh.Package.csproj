@@ -224,6 +224,8 @@
     <Content Include="Gui\menu\Legacy\AddUrl.png" />
     <Content Include="Gui\menu\Legacy\CopyUrlToClipboard.png" />
     <Content Include="Gui\menu\Export.png" />
+    <Content Include="Gui\PendingChanges\ApplyPatch.png" />
+    <Content Include="Gui\PendingChanges\CreatePatch.png" />
     <Content Include="Gui\PendingChanges\Legacy\EditConflict.png" />
     <Content Include="Gui\PendingChanges\Legacy\FetchAll.png" />
     <Content Include="Gui\PendingChanges\Legacy\ShowChangedPaths.png" />
@@ -250,11 +252,11 @@
     <Content Include="Gui\Scc\Legacy\Unlock.png" />
     <Content Include="Gui\menu\ViewInVSNet.png" />
     <Content Include="Gui\menu\ViewInWindows.png" />
-    <Content Include="Gui\PendingChanges\ApplyPatch.png" />
+    <Content Include="Gui\PendingChanges\Legacy\ApplyPatch.png" />
     <Content Include="Gui\PendingChanges\Blank.png" />
     <Content Include="Gui\Scc\Legacy\Brush.png" />
     <Content Include="Gui\Scc\Legacy\CopyProject.png" />
-    <Content Include="Gui\PendingChanges\CreatePatch.png" />
+    <Content Include="Gui\PendingChanges\Legacy\CreatePatch.png" />
     <Content Include="Gui\PendingChanges\EditConflict.png" />
     <Content Include="Gui\PendingChanges\FetchAll.png" />
     <Content Include="Gui\PendingChanges\FilterOnSolution.png" />
