@@ -697,7 +697,7 @@
           <MenuRef id="Menu_ItemOpen" priority="0x100" />
           <Button id="Cmd_Export" name="Export" priority="0x300"
               text="E&amp;xport..."
-              toolTip="Export to Folder" iconFile="menu/Export.png" />
+              toolTip="Export to Folder" iconFile="PendingChanges/Export.png" />
           <ButtonRef id="guidVSStd97:cmdidDelete" priority="0x700" />
         </Group>
         <Group id="Grp_WceBranch" priority="0x9000">

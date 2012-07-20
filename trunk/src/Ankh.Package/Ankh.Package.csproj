@@ -223,7 +223,8 @@
     <Content Include="Gui\menu\CopyUrlToClipboard.png" />
     <Content Include="Gui\menu\Legacy\AddUrl.png" />
     <Content Include="Gui\menu\Legacy\CopyUrlToClipboard.png" />
-    <Content Include="Gui\menu\Export.png" />
+    <Content Include="Gui\PendingChanges\Export.png" />
+    <Content Include="Gui\PendingChanges\Legacy\Export.png" />
     <Content Include="Gui\PendingChanges\ApplyPatch.png" />
     <Content Include="Gui\PendingChanges\CreatePatch.png" />
     <Content Include="Gui\PendingChanges\Legacy\EditConflict.png" />
