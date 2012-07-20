@@ -223,6 +223,8 @@
     <Content Include="Gui\menu\CopyUrlToClipboard.png" />
     <Content Include="Gui\menu\Legacy\AddUrl.png" />
     <Content Include="Gui\menu\Legacy\CopyUrlToClipboard.png" />
+    <Content Include="Gui\menu\Legacy\ViewInVSNet.png" />
+    <Content Include="Gui\menu\Legacy\ViewInWindows.png" />
     <Content Include="Gui\PendingChanges\Export.png" />
     <Content Include="Gui\PendingChanges\FileMove.png" />
     <Content Include="Gui\PendingChanges\Legacy\Export.png" />
