@@ -145,7 +145,7 @@
     <value>revisionBox</value>
   </data>
   <data name="&gt;&gt;revisionBox.Type" xml:space="preserve">
-    <value>Ankh.UI.SvnLog.LogRevisionControl, Ankh.UI, Version=2.3.4583.25240, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.SvnLog.LogRevisionControl, Ankh.UI, Version=2.3.4583.32101, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;revisionBox.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -187,7 +187,7 @@
     <value>changedPathBox</value>
   </data>
   <data name="&gt;&gt;changedPathBox.Type" xml:space="preserve">
-    <value>Ankh.UI.SvnLog.LogChangedPathsView, Ankh.UI, Version=2.3.4583.25240, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.SvnLog.LogChangedPathsView, Ankh.UI, Version=2.3.4583.32101, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;changedPathBox.Parent" xml:space="preserve">
     <value>splitContainer2.Panel1</value>
@@ -203,12 +203,6 @@
   </data>
   <data name="changedPathLabel.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
-  </data>
-  <data name="changedPathLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="changedPathLabel.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 1, 1, 1</value>
   </data>
   <data name="changedPathLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>352, 16</value>
@@ -262,7 +256,7 @@
     <value>logBox</value>
   </data>
   <data name="&gt;&gt;logBox.Type" xml:space="preserve">
-    <value>Ankh.UI.PendingChanges.LogMessageEditor, Ankh.UI, Version=2.3.4583.25240, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.PendingChanges.LogMessageEditor, Ankh.UI, Version=2.3.4583.32101, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;logBox.Parent" xml:space="preserve">
     <value>splitContainer2.Panel2</value>
@@ -278,12 +272,6 @@
   </data>
   <data name="logLabel.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
-  </data>
-  <data name="logLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="logLabel.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 1, 1, 1</value>
   </data>
   <data name="logLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>390, 16</value>
@@ -331,7 +319,7 @@
     <value>splitContainer2</value>
   </data>
   <data name="&gt;&gt;splitContainer2.Type" xml:space="preserve">
-    <value>Ankh.UI.VSSelectionControls.SmartSplitContainer, Ankh.UI, Version=2.3.4583.25240, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.VSSelectionControls.SmartSplitContainer, Ankh.UI, Version=2.3.4583.32101, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;splitContainer2.Parent" xml:space="preserve">
     <value>splitContainer1.Panel2</value>
@@ -364,7 +352,7 @@
     <value>splitContainer1</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Type" xml:space="preserve">
-    <value>Ankh.UI.VSSelectionControls.SmartSplitContainer, Ankh.UI, Version=2.3.4583.25240, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.VSSelectionControls.SmartSplitContainer, Ankh.UI, Version=2.3.4583.32101, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Parent" xml:space="preserve">
     <value>$this</value>
