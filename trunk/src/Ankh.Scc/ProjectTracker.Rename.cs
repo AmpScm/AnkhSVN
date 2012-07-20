@@ -273,6 +273,11 @@ namespace Ankh.Scc
                     StatusCache.MarkDirty(s);
             }
 
+            if (!SccProvider.IsActive)
+                return VSConstants.S_OK;
+
+            ProcessRenames(rgszMkOldNames, rgszMkNewNames);
+
             for (int iProject = 0; (iProject < cProjects) && (iDirectory < cDirs); iProject++)
             {
                 int iLastDirectoryThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cDirs;
