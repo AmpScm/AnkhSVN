@@ -599,7 +599,7 @@
                   iconFile="Scc/CopyProject.png" defaultInvisible="true" />
           <Button id="Cmd_ReposMoveTo" priority="0x200"
                   name="SvnCopyTo" text="&amp;Move To..."
-                  iconFile="PendingChanges/MoveTo.png" defaultInvisible="true" />
+                  iconFile="PendingChanges/FileMove.png" defaultInvisible="true" />
           <Button id="Cmd_NewFolder" name="NewFolder" priority="0x500"
                 text="Ne&amp;w Folder..."
                 toolTip="Create a new folder here." iconFile="Scc/NewFolder.png" defaultInvisible="true" />
