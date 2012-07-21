@@ -70,12 +70,16 @@ namespace Ankh.UI
             }
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (Context != null)
+                OnThemeChanged(e);
+        }
+
         protected virtual void OnContextChanged(EventArgs e)
         {
-            if (Context == null)
-                return;
-
-            OnThemeChanged(e);
         }
 
         protected virtual void OnThemeChanged(EventArgs e)
@@ -85,7 +89,7 @@ namespace Ankh.UI
 
             IWinFormsThemingService wfts = Context.GetService<IWinFormsThemingService>();
             if (wfts != null)
-                wfts.ThemeControl(this);
+                wfts.ThemeRecursive(this);
             else
             {
                 IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();

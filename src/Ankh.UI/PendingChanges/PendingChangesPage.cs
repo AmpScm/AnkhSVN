@@ -136,5 +136,7 @@ namespace Ankh.UI.PendingChanges
         public virtual void OnThemeChanged(EventArgs e)
         {
         }
+
+        internal bool _alreadyThemed;
     }
 }

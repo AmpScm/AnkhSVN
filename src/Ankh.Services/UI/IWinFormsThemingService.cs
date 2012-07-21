@@ -5,7 +5,7 @@ namespace Ankh.UI
 {
     public interface IWinFormsThemingService
     {
-        void ThemeControl(Control control);
+        void ThemeRecursive(Control control);
 
         // 
         void VSThemeWindow(Control control);

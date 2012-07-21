@@ -238,40 +238,29 @@ namespace Ankh.WpfPackage.Services
             return false;
         }
 
-        public void ThemeControl(System.Windows.Forms.Control control)
+        public void ThemeRecursive(System.Windows.Forms.Control control)
         {            
             DoThemeControl(control, true);
         }
 
         void DoThemeControl(System.Windows.Forms.Control control, bool delay)
         {
-            if (!control.IsHandleCreated)
+            if (control.IsHandleCreated)
             {
-                if (control.IsDisposed)
-                    return;
+                ISupportsVSTheming themeControl = control as ISupportsVSTheming;
+                CancelEventArgs ca = new CancelEventArgs(false);
+                if (themeControl != null)
+                    themeControl.OnThemeChange(this, ca);
 
-                if (delay)
-                    GetService<IAnkhCommandService>().PostIdleAction(
-                        delegate
-                        {
-                            DoThemeControl(control, false);
-                        });
-                return;
+                if (ca.Cancel)
+                    return; // No recurse!
+
+                VSThemeWindow(control);
             }
-
-            ISupportsVSTheming themeControl = control as ISupportsVSTheming;
-            CancelEventArgs ca = new CancelEventArgs(false);
-            if (themeControl != null)
-                themeControl.OnThemeChange(this, ca);
-
-            if (ca.Cancel)
-                return; // No recurse!
-
-            VSThemeWindow(control);
 
             foreach (Control c in control.Controls)
             {
-                ThemeControl(c);
+                ThemeRecursive(c);
             }
         }
 

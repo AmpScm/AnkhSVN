@@ -201,14 +201,15 @@ namespace Ankh.UI.PendingChanges
                 {
                     foundPage = true;
                     p.Enabled = p.Visible = true;
+
+                    if (!p._alreadyThemed)
+                    {
+                        ThemePage(p);
+                    }
                 }
             }
 
-            if (!foundPage)
-            {
-                panel1.Controls.Add(page);
-                page.Dock = DockStyle.Fill;
-            }
+            System.Diagnostics.Debug.Assert(foundPage);
 
             _currentPage = page;
 
@@ -231,6 +232,19 @@ namespace Ankh.UI.PendingChanges
                     cmd.UpdateCommandUI(false);
 
                 UpdateCaption();
+            }
+        }
+
+        private void ThemePage(PendingChangesPage page)
+        {
+            page._alreadyThemed = true;
+
+            if (VSVersion.SupportsTheming && Context != null)
+            {
+                IWinFormsThemingService wts = Context.GetService<IWinFormsThemingService>();
+
+                if (wts != null)
+                    wts.ThemeRecursive(page);
             }
         }
 
