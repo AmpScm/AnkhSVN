@@ -238,13 +238,6 @@ namespace Ankh.WpfPackage.Services
             return false;
         }
 
-
-        IUIService _ui;
-        IUIService UI
-        {
-            get { return _ui ?? (_ui = GetService<IUIService>()); }
-        }
-
         public void ThemeControl(System.Windows.Forms.Control control)
         {            
             DoThemeControl(control, true);
