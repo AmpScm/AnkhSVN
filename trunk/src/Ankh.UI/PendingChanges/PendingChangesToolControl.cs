@@ -72,11 +72,11 @@ namespace Ankh.UI.PendingChanges
                 p.Context = Context;
                 p.ToolControl = this;
 
-                if (!panel1.Controls.Contains(p))
+                if (!contentPanel.Controls.Contains(p))
                 {
                     p.Enabled = p.Visible = false;
                     p.Dock = DockStyle.Fill;
-                    panel1.Controls.Add(p);
+                    contentPanel.Controls.Add(p);
                 }
             }
 
@@ -146,7 +146,6 @@ namespace Ankh.UI.PendingChanges
                 p.OnThemeChanged(e);
             }
 
-            Invalidate();
             pendingChangesTabs.Invalidate();
         }
 
@@ -191,7 +190,7 @@ namespace Ankh.UI.PendingChanges
                 return;
 
             bool foundPage = false;
-            foreach (PendingChangesPage p in panel1.Controls)
+            foreach (PendingChangesPage p in contentPanel.Controls)
             {
                 if (p != page)
                 {
