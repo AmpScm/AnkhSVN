@@ -213,8 +213,8 @@ namespace Ankh.WpfPackage.Services
                 else
                     uiOb = _giff(path, __VSUIDATAFORMAT.VSDF_WIN32);
 
-                if (src == 2)
-                    return false; // Just use the os directly then. (Allows caching)
+                if (src == 2 || uiOb == null)
+                    return false; // Just use the os directly. (Allows caching)
 
                 object data;
                 if (!ErrorHandler.Succeeded(uiOb.get_Data(out data)))
