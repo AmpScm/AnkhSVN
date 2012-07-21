@@ -19,10 +19,13 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
+using CommandID = System.ComponentModel.Design.CommandID;
 
 using Ankh.Commands;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
+using Ankh.Configuration;
+using Ankh.VS;
 
 namespace Ankh.Scc
 {
@@ -149,7 +152,23 @@ namespace Ankh.Scc
 
             RegisterForSccCleanup();
 
+            IAnkhConfigurationService cfg = GetService<IAnkhConfigurationService>();
+            
+            if (cfg != null && !cfg.Instance.DontHookSolutionExplorerRefresh)
+            {
+                IAnkhGlobalCommandHook cmdHook = GetService<IAnkhGlobalCommandHook>();
+
+                if (cmdHook != null)
+                    cmdHook.HookCommand(new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.SLNREFRESH),
+                                        OnSlnRefresh);
+            }
+
             return VSConstants.S_OK;
+        }
+
+        private void OnSlnRefresh(object sender, EventArgs e)
+        {
+            CommandService.PostExecCommand(AnkhCommand.Refresh);
         }
 
         /// <summary>
@@ -186,6 +205,12 @@ namespace Ankh.Scc
             }
 
             GetService<IAnkhServiceEvents>().OnSccProviderDeactivated(EventArgs.Empty);
+
+            IAnkhGlobalCommandHook cmdHook = GetService<IAnkhGlobalCommandHook>();
+
+            if (cmdHook != null)
+                cmdHook.UnhookCommand(new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.SLNREFRESH),
+                                      OnSlnRefresh);
 
             return VSConstants.S_OK;
         }
