@@ -57,7 +57,7 @@ namespace Ankh.UI.SvnLog
                 Author,
                 Date.ToString(CultureInfo.CurrentCulture),
                 GetIssueText(),
-                LogMessage);
+                GetLogMessageLine());
         }
 
         private string GetIssueText()
@@ -105,16 +105,16 @@ namespace Ankh.UI.SvnLog
             get { return _args.Author; }
         }
 
-        string _logMessage;
+        internal string GetLogMessageLine()
+        {
+            return LogMessage.Trim().Replace("\r", "").Replace("\n", "\x23CE");
+        }
+
         internal string LogMessage
         {
             get
             {
-                if (_logMessage == null && _args.LogMessage != null)
-                {
-                    _logMessage = _args.LogMessage.Trim().Replace("\r", "").Replace("\n", "\x23CE");
-                }
-                return _logMessage;
+                return _args.LogMessage ?? "";
             }
         }
 
