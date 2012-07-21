@@ -240,11 +240,6 @@ namespace Ankh.WpfPackage.Services
 
         public void ThemeRecursive(System.Windows.Forms.Control control)
         {            
-            DoThemeControl(control, true);
-        }
-
-        void DoThemeControl(System.Windows.Forms.Control control, bool delay)
-        {
             if (control.IsHandleCreated)
             {
                 ISupportsVSTheming themeControl = control as ISupportsVSTheming;
@@ -492,6 +487,40 @@ namespace Ankh.WpfPackage.Services
                 combo.ForeColor = combo.Parent.ForeColor;
         }
 
+        void ThemeOne(SplitContainer panel)
+        {
+            IHasSplitterColor ex = panel as IHasSplitterColor;
+            if (ex != null)
+                ThemeOne(ex);
+
+            if (panel.Parent != null && panel.Font != panel.Parent.Font)
+                panel.Font = panel.Parent.Font;
+
+            Color color;
+            if (ColorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
+            {
+                if (panel.BackColor != color)
+                {
+                    panel.BackColor = color;
+                    panel.Panel1.BackColor = color;
+                    panel.Panel2.BackColor = color;
+                }
+            }
+
+            if (ColorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_TEXT, out color))
+            {
+                if (panel.ForeColor != color)
+                {
+                    panel.ForeColor = color;
+                    panel.Panel1.ForeColor = color;
+                    panel.Panel2.ForeColor = color;
+                }
+            }
+
+            if (panel.BorderStyle == BorderStyle.Fixed3D)
+                panel.BorderStyle = BorderStyle.FixedSingle;
+        }
+
         void ThemeOne(IHasSplitterColor splitter)
         {
             Color clrSplitter;
@@ -531,6 +560,7 @@ namespace Ankh.WpfPackage.Services
                 || MaybeTheme<UserControl>(ThemeOne, control)
                 || MaybeTheme<PropertyGrid>(ThemeOne, control)
                 || MaybeTheme<ComboBox>(ThemeOne, control)
+                || MaybeTheme<SplitContainer>(ThemeOne, control)
                 || MaybeTheme<IHasSplitterColor>(ThemeOne, control);
         }
     }
