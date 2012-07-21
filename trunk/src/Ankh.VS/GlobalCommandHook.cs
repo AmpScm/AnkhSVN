@@ -131,8 +131,11 @@ namespace Ankh.VS
             return false;
         }
 
+
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
+            // Exit as quickly as possible without creating exceptions. This function is performance critical!
+
             if (GuidRefIsNull(ref pguidCmdGroup))
                 return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
@@ -141,9 +144,21 @@ namespace Ankh.VS
                 return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
 
             EventHandler handler;
-            if (cmdMap.TryGetValue((int)nCmdID, out handler))
+            if (cmdMap.TryGetValue(unchecked((int)nCmdID), out handler))
             {
-                handler(this, EventArgs.Empty);
+                try
+                {
+                    handler(this, EventArgs.Empty);
+                }
+                catch (Exception ex)
+                {
+                    IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
+
+                    if (eh != null && eh.IsEnabled(ex))
+                        eh.OnError(ex);
+                    else
+                        throw;
+                }
             }
 
             return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
@@ -151,18 +166,7 @@ namespace Ankh.VS
 
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
-            if ((prgCmds == null))
-                return VSConstants.E_POINTER;
-            else if (GuidRefIsNull(ref pguidCmdGroup))
-                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
-
-            Dictionary<int, EventHandler> cmdMap;
-            if (!_commandMap.TryGetValue(pguidCmdGroup, out cmdMap))
-                return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
-
-            if (!cmdMap.ContainsKey((int)prgCmds[0].cmdID))
-                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
-
+            // Don't do anything here. This function is 100% performance critical!
             return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
         }
     }

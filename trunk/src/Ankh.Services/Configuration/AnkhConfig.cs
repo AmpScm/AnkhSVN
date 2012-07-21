@@ -39,6 +39,7 @@ namespace Ankh.Configuration
         int _recentChangesRefreshInterval;
         bool _disableUpdateCheck;
         bool _enableTsvnHooks;
+        bool _dontHookSlnRefresh;
 
         /// <summary>
         /// Gets or sets the merge exe path.
@@ -137,6 +138,13 @@ namespace Ankh.Configuration
         {
             get { return _enableTsvnHooks; }
             set { _enableTsvnHooks = value; }
+        }
+
+        [DefaultValue(false)]
+        public bool DontHookSolutionExplorerRefresh
+        {
+            get { return _dontHookSlnRefresh; }
+            set { _dontHookSlnRefresh = value; }
         }
     }
 }
