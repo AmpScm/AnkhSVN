@@ -317,7 +317,6 @@ namespace Ankh.UI.PendingChanges.Commits
             get { return Context == null ? null : Context.GetService<IAnkhCommandService>(); }
         }
 
-        bool _themedOnce;
         public override void OnThemeChange(IAnkhServiceProvider sender, CancelEventArgs e)
         {
             IAnkhCommandStates states;
@@ -348,15 +347,12 @@ namespace Ankh.UI.PendingChanges.Commits
                 ForeColor = clrText;
                 BackColor = clrFill;
 
-                _themedOnce = false;
-
                 // Re-enable after undoing theming
                 ShowSelectAllCheckBox = true;
 
                 return;
             }
 
-            _themedOnce = true;
             base.OnThemeChange(sender, e);
         }
     }
