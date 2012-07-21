@@ -254,11 +254,14 @@ namespace Ankh.WpfPackage.Services
         {
             if (!control.IsHandleCreated)
             {
+                if (control.IsDisposed)
+                    return;
+
                 if (delay)
                     GetService<IAnkhCommandService>().PostIdleAction(
                         delegate
                         {
-                            ThemeControl(control);
+                            DoThemeControl(control, false);
                         });
                 return;
             }
