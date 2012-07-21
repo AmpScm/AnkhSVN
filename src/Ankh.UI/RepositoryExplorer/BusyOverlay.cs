@@ -63,8 +63,10 @@ namespace Ankh.UI.RepositoryExplorer
 
                 if (_parent != null)
                 {
+                    _parent.BackColorChanged -= new EventHandler(OnParentBackColorChanged);
                     _parent.SizeChanged -= new EventHandler(OnParentSizeChanged);
                     _parent.VisibleChanged -= new EventHandler(OnParentVisibleChanged);
+
                     _parent.HandleCreated -= new EventHandler(OnParentHandleCreated);
                     _parent.HandleDestroyed -= new EventHandler(OnParentHandleDestroyed);
                     _parent = value;
@@ -103,8 +105,10 @@ namespace Ankh.UI.RepositoryExplorer
                 {
                     _parent.HandleDestroyed += new EventHandler(OnParentHandleDestroyed);
                     _parent.HandleCreated += new EventHandler(OnParentHandleCreated);
+
                     _parent.VisibleChanged += new EventHandler(OnParentVisibleChanged);
                     _parent.SizeChanged += new EventHandler(OnParentSizeChanged);
+                    _parent.BackColorChanged += new EventHandler(OnParentBackColorChanged);
                 }
 
                 if (_top != null)
@@ -117,7 +121,7 @@ namespace Ankh.UI.RepositoryExplorer
                 }
             }
         }
-
+        
         void OnTopVisibleChanged(object sender, EventArgs e)
         {
             if (_top != null && !_top.Visible)
@@ -158,6 +162,11 @@ namespace Ankh.UI.RepositoryExplorer
                 _pb.Dispose();
                 _pb = null;
             }
+        }
+
+        private void OnParentBackColorChanged(object sender, EventArgs e)
+        {
+            UpdatePosition();
         }
 
         void OnParentSizeChanged(object sender, EventArgs e)
@@ -212,6 +221,8 @@ namespace Ankh.UI.RepositoryExplorer
             }
 
             _pb.Location = p;
+            if (_pb.BackColor != Parent.BackColor)
+                _pb.BackColor = Parent.BackColor;
         }
 
         public void Show()
