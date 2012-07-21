@@ -74,6 +74,7 @@
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
+    <Compile Include="VS\IAnkhGlobalCommandHook.cs" />
     <Compile Include="VS\IssueMarker.cs" />
     <Compile Include="VS\ILinqInterfaceDelegateService.cs" />
     <Compile Include="Scc\SvnItemAnnotation.cs" />
