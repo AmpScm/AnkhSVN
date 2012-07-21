@@ -25,11 +25,13 @@ using System.Windows.Forms.Design;
 using Microsoft.VisualStudio;
 using SharpSvn;
 using SharpSvn.Remote;
+
 using Ankh.Commands;
 using Ankh.Configuration;
 using Ankh.Scc;
 using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
+
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -183,6 +185,18 @@ namespace Ankh.UI.RepositoryExplorer
                 RepositoryTreeNode selected = this.treeView.SelectedNode;
                 return selected == null ? null : selected.RawUri;
             }
+        }
+
+        protected override void OnThemeChanged(EventArgs e)
+        {
+            if (VSVersion.VS11OrLater)
+            {
+                // Remove the chrome
+                toolFolders.Visible = toolFolders.Enabled = false;
+                treeView.BorderStyle = BorderStyle.None;
+                fileView.BorderStyle = BorderStyle.None;
+            }
+            base.OnThemeChanged(e);
         }
 
         private void OnTreeViewShowContextMenu(object sender, MouseEventArgs e)

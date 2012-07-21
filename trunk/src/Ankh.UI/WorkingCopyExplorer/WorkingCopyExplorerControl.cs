@@ -22,6 +22,7 @@ using System.Windows.Forms.Design;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+
 using Ankh.Commands;
 using Ankh.Configuration;
 using Ankh.Scc;
@@ -51,6 +52,18 @@ namespace Ankh.UI.WorkingCopyExplorer
             base.OnContextChanged(e);
             folderTree.Context = Context;
             fileList.Context = Context;
+        }
+
+        protected override void OnThemeChanged(EventArgs e)
+        {
+            if (VSVersion.VS11OrLater)
+            {
+                // Remove the chrome
+                foldersStrip.Visible = foldersStrip.Enabled = false;
+                folderTree.BorderStyle = BorderStyle.None;
+                fileList.BorderStyle = BorderStyle.None;
+            }
+            base.OnThemeChanged(e);
         }
 
         /// <summary>
