@@ -50,7 +50,7 @@ namespace Ankh.UI.PendingChanges
             this.issuesButton = new System.Windows.Forms.ToolStripButton();
             this.recentChangesButton = new System.Windows.Forms.ToolStripButton();
             this.conflictsButton = new System.Windows.Forms.ToolStripButton();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.contentPanel = new System.Windows.Forms.Panel();
             this.pendingChangesTabs.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -99,14 +99,14 @@ namespace Ankh.UI.PendingChanges
             // 
             // panel1
             // 
-            resources.ApplyResources(this.panel1, "panel1");
-            this.panel1.Name = "panel1";
+            resources.ApplyResources(this.contentPanel, "panel1");
+            this.contentPanel.Name = "panel1";
             // 
             // PendingChangesToolControl
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.contentPanel);
             this.Controls.Add(this.pendingChangesTabs);
             this.Name = "PendingChangesToolControl";
             this.pendingChangesTabs.ResumeLayout(false);
@@ -122,7 +122,7 @@ namespace Ankh.UI.PendingChanges
         private System.Windows.Forms.ToolStripButton fileChangesButton;
         private System.Windows.Forms.ToolStripButton issuesButton;
         private System.Windows.Forms.ToolStripButton recentChangesButton;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel contentPanel;
         private System.Windows.Forms.ToolStripButton conflictsButton;
     }
 }
