@@ -51,6 +51,14 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        public override void OnThemeChanged(EventArgs e)
+        {
+            base.OnThemeChanged(e);
+
+            if (VSVersion.VS11OrLater)
+                pleaseConfigureLabel.BorderStyle = BorderStyle.None;
+        }
+
         void issueService_IssueRepositoryChanged(object sender, EventArgs e)
         {
             RefreshPageContents();
@@ -58,7 +66,15 @@ namespace Ankh.UI.PendingChanges
 
         public void RefreshPageContents()
         {
+            foreach (Control c in this.Controls)
+            {
+                if (c == pleaseConfigureLabel)
+                    continue;
+
+                c.Dispose();
+            }
             this.Controls.Clear();
+
             IAnkhIssueService issueService = Context.GetService<IAnkhIssueService>();
             if (issueService != null)
             {
@@ -72,6 +88,14 @@ namespace Ankh.UI.PendingChanges
                     {
                         control.Dock = DockStyle.Fill;
                         this.Controls.Add(control);
+
+                        if (VSVersion.SupportsTheming && Context != null)
+                        {
+                            IWinFormsThemingService wts = Context.GetService<IWinFormsThemingService>();
+
+                            if (wts != null)
+                                wts.ThemeRecursive(control);
+                        }
                         return;
                     }
                 }

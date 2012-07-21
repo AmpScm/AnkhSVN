@@ -155,6 +155,14 @@ namespace Ankh.UI.PendingChanges
 
         #endregion
 
+        public override void OnThemeChanged(EventArgs e)
+        {
+            base.OnThemeChanged(e);
+
+            if (VSVersion.VS11OrLater)
+                syncView.BorderStyle = BorderStyle.None;
+        }
+
         void DoRefresh()
         {
             DoRefresh(false);
