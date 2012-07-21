@@ -11,6 +11,7 @@
       <ComponentGroupRef Id="Ankh.Scc" />
       <ComponentGroupRef Id="Ankh.UI" />
       <ComponentGroupRef Id="Ankh.VS" />
+      <ComponentGroupRef Id="Ankh.VS.Interop" />
       <ComponentGroupRef Id="Ankh.Diff" />
       <ComponentGroupRef Id="Ankh.ExtensionPoints" />
       <ComponentRef Id="C_Ankh.Package.dll" />

@@ -523,6 +523,10 @@
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
       <Name>Ankh.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ankh.VS.Interop\Ankh.VS.Interop.csproj">
+      <Project>{b99cb919-1a2c-4e3b-9c15-8789b358ea99}</Project>
+      <Name>Ankh.VS.Interop</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.VS\Ankh.VS.csproj">
       <Project>{906E3F01-CD79-4F80-BCA7-1105224328C4}</Project>
       <Name>Ankh.VS</Name>
