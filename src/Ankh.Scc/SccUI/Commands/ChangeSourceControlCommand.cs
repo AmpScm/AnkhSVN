@@ -50,6 +50,8 @@ namespace Ankh.Scc.SccUI.Commands
             {
                 csc.Context = e.Context;
 
+                csc.Prepare();
+
                 csc.ShowDialog(e.Context);
             }
         }
