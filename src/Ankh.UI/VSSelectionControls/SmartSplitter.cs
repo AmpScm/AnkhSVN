@@ -66,6 +66,9 @@ namespace Ankh.UI.VSSelectionControls
             get { return _hasSplitterColor ? _splitterColor : Color.Transparent; }
             set
             {
+                if (value == SplitterColor)
+                    return;
+
                 if (value != Color.Transparent)
                 {
                     _hasSplitterColor = true;
@@ -73,6 +76,9 @@ namespace Ankh.UI.VSSelectionControls
                 }
                 else
                     _hasSplitterColor = false;
+
+                if (IsHandleCreated)
+                    Invalidate(SplitterRectangle);
             }
         }
 
