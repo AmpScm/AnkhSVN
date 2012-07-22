@@ -21,6 +21,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using ArrayList = System.Collections.ArrayList;
 using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh.UI.PendingChanges
@@ -66,13 +67,6 @@ namespace Ankh.UI.PendingChanges
 
         public void RefreshPageContents()
         {
-            foreach (Control c in this.Controls)
-            {
-                if (c == pleaseConfigureLabel)
-                    continue;
-
-                c.Dispose();
-            }
             this.Controls.Clear();
 
             IAnkhIssueService issueService = Context.GetService<IAnkhIssueService>();
