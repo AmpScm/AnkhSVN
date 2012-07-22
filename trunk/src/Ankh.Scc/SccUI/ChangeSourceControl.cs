@@ -15,16 +15,15 @@
 //  limitations under the License.
 
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using System.Windows.Forms.Design;
 
 using Ankh.Selection;
-using Ankh.Scc;
 using Ankh.UI;
 using Ankh.VS;
-using System.Diagnostics;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -47,24 +46,46 @@ namespace Ankh.Scc.SccUI
 
             if (Context != null)
             {
-                IUIService ds = Context.GetService<IUIService>();
-
-                if (ds != null)
+                if (!VSVersion.VS11OrLater)
                 {
-                    ToolStripRenderer renderer = ds.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
+                    IUIService ds = Context.GetService<IUIService>();
 
-                    if (renderer != null)
-                        toolStrip1.Renderer = renderer;
+                    if (ds != null)
+                    {
+                        ToolStripRenderer renderer = ds.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
+
+                        if (renderer != null)
+                            toolStrip1.Renderer = renderer;
+                    }
                 }
-
-                IAnkhSolutionSettings settings = Context.GetService<IAnkhSolutionSettings>();
-
-                if (settings.SolutionFilename != null)
-                    Text += " - " + Path.GetFileName(settings.SolutionFilename);
             }
 
-            if (bindingGrid != null)
-                InitializeGrid();
+            Prepare();
+        }
+
+        bool _prepared;
+        public void Prepare()
+        {
+            if (_prepared)
+                return;
+
+            if (Context == null)
+                return;
+
+            _prepared = true;
+
+            IAnkhSolutionSettings settings = Context.GetService<IAnkhSolutionSettings>();
+
+            if (settings.SolutionFilename != null)
+                Text += " - " + Path.GetFileName(settings.SolutionFilename);
+
+            InitializeGrid();
+        }
+
+        Ankh.UI.IAnkhThreadedWaitService _tws;
+        Ankh.UI.IAnkhThreadedWaitService ThreadedWaitService
+        {
+            get { return _tws ?? (_tws = GetService<Ankh.UI.IAnkhThreadedWaitService>()); }
         }
 
         private void InitializeGrid()
@@ -112,9 +133,18 @@ namespace Ankh.Scc.SccUI
 
         void RefreshGrid()
         {
-            foreach (ChangeSourceControlRow row in bindingGrid.Rows)
+            ISupportInitialize init = bindingGrid;
+            init.BeginInit();
+            try
             {
-                row.Refresh();
+                foreach (ChangeSourceControlRow row in bindingGrid.Rows)
+                {
+                    row.Refresh();
+                }
+            }
+            finally
+            {
+                init.EndInit();
             }
 
             bool enableConnect = false;
