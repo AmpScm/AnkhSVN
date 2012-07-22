@@ -97,6 +97,17 @@ namespace Ankh.UI.PendingChanges
                 ResizeToFit();
         }
 
+        public override void OnThemeChanged(EventArgs e)
+        {
+            base.OnThemeChanged(e);
+            if (VSVersion.VS11OrLater)
+            {
+                borderPanel.BorderStyle = BorderStyle.None;
+                conflictView.BorderStyle = BorderStyle.None;
+
+            }
+        }
+
         private void ResizeToFit()
         {
             conflictEditSplitter.SplitterDistance += conflictEditSplitter.Panel2.Height - resolveLinkLabel.Bottom - resolveLinkLabel.Margin.Bottom;

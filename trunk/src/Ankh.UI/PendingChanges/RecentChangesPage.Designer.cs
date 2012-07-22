@@ -44,6 +44,7 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RecentChangesPage));
             this.syncView = new Ankh.UI.PendingChanges.Synchronize.SynchronizeListView();
             this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -52,15 +53,15 @@ namespace Ankh.UI.PendingChanges
             this.panel2 = new System.Windows.Forms.Panel();
             this.refreshCombo = new System.Windows.Forms.ComboBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer(this.components);
+            this.borderPanel = new System.Windows.Forms.Panel();
             this.topLayoutPanel.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.borderPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // syncView
@@ -125,18 +126,18 @@ namespace Ankh.UI.PendingChanges
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.panel1);
+            this.splitContainer1.Panel1.Controls.Add(this.borderPanel);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.syncView);
             // 
-            // panel1
+            // borderPanel
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.topLayoutPanel);
-            resources.ApplyResources(this.panel1, "panel1");
-            this.panel1.Name = "panel1";
+            this.borderPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.borderPanel.Controls.Add(this.topLayoutPanel);
+            resources.ApplyResources(this.borderPanel, "borderPanel");
+            this.borderPanel.Name = "borderPanel";
             // 
             // RecentChangesPage
             // 
@@ -151,7 +152,7 @@ namespace Ankh.UI.PendingChanges
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
+            this.borderPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -162,7 +163,7 @@ namespace Ankh.UI.PendingChanges
         private System.Windows.Forms.TableLayoutPanel topLayoutPanel;
 		private System.Windows.Forms.Label label1;
         private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer1;
-		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Panel borderPanel;
 		private System.Windows.Forms.TextBox updateTime;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.ComboBox refreshCombo;
