@@ -44,11 +44,12 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PendingConflictsPage));
-            this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer(this.components);
+            this.borderPanel = new System.Windows.Forms.Panel();
             this.conflictHeader = new System.Windows.Forms.Label();
-            this.conflictEditSplitter = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
+            this.conflictEditSplitter = new Ankh.UI.VSSelectionControls.SmartSplitContainer(this.components);
             this.conflictView = new Ankh.UI.PendingChanges.Conflicts.ConflictListView();
             this.resolvePanel = new System.Windows.Forms.FlowLayoutPanel();
             this.resolveButton0 = new System.Windows.Forms.Button();
@@ -66,7 +67,7 @@ namespace Ankh.UI.PendingChanges
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.borderPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.conflictEditSplitter)).BeginInit();
             this.conflictEditSplitter.Panel1.SuspendLayout();
             this.conflictEditSplitter.Panel2.SuspendLayout();
@@ -82,18 +83,18 @@ namespace Ankh.UI.PendingChanges
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.panel1);
+            this.splitContainer1.Panel1.Controls.Add(this.borderPanel);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.conflictEditSplitter);
             // 
-            // panel1
+            // borderPanel
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.conflictHeader);
-            resources.ApplyResources(this.panel1, "panel1");
-            this.panel1.Name = "panel1";
+            this.borderPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.borderPanel.Controls.Add(this.conflictHeader);
+            resources.ApplyResources(this.borderPanel, "borderPanel");
+            this.borderPanel.Name = "borderPanel";
             // 
             // conflictHeader
             // 
@@ -214,7 +215,7 @@ namespace Ankh.UI.PendingChanges
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
+            this.borderPanel.ResumeLayout(false);
             this.conflictEditSplitter.Panel1.ResumeLayout(false);
             this.conflictEditSplitter.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.conflictEditSplitter)).EndInit();
@@ -228,7 +229,7 @@ namespace Ankh.UI.PendingChanges
         #endregion
 
         private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer1;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel borderPanel;
         private Ankh.UI.VSSelectionControls.SmartSplitContainer conflictEditSplitter;
         private Ankh.UI.PendingChanges.Conflicts.ConflictListView conflictView;
         private System.Windows.Forms.FlowLayoutPanel resolvePanel;

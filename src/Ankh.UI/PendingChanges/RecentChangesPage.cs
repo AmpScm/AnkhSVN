@@ -160,7 +160,10 @@ namespace Ankh.UI.PendingChanges
             base.OnThemeChanged(e);
 
             if (VSVersion.VS11OrLater)
+            {
                 syncView.BorderStyle = BorderStyle.None;
+                borderPanel.BorderStyle = BorderStyle.None;
+            }
         }
 
         void DoRefresh()
