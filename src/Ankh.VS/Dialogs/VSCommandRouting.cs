@@ -105,8 +105,9 @@ namespace Ankh.VS.Dialogs
                         _priorityCommandTarget.UnregisterPriorityCommandTarget(_csCookie);
                     }
                     finally
-                    { }
-                    _priorityCommandTarget = null;
+                    {
+                        _priorityCommandTarget = null;
+                    }
                 }
 
                 if (_activeStack != null)
