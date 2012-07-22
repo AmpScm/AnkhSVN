@@ -142,12 +142,11 @@ namespace Ankh.UI.VSSelectionControls
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            base.OnMouseDown(e);
             if (e.Button == MouseButtons.Right)
             {
                 ExtendSelection(e.Location, true);
             }
-
-            base.OnMouseDown(e);
         }
 
         protected virtual void ExtendSelection(Point p, bool rightClick)
