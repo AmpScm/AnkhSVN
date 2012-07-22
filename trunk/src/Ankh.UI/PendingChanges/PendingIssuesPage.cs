@@ -15,13 +15,8 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using ArrayList = System.Collections.ArrayList;
 using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh.UI.PendingChanges
@@ -67,7 +62,7 @@ namespace Ankh.UI.PendingChanges
 
         public void RefreshPageContents()
         {
-            this.Controls.Clear();
+            Controls.Clear();
 
             IAnkhIssueService issueService = Context.GetService<IAnkhIssueService>();
             if (issueService != null)
@@ -81,7 +76,7 @@ namespace Ankh.UI.PendingChanges
                     if (control != null)
                     {
                         control.Dock = DockStyle.Fill;
-                        this.Controls.Add(control);
+                        Controls.Add(control);
 
                         if (VSVersion.SupportsTheming && Context != null)
                         {
@@ -94,7 +89,7 @@ namespace Ankh.UI.PendingChanges
                     }
                 }
             }
-            this.Controls.Add(pleaseConfigureLabel);
+            Controls.Add(pleaseConfigureLabel);
         }
 
 		protected override void OnFontChanged(EventArgs e)
