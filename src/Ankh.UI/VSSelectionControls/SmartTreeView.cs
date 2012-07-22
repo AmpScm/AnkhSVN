@@ -193,12 +193,12 @@ namespace Ankh.UI.VSSelectionControls
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            base.OnMouseDown(e);
+
             if (e.Button == MouseButtons.Right)
             {
                 ExtendSelection(e.Location, true);
             }
-
-            base.OnMouseDown(e);
         }
 
         protected virtual void ExtendSelection(Point p, bool rightClick)
@@ -230,14 +230,6 @@ namespace Ankh.UI.VSSelectionControls
 
             [DllImport("uxtheme.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]
             public static extern int SetWindowTheme(IntPtr hWnd, String pszSubAppName, String pszSubIdList);
-        }
-
-        bool _noVsTheming;
-        [DefaultValue(true)]
-        public bool UseVSTheming
-        {
-            get { return !_noVsTheming; }
-            set { _noVsTheming = !value; }
         }
     }
 }
