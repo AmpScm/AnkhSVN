@@ -428,6 +428,7 @@ namespace Ankh.WpfPackage.Services
         const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_FILL = (__VSSYSCOLOREX)__VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_FILL;
         const __VSSYSCOLOREX VSCOLOR_GRAYTEXT = (__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_GRAYTEXT;
         const __VSSYSCOLOREX VSCOLOR_COMMANDBAR_TOOLBAR_SEPARATOR = (__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_COMMANDBAR_TOOLBAR_SEPARATOR;
+        const __VSSYSCOLOREX VSCOLOR_THREEDFACE = (__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_THREEDFACE;
 
         IAnkhVSColor _vsColors;
         IAnkhVSColor VSColors
@@ -525,7 +526,7 @@ namespace Ankh.WpfPackage.Services
         {
             Color clrSplitter;
 
-            if (!VSColors.TryGetColor(VSCOLOR_COMMANDBAR_TOOLBAR_SEPARATOR, out clrSplitter))
+            if (!VSColors.TryGetColor(VSCOLOR_THREEDFACE, out clrSplitter))
                 clrSplitter = SystemColors.InactiveBorder;
 
             splitter.SplitterColor = clrSplitter;
