@@ -55,6 +55,11 @@ namespace Ankh.UI.RepositoryOpen
             _dirOffset = mapper.DirectoryIcon;
             _fileOffset = mapper.FileIcon;
 
+            if (VSVersion.VS11OrLater)
+            {
+                return;
+            }
+
             IUIService ds = GetService<IUIService>();
 
             if (ds != null)
