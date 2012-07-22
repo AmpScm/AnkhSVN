@@ -380,10 +380,20 @@ namespace Ankh.VS.Selection
 
             public int GetCurrentSelection(out IntPtr ppHier, out uint pitemid, out IVsMultiItemSelect ppMIS, out IntPtr ppSC)
             {
-                ppHier = IntPtr.Zero; // Not used by our code
+                ppHier = IntPtr.Zero;
                 pitemid = VSConstants.VSITEMID_NIL;
                 ppMIS = null;
                 ppSC = IntPtr.Zero;
+
+                if (_ctx._topPopup == _top)
+                {
+                    if (_ctx.current.hierarchy != null)
+                        ppHier = Marshal.GetIUnknownForObject(_ctx.current.hierarchy);
+                    pitemid = _ctx.current.id;
+                    ppMIS = _ctx.current.selection;
+                    if (_ctx._currentContainer != null)
+                        ppSC = Marshal.GetIUnknownForObject(_ctx._currentContainer);
+                }
                 return VSConstants.S_OK;
             }
 
