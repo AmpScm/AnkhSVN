@@ -192,14 +192,27 @@ namespace Ankh.UI.RepositoryExplorer
             else
             {
                 Size ps = Parent.ClientSize;
+                System.Reflection.PropertyInfo pi = Parent.GetType().GetProperty("BorderStyle", typeof(BorderStyle));
+                int borderWidth = 0;
+
+                if (pi != null)
+                    switch ((BorderStyle)pi.GetValue(Parent))
+                    {
+                        case BorderStyle.Fixed3D:
+                            borderWidth = 2;
+                            break;
+                        case BorderStyle.FixedSingle:
+                            borderWidth = 1;
+                            break;
+                    }
 
                 switch (Anchor & (AnchorStyles.Left | AnchorStyles.Right))
                 {
                     case AnchorStyles.Left:
-                        p.X = 1;
+                        p.X = borderWidth;
                         break;
                     case AnchorStyles.Right:
-                        p.X = ps.Width - _pb.Width - 2;
+                        p.X = ps.Width - _pb.Width - borderWidth;
                         break;
                     default:
                         p.X = (ps.Width - _pb.Width) / 2;
@@ -209,10 +222,10 @@ namespace Ankh.UI.RepositoryExplorer
                 switch (Anchor & (AnchorStyles.Top | AnchorStyles.Bottom))
                 {
                     case AnchorStyles.Top:
-                        p.Y = 1;
+                        p.Y = borderWidth;
                         break;
                     case AnchorStyles.Bottom:
-                        p.Y = ps.Height - _pb.Height - 2;
+                        p.Y = ps.Height - _pb.Height - borderWidth;
                         break;
                     default:
                         p.X = (ps.Height - _pb.Height) / 2;
