@@ -6,7 +6,7 @@
     <PropertyRef Id="VS2005DEVENV" />
 
     <InstallExecuteSequence>
-      <Custom Action="AnkhVS2005Setup" Before="InstallFinalize" Overridable="yes">VS2005DEVENV And (Not Installed Or Not UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="AnkhVS2005Setup" Before="InstallFinalize" Overridable="yes">VS2005DEVENVAnd Not UPGRADINGPRODUCTCODE</Custom>
     </InstallExecuteSequence>
   </Fragment>
 
@@ -15,7 +15,7 @@
     <PropertyRef Id="VS90DEVENV" />
 
     <InstallExecuteSequence>
-      <Custom Action="AnkhVS2008Setup" Before="InstallFinalize" Overridable="yes">VS90DEVENV And (Not Installed Or Not UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="AnkhVS2008Setup" Before="InstallFinalize" Overridable="yes">VS90DEVENVAnd Not UPGRADINGPRODUCTCODE</Custom>
     </InstallExecuteSequence>
   </Fragment>
 
@@ -24,7 +24,7 @@
     <PropertyRef Id="VS2010DEVENV" />
 
     <InstallExecuteSequence>
-      <Custom Action="AnkhVS2010Setup" Before="InstallFinalize" Overridable="yes">VS2010DEVENV And (Not Installed Or Not UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="AnkhVS2010Setup" Before="InstallFinalize" Overridable="yes">VS2010DEVENVAnd Not UPGRADINGPRODUCTCODE</Custom>
     </InstallExecuteSequence>
   </Fragment>
 
@@ -33,7 +33,7 @@
     <PropertyRef Id="VS11DEVENV" />
 
     <InstallExecuteSequence>
-      <Custom Action="AnkhVS2012Setup" Before="InstallFinalize" Overridable="yes">VS11DEVENV And (Not Installed Or Not UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="AnkhVS2012Setup" Before="InstallFinalize" Overridable="yes">VS11DEVENVAnd Not UPGRADINGPRODUCTCODE</Custom>
     </InstallExecuteSequence>
   </Fragment>
 
