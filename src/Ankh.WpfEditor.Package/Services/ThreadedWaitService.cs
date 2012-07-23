@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Ankh.UI;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
+
+using Ankh.UI;
 
 namespace Ankh.WpfPackage.Services
 {
