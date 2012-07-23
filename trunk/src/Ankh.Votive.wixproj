@@ -32,7 +32,7 @@
     </WixVariables>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>True</Pedantic>
-    <SuppressIces>ICE03;ICE25;ICE61;ICE69;ICE82</SuppressIces>
+    <SuppressIces>ICE03;ICE69;ICE82;ICE83</SuppressIces>
     <SuppressValidation>False</SuppressValidation>
     <CompilerAdditionalOptions>
     </CompilerAdditionalOptions>
@@ -54,7 +54,7 @@
     </WixVariables>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>True</Pedantic>
-    <SuppressIces>ICE03;ICE25;ICE61;ICE69;ICE82</SuppressIces>
+    <SuppressIces>ICE03;ICE69;ICE82;ICE83</SuppressIces>
     <SuppressValidation>False</SuppressValidation>
     <CompilerAdditionalOptions>
     </CompilerAdditionalOptions>

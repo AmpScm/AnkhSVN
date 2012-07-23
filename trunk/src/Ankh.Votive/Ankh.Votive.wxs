@@ -46,29 +46,29 @@
               <!-- SharpSvn licenses will be placed here -->
             </Directory>
             <Component Id="C_CONTRIBUTORS" Guid="BD3AA74E-8B7D-4582-A2E0-CC5F0E2D08A7">
-              <File Id="CF_CONTRIBUTORS.txt" Name="CONTRIBUTORS.txt" />
+              <File Id="CF_CONTRIBUTORS.txt" Name="CONTRIBUTORS.txt" KeyPath="yes"/>
             </Component>
             <Component Id="C_LICENSE" Guid="7A5DB32C-CB0D-4CA8-9661-A1FC5E1F8DBB">
-              <File Id="CF_LICENSE.rtf" Name="LICENSE.rtf" />
+              <File Id="CF_LICENSE.rtf" Name="LICENSE.rtf" KeyPath="yes"/>
             </Component>
-            <Component Id="C_NOTICE" Guid="768C16AE-3159-4eb0-8976-0FCC3AA020AA">
-              <File Id="CF_NOTICE.txt" Name="NOTICE.txt" />
+            <Component Id="C_NOTICE" Guid="768C16AE-3159-4EB0-8976-0FCC3AA020AA">
+              <File Id="CF_NOTICE.txt" Name="NOTICE.txt" KeyPath="yes"/>
             </Component>
             <Component Id="C_PKGDEF" Guid="E1ABF0EB-ADDA-4158-95A0-46B3B977768E">
-              <File Id="Ankh.pkgdef" Name="Ankh.Pkgdef" />
+              <File Id="Ankh.pkgdef" Name="Ankh.Pkgdef" KeyPath="yes"/>
             </Component>
             <Component Id="C_VSIXMANIFEST" Guid="F88724B3-9B13-4BF7-9AD6-E6FBFF4E725E">
-              <File Id="CF_VSIXMANIFEST" Name="extension.VsixManifest" />
+              <File Id="CF_VSIXMANIFEST" Name="extension.VsixManifest" KeyPath="yes"/>
             </Component>
             <Component Id="C_VSIXICO" Guid="62E7DE1D-4516-4742-B1E7-A867D41C164F">
-              <File Id="CF_VSIXICO" Source="Ankh.Votive\AnkhSVN-Icon.png" />
+              <File Id="CF_VSIXICO" Source="Ankh.Votive\AnkhSVN-Icon.png" KeyPath="yes"/>
             </Component>
             <Component Id="C_VSIXPREVIEW" Guid="1F77F7F1-9CF0-4A75-B924-B81D191652DE">
-              <File Id="CF_VSIXPREVIEW" Source="Ankh.Votive\AnkhSVN-Preview.png" />
+              <File Id="CF_VSIXPREVIEW" Source="Ankh.Votive\AnkhSVN-Preview.png" KeyPath="yes"/>
             </Component>
             <!-- All assemblies are placed here -->
             <Component Id="C_VSIXMANIFEST10" Guid="56F2C5B8-DAD2-4C11-9ECE-F9C827242073">
-              <File Id="CF_VSIXMANIFEST10" Name="extension.VsixManifest-vs2010" />
+              <File Id="CF_VSIXMANIFEST10" Name="extension.VsixManifest-vs2010" KeyPath="yes"/>
             </Component>
           </Directory>
         </Directory>
@@ -85,6 +85,7 @@
           <Directory Name="2.X" Id="ANKHSVN_EXTENSION_2010">
             <Component Id="C_Reg2010" Guid="CE0855C9-C174-4A6D-B278-780232106323">
               <Condition>VS2010DEVENV</Condition>
+              <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS2010-Info" Value="[ANKHSVN_EXTENSION_2010]" Type="string" KeyPath="yes" />
               <CopyFile Id="Vsix_Mnf2010" FileId="CF_VSIXMANIFEST10" DestinationDirectory="ANKHSVN_EXTENSION_2010" DestinationName="extension.VsixManifest" />
               <CopyFile Id="Vsix_Lic2010" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2010" />
               <CopyFile Id="Vsix_Ico2010" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2010" />
@@ -96,12 +97,13 @@
       <Directory Name="Extensions" Id="VS11_EXTENSIONS_DIR">
         <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_2012">
           <Directory Name="2.X" Id="ANKHSVN_EXTENSION_2012">
-            <Component Id="C_Reg11" Guid="06D5D441-6469-49B5-9FA7-FF8B2FD7382E">
+            <Component Id="C_Reg2012" Guid="06D5D441-6469-49B5-9FA7-FF8B2FD7382E">
               <Condition>VS11DEVENV</Condition>
-              <CopyFile Id="Vsix_Mnf_11" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
-              <CopyFile Id="Vsix_Lic_11" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
-              <CopyFile Id="Vsix_Ico_11" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
-              <CopyFile Id="Vsix_Pvw_11" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
+              <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS2010-Info" Value="[ANKHSVN_EXTENSION_2012]" Type="string" KeyPath="yes" />
+              <CopyFile Id="Vsix_Mnf_2012" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
+              <CopyFile Id="Vsix_Lic_2012" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
+              <CopyFile Id="Vsix_Ico_2012" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
+              <CopyFile Id="Vsix_Pvw_2012" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
             </Component>
           </Directory>
         </Directory>
