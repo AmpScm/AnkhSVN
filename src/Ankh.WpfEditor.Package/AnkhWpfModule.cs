@@ -21,7 +21,6 @@ namespace Ankh.WpfPackage
 
         public override void OnInitialize()
         {
-            
         }
     }
 }
