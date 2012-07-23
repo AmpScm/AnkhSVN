@@ -196,7 +196,7 @@ namespace Ankh.UI.RepositoryExplorer
                 int borderWidth = 0;
 
                 if (pi != null)
-                    switch ((BorderStyle)pi.GetValue(Parent))
+                    switch ((BorderStyle)pi.GetValue(Parent, null))
                     {
                         case BorderStyle.Fixed3D:
                             borderWidth = 2;
