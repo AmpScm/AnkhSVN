@@ -61,6 +61,7 @@
     <Compile Include="AnkhServiceEvents.cs" />
     <Compile Include="Commands\AnkhAction.cs" />
     <Compile Include="Commands\CommandTarget.cs" />
+    <Compile Include="ContextServices\GuidUtils.cs" />
     <Compile Include="EnumHelpers.cs" />
     <Compile Include="GlobalServiceAttribute.cs" />
     <Compile Include="Commands\BaseCommandEventArgs.cs" />
