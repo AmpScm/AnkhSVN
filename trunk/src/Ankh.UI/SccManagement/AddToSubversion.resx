@@ -570,9 +570,6 @@
   <data name="&gt;&gt;bodyPanel.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>WindowsDefaultLocation</value>
-  </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Add to Subversion</value>
   </data>
