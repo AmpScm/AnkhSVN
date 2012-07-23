@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.UI;
 using Ankh.VS;
-using Ankh.Commands;
-using Microsoft.VisualStudio;
-using System.Diagnostics;
-using System.ComponentModel;
 
 namespace Ankh.WpfPackage.Services
 {

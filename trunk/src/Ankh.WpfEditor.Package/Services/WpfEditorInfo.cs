@@ -1,14 +1,13 @@
 ﻿using System;
-using SystemPoint = System.Drawing.Point;
+using System.Windows;
 using System.Windows.Media;
-using Ankh.VS;
+using SystemPoint = System.Drawing.Point;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
-using System.Windows;
-using System.Windows.Controls;
-using Microsoft.VisualStudio.Shell.Interop;
+
+using Ankh.VS;
 
 namespace Ankh.WpfPackage.Services
 {
