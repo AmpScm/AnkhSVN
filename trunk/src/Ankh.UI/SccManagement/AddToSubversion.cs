@@ -26,7 +26,7 @@ using Ankh.VS;
 
 namespace Ankh.UI.SccManagement
 {
-    public partial class AddToSubversion : VSContainerForm
+    public partial class AddToSubversion : VSDialogForm
     {
         public AddToSubversion()
         {
