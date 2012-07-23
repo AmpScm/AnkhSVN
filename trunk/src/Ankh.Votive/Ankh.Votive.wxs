@@ -6,18 +6,14 @@
   <Product Id="*" Name="AnkhSVN $(var.ankhVersion)" Language="1033" Version="$(var.ankhVersion)" Manufacturer="AnkhSVN Team" UpgradeCode="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
     <Package InstallerVersion="300" Compressed="yes" InstallPrivileges="elevated" Platform="x86" Languages="1033" />
 
-    <!-- AnkhSVN 2.0 daily builds before 2008-06-18 -->
+    <!-- AnkhSVN 2.0 daily builds before 2008-06-18 used a different upgrade key -->
     <Upgrade Id="40880177-2453-4EC7-8EEF-744EC101B688">
-      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0.0" Maximum="2.9999.0.0" IncludeMinimum="yes" IncludeMaximum="yes" MigrateFeatures="no" />
+      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0.0" Maximum="3.0.0.0" IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="no" />
     </Upgrade>
 
-    <!-- AnkhSVN 0.5-1.0.3 and Ankh 2.0 and higher -->
-    <Upgrade Id="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
-      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="0.5.0" Maximum="2.0.0" IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="no" />
-      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0" Maximum="$(var.ankhVersion)" IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="yes" />
-      <UpgradeVersion Property="EXACTVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="$(var.ankhVersion)" IncludeMinimum="yes" IncludeMaximum="yes" />
-      <UpgradeVersion Property="NEWERVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="99.0.0.0" IncludeMinimum="no" IncludeMaximum="yes" />
-    </Upgrade>
+    <MajorUpgrade
+      Schedule="afterInstallInitialize"
+      DowngradeErrorMessage="Unable to install because a newer version than AnkhSVN $(var.ankhVersion) is already installed." />
 
     <Property Id="ShortProductName" Value="AnkhSVN" />
     <Property Id="ARPCONTACT">AnkhSVN - users@ankhsvn.open.collab.net</Property>
@@ -26,12 +22,8 @@
     <Property Id="ARPURLUPDATEINFO">http://www.ankhsvn.net/changes/?v=$(var.ankhVersion)</Property>
     <Property Id="ARPPRODUCTICON">ICON_AnkhSvn</Property>
     <!-- Error messages -->
-    <Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
 
     <!-- Errormessages -->
-    <CustomAction Id="ERRCA_CANCELNEWERVERSION" Error="[VSDVERSIONMSG]" />
-    <CustomAction Id="ERRCA_CANCELEXACTVERSION" Error="[VSDVERSIONMSG]" />
-    <CustomAction Id="ERRCA_UIANDADVERTISED" Error="[VSDUIANDADVERTISED]" />
     <Icon Id="ICON_AnkhSvn" SourceFile="$(sys.SOURCEFILEDIR)..\Ankh.Package\Resources\Package.ico" />
 
     <Media Id="1" Cabinet="AnkhSVN.cab" EmbedCab="yes" CompressionLevel="high" />
@@ -102,40 +94,30 @@
         </Directory>
       </Directory>
       <Directory Name="Extensions" Id="VS11_EXTENSIONS_DIR">
-        <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_11">
-          <Directory Name="2.X" Id="ANKHSVN_EXTENSION_11">
+        <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_2012">
+          <Directory Name="2.X" Id="ANKHSVN_EXTENSION_2012">
             <Component Id="C_Reg11" Guid="06D5D441-6469-49B5-9FA7-FF8B2FD7382E">
               <Condition>VS11DEVENV</Condition>
-              <CopyFile Id="Vsix_Mnf_11" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_11" />
-              <CopyFile Id="Vsix_Lic_11" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_11" />
-              <CopyFile Id="Vsix_Ico_11" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_11" />
-              <CopyFile Id="Vsix_Pvw_11" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_11" />
+              <CopyFile Id="Vsix_Mnf_11" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
+              <CopyFile Id="Vsix_Lic_11" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
+              <CopyFile Id="Vsix_Ico_11" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
+              <CopyFile Id="Vsix_Pvw_11" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
             </Component>
           </Directory>
         </Directory>
       </Directory>
     </Directory>
     <!-- Make sure the packages are set up in The VS Environment -->
-    <CustomActionRef Id="VS2005Setup" />
-    <CustomActionRef Id="VS90SetupNoVSTemplates" />
-    <CustomActionRef Id="VS2010SetupNoVSTemplates" />
-    <CustomActionRef Id="VS11SetupNoVSTemplates" />
+    <CustomActionRef Id="AnkhVS2005Setup" />
+    <CustomActionRef Id="AnkhVS2008Setup" />
+    <CustomActionRef Id="AnkhVS2010Setup" />
+    <CustomActionRef Id="AnkhVS2012Setup" />
     <UI>
-      <InstallUISequence>
-        <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
-        <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND ANKHSVNREINSTALL="" AND NOT Installed</Custom>
-      </InstallUISequence>
-      <ProgressText Action="VS2005Setup" Template="[1]">Updating Visual Studio 2005 registration</ProgressText>
-      <ProgressText Action="VS90SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
-      <ProgressText Action="VS2010SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
-      <ProgressText Action="VS11SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2012 registration</ProgressText>
+      <ProgressText Action="AnkhVS2005Setup" Template="[1]">Updating Visual Studio 2005 registration</ProgressText>
+      <ProgressText Action="AnkhVS2008Setup" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
+      <ProgressText Action="AnkhVS2010Setup" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
+      <ProgressText Action="AnkhVS2012Setup" Template="[1]">Updating Visual Studio 2012 registration</ProgressText>
     </UI>
-
-    <InstallExecuteSequence>
-      <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
-      <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND ANKHSVNREINSTALL="" AND NOT Installed</Custom>
-      <RemoveExistingProducts After="InstallInitialize">PREVIOUSVERSIONINSTALLED&lt;&gt;"" OR EXACTVERSIONINSTALLED&lt;&gt;""</RemoveExistingProducts>
-    </InstallExecuteSequence>
 
     <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
 
@@ -177,10 +159,10 @@
         <ComponentRef Id="C_Reg2010" />
       </Feature>
       <Feature Id="RegVS11" Title="Register in Microsoft Visual Studio 2012" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2012" Level="1" AllowAdvertise="no">
-        <ComponentGroupRef Id="PkgReg11" />
-        <ComponentGroupRef Id="PkgWpfReg11" />
-        <!-- VS2012 allows binding redirects in the registry, so no Extension11 -->
-        <ComponentRef Id="C_Reg11" />
+        <ComponentGroupRef Id="PkgReg2012" />
+        <ComponentGroupRef Id="PkgWpfReg2012" />
+        <!-- VS2012 allows binding redirects in the registry, so no Extension2012 -->
+        <ComponentRef Id="C_Reg2012" />
       </Feature>
     </Feature>
   </Product>

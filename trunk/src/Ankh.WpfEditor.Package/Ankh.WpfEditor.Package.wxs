@@ -15,18 +15,18 @@
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="PkgWpf-VS2010" Value="1" Type="integer" KeyPath="yes" />
         <?include $(sys.SOURCEFILEDIR)obj\Ankh.WpfEditor.Package-2010.wxi ?>
       </Component>
-      <Component Id="CR_PkgWpf_11" Guid="D7035C6B-46A9-4272-87A5-743FB08DA989">
-        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="PkgWpf-VS11" Value="1" Type="integer" KeyPath="yes" />
-        <?include $(sys.SOURCEFILEDIR)obj\Ankh.WpfEditor.Package-11.wxi ?>
+      <Component Id="CR_PkgWpf_2012" Guid="2A099799-8671-46F8-9A17-D7330976387A">
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="PkgWpf-VS2012" Value="1" Type="integer" KeyPath="yes" />
+        <?include $(sys.SOURCEFILEDIR)obj\Ankh.WpfEditor.Package-2012.wxi ?>
       </Component>
     </DirectoryRef>
     <ComponentGroup Id="PkgWpfReg2010">
       <ComponentGroupRef Id="Ankh.WpfEditor.Package" />
       <ComponentRef Id="CR_PkgWpf_2010" />
     </ComponentGroup>
-    <ComponentGroup Id="PkgWpfReg11">
+    <ComponentGroup Id="PkgWpfReg2012">
       <ComponentGroupRef Id="Ankh.WpfEditor.Package" />
-      <ComponentRef Id="CR_PkgWpf_11" />
+      <ComponentRef Id="CR_PkgWpf_2012" />
     </ComponentGroup>
   </Fragment>
 </Wix>
