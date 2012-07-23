@@ -8,7 +8,7 @@
       <ComponentRef Id="C_Ankh.UI.dll" />
     </ComponentGroup>
     <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.UI.TargetDir)">
-      <Component Id="C_Ankh.UI.dll" Guid="BE3BF683-9D60-444a-923F-3A2891F628B7">
+      <Component Id="C_Ankh.UI.dll" Guid="BE3BF683-9D60-444A-923F-3A2891F628B7">
         <File Id="CF_Ankh.UI.dll" Name="Ankh.UI.dll" Checksum="yes" KeyPath="yes" />
       </Component>
       <!-- TODO: Add localized resource dll's -->
