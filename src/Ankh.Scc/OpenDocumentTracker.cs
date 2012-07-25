@@ -321,24 +321,20 @@ namespace Ankh.Scc
                 SccDocumentData newData;
 
                 if (!_docMap.TryGetValue(pszMkDocumentNew, out newData))
-                    _docMap.Add(pszMkDocumentNew, newData = new SccDocumentData(Context, pszMkDocumentNew));
-                else if (newData.Cookie != 0)
                 {
-                    _cookieMap.Remove(newData.Cookie);
-                    newData.Cookie = 0;
-                }
-
-                if (data != null)
-                {
+                    newData = new SccDocumentData(Context, pszMkDocumentNew);
                     newData.CopyState(data);
-
-                    newData.Cookie = data.Cookie;
-                    _cookieMap[newData.Cookie] = newData;
-                    data.Cookie = 0;
-
+                    newData.Cookie = docCookie;
                     data.Dispose();
+
+                    _docMap.Add(pszMkDocumentNew, newData);
+                }
+                else
+                {
+                    data.Dispose(); // Removes old item from docmap and cookie map if necessary
                 }
 
+                _cookieMap[newData.Cookie] = newData;
                 data = newData;
             }
 
