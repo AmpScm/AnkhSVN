@@ -520,5 +520,11 @@ namespace Ankh.Scc
             projectId = new Guid(project);
             return true;
         }
+
+        internal bool TryGetTranslation(bool slnFilePath, string path, out SccTranslatePathInfo info)
+        {
+            info = null;
+            return false;
+        }
     }
 }
