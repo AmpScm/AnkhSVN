@@ -156,9 +156,6 @@ namespace Ankh.Scc
 
         internal void OnSolutionRenamedFile(string oldName, string newName)
         {
-            if (!IsActive)
-                return;
-
             // The solution file is renamed
 
             _solutionDirectory = _solutionFile = null; // Get new data after this rename
