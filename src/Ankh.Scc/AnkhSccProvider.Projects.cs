@@ -322,7 +322,7 @@ namespace Ankh.Scc
             _isDirty = false;
             _solutionLoaded = false;
             _sccExcluded.Clear();
-            ClearEnlistState();
+            Translate_ClearState();
 
             IPendingChangesManager mgr = GetService<IPendingChangesManager>();
             if (mgr != null)

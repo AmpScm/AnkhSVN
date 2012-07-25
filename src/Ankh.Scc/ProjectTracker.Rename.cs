@@ -124,10 +124,10 @@ namespace Ankh.Scc
                         string oldName = SvnTools.GetNormalizedFullPath(rgszMkOldNames[iFile]);
                         string newName = SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]);
 
-                        if (oldName == newName)
-                            continue;
+                        if (oldName != newName)
+                            SccProvider.OnSolutionRenamedFile(oldName, newName);
 
-                        SccProvider.OnSolutionRenamedFile(oldName, newName);
+                        SccProvider.Translate_SolutionRenamed(rgszMkOldNames[iFile], rgszMkNewNames[iFile]);
                     }
                 }
             }

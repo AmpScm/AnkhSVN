@@ -22,10 +22,12 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
 
 using Ankh.Scc.ProjectMap;
+using Ankh.Scc.SettingMap;
 
 namespace Ankh.Scc
 {
@@ -40,7 +42,7 @@ namespace Ankh.Scc
         int Write(string pszPropName, ref object pVar);
     }
 
-    partial class AnkhSccProvider : IVsAsynchOpenFromScc
+    partial class AnkhSccProvider
     {
         bool _solutionLoaded;
         readonly Dictionary<string, EnlistBase> _enlistStore = new Dictionary<string, EnlistBase>();
@@ -50,18 +52,124 @@ namespace Ankh.Scc
         readonly Dictionary<string, SccTranslateData> _storedPaths = new Dictionary<string, SccTranslateData>(StringComparer.OrdinalIgnoreCase);
         readonly Dictionary<string, SccTranslateData> _sccPaths = new Dictionary<string, SccTranslateData>(StringComparer.OrdinalIgnoreCase);
 
-
+        readonly Dictionary<string, string> _trueNameMap = new Dictionary<string, string>();
         int IVsSccEnlistmentPathTranslation.TranslateEnlistmentPathToProjectPath(string lpszEnlistmentPath, out string pbstrProjectPath)
         {
-            return SccStore.TranslateEnlistmentPathToProjectPath(lpszEnlistmentPath, out pbstrProjectPath);
+            SccTranslatePathInfo info;
+            if (SccStore.TryGetTranslation(false, lpszEnlistmentPath, out info))
+            {
+                pbstrProjectPath = info.SolutionPath;
+                return VSConstants.S_OK;
+            }
+
+            if (!IsSafeSccPath(lpszEnlistmentPath))
+            {
+                pbstrProjectPath = lpszEnlistmentPath;
+                return VSConstants.S_OK;
+            }
+
+            if (_trueNameMap.TryGetValue(lpszEnlistmentPath, out pbstrProjectPath))
+            {
+                // Already set the path
+            }
+            else
+                pbstrProjectPath = lpszEnlistmentPath;
+
+            return VSConstants.S_OK;
         }
 
         int IVsSccEnlistmentPathTranslation.TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
         {
-            return SccStore.TranslateProjectPathToEnlistmentPath(lpszProjectPath, out pbstrEnlistmentPath, out pbstrEnlistmentPathUNC);
+            SccTranslatePathInfo info;
+            if (SccStore.TryGetTranslation(true, lpszProjectPath, out info))
+            {
+                pbstrEnlistmentPath = info.EnlistmentPath;
+                pbstrEnlistmentPathUNC = info.EnlistmentPathUNC;
+            }
+
+            if (!IsSafeSccPath(lpszProjectPath))
+            {
+                pbstrEnlistmentPath = pbstrEnlistmentPathUNC = lpszProjectPath;
+                return VSConstants.S_OK;
+            }
+
+            string trueProjectPath = CalculateTruePath(lpszProjectPath);
+
+            if (trueProjectPath != lpszProjectPath)
+            {
+                _trueNameMap[trueProjectPath] = lpszProjectPath;
+            }
+
+            pbstrEnlistmentPath = pbstrEnlistmentPathUNC = trueProjectPath;
+
+            return VSConstants.S_OK;
         }
 
-        void ClearEnlistState()
+        private string CalculateTruePath(string lpszProjectPath)
+        {
+            string trueName = SvnTools.GetTruePath(lpszProjectPath, true);
+
+            if (trueName != lpszProjectPath)
+            {
+                if (trueName.Length == lpszProjectPath.Length - 1 && lpszProjectPath[trueName.Length] == '\\')
+                    trueName += '\\';
+            }
+
+            return trueName;
+        }
+
+        static string MakeRelative(string relativeFrom, string path)
+        {
+            return PackageUtilities.MakeRelative(relativeFrom, path);
+        }
+
+        string MakeRelativeNoCase(string relativeFrom, string path)
+        {
+            string rp = MakeRelative(relativeFrom.ToUpperInvariant(), path.ToUpperInvariant());
+
+            if (string.IsNullOrEmpty(rp) || IsSafeSccPath(rp))
+                return path;
+
+            int back = rp.LastIndexOf("..\\", StringComparison.Ordinal);
+            if (back >= 0)
+            {
+                int rest = rp.Length - back - 3;
+
+                return rp.Substring(0, back + 3) + path.Substring(path.Length - rest, rest);
+            }
+            else
+                return path.Substring(path.Length - rp.Length, rp.Length);
+        }
+
+        internal void Translate_SolutionRenamed(string oldName, string newName)
+        {
+            string oldDir = Path.GetDirectoryName(oldName);
+            string newDir = Path.GetDirectoryName(newName);
+            string newNameU = newName.ToUpperInvariant();
+
+            if (oldDir == newDir)
+                return;
+            string oldDirRoot = Path.GetPathRoot(oldDir);
+
+            Dictionary<string, string> oldNameMap = new Dictionary<string, string>(_trueNameMap);
+            _trueNameMap.Clear();
+
+            foreach (KeyValuePair<string, string> kv in oldNameMap)
+            {
+                string newRel = MakeRelativeNoCase(newName, kv.Key);
+
+                if (IsSafeSccPath(newRel))
+                    continue; // Not relative from .sln after
+
+                string newPath = Path.GetFullPath(Path.Combine(newDir, newRel));
+
+                if (newPath == kv.Key)
+                    continue; // No translation necessary after the rename
+                _trueNameMap[kv.Key] = newPath;
+            }
+        }
+
+        void Translate_ClearState()
         {
             _enlistStore.Clear();
             _enlistState.Clear();
@@ -70,6 +178,7 @@ namespace Ankh.Scc
             _translations.Clear();
             _storedPaths.Clear();
             _sccPaths.Clear();
+            _trueNameMap.Clear();
         }
 
         #region IAnkhSccService Members
@@ -874,41 +983,5 @@ namespace Ankh.Scc
 
             return true;
         }
-
-        #region IVsAsynchOpenFromScc Members
-
-        public int IsLoadingContent(IVsHierarchy pHierarchy, out int pfIsLoading)
-        {
-            pfIsLoading = 0; // The project is available
-            return VSConstants.S_OK;
-        }
-
-        /// <summary>
-        /// This method begins loading the specified project asynchronously.
-        /// </summary>
-        /// <param name="lpszProjectPath">[in] Physical path to the project to be loaded from source control.</param>
-        /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"/>. If it fails, it returns an error code.
-        /// </returns>
-        public int LoadProject(string lpszProjectPath)
-        {
-            return VSConstants.S_OK; // The project is available
-        }
-
-        /// <summary>
-        /// This method determines whether a specified project must be loaded asynchronously.
-        /// </summary>
-        /// <param name="lpszProjectPath">[in] Physical path to the specified project.</param>
-        /// <param name="pReturnValue">[out] Returns nonzero (true) if the project must be loaded asynchronously. Otherwise, returns zero (false) if the project can be loaded synchronously.</param>
-        /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"/>. If it fails, it returns an error code.
-        /// </returns>
-        public int LoadProjectAsynchronously(string lpszProjectPath, out int pReturnValue)
-        {
-            pReturnValue = 0; // Project shouldn't be loaded asynchronous
-            return VSConstants.S_OK;
-        }
-
-        #endregion
     }
 }
