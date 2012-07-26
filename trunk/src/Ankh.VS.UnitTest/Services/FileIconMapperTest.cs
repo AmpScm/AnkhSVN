@@ -19,7 +19,6 @@ using NUnit.Framework;
 using Ankh.VS.SolutionExplorer;
 using AnkhSvn_UnitTestProject.Helpers;
 using Ankh.VS;
-using NUnit.Framework.SyntaxHelpers;
 using Ankh;
 using System.IO;
 using Ankh.Scc;

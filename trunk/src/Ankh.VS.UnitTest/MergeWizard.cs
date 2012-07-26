@@ -20,7 +20,6 @@ using System.Text;
 using NUnit.Framework;
 using SharpSvn;
 using Ankh.UI.MergeWizard;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace Ankh.Tests
 {
