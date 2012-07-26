@@ -45,13 +45,8 @@ namespace Ankh.Commands
             {
                 case AnkhCommand.SolutionSwitchDialog:
                     IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
-                    if (solutionSettings == null || string.IsNullOrEmpty(solutionSettings.ProjectRoot))
-                    {
-                        e.Enabled = false;
-                        return;
-                    }
-                    SvnItem solutionItem = e.GetService<IFileStatusCache>()[solutionSettings.ProjectRoot];
-                    if (!solutionItem.IsVersioned)
+                    SvnItem solutionItem = solutionSettings.ProjectRootSvnItem;
+                    if (solutionItem == null || !solutionItem.IsVersioned || solutionItem.IsNewAddition)
                     {
                         e.Enabled = false;
                         return;
@@ -78,14 +73,14 @@ namespace Ankh.Commands
 
                     SvnItem projectItem = e.GetService<IFileStatusCache>()[pi.ProjectDirectory];
 
-                    if (projectItem == null || !projectItem.IsVersioned)
+                    if (projectItem == null || !projectItem.IsVersioned || projectItem.IsNewAddition)
                         e.Enabled = false;
                     break;
 
                 case AnkhCommand.SwitchItem:
                     SvnItem oneItem = EnumTools.GetSingle(e.Selection.GetSelectedSvnItems(false));
 
-                    if (oneItem == null || !oneItem.IsVersioned)
+                    if (oneItem == null || !oneItem.IsVersioned || oneItem.IsNewAddition)
                         e.Enabled = false;
                     break;
             }
