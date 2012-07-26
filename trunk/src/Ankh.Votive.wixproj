@@ -25,7 +25,7 @@
     <OutputPath>Ankh.Votive\bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>Ankh.Votive\obj\$(Configuration)\</IntermediateOutputPath>
     <SuppressPdbOutput>False</SuppressPdbOutput>
-    <SuppressSpecificWarnings>1080</SuppressSpecificWarnings>
+    <SuppressSpecificWarnings>1080;1055</SuppressSpecificWarnings>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <VerboseOutput>False</VerboseOutput>
     <WixVariables>
@@ -47,7 +47,7 @@
     <OutputPath>Ankh.Votive\bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>Ankh.Votive\obj\$(Configuration)\</IntermediateOutputPath>
     <SuppressPdbOutput>False</SuppressPdbOutput>
-    <SuppressSpecificWarnings>1080</SuppressSpecificWarnings>
+    <SuppressSpecificWarnings>1080;1055</SuppressSpecificWarnings>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <VerboseOutput>False</VerboseOutput>
     <WixVariables>
