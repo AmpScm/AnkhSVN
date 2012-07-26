@@ -25,14 +25,14 @@
     <OutputPath>Ankh.Votive\bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>Ankh.Votive\obj\$(Configuration)\</IntermediateOutputPath>
     <SuppressPdbOutput>False</SuppressPdbOutput>
-    <SuppressSpecificWarnings>1080;1055</SuppressSpecificWarnings>
+    <SuppressSpecificWarnings>1080</SuppressSpecificWarnings>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <VerboseOutput>False</VerboseOutput>
     <WixVariables>
     </WixVariables>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>True</Pedantic>
-    <SuppressIces>ICE03;ICE69;ICE82;ICE83</SuppressIces>
+    <SuppressIces>ICE03;ICE69;ICE82</SuppressIces>
     <SuppressValidation>False</SuppressValidation>
     <CompilerAdditionalOptions>
     </CompilerAdditionalOptions>
@@ -47,14 +47,14 @@
     <OutputPath>Ankh.Votive\bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>Ankh.Votive\obj\$(Configuration)\</IntermediateOutputPath>
     <SuppressPdbOutput>False</SuppressPdbOutput>
-    <SuppressSpecificWarnings>1080;1055</SuppressSpecificWarnings>
+    <SuppressSpecificWarnings>1080</SuppressSpecificWarnings>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <VerboseOutput>False</VerboseOutput>
     <WixVariables>
     </WixVariables>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>True</Pedantic>
-    <SuppressIces>ICE03;ICE69;ICE82;ICE83</SuppressIces>
+    <SuppressIces>ICE03;ICE69;ICE82</SuppressIces>
     <SuppressValidation>False</SuppressValidation>
     <CompilerAdditionalOptions>
     </CompilerAdditionalOptions>
