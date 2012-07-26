@@ -21,13 +21,21 @@ using Ankh.Commands;
 
 namespace Ankh.UI.Commands
 {
-    [Command(AnkhCommand.ForceUIShow, AlwaysAvailable=true)]
+    [Command(AnkhCommand.ForceUIShow, AlwaysAvailable=true, MaxVersion=VSInstance.VS2008)]
     sealed class UIEditCommand : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            e.GetService<CommandMapper>().EnableCustomizeMode();
             e.Enabled = e.Visible = false;
+
+            // We use this command in Visual Studio 2005/2008 to make all commands visible
+            // in the menu/toolbar editor.
+
+            // We explicitly disable this in VS-Versions that don't use this to make sure
+            // we don't accidentally enable the customize mode
+
+            if (VSVersion.VS2008OrOlder)
+                e.GetService<CommandMapper>().EnableCustomizeMode();
         }
 
         public void OnExecute(CommandEventArgs e)
