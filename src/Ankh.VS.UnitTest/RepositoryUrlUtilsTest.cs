@@ -5,7 +5,6 @@ using System.Text;
 using Ankh.UI.SccManagement;
 using AnkhSvn_UnitTestProject.Helpers;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace AnkhSvn_UnitTestProject
 {

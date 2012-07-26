@@ -35,7 +35,6 @@ using Microsoft.VisualStudio;
 using System.Windows.Forms.Design;
 using System.Windows.Forms;
 using System.IO;
-using NUnit.Framework.SyntaxHelpers;
 using Microsoft.VsSDK.UnitTestLibrary;
 
 namespace AnkhSvn_UnitTestProject.CommandRouting
