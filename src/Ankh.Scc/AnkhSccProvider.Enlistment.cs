@@ -387,7 +387,7 @@ namespace Ankh.Scc
             tpi = new SccTranslatePathInfo();
             tpi.SolutionPath = pszProjectMk;
             tpi.EnlistmentPath = enlistPath;
-            tpi.EnlistmentPathUNC = SvnTools.GetTruePath(enlistPathUNC, true) ?? SvnTools.GetNormalizedFullPath(enlistPathUNC);
+            tpi.EnlistmentPathUNC = CalculateTruePath(enlistPathUNC);
 
             _translationMap[pszProjectMk] = tpi;
 
