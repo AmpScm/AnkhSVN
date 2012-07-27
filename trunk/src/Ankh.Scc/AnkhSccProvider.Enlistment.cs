@@ -384,6 +384,13 @@ namespace Ankh.Scc
             if (!ErrorHandler.Succeeded(enlistFactory.GetDefaultEnlistment(pszProjectMk, out enlistPath, out enlistPathUNC)))
                 return;
 
+            // ### We should now proceed with the editing operations as documented
+            // ### in IVsSccEnlistmentPathTranslation.idl
+
+            // ### But since we don't have per user settings yet we currently just
+            // ### pass the defaults as that happens to be the same behavior as
+            // ### before
+
             tpi = new SccTranslatePathInfo();
             tpi.SolutionPath = pszProjectMk;
             tpi.EnlistmentPath = enlistPath;
