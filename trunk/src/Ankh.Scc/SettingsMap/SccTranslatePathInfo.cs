@@ -7,17 +7,20 @@ namespace Ankh.Scc.SettingMap
     {
         public string EnlistmentPath
         {
-            get { return EnlistmentPathUNC; }
+            get;
+            set; //{ return EnlistmentPathUNC; }
         }
 
         public string EnlistmentPathUNC
-        { 
-            get { return ""; }
+        {
+            get;
+            set;//{ return ""; }
         }
 
         public string SolutionPath
         {
-            get { return ""; } 
+            get;
+            set; //{ return ""; } 
         }
     }
 }

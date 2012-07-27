@@ -50,7 +50,7 @@ namespace Ankh
 
         /// <summary>The Subversion SCC Provider name as used in the solution file</summary>
         public const string SubversionSccName = "SubversionScc";
-        public const string SccStructureName = "SccStructure";
+        public const string SvnOriginName = "SvnOrigin";
 
         // Items for the VS 2010 Extension registration
         public const string ExtensionTitle = AnkhId.AssemblyProduct;

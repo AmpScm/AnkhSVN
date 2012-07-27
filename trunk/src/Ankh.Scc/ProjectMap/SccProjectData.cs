@@ -46,6 +46,13 @@ namespace Ankh.Scc.ProjectMap
 		ForceSccGlyphChange = 0x100,
 	}
 
+    public enum SccEnlistChoice
+    {
+        Never,
+        Optional,
+        Required
+    }
+
     [DebuggerDisplay("Project={ProjectName}, ProjectType={_projectType}")]
     sealed partial class SccProjectData : IDisposable
     {
@@ -56,7 +63,6 @@ namespace Ankh.Scc.ProjectMap
         readonly SccProjectType _projectType;
         readonly SccProjectFlags _projectFlags;
         readonly SccProjectFileCollection _files;
-        SccTranslateData _translateData;
         bool _isManaged;
         bool _isRegistered;
         bool _loaded;
@@ -312,47 +318,6 @@ namespace Ankh.Scc.ProjectMap
             }
 
             return ProjectDirectory;
-        }
-
-        SccEnlistMode? _enlistMode;
-        public SccEnlistMode EnlistMode
-        {
-            get { return (_enlistMode ?? (_enlistMode = GetEnlistMode(true))).Value; }
-        }
-
-        SccEnlistMode GetEnlistMode(bool smart)
-        {
-            IVsSccProjectEnlistmentChoice enlistChoice = VsProject as IVsSccProjectEnlistmentChoice;
-
-            VSSCCENLISTMENTCHOICE[] choice = new VSSCCENLISTMENTCHOICE[1];
-            if (enlistChoice != null && ErrorHandler.Succeeded(enlistChoice.GetEnlistmentChoice(choice)))
-                switch (choice[0])
-                {
-                    case VSSCCENLISTMENTCHOICE.VSSCC_EC_COMPULSORY:
-                        return SccEnlistMode.SccEnlistCompulsory;
-                    case VSSCCENLISTMENTCHOICE.VSSCC_EC_OPTIONAL:
-                        return SccEnlistMode.SccEnlistOptional;
-                    default:
-                        break;
-                }
-
-            if (IsSolutionFolder)
-                return SccEnlistMode.None;
-
-            string dir;
-            if (smart && null != (dir = SccBaseDirectory))
-            {
-                IAnkhSolutionSettings settings = GetService<IAnkhSolutionSettings>();
-                SvnItem dirItem = GetService<IFileStatusCache>()[dir];
-
-                if (dirItem.IsBelowPath(settings.ProjectRootSvnItem))
-                {
-                    if (dirItem.WorkingCopy == settings.ProjectRootSvnItem.WorkingCopy)
-                        return SccEnlistMode.None; // All information available via working copy
-                }
-            }
-
-            return SccEnlistMode.SvnStateOnly;
         }
 
         public bool IsSccBindable
@@ -687,19 +652,41 @@ namespace Ankh.Scc.ProjectMap
             get { return _scc ?? (_scc = GetService<AnkhSccProvider>()); }
         }
 
-        public SccTranslateData SccTranslateData
+        SccEnlistChoice? _sccEnlistChoice;
+        public SccEnlistChoice EnlistMode
         {
             get
             {
-                if (_translateData == null)
+                if (!_sccEnlistChoice.HasValue)
                 {
-                    _translateData = Scc.GetTranslateData(ProjectGuid, SccEnlistMode.None, null);
+                    IVsSccProjectEnlistmentChoice pec = VsProject as IVsSccProjectEnlistmentChoice;
 
-                    if (_translateData == null)
-                        _translateData = Scc.GetTranslateData(ProjectGuid, GetEnlistMode(false), ProjectLocation);
+                    VSSCCENLISTMENTCHOICE[] choiceList = new VSSCCENLISTMENTCHOICE[1];
+                    if (pec == null || !ErrorHandler.Succeeded(pec.GetEnlistmentChoice(choiceList)))
+                    {
+                        _sccEnlistChoice = SccEnlistChoice.Never;
+
+                        return SccEnlistChoice.Never; // 99% case. Only Websites appear to use this
+                    }
+
+                    VSSCCENLISTMENTCHOICE choice = choiceList[0];
+
+                    switch (choice)
+                    {
+                        case VSSCCENLISTMENTCHOICE.VSSCC_EC_NEVER:
+                        default:
+                            _sccEnlistChoice = SccEnlistChoice.Never;
+                            break; // Valid for most projects
+                        case VSSCCENLISTMENTCHOICE.VSSCC_EC_OPTIONAL:
+                            _sccEnlistChoice = SccEnlistChoice.Optional;
+                            break;
+                        case VSSCCENLISTMENTCHOICE.VSSCC_EC_COMPULSORY:
+                            _sccEnlistChoice = SccEnlistChoice.Required;
+                            break;
+                    }
                 }
 
-                return _translateData;
+                return _sccEnlistChoice.Value;
             }
         }
 
