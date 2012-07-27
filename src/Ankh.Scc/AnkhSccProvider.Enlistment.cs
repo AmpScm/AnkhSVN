@@ -111,7 +111,7 @@ namespace Ankh.Scc
 
         private string CalculateTruePath(string lpszProjectPath)
         {
-            string trueName = SvnTools.GetTruePath(lpszProjectPath, true);
+            string trueName = SvnTools.GetTruePath(lpszProjectPath, true) ?? SvnTools.GetNormalizedFullPath(lpszProjectPath);
 
             if (trueName != lpszProjectPath)
             {
@@ -387,7 +387,7 @@ namespace Ankh.Scc
             tpi = new SccTranslatePathInfo();
             tpi.SolutionPath = pszProjectMk;
             tpi.EnlistmentPath = enlistPath;
-            tpi.EnlistmentPathUNC = SvnTools.GetTruePath(enlistPathUNC, true) ?? enlistPathUNC;
+            tpi.EnlistmentPathUNC = SvnTools.GetTruePath(enlistPathUNC, true) ?? SvnTools.GetNormalizedFullPath(enlistPathUNC);
 
             _translationMap[pszProjectMk] = tpi;
 
