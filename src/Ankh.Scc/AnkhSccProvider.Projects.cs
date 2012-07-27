@@ -348,27 +348,11 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 return;
 
-            string oldLocation = data.ProjectLocation;
-            try
-            {
-                using (SccProjectData newData = new SccProjectData(Context, project))
-                {
-                    string newLocation = newData.ProjectLocation;
+            // Mark the sln file edited, so it shows up in Pending Changes/Commit
+            if (!string.IsNullOrEmpty(SolutionFilename))
+                DocumentTracker.CheckDirty(SolutionFilename);
 
-                    if (newLocation == null && oldLocation == null)
-                        return; // No need to do anything for this case (e.g. solution folders)
-
-                    SccStore.OnProjectRenamed(oldLocation, newLocation);
-                }
-            }
-            finally
-            {
-                // Mark the sln file edited, so it shows up in Pending Changes/Commit
-                if (!string.IsNullOrEmpty(SolutionFilename))
-                    DocumentTracker.CheckDirty(SolutionFilename);
-
-                data.Reload(); // Reload project name, etc.
-            }
+            data.Reload(); // Reload project name, etc.
         }
 
         /// <summary>

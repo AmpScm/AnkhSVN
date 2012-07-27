@@ -745,15 +745,6 @@ namespace Ankh.Scc
                 set { throw new InvalidOperationException(); }
             }
 
-            /// <summary>
-            /// Gets the SCC enlist mode.
-            /// </summary>
-            /// <value>The SCC enlist mode.</value>
-            public SccEnlistMode SccEnlistMode
-            {
-                get { return _data.EnlistMode; }
-            }
-
             public bool IsSccBindable
             {
                 get { return _data.IsSccBindable; }
