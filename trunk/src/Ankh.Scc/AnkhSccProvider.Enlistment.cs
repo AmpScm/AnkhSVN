@@ -276,9 +276,76 @@ namespace Ankh.Scc
             }
 
             if (data != null)
-                origin.Enlist = data.EnlistMode.ToString();
+            {
+                SccEnlistChoice choice = data.EnlistMode;
+                if (choice != SccEnlistChoice.Never)
+                {
+                    origin.Enlist = choice.ToString();
+
+                    if (string.IsNullOrEmpty(origin.SvnUri))
+                        UpdateOriginUri(pHierarchy);
+                }
+                else
+                    origin.Enlist = null;
+            }
 
             origin.Write(map);
+        }
+
+        private void UpdateOriginUri(IVsHierarchy pHierarchy)
+        {
+            string location;
+            SccProjectData data;
+
+            if (string.IsNullOrEmpty(SolutionDirectory))
+                return;
+
+            if (!MapProject(pHierarchy, out location, out data))
+                return;
+
+            if (data == null)
+                return;
+
+            string originalLocation;
+
+            if (!_trueNameMap.TryGetValue(location, out originalLocation))
+                originalLocation = location;
+
+            SccSvnOrigin origin;
+            if (!_originMap.TryGetValue(originalLocation, out origin))
+                return;
+
+            if (data.ProjectDirectory == null)
+                return;
+
+            SvnItem dirItem = StatusCache[data.ProjectDirectory];
+            SvnItem slnDirItem = StatusCache[SolutionDirectory];
+
+            if (!dirItem.IsVersioned)
+                return;
+
+            Uri dirUri = dirItem.Uri;
+            Uri slnDirUri;
+
+            SvnWorkingCopy slnWc = slnDirItem.WorkingCopy;
+
+            if (slnWc == null)
+                return;
+
+            if (slnDirItem.IsVersioned)
+                slnDirUri = slnDirItem.Uri;
+            else
+            {
+                origin.SvnUri = dirItem.Uri.AbsoluteUri;
+                return;
+            }
+
+            Uri relUri = slnDirUri.MakeRelativeUri(dirUri);
+
+            if (relUri.IsAbsoluteUri)
+                origin.SvnUri = relUri.AbsoluteUri;
+            else
+                origin.SvnUri = relUri.ToString();
         }
 
         public void ReadProjectProperties(IVsHierarchy pHierarchy, string pszProjectName, string pszProjectMk, IPropertyMap map)
