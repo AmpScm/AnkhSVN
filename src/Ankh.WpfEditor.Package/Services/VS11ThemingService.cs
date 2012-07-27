@@ -298,6 +298,15 @@ namespace Ankh.WpfPackage.Services
             if (label.ForeColor != label.Parent.ForeColor)
                 label.ForeColor = label.Parent.ForeColor;
 
+            LinkLabel ll = label as LinkLabel;
+            if (ll != null)
+            {
+                Color clrLink;
+
+                if (VSColors.TryGetColor((__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_STARTPAGE_TEXT_CONTROL_LINK_SELECTED, out clrLink))
+                    ll.LinkColor = clrLink;
+            }
+
             if (label.BorderStyle == BorderStyle.Fixed3D)
                 label.BorderStyle = BorderStyle.FixedSingle;
         }
