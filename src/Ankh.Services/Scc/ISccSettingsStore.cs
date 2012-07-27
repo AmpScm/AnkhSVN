@@ -21,30 +21,6 @@ using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Ankh.Scc
 {
-    [CLSCompliant(false)]
-    public interface ISccSettingsStore
-    {
-        /// <summary>
-        /// Gets a boolean indicating whether te solution should be saved for changed scc settings
-        /// </summary>
-        bool IsSolutionDirty { get; }
-        /// <summary>
-        /// Gets a boolean indicating whether data should be saved in the solution.
-        /// </summary>
-        bool HasSolutionData { get; }
-
-        /// <summary>
-        /// Gets a <see cref="IPropertyMap"/> for the specified property bag
-        /// </summary>
-        /// <param name="pPropBag">The p prop bag.</param>
-        /// <returns></returns>
-        IPropertyMap GetMap(IPropertyBag propertyBag);
-
-        void WriteSolutionProperties(IPropertyMap map);
-
-        void ReadSolutionProperties(IPropertyMap map);
-    }
-
     public interface ISccStoreMap
     {
         /// <summary>
