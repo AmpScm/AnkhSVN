@@ -16,9 +16,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Ankh.Selection;
 using System.IO;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Scc
 {
@@ -39,11 +39,6 @@ namespace Ankh.Scc
         /// Gets or sets a boolean indicating whether te solution should be saved for changed scc settings
         /// </summary>
         bool IsSolutionDirty { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance has solution property data.
-        /// </summary>
-        bool HasSolutionData { get; }
 
         /// <summary>
         /// Called by the package when loading a managed solution
@@ -88,18 +83,6 @@ namespace Ankh.Scc
         AnkhGlyph GetPathGlyph(string path);
 
         /// <summary>
-        /// Writes the enlistment state to the solution
-        /// </summary>
-        /// <param name="propertyBag">The property bag.</param>
-        void WriteSolutionProperties(IPropertyMap propertyBag);
-
-        /// <summary>
-        /// Loads the state of the enlistment.
-        /// </summary>
-        /// <param name="propertyBag">The property bag.</param>
-        void ReadSolutionProperties(IPropertyMap propertyBag);
-
-        /// <summary>
         /// Serializes the enlist data.
         /// </summary>
         /// <param name="store">The store.</param>
@@ -131,6 +114,12 @@ namespace Ankh.Scc
         /// </summary>
         /// <remarks>Only used after enabling ourself as SCC provider</remarks>
         void EnsureLoaded();
+
+        bool HasProjectProperties(IVsHierarchy pHierarchy);
+
+        void StoreProjectProperties(IVsHierarchy pHierarchy, IPropertyMap map);
+
+        void ReadProjectProperties(IVsHierarchy pHierarchy, string pszProjectName, string pszProjectMk, IPropertyMap map);
     }
 
     /// <summary>
@@ -147,5 +136,8 @@ namespace Ankh.Scc
         bool TryGetQuoted(string key, out string value);
 
         void Flush();
+
+        IEnumerable<string> WrittenKeys { get; }
+        bool WrittenKey(string key);
     }
 }

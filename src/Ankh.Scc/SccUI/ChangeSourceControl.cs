@@ -296,7 +296,6 @@ namespace Ankh.Scc.SccUI
             string projectLocation = null;
             bool first = true;
             Uri projectUri = null;
-            SccEnlistMode enlistMode = (SccEnlistMode) (-1);
 
             foreach (SvnProject p in SelectedProjects)
             {
@@ -360,11 +359,6 @@ namespace Ankh.Scc.SccUI
 
                 KeepOne(ref projectUri, pUri, first);
 
-                if (first)
-                    enlistMode = info.SccEnlistMode;
-                else
-                    enlistMode = SccEnlistMode.None;
-
                 first = false;
             }
 
@@ -393,13 +387,14 @@ namespace Ankh.Scc.SccUI
 
             slnBindUrl.Text = (SolutionSettings.ProjectRootUri != null) ? SolutionSettings.ProjectRootUri.ToString() : "";
 
-            usProjectLocationBrowse.Visible = enlistMode > SccEnlistMode.None;
-            usProjectLocationBrowse.Enabled = enlistMode > SccEnlistMode.SvnStateOnly;
+            usProjectLocationBrowse.Visible = false;// enlistMode > SccEnlistMode.None;
+            usProjectLocationBrowse.Enabled = false;// enlistMode > SccEnlistMode.SvnStateOnly;
 
-            sharedProjectUrlBrowse.Enabled = sharedBasePathBrowse.Visible 
-                = (enlistMode > SccEnlistMode.None) 
-                && (projectBase != null) 
-                && (enlistMode > SccEnlistMode.SvnStateOnly || projectBase != SolutionSettings.ProjectRoot);
+            sharedProjectUrlBrowse.Enabled = false;// sharedBasePathBrowse.Visible
+            sharedProjectUrlBrowse.Visible = false;
+                 //= (enlistMode > SccEnlistMode.None)
+                 //&& (projectBase != null)
+                 //&& (enlistMode > SccEnlistMode.SvnStateOnly || projectBase != SolutionSettings.ProjectRoot);
 
             slnBindBrowse.Enabled = (SolutionSettings.ProjectRootSvnItem != null) && SolutionSettings.ProjectRootSvnItem.WorkingCopy != null;
         }

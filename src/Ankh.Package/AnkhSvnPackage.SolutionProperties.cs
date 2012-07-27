@@ -25,12 +25,12 @@ using Ankh.Scc;
 using Ankh.VSPackage.Attributes;
 using Ankh.VS;
 using System.IO;
+using Ankh.Scc.Native;
 
 namespace Ankh.VSPackage
 {
     [ProvideSolutionProperties(AnkhSvnPackage.SubversionPropertyCategory)]
-    [ProvideSolutionProperties(AnkhId.SccStructureName)]
-    //[ProvideSolutionProperties(AnkhId.IssueTrackerStructureName)]
+    [ProvideSolutionProperties(AnkhId.SvnOriginName)]
     partial class AnkhSvnPackage : IVsPersistSolutionProps
     {
         const string SubversionPropertyCategory = AnkhId.SubversionSccName;
@@ -47,153 +47,181 @@ namespace Ankh.VSPackage
             return VSConstants.S_OK;
         }
 
+        IAnkhSccService _scc;
+        IAnkhSccService Scc
+        {
+            get { return _scc ?? (_scc = GetService<IAnkhSccService>()); }
+        }
 
         // Global note: 
         // The same trick we do here for the solution (loading the package when encountering a solution property) 
         // can be done on several project types using IVsProjectStartupServices
         public int QuerySaveSolutionProps(IVsHierarchy pHierarchy, VSQUERYSAVESLNPROPS[] pqsspSave)
         {
-            // This function is called by the IDE to determine if something needs to be saved in the solution.
-            // If the package returns that it has dirty properties, the shell will callback on SaveSolutionProps
-
-            if (pHierarchy == null)
+            try
             {
-                // We will write solution properties only for the solution
-                IAnkhSccService scc = GetService<IAnkhSccService>();
-                ISccSettingsStore translate = GetService<ISccSettingsStore>();
+                // This function is called by the IDE to determine if something needs to be saved in the solution.
+                // If the package returns that it has dirty properties, the shell will callback on SaveSolutionProps
 
-                VSQUERYSAVESLNPROPS result = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
-
-                if(scc != null && translate != null)
+                if (Scc == null || !Scc.IsSolutionManaged)
                 {
-                    if (scc.IsSolutionDirty
-                        || translate.IsSolutionDirty)
-                    {
-                        result = VSQUERYSAVESLNPROPS.QSP_HasDirtyProps;
-                    }
-                    else if (!scc.HasSolutionData
-                        && !translate.HasSolutionData)
-                    {
-                        result = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
-                    }
-                    else
-                        result = VSQUERYSAVESLNPROPS.QSP_HasNoDirtyProps;
+                    pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
+                    return VSConstants.S_OK;
                 }
-                pqsspSave[0] = result;
-            }
-            else
-                pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
 
-            return VSConstants.S_OK;
+                if (pHierarchy == null)
+                {
+                    if (Scc.IsSolutionDirty)
+                        pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasDirtyProps;
+                    else
+                        pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoDirtyProps;
+                }
+                else
+                {
+                    if (!Scc.HasProjectProperties(pHierarchy))
+                        pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
+                    else if (Scc.IsSolutionDirty)
+                        pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasDirtyProps;
+                    else
+                        pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoDirtyProps;
+                }
+                return VSConstants.S_OK;
+            }
+            catch (Exception e)
+            {
+                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(e);
+
+                return e.HResult;
+            }
         }
 
 
         public int SaveSolutionProps(IVsHierarchy pHierarchy, IVsSolutionPersistence pPersistence)
         {
-            // This function gets called by the shell after QuerySaveSolutionProps returned QSP_HasDirtyProps
-
-            // The package will pass in the key under which it wants to save its properties, 
-            // and the IDE will call back on WriteSolutionProps
-
-            // The properties will be saved in the Pre-Load section
-            // When the solution will be reopened, the IDE will call our package to load them back before the projects in the solution are actually open
-            // This could help if the source control package needs to persist information like projects translation tables, that should be read from the suo file
-            // and should be available by the time projects are opened and the shell start calling IVsSccEnlistmentPathTranslation functions.
-            if (pHierarchy == null) // Only save the property on the solution itself
+            try
             {
-                IAnkhSccService scc = GetService<IAnkhSccService>();                
+                int hr = VSConstants.S_OK;
 
-                // SavePackageSolutionProps will call WriteSolutionProps with the specified key
+                // This function gets called by the shell after QuerySaveSolutionProps returned QSP_HasDirtyProps
 
-                if (scc != null && scc.HasSolutionData)
-                    pPersistence.SavePackageSolutionProps(1 /* TRUE */, null, this, SubversionPropertyCategory);
+                // The package will pass in the key under which it wants to save its properties, 
+                // and the IDE will call back on WriteSolutionProps
 
-                ISccSettingsStore translate = GetService<ISccSettingsStore>();
-                if (translate != null && translate.HasSolutionData)
-                    pPersistence.SavePackageSolutionProps(1 /* TRUE */, null, this, AnkhId.SccStructureName);
+                // The properties will be saved in the Pre-Load section
+                // When the solution will be reopened, the IDE will call our package to load them back before the projects in the solution are actually open
+                // This could help if the source control package needs to persist information like projects translation tables, that should be read from the suo file
+                // and should be available by the time projects are opened and the shell start calling IVsSccEnlistmentPathTranslation functions.
+                if (Scc != null && Scc.IsSolutionManaged)
+                {
+                    if (pHierarchy == null)
+                        hr = pPersistence.SavePackageSolutionProps(1 /* fPreLoad */, pHierarchy, this, SubversionPropertyCategory);
+                    else if (Scc.HasProjectProperties(pHierarchy))
+                        hr = pPersistence.SavePackageSolutionProps(1 /* fPreLoad */, pHierarchy, this, AnkhId.SvnOriginName);
 
-                // Once we saved our props, the solution is not dirty anymore
-                scc.IsSolutionDirty = false;
+                    // Once we saved our props, the solution is not dirty anymore
+                    if (ErrorHandler.Succeeded(hr))
+                        Scc.IsSolutionDirty = false;
+                }
+
+                return hr;
             }
+            catch (Exception e)
+            {
+                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
 
-            return VSConstants.S_OK;
+                if (handler != null)
+                    handler.OnError(e);
+
+                return e.HResult;
+            }
         }
 
         int IVsPersistSolutionProps.WriteSolutionProps(IVsHierarchy pHierarchy, string pszKey, IPropertyBag pPropBag)
         {
-            if (pHierarchy != null)
-                return VSConstants.S_OK; // Not send by our code!
+            if (Scc == null)
+                return VSConstants.S_OK;
             else if(pPropBag == null)
                 return VSConstants.E_POINTER;
 
-            // This method is called from the VS implementation after a request from SaveSolutionProps
-            
-            ISccSettingsStore translate = GetService<ISccSettingsStore>();
-            IAnkhSccService scc = GetService<IAnkhSccService>();
-
-            using (IPropertyMap map = translate.GetMap(pPropBag))
+            try
             {
-                switch (pszKey)
+                // This method is called from the VS implementation after a request from SaveSolutionProps
+                using (IPropertyMap map = new PropertyBag(pPropBag))
                 {
-                    case SubversionPropertyCategory:
-                        map.SetRawValue(ManagedPropertyName, true.ToString());
-                        // BH: Don't localize this text! Changing it will change all solutions marked as managed by Ankh
-                        map.SetRawValue(ManagerPropertyName, "AnkhSVN - Subversion Support for Visual Studio");
-
-                        scc.WriteSolutionProperties(map);
-                        break;
-                    case AnkhId.SccStructureName:
-                        translate.WriteSolutionProperties(map);
-                        break;
+                    switch (pszKey)
+                    {
+                        case SubversionPropertyCategory:
+                            map.SetRawValue(ManagedPropertyName, true.ToString());
+                            // BH: Don't localize this text! Changing it will change all solutions marked as managed by Ankh
+                            map.SetRawValue(ManagerPropertyName, "AnkhSVN - Subversion Support for Visual Studio");
+                            break;
+                        case AnkhId.SvnOriginName:
+                            Scc.StoreProjectProperties(pHierarchy, map);
+                            break;
+                    }
                 }
-            }
 
-            return VSConstants.S_OK;
+                return VSConstants.S_OK;
+            }
+            catch (Exception e)
+            {
+                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(e);
+
+                return e.HResult;
+            }
         }
 
         public int ReadSolutionProps(IVsHierarchy pHierarchy, string pszProjectName, string pszProjectMk, string pszKey, int fPreLoad, IPropertyBag pPropBag)
         {
-            if (pHierarchy != null)
-                return VSConstants.S_OK;
-
-            ISccSettingsStore translate = GetService<ISccSettingsStore>();
-            IAnkhSccService scc = GetService<IAnkhSccService>();
-
-            using (IPropertyMap map = translate.GetMap(pPropBag))
+            try
             {
-
-                bool preload = (fPreLoad != 0);
-
-                switch (pszKey)
+                using (IPropertyMap map = new PropertyBag(pPropBag))
                 {
-                    case SubversionPropertyCategory:
-                        if (preload)
-                        {
-                            string value;
-                            bool register;
+                    bool preload = (fPreLoad != 0);
 
-                            if (!map.TryGetValue(ManagedPropertyName, out value))
-                                register = false;
-                            else if (string.IsNullOrEmpty(value) || !bool.TryParse(value, out register))
-                                register = false;
-
-                            if (register)
+                    switch (pszKey)
+                    {
+                        case SubversionPropertyCategory:
+                            if (preload && pHierarchy == null)
                             {
-                                scc.RegisterAsPrimarySccProvider();
+                                string value;
+                                bool register;
 
-                                scc.LoadingManagedSolution(true);
+                                if (!map.TryGetValue(ManagedPropertyName, out value))
+                                    register = false;
+                                else if (string.IsNullOrEmpty(value) || !bool.TryParse(value, out register))
+                                    register = false;
+
+                                if (register)
+                                {
+                                    Scc.RegisterAsPrimarySccProvider();
+
+                                    Scc.LoadingManagedSolution(true);
+                                }
                             }
-
-                            scc.ReadSolutionProperties(map);
-                        }
-                        break;
-                    case AnkhId.SccStructureName:
-                        translate.ReadSolutionProperties(map);
-                        break;
+                            break;
+                        case AnkhId.SvnOriginName:
+                            Scc.ReadProjectProperties(pHierarchy, pszProjectName, pszProjectMk, map);
+                            break;
+                    }
                 }
+                return VSConstants.S_OK;
             }
-             
-            return VSConstants.S_OK;
+            catch (Exception e)
+            {
+                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(e);
+
+                return e.HResult;
+            }
         }
 
         #region IVsPersistSolutionOpts
