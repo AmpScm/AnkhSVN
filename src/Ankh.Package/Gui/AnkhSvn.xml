@@ -544,6 +544,10 @@
       <!-- The 'Edit Project' group on unloaded projects -->
       <ButtonRef id="Cmd_UpgradeWorkingCopy" priority="0x7FFF" />
       <ButtonRef id="Cmd_ItemConflictEdit" priority="0x8000" />
+      <Button id="Cmd_SccSccReCheckoutFailedProject" name="SvnReCheckoutFailedProject" priority="0x8100"
+              text="Re-Checkout Failed &amp;Project from Subversion" defaultInvisible="true"/>
+      <Button id="Cmd_SccEditFailedProjectLocation" name="SvnEditFailedProjectLocation" priority="0x8200"
+              text="Edit Failed Project &amp;Location" defaultInvisible="true"/>
     </GroupRef>
     <GroupRef id="Menu_RepositoryExplorerToolBar">
       <!-- The Repository Explorer Toolbar -->

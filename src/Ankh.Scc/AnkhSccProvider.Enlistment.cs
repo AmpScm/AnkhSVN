@@ -251,6 +251,7 @@ namespace Ankh.Scc
                     && VSErr.Succeeded(pHierarchy.GetCanonicalName(VSConstants.VSITEMID_ROOT, out projectLocation)))
                     return !string.IsNullOrEmpty(projectLocation);
 
+                projectLocation = null;
                 return false;
             }
             finally
@@ -447,6 +448,137 @@ namespace Ankh.Scc
 
             if (enlistPathUNC != slnProjectMk)
                 _trueNameMap[enlistPathUNC] = slnProjectMk;
+        }
+
+        public IDictionary<string, object> GetProjectsThatNeedEnlisting()
+        {
+            if (_translationMap.Count == 0)
+                return null;
+
+            Guid guidEmpty = Guid.Empty;
+            IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
+
+            if (solution == null)
+                return null;
+
+            IEnumHierarchies ppEnum;
+            if (!VSErr.Succeeded(solution.GetProjectEnum((uint)Microsoft.VisualStudio.Shell.Interop.__VSENUMPROJFLAGS.EPF_UNLOADEDINSOLUTION, ref guidEmpty, out ppEnum)))
+                return null;
+
+            IVsHierarchy[] hiers = new IVsHierarchy[16];
+
+            uint iFetched;
+            Dictionary<string, object> map = new Dictionary<string, object>();
+            while (VSErr.Succeeded(ppEnum.Next((uint)hiers.Length, hiers, out iFetched)))
+            {
+                for (uint i = 0; i < iFetched; i++)
+                {
+                    string name;
+                    if (VSErr.Succeeded(hiers[i].GetCanonicalName(Microsoft.VisualStudio.VSConstants.VSITEMID_ROOT, out name)))
+                    {
+                        string slnName;
+                        if (!_trueNameMap.TryGetValue(name, out slnName))
+                            slnName = name;
+
+                        SccSvnOrigin origin;
+                        if (_originMap.TryGetValue(slnName, out origin)
+                            && !string.IsNullOrEmpty(origin.Enlist))
+                        {
+                            map.Add(name, hiers[i]);
+                        }
+                    }
+                }
+
+                if ((int)iFetched < hiers.Length)
+                    break;
+            }
+
+            return map;
+        }
+
+        internal void EnlistAndCheckout(IVsHierarchy vsHierarchy, string pszProjectMk)
+        {
+            string slnProjectMk;
+
+            if (!_trueNameMap.TryGetValue(pszProjectMk, out slnProjectMk))
+                slnProjectMk = pszProjectMk;
+
+            SccSvnOrigin origin;
+
+            if (!_originMap.TryGetValue(slnProjectMk, out origin))
+                return;
+
+            if (string.IsNullOrEmpty(origin.SvnUri))
+                return;
+
+            IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
+            if (sol == null)
+                return;
+
+            IVsProjectFactory factory;
+            if (!VSErr.Succeeded(sol.GetProjectFactory(0, null, pszProjectMk, out factory)))
+                return;
+
+            IVsSccProjectEnlistmentFactory enlistFactory = factory as IVsSccProjectEnlistmentFactory;
+            if (enlistFactory == null)
+                return;
+
+            string enlistPath, enlistPathUNC;
+            if (!VSErr.Succeeded(enlistFactory.GetDefaultEnlistment(pszProjectMk, out enlistPath, out enlistPathUNC)))
+                return;
+
+            uint flags;
+            int hr;
+            // Website projects return E_NOTIMPL on these methods
+            if (!VSErr.Succeeded(hr = enlistFactory.GetEnlistmentFactoryOptions(out flags)))
+            {
+                if (hr != VSErr.E_NOTIMPL)
+                    return;
+                flags = 0;
+            }
+            if (!VSErr.Succeeded(hr = enlistFactory.OnBeforeEnlistmentCreate(pszProjectMk, enlistPath, enlistPathUNC)))
+                return;
+
+            Uri projectUri;
+            if (!Uri.TryCreate(origin.SvnUri, UriKind.Absolute, out projectUri))
+            {
+                Uri relativeUri;
+
+                if (!Uri.TryCreate(origin.SvnUri, UriKind.Relative, out relativeUri))
+                    return;
+
+                // We have a Uri relative from the solution file
+                if (StatusCache == null)
+                    return;
+
+                SvnItem slnDirItem = StatusCache[SolutionDirectory];
+
+                if (!slnDirItem.IsVersioned || slnDirItem.Uri == null)
+                    return;
+
+                projectUri = new Uri(slnDirItem.Uri, relativeUri);
+            }
+
+            GetService<IProgressRunner>().RunModal(Resources.CheckingOutProject,
+                delegate(object sender, ProgressWorkerArgs e)
+                {
+                    e.Client.CheckOut(projectUri, SvnTools.GetNormalizedFullPath(enlistPathUNC));
+                });
+
+           if (!VSErr.Succeeded(hr = enlistFactory.OnAfterEnlistmentCreate(pszProjectMk, enlistPath, enlistPathUNC)))
+                return;
+
+           SccTranslatePathInfo tpi = new SccTranslatePathInfo(slnProjectMk, enlistPath, enlistPathUNC);
+
+            _translationMap[tpi.SolutionPath] = tpi;
+
+            if (tpi.SolutionPath != tpi.EnlistmentUNCPath)
+                _trueNameMap[tpi.EnlistmentUNCPath] = tpi.SolutionPath;
+        }
+
+        internal void EditEnlistment(IVsHierarchy vsHierarchy, string p)
+        {
+            throw new NotImplementedException();
         }
 
         private void EnsureEnlistUserSettings()
