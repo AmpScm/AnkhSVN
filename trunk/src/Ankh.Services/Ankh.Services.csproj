@@ -74,6 +74,7 @@
     <Compile Include="Commands\IAnkhCommandService.cs" />
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
+    <Compile Include="Selection\SvnHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
     <Compile Include="VSErr.cs" />
     <Compile Include="VS\IAnkhGlobalCommandHook.cs" />

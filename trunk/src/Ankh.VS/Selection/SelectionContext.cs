@@ -62,6 +62,7 @@ namespace Ankh.VS.Selection
         CachedEnumerable<SvnItem> _svnItemsRecursive;
         CachedEnumerable<SvnProject> _selectedProjects;
         CachedEnumerable<SvnProject> _selectedProjectsRecursive;
+        CachedEnumerable<SvnHierarchy> _selectedHierarchies;
         CachedEnumerable<SvnProject> _ownerProjects;
         Dictionary<Type, IEnumerable> _selectedItemsMap;
         readonly Hashtable _hashCache = new Hashtable();
@@ -171,6 +172,7 @@ namespace Ankh.VS.Selection
             _svnItemsRecursive = null;
             _selectedProjects = null;
             _selectedProjectsRecursive = null;
+            _selectedHierarchies = null;
             _ownerProjects = null;
 
             _isSolutionExplorer = null;
@@ -763,6 +765,11 @@ namespace Ankh.VS.Selection
             return recursive ? GetSelectedProjectsRecursive() : GetSelectedProjects();
         }
 
+        public IEnumerable<SvnHierarchy> GetSelectedHierarchies()
+        {
+            return _selectedHierarchies ?? (_selectedHierarchies = new CachedEnumerable<SvnHierarchy>(InternalGetSelectedHierarchies(false), Disposer));
+        }
+
         protected IEnumerable<SvnProject> InternalGetSelectedProjects(bool recursive)
         {
             foreach (SelectionItem item in GetSelectedItems(recursive))
@@ -771,6 +778,18 @@ namespace Ankh.VS.Selection
                 {
                     if (!item.IsSolution && item.SccProject != null)
                         yield return new SvnProject(null, item.SccProject);
+                }
+            }
+        }
+
+        protected IEnumerable<SvnHierarchy> InternalGetSelectedHierarchies(bool recursive)
+        {
+            foreach (SelectionItem item in GetSelectedItems(recursive))
+            {
+                if (item.Id == VSConstants.VSITEMID_ROOT)
+                {
+                    if (!item.IsSolution && item.Hierarchy != null)
+                        yield return new SvnHierarchy(item.Hierarchy);
                 }
             }
         }
