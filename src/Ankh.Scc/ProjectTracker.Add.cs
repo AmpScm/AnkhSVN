@@ -51,7 +51,7 @@ namespace Ankh.Scc
         public int OnQueryAddFiles(IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYADDFILEFLAGS[] rgFlags, VSQUERYADDFILERESULTS[] pSummaryResult, VSQUERYADDFILERESULTS[] rgResults)
         {
             if (rgpszMkDocuments == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             RegisterForSccCleanup(); // Clear the origins
             _collectHints = true; // Some projects call HandsOff(file) on which files they wish to import. Use that to get more information
@@ -420,7 +420,7 @@ namespace Ankh.Scc
         public int OnQueryAddDirectories(IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYADDDIRECTORYFLAGS[] rgFlags, VSQUERYADDDIRECTORYRESULTS[] pSummaryResult, VSQUERYADDDIRECTORYRESULTS[] rgResults)
         {
             if (pProject == null || rgpszMkDocuments == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             RegisterForSccCleanup(); // Clear the origins table after adding
             _collectHints = true;
@@ -451,7 +451,7 @@ namespace Ankh.Scc
         public int OnAfterAddDirectoriesEx(int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSADDDIRECTORYFLAGS[] rgFlags)
         {
             if (rgpProjects == null || rgpszMkDocuments == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             bool sccActive = SccProvider.IsActive;
 

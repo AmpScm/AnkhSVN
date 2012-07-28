@@ -286,7 +286,7 @@ namespace Ankh.Scc
             pbstrDirectory = null;
             pfOK = 0;
 
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int CancelAfterBrowseForProject()
         {
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
         #endregion
     }

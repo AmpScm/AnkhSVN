@@ -69,7 +69,7 @@ namespace Ankh.Scc
         /// </returns>
         public int AddItemFromSourceControl(IVsProject pProject, uint itemidLoc, uint cFilesToAdd, string[] rgpszFilesToAdd, IntPtr hwndDlgOwner, uint grfEditorFlags, ref Guid rguidEditorType, string pszPhysicalView, ref Guid rguidLogicalView, VSADDRESULT[] pResult)
         {
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Ankh.Scc
         public int AddProjectFromSourceControl(string pszProjectStoreUrl)
         {
             if (string.IsNullOrEmpty(pszProjectStoreUrl))
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             CommandResult cr = CommandService.ExecCommand(AnkhCommand.FileFileAddFromSubversion, false, pszProjectStoreUrl);
 
@@ -97,14 +97,14 @@ namespace Ankh.Scc
         /// <param name="pbstrTrayDisplayName">[out] Returns the display name of the NSE (which can appear in the Places section of the Window border of the dialog boxes).</param>
         /// <param name="pbstrProtocolPrefix">[out] Returns the NSE protocol prefix (for example, "msss://").</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.E_NOTIMPL"></see> or an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns <see cref="F:Microsoft.VisualStudio.VSErr.E_NOTIMPL"></see> or an error code.
         /// </returns>
         public int GetNamespaceExtensionInformation(int vsofsdDlg, out string pbstrNamespaceGUID, out string pbstrTrayDisplayName, out string pbstrProtocolPrefix)
         {
             pbstrNamespaceGUID = Guid.Empty.ToString();
             pbstrTrayDisplayName = "Subversion";
             pbstrProtocolPrefix = "svn://";
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Ankh.Scc
         /// </returns>
         public int OpenSolutionFromSourceControl(string pszSolutionStoreUrl)
         {
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
     }
 }

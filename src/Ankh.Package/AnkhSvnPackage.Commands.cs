@@ -65,7 +65,7 @@ namespace Ankh.VSPackage
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             if ((prgCmds == null))
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
             else if (GuidRefIsNull(ref pguidCmdGroup))
                 return VSErr.OLECMDERR_E_NOTSUPPORTED;
 
@@ -102,13 +102,13 @@ namespace Ankh.VSPackage
                 case OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP:
                 default:
                     // VS Doesn't use OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP                    
-                    return VSConstants.E_NOTIMPL;
+                    return VSErr.E_NOTIMPL;
                 case (OLECMDEXECOPT)0x00010000 | OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP:
                     // Retrieve parameter information of command for immediate window
                     // See http://blogs.msdn.com/dr._ex/archive/2005/03/16/396877.aspx for more info
 
                     if (pvaOut == IntPtr.Zero)
-                        return VSConstants.E_POINTER;
+                        return VSErr.E_POINTER;
 
                     string definition;
                     if (pvaOut != IntPtr.Zero && CommandMapper.TryGetParameterList((AnkhCommand)nCmdID, out definition))
@@ -118,7 +118,7 @@ namespace Ankh.VSPackage
                         return VSErr.S_OK;
                     }
 
-                    return VSConstants.E_NOTIMPL;
+                    return VSErr.E_NOTIMPL;
             }
 
             object argIn = null;

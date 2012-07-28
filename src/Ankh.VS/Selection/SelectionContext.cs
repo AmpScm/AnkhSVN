@@ -488,7 +488,7 @@ namespace Ankh.VS.Selection
                 if (ee != null && !VSErr.Succeeded(ee.ErrorCode))
                     hr = ee.ErrorCode; // Should have been returned instead
                 else if (e is NotImplementedException)
-                    hr = VSConstants.E_NOTIMPL; // From Microsoft.VisualStudio.PerformanceTools.DummyVsUIHierarchy.GetNestedHierarchy()
+                    hr = VSErr.E_NOTIMPL; // From Microsoft.VisualStudio.PerformanceTools.DummyVsUIHierarchy.GetNestedHierarchy()
                 else
                     hr = VSErr.E_FAIL;
 

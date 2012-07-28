@@ -28,7 +28,7 @@ namespace Ankh.Scc
         public int OnQueryRemoveFiles(IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYREMOVEFILEFLAGS[] rgFlags, VSQUERYREMOVEFILERESULTS[] pSummaryResult, VSQUERYREMOVEFILERESULTS[] rgResults)
         {
             if (rgpszMkDocuments == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             if (rgResults != null)
                 for (int i = 0; i < cFiles; i++)
@@ -45,7 +45,7 @@ namespace Ankh.Scc
         public int OnAfterRemoveFiles(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEFILEFLAGS[] rgFlags)
         {
             if (rgpProjects == null || rgpszMkDocuments == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             for (int iProject = 0, iFile = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
             {
@@ -78,7 +78,7 @@ namespace Ankh.Scc
         public int OnQueryRemoveDirectories(IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYFLAGS[] rgFlags, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults)
         {
             if (rgpszMkDocuments == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             for (int i = 0; i < cDirectories; i++)
             {
@@ -97,7 +97,7 @@ namespace Ankh.Scc
         public int OnAfterRemoveDirectories(int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEDIRECTORYFLAGS[] rgFlags)
         {
             if (rgpProjects == null || rgpszMkDocuments == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             for (int iProject = 0, iDirectory = 0; (iProject < cProjects) && (iDirectory < cDirectories); iProject++)
             {

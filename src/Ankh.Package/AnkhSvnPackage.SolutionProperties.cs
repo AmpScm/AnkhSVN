@@ -144,7 +144,7 @@ namespace Ankh.VSPackage
             if (Scc == null)
                 return VSErr.S_OK;
             else if (pPropBag == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             try
             {

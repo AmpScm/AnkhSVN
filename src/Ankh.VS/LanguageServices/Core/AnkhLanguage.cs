@@ -33,7 +33,7 @@ namespace Ankh.VS.LanguageServices.Core
             if (codeWindowManager != null)
                 return VSErr.S_OK;
             else
-                return VSConstants.E_NOTIMPL;
+                return VSErr.E_NOTIMPL;
         }
 
         [CLSCompliant(false)]
@@ -49,7 +49,7 @@ namespace Ankh.VS.LanguageServices.Core
             if (colorizer != null)
                 return VSErr.S_OK;
             else
-                return VSConstants.E_NOTIMPL;
+                return VSErr.E_NOTIMPL;
         }
 
         [CLSCompliant(false)]

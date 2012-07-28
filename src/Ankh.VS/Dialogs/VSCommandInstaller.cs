@@ -170,7 +170,7 @@ namespace Ankh.VS.Dialogs
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             if ((prgCmds == null))
-                return Microsoft.VisualStudio.VSConstants.E_INVALIDARG;
+                return VSErr.E_INVALIDARG;
 
             System.Diagnostics.Debug.Assert(cCmds == 1, "Multiple commands"); // Should never happen in VS
 

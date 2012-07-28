@@ -40,19 +40,19 @@ namespace Ankh.VS.LanguageServices.Core
         public int GetDataTipText(TextSpan[] pSpan, out string pbstrText)
         {
             pbstrText = null;
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         [CLSCompliant(false)]
         public int GetPairExtents(int iLine, int iIndex, TextSpan[] pSpan)
         {
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         [CLSCompliant(false)]
         public int GetWordExtent(int iLine, int iIndex, uint dwFlags, TextSpan[] pSpan)
         {
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         #endregion

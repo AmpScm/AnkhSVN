@@ -30,7 +30,7 @@ namespace Ankh.Scc
         public int OnQueryRenameFiles(IVsProject pProject, int cFiles, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEFILEFLAGS[] rgFlags, VSQUERYRENAMEFILERESULTS[] pSummaryResult, VSQUERYRENAMEFILERESULTS[] rgResults)
         {
             if (rgszMkNewNames == null || rgszMkOldNames == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             RegisterForSccCleanup(); // Clear the origins
             _collectHints = true;
@@ -65,7 +65,7 @@ namespace Ankh.Scc
         public int OnAfterRenameFiles(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, VSRENAMEFILEFLAGS[] rgFlags)
         {
             if (rgszMkNewNames == null || rgpProjects == null || rgszMkOldNames == null || rgszMkOldNames.Length != rgszMkNewNames.Length)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             // TODO: C++ projects do not send directory renames; but do send OnAfterRenameFile() events
             //       for all files (one at a time). We should detect that case here and fix up this dirt!
@@ -221,7 +221,7 @@ namespace Ankh.Scc
         public int OnQueryRenameDirectories(IVsProject pProject, int cDirs, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEDIRECTORYFLAGS[] rgFlags, VSQUERYRENAMEDIRECTORYRESULTS[] pSummaryResult, VSQUERYRENAMEDIRECTORYRESULTS[] rgResults)
         {
             if (rgszMkNewNames == null || pProject == null || rgszMkOldNames == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             RegisterForSccCleanup(); // Clear the origins
             _collectHints = true;
@@ -258,7 +258,7 @@ namespace Ankh.Scc
         public int OnAfterRenameDirectories(int cProjects, int cDirs, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, VSRENAMEDIRECTORYFLAGS[] rgFlags)
         {
             if (rgszMkNewNames == null || rgpProjects == null || rgszMkOldNames == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             int iDirectory = 0;
 
