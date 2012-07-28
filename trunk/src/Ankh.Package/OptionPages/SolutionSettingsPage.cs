@@ -85,7 +85,7 @@ namespace Ankh.VSPackage.OptionPages
 		public int TranslateAccelerator(MSG[] pMsg)
 		{
 			if (pMsg == null)
-				return VSConstants.E_POINTER;
+				return VSErr.E_POINTER;
 
 			Message message = Message.Create(pMsg[0].hwnd, (int)pMsg[0].message, pMsg[0].wParam, pMsg[0].lParam);
 

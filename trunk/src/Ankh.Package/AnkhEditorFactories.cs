@@ -24,7 +24,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 using Ankh.UI;
-using Ankh.VS.Dialogs;
 
 namespace Ankh.VSPackage
 {
@@ -54,7 +53,7 @@ namespace Ankh.VSPackage
             // Validate inputs
             if ((grfCreateDoc & (VSConstants.CEF_OPENFILE | VSConstants.CEF_SILENT)) == 0)
             {
-                return VSConstants.E_INVALIDARG;
+                return VSErr.E_INVALIDARG;
             }
 
             VSEditorControl form = CreateForm();
@@ -84,7 +83,7 @@ namespace Ankh.VSPackage
                 return VSErr.S_OK;
             }
 
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         public int SetSite(IOleServiceProvider psp)
@@ -162,7 +161,7 @@ namespace Ankh.VSPackage
                 pbstrEditorCaption = null;
                 pguidCmdUI = Guid.Empty;
                 pgrfCDW = 0;
-                return VSConstants.E_UNEXPECTED;
+                return VSErr.E_UNEXPECTED;
             }
 
             return base.CreateEditorInstance(grfCreateDoc, pszMkDocument, pszPhysicalView, pvHier, itemid, punkDocDataExisting, out ppunkDocView, out ppunkDocData, out pbstrEditorCaption, out pguidCmdUI, out pgrfCDW);

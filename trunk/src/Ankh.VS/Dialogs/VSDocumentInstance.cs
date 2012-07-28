@@ -111,7 +111,7 @@ namespace Ankh.VS.Dialogs
         public int GetClassID(out Guid pClassID)
         {
             pClassID = Guid.Empty;
-            return VSConstants.E_UNEXPECTED;
+            return VSErr.E_UNEXPECTED;
         }
 
         public int GetCurFile(out string ppszFilename, out uint pnFormatIndex)
@@ -198,7 +198,7 @@ namespace Ankh.VS.Dialogs
                 return _findTarget.Find(pszSearch, grfOptions, fResetStartPoint, pHelper, out pResult);
 
             pResult = 0;
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         int IVsFindTarget.GetCapabilities(bool[] pfImage, uint[] pgrfOptions)
@@ -216,7 +216,7 @@ namespace Ankh.VS.Dialogs
             if (_findTarget != null)
                 return _findTarget.GetCurrentSpan(pts);
 
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         int IVsFindTarget.GetFindState(out object ppunk)
@@ -225,7 +225,7 @@ namespace Ankh.VS.Dialogs
                 return _findTarget.GetFindState(out ppunk);
 
             ppunk = null;
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         int IVsFindTarget.GetMatchRect(RECT[] prc)
@@ -251,7 +251,7 @@ namespace Ankh.VS.Dialogs
                 return _findTarget.GetSearchImage(grfOptions, ppSpans, out ppTextImage);
 
             ppTextImage = null;
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         int IVsFindTarget.MarkSpan(TextSpan[] pts)
@@ -259,7 +259,7 @@ namespace Ankh.VS.Dialogs
             if (_findTarget != null)
                 return _findTarget.MarkSpan(pts);
 
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         int IVsFindTarget.NavigateTo(TextSpan[] pts)
@@ -267,7 +267,7 @@ namespace Ankh.VS.Dialogs
             if (_findTarget != null)
                 return _findTarget.NavigateTo(pts);
 
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         int IVsFindTarget.NotifyFindTarget(uint notification)
@@ -275,7 +275,7 @@ namespace Ankh.VS.Dialogs
             if (_findTarget != null)
                 return _findTarget.NotifyFindTarget(notification);
 
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         int IVsFindTarget.Replace(string pszSearch, string pszReplace, uint grfOptions, int fResetStartPoint, IVsFindHelper pHelper, out int pfReplaced)
@@ -284,7 +284,7 @@ namespace Ankh.VS.Dialogs
                 return _findTarget.Replace(pszSearch, pszReplace, grfOptions, fResetStartPoint, pHelper, out pfReplaced);
 
             pfReplaced = 0;
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         int IVsFindTarget.SetFindState(object pUnk)
@@ -292,7 +292,7 @@ namespace Ankh.VS.Dialogs
             if (_findTarget != null)
                 return _findTarget.SetFindState(pUnk);
 
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         int IVsFindTarget2.NavigateTo2(IVsTextSpanSet pSpans, TextSelMode iSelMode)
@@ -300,7 +300,7 @@ namespace Ankh.VS.Dialogs
             if (_findTarget2 != null)
                 return _findTarget2.NavigateTo2(pSpans, iSelMode);
 
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
 

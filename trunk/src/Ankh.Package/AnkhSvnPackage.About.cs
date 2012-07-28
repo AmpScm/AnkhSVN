@@ -96,7 +96,7 @@ namespace Ankh.VSPackage
         public int IdBmpSplash(out uint pIdBmp)
         {
             pIdBmp = 0; // Not used by VS2005+
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         public int IdIcoLogoForAboutbox(out uint pIdIco)

@@ -478,7 +478,7 @@ namespace Ankh.VS.LanguageServices.Core
                 physicalView = null;
                 return VSErr.S_OK;
             }
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         /// <include file='doc\EditorFactory.uex' path='docs/doc[@for="EditorFactory.SetSite"]/*' />

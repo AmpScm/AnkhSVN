@@ -269,7 +269,7 @@ namespace Ankh.Scc
             bool? allowReadOnlyNonSccWrites = null;
 
             if (rgpszMkDocuments == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             try
             {
@@ -495,7 +495,7 @@ namespace Ankh.Scc
             List<SvnItem> toBeSvnLocked = new List<SvnItem>();
 
             if (rgpszMkDocuments == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             if (_querySaveBatchCancel)
             {

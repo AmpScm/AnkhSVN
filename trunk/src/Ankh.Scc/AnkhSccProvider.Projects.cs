@@ -236,7 +236,7 @@ namespace Ankh.Scc
             string dir, path, user;
 
             if (sol == null
-                || !ErrorHandler.Succeeded(sol.GetSolutionInfo(out dir, out path, out user))
+                || !VSErr.Succeeded(sol.GetSolutionInfo(out dir, out path, out user))
                 || string.IsNullOrEmpty(path))
             {
                 return;
@@ -261,16 +261,16 @@ namespace Ankh.Scc
                 IVsHierarchy slnHier;
                 uint pitemid;
                 uint pdwCookie;
-                
-                if (!ErrorHandler.Succeeded(rdt.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_EditLock, path, out slnHier, out pitemid, out ppunkDocData, out pdwCookie)))
+
+                if (!VSErr.Succeeded(rdt.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_EditLock, path, out slnHier, out pitemid, out ppunkDocData, out pdwCookie)))
                     return;
-                if (!ErrorHandler.Succeeded(Marshal.QueryInterface(unk, ref IID_hier, out hier)))
+                if (!VSErr.Succeeded(Marshal.QueryInterface(unk, ref IID_hier, out hier)))
                 {
                     hier = IntPtr.Zero;
                     return;
                 }
 
-                if (ErrorHandler.Succeeded(rdt.RenameDocument(path, trueSln, hier, VSConstants.VSITEMID_ROOT)))
+                if (VSErr.Succeeded(rdt.RenameDocument(path, trueSln, hier, VSConstants.VSITEMID_ROOT)))
                 {
                     int hr;
 
@@ -327,7 +327,7 @@ namespace Ankh.Scc
             IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
 
             if (sol == null ||
-                !ErrorHandler.Succeeded(sol.GetSolutionInfo(out dir, out path, out user)))
+                !VSErr.Succeeded(sol.GetSolutionInfo(out dir, out path, out user)))
             {
                 _solutionDirectory = _solutionFile = "";
                 return;
@@ -505,7 +505,7 @@ namespace Ankh.Scc
                 {
                     int busy;
                     if (BuildManager != null &&
-                        ErrorHandler.Succeeded(BuildManager.QueryBuildManagerBusy(out busy)) &&
+                        VSErr.Succeeded(BuildManager.QueryBuildManagerBusy(out busy)) &&
                         busy != 0)
                     {
                         trackCopies = false;

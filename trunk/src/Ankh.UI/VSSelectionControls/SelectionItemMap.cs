@@ -211,7 +211,7 @@ namespace Ankh.UI.VSSelectionControls
                 if (pEventSink == null)
                 {
                     pdwCookie = 0;
-                    return VSConstants.E_POINTER;
+                    return VSErr.E_POINTER;
                 }
 
                 _eventHandlers.Add(pdwCookie = ++lvId, pEventSink);
@@ -411,7 +411,7 @@ namespace Ankh.UI.VSSelectionControls
         int ISelectionContainer.GetObjects(uint dwFlags, uint cObjects, object[] apUnkObjects)
         {
             if (apUnkObjects == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             IList src;
             if (dwFlags == (uint)Constants.GETOBJS_ALL)
@@ -467,7 +467,7 @@ namespace Ankh.UI.VSSelectionControls
             object[] items = _data.CreateArray((int)cSelect);
 
             if (cSelect > 0 && apUnkSelect == null)
-                return VSConstants.E_POINTER;
+                return VSErr.E_POINTER;
 
             for (int i = 0; i < cSelect; i++)
                 items[i] = _data.GetRealObject(apUnkSelect[i]);
@@ -727,27 +727,27 @@ namespace Ankh.UI.VSSelectionControls
 
             int IVsHierarchy.Unused0()
             {
-                return VSConstants.E_NOTIMPL;
+                return VSErr.E_NOTIMPL;
             }
 
             int IVsHierarchy.Unused1()
             {
-                return VSConstants.E_NOTIMPL;
+                return VSErr.E_NOTIMPL;
             }
 
             int IVsHierarchy.Unused2()
             {
-                return VSConstants.E_NOTIMPL;
+                return VSErr.E_NOTIMPL;
             }
 
             int IVsHierarchy.Unused3()
             {
-                return VSConstants.E_NOTIMPL;
+                return VSErr.E_NOTIMPL;
             }
 
             int IVsHierarchy.Unused4()
             {
-                return VSConstants.E_NOTIMPL;
+                return VSErr.E_NOTIMPL;
             }
 
         }

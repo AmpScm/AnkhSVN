@@ -108,7 +108,7 @@ namespace Ankh.VSPackage
 
         int IOleComponent.FReserved1(uint dwReserved, uint message, IntPtr wParam, IntPtr lParam)
         {
-            return VSConstants.E_NOTIMPL;
+            return VSErr.E_NOTIMPL;
         }
 
         IntPtr IOleComponent.HwndGetWindow(uint dwWhich, uint dwReserved)

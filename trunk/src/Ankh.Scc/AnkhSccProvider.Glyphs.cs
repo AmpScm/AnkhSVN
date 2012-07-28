@@ -199,7 +199,7 @@ namespace Ankh.Scc
         public int GetSccGlyph(int cFiles, string[] rgpszFullPaths, VsStateIcon[] rgsiGlyphs, uint[] rgdwSccStatus)
         {
             if (rgpszFullPaths == null || rgsiGlyphs == null)
-                return VSConstants.E_POINTER; // Documented as impossible
+                return VSErr.E_POINTER; // Documented as impossible
 
             if (!_active)
             {

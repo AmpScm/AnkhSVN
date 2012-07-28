@@ -442,7 +442,7 @@ namespace Ankh.VS.Dialogs
         public int GetBorder(RECT[] prc)
         {
             if (_panel == null)
-                return VSConstants.E_NOTIMPL;
+                return VSErr.E_NOTIMPL;
 
             Size sz = _form.ClientRectangle.Size;
             prc[0].left = 0;

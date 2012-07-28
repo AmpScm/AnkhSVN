@@ -108,7 +108,7 @@ namespace Ankh.VS.Selection
                         else
                             ok = true; // Try the GetMkDocument route to find an alternative
                     }
-                    else if (hr != VSConstants.E_NOTIMPL)
+                    else if (hr != VSErr.E_NOTIMPL)
                         return false; // 
                 }
 
@@ -370,14 +370,14 @@ namespace Ankh.VS.Selection
                     return VSErr.S_OK;
                 }
 
-                return VSConstants.E_NOTIMPL;
+                return VSErr.E_NOTIMPL;
             }
 
             public int GetSccSpecialFiles(uint itemid, string pszSccFile, Microsoft.VisualStudio.OLE.Interop.CALPOLESTR[] pCaStringsOut, Microsoft.VisualStudio.OLE.Interop.CADWORD[] pCaFlagsOut)
             {
                 pCaStringsOut[0].cElems = 0;
                 pCaStringsOut[0].pElems = IntPtr.Zero;
-                return VSConstants.E_NOTIMPL;
+                return VSErr.E_NOTIMPL;
             }
 
             public int SccGlyphChanged(int cAffectedNodes, uint[] rgitemidAffectedNodes, VsStateIcon[] rgsiNewGlyphs, uint[] rgdwNewSccStatus)
@@ -397,7 +397,7 @@ namespace Ankh.VS.Selection
 
             public int SetSccLocation(string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszSccProvider)
             {
-                return VSConstants.E_NOTIMPL;
+                return VSErr.E_NOTIMPL;
             }
 
             #endregion
