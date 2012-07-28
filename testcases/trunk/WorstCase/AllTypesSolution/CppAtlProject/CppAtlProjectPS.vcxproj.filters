@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{9a19d0c5-50c9-4318-808f-c658e79b6a59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{6c233ed2-ed7a-45fa-a6fe-5f90427b9f3d}</UniqueIdentifier>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include=".\CppAtlProject_i.c">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\CppAtlProject_p.c">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\dlldata.c">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".\CppAtlProjectps.def" />
+  </ItemGroup>
+</Project>
