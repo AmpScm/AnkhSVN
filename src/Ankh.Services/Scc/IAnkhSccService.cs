@@ -120,6 +120,8 @@ namespace Ankh.Scc
         void StoreProjectProperties(IVsHierarchy pHierarchy, IPropertyMap map);
 
         void ReadProjectProperties(IVsHierarchy pHierarchy, string pszProjectName, string pszProjectMk, IPropertyMap map);
+
+        void ProjectLoadFailed(string pszProjectMk);
     }
 
     /// <summary>
