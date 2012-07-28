@@ -4,30 +4,31 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-   <SccProvider>SubversionScc</SccProvider>
-   <SccAuxPath>Svn</SccAuxPath>
-   <SccLocalPath>Svn</SccLocalPath>
-   <SccProjectName>Svn</SccProjectName>
-   <UpgradedFromDBP>True</UpgradedFromDBP>
+    <SccProvider>SubversionScc</SccProvider>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccProjectName>Svn</SccProjectName>
+    <UpgradedFromDBP>True</UpgradedFromDBP>
     <Name>dbpProjectName</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{64f316bc-9d85-4c3a-8252-327004cbe2f9}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
-    <RootPath></RootPath>
-   <SccProvider>SubversionScc</SccProvider>
-   <SccAuxPath>Svn</SccAuxPath>
-   <SccLocalPath>Svn</SccLocalPath>
-   <SccProjectName>Svn</SccProjectName>
-   <UpgradedFromDBP>True</UpgradedFromDBP>
+    <RootPath>
+    </RootPath>
+    <SccProvider>SubversionScc</SccProvider>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccProjectName>Svn</SccProjectName>
+    <UpgradedFromDBP>True</UpgradedFromDBP>
     <RootNamespace>dbpProjectName</RootNamespace>
-   <PostUpgradeAddToSCC>;C:\Users\Bert\Documents\Visual Studio 2012\Projects\AllTypesSolution-2008\WorstCase\AllTypesSolution\DbProject\DbProject.sqlproj;C:\Users\Bert\Documents\Visual Studio 2012\Projects\AllTypesSolution-2008\WorstCase\AllTypesSolution\DbProject\Connections.txt</PostUpgradeAddToSCC>
-   <SccProvider>SubversionScc</SccProvider>
-   <SccAuxPath>Svn</SccAuxPath>
-   <SccLocalPath>Svn</SccLocalPath>
-   <SccProjectName>Svn</SccProjectName>
-   <UpgradedFromDBP>True</UpgradedFromDBP>
+    <PostUpgradeAddToSCC>;C:\Users\Bert\Documents\Visual Studio 2012\Projects\AllTypesSolution-2008\WorstCase\AllTypesSolution\DbProject\DbProject.sqlproj;C:\Users\Bert\Documents\Visual Studio 2012\Projects\AllTypesSolution-2008\WorstCase\AllTypesSolution\DbProject\Connections.txt</PostUpgradeAddToSCC>
+    <SccProvider>SubversionScc</SccProvider>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccProjectName>Svn</SccProjectName>
+    <UpgradedFromDBP>True</UpgradedFromDBP>
     <AssemblyName>dbpProjectName</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
@@ -36,6 +37,7 @@
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -66,7 +68,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
-    <Folder Include="Properties"/>
+    <Folder Include="Properties" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Change Scripts" />
@@ -75,6 +77,6 @@
     <Folder Include="Properties" />
   </ItemGroup>
   <ItemGroup>
-    <NotInBuild Include="Connections.txt"/>
+    <NotInBuild Include="Connections.txt" />
   </ItemGroup>
 </Project>
