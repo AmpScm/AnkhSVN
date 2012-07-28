@@ -449,7 +449,7 @@ namespace Ankh.Scc
             Guid solutionNavigatorPackage = new Guid("{cf6a5c16-83b0-4d04-b702-195c35c6e887}");
 
             int bInstalled;
-            if (!ErrorHandler.Succeeded(shell.IsPackageInstalled(ref solutionNavigatorPackage, out bInstalled)))
+            if (!VSErr.Succeeded(shell.IsPackageInstalled(ref solutionNavigatorPackage, out bInstalled)))
                 return false;
 
             return (bInstalled != 0);

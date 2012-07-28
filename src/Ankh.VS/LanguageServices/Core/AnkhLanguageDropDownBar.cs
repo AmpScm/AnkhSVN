@@ -59,11 +59,11 @@ namespace Ankh.VS.LanguageServices.Core
             for (int i = 0; i < combos; i++)
                 _combos.Add(new ComboMemberCollection(this, i));
 
-            if (!ErrorHandler.Succeeded(dbm.AddDropdownBar(combos, this)))
+            if (!VSErr.Succeeded(dbm.AddDropdownBar(combos, this)))
                 return;
 
             IVsDropdownBar bar;
-            if (!ErrorHandler.Succeeded(dbm.GetDropdownBar(out bar)))
+            if (!VSErr.Succeeded(dbm.GetDropdownBar(out bar)))
                 return;
 
             _added = true;
@@ -165,7 +165,7 @@ namespace Ankh.VS.LanguageServices.Core
                 if (_activeView != null)
                 {
                     int line, col;
-                    if (ErrorHandler.Succeeded(_activeView.GetCaretPos(out line, out col)))
+                    if (VSErr.Succeeded(_activeView.GetCaretPos(out line, out col)))
                     {
                         SynchronizeCombos(_activeView, line, col);
                     }

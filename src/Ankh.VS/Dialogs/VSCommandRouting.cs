@@ -72,7 +72,7 @@ namespace Ankh.VS.Dialogs
 
             if (_priorityCommandTarget != null)
             {
-                if (!ErrorHandler.Succeeded(_priorityCommandTarget.RegisterPriorityCommandTarget(0, this, out _csCookie)))
+                if (!VSErr.Succeeded(_priorityCommandTarget.RegisterPriorityCommandTarget(0, this, out _csCookie)))
                     _priorityCommandTarget = null;
             }
 
@@ -192,7 +192,7 @@ namespace Ankh.VS.Dialogs
                 int lResult;
                 hr = host.ProcessMouseActivationModal(m.HWnd, (uint)m.Msg, (uint)m.WParam, (int)m.LParam, out lResult);
                 // Check for errors.
-                if (ErrorHandler.Succeeded(hr))
+                if (VSErr.Succeeded(hr))
                 {
                     // ProcessMouseActivationModal returns S_FALSE to stop the message processing, but this
                     // function has to return true in this case.
@@ -350,7 +350,7 @@ namespace Ankh.VS.Dialogs
                 Rectangle r = new Rectangle(_form.Location, _form.Size);
                 _form.Location = new Point(0, 0);
 
-                if (!ErrorHandler.Succeeded(p.CreatePaneWindow(_form.Handle, 0, 0, r.Width, r.Height, out hwnd)))
+                if (!VSErr.Succeeded(p.CreatePaneWindow(_form.Handle, 0, 0, r.Width, r.Height, out hwnd)))
                 {
                     _pane.Dispose();
                     _pane = null;
@@ -504,7 +504,7 @@ namespace Ankh.VS.Dialogs
                 }
             }
 
-            if (!ErrorHandler.Succeeded(hr))
+            if (!VSErr.Succeeded(hr))
             {
                 bool skipProcessing = false;
                 if (pguidCmdGroup == VSConstants.GUID_VSStandardCommandSet97)

@@ -396,7 +396,7 @@ namespace Ankh.Configuration
 
                 string root;
 
-                if (!ErrorHandler.Succeeded(lr3.GetLocalRegistryRoot(out root)))
+                if (!VSErr.Succeeded(lr3.GetLocalRegistryRoot(out root)))
                     return null;
 
                 rootKey = Registry.LocalMachine.OpenSubKey(root);
@@ -411,7 +411,7 @@ namespace Ankh.Configuration
                 uint type;
                 const uint VsLocalRegistryRootHandle_CURRENT_USER = unchecked((uint)-2147483647);
                 string root;
-                if (!ErrorHandler.Succeeded(lr4.GetLocalRegistryRootEx(2 /* _VsLocalRegistryType.Configuration */, out type, out root)))
+                if (!VSErr.Succeeded(lr4.GetLocalRegistryRootEx(2 /* _VsLocalRegistryType.Configuration */, out type, out root)))
                     return null;
 
                 rootKey = ((type == VsLocalRegistryRootHandle_CURRENT_USER) ? Registry.CurrentUser : Registry.LocalMachine).OpenSubKey(root);
@@ -440,7 +440,7 @@ namespace Ankh.Configuration
 
 				string root;
 
-				if (!ErrorHandler.Succeeded(lr3.GetLocalRegistryRoot(out root)))
+				if (!VSErr.Succeeded(lr3.GetLocalRegistryRoot(out root)))
 					return null;
 
 				rootKey = Registry.CurrentUser.OpenSubKey(root);
@@ -455,7 +455,7 @@ namespace Ankh.Configuration
 				uint type;
 				const uint VsLocalRegistryRootHandle_CURRENT_USER = unchecked((uint)-2147483647);
 				string root;
-				if (!ErrorHandler.Succeeded(lr4.GetLocalRegistryRootEx(1 /* _VsLocalRegistryType.UserSettings */, out type, out root)))
+				if (!VSErr.Succeeded(lr4.GetLocalRegistryRootEx(1 /* _VsLocalRegistryType.UserSettings */, out type, out root)))
 					return null;
 
 				rootKey = ((type == VsLocalRegistryRootHandle_CURRENT_USER) ? Registry.CurrentUser : Registry.LocalMachine).OpenSubKey(root);

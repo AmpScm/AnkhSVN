@@ -122,7 +122,7 @@ namespace Ankh.VSPackage
                         hr = pPersistence.SavePackageSolutionProps(1 /* fPreLoad */, pHierarchy, this, AnkhId.SvnOriginName);
 
                     // Once we saved our props, the solution is not dirty anymore
-                    if (ErrorHandler.Succeeded(hr))
+                    if (VSErr.Succeeded(hr))
                         Scc.IsSolutionDirty = false;
                 }
 

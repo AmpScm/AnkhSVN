@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace Ankh
         /// <summary>
         /// Checks if a HRESULT is a success return code.
         /// </summary>
+        [DebuggerStepThrough]
         public static bool Succeeded(int hr)
         {
             return (hr >= 0);
@@ -20,6 +22,7 @@ namespace Ankh
         /// </summary>
         /// <param name="hr">The HRESULT to test.</param>
         /// <returns>true if hr represents an error, false otherwise.</returns>
+        [DebuggerStepThrough]
         public static bool Failed(int hr)
         {
             return (hr < 0);
@@ -29,6 +32,7 @@ namespace Ankh
         /// Checks if the parameter is a success or failure HRESULT and throws an exception in case
         /// of failure.
         /// </summary>
+        [DebuggerStepThrough]
         public static void ThrowOnFailure(int hr)
         {
             if (VSErr.Failed(hr))
@@ -42,6 +46,7 @@ namespace Ankh
         /// <param name="hr"></param>
         /// <param name="expectedHRFailure"></param>
         /// <returns></returns>
+        [DebuggerStepThrough]
         public static int ThrowOnFailure(int hr, params int[] expectedHRFailure)
         {
             if (VSErr.Failed(hr))

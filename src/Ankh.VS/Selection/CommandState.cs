@@ -54,12 +54,12 @@ namespace Ankh.VS.Selection
             {
                 object v;
 
-                if (!ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_Zombie, out v)))
+                if (!VSErr.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_Zombie, out v)))
                     _zombie = false;
                 else
                     _zombie = (v is bool) && ((bool)v);
 
-                if (!ErrorHandler.Succeeded(shell.AdviseShellPropertyChanges(this, out _shellPropsCookie)))
+                if (!VSErr.Succeeded(shell.AdviseShellPropertyChanges(this, out _shellPropsCookie)))
                     _shellPropsCookie = 0;
             }
 
@@ -120,7 +120,7 @@ namespace Ankh.VS.Selection
         {
             uint cookie;
 
-            if (!ErrorHandler.Succeeded(Monitor.GetCmdUIContextCookie(ref cmdContextId, out cookie)))
+            if (!VSErr.Succeeded(Monitor.GetCmdUIContextCookie(ref cmdContextId, out cookie)))
                 return new CmdStateCacheItem(Monitor, 0);
 
             CmdStateCacheItem item;
@@ -479,7 +479,7 @@ namespace Ankh.VS.Selection
             internal void Reload(IVsMonitorSelection monitor)
             {
                 int active;
-                _active = ErrorHandler.Succeeded(monitor.IsCmdUIContextActive(_cookie, out active)) && active != 0;
+                _active = VSErr.Succeeded(monitor.IsCmdUIContextActive(_cookie, out active)) && active != 0;
             }
 
             public bool Active
@@ -539,7 +539,7 @@ namespace Ankh.VS.Selection
                         IVsSccProvider pv = GetService<IAnkhQueryService>().QueryService<IVsSccProvider>(gService);
 
                         int iManaging;
-                        if (pv != null && ErrorHandler.Succeeded(pv.AnyItemsUnderSourceControl(out iManaging)))
+                        if (pv != null && VSErr.Succeeded(pv.AnyItemsUnderSourceControl(out iManaging)))
                         {
                             if (iManaging != 0)
                                 return true;
@@ -563,7 +563,7 @@ namespace Ankh.VS.Selection
 
                 string root;
                 List<string> names = new List<string>();
-                if (ErrorHandler.Succeeded(lr.GetLocalRegistryRoot(out root)))
+                if (VSErr.Succeeded(lr.GetLocalRegistryRoot(out root)))
                 {
                     RegistryKey baseKey = Registry.LocalMachine;
 
@@ -626,7 +626,7 @@ namespace Ankh.VS.Selection
 
             // If the active manager is not installed, it is not active
             int installed = 0;
-            if (!ErrorHandler.Succeeded(manager.IsInstalled(out installed)) || (installed == 0))
+            if (!VSErr.Succeeded(manager.IsInstalled(out installed)) || (installed == 0))
                 return false;
 
             if (GetOtherSccActive())

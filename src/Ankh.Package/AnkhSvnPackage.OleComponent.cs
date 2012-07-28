@@ -42,7 +42,7 @@ namespace Ankh.VSPackage
             crInfo[0].uIdleTimeInterval = 1000;
 
             uint id;
-            if (ErrorHandler.Succeeded(mgr.FRegisterComponent(this, crInfo, out id)))
+            if (VSErr.Succeeded(mgr.FRegisterComponent(this, crInfo, out id)))
                 _componentId = id;
         }
 

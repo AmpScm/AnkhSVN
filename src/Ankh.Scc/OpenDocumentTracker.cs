@@ -87,12 +87,12 @@ namespace Ankh.Scc
                 return;
 
             IEnumRunningDocuments docEnum;
-            if (!ErrorHandler.Succeeded(rdt.GetRunningDocumentsEnum(out docEnum)))
+            if (!VSErr.Succeeded(rdt.GetRunningDocumentsEnum(out docEnum)))
                 return;
 
             uint[] cookies = new uint[256];
             uint nFetched;
-            while (ErrorHandler.Succeeded(docEnum.Next((uint)cookies.Length, cookies, out nFetched)))
+            while (VSErr.Succeeded(docEnum.Next((uint)cookies.Length, cookies, out nFetched)))
             {
                 if (nFetched == 0)
                     break;
@@ -120,7 +120,7 @@ namespace Ankh.Scc
 
             if (enable)
             {
-                if (ErrorHandler.Succeeded(rdt.AdviseRunningDocTableEvents(this, out _cookie)))
+                if (VSErr.Succeeded(rdt.AdviseRunningDocTableEvents(this, out _cookie)))
                     _hooked = true;
             }
             else
@@ -157,7 +157,7 @@ namespace Ankh.Scc
             uint itemId;
             IntPtr ppunkDocData;
 
-            if (ErrorHandler.Succeeded(RunningDocumentTable.GetDocumentInfo(cookie,
+            if (VSErr.Succeeded(RunningDocumentTable.GetDocumentInfo(cookie,
                 out flags, out locks, out editLocks, out name, out hier, out itemId, out ppunkDocData)))
             {
                 object document = null;

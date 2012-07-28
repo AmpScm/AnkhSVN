@@ -445,7 +445,7 @@ namespace Ankh.Scc
                 return true;
 
             object o;
-            if (!ErrorHandler.Succeeded(
+            if (!VSErr.Succeeded(
                 sccToolsOptions.GetSccToolsOption(SccToolsOptionsEnum.ksctoAllowReadOnlyFilesNotUnderSccToBeEdited,
                                                   out o)))
                 return true;

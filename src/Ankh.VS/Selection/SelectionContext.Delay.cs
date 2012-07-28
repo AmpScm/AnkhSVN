@@ -180,7 +180,7 @@ namespace Ankh.VS.Selection
             {
                 object pvar;
                 int hr = windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out pvar);
-                if (!ErrorHandler.Succeeded(hr))
+                if (!VSErr.Succeeded(hr))
                     return null;
 
                 IVsTextView textView = pvar as IVsTextView;
@@ -191,7 +191,7 @@ namespace Ankh.VS.Selection
                     {
                         hr = codeWin.GetPrimaryView(out textView);
 
-                        if (!ErrorHandler.Succeeded(hr))
+                        if (!VSErr.Succeeded(hr))
                             return null;
                     }
                 }

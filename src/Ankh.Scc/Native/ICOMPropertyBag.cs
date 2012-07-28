@@ -67,7 +67,7 @@ namespace Ankh.Scc.Native
                 throw new ArgumentNullException("propName");
 
             object var;
-            if (ErrorHandler.Succeeded(_bag.Read(propName, out var, null, 0, null)))
+            if (VSErr.Succeeded(_bag.Read(propName, out var, null, 0, null)))
             {
                 value = var as string;
 

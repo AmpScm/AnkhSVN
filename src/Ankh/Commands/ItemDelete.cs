@@ -71,7 +71,7 @@ namespace Ankh.Commands
                     if (VsShellUtilities.IsDocumentOpen(e.Context, item.FullPath, Guid.Empty, out hier, out id, out frame))
                     {
                         hr = frame.CloseFrame((uint)__FRAMECLOSE.FRAMECLOSE_NoSave);
-                        if (!ErrorHandler.Succeeded(hr))
+                        if (!VSErr.Succeeded(hr))
                             break; // Show error and cancel further actions
                     }
                 }
@@ -117,17 +117,17 @@ namespace Ankh.Commands
                     VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
                     int found;
                     uint id;
-                    if (!ErrorHandler.Succeeded(p2.IsDocumentInProject(item.FullPath, out found, prio, out id)) || found == 0)
+                    if (!VSErr.Succeeded(p2.IsDocumentInProject(item.FullPath, out found, prio, out id)) || found == 0)
                         continue; // Probably already removed (mapping out of synch?)
 
                     hr = p2.RemoveItem(0, id, out found);
 
-                    if (!ErrorHandler.Succeeded(hr))
+                    if (!VSErr.Succeeded(hr))
                         break;
                 }
             }
 
-            if (!ErrorHandler.Succeeded(hr))
+            if (!VSErr.Succeeded(hr))
                 mb.Show(Marshal.GetExceptionForHR(hr).Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }

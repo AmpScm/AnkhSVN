@@ -317,7 +317,7 @@ namespace Ankh.Services
                 { }
                 else if (!_monitorDir)
                 {
-                    if (!ErrorHandler.Succeeded(fx.AdviseFileChange(monitor,
+                    if (!VSErr.Succeeded(fx.AdviseFileChange(monitor,
                             (uint)(_VSFILECHANGEFLAGS.VSFILECHG_Time | _VSFILECHANGEFLAGS.VSFILECHG_Size
                             | _VSFILECHANGEFLAGS.VSFILECHG_Add | _VSFILECHANGEFLAGS.VSFILECHG_Del
                             | _VSFILECHANGEFLAGS.VSFILECHG_Attr),
@@ -329,7 +329,7 @@ namespace Ankh.Services
                 }
                 else
                 {
-                    if (!ErrorHandler.Succeeded(fx.AdviseDirChange(monitor, 1, this, out _cookie)))
+                    if (!VSErr.Succeeded(fx.AdviseDirChange(monitor, 1, this, out _cookie)))
                     {
                         _cookie = 0;
                     }
@@ -665,7 +665,7 @@ namespace Ankh.Services
                         if (sol == null)
                             return false;
                         object val;
-                        if (ErrorHandler.Succeeded(sol.GetProperty((int)__VSSPROPID.VSSPROPID_InstallDirectory, out val)))
+                        if (VSErr.Succeeded(sol.GetProperty((int)__VSSPROPID.VSSPROPID_InstallDirectory, out val)))
                             value = val as string;
                         return true;
                     default:

@@ -104,7 +104,7 @@ namespace Ankh.Scc
                 return;
 
             string dir, file, user;
-            if (!ErrorHandler.Succeeded(solution.GetSolutionInfo(out dir, out file, out user))
+            if (!VSErr.Succeeded(solution.GetSolutionInfo(out dir, out file, out user))
                 || string.IsNullOrEmpty(file))
             {
                 return; // No solution loaded, nothing to load
@@ -112,12 +112,12 @@ namespace Ankh.Scc
 
             Guid none = Guid.Empty;
             IEnumHierarchies hierEnum;
-            if (!ErrorHandler.Succeeded(solution.GetProjectEnum((uint)__VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION, ref none, out hierEnum)))
+            if (!VSErr.Succeeded(solution.GetProjectEnum((uint)__VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION, ref none, out hierEnum)))
                 return;
 
             IVsHierarchy[] hiers = new IVsHierarchy[32];
             uint nFetched;
-            while (ErrorHandler.Succeeded(hierEnum.Next((uint)hiers.Length, hiers, out nFetched)))
+            while (VSErr.Succeeded(hierEnum.Next((uint)hiers.Length, hiers, out nFetched)))
             {
                 if (nFetched == 0)
                     break;

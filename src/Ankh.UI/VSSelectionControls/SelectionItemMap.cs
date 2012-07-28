@@ -599,7 +599,7 @@ namespace Ankh.UI.VSSelectionControls
             uint itemid;
             IVsMultiItemSelect ms;
             IntPtr ppSc;
-            if (!ErrorHandler.Succeeded(Tracker.GetCurrentSelection(out ppHier, out itemid, out ms, out ppSc)))
+            if (!VSErr.Succeeded(Tracker.GetCurrentSelection(out ppHier, out itemid, out ms, out ppSc)))
                 return;
 
             if (ppHier != IntPtr.Zero)

@@ -30,7 +30,7 @@ namespace Ankh.Scc.ProjectMap
             uint cookie;
             if (_hierarchyEventsCookie == 0 && hook)
             {
-                if (ErrorHandler.Succeeded(ProjectHierarchy.AdviseHierarchyEvents(this, out cookie)))
+                if (VSErr.Succeeded(ProjectHierarchy.AdviseHierarchyEvents(this, out cookie)))
                 {
                     _hierarchyEventsCookie = cookie;
                 }
@@ -90,7 +90,7 @@ namespace Ankh.Scc.ProjectMap
             string r;
 
             object var;
-            if (ErrorHandler.Succeeded(ProjectHierarchy.GetProperty(itemidAdded, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
+            if (VSErr.Succeeded(ProjectHierarchy.GetProperty(itemidAdded, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
                 && (bool)var)
             {
                 return VSConstants.S_OK; // Extra item for show all files
@@ -98,7 +98,7 @@ namespace Ankh.Scc.ProjectMap
 
             if (_loaded)
             {
-                if (ErrorHandler.Succeeded(VsProject.GetMkDocument(itemidAdded, out r))
+                if (VSErr.Succeeded(VsProject.GetMkDocument(itemidAdded, out r))
                     && SvnItem.IsValidPath(r))
                 {
                     if (!SvnItem.PathExists(r))
@@ -122,7 +122,7 @@ namespace Ankh.Scc.ProjectMap
             SetPreCreatedItem(VSConstants.VSITEMID_NIL);
 
             object var;
-            if (ErrorHandler.Succeeded(ProjectHierarchy.GetProperty(itemid, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
+            if (VSErr.Succeeded(ProjectHierarchy.GetProperty(itemid, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
                 && (bool)var)
             {
                 return VSConstants.S_OK; // Extra item for show all files

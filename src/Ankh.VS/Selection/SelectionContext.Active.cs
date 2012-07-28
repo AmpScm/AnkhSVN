@@ -107,7 +107,7 @@ namespace Ankh.VS.Selection
                 if (_activeFrameObject == null && ActiveFrame != null)
                 {
                     object v;
-                    if (ErrorHandler.Succeeded(ActiveFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out v)))
+                    if (VSErr.Succeeded(ActiveFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out v)))
                     {
                         _activeFrameObject = v;
                     }
@@ -144,7 +144,7 @@ namespace Ankh.VS.Selection
                 if (_activeDocumentFrameObject == null && ActiveDocumentFrame != null)
                 {
                     object v;
-                    if (ErrorHandler.Succeeded(ActiveDocumentFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out v)))
+                    if (VSErr.Succeeded(ActiveDocumentFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out v)))
                     {
                         _activeFrameObject = v;
                     }
@@ -172,7 +172,7 @@ namespace Ankh.VS.Selection
                 {
                     object value;
                     string path;
-                    if (ErrorHandler.Succeeded(_activeDocumentFrame.GetProperty((int)__VSFPROPID.VSFPROPID_pszMkDocument, out value))
+                    if (VSErr.Succeeded(_activeDocumentFrame.GetProperty((int)__VSFPROPID.VSFPROPID_pszMkDocument, out value))
                         && null != (path = value as string))
                     {
                         if (SvnItem.IsValidPath(path))
