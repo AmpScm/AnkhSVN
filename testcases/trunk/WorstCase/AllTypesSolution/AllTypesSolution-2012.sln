@@ -36,19 +36,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ExternalSite", "..\External
 		SccLocalPath = "Svn"
 		SccProvider = "SubversionScc"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
-		Debug.AspNetCompiler.VirtualPath = "/ExternalSite"
-		Debug.AspNetCompiler.PhysicalPath = "ExternalSite\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\ExternalSite\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/ExternalSite"
-		Release.AspNetCompiler.PhysicalPath = "ExternalSite\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\ExternalSite\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "14893"
 	EndProjectSection
@@ -112,6 +100,10 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "HttpSite", "http://localhos
 		Release.AspNetCompiler.Debug = "False"
 		SlnRelativePath = "..\..\..\..\WebSites\HttpSite\"
 		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+	ProjectSection(SvnOrigin) = preProject
+		Enlist = Required
+		Svn.Uri = ../HttpSite/
 	EndProjectSection
 EndProject
 Global
