@@ -158,7 +158,7 @@ namespace Ankh.Scc
         {
             // The solution file is renamed
 
-            _solutionDirectory = _solutionFile = null; // Get new data after this rename
+            _solutionFile = null; // Get new data after this rename
             Monitor.ScheduleGlyphUpdate(SolutionFilename);
         }
 
