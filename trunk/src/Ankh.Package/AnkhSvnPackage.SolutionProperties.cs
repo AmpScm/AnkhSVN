@@ -213,14 +213,14 @@ namespace Ankh.VSPackage
                 }
                 return VSConstants.S_OK;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
 
                 if (handler != null)
-                    handler.OnError(e);
+                    handler.OnError(ex);
 
-                return e.HResult;
+                return Marshal.GetHRForException(ex);
             }
         }
 
