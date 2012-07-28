@@ -29,13 +29,13 @@ namespace Ankh.Scc
         /// Adds the current solution to source control.
         /// </summary>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK" />. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK" />. If it fails, it returns an error code.
         /// </returns>
         public int AddNewSolutionToSourceControl()
         {
             CommandService.PostExecCommand(AnkhCommand.FileSccAddSolutionToSubversion, this);
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -43,12 +43,12 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="pbstrActionName">[out] Returns the text to be used for the "Add to Source Control" check box.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int GetDisplayStringForAction(out string pbstrActionName)
         {
             pbstrActionName = Resources.AddToSubversionCommandName;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Ankh.Scc
         /// <param name="rguidLogicalView">[in] GUID that identifies the logical view.</param>
         /// <param name="pResult">[out] Returns a <see cref="T:Microsoft.VisualStudio.Shell.Interop.VSADDRESULT"></see> code indicating the overall status of the add process.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int AddItemFromSourceControl(IVsProject pProject, uint itemidLoc, uint cFilesToAdd, string[] rgpszFilesToAdd, IntPtr hwndDlgOwner, uint grfEditorFlags, ref Guid rguidEditorType, string pszPhysicalView, ref Guid rguidLogicalView, VSADDRESULT[] pResult)
         {
@@ -77,7 +77,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="pszProjectStoreUrl">[in] The URL of the project in the source control to be added to the current solution (for example, msss://server/…/MyProject.proj).</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int AddProjectFromSourceControl(string pszProjectStoreUrl)
         {
@@ -86,7 +86,7 @@ namespace Ankh.Scc
 
             CommandResult cr = CommandService.ExecCommand(AnkhCommand.FileFileAddFromSubversion, false, pszProjectStoreUrl);
 
-            return cr.Success ? VSConstants.S_OK : VSConstants.S_FALSE;
+            return cr.Success ? VSErr.S_OK : VSErr.S_FALSE;
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Ankh.Scc
         /// <param name="pbstrTrayDisplayName">[out] Returns the display name of the NSE (which can appear in the Places section of the Window border of the dialog boxes).</param>
         /// <param name="pbstrProtocolPrefix">[out] Returns the NSE protocol prefix (for example, "msss://").</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.E_NOTIMPL"></see> or an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.E_NOTIMPL"></see> or an error code.
         /// </returns>
         public int GetNamespaceExtensionInformation(int vsofsdDlg, out string pbstrNamespaceGUID, out string pbstrTrayDisplayName, out string pbstrProtocolPrefix)
         {
@@ -112,7 +112,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="pszSolutionStoreUrl">[in] The URL of the solution in source control to be opened (for example, msss://server/.../MySolution.sln).</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int OpenSolutionFromSourceControl(string pszSolutionStoreUrl)
         {

@@ -44,7 +44,7 @@ namespace Ankh.VSPackage
             if (scc != null)
                 scc.IsSolutionDirty = true; // We should save our settings again
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         IAnkhSccService _scc;
@@ -66,7 +66,7 @@ namespace Ankh.VSPackage
                 if (Scc == null || !Scc.IsSolutionManaged)
                 {
                     pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
-                    return VSConstants.S_OK;
+                    return VSErr.S_OK;
                 }
 
                 if (pHierarchy == null)
@@ -85,7 +85,7 @@ namespace Ankh.VSPackage
                     else
                         pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoDirtyProps;
                 }
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
             catch (Exception ex)
             {
@@ -103,7 +103,7 @@ namespace Ankh.VSPackage
         {
             try
             {
-                int hr = VSConstants.S_OK;
+                int hr = VSErr.S_OK;
 
                 // This function gets called by the shell after QuerySaveSolutionProps returned QSP_HasDirtyProps
 
@@ -142,7 +142,7 @@ namespace Ankh.VSPackage
         int IVsPersistSolutionProps.WriteSolutionProps(IVsHierarchy pHierarchy, string pszKey, IPropertyBag pPropBag)
         {
             if (Scc == null)
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             else if (pPropBag == null)
                 return VSConstants.E_POINTER;
 
@@ -164,7 +164,7 @@ namespace Ankh.VSPackage
                     }
                 }
 
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
             catch (Exception ex)
             {
@@ -211,7 +211,7 @@ namespace Ankh.VSPackage
                             break;
                     }
                 }
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
             catch (Exception ex)
             {
@@ -233,7 +233,7 @@ namespace Ankh.VSPackage
         {
             if ((grfLoadOpts & (uint)__VSLOADUSEROPTS.LUO_OPENEDDSW) != 0)
             {
-                return VSConstants.S_OK; // We only know .suo; let's ignore old style projects
+                return VSErr.S_OK; // We only know .suo; let's ignore old style projects
             }
 
             try
@@ -242,7 +242,7 @@ namespace Ankh.VSPackage
                 pPersistence.LoadPackageUserOpts(this, SccExcludedStream);
                 pPersistence.LoadPackageUserOpts(this, SccEnlistStream);
 
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
             catch (Exception ex)
             {
@@ -288,7 +288,7 @@ namespace Ankh.VSPackage
                             break;
                     }
                 }
-                return VSConstants.S_OK; // Our data is in subversion properties
+                return VSErr.S_OK; // Our data is in subversion properties
             }
             catch (Exception ex)
             {
@@ -314,7 +314,7 @@ namespace Ankh.VSPackage
                 if (scc != null)
                 {
                     if (!scc.IsActive)
-                        return VSConstants.S_OK;
+                        return VSErr.S_OK;
 
                     pPersistence.SavePackageUserOpts(this, SccPendingChangeStream);
                     pPersistence.SavePackageUserOpts(this, SccExcludedStream);
@@ -325,7 +325,7 @@ namespace Ankh.VSPackage
                     }
                 }
 
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
             finally
             {
@@ -362,7 +362,7 @@ namespace Ankh.VSPackage
                     }
                 }
 
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
             finally
             {

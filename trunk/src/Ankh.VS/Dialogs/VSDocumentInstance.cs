@@ -48,60 +48,60 @@ namespace Ankh.VS.Dialogs
 
         public int Close()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int GetGuidEditorType(out Guid pClassID)
         {
             pClassID = _factoryId;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int IsDocDataDirty(out int pfDirty)
         {
             //throw new NotImplementedException();
             pfDirty = 0;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int IsDocDataReloadable(out int pfReloadable)
         {
             pfReloadable = 0;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int LoadDocData(string pszMkDocument)
         {
             //throw new NotImplementedException();
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnRegisterDocData(uint docCookie, IVsHierarchy pHierNew, uint itemidNew)
         {
             //throw new NotImplementedException();
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int ReloadDocData(uint grfFlags)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int RenameDocData(uint grfAttribs, IVsHierarchy pHierNew, uint itemidNew, string pszMkDocumentNew)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int SaveDocData(VSSAVEFLAGS dwSave, out string pbstrMkDocumentNew, out int pfSaveCanceled)
         {
             pbstrMkDocumentNew = null;
             pfSaveCanceled = 0;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int SetUntitledDocPath(string pszDocDataPath)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion
@@ -118,39 +118,39 @@ namespace Ankh.VS.Dialogs
         {
             ppszFilename = "";
             pnFormatIndex = 0;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int GetFormatList(out string ppszFormatList)
         {
             ppszFormatList = "";
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int InitNew(uint nFormatIndex)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int IsDirty(out int pfIsDirty)
         {
             pfIsDirty = 0;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int Load(string pszFilename, uint grfMode, int fReadOnly)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int Save(string pszFilename, int fRemember, uint nFormatIndex)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int SaveCompleted(string pszFilename)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion
@@ -166,12 +166,12 @@ namespace Ankh.VS.Dialogs
 
         public int SetDocDataDirty(int fDirty)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int SetDocDataReadOnly(int fReadOnly)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion
@@ -180,12 +180,12 @@ namespace Ankh.VS.Dialogs
 
         public int HandsOffDocDataStorage()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int HandsOnDocDataStorage()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion
@@ -208,7 +208,7 @@ namespace Ankh.VS.Dialogs
 
             pfImage[0] = false;
             pgrfOptions[0] = 0;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         int IVsFindTarget.GetCurrentSpan(TextSpan[] pts)
@@ -233,7 +233,7 @@ namespace Ankh.VS.Dialogs
             if (_findTarget != null)
                 return _findTarget.GetMatchRect(prc);
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         int IVsFindTarget.GetProperty(uint propid, out object pvar)
@@ -242,7 +242,7 @@ namespace Ankh.VS.Dialogs
                 return _findTarget.GetProperty(propid, out pvar);
 
             pvar = null;
-            return VSConstants.E_FAIL; // All properties are documented to be optional!
+            return VSErr.E_FAIL; // All properties are documented to be optional!
         }
 
         int IVsFindTarget.GetSearchImage(uint grfOptions, IVsTextSpanSet[] ppSpans, out IVsTextImage ppTextImage)

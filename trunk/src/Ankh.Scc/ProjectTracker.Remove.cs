@@ -39,7 +39,7 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYREMOVEFILERESULTS.VSQUERYREMOVEFILERESULTS_RemoveOK;
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnAfterRemoveFiles(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEFILEFLAGS[] rgFlags)
@@ -72,7 +72,7 @@ namespace Ankh.Scc
                         SccProvider.AddDelayedDelete(file);
                 }
             }
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnQueryRemoveDirectories(IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYFLAGS[] rgFlags, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults)
@@ -91,7 +91,7 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnAfterRemoveDirectories(int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEDIRECTORYFLAGS[] rgFlags)
@@ -125,7 +125,7 @@ namespace Ankh.Scc
                 }
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
     }
 }

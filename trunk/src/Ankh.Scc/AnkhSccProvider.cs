@@ -101,7 +101,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="pfResult">[out] Returns non-zero (TRUE) if there is at least one item under source control; otherwise, returns zero (FALSE).</param>
         /// <returns>
-        /// The method returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>.
+        /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
         /// </returns>
         public int AnyItemsUnderSourceControl(out int pfResult)
         {
@@ -120,14 +120,14 @@ namespace Ankh.Scc
                 }
             }
             pfResult = oneManaged ? 1 : 0;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
         /// Called by environment to mark a particular source control package as active.
         /// </summary>
         /// <returns>
-        /// The method returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>.
+        /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
         /// </returns>
         public int SetActive()
         {
@@ -156,7 +156,7 @@ namespace Ankh.Scc
                                         OnSlnRefresh);
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         private void OnSlnRefresh(object sender, EventArgs e)
@@ -168,7 +168,7 @@ namespace Ankh.Scc
         /// Called by environment to mark a particular source control package as inactive.
         /// </summary>
         /// <returns>
-        /// The method returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>.
+        /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
         /// </returns>
         public int SetInactive()
         {
@@ -205,7 +205,7 @@ namespace Ankh.Scc
                 cmdHook.UnhookCommand(new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.SLNREFRESH),
                                       OnSlnRefresh);
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace Ankh.Scc
         {
             pbInstalled = 1; // We are always installed as we have no external dependencies
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -246,7 +246,7 @@ namespace Ankh.Scc
             _syncMap = true;
             RegisterForSccCleanup();
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace Ankh.Scc
                 data.IsRegistered = false;
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>

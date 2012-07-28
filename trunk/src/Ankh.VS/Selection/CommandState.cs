@@ -659,7 +659,7 @@ namespace Ankh.VS.Selection
                     break;
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion

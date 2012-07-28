@@ -379,7 +379,7 @@ namespace Ankh.Services
                     fsc.MarkDirtyRecursive(SvnTools.GetNormalizedFullPath(pszDirectory));
                 }
 
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
             public int FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
@@ -400,7 +400,7 @@ namespace Ankh.Services
                     }
                 }
 
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
         }
 

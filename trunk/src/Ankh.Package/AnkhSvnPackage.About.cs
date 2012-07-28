@@ -102,7 +102,7 @@ namespace Ankh.VSPackage
         public int IdIcoLogoForAboutbox(out uint pIdIco)
         {
             pIdIco = 400;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OfficialName(out string pbstrName)
@@ -117,7 +117,7 @@ namespace Ankh.VSPackage
                 // We are running with full UI. Probably used for the about box
                 pbstrName = Resources.AboutTitleName;
             }
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int ProductDetails(out string pbstrProductDetails)
@@ -172,14 +172,14 @@ namespace Ankh.VSPackage
 
             pbstrProductDetails = sb.ToString();
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int ProductID(out string pbstrPID)
         {
             pbstrPID = UIVersion.ToString();
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion

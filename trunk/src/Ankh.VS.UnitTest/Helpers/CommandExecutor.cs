@@ -30,10 +30,10 @@ namespace AnkhSvn_UnitTestProject.Helpers
         {
             Guid cmdId = AnkhId.CommandSetGuid;
             int hr = ((IOleCommandTarget)package).Exec(ref cmdId, (uint)command, (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
-            if (hr == (int)OLEConstants.OLECMDERR_E_DISABLED)
+            if (hr == VSErr.OLECMDERR_E_DISABLED)
                 Assert.Inconclusive("Command is disabled");
             else
-                Assert.IsTrue(hr == VSConstants.S_OK);
+                Assert.IsTrue(hr == VSErr.S_OK);
         }
     }
 }

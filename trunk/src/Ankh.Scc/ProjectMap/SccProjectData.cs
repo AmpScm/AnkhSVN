@@ -702,7 +702,7 @@ namespace Ankh.Scc.ProjectMap
             if (pFileFormat != null)
             {
                 Guid guidClassID;
-                if (VSConstants.S_OK != pFileFormat.GetClassID(out guidClassID))
+                if (VSErr.S_OK != pFileFormat.GetClassID(out guidClassID))
                     return SccProjectType.Normal;
 
                 if (guidClassID == _solutionFolderProjectId)

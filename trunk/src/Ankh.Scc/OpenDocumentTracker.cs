@@ -211,13 +211,13 @@ namespace Ankh.Scc
         /// <param name="itemid">[in] The item ID in the hierarchy. This is a unique identifier or it can be one of the following values: <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_NIL"></see>, <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_ROOT"></see>, or <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_SELECTION"></see>.</param>
         /// <param name="pszMkDocument">[in] The path to the document about to be locked.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int OnBeforeFirstDocumentLock(IVsHierarchy pHier, uint itemid, string pszMkDocument)
         {
             if (string.IsNullOrEmpty(pszMkDocument))
             {
-                return VSConstants.S_OK; // Can't be a valid path; don't monitor
+                return VSErr.S_OK; // Can't be a valid path; don't monitor
             }
 
             SccDocumentData data;
@@ -229,7 +229,7 @@ namespace Ankh.Scc
                 data.ItemId = itemid;
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Ankh.Scc
         public int OnAfterLastDocumentUnlock(IVsHierarchy pHier, uint itemid, string pszMkDocument, int fClosedWithoutSaving)
         {
             if (string.IsNullOrEmpty(pszMkDocument))
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
 
             SccDocumentData data;
             if (_docMap.TryGetValue(pszMkDocument, out data))
@@ -255,12 +255,12 @@ namespace Ankh.Scc
                     _cookieMap.Remove(data.Cookie);
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnBeforeSave(uint docCookie)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnAfterSave(uint docCookie)
@@ -271,7 +271,7 @@ namespace Ankh.Scc
             {
                 data.OnSaved();
             }
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -291,7 +291,7 @@ namespace Ankh.Scc
                 }
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnAfterAttributeChange(uint docCookie, uint grfAttribs)
@@ -303,14 +303,14 @@ namespace Ankh.Scc
                 data.OnAttributeChange((__VSRDTATTRIB)grfAttribs);
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnAfterAttributeChangeEx(uint docCookie, uint grfAttribs, IVsHierarchy pHierOld, uint itemidOld, string pszMkDocumentOld, IVsHierarchy pHierNew, uint itemidNew, string pszMkDocumentNew)
         {
             SccDocumentData data;
             if (!TryGetDocument(docCookie, true, out data))
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
 
             __VSRDTATTRIB attribs = (__VSRDTATTRIB)grfAttribs;
 
@@ -361,17 +361,17 @@ namespace Ankh.Scc
                 }
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnAfterFirstDocumentLock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnBeforeLastDocumentUnlock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         internal void DoDispose(SccDocumentData data)

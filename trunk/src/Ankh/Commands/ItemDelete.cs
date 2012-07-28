@@ -60,7 +60,7 @@ namespace Ankh.Commands
             if (DialogResult.OK != mb.Show(body, "", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation))
                 return; // No delete
 
-            int hr = VSConstants.S_OK;
+            int hr = VSErr.S_OK;
             foreach (SvnItem item in toDelete)
             {
                 {

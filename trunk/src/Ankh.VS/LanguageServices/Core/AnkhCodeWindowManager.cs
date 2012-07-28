@@ -81,7 +81,7 @@ namespace Ankh.VS.LanguageServices.Core
                 }
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int RemoveAdornments()
@@ -91,7 +91,7 @@ namespace Ankh.VS.LanguageServices.Core
 
             if (bar != null)
                 bar.Close();
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         [CLSCompliant(false)]
@@ -106,7 +106,7 @@ namespace Ankh.VS.LanguageServices.Core
                     _bar.OnNewView(view);
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #region IVsCodeWindowEvents Members
@@ -129,7 +129,7 @@ namespace Ankh.VS.LanguageServices.Core
                     Close();
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         [CLSCompliant(false)]

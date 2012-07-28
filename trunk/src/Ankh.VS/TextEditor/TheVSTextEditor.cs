@@ -1131,7 +1131,7 @@ namespace Ankh.VS.TextEditor
             if (HasFocus)
                 return commandTarget.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
             else
-                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+                return VSErr.OLECMDERR_E_NOTSUPPORTED;
         }
 
 
@@ -1148,7 +1148,7 @@ namespace Ankh.VS.TextEditor
             if (HasFocus)
                 return commandTarget.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
             else
-                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+                return VSErr.OLECMDERR_E_NOTSUPPORTED;
         }
 
         public IOleCommandTarget EditorCommandTarget

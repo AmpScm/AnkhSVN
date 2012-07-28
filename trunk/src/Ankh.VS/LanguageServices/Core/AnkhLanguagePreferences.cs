@@ -446,29 +446,29 @@ namespace Ankh.VS.LanguageServices.Core
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.OnRegisterMarkerType"]/*' />
         public virtual int OnRegisterMarkerType(int iMarkerType)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.OnRegisterView"]/*' />
         [CLSCompliant(false)]
         public virtual int OnRegisterView(IVsTextView view)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.OnUnregisterView"]/*' />
         [CLSCompliant(false)]
         public virtual int OnUnregisterView(IVsTextView view)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.OnReplaceAllInFilesBegin"]/*' />
         public virtual int OnReplaceAllInFilesBegin()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.OnReplaceAllInFilesEnd"]/*' />
         public virtual int OnReplaceAllInFilesEnd()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.OnUserPreferencesChanged2"]/*' />
@@ -479,7 +479,7 @@ namespace Ankh.VS.LanguageServices.Core
             {
                 this.prefs = langPrefs[0];
             }
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion

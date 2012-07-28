@@ -141,7 +141,7 @@ namespace Ankh.VS.Dialogs
             List<CommandData> items;
 
             if (!_data.TryGetValue(cd, out items))
-                return (int)Constants.OLECMDERR_E_NOTSUPPORTED;
+                return VSErr.OLECMDERR_E_NOTSUPPORTED;
 
             foreach (CommandData d in items)
             {
@@ -156,15 +156,15 @@ namespace Ankh.VS.Dialogs
                     d.UpdateHandler(d.Control, ud);
 
                     if (!ud.Enabled)
-                        return (int)Constants.OLECMDERR_E_DISABLED;
+                        return VSErr.OLECMDERR_E_DISABLED;
                 }
 
                 d.Handler(d.Control, ce);
 
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
-            return (int)Constants.OLECMDERR_E_NOTSUPPORTED;
+            return VSErr.OLECMDERR_E_NOTSUPPORTED;
         }
 
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
@@ -179,7 +179,7 @@ namespace Ankh.VS.Dialogs
             List<CommandData> items;
 
             if (!_data.TryGetValue(cd, out items))
-                return (int)Constants.OLECMDERR_E_NOTSUPPORTED;
+                return VSErr.OLECMDERR_E_NOTSUPPORTED;
 
             foreach (CommandData d in items)
             {
@@ -192,7 +192,7 @@ namespace Ankh.VS.Dialogs
                     d.UpdateHandler(d.Control, ee);
 
                 if (ee.DynamicMenuEnd)
-                    return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+                    return VSErr.OLECMDERR_E_NOTSUPPORTED;
 
                 OLECMDF cmdf = OLECMDF.OLECMDF_SUPPORTED;
 
@@ -200,10 +200,10 @@ namespace Ankh.VS.Dialogs
 
                 prgCmds[0].cmdf = (uint)cmdf;
 
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
-            return (int)Constants.OLECMDERR_E_NOTSUPPORTED;
+            return VSErr.OLECMDERR_E_NOTSUPPORTED;
         }
 
         #endregion

@@ -41,7 +41,7 @@ namespace Ankh.VSPackage
 
         public int Close()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public virtual int CreateEditorInstance(uint grfCreateDoc, string pszMkDocument, string pszPhysicalView, IVsHierarchy pvHier, uint itemid, IntPtr punkDocDataExisting, out IntPtr ppunkDocView, out IntPtr ppunkDocData, out string pbstrEditorCaption, out Guid pguidCmdUI, out int pgrfCDW)
@@ -67,7 +67,7 @@ namespace Ankh.VSPackage
             ppunkDocData = Marshal.GetIUnknownForObject(doc);
 
             pbstrEditorCaption = form.Text;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         protected abstract Guid FactoryId { get; }
@@ -81,7 +81,7 @@ namespace Ankh.VSPackage
             if (rguidLogicalView == VSConstants.LOGVIEWID_Primary)
             {
                 pbstrPhysicalView = null;
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
             return VSConstants.E_NOTIMPL;
@@ -90,7 +90,7 @@ namespace Ankh.VSPackage
         public int SetSite(IOleServiceProvider psp)
         {
             _site = psp;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion

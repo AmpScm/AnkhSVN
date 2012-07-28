@@ -81,7 +81,7 @@ namespace Ankh.VS.Selection
             _activeDocumentFileName = null; // Flush on every document state change
             ClearCache();
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #region ISelectionContextEx Members
@@ -394,19 +394,19 @@ namespace Ankh.VS.Selection
                     if (_ctx._currentContainer != null)
                         ppSC = Marshal.GetIUnknownForObject(_ctx._currentContainer);
                 }
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
             public int IsMyHierarchyCurrent(out int pfCurrent)
             {
                 pfCurrent = 0; // Not used by our code
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
             public int OnElementValueChange(uint elementid, int fDontPropagate, object varValue)
             {
                 // Not used by our code
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
             public int OnSelectChange(ISelectionContainer pSC)
@@ -417,7 +417,7 @@ namespace Ankh.VS.Selection
                         _ctx.current.hierarchy, _ctx.current.id, _ctx.current.selection, pSC);
                 }
 
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
             public int OnSelectChangeEx(IntPtr pHier, uint itemid, IVsMultiItemSelect pMIS, IntPtr pSC)
@@ -439,7 +439,7 @@ namespace Ankh.VS.Selection
                 if (pSC != IntPtr.Zero)
                     Marshal.Release(pSC);
 
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
             #endregion

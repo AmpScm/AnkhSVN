@@ -179,7 +179,7 @@ namespace Ankh.Scc
 
         public int OnAfterSccStatusChanged(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, uint[] rgdwSccStatus)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion
@@ -191,7 +191,7 @@ namespace Ankh.Scc
         /// <param name="cFiles">[in] The number of files in the rgpszMkDocuments array.</param>
         /// <param name="rgpszMkDocuments">[in] If there are any locks on this array of file names, the caller wants them to be released.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int HandsOffFiles(uint grfRequiredAccess, int cFiles, string[] rgpszMkDocuments)
         {
@@ -208,7 +208,7 @@ namespace Ankh.Scc
                         _fileHints.Add(fullFile);
                 }
             }
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -217,11 +217,11 @@ namespace Ankh.Scc
         /// <param name="cFiles">[in] Number of file names given in the rgpszMkDocuments array.</param>
         /// <param name="rgpszMkDocuments">[in] An array of file names.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int HandsOnFiles(int cFiles, string[] rgpszMkDocuments)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         bool _registeredSccCleanup;

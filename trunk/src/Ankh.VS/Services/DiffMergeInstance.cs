@@ -83,24 +83,24 @@ namespace Ankh.VS.Services
 
         public int OnDockableChange(int fDockable)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnMove()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnShow(int fShow)
         {
             if (fShow == (int)__FRAMESHOW.FRAMESHOW_WinClosed)
                 Dispose(true);
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnSize()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnClose(ref uint pgrfSaveOptions)
@@ -109,22 +109,22 @@ namespace Ankh.VS.Services
             {
                 // Prompt for handled, etc?
             }
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnDockableChange(int fDockable, int x, int y, int w, int h)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnMove(int x, int y, int w, int h)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnSize(int x, int y, int w, int h)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
     }
 }
