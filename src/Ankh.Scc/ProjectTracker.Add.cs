@@ -269,7 +269,6 @@ namespace Ankh.Scc
                         if (!SvnItem.IsValidPath(rawFile))
                             continue;
 
-                        // The clipboard somehow only has lowercase filenames. Obtain the full path
                         string file = SvnTools.GetNormalizedFullPath(rawFile);
 
                         if (_fileOrigins.ContainsKey(file))
