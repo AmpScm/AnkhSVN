@@ -87,14 +87,14 @@ namespace Ankh.VSPackage
                 }
                 return VSConstants.S_OK;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
 
                 if (handler != null)
-                    handler.OnError(e);
+                    handler.OnError(ex);
 
-                return e.HResult;
+                return Marshal.GetHRForException(ex);
             }
         }
 
@@ -128,14 +128,14 @@ namespace Ankh.VSPackage
 
                 return hr;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
 
                 if (handler != null)
-                    handler.OnError(e);
+                    handler.OnError(ex);
 
-                return e.HResult;
+                return Marshal.GetHRForException(ex);
             }
         }
 
@@ -143,7 +143,7 @@ namespace Ankh.VSPackage
         {
             if (Scc == null)
                 return VSConstants.S_OK;
-            else if(pPropBag == null)
+            else if (pPropBag == null)
                 return VSConstants.E_POINTER;
 
             try
@@ -166,14 +166,14 @@ namespace Ankh.VSPackage
 
                 return VSConstants.S_OK;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
 
                 if (handler != null)
-                    handler.OnError(e);
+                    handler.OnError(ex);
 
-                return e.HResult;
+                return Marshal.GetHRForException(ex);
             }
         }
 
@@ -240,7 +240,7 @@ namespace Ankh.VSPackage
             {
                 pPersistence.LoadPackageUserOpts(this, SccPendingChangeStream);
                 pPersistence.LoadPackageUserOpts(this, SccExcludedStream);
-                pPersistence.LoadPackageUserOpts(this, SccEnlistStream);                
+                pPersistence.LoadPackageUserOpts(this, SccEnlistStream);
 
                 return VSConstants.S_OK;
             }
@@ -379,7 +379,7 @@ namespace Ankh.VSPackage
         {
             IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
 
-            if(monitor == null)
+            if (monitor == null)
                 return;
 
             using (BinaryReader br = new BinaryReader(storageStream))
@@ -387,12 +387,12 @@ namespace Ankh.VSPackage
                 int n = br.ReadInt32();
                 List<string> files = new List<string>();
 
-                for(int i = 0; i < n; i++)
+                for (int i = 0; i < n; i++)
                 {
                     files.Add(br.ReadString());
                 }
 
-                monitor.ScheduleMonitor(files);                    
+                monitor.ScheduleMonitor(files);
             }
         }
         #endregion
