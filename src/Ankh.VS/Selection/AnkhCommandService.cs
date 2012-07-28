@@ -116,7 +116,7 @@ namespace Ankh.Services
                 OLECMD[] cmd = new OLECMD[1];
                 cmd[0].cmdID = unchecked((uint)command.ID);
 
-                if (VSConstants.S_OK != dispatcher.QueryStatus(ref g, 1, cmd, IntPtr.Zero))
+                if (VSErr.S_OK != dispatcher.QueryStatus(ref g, 1, cmd, IntPtr.Zero))
                     return new CommandResult(false);
 
                 OLECMDF flags = (OLECMDF)cmd[0].cmdf;
@@ -305,7 +305,7 @@ namespace Ankh.Services
                 Guid set = command.Guid;
                 object a = args;
 
-                return VSConstants.S_OK == shell.PostExecCommand(ref set,
+                return VSErr.S_OK == shell.PostExecCommand(ref set,
                         unchecked((uint)command.ID), flags, ref a);
             }
 

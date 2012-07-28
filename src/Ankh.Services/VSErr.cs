@@ -110,6 +110,14 @@ namespace Ankh
         OLE_E_CANTCONVERT = unchecked((int)0x80040011),
         OLE_E_NOSTORAGE = unchecked((int)0x80040012);
 
+        public const int
+        OLECMDERR_E_FIRST = unchecked((int)0x80040100),
+        OLECMDERR_E_NOTSUPPORTED = unchecked((int)0x80040100),
+        OLECMDERR_E_DISABLED = unchecked((int)0x80040101),
+        OLECMDERR_E_NOHELP = unchecked((int)0x80040102),
+        OLECMDERR_E_CANCELED = unchecked((int)0x80040103),
+        OLECMDERR_E_UNKNOWNGROUP = unchecked((int)0x80040102);
+
         // OLE DISP HRESULTS - may be returned by OLE DISP or related VS methods 
 
         public const int

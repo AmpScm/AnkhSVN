@@ -676,13 +676,13 @@ namespace Ankh.Scc.ProjectMap
 
         public int DirectoryChanged(string pszDirectory)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
         {
             if (rgpszFile == null || cChanges == 0)
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
 
             try
             {
@@ -704,7 +704,7 @@ namespace Ankh.Scc.ProjectMap
                     throw;
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
         #endregion
     }

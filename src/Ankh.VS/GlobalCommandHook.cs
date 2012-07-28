@@ -137,11 +137,11 @@ namespace Ankh.VS
             // Exit as quickly as possible without creating exceptions. This function is performance critical!
 
             if (GuidRefIsNull(ref pguidCmdGroup))
-                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+                return VSErr.OLECMDERR_E_NOTSUPPORTED;
 
             Dictionary<int, EventHandler> cmdMap;
             if (!_commandMap.TryGetValue(pguidCmdGroup, out cmdMap))
-                return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
+                return VSErr.OLECMDERR_E_UNKNOWNGROUP;
 
             EventHandler handler;
             if (cmdMap.TryGetValue(unchecked((int)nCmdID), out handler))
@@ -161,13 +161,13 @@ namespace Ankh.VS
                 }
             }
 
-            return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+            return VSErr.OLECMDERR_E_NOTSUPPORTED;
         }
 
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             // Don't do anything here. This function is 100% performance critical!
-            return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+            return VSErr.OLECMDERR_E_NOTSUPPORTED;
         }
     }
 }

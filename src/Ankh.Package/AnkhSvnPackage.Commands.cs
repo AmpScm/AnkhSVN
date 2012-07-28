@@ -67,14 +67,14 @@ namespace Ankh.VSPackage
             if ((prgCmds == null))
                 return VSConstants.E_POINTER;
             else if (GuidRefIsNull(ref pguidCmdGroup))
-                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+                return VSErr.OLECMDERR_E_NOTSUPPORTED;
 
             Debug.Assert(cCmds == 1, "Multiple commands"); // Should never happen in VS
 
             if (Zombied || pguidCmdGroup != AnkhId.CommandSetGuid)
             {
                 // Filter out commands that are not defined by this package
-                return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
+                return VSErr.OLECMDERR_E_UNKNOWNGROUP;
             }
 
             int hr = CommandMapper.QueryStatus(Context, cCmds, prgCmds, pCmdText);
@@ -86,11 +86,11 @@ namespace Ankh.VSPackage
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
             if (GuidRefIsNull(ref pguidCmdGroup))
-                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+                return VSErr.OLECMDERR_E_NOTSUPPORTED;
 
             if (Zombied || pguidCmdGroup != AnkhId.CommandSetGuid)
             {
-                return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
+                return VSErr.OLECMDERR_E_UNKNOWNGROUP;
             }
 
             switch ((OLECMDEXECOPT)nCmdexecopt)
@@ -115,7 +115,7 @@ namespace Ankh.VSPackage
                     {
                         Marshal.GetNativeVariantForObject(definition, pvaOut);
 
-                        return VSConstants.S_OK;
+                        return VSErr.S_OK;
                     }
 
                     return VSConstants.E_NOTIMPL;
@@ -134,14 +134,14 @@ namespace Ankh.VSPackage
                 (OLECMDEXECOPT)nCmdexecopt == OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER);
 
             if (!CommandMapper.Execute(args.Command, args))
-                return (int)OLEConstants.OLECMDERR_E_DISABLED;
+                return VSErr.OLECMDERR_E_DISABLED;
 
             if (pvaOut != IntPtr.Zero)
             {
                 Marshal.GetNativeVariantForObject(args.Result, pvaOut);
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         [DebuggerStepThrough]

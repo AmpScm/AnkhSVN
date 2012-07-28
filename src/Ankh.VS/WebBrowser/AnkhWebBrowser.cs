@@ -95,67 +95,67 @@ namespace Ankh.VS.WebBrowser
 
         public int Disconnect()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int FilterDataObject(Microsoft.VisualStudio.OLE.Interop.IDataObject pDataObjIn, out Microsoft.VisualStudio.OLE.Interop.IDataObject ppDataObjOut)
         {
             ppDataObjOut = null;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int GetCmdUIGuid(out Guid pguidCmdUI)
         {
             pguidCmdUI = Guid.Empty;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int GetCustomMenuInfo(object pUnkCmdReserved, object pDispReserved, uint dwType, uint dwPosition, out Guid pguidCmdGroup, out int pdwMenuID)
         {
             pguidCmdGroup = Guid.Empty;
             pdwMenuID = 0;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int GetCustomURL(uint nPage, out string pbstrURL)
         {
             pbstrURL = null;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int GetDropTarget(Microsoft.VisualStudio.OLE.Interop.IDropTarget pDropTgtIn, out Microsoft.VisualStudio.OLE.Interop.IDropTarget ppDropTgtOut)
         {
             ppDropTgtOut = null;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int GetExternalObject(out object ppDispObject)
         {
 
             ppDispObject = null;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int GetOptionKeyPath(uint dwReserved, out string pbstrKey)
         {
             pbstrKey = null;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int Resize(int cx, int cy)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int TranslateAccelarator(Microsoft.VisualStudio.OLE.Interop.MSG[] lpmsg)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int TranslateUrl(uint dwReserved, string lpszURLIn, out string lppszURLOut)
         {
             lppszURLOut = null;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion

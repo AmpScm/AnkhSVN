@@ -46,14 +46,14 @@ namespace Ankh.Scc.ProjectMap
 
         public int OnInvalidateIcon(IntPtr hicon)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnInvalidateItems(uint itemidParent)
         {
             // Should be set the project dirty.. 
             // But is called in some cases when it really shouldn't
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         private void SetDirty()
@@ -93,7 +93,7 @@ namespace Ankh.Scc.ProjectMap
             if (VSErr.Succeeded(ProjectHierarchy.GetProperty(itemidAdded, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
                 && (bool)var)
             {
-                return VSConstants.S_OK; // Extra item for show all files
+                return VSErr.S_OK; // Extra item for show all files
             }
 
             if (_loaded)
@@ -114,7 +114,7 @@ namespace Ankh.Scc.ProjectMap
                 }
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnItemDeleted(uint itemid)
@@ -125,18 +125,18 @@ namespace Ankh.Scc.ProjectMap
             if (VSErr.Succeeded(ProjectHierarchy.GetProperty(itemid, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
                 && (bool)var)
             {
-                return VSConstants.S_OK; // Extra item for show all files
+                return VSErr.S_OK; // Extra item for show all files
             }
 
             SetDirty();
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnItemsAppended(uint itemidParent)
         {
             SetDirty();
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnPropertyChanged(uint itemid, int propid, uint flags)
@@ -151,7 +151,7 @@ namespace Ankh.Scc.ProjectMap
                 _sccBaseDirectory = null;
                 _checkedProjectFile = false;
             }
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
     }
 }

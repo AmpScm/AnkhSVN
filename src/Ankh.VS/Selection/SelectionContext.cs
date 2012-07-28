@@ -125,7 +125,7 @@ namespace Ankh.VS.Selection
                 CmdUIContextChanged(this, new CmdUIContextChangeEventArgs(dwCmdUICookie, fActive != 0));
 
             /// Some global state change which might change UI cueues
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         Disposer _disposer;
@@ -158,7 +158,7 @@ namespace Ankh.VS.Selection
 
             ClearCache();
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         private void ClearCache()
@@ -490,7 +490,7 @@ namespace Ankh.VS.Selection
                 else if (e is NotImplementedException)
                     hr = VSConstants.E_NOTIMPL; // From Microsoft.VisualStudio.PerformanceTools.DummyVsUIHierarchy.GetNestedHierarchy()
                 else
-                    hr = VSConstants.E_FAIL;
+                    hr = VSErr.E_FAIL;
 
                 hierPtr = IntPtr.Zero;
                 subId = VSConstants.VSITEMID_NIL;

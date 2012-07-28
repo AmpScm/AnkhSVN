@@ -158,7 +158,7 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
         public int OnLoadCompleted(int fReload)
         {
             _shouldParse = true;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion

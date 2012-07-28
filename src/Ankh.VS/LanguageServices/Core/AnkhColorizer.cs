@@ -94,7 +94,7 @@ namespace Ankh.VS.LanguageServices.Core
         int IVsColorizer.GetStartState(out int startState)
         {
             startState = StartState;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         protected virtual int StartState
@@ -122,7 +122,7 @@ namespace Ankh.VS.LanguageServices.Core
         int IVsColorizer.GetStateMaintenanceFlag(out int pfFlag)
         {
             pfFlag = Language.NeedsPerLineState ? 1 : 0;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion
@@ -131,12 +131,12 @@ namespace Ankh.VS.LanguageServices.Core
 
         public int BeginColorization()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int EndColorization()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion

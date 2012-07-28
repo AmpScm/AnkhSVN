@@ -210,7 +210,7 @@ namespace Ankh.VS.LanguageServices.Core
             else
                 phImageList = imageList.Handle;
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         [CLSCompliant(false)]
@@ -230,7 +230,7 @@ namespace Ankh.VS.LanguageServices.Core
             else
                 pbstrText = null;
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         int IVsDropdownBarClient.GetEntryAttributes(int iCombo, int iIndex, out uint pAttr)
@@ -238,16 +238,16 @@ namespace Ankh.VS.LanguageServices.Core
             if (iIndex < 0)
             {
                 pAttr = 0;
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
             pAttr = (uint)_combos[iCombo][iIndex].Attributes;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         int IVsDropdownBarClient.GetEntryImage(int iCombo, int iIndex, out int piImageIndex)
         {
             piImageIndex = GetEntryImage(iCombo, iIndex);
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         protected virtual int GetEntryImage(int iCombo, int iIndex)
@@ -260,10 +260,10 @@ namespace Ankh.VS.LanguageServices.Core
             if (iIndex < 0)
             {
                 ppszText = "";
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
             ppszText = GetEntryText(iCombo, iIndex);
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         protected virtual string GetEntryText(int iCombo, int iIndex)
@@ -273,7 +273,7 @@ namespace Ankh.VS.LanguageServices.Core
 
         int IVsDropdownBarClient.OnComboGetFocus(int iCombo)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         int IVsDropdownBarClient.OnItemChosen(int iCombo, int iIndex)
@@ -282,7 +282,7 @@ namespace Ankh.VS.LanguageServices.Core
 
             if (iIndex >= 0 && _activeView != null)
                 OnItemChosen(iCombo, iIndex);
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         protected virtual void OnItemChosen(int iCombo, int iIndex)
@@ -292,14 +292,14 @@ namespace Ankh.VS.LanguageServices.Core
 
         public int OnItemSelected(int iCombo, int iIndex)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         [CLSCompliant(false)]
         public int SetDropdownBar(IVsDropdownBar pDropdownBar)
         {
             _bar = pDropdownBar;
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion

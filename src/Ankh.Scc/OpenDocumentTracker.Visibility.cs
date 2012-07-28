@@ -39,7 +39,7 @@ namespace Ankh.Scc
                     ProjectPropertyPageFixup(dd);
                 }
             }
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }        
 
         public int OnAfterDocumentWindowHide(uint docCookie, IVsWindowFrame pFrame)
@@ -55,7 +55,7 @@ namespace Ankh.Scc
                     ProjectPropertyPageFixup(dd);
                 }
             }
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         private void ProjectPropertyPageFixup(ProjectMap.SccDocumentData dd)

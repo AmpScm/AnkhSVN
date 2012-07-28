@@ -566,7 +566,7 @@ namespace Ankh.Scc
                     }
                     break;
             }
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         #endregion

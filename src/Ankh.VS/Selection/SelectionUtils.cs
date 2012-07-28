@@ -367,7 +367,7 @@ namespace Ankh.VS.Selection
                     pCaFlagsOut[0].cElems = 0;
                     pCaFlagsOut[0].pElems = IntPtr.Zero;
 
-                    return VSConstants.S_OK;
+                    return VSErr.S_OK;
                 }
 
                 return VSConstants.E_NOTIMPL;

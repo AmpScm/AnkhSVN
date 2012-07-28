@@ -65,7 +65,7 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Ankh.Scc
         /// <param name="pSummaryResult">[out] Returns an overall status for all files as a value from the <see cref="T:Microsoft.VisualStudio.Shell.Interop.VSQUERYADDFILERESULTS"></see> enumeration.</param>
         /// <param name="rgResults">[out] An array that is to be filled in with the status of each file. Each status is a value from the <see cref="T:Microsoft.VisualStudio.Shell.Interop.VSQUERYADDFILERESULTS"></see> enumeration.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         /// <remarks>Deny a query only if allowing the operation would compromise your stable state</remarks>
         public int OnQueryAddFilesEx(IVsProject pProject, int cFiles, string[] rgpszNewMkDocuments, string[] rgpszSrcMkDocuments, VSQUERYADDFILEFLAGS[] rgFlags, VSQUERYADDFILERESULTS[] pSummaryResult, VSQUERYADDFILERESULTS[] rgResults)
@@ -116,7 +116,7 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace Ankh.Scc
                     }
                 }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         private void TryFindOrigin(string newName, out string origin)
@@ -434,7 +434,7 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddOK;
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -499,7 +499,7 @@ namespace Ankh.Scc
                 }
             }
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         internal void OnDocumentSaveAs(string oldName, string newName)

@@ -53,27 +53,27 @@ namespace Ankh.Scc
             if (_trueNameMap.TryGetValue(lpszEnlistmentPath, out pbstrProjectPath))
             {
                 // Already set the path
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
             else if (_trueNameMap.TryGetValue(lpszEnlistmentPath + "\\", out pbstrProjectPath))
             {
                 pbstrProjectPath += "\\";
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
             else if (_trueNameMap.TryGetValue(lpszEnlistmentPath.TrimEnd('\\'), out pbstrProjectPath))
             {
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
             if (!IsSafeSccPath(lpszEnlistmentPath))
             {
                 pbstrProjectPath = lpszEnlistmentPath;
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
             pbstrProjectPath = lpszEnlistmentPath;
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Ankh.Scc
         /// <param name="pbstrEnlistmentPath">[out] The local path used by the solution for loading and saving the project.</param>
         /// <param name="pbstrEnlistmentPathUNC">[out] The path used by the source control system for managing the enlistment ("\\drive\path", "[drive]:\path", "file://server/path").</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"/>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"/>. If it fails, it returns an error code.
         /// </returns>
         public int TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
         {
@@ -96,13 +96,13 @@ namespace Ankh.Scc
             {
                 pbstrEnlistmentPath = info.EnlistmentPath;
                 pbstrEnlistmentPathUNC = info.EnlistmentPathUNC;
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
             if (!IsSafeSccPath(lpszProjectPath))
             {
                 pbstrEnlistmentPath = pbstrEnlistmentPathUNC = lpszProjectPath;
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
             string trueProjectPath = CalculateTruePath(lpszProjectPath);
@@ -114,7 +114,7 @@ namespace Ankh.Scc
 
             pbstrEnlistmentPath = pbstrEnlistmentPathUNC = trueProjectPath;
 
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         private string CalculateTruePath(string lpszProjectPath)

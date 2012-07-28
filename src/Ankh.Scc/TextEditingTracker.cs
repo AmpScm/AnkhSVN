@@ -74,32 +74,32 @@ namespace Ankh.Scc
 
         public int OnRegisterMarkerType(int iMarkerType)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnRegisterView(IVsTextView pView)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnReplaceAllInFilesBegin()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnReplaceAllInFilesEnd()
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnUnregisterView(IVsTextView pView)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
 
         public int OnUserPreferencesChanged2(VIEWPREFERENCES2[] pViewPrefs, FRAMEPREFERENCES2[] pFramePrefs, LANGPREFERENCES2[] pLangPrefs, FONTCOLORPREFERENCES2[] pColorPrefs)
         {
-            return VSConstants.S_OK;
+            return VSErr.S_OK;
         }
     }
 }

@@ -391,19 +391,19 @@ namespace Ankh.Scc
             int IVsFileChangeEvents.DirectoryChanged(string pszDirectory)
             {
                 if (string.IsNullOrEmpty(pszDirectory))
-                    return VSConstants.S_OK;
+                    return VSErr.S_OK;
 
                 if (!_changedPaths.Contains(pszDirectory))
                     _changedPaths.Add(pszDirectory);
 
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
 
             // Called by the file monitor when a monitored file has changed
             int IVsFileChangeEvents.FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
             {
                 if (cChanges == 0 || rgpszFile == null)
-                    return VSConstants.S_OK;
+                    return VSErr.S_OK;
 
                 for (int i = 0; i < cChanges && i < rgpszFile.Length; i++)
                 {
@@ -415,7 +415,7 @@ namespace Ankh.Scc
                         _changedPaths.Add(file);
                 }
 
-                return VSConstants.S_OK;
+                return VSErr.S_OK;
             }
             #endregion
 

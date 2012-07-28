@@ -59,7 +59,7 @@ namespace Ankh.VSPackage.OptionPages
 
 		public int IsPageDirty()
 		{
-			return VSConstants.S_FALSE; // Not dirty (S_OK = Dirty)
+			return VSErr.S_FALSE; // Not dirty (S_OK = Dirty)
 		}
 
 		public void Move(RECT[] pRect)
@@ -92,12 +92,12 @@ namespace Ankh.VSPackage.OptionPages
 			Control control = Control.FromChildHandle(message.HWnd);
 
 			if (control != null && control.PreProcessMessage(ref message))
-				return VSConstants.S_OK;
+				return VSErr.S_OK;
 			
 			if (Site != null)
 				return Site.TranslateAccelerator(pMsg);
 			
-			return VSConstants.S_OK;
+			return VSErr.S_OK;
 		}
 
 		public void EditProperty(int DISPID)
