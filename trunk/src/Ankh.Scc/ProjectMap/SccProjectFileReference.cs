@@ -148,7 +148,7 @@ namespace Ankh.Scc.ProjectMap
 
                 if (imageList != IntPtr.Zero)
                 {
-                    if (ErrorHandler.Succeeded(
+                    if (VSErr.Succeeded(
                         Project.ProjectHierarchy.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconIndex, out value)))
                     {
                         icon = new ProjectIconReference(imageList, SafeToInt(value));
@@ -158,7 +158,7 @@ namespace Ankh.Scc.ProjectMap
 
                 // Only do this if we know there is no imagelist behind the icons
                 // (This will create a cached icon handle if called on a managed project, which we only need once)
-                if (imageList == IntPtr.Zero && ErrorHandler.Succeeded(
+                if (imageList == IntPtr.Zero && VSErr.Succeeded(
                     Project.ProjectHierarchy.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconHandle, out value)))
                 {
                     icon = new ProjectIconReference((IntPtr)SafeToInt(value)); // Marshalled by VS as 32 bit integer
@@ -210,7 +210,7 @@ namespace Ankh.Scc.ProjectMap
 
             IntPtr DOCDATAEXISTING_UNKNOWN = (IntPtr)(int)-1;
             IVsWindowFrame frame;
-            return ErrorHandler.Succeeded(
+            return VSErr.Succeeded(
                 Project.VsProject.OpenItem(ProjectItemId, ref editorType, DOCDATAEXISTING_UNKNOWN, out frame));
         }
 

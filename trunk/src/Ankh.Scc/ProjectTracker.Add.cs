@@ -260,11 +260,11 @@ namespace Ankh.Scc
                     Guid projectGuid = ci.ProjectGuid;
                     IVsHierarchy project;
 
-                    if (!ErrorHandler.Succeeded(solution.GetProjectOfGuid(ref projectGuid, out project)) || project == null)
+                    if (!VSErr.Succeeded(solution.GetProjectOfGuid(ref projectGuid, out project)) || project == null)
                         continue;
 
                     uint itemid;
-                    if (!ErrorHandler.Succeeded(project.ParseCanonicalName(ci.FileName, out itemid)))
+                    if (!VSErr.Succeeded(project.ParseCanonicalName(ci.FileName, out itemid)))
                         continue;
 
                     foreach(string rawFile in walker.GetSccFiles(project, itemid, ProjectWalkDepth.AllDescendantsInHierarchy, null))

@@ -141,7 +141,7 @@ namespace Ankh.Services
                     Marshal.GetNativeVariantForObject(argument, vIn);
                 }
 
-                bool ok = ErrorHandler.Succeeded(dispatcher.Exec(ref g,
+                bool ok = VSErr.Succeeded(dispatcher.Exec(ref g,
                     unchecked((uint)command.ID), (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero));
 
                 return new CommandResult(ok, Marshal.GetObjectForNativeVariant(vOut));

@@ -142,7 +142,7 @@ namespace Ankh.Scc.ProjectMap
                     _projectName = "";
                     object name;
 
-                    if (ErrorHandler.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_Name, out name)))
+                    if (VSErr.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_Name, out name)))
                     {
                         _projectName = name as string;
                     }
@@ -164,7 +164,7 @@ namespace Ankh.Scc.ProjectMap
                     IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
 
                     Guid value;
-                    if (ErrorHandler.Succeeded(solution.GetGuidOfProject(ProjectHierarchy, out value)))
+                    if (VSErr.Succeeded(solution.GetGuidOfProject(ProjectHierarchy, out value)))
                         _projectGuid = value;
                 }
 
@@ -182,7 +182,7 @@ namespace Ankh.Scc.ProjectMap
                 if (!_projectTypeGuid.HasValue)
                 {
                     Guid value;
-                    if (ErrorHandler.Succeeded(_hierarchy.GetGuidProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_TypeGuid, out value)))
+                    if (VSErr.Succeeded(_hierarchy.GetGuidProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_TypeGuid, out value)))
                         _projectTypeGuid = value;
                 }
 
@@ -203,7 +203,7 @@ namespace Ankh.Scc.ProjectMap
                     _projectDirectory = "";
                     object name;
 
-                    if (ErrorHandler.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ProjectDir, out name)))
+                    if (VSErr.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ProjectDir, out name)))
                     {
                         string dir = name as string;
 
@@ -249,7 +249,7 @@ namespace Ankh.Scc.ProjectMap
                     _checkedProjectFile = true;
                     string name;
 
-                    if (ErrorHandler.Succeeded(_vsProject.GetMkDocument(VSConstants.VSITEMID_ROOT, out name)))
+                    if (VSErr.Succeeded(_vsProject.GetMkDocument(VSConstants.VSITEMID_ROOT, out name)))
                     {
                         _projectLocation = name;
                         if (SvnItem.IsValidPath(name, true))
@@ -328,7 +328,7 @@ namespace Ankh.Scc.ProjectMap
 
                 VSSCCPROVIDERBINDING[] ppb = new VSSCCPROVIDERBINDING[1];
                 if (providerBinding != null &&
-                    Microsoft.VisualStudio.ErrorHandler.Succeeded(providerBinding.GetProviderBinding(ppb)))
+                    VSErr.Succeeded(providerBinding.GetProviderBinding(ppb)))
                 {
                     VSSCCPROVIDERBINDING pb = ppb[0];
 
@@ -353,7 +353,7 @@ namespace Ankh.Scc.ProjectMap
                 {
                     string name;
 
-                    if (ErrorHandler.Succeeded(solution.GetUniqueUINameOfProject(ProjectHierarchy, out name)))
+                    if (VSErr.Succeeded(solution.GetUniqueUINameOfProject(ProjectHierarchy, out name)))
                         _uniqueName = name;
                 }
                 return _uniqueName ?? ProjectName;
@@ -662,7 +662,7 @@ namespace Ankh.Scc.ProjectMap
                     IVsSccProjectEnlistmentChoice pec = VsProject as IVsSccProjectEnlistmentChoice;
 
                     VSSCCENLISTMENTCHOICE[] choiceList = new VSSCCENLISTMENTCHOICE[1];
-                    if (pec == null || !ErrorHandler.Succeeded(pec.GetEnlistmentChoice(choiceList)))
+                    if (pec == null || !VSErr.Succeeded(pec.GetEnlistmentChoice(choiceList)))
                     {
                         _sccEnlistChoice = SccEnlistChoice.Never;
 
@@ -803,7 +803,7 @@ namespace Ankh.Scc.ProjectMap
 
                 _fetchedImgList = true;
                 object value;
-                if (ErrorHandler.Succeeded(ProjectHierarchy.GetProperty(VSConstants.VSITEMID_ROOT,
+                if (VSErr.Succeeded(ProjectHierarchy.GetProperty(VSConstants.VSITEMID_ROOT,
                     (int)__VSHPROPID.VSHPROPID_IconImgList, out value)))
                 {
                     _projectImgList = (IntPtr)(int)value; // Marshalled by VS as 32 bit integer
@@ -825,7 +825,7 @@ namespace Ankh.Scc.ProjectMap
             uint id;
             VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
 
-            if (ErrorHandler.Succeeded(
+            if (VSErr.Succeeded(
                 VsProject.IsDocumentInProject(path, out found, prio, out id)))
             {
                 // Priority also returns information on whether the file can be added

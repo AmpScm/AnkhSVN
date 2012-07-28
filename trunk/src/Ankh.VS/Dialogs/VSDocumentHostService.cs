@@ -44,7 +44,7 @@ namespace Ankh.VS.Dialogs
         {
             VSDocumentFormPane pane = null;
             object value;
-            if (ErrorHandler.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out value)))
+            if (VSErr.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out value)))
             {
                 pane = value as VSDocumentFormPane;
             }

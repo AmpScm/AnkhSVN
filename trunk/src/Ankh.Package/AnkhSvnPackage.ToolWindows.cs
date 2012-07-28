@@ -308,7 +308,7 @@ namespace Ankh.VSPackage
             if (t != null)
                 r = t.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
 
-            if (ErrorHandler.Succeeded(r))
+            if (VSErr.Succeeded(r))
                 return r;
             else
                 return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
@@ -333,7 +333,7 @@ namespace Ankh.VSPackage
         private Guid GetGuid(__VSFPROPID id)
         {
             Guid gResult;
-            if (ErrorHandler.Succeeded(Frame.GetGuidProperty((int)id, out gResult)))
+            if (VSErr.Succeeded(Frame.GetGuidProperty((int)id, out gResult)))
                 return gResult;
             else
                 return Guid.Empty;
@@ -358,7 +358,7 @@ namespace Ankh.VSPackage
                 {
                     int onScreen;
 
-                    if (ErrorHandler.Succeeded(frame.IsOnScreen(out onScreen)) && onScreen != 0)
+                    if (VSErr.Succeeded(frame.IsOnScreen(out onScreen)) && onScreen != 0)
                         return true;
                 }
 
@@ -500,7 +500,7 @@ namespace Ankh.VSPackage
                 object obj;
 
                 if (frame != null
-                    && ErrorHandler.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_ToolbarHost, out obj)))
+                    && VSErr.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_ToolbarHost, out obj)))
                 {
                     IVsToolWindowToolbarHost host = obj as IVsToolWindowToolbarHost;
 

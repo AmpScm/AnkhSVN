@@ -45,7 +45,7 @@ namespace Ankh.VS.Services
 
                     if (dlg != null)
                     {
-                        if (ErrorHandler.Succeeded(dlg.StartWaitDialog(_caption, _message, null, (uint)__VSTWDFLAGS.VSTWDFLAGS_TOPMOST, null, null)))
+                        if (VSErr.Succeeded(dlg.StartWaitDialog(_caption, _message, null, (uint)__VSTWDFLAGS.VSTWDFLAGS_TOPMOST, null, null)))
                             _dlg = dlg;
                     }
                 }

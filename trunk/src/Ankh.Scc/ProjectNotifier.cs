@@ -44,7 +44,7 @@ namespace Ankh.Scc
             : base(context)
         {
             uint cookie;
-            if (ErrorHandler.Succeeded(Shell.AdviseBroadcastMessages(this, out cookie)))
+            if (VSErr.Succeeded(Shell.AdviseBroadcastMessages(this, out cookie)))
                 _cookie = cookie;
         }
 

@@ -390,7 +390,7 @@ namespace Ankh.VS.LanguageServices.Core
                 {
                     LANGPREFERENCES2[] langPrefs2 = new LANGPREFERENCES2[1];
                     langPrefs2[0] = this.prefs;
-                    if (ErrorHandler.Succeeded(textMgr2.GetUserPreferences2(null, null, langPrefs2, null)))
+                    if (VSErr.Succeeded(textMgr2.GetUserPreferences2(null, null, langPrefs2, null)))
                     {
                         this.prefs = langPrefs2[0];
                     }
@@ -411,7 +411,7 @@ namespace Ankh.VS.LanguageServices.Core
                 this.prefs.guidLang = langSvc;
                 LANGPREFERENCES2[] langPrefs2 = new LANGPREFERENCES2[1];
                 langPrefs2[0] = this.prefs;
-                if (!ErrorHandler.Succeeded(textMgr2.SetUserPreferences2(null, null, langPrefs2, null)))
+                if (!VSErr.Succeeded(textMgr2.SetUserPreferences2(null, null, langPrefs2, null)))
                 {
                     Debug.Assert(false, "textMgr2.SetUserPreferences2");
                 }

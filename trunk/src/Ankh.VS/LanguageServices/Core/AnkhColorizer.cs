@@ -77,7 +77,7 @@ namespace Ankh.VS.LanguageServices.Core
                 return null;
 
             int lastLine, lastIndex;
-            if (!ErrorHandler.Succeeded(_lines.GetLastLineIndex(out lastLine, out lastIndex)))
+            if (!VSErr.Succeeded(_lines.GetLastLineIndex(out lastLine, out lastIndex)))
                 return null;
 
             if (lineNr > lastLine)
@@ -85,7 +85,7 @@ namespace Ankh.VS.LanguageServices.Core
 
             LINEDATA[] data = new LINEDATA[1];
 
-            if (!ErrorHandler.Succeeded(_lines.GetLineData(lineNr, data, null)))
+            if (!VSErr.Succeeded(_lines.GetLineData(lineNr, data, null)))
                 return null;
 
             return Marshal.PtrToStringUni(data[0].pszText, data[0].iLength);

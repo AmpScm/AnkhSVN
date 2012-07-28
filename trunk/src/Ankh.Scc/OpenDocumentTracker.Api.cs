@@ -93,7 +93,7 @@ namespace Ankh.Scc
                 return true; // Not/never modified, no need to save
 
             // Save the document if it is dirty
-            return ErrorHandler.Succeeded(RunningDocumentTable.SaveDocuments((uint)__VSRDTSAVEOPTIONS.RDTSAVEOPT_PromptSave,
+            return VSErr.Succeeded(RunningDocumentTable.SaveDocuments((uint)__VSRDTSAVEOPTIONS.RDTSAVEOPT_PromptSave,
                 data.Hierarchy, data.ItemId, data.Cookie));
         }
 
@@ -298,7 +298,7 @@ namespace Ankh.Scc
                     // But to be able to tell if there are changes.. We keep some stats ourselves
 
                     if (!ignoring.Contains(file) &&
-                        ErrorHandler.Succeeded(_change.IgnoreFile(0, file, 1)))
+                        VSErr.Succeeded(_change.IgnoreFile(0, file, 1)))
                     {
                         _fsIgnored.Add(file);
                         FileInfo info = new FileInfo(file);
@@ -324,7 +324,7 @@ namespace Ankh.Scc
                     uint cky;
 
                     // BH: We don't monitor the attributes as some SVN actions put files temporary on read only!
-                    if (ErrorHandler.Succeeded(_change.AdviseFileChange(path, (uint)(/*_VSFILECHANGEFLAGS.VSFILECHG_Attr |*/
+                    if (VSErr.Succeeded(_change.AdviseFileChange(path, (uint)(/*_VSFILECHANGEFLAGS.VSFILECHG_Attr |*/
                         _VSFILECHANGEFLAGS.VSFILECHG_Size | _VSFILECHANGEFLAGS.VSFILECHG_Time), this, out cky)))
                     {
                         _monitor.Add(cky, path);

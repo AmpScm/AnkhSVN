@@ -223,7 +223,7 @@ namespace Ankh.VS.Selection
                     if (Solution != null)
                     {
                         string solutionDir, solutionFile, solutionUserFile;
-                        if (ErrorHandler.Succeeded(Solution.GetSolutionInfo(out solutionDir, out solutionFile, out solutionUserFile)))
+                        if (VSErr.Succeeded(Solution.GetSolutionInfo(out solutionDir, out solutionFile, out solutionUserFile)))
                         {
                             if (!string.IsNullOrEmpty(solutionFile))
                             {
@@ -275,7 +275,7 @@ namespace Ankh.VS.Selection
                     if (hw == null)
                         return false;
 
-                    if (!ErrorHandler.Succeeded(hw.GetCurrentSelection(out hierarchy, out itemId, out ms)))
+                    if (!VSErr.Succeeded(hw.GetCurrentSelection(out hierarchy, out itemId, out ms)))
                         return false;
 
                     IVsHierarchy hier = null;
@@ -309,7 +309,7 @@ namespace Ankh.VS.Selection
                     {
                         uint nItems;
                         int withinSingleHierarchy;
-                        if (ErrorHandler.Succeeded(current.selection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
+                        if (VSErr.Succeeded(current.selection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
                         {
                             if (nItems == 1)
                                 _isSingleNodeSelection = true;
@@ -368,7 +368,7 @@ namespace Ankh.VS.Selection
                 uint nItems;
                 int withinSingleHierarchy;
 
-                if (sel.selection == null || !ErrorHandler.Succeeded(sel.selection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
+                if (sel.selection == null || !VSErr.Succeeded(sel.selection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
                     yield break;
 
                 uint flags = 0;
@@ -378,7 +378,7 @@ namespace Ankh.VS.Selection
 
                 VSITEMSELECTION[] items = new VSITEMSELECTION[nItems];
 
-                if (!ErrorHandler.Succeeded(sel.selection.GetSelectedItems(flags, nItems, items)))
+                if (!VSErr.Succeeded(sel.selection.GetSelectedItems(flags, nItems, items)))
                     yield break;
 
                 for (int i = 0; i < nItems; i++)
@@ -485,7 +485,7 @@ namespace Ankh.VS.Selection
             {
                 ExternalException ee = e as ExternalException;
 
-                if (ee != null && !ErrorHandler.Succeeded(ee.ErrorCode))
+                if (ee != null && !VSErr.Succeeded(ee.ErrorCode))
                     hr = ee.ErrorCode; // Should have been returned instead
                 else if (e is NotImplementedException)
                     hr = VSConstants.E_NOTIMPL; // From Microsoft.VisualStudio.PerformanceTools.DummyVsUIHierarchy.GetNestedHierarchy()
@@ -496,7 +496,7 @@ namespace Ankh.VS.Selection
                 subId = VSConstants.VSITEMID_NIL;
             }
 
-            if (ErrorHandler.Succeeded(hr) && hierPtr != IntPtr.Zero)
+            if (VSErr.Succeeded(hr) && hierPtr != IntPtr.Zero)
             {
                 IVsHierarchy nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
                 Marshal.Release(hierPtr);
@@ -525,7 +525,7 @@ namespace Ankh.VS.Selection
                 yield break;
 
             object value;
-            if (!ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
+            if (!VSErr.Succeeded(si.Hierarchy.GetProperty(si.Id,
                 (int)__VSHPROPID.VSHPROPID_FirstChild, out value)))
             {
                 yield break;
@@ -541,7 +541,7 @@ namespace Ankh.VS.Selection
                     yield return ii;
                 }
 
-                if (!ErrorHandler.Succeeded(si.Hierarchy.GetProperty(i.Id,
+                if (!VSErr.Succeeded(si.Hierarchy.GetProperty(i.Id,
                     (int)__VSHPROPID.VSHPROPID_NextSibling, out value)))
                 {
                     yield break;
@@ -555,7 +555,7 @@ namespace Ankh.VS.Selection
         {
             object value;
 
-            if (ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
+            if (VSErr.Succeeded(si.Hierarchy.GetProperty(si.Id,
                 (int)__VSHPROPID.VSHPROPID_HasEnumerationSideEffects, out value)))
             {
                 if (value != null)
@@ -575,7 +575,7 @@ namespace Ankh.VS.Selection
                 }
             }
 
-            if (si.SccProject == null && ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
+            if (si.SccProject == null && VSErr.Succeeded(si.Hierarchy.GetProperty(si.Id,
                 (int)__VSHPROPID2.VSHPROPID_ChildrenEnumerated, out value)))
             {
                 if (value != null)
@@ -818,11 +818,11 @@ namespace Ankh.VS.Selection
             ISelectionContainer sc = _currentContainer;
 
             uint nItems;
-            if (sc == null || !ErrorHandler.Succeeded(sc.CountObjects((uint)ShellConstants.GETOBJS_SELECTED, out nItems)))
+            if (sc == null || !VSErr.Succeeded(sc.CountObjects((uint)ShellConstants.GETOBJS_SELECTED, out nItems)))
                 yield break;
 
             object[] objs = new object[(int)nItems];
-            if (ErrorHandler.Succeeded(sc.GetObjects((uint)ShellConstants.GETOBJS_SELECTED, nItems, objs)))
+            if (VSErr.Succeeded(sc.GetObjects((uint)ShellConstants.GETOBJS_SELECTED, nItems, objs)))
             {
                 foreach (object o in objs)
                 {

@@ -98,7 +98,7 @@ namespace Ankh.VS.Selection
                     CALPOLESTR[] str = new CALPOLESTR[1];
                     CADWORD[] dw = new CADWORD[1];
 
-                    if (ErrorHandler.Succeeded(hr = sccProject.GetSccFiles(id, str, dw)))
+                    if (VSErr.Succeeded(hr = sccProject.GetSccFiles(id, str, dw)))
                     {
                         files = GetFileNamesFromOleBuffer(str, true);
                         flags = GetFlagsFromOleBuffer(dw, true);
@@ -120,7 +120,7 @@ namespace Ankh.VS.Selection
                 {
                     string mkDocument;
 
-                    if (ErrorHandler.Succeeded(project.GetMkDocument(id, out mkDocument)))
+                    if (VSErr.Succeeded(project.GetMkDocument(id, out mkDocument)))
                     {
                         if (!IsValidPath(mkDocument))
                             files = new string[0];
@@ -141,7 +141,7 @@ namespace Ankh.VS.Selection
                 string name;
                 try
                 {
-                    if (ErrorHandler.Succeeded(hierarchy.GetCanonicalName(id, out name)))
+                    if (VSErr.Succeeded(hierarchy.GetCanonicalName(id, out name)))
                     {
                         if (IsValidPath(name, true))
                         {
@@ -264,7 +264,7 @@ namespace Ankh.VS.Selection
                     CALPOLESTR[] str = new CALPOLESTR[1];
                     CADWORD[] dw = new CADWORD[1];
 
-                    if (ErrorHandler.Succeeded(sccProject.GetSccSpecialFiles(id, allFiles[i], str, dw)))
+                    if (VSErr.Succeeded(sccProject.GetSccSpecialFiles(id, allFiles[i], str, dw)))
                     {
                         files = GetFileNamesFromOleBuffer(str, true);
                         GetFlagsFromOleBuffer(dw, true); // Free the flags (No need to parse at this time)
@@ -289,7 +289,7 @@ namespace Ankh.VS.Selection
 
             IVsSolution sol = (IVsSolution)context.GetService(typeof(SVsSolution));
             string solutionDirectory, solutionFile, solutionUserOptions;
-            if (ErrorHandler.Succeeded(sol.GetSolutionInfo(out solutionDirectory, out solutionFile, out solutionUserOptions))
+            if (VSErr.Succeeded(sol.GetSolutionInfo(out solutionDirectory, out solutionFile, out solutionUserOptions))
                 && IsValidPath(solutionFile))
             {
                 return solutionFile;

@@ -46,7 +46,7 @@ namespace Ankh.VS
                 IVsRegisterPriorityCommandTarget svc = GetService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
 
                 if (svc != null
-                    && ErrorHandler.Succeeded(svc.RegisterPriorityCommandTarget(0, this, out _cookie)))
+                    && VSErr.Succeeded(svc.RegisterPriorityCommandTarget(0, this, out _cookie)))
                 {
                     _hooked = true;
                 }

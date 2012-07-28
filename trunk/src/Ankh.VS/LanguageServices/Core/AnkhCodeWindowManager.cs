@@ -63,10 +63,10 @@ namespace Ankh.VS.LanguageServices.Core
         public int AddAdornments()
         {
             IVsTextView primaryView, secondaryView;
-            if (ErrorHandler.Succeeded(_window.GetPrimaryView(out primaryView)) && primaryView != null)
+            if (VSErr.Succeeded(_window.GetPrimaryView(out primaryView)) && primaryView != null)
                 OnNewView(primaryView);
 
-            if (ErrorHandler.Succeeded(_window.GetSecondaryView(out secondaryView)) && secondaryView != null)
+            if (VSErr.Succeeded(_window.GetSecondaryView(out secondaryView)) && secondaryView != null)
                 OnNewView(secondaryView);
 
             if (primaryView != null || secondaryView != null)

@@ -273,7 +273,7 @@ namespace Ankh.Commands
             {
                 string file, user, dir;
 
-                if (ErrorHandler.Succeeded(sol.GetSolutionInfo(out dir, out file, out user))
+                if (VSErr.Succeeded(sol.GetSolutionInfo(out dir, out file, out user))
                     && !string.IsNullOrEmpty(file))
                 {
                     scc.SetProjectManaged(null, true);

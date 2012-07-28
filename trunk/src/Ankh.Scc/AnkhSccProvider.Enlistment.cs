@@ -240,7 +240,7 @@ namespace Ankh.Scc
                 IVsSolution2 sln = GetService<IVsSolution2>(typeof(SVsSolution));
 
                 if (sln != null
-                    && ErrorHandler.Succeeded(sln.GetUniqueNameOfProject(pHierarchy, out projectLocation)))
+                    && VSErr.Succeeded(sln.GetUniqueNameOfProject(pHierarchy, out projectLocation)))
                     return !string.IsNullOrEmpty(projectLocation);
 
                 return false;
@@ -389,7 +389,7 @@ namespace Ankh.Scc
                 return;
 
             IVsProjectFactory factory;
-            if (!ErrorHandler.Succeeded(sol.GetProjectFactory(0, null, pszProjectMk, out factory)))
+            if (!VSErr.Succeeded(sol.GetProjectFactory(0, null, pszProjectMk, out factory)))
                 return;
 
             IVsSccProjectEnlistmentFactory enlistFactory = factory as IVsSccProjectEnlistmentFactory;
@@ -397,7 +397,7 @@ namespace Ankh.Scc
                 return;
 
             string enlistPath, enlistPathUNC;
-            if (!ErrorHandler.Succeeded(enlistFactory.GetDefaultEnlistment(pszProjectMk, out enlistPath, out enlistPathUNC)))
+            if (!VSErr.Succeeded(enlistFactory.GetDefaultEnlistment(pszProjectMk, out enlistPath, out enlistPathUNC)))
                 return;
 
             // ### We should now proceed with the editing operations as documented
@@ -419,7 +419,7 @@ namespace Ankh.Scc
                 // sure we don't break backwards compatibility
                 string suffix = ".sccEnlistAttemptLocation";
 
-                if (ErrorHandler.Succeeded(enlistFactory.ValidateEnlistmentEdit(0, slnProjectName, pszProjectMk+suffix, out chosenUNC, out pfValidEnlistment))
+                if (VSErr.Succeeded(enlistFactory.ValidateEnlistmentEdit(0, slnProjectName, pszProjectMk+suffix, out chosenUNC, out pfValidEnlistment))
                     && pfValidEnlistment != 0
                     && chosenUNC.EndsWith(suffix))
                 {
@@ -499,7 +499,7 @@ namespace Ankh.Scc
                 {
                     VSSCCENLISTMENTCHOICE[] choice = new VSSCCENLISTMENTCHOICE[1];
 
-                    if (ErrorHandler.Succeeded(projectChoice.GetEnlistmentChoice(choice)))
+                    if (VSErr.Succeeded(projectChoice.GetEnlistmentChoice(choice)))
                     {
                         switch (choice[0])
                         {
@@ -591,7 +591,7 @@ namespace Ankh.Scc
                     solution = GetService<IVsSolution>(typeof(SVsSolution));
 
                 Guid projectGuid;
-                if(ErrorHandler.Succeeded(solution.GetGuidOfProject(hier, out projectGuid)))
+                if(VSErr.Succeeded(solution.GetGuidOfProject(hier, out projectGuid)))
                 {
                     string id = projectGuid.ToString("B").ToUpperInvariant();
                     foreach(EnlistData data in _enlistState)
@@ -803,7 +803,7 @@ namespace Ankh.Scc
                 /*foreach (IVsHierarchy hier in GetAllProjectsInSolutionRaw())
                 {
                     Guid g;
-                    if (!ErrorHandler.Succeeded(sol.GetGuidOfProject(hier, out g)))
+                    if (!VSErr.Succeeded(sol.GetGuidOfProject(hier, out g)))
                         continue;
 
                     string projectId = g.ToString("B").ToUpperInvariant();

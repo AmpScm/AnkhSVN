@@ -40,7 +40,7 @@ namespace Ankh.VS
         public bool TryGetColor(__VSSYSCOLOREX vsColor, out Color color)
         {
             uint rgb;
-            if (ErrorHandler.Succeeded(UIShell.GetVSSysColorEx((int)vsColor, out rgb)))
+            if (VSErr.Succeeded(UIShell.GetVSSysColorEx((int)vsColor, out rgb)))
             {
                 color = ColorTranslator.FromWin32(unchecked((int)rgb));
                 return true;

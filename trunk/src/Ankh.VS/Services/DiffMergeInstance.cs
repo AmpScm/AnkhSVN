@@ -27,7 +27,7 @@ namespace Ankh.VS.Services
             _frame = frame;
             _frame2 = frame as IVsWindowFrame2;
 
-            if (_frame2 != null && ErrorHandler.Succeeded(_frame2.Advise(this, out  _frameCookie)))
+            if (_frame2 != null && VSErr.Succeeded(_frame2.Advise(this, out  _frameCookie)))
             {
                 _frameHooked = true;
             }
