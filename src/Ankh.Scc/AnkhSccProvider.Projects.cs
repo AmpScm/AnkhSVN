@@ -111,7 +111,7 @@ namespace Ankh.Scc
 
                     foreach (SccProjectData p in _projectMap.Values)
                     {
-                        if (p.IsSolutionFolder || p.IsWebSite)
+                        if (p.IsPersistedInSolution)
                         {
                             p.SetManaged(managed);
 
@@ -199,17 +199,14 @@ namespace Ankh.Scc
 
             foreach (SccProjectData data in _projectMap.Values)
             {
-                if (data.IsSolutionFolder)
+                if (data.IsPersistedInSolution)
                 {
                     // Solution folders don't save their Scc management state
                     // We let them follow the solution settings
 
                     if (IsSolutionManaged)
                         data.SetManaged(true);
-                }
 
-                if (data.IsSolutionFolder || data.IsWebSite)
-                {
                     // Flush the glyph cache of solution folders
                     // (Well known VS bug: Initially clear)
                     data.NotifyGlyphsChanged();
@@ -440,12 +437,12 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 _projectMap.Add(project, data = new SccProjectData(Context, project));
 
-            if (data.IsSolutionFolder || data.IsWebSite)
+            if (data.IsPersistedInSolution)
             {
                 if (IsSolutionManaged)
                 {
                     // We let them follow the solution settings (See OnSolutionOpen() for the not added case
-                    if (added && data.IsSolutionFolder)
+                    if (added)
                         data.SetManaged(true);
                 }
 
@@ -458,7 +455,7 @@ namespace Ankh.Scc
 
             // Don't take the focus from naming the folder. The rename will perform the .Load()
             // and dirty check
-            if (added && data.IsSolutionFolder)
+            if (added && data.IsPersistedInSolution)
                 return;
 
             if (added && !string.IsNullOrEmpty(SolutionFilename))
@@ -507,7 +504,7 @@ namespace Ankh.Scc
             {
                 trackCopies = true;
 
-                if (data.IsWebSite)
+                if (data.WebLikeFileHandling)
                 {
                     int busy;
                     if (BuildManager != null &&
@@ -625,7 +622,7 @@ namespace Ankh.Scc
                     bool sorted = false;
                     foreach (SccProjectData project in _projectMap.Values)
                     {
-                        if (project.RequiresForcedRefresh() && !string.IsNullOrEmpty(project.ProjectDirectory))
+                        if (project.WebLikeFileHandling && !string.IsNullOrEmpty(project.ProjectDirectory))
                         {
                             string dir = project.ProjectDirectory;
 
