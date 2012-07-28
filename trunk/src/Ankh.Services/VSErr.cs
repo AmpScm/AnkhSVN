@@ -116,7 +116,7 @@ namespace Ankh
         OLECMDERR_E_DISABLED = unchecked((int)0x80040101),
         OLECMDERR_E_NOHELP = unchecked((int)0x80040102),
         OLECMDERR_E_CANCELED = unchecked((int)0x80040103),
-        OLECMDERR_E_UNKNOWNGROUP = unchecked((int)0x80040102);
+        OLECMDERR_E_UNKNOWNGROUP = unchecked((int)0x80040104);
 
         // OLE DISP HRESULTS - may be returned by OLE DISP or related VS methods 
 
