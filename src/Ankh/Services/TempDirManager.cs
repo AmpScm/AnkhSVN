@@ -18,8 +18,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using SharpSvn;
+using Ankh.VS;
 
-namespace Ankh.VS
+namespace Ankh.Services
 {
     [GlobalService(typeof(IAnkhTempDirManager))]
     class TempDirManager : AnkhService, IAnkhTempDirManager

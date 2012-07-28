@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio;
-using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
-using VSConstants = Microsoft.VisualStudio.VSConstants;
 
-namespace Ankh.VS
+namespace Ankh.VS.Services
 {
     [GlobalService(typeof(IAnkhGlobalCommandHook))]
     sealed class GlobalCommandHook : AnkhService, IAnkhGlobalCommandHook, IOleCommandTarget
