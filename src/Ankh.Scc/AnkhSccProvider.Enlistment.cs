@@ -409,12 +409,12 @@ namespace Ankh.Scc
 
             if (IsSafeSccPath(pszProjectMk)
                 && !string.IsNullOrEmpty(SolutionSettings.ProjectRoot)
-                && SvnItem.IsBelowRoot(pszProjectMk, SolutionSettings.ProjectRoot))
+                && (SvnItem.IsBelowRoot(pszProjectMk, SolutionSettings.ProjectRoot) || string.IsNullOrEmpty(origin.SvnUri)))
             {
                 int pfValidEnlistment;
                 string chosenUNC;
 
-                // We have a website that has a default location below our project root
+                // We have a website that has a default location below our project root or without a Svn Uri
                 // At least for now we should default to enlist at that location to make
                 // sure we don't break backwards compatibility
                 string suffix = ".sccEnlistAttemptLocation";
