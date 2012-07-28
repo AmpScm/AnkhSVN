@@ -312,9 +312,22 @@ namespace Ankh.Scc
             if (!TryGetDocument(docCookie, true, out data))
                 return VSConstants.S_OK;
 
-            data.OnAttributeChange((__VSRDTATTRIB)grfAttribs);
+            __VSRDTATTRIB attribs = (__VSRDTATTRIB)grfAttribs;
 
-            if (!string.IsNullOrEmpty(pszMkDocumentNew) && pszMkDocumentNew != pszMkDocumentOld)
+            data.OnAttributeChange(attribs);
+
+            if ((attribs & __VSRDTATTRIB.RDTA_ItemID) == __VSRDTATTRIB.RDTA_ItemID)
+            {
+                data.ItemId = itemidNew;
+            }
+
+            if ((attribs & __VSRDTATTRIB.RDTA_Hierarchy) == __VSRDTATTRIB.RDTA_Hierarchy)
+            {
+                data.Hierarchy = pHierNew;
+            }
+
+            if ((attribs & __VSRDTATTRIB.RDTA_MkDocument) == __VSRDTATTRIB.RDTA_MkDocument
+                && !string.IsNullOrEmpty(pszMkDocumentNew))
             {
                 // The document changed names; for SCC this is a close without saving and setting dirty state on new document
 
@@ -336,21 +349,15 @@ namespace Ankh.Scc
 
                 _cookieMap[newData.Cookie] = newData;
                 data = newData;
-            }
 
-            if (pHierNew != null)
-                data.Hierarchy = pHierNew;
-            if (itemidNew != VSConstants.VSITEMID_NIL)
-                data.ItemId = itemidNew;
-
-            if (!string.IsNullOrEmpty(pszMkDocumentNew) && !string.IsNullOrEmpty(pszMkDocumentOld)
-                && pszMkDocumentNew != pszMkDocumentOld)
-            {
-                if (SvnItem.IsValidPath(pszMkDocumentNew) && SvnItem.IsValidPath(pszMkDocumentOld))
+                if (!string.IsNullOrEmpty(pszMkDocumentOld) && pszMkDocumentNew != pszMkDocumentOld)
                 {
-                    string oldFile = SvnTools.GetNormalizedFullPath(pszMkDocumentOld);
-                    string newFile = SvnTools.GetNormalizedFullPath(pszMkDocumentNew);
-                    ProjectTracker.OnDocumentSaveAs(oldFile, newFile);
+                    if (SvnItem.IsValidPath(pszMkDocumentNew) && SvnItem.IsValidPath(pszMkDocumentOld))
+                    {
+                        string oldFile = SvnTools.GetNormalizedFullPath(pszMkDocumentOld);
+                        string newFile = SvnTools.GetNormalizedFullPath(pszMkDocumentNew);
+                        ProjectTracker.OnDocumentSaveAs(oldFile, newFile);
+                    }
                 }
             }
 
