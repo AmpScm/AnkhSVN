@@ -15,16 +15,13 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
 using System.Drawing;
+using Microsoft.VisualStudio.Shell.Interop;
 
-namespace Ankh.VS
+namespace Ankh.VS.Services
 {
     [GlobalService(typeof(IAnkhVSColor))]
-    class AnkhVSColor : AnkhService, IAnkhVSColor
+    sealed class AnkhVSColor : AnkhService, IAnkhVSColor
     {
         public AnkhVSColor(IAnkhServiceProvider context)
             : base(context)

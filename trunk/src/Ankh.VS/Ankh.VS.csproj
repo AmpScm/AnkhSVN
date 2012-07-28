@@ -63,15 +63,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlobalCommandHook.cs" />
+    <Compile Include="Services\GlobalCommandHook.cs" />
     <Compile Include="Services\DiffMergeInstance.cs" />
     <Compile Include="Services\InternalDiff.cs" />
     <Compile Include="Services\ThreadedWaitService.cs" />
     <Compile Include="LanguageServices\Core\AnkhEditorFactory.cs" />
     <Compile Include="LanguageServices\Core\AnkhLanguagePreferences.cs" />
-    <Compile Include="TempDirManager.cs" />
-    <Compile Include="TempFileManager.cs" />
-    <Compile Include="AnkhVSColor.cs" />
+    <Compile Include="Services\AnkhVSColor.cs" />
     <Compile Include="Dialogs\AnkhDialogOwner.cs" />
     <Compile Include="AnkhVSModule.cs" />
     <Compile Include="Dialogs\VSCommandRouting.cs" />
