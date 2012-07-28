@@ -62,7 +62,6 @@ namespace Ankh.Scc
             }
             else if (_trueNameMap.TryGetValue(lpszEnlistmentPath.TrimEnd('\\'), out pbstrProjectPath))
             {
-                pbstrProjectPath = pbstrProjectPath.TrimEnd('\\');
                 return VSConstants.S_OK;
             }
 
@@ -407,6 +406,27 @@ namespace Ankh.Scc
             // ### But since we don't have per user settings yet we currently just
             // ### pass the defaults as that happens to be the same behavior as
             // ### before
+
+            if (IsSafeSccPath(pszProjectMk)
+                && !string.IsNullOrEmpty(SolutionSettings.ProjectRoot)
+                && SvnItem.IsBelowRoot(pszProjectMk, SolutionSettings.ProjectRoot))
+            {
+                int pfValidEnlistment;
+                string chosenUNC;
+
+                // We have a website that has a default location below our project root
+                // At least for now we should default to enlist at that location to make
+                // sure we don't break backwards compatibility
+                string suffix = ".sccEnlistAttemptLocation";
+
+                if (ErrorHandler.Succeeded(enlistFactory.ValidateEnlistmentEdit(0, slnProjectName, pszProjectMk+suffix, out chosenUNC, out pfValidEnlistment))
+                    && pfValidEnlistment != 0
+                    && chosenUNC.EndsWith(suffix))
+                {
+                    enlistPath = pszProjectMk;
+                    enlistPathUNC = chosenUNC.Substring(chosenUNC.Length - suffix.Length);
+                }
+            }
 
             string slnProjectMk;
 
