@@ -23,7 +23,7 @@ using Ankh.VS;
 namespace Ankh.Services
 {
     [GlobalService(typeof(IAnkhTempDirManager))]
-    class TempDirManager : AnkhService, IAnkhTempDirManager
+    sealed class TempDirManager : AnkhService, IAnkhTempDirManager
     {
         readonly TempDirCollection _tempDirs = new TempDirCollection();
 

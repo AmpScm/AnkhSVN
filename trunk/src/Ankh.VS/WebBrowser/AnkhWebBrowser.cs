@@ -24,7 +24,7 @@ using Microsoft.VisualStudio;
 namespace Ankh.VS.WebBrowser
 {
     [GlobalService(typeof(IAnkhWebBrowser))]
-    class AnkhWebBrowser : AnkhService, IAnkhWebBrowser
+    sealed class AnkhWebBrowser : AnkhService, IAnkhWebBrowser
     {
         public AnkhWebBrowser(IAnkhServiceProvider context)
             : base(context)
