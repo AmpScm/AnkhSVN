@@ -162,18 +162,12 @@ namespace Ankh.Scc
             set { _isDirty = value; }
         }
 
-        public bool IsSolutionLoaded
-        {
-            get { return _solutionLoaded; }
-        }
-
         /// <summary>
         /// Called by ProjectDocumentTracker when a solution is opened 
         /// </summary>
         internal void OnSolutionOpened(bool onLoad)
         {
-            _solutionLoaded = true;
-            _solutionFile = _solutionDirectory = null;
+            _solutionFile = null;
 
             if (!IsActive)
             {
@@ -298,6 +292,7 @@ namespace Ankh.Scc
 
         string _solutionFile;
         string _solutionDirectory;
+        string _rawSolutionDirectory;
         public string SolutionFilename
         {
             get
@@ -313,10 +308,21 @@ namespace Ankh.Scc
         {
             get
             {
-                if (_solutionDirectory == null)
+                if (_solutionFile == null)
                     LoadSolutionInfo();
 
                 return _solutionDirectory;
+            }
+        }
+
+        public string RawSolutionDirectory
+        {
+            get
+            {
+                if (_solutionFile == null)
+                    LoadSolutionInfo();
+
+                return _rawSolutionDirectory;
             }
         }
 
@@ -324,31 +330,32 @@ namespace Ankh.Scc
         {
             string dir, path, user;
 
+            _rawSolutionDirectory = null;
+            _solutionDirectory = null;
+            _solutionFile = "";
+
             IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
 
             if (sol == null ||
                 !VSErr.Succeeded(sol.GetSolutionInfo(out dir, out path, out user)))
             {
-                _solutionDirectory = _solutionFile = "";
                 return;
             }
 
             if (string.IsNullOrEmpty(dir) || string.IsNullOrEmpty(path))
             {
                 // Cache negative result; will be returned as null
-                _solutionDirectory = _solutionFile = "";
             }
             else
             {
                 if (SvnItem.IsValidPath(dir))
+                {
+                    _rawSolutionDirectory = dir;
                     _solutionDirectory = SvnTools.GetTruePath(dir, true) ?? SvnTools.GetNormalizedFullPath(dir);
-                else
-                    _solutionDirectory = "";
+                }
 
                 if (SvnItem.IsValidPath(path))
                     _solutionFile = SvnTools.GetTruePath(path, true) ?? SvnTools.GetNormalizedFullPath(path);
-                else
-                    _solutionFile = "";
             }
         }
 
@@ -379,7 +386,7 @@ namespace Ankh.Scc
             Debug.Assert(_projectMap.Count == 0);
             Debug.Assert(_fileMap.Count == 0);
 
-            _solutionFile = _solutionDirectory = null;
+            _solutionFile = null;
             _projectMap.Clear();
             _fileMap.Clear();
             _unreloadable.Clear();
@@ -388,7 +395,6 @@ namespace Ankh.Scc
             // Clear status for reopening solution
             _managedSolution = false;
             _isDirty = false;
-            _solutionLoaded = false;
             _sccExcluded.Clear();
             Translate_ClearState();
 

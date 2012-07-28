@@ -1,26 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Ankh.Scc.SettingMap
 {
-    class SccTranslatePathInfo
+    [DebuggerDisplay("{SolutionPath} => ({EnlistmentPath}, {EnlistmentUNCPath})")]
+    sealed class SccTranslatePathInfo
     {
-        public string EnlistmentPath
+        readonly string _solutionPath;
+        readonly string _enlistUIPath;
+        readonly string _enlistUNCPath;
+
+        public SccTranslatePathInfo(string solutionPath, string enlistUIPath, string enlistUNCPath)
         {
-            get;
-            set; //{ return EnlistmentPathUNC; }
+            if (string.IsNullOrEmpty(solutionPath))
+                throw new ArgumentNullException("solutionPath");
+            else if (string.IsNullOrEmpty(enlistUIPath))
+                throw new ArgumentNullException("enlistUIPath");
+            else if (string.IsNullOrEmpty(enlistUNCPath))
+                throw new ArgumentNullException("enlistUNCPath");
+
+            _solutionPath = solutionPath;
+            _enlistUIPath = enlistUIPath;
+            _enlistUNCPath = enlistUNCPath;
         }
 
-        public string EnlistmentPathUNC
+        public string EnlistmentPath
         {
-            get;
-            set;//{ return ""; }
+            get { return _enlistUIPath; }
+        }
+
+        public string EnlistmentUNCPath
+        {
+            get { return _enlistUNCPath; }
         }
 
         public string SolutionPath
         {
-            get;
-            set; //{ return ""; } 
+            get { return _solutionPath; }
         }
     }
 }

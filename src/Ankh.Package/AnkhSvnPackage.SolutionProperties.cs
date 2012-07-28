@@ -16,16 +16,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio;
+using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Scc;
-using Ankh.VSPackage.Attributes;
-using Ankh.VS;
-using System.IO;
 using Ankh.Scc.Native;
+using Ankh.VS;
+using Ankh.VSPackage.Attributes;
 
 namespace Ankh.VSPackage
 {
@@ -226,7 +224,7 @@ namespace Ankh.VSPackage
 
         #region IVsPersistSolutionOpts
         const string SccPendingChangeStream = AnkhId.SubversionSccName + "Pending";
-        const string SccEnlistStream = AnkhId.SubversionSccName + "Enlist";
+        const string SccTranslateStream = AnkhId.SccTranslateStream;
         const string SccExcludedStream = AnkhId.SubversionSccName + "SccExcluded";
 
         public int LoadUserOptions(IVsSolutionPersistence pPersistence, uint grfLoadOpts)
@@ -240,7 +238,7 @@ namespace Ankh.VSPackage
             {
                 pPersistence.LoadPackageUserOpts(this, SccPendingChangeStream);
                 pPersistence.LoadPackageUserOpts(this, SccExcludedStream);
-                pPersistence.LoadPackageUserOpts(this, SccEnlistStream);
+                pPersistence.LoadPackageUserOpts(this, SccTranslateStream);
 
                 return VSErr.S_OK;
             }
@@ -260,6 +258,29 @@ namespace Ankh.VSPackage
             }
         }
 
+        public bool ForceLoadUserSettings(string streamName)
+        {
+            IVsSolutionPersistence persistence = GetService<IVsSolutionPersistence>(typeof(SVsSolutionPersistence));
+            if (persistence == null)
+                return false;
+
+            try
+            {
+                int hr = persistence.LoadPackageUserOpts(this, streamName);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(ex);
+
+                return false;
+            }
+        }
+
         public int ReadUserOptions([In] IStream pOptionsStream, [In] string pszKey)
         {
             try
@@ -272,10 +293,10 @@ namespace Ankh.VSPackage
                         case SccPendingChangeStream:
                             LoadPendingChanges(wrapper);
                             break;
-                        case SccEnlistStream:
+                        case SccTranslateStream:
                             scc = GetService<IAnkhSccService>();
                             if (scc != null)
-                                scc.SerializeEnlistData(wrapper, false);
+                                scc.SerializeSccTranslateData(wrapper, false);
                             break;
                         case SccExcludedStream:
                             scc = GetService<IAnkhSccService>();
@@ -321,7 +342,7 @@ namespace Ankh.VSPackage
 
                     if (scc.IsSolutionManaged)
                     {
-                        pPersistence.SavePackageUserOpts(this, SccEnlistStream);
+                        pPersistence.SavePackageUserOpts(this, SccTranslateStream);
                     }
                 }
 
@@ -346,10 +367,10 @@ namespace Ankh.VSPackage
                         case SccPendingChangeStream:
                             WritePendingChanges(wrapper);
                             break;
-                        case SccEnlistStream:
+                        case SccTranslateStream:
                             scc = GetService<IAnkhSccService>();
                             if (scc != null)
-                                scc.SerializeEnlistData(wrapper, true);
+                                scc.SerializeSccTranslateData(wrapper, true);
                             break;
                         case SccExcludedStream:
                             scc = GetService<IAnkhSccService>();

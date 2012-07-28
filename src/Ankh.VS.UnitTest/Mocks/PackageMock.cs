@@ -141,6 +141,12 @@ namespace AnkhSvn_UnitTestProject.Mocks
             }
 
             #endregion
+
+
+            public bool ForceLoadUserSettings(string streamName)
+            {
+                return false;
+            }
         }
     }
 }

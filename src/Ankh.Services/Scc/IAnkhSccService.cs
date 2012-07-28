@@ -87,7 +87,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="store">The store.</param>
         /// <param name="writeData">if set to <c>true</c> [write data].</param>
-        void SerializeEnlistData(Stream store, bool writeData);
+        void SerializeSccTranslateData(Stream store, bool writeData);
 
         /// <summary>
         /// Serializes the scc-exclude data.
