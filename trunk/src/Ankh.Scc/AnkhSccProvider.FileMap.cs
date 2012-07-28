@@ -106,7 +106,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
-            if (!data.IsWebSite)
+            if (!data.WebLikeFileHandling)
             {
                 // Do nothing
             }
@@ -660,7 +660,7 @@ namespace Ankh.Scc
             {
                 // We have to know its contents to provide SCC info
                 // TODO: BH: Maybe only enable while reloading?
-                return projectData.IsWebSite;
+                return projectData.WebLikeFileHandling;
             }
 
             return false;

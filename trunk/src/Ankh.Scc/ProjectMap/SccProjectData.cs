@@ -29,22 +29,14 @@ using Ankh.VS;
 
 namespace Ankh.Scc.ProjectMap
 {
-    /// <summary>
-    /// Enum of project types with workarounds
-    /// </summary>
-    enum SccProjectType
+    [Flags]
+    public enum SccProjectFlags
     {
-        Normal,
-        SolutionFolder,
-        WebSite,
+        None,
+        WebLikeFileHandling = 0x0010,
+        ForceSccGlyphChange = 0x0100,
+        PartOfSolution = 0x1000
     }
-
-	[Flags]
-	public enum SccProjectFlags
-	{
-		None,
-		ForceSccGlyphChange = 0x100,
-	}
 
     public enum SccEnlistChoice
     {
@@ -53,14 +45,13 @@ namespace Ankh.Scc.ProjectMap
         Required
     }
 
-    [DebuggerDisplay("Project={ProjectName}, ProjectType={_projectType}")]
+    [DebuggerDisplay("Project={ProjectName}, Flags={_projectFlags}")]
     sealed partial class SccProjectData : IDisposable
     {
         readonly IAnkhServiceProvider _context;
         readonly IVsSccProject2 _sccProject;
         readonly IVsHierarchy _hierarchy;
         readonly IVsProject _vsProject;
-        readonly SccProjectType _projectType;
         readonly SccProjectFlags _projectFlags;
         readonly SccProjectFileCollection _files;
         bool _isManaged;
@@ -91,7 +82,6 @@ namespace Ankh.Scc.ProjectMap
             _hierarchy = (IVsHierarchy)project; // A project must be a hierarchy in VS
             _vsProject = (IVsProject)project; // A project must be a VS project
 
-            _projectType = GetProjectType(project);
             _projectFlags = GetProjectFlags(ProjectTypeGuid);
             _files = new SccProjectFileCollection();
         }
@@ -410,14 +400,14 @@ namespace Ankh.Scc.ProjectMap
             internal set { _isRegistered = value; }
         }
 
-        public bool IsSolutionFolder
+        public bool IsPersistedInSolution
         {
-            get { return _projectType == SccProjectType.SolutionFolder; }
+            get { return (_projectFlags & SccProjectFlags.PartOfSolution) != SccProjectFlags.None; }
         }
 
-        public bool IsWebSite
+        public bool WebLikeFileHandling
         {
-            get { return _projectType == SccProjectType.WebSite; }
+            get { return (_projectFlags & SccProjectFlags.WebLikeFileHandling) != SccProjectFlags.None; }
         }
 
         internal void SetManaged(bool managed)
@@ -539,7 +529,7 @@ namespace Ankh.Scc.ProjectMap
         {
             bool alreadyLoaded = _loaded && !_inLoad;
 
-            if (alreadyLoaded && IsWebSite)
+            if (alreadyLoaded && WebLikeFileHandling)
             {
                 uint fid = VSConstants.VSITEMID_NIL;
 
@@ -690,86 +680,62 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-
-        /// <summary>
-        /// Checks whether the specified project is a solution folder
-        /// </summary>
-        private static readonly Guid _solutionFolderProjectId = new Guid("2150e333-8fdc-42a3-9474-1a3956d46de8");
-        private static readonly Guid _websiteProjectId = new Guid("e24c65dc-7377-472b-9aba-bc803b73c61a");
-        static SccProjectType GetProjectType(IVsSccProject2 project)
+        // Switch to dictionary when we have more than a handfull of items
+        static SortedList<Guid, SccProjectFlags> _projectFlagMap = new SortedList<Guid, SccProjectFlags>();
+        static bool _projectFlagMapLoaded;
+        SccProjectFlags GetProjectFlags(Guid projectId)
         {
-            IPersistFileFormat pFileFormat = project as IPersistFileFormat;
-            if (pFileFormat != null)
+            lock (_projectFlagMap)
             {
-                Guid guidClassID;
-                if (VSErr.S_OK != pFileFormat.GetClassID(out guidClassID))
-                    return SccProjectType.Normal;
+                if (!_projectFlagMapLoaded)
+                    LoadProjectFlagMap();
 
-                if (guidClassID == _solutionFolderProjectId)
-                    return SccProjectType.SolutionFolder;
-                else if (guidClassID == _websiteProjectId)
-                    return SccProjectType.WebSite;
+                SccProjectFlags flags;
+                if (!_projectFlagMap.TryGetValue(projectId, out flags))
+                    return SccProjectFlags.None;
+
+                return flags;
             }
-
-            return SccProjectType.Normal;
         }
 
-		// Switch to dictionary when we have more than a handfull of items
-		static SortedList<Guid, SccProjectFlags> _projectFlagMap = new SortedList<Guid, SccProjectFlags>();
-		static bool _projectFlagMapLoaded;
-		SccProjectFlags GetProjectFlags(Guid projectId)
-		{
-			lock (_projectFlagMap)
-			{
-				if (!_projectFlagMapLoaded)
-					LoadProjectFlagMap();
+        void LoadProjectFlagMap()
+        {
+            _projectFlagMapLoaded = true;
 
-				SccProjectFlags flags;
-				if (!_projectFlagMap.TryGetValue(projectId, out flags))
-					return SccProjectFlags.None;
+            IAnkhConfigurationService configService = GetService<IAnkhConfigurationService>();
 
-				return flags;
-			}
-		}
+            if (configService == null)
+                return;
 
-		void LoadProjectFlagMap()
-		{
-			_projectFlagMapLoaded = true;
+            using (RegistryKey projectHandlingKey = configService.OpenVSInstanceKey("Extensions\\AnkhSVN\\ProjectHandling"))
+            {
+                if (projectHandlingKey == null)
+                    return;
 
-			IAnkhConfigurationService configService = GetService<IAnkhConfigurationService>();
+                foreach (string typeValue in projectHandlingKey.GetSubKeyNames())
+                {
+                    if (typeValue.Length != 38) // No proper guid
+                        continue;
 
-			if (configService == null)
-				return;
+                    try
+                    {
+                        using (RegistryKey projectTypeKey = projectHandlingKey.OpenSubKey(typeValue))
+                        {
+                            object v = projectTypeKey.GetValue("flags");
 
-			using (RegistryKey projectHandlingKey = configService.OpenVSInstanceKey("Extensions\\AnkhSVN\\ProjectHandling"))
-			{
-				if (projectHandlingKey == null)
-					return;
+                            if (!(v is int))
+                                continue;
 
-				foreach (string typeValue in projectHandlingKey.GetSubKeyNames())
-				{
-					if (typeValue.Length != 38) // No proper guid
-						continue;
-
-					try
-					{
-						using (RegistryKey projectTypeKey = projectHandlingKey.OpenSubKey(typeValue))
-						{
-							object v = projectTypeKey.GetValue("flags");
-
-							if (!(v is int))
-								continue;
-
-							Guid projectType = new Guid(typeValue);
-							SccProjectFlags flags = (SccProjectFlags)(int)v;
-							_projectFlagMap.Add(projectType, flags);
-						}
-					}
-					catch
-					{ /* Parse Error */ }
-				}
-			}
-		}
+                            Guid projectType = new Guid(typeValue);
+                            SccProjectFlags flags = (SccProjectFlags)(int)v;
+                            _projectFlagMap.Add(projectType, flags);
+                        }
+                    }
+                    catch
+                    { /* Parse Error */ }
+                }
+            }
+        }
         #endregion
 
         /// <summary>
@@ -851,49 +817,49 @@ namespace Ankh.Scc.ProjectMap
             set { _unloading = value; }
         }
 
-		[DebuggerNonUserCode]
-		public void NotifyGlyphsChanged()
-		{
-			try
-			{
-				if ((_projectFlags & SccProjectFlags.ForceSccGlyphChange) == 0)
-					SccProject.SccGlyphChanged(0, null, null, null);
-				else
-					ForceGlyphChanges();
-			}
-			catch { }
-		}
+        [DebuggerNonUserCode]
+        public void NotifyGlyphsChanged()
+        {
+            try
+            {
+                if ((_projectFlags & SccProjectFlags.ForceSccGlyphChange) == 0)
+                    SccProject.SccGlyphChanged(0, null, null, null);
+                else
+                    ForceGlyphChanges();
+            }
+            catch { }
+        }
 
-		internal void ForceGlyphChanges()
-		{
-			uint[] idsArray;
-			string[] namesArray;
-			{
-				List<uint> ids = new List<uint>(_files.Count);
-				List<string> names = new List<string>(_files.Count);
+        internal void ForceGlyphChanges()
+        {
+            uint[] idsArray;
+            string[] namesArray;
+            {
+                List<uint> ids = new List<uint>(_files.Count);
+                List<string> names = new List<string>(_files.Count);
 
-				foreach (SccProjectFileReference r in _files)
-				{
-					uint id = r.ProjectItemId;
-					if (id == VSConstants.VSITEMID_NIL)
-						continue;
+                foreach (SccProjectFileReference r in _files)
+                {
+                    uint id = r.ProjectItemId;
+                    if (id == VSConstants.VSITEMID_NIL)
+                        continue;
 
-					string name = r.ProjectFile.FullPath;
-					if (string.IsNullOrEmpty(name))
-						continue;
+                    string name = r.ProjectFile.FullPath;
+                    if (string.IsNullOrEmpty(name))
+                        continue;
 
-					ids.Add(id);
-					names.Add(name);
-				}
-				idsArray = ids.ToArray();
-				namesArray = names.ToArray();
-			}
+                    ids.Add(id);
+                    names.Add(name);
+                }
+                idsArray = ids.ToArray();
+                namesArray = names.ToArray();
+            }
 
-			VsStateIcon[] newGlyphs = new VsStateIcon[idsArray.Length];
-			uint[] sccState = new uint[idsArray.Length];
+            VsStateIcon[] newGlyphs = new VsStateIcon[idsArray.Length];
+            uint[] sccState = new uint[idsArray.Length];
 
-			if (0 == Scc.GetSccGlyph(idsArray.Length, namesArray, newGlyphs, sccState))
-				SccProject.SccGlyphChanged(idsArray.Length, idsArray, newGlyphs, sccState);
-		}
-	}
+            if (0 == Scc.GetSccGlyph(idsArray.Length, namesArray, newGlyphs, sccState))
+                SccProject.SccGlyphChanged(idsArray.Length, idsArray, newGlyphs, sccState);
+        }
+    }
 }

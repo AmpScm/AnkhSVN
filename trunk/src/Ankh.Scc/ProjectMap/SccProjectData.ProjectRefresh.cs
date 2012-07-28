@@ -24,11 +24,6 @@ namespace Ankh.Scc.ProjectMap
 {
     partial class SccProjectData
     {
-        internal bool RequiresForcedRefresh()
-        {
-            return IsWebSite;
-        }
-
         sealed class RefreshState
         {
             readonly IFileStatusCache _cache;
@@ -140,7 +135,7 @@ namespace Ankh.Scc.ProjectMap
 
         public void PerformRefresh(IEnumerable<SvnClientAction> sccRefreshItems)
         {
-            Debug.Assert(RequiresForcedRefresh(), "Refreshing a project that manages itself");
+            Debug.Assert(WebLikeFileHandling, "Refreshing a project that manages itself");
 
             RefreshState state = new RefreshState(_context, ProjectHierarchy, VsProject, ProjectDirectory);
 
