@@ -244,6 +244,15 @@ namespace Ankh.VSPackage
 
                 return VSConstants.S_OK;
             }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(ex);
+
+                return Marshal.GetHRForException(ex);
+            }
             finally
             {
                 if (Marshal.IsComObject(pPersistence))
@@ -280,6 +289,15 @@ namespace Ankh.VSPackage
                     }
                 }
                 return VSConstants.S_OK; // Our data is in subversion properties
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(ex);
+
+                return Marshal.GetHRForException(ex);
             }
             finally
             {
