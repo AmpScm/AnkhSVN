@@ -55,6 +55,16 @@ namespace Ankh.Scc
                 // Already set the path
                 return VSConstants.S_OK;
             }
+            else if (_trueNameMap.TryGetValue(lpszEnlistmentPath + "\\", out pbstrProjectPath))
+            {
+                pbstrProjectPath += "\\";
+                return VSConstants.S_OK;
+            }
+            else if (_trueNameMap.TryGetValue(lpszEnlistmentPath.TrimEnd('\\'), out pbstrProjectPath))
+            {
+                pbstrProjectPath = pbstrProjectPath.TrimEnd('\\');
+                return VSConstants.S_OK;
+            }
 
             if (!IsSafeSccPath(lpszEnlistmentPath))
             {
@@ -195,10 +205,16 @@ namespace Ankh.Scc
                 return false;
             }
 
-            return _translationMap.TryGetValue(path, out info);
+            if (_translationMap.TryGetValue(path, out info))
+                return true;
+
+            if (_translationMap.TryGetValue(path + "\\", out info))
+                return true;
+
+            return false;
         }
 
-        bool MapProject(IVsHierarchy pHierarchy, out string location, out SccProjectData data)
+        bool MapProject(IVsHierarchy pHierarchy, out string slnLocation, out SccProjectData data)
         {
             IVsSccProject2 sccProject = pHierarchy as IVsSccProject2;
 
@@ -213,20 +229,28 @@ namespace Ankh.Scc
             else
                 data = null;
 
-            if (data != null && !string.IsNullOrEmpty(data.ProjectLocation))
+            string projectLocation = null;
+            try
             {
-                location = data.ProjectLocation;
-                return true;
+                if (data != null && !string.IsNullOrEmpty(data.ProjectLocation))
+                {
+                    projectLocation = data.ProjectLocation;
+                    return true;
+                }
+
+                IVsSolution2 sln = GetService<IVsSolution2>(typeof(SVsSolution));
+
+                if (sln != null
+                    && ErrorHandler.Succeeded(sln.GetUniqueNameOfProject(pHierarchy, out projectLocation)))
+                    return !string.IsNullOrEmpty(projectLocation);
+
+                return false;
             }
-
-            IVsSolution2 sln = GetService<IVsSolution2>(typeof(SVsSolution));
-
-            if (sln != null
-                && ErrorHandler.Succeeded(sln.GetUniqueNameOfProject(pHierarchy, out location)))
-                return !string.IsNullOrEmpty(location);
-
-            location = null;
-            return false;
+            finally
+            {
+                if (projectLocation == null || !_trueNameMap.TryGetValue(projectLocation, out slnLocation))
+                    slnLocation = projectLocation;
+            }
         }
 
         public bool HasProjectProperties(IVsHierarchy pHierarchy)
@@ -245,12 +269,7 @@ namespace Ankh.Scc
                     return true;
             }
 
-            string originalLocation;
-
-            if (!_trueNameMap.TryGetValue(location, out originalLocation))
-                originalLocation = location;
-
-            return _originMap.ContainsKey(originalLocation);
+            return _originMap.ContainsKey(location);
         }
 
         public void StoreProjectProperties(IVsHierarchy pHierarchy, IPropertyMap map)
@@ -304,13 +323,8 @@ namespace Ankh.Scc
             if (data == null)
                 return;
 
-            string originalLocation;
-
-            if (!_trueNameMap.TryGetValue(location, out originalLocation))
-                originalLocation = location;
-
             SccSvnOrigin origin;
-            if (!_originMap.TryGetValue(originalLocation, out origin))
+            if (!_originMap.TryGetValue(location, out origin))
                 return;
 
             if (data.ProjectDirectory == null)
@@ -348,21 +362,26 @@ namespace Ankh.Scc
 
         public void ReadProjectProperties(IVsHierarchy pHierarchy, string pszProjectName, string pszProjectMk, IPropertyMap map)
         {
+            string slnProjectName;
+
+            if (!_trueNameMap.TryGetValue(pszProjectMk, out slnProjectName))
+                slnProjectName = pszProjectMk;
+
             SccSvnOrigin origin = new SccSvnOrigin();
             origin.Load(map);
 
-            _originMap[pszProjectMk] = origin;
+            _originMap[slnProjectName] = origin;
 
             if (!string.IsNullOrEmpty(origin.Enlist))
-                EnsureEnlistment(pszProjectName, pszProjectMk, origin);
+                EnsureEnlistment(slnProjectName, pszProjectMk, origin);
         }
 
-        void EnsureEnlistment(string pszProjectName, string pszProjectMk, SccSvnOrigin origin)
+        void EnsureEnlistment(string slnProjectName, string pszProjectMk, SccSvnOrigin origin)
         {
             EnsureEnlistUserSettings();
 
             SccTranslatePathInfo tpi;
-            if (TryGetTranslation(pszProjectMk, out tpi))
+            if (TryGetTranslation(slnProjectName, out tpi))
                 return; // We have existing local data
 
             IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
@@ -389,15 +408,21 @@ namespace Ankh.Scc
             // ### pass the defaults as that happens to be the same behavior as
             // ### before
 
+            string slnProjectMk;
+
+            // Maybe we already translated the path?
+            if (!_trueNameMap.TryGetValue(pszProjectMk, out slnProjectMk))
+                slnProjectMk = pszProjectMk;
+
             tpi = new SccTranslatePathInfo();
-            tpi.SolutionPath = pszProjectMk;
+            tpi.SolutionPath = slnProjectMk;
             tpi.EnlistmentPath = enlistPath;
             tpi.EnlistmentPathUNC = CalculateTruePath(enlistPathUNC);
 
-            _translationMap[pszProjectMk] = tpi;
+            _translationMap[slnProjectMk] = tpi;
 
-            if (enlistPathUNC != pszProjectMk)
-                _trueNameMap[enlistPathUNC] = pszProjectMk;
+            if (enlistPathUNC != slnProjectMk)
+                _trueNameMap[enlistPathUNC] = slnProjectMk;
         }
 
         private void EnsureEnlistUserSettings()
