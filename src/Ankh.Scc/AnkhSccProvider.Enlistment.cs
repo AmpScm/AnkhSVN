@@ -45,7 +45,6 @@ namespace Ankh.Scc
     partial class AnkhSccProvider
     {
         bool _solutionLoaded;
-        bool _enlistCompleted;// = false;
 
         readonly Dictionary<string, string> _trueNameMap = new Dictionary<string, string>();
         readonly Dictionary<string, SccSvnOrigin> _originMap = new Dictionary<string, SccSvnOrigin>();
@@ -182,7 +181,6 @@ namespace Ankh.Scc
 
         void Translate_ClearState()
         {
-            _enlistCompleted = false;
             _trueNameMap.Clear();
             _originMap.Clear();
             _translationMap.Clear();
