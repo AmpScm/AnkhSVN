@@ -48,6 +48,9 @@ namespace Ankh.Scc
                 The fWide member in the DROPFILES structure tells us if the string is encoded in Unicode or ASCII.
                 And each string contains the following:
                 {project guid} +"|"+ project file name +"|"+ drag-dropped file name
+
+                The exact format is documented as part of the documentation of IVsSolution.GetItemOfProjref()
+                which is the API to parse these strings.
                 */
 
                 MemoryStream stream = data.GetData(ClipFormatProjectItem) as MemoryStream;
