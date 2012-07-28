@@ -112,6 +112,7 @@
     </Compile>
     <Compile Include="Commands\PendingChangeTicker.cs" />
     <Compile Include="Commands\ProjectFileFilter.cs" />
+    <Compile Include="Commands\SccCheckoutFailedProject.cs" />
     <Compile Include="Commands\UnsupportedWcVersion.cs" />
     <Compile Include="Native\ICOMPropertyBag.cs" />
     <Compile Include="Native\SolutionExplorerDataItem.cs" />

@@ -197,6 +197,10 @@ namespace Ankh.Scc
             _translationMap.Clear();
         }
 
+        public void ProjectLoadFailed(string pszProjectMk)
+        {
+        }
+
         Dictionary<string, SccTranslatePathInfo> _translationMap = new Dictionary<string, SccTranslatePathInfo>();
         private bool TryGetTranslation(string path, out SccTranslatePathInfo info)
         {
@@ -244,7 +248,7 @@ namespace Ankh.Scc
                 IVsSolution2 sln = GetService<IVsSolution2>(typeof(SVsSolution));
 
                 if (sln != null
-                    && VSErr.Succeeded(sln.GetUniqueNameOfProject(pHierarchy, out projectLocation)))
+                    && VSErr.Succeeded(pHierarchy.GetCanonicalName(VSConstants.VSITEMID_ROOT, out projectLocation)))
                     return !string.IsNullOrEmpty(projectLocation);
 
                 return false;
@@ -427,7 +431,7 @@ namespace Ankh.Scc
                     && chosenUNC.EndsWith(suffix))
                 {
                     enlistPath = pszProjectMk;
-                    enlistPathUNC = chosenUNC.Substring(chosenUNC.Length - suffix.Length);
+                    enlistPathUNC = chosenUNC.Substring(0, chosenUNC.Length - suffix.Length);
                 }
             }
 
@@ -513,7 +517,12 @@ namespace Ankh.Scc
                         SccTranslatePathInfo tpi = new SccTranslatePathInfo(strings[0], strings[1], strings[2]);
 
                         if (!_translationMap.ContainsKey(tpi.SolutionPath))
+                        {
                             _translationMap[tpi.SolutionPath] = tpi;
+
+                            if (tpi.SolutionPath != tpi.EnlistmentUNCPath)
+                                _trueNameMap[tpi.EnlistmentUNCPath] = tpi.SolutionPath;
+                        }
                     }
                 }
             }

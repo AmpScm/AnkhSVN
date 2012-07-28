@@ -40,7 +40,7 @@ namespace Ankh.VSPackage
             IAnkhSccService scc = GetService<IAnkhSccService>();
 
             if (scc != null)
-                scc.IsSolutionDirty = true; // We should save our settings again
+                scc.ProjectLoadFailed(pszProjectMk);
 
             return VSErr.S_OK;
         }
