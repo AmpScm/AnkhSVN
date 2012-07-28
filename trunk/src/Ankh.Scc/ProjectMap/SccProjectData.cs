@@ -415,15 +415,23 @@ namespace Ankh.Scc.ProjectMap
             if (managed == IsManaged)
                 return;
 
+            bool ok;
+
             if (managed)
-                Marshal.ThrowExceptionForHR(SccProject.SetSccLocation("Svn", "Svn", "Svn", AnkhId.SubversionSccName));
+            {
+                // Set some constant strings as marker
+                ok = VSErr.Succeeded(SccProject.SetSccLocation("Svn", "Svn", "Svn", AnkhId.SubversionSccName));
+            }
             else
             {
                 // The managed package framework assumes empty strings for clearing; null will fail there
-                Marshal.ThrowExceptionForHR(SccProject.SetSccLocation("", "", "", ""));
+                ok = VSErr.Succeeded(SccProject.SetSccLocation("", "", "", ""));
             }
 
-            IsManaged = managed;
+            if (ok)
+            {
+                IsManaged = managed;
+            }
         }
 
         internal void OnClose()
