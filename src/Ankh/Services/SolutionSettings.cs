@@ -564,7 +564,11 @@ namespace Ankh.Settings
                 {
                     object r;
                     if (ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_VisualStudioProjDir, out r)))
-                        return SvnTools.GetNormalizedFullPath((string)r);
+                    {
+                        string path = (string)r;
+
+                        return SvnTools.GetTruePath(path, true) ?? SvnTools.GetNormalizedFullPath(path);
+                    }
                 }
 
                 return "C:\\";
