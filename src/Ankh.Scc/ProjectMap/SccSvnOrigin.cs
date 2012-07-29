@@ -12,13 +12,14 @@ namespace Ankh.Scc.ProjectMap
         const string KeysName = "@Keys";
         const string EnlistName = "Enlist";
         const string UriName = "Svn.Uri";
+        const string ProjectSuffix = "Svn.ProjectSuffix";
         const string GroupName = "Svn.Group";
         const string RelationName = "Svn.Relation";
 
         // This list contains the properties every AnkhSVN that understands SvnOrigin knows
-        readonly string[] InitialProperties = { EnlistName, UriName, GroupName, RelationName }; 
+        readonly string[] InitialProperties = { EnlistName, UriName, ProjectSuffix, GroupName, RelationName }; 
         // And this contains the list of properties that aren't custom
-        readonly string[] HandledProperties = { EnlistName, UriName, GroupName, RelationName };
+        readonly string[] HandledProperties = { EnlistName, UriName, ProjectSuffix, GroupName, RelationName };
 
         static bool InList(string needle, IEnumerable<string> haystack)
         {
@@ -61,17 +62,22 @@ namespace Ankh.Scc.ProjectMap
             if (map.TryGetValue(UriName, out value))
                 SvnUri = value;
             else
-                SvnUri = value;
+                SvnUri = null;
+
+            if (map.TryGetValue(ProjectSuffix, out value))
+                SvnSuffix = value;
+            else
+                SvnSuffix = null;
 
             if (map.TryGetValue(GroupName, out value))
                 Group = value;
             else
-                Group = value;
+                Group = null;
 
             if (map.TryGetValue(RelationName, out value))
                 Relation = value;
             else
-                Relation = value;
+                Relation = null;
         }
 
         public void Write(IPropertyMap map)
@@ -81,6 +87,9 @@ namespace Ankh.Scc.ProjectMap
 
             if (!string.IsNullOrEmpty(SvnUri))
                 map.SetValue(UriName, SvnUri);
+
+            if (!string.IsNullOrEmpty(SvnSuffix))
+                map.SetValue(ProjectSuffix, SvnSuffix);
 
             if (!string.IsNullOrEmpty(Group))
                 map.SetValue(GroupName, Group);
@@ -137,6 +146,13 @@ namespace Ankh.Scc.ProjectMap
         {
             get { return _svnUri; }
             set { _svnUri = TrimNull(value); }
+        }
+
+        string _svnSuffix;
+        public string SvnSuffix
+        {
+            get { return _svnSuffix; }
+            set { _svnSuffix = TrimNull(value); }
         }
 
         string _group;
