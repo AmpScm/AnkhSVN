@@ -7,7 +7,7 @@ namespace Ankh.Scc.ProjectMap
 {
     public class SccSvnOrigin
     {
-        readonly Dictionary<string, string> _custom = new Dictionary<string, string>();
+        readonly SortedList<string, string> _custom = new SortedList<string, string>();
 
         const string KeysName = "@Keys";
         const string EnlistName = "Enlist";
@@ -104,17 +104,23 @@ namespace Ankh.Scc.ProjectMap
                 if (map.WrittenKey(kv.Key))
                     continue;
 
-                if (InList(kv.Key, InitialProperties))
+                if (InList(kv.Key, HandledProperties))
                     continue;
 
                 map.SetValue(kv.Key, kv.Value);
+            }
+
+            foreach(string k in map.WrittenKeys)
+            {
+                if (!InList(k, InitialProperties))
+                    continue;
 
                 if (sb == null)
                     sb = new StringBuilder();
                 else
                     sb.Append(',');
 
-                sb.Append(kv.Key);
+                sb.Append(k);
             }
 
             if (sb != null)
