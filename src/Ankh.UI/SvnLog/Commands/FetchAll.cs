@@ -15,34 +15,32 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Ankh.Commands;
-using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
     [Command(AnkhCommand.LogFetchAll, AlwaysAvailable=true)]
     class FetchAll : ICommandHandler
     {
+        LogToolWindowControl _ctrl;
+
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            ILogControl lc = e.Selection.GetActiveControl<ILogControl>();
+            if (_ctrl == null)
+                _ctrl = e.GetService<LogToolWindowControl>();
 
-            if (lc == null)
+            if (_ctrl == null)
             {
                 e.Enabled = false;
-                return;
             }
         }
+
         public void OnExecute(CommandEventArgs e)
         {
-            ILogControl lc = e.Selection.GetActiveControl<ILogControl>();
-
-            if (lc == null)
+            if (_ctrl == null)
                 return;
 
-            lc.FetchAll();
+            _ctrl.FetchAll();
         }
     }
 }
