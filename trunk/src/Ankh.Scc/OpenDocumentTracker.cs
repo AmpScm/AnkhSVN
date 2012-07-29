@@ -329,26 +329,29 @@ namespace Ankh.Scc
             if ((attribs & __VSRDTATTRIB.RDTA_MkDocument) == __VSRDTATTRIB.RDTA_MkDocument
                 && !string.IsNullOrEmpty(pszMkDocumentNew))
             {
-                // The document changed names; for SCC this is a close without saving and setting dirty state on new document
-
-                SccDocumentData newData;
-
-                if (!_docMap.TryGetValue(pszMkDocumentNew, out newData))
+                if (data.Name != pszMkDocumentNew)
                 {
-                    newData = new SccDocumentData(Context, pszMkDocumentNew);
-                    newData.CopyState(data);
-                    newData.Cookie = docCookie;
-                    data.Dispose();
+                    // The document changed names; Handle this as opening a new document
 
-                    _docMap.Add(pszMkDocumentNew, newData);
-                }
-                else
-                {
-                    data.Dispose(); // Removes old item from docmap and cookie map if necessary
-                }
+                    SccDocumentData newData;
 
-                _cookieMap[newData.Cookie] = newData;
-                data = newData;
+                    if (!_docMap.TryGetValue(pszMkDocumentNew, out newData))
+                    {
+                        newData = new SccDocumentData(Context, pszMkDocumentNew);
+                        newData.CopyState(data);
+                        newData.Cookie = docCookie;
+                        data.Dispose();
+
+                        _docMap.Add(pszMkDocumentNew, newData);
+                    }
+                    else
+                    {
+                        data.Dispose(); // Removes old item from docmap and cookie map if necessary
+                    }
+
+                    _cookieMap[newData.Cookie] = newData;
+                    data = newData;
+                }
 
                 if (!string.IsNullOrEmpty(pszMkDocumentOld) && pszMkDocumentNew != pszMkDocumentOld)
                 {
