@@ -152,13 +152,15 @@ namespace Ankh.Scc
             pathsCol.UniqueAddRange(paths);
 
             bool ok = true;
-            foreach (SccDocumentData data in _docMap.Values)
+            foreach(string name in pathsCol)
             {
-                if (!pathsCol.Contains(data.Name))
-                {
-                    if (!data.SaveDocument(RunningDocumentTable))
-                        ok = false;
-                }
+                SccDocumentData data;
+
+                if (!_docMap.TryGetValue(name, out data))
+                    continue;
+
+                if (!data.SaveDocument(RunningDocumentTable))
+                    ok = false;
             }
 
             return ok;
