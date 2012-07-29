@@ -35,7 +35,7 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
             }
 
-            e.Checked = lc.StopOnCopy;
+            e.Checked = !lc.StopOnCopy;
         }
 
         public void OnExecute(CommandEventArgs e)
