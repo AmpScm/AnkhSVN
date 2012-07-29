@@ -545,7 +545,8 @@
       <ButtonRef id="Cmd_UpgradeWorkingCopy" priority="0x7FFF" />
       <ButtonRef id="Cmd_ItemConflictEdit" priority="0x8000" />
       <Button id="Cmd_SccSccReCheckoutFailedProject" name="SvnReCheckoutFailedProject" priority="0x8100"
-              text="Re-Checkout Failed &amp;Project from Subversion" defaultInvisible="true"/>
+              text="Re-Checkout Failed &amp;Project from Subversion" defaultInvisible="true"
+              iconFile="Scc/TfsCheckOut.png" />
       <Button id="Cmd_SccEditFailedProjectLocation" name="SvnEditFailedProjectLocation" priority="0x8200"
               text="Edit Failed Project &amp;Location" defaultInvisible="true"/>
     </GroupRef>
