@@ -111,7 +111,7 @@ namespace Ankh.Scc
 
                     foreach (SccProjectData p in _projectMap.Values)
                     {
-                        if (p.IsPersistedInSolution)
+                        if (p.IsStoredInSolution)
                         {
                             p.SetManaged(managed);
 
@@ -199,14 +199,17 @@ namespace Ankh.Scc
 
             foreach (SccProjectData data in _projectMap.Values)
             {
-                if (data.IsPersistedInSolution)
+                if (data.IsSolutionInfrastructure)
                 {
                     // Solution folders don't save their Scc management state
                     // We let them follow the solution settings
 
                     if (IsSolutionManaged)
                         data.SetManaged(true);
+                }
 
+                if (data.IsStoredInSolution)
+                {
                     // Flush the glyph cache of solution folders
                     // (Well known VS bug: Initially clear)
                     data.NotifyGlyphsChanged();
@@ -437,12 +440,12 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 _projectMap.Add(project, data = new SccProjectData(Context, project));
 
-            if (data.IsPersistedInSolution)
+            if (data.IsStoredInSolution)
             {
                 if (IsSolutionManaged)
                 {
                     // We let them follow the solution settings (See OnSolutionOpen() for the not added case
-                    if (added)
+                    if (added && data.IsSolutionInfrastructure)
                         data.SetManaged(true);
                 }
 
@@ -455,7 +458,7 @@ namespace Ankh.Scc
 
             // Don't take the focus from naming the folder. The rename will perform the .Load()
             // and dirty check
-            if (added && data.IsPersistedInSolution)
+            if (added && data.IsSolutionInfrastructure)
                 return;
 
             if (added && !string.IsNullOrEmpty(SolutionFilename))

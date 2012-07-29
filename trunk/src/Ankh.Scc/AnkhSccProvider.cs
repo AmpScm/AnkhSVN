@@ -37,7 +37,7 @@ namespace Ankh.Scc
     [GlobalService(typeof(AnkhSccProvider))]
     [GlobalService(typeof(IAnkhSccService))]
     [GlobalService(typeof(ITheAnkhSvnSccProvider), true)]
-    sealed partial class AnkhSccProvider : AnkhService, ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService, IVsSccEnlistmentPathTranslation
+    partial class AnkhSccProvider : AnkhService, ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService, IVsSccEnlistmentPathTranslation
     {
         bool _active;
         IFileStatusCache _statusCache;
