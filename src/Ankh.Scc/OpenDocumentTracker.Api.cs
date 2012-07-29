@@ -147,17 +147,22 @@ namespace Ankh.Scc
             if (paths == null)
                 throw new ArgumentNullException("paths");
 
-            HybridCollection<string> pathsCol = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+            HybridCollection<string> openDocs = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+            HybridCollection<string> dontSave = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
-            pathsCol.UniqueAddRange(paths);
+            openDocs.UniqueAddRange(_docMap.Keys);
+            dontSave.UniqueAddRange(paths);
 
             bool ok = true;
-            foreach(string name in pathsCol)
+            foreach(string name in openDocs)
             {
                 SccDocumentData data;
 
-                if (!_docMap.TryGetValue(name, out data))
+                if (dontSave.Contains(name))
                     continue;
+
+                if (!_docMap.TryGetValue(name, out data))
+                    continue; // File closed through saving another one
 
                 if (!data.SaveDocument(RunningDocumentTable))
                     ok = false;
