@@ -35,7 +35,8 @@ namespace Ankh.Scc.ProjectMap
         None,
         WebLikeFileHandling = 0x0010,
         ForceSccGlyphChange = 0x0100,
-        PartOfSolution = 0x1000
+        StoredInSolution = 0x1000,
+        SolutionInfrastructure = 0x2000
     }
 
     public enum SccEnlistChoice
@@ -400,14 +401,19 @@ namespace Ankh.Scc.ProjectMap
             internal set { _isRegistered = value; }
         }
 
-        public bool IsPersistedInSolution
+        public bool IsStoredInSolution
         {
-            get { return (_projectFlags & SccProjectFlags.PartOfSolution) != SccProjectFlags.None; }
+            get { return (_projectFlags & SccProjectFlags.StoredInSolution) != SccProjectFlags.None; }
         }
 
         public bool WebLikeFileHandling
         {
             get { return (_projectFlags & SccProjectFlags.WebLikeFileHandling) != SccProjectFlags.None; }
+        }
+
+        public bool IsSolutionInfrastructure
+        {
+            get { return (_projectFlags & SccProjectFlags.SolutionInfrastructure) != SccProjectFlags.None; }
         }
 
         internal void SetManaged(bool managed)
