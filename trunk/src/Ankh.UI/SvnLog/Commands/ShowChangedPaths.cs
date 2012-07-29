@@ -15,36 +15,35 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using Ankh.Commands;
-using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
     [Command(AnkhCommand.LogShowChangedPaths, AlwaysAvailable = true)]
-    class ShowChangedPaths : ICommandHandler
+    sealed class ShowChangedPaths : ICommandHandler
     {
+        LogToolWindowControl _ctrl;
+
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            ILogControl lc = e.Selection.GetActiveControl<ILogControl>();
+            if (_ctrl == null)
+                _ctrl = e.GetService<LogToolWindowControl>();
 
-            if (lc == null)
+            if (_ctrl == null)
             {
                 e.Enabled = false;
                 return;
             }
 
-            e.Checked = lc.ShowChangedPaths;
+            e.Checked = _ctrl.ShowChangedPaths;
         }
 
         public void OnExecute(CommandEventArgs e)
         {
-            ILogControl lc = e.Selection.GetActiveControl<ILogControl>();
-
-            if (lc == null)
+            if (_ctrl == null)
                 return;
 
-            lc.ShowChangedPaths = !lc.ShowChangedPaths;
+            _ctrl.ShowChangedPaths = !_ctrl.ShowChangedPaths;
         }
     }
 }
