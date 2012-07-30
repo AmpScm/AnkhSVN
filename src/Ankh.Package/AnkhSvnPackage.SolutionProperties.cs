@@ -29,7 +29,6 @@ using System.IO;
 namespace Ankh.VSPackage
 {
     [ProvideSolutionProperties(AnkhSvnPackage.SubversionPropertyCategory)]
-    [ProvideSolutionProperties(AnkhId.SccStructureName)]
     //[ProvideSolutionProperties(AnkhId.IssueTrackerStructureName)]
     partial class AnkhSvnPackage : IVsPersistSolutionProps
     {
@@ -60,19 +59,16 @@ namespace Ankh.VSPackage
             {
                 // We will write solution properties only for the solution
                 IAnkhSccService scc = GetService<IAnkhSccService>();
-                ISccSettingsStore translate = GetService<ISccSettingsStore>();
 
                 VSQUERYSAVESLNPROPS result = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
 
-                if(scc != null && translate != null)
+                if(scc != null)
                 {
-                    if (scc.IsSolutionDirty
-                        || translate.IsSolutionDirty)
+                    if (scc.IsSolutionDirty)
                     {
                         result = VSQUERYSAVESLNPROPS.QSP_HasDirtyProps;
                     }
-                    else if (!scc.HasSolutionData
-                        && !translate.HasSolutionData)
+                    else if (!scc.HasSolutionData)
                     {
                         result = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
                     }
@@ -108,10 +104,6 @@ namespace Ankh.VSPackage
                 if (scc != null && scc.HasSolutionData)
                     pPersistence.SavePackageSolutionProps(1 /* TRUE */, null, this, SubversionPropertyCategory);
 
-                ISccSettingsStore translate = GetService<ISccSettingsStore>();
-                if (translate != null && translate.HasSolutionData)
-                    pPersistence.SavePackageSolutionProps(1 /* TRUE */, null, this, AnkhId.SccStructureName);
-
                 // Once we saved our props, the solution is not dirty anymore
                 scc.IsSolutionDirty = false;
             }
@@ -128,10 +120,9 @@ namespace Ankh.VSPackage
 
             // This method is called from the VS implementation after a request from SaveSolutionProps
             
-            ISccSettingsStore translate = GetService<ISccSettingsStore>();
             IAnkhSccService scc = GetService<IAnkhSccService>();
 
-            using (IPropertyMap map = translate.GetMap(pPropBag))
+            using (IPropertyMap map = new Ankh.Scc.Native.PropertyBag(pPropBag))
             {
                 switch (pszKey)
                 {
@@ -141,9 +132,6 @@ namespace Ankh.VSPackage
                         map.SetRawValue(ManagerPropertyName, "AnkhSVN - Subversion Support for Visual Studio");
 
                         scc.WriteSolutionProperties(map);
-                        break;
-                    case AnkhId.SccStructureName:
-                        translate.WriteSolutionProperties(map);
                         break;
                 }
             }
@@ -156,10 +144,9 @@ namespace Ankh.VSPackage
             if (pHierarchy != null)
                 return VSConstants.S_OK;
 
-            ISccSettingsStore translate = GetService<ISccSettingsStore>();
             IAnkhSccService scc = GetService<IAnkhSccService>();
 
-            using (IPropertyMap map = translate.GetMap(pPropBag))
+            using (IPropertyMap map = new Ankh.Scc.Native.PropertyBag(pPropBag))
             {
 
                 bool preload = (fPreLoad != 0);
@@ -186,9 +173,6 @@ namespace Ankh.VSPackage
 
                             scc.ReadSolutionProperties(map);
                         }
-                        break;
-                    case AnkhId.SccStructureName:
-                        translate.ReadSolutionProperties(map);
                         break;
                 }
             }

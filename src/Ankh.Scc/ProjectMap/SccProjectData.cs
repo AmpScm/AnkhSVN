@@ -56,7 +56,6 @@ namespace Ankh.Scc.ProjectMap
         readonly SccProjectType _projectType;
         readonly SccProjectFlags _projectFlags;
         readonly SccProjectFileCollection _files;
-        SccTranslateData _translateData;
         bool _isManaged;
         bool _isRegistered;
         bool _loaded;
@@ -312,47 +311,6 @@ namespace Ankh.Scc.ProjectMap
             }
 
             return ProjectDirectory;
-        }
-
-        SccEnlistMode? _enlistMode;
-        public SccEnlistMode EnlistMode
-        {
-            get { return (_enlistMode ?? (_enlistMode = GetEnlistMode(true))).Value; }
-        }
-
-        SccEnlistMode GetEnlistMode(bool smart)
-        {
-            IVsSccProjectEnlistmentChoice enlistChoice = VsProject as IVsSccProjectEnlistmentChoice;
-
-            VSSCCENLISTMENTCHOICE[] choice = new VSSCCENLISTMENTCHOICE[1];
-            if (enlistChoice != null && ErrorHandler.Succeeded(enlistChoice.GetEnlistmentChoice(choice)))
-                switch (choice[0])
-                {
-                    case VSSCCENLISTMENTCHOICE.VSSCC_EC_COMPULSORY:
-                        return SccEnlistMode.SccEnlistCompulsory;
-                    case VSSCCENLISTMENTCHOICE.VSSCC_EC_OPTIONAL:
-                        return SccEnlistMode.SccEnlistOptional;
-                    default:
-                        break;
-                }
-
-            if (IsSolutionFolder)
-                return SccEnlistMode.None;
-
-            string dir;
-            if (smart && null != (dir = SccBaseDirectory))
-            {
-                IAnkhSolutionSettings settings = GetService<IAnkhSolutionSettings>();
-                SvnItem dirItem = GetService<IFileStatusCache>()[dir];
-
-                if (dirItem.IsBelowPath(settings.ProjectRootSvnItem))
-                {
-                    if (dirItem.WorkingCopy == settings.ProjectRootSvnItem.WorkingCopy)
-                        return SccEnlistMode.None; // All information available via working copy
-                }
-            }
-
-            return SccEnlistMode.SvnStateOnly;
         }
 
         public bool IsSccBindable
@@ -686,23 +644,6 @@ namespace Ankh.Scc.ProjectMap
         {
             get { return _scc ?? (_scc = GetService<AnkhSccProvider>()); }
         }
-
-        public SccTranslateData SccTranslateData
-        {
-            get
-            {
-                if (_translateData == null)
-                {
-                    _translateData = Scc.GetTranslateData(ProjectGuid, SccEnlistMode.None, null);
-
-                    if (_translateData == null)
-                        _translateData = Scc.GetTranslateData(ProjectGuid, GetEnlistMode(false), ProjectLocation);
-                }
-
-                return _translateData;
-            }
-        }
-
 
         /// <summary>
         /// Checks whether the specified project is a solution folder

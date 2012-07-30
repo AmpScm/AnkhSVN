@@ -108,7 +108,6 @@ namespace Ankh.Scc
             if (SccProvider.IsActive)
             {
                 SccProvider.OnSolutionClosed();
-                SccStore.OnSolutionClosed();
             }
 
             GetService<IAnkhServiceEvents>().OnSolutionClosed(EventArgs.Empty);

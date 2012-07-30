@@ -37,7 +37,7 @@ namespace Ankh.Scc.Native
         int Write(string pszPropName, ref object pVar);
     }
 
-    sealed class PropertyBag : IPropertyMap
+    public sealed class PropertyBag : IPropertyMap
     {
         readonly ICOMPropertyBag _bag;
         readonly SortedList<string, string> _toWrite = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -49,6 +49,7 @@ namespace Ankh.Scc.Native
             _bag = bag;
         }
 
+        [CLSCompliant(false)]
         public PropertyBag(IPropertyBag bag)
             : this((ICOMPropertyBag)bag)
         {
