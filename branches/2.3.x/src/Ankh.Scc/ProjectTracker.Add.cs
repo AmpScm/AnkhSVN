@@ -247,32 +247,29 @@ namespace Ankh.Scc
             // 3 - Copy & Paste in the solution explorer:
             //     The original hierarchy information is still on the clipboard
             IDataObject dataObject;
-            if (null != (dataObject = Clipboard.GetDataObject()) && dataObject.GetDataPresent(SolutionExplorerClipboardItem.ClipFormatProjectItem))
+            string projectItemType;
+            if (null != (dataObject = Clipboard.GetDataObject()) && SolutionExplorerClipboardItem.CanRead(dataObject, out projectItemType))
             {
                 IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
                 ISccProjectWalker walker = GetService<ISccProjectWalker>();
 
-                foreach (SolutionExplorerClipboardItem ci in SolutionExplorerClipboardItem.DecodeProjectItemData(dataObject, true))
+                foreach (string projref in SolutionExplorerClipboardItem.DecodeProjectItemData(dataObject, projectItemType))
                 {
-                    if (!SvnItem.IsValidPath(ci.FileName))
-                        continue;
-
-                    Guid projectGuid = ci.ProjectGuid;
                     IVsHierarchy project;
-
-                    if (!ErrorHandler.Succeeded(solution.GetProjectOfGuid(ref projectGuid, out project)) || project == null)
-                        continue;
-
                     uint itemid;
-                    if (!ErrorHandler.Succeeded(project.ParseCanonicalName(ci.FileName, out itemid)))
-                        continue;
+
+                    {
+                        string updatedRef;
+                        VSUPDATEPROJREFREASON[] updateReason = new VSUPDATEPROJREFREASON[1];
+                        if (!ErrorHandler.Succeeded(solution.GetItemOfProjref(projref, out project, out itemid, out updatedRef, updateReason)))
+                            continue;
+                    }
 
                     foreach(string rawFile in walker.GetSccFiles(project, itemid, ProjectWalkDepth.AllDescendantsInHierarchy, null))
                     {
                         if (!SvnItem.IsValidPath(rawFile))
                             continue;
 
-                        // The clipboard somehow only has lowercase filenames. Obtain the full path
                         string file = SvnTools.GetNormalizedFullPath(rawFile);
 
                         if (_fileOrigins.ContainsKey(file))
