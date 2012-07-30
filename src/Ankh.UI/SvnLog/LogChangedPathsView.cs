@@ -126,6 +126,19 @@ namespace Ankh.UI.SvnLog
 
             if (item != null && item.ChangedPaths != null)
             {
+                IAnkhCommandStates states = null;
+
+                if (Context != null)
+                    states = Context.GetService<IAnkhCommandStates>();
+
+                Color[] colorInfo = null;
+
+                if (!SystemInformation.HighContrast &&
+                    (states != null && (!states.ThemeDefined || states.ThemeLight)))
+                {
+                    colorInfo = new Color[] { Color.Gray, Color.FromArgb(100, 0, 100), Color.DarkRed, Color.DarkBlue };
+                }
+
                 List<PathListViewItem> paths = new List<PathListViewItem>();
 
                 List<string> origins = new List<string>();
@@ -140,7 +153,9 @@ namespace Ankh.UI.SvnLog
 
                 foreach (SvnChangeItem i in item.ChangedPaths)
                 {
-                    paths.Add(new PathListViewItem(this, item, i, item.RepositoryRoot, HasFocus(origins, i.Path)));
+                    bool hasFocus = (colorInfo != null) && HasFocus(origins, i.Path);
+
+                    paths.Add(new PathListViewItem(this, item, i, item.RepositoryRoot, hasFocus, colorInfo));
                 }
 
                 Items.AddRange(paths.ToArray());
