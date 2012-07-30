@@ -102,7 +102,7 @@ namespace Ankh.Scc
                         if (c == '\0')
                         {
                             items.Add(sb.ToString());
-                            sb.Clear();
+                            sb.Length = 0;
                         }
                         else
                         {
