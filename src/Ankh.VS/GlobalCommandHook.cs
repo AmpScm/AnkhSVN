@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
+using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+using VSConstants = Microsoft.VisualStudio.VSConstants;
 
-namespace Ankh.VS.Services
+namespace Ankh.VS
 {
     [GlobalService(typeof(IAnkhGlobalCommandHook))]
     sealed class GlobalCommandHook : AnkhService, IAnkhGlobalCommandHook, IOleCommandTarget
@@ -42,7 +46,7 @@ namespace Ankh.VS.Services
                 IVsRegisterPriorityCommandTarget svc = GetService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
 
                 if (svc != null
-                    && VSErr.Succeeded(svc.RegisterPriorityCommandTarget(0, this, out _cookie)))
+                    && ErrorHandler.Succeeded(svc.RegisterPriorityCommandTarget(0, this, out _cookie)))
                 {
                     _hooked = true;
                 }
@@ -133,11 +137,11 @@ namespace Ankh.VS.Services
             // Exit as quickly as possible without creating exceptions. This function is performance critical!
 
             if (GuidRefIsNull(ref pguidCmdGroup))
-                return VSErr.OLECMDERR_E_NOTSUPPORTED;
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
             Dictionary<int, EventHandler> cmdMap;
             if (!_commandMap.TryGetValue(pguidCmdGroup, out cmdMap))
-                return VSErr.OLECMDERR_E_UNKNOWNGROUP;
+                return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
 
             EventHandler handler;
             if (cmdMap.TryGetValue(unchecked((int)nCmdID), out handler))
@@ -157,13 +161,13 @@ namespace Ankh.VS.Services
                 }
             }
 
-            return VSErr.OLECMDERR_E_NOTSUPPORTED;
+            return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
         }
 
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             // Don't do anything here. This function is 100% performance critical!
-            return VSErr.OLECMDERR_E_NOTSUPPORTED;
+            return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
         }
     }
 }

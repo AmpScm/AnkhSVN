@@ -279,7 +279,7 @@ namespace Ankh.VSPackage
             {
                 int hr = target.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
 
-                if (hr != VSErr.OLECMDERR_E_NOTSUPPORTED && hr != VSErr.OLECMDERR_E_UNKNOWNGROUP)
+                if (hr != (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED && hr != (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)
                     return hr;
             }
 
@@ -288,7 +288,7 @@ namespace Ankh.VSPackage
             if (t != null)
                 return t.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
             else
-                return VSErr.OLECMDERR_E_NOTSUPPORTED;
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
         }
 
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
@@ -297,21 +297,21 @@ namespace Ankh.VSPackage
             {
                 int hr = target.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
 
-                if (hr != VSErr.OLECMDERR_E_NOTSUPPORTED && hr != VSErr.OLECMDERR_E_UNKNOWNGROUP)
+                if (hr != (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED && hr != (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)
                     return hr;
             }
 
             IOleCommandTarget t = _baseTarget ?? (_baseTarget = (IOleCommandTarget)_pane.BaseGetService(typeof(IOleCommandTarget)));
 
-            int r = VSErr.OLECMDERR_E_NOTSUPPORTED;
+            int r = (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
             if (t != null)
                 r = t.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
 
-            if (VSErr.Succeeded(r))
+            if (ErrorHandler.Succeeded(r))
                 return r;
             else
-                return VSErr.OLECMDERR_E_NOTSUPPORTED;
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
         }
 
         #endregion
@@ -333,7 +333,7 @@ namespace Ankh.VSPackage
         private Guid GetGuid(__VSFPROPID id)
         {
             Guid gResult;
-            if (VSErr.Succeeded(Frame.GetGuidProperty((int)id, out gResult)))
+            if (ErrorHandler.Succeeded(Frame.GetGuidProperty((int)id, out gResult)))
                 return gResult;
             else
                 return Guid.Empty;
@@ -358,7 +358,7 @@ namespace Ankh.VSPackage
                 {
                     int onScreen;
 
-                    if (VSErr.Succeeded(frame.IsOnScreen(out onScreen)) && onScreen != 0)
+                    if (ErrorHandler.Succeeded(frame.IsOnScreen(out onScreen)) && onScreen != 0)
                         return true;
                 }
 
@@ -500,7 +500,7 @@ namespace Ankh.VSPackage
                 object obj;
 
                 if (frame != null
-                    && VSErr.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_ToolbarHost, out obj)))
+                    && ErrorHandler.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_ToolbarHost, out obj)))
                 {
                     IVsToolWindowToolbarHost host = obj as IVsToolWindowToolbarHost;
 
@@ -518,35 +518,35 @@ namespace Ankh.VSPackage
         {
             _twControl.OnFrameClose(EventArgs.Empty);
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnDockableChange(int fDockable, int x, int y, int w, int h)
         {
             _twControl.OnFrameDockableChanged(new FrameEventArgs(fDockable != 0, new Rectangle(x, y, w, h), (__FRAMESHOW)(-1)));
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnMove(int x, int y, int w, int h)
         {
             _twControl.OnFrameMove(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)(-1)));
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnShow(int fShow)
         {
             _twControl.OnFrameShow(new FrameEventArgs(false, Rectangle.Empty, (__FRAMESHOW)fShow));
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnSize(int x, int y, int w, int h)
         {
             _twControl.OnFrameSize(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)(-1)));
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion

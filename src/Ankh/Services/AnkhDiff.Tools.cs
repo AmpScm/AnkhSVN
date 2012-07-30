@@ -317,7 +317,7 @@ namespace Ankh.Services
                 throw new ArgumentNullException("appId");
 
             Guid clsid;
-            if (!VSErr.Succeeded(NativeMethods.CLSIDFromProgID(appId, out clsid)))
+            if (!ErrorHandler.Succeeded(NativeMethods.CLSIDFromProgID(appId, out clsid)))
                 return null;
 
             return ClsIdServerSearch(clsid);

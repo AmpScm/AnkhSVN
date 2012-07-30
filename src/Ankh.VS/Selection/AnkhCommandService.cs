@@ -116,7 +116,7 @@ namespace Ankh.Services
                 OLECMD[] cmd = new OLECMD[1];
                 cmd[0].cmdID = unchecked((uint)command.ID);
 
-                if (VSErr.S_OK != dispatcher.QueryStatus(ref g, 1, cmd, IntPtr.Zero))
+                if (VSConstants.S_OK != dispatcher.QueryStatus(ref g, 1, cmd, IntPtr.Zero))
                     return new CommandResult(false);
 
                 OLECMDF flags = (OLECMDF)cmd[0].cmdf;
@@ -141,7 +141,7 @@ namespace Ankh.Services
                     Marshal.GetNativeVariantForObject(argument, vIn);
                 }
 
-                bool ok = VSErr.Succeeded(dispatcher.Exec(ref g,
+                bool ok = ErrorHandler.Succeeded(dispatcher.Exec(ref g,
                     unchecked((uint)command.ID), (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero));
 
                 return new CommandResult(ok, Marshal.GetObjectForNativeVariant(vOut));
@@ -305,7 +305,7 @@ namespace Ankh.Services
                 Guid set = command.Guid;
                 object a = args;
 
-                return VSErr.S_OK == shell.PostExecCommand(ref set,
+                return VSConstants.S_OK == shell.PostExecCommand(ref set,
                         unchecked((uint)command.ID), flags, ref a);
             }
 

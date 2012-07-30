@@ -51,7 +51,7 @@ namespace Ankh.Scc
         public int OnQueryAddFiles(IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYADDFILEFLAGS[] rgFlags, VSQUERYADDFILERESULTS[] pSummaryResult, VSQUERYADDFILERESULTS[] rgResults)
         {
             if (rgpszMkDocuments == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             RegisterForSccCleanup(); // Clear the origins
             _collectHints = true; // Some projects call HandsOff(file) on which files they wish to import. Use that to get more information
@@ -65,7 +65,7 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Ankh.Scc
         /// <param name="pSummaryResult">[out] Returns an overall status for all files as a value from the <see cref="T:Microsoft.VisualStudio.Shell.Interop.VSQUERYADDFILERESULTS"></see> enumeration.</param>
         /// <param name="rgResults">[out] An array that is to be filled in with the status of each file. Each status is a value from the <see cref="T:Microsoft.VisualStudio.Shell.Interop.VSQUERYADDFILERESULTS"></see> enumeration.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         /// <remarks>Deny a query only if allowing the operation would compromise your stable state</remarks>
         public int OnQueryAddFilesEx(IVsProject pProject, int cFiles, string[] rgpszNewMkDocuments, string[] rgpszSrcMkDocuments, VSQUERYADDFILEFLAGS[] rgFlags, VSQUERYADDFILERESULTS[] pSummaryResult, VSQUERYADDFILERESULTS[] rgResults)
@@ -116,7 +116,7 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace Ankh.Scc
                     }
                 }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         private void TryFindOrigin(string newName, out string origin)
@@ -247,28 +247,32 @@ namespace Ankh.Scc
             // 3 - Copy & Paste in the solution explorer:
             //     The original hierarchy information is still on the clipboard
             IDataObject dataObject;
-            string projectItemType;
-            if (null != (dataObject = Clipboard.GetDataObject()) && SolutionExplorerClipboardItem.CanRead(dataObject, out projectItemType))
+            if (null != (dataObject = Clipboard.GetDataObject()) && dataObject.GetDataPresent(SolutionExplorerClipboardItem.ClipFormatProjectItem))
             {
                 IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
                 ISccProjectWalker walker = GetService<ISccProjectWalker>();
 
-                foreach (string projref in SolutionExplorerClipboardItem.DecodeProjectItemData(dataObject, projectItemType))
+                foreach (SolutionExplorerClipboardItem ci in SolutionExplorerClipboardItem.DecodeProjectItemData(dataObject, true))
                 {
+                    if (!SvnItem.IsValidPath(ci.FileName))
+                        continue;
+
+                    Guid projectGuid = ci.ProjectGuid;
                     IVsHierarchy project;
+
+                    if (!ErrorHandler.Succeeded(solution.GetProjectOfGuid(ref projectGuid, out project)) || project == null)
+                        continue;
+
                     uint itemid;
-                    {
-                        string updatedRef;
-                        VSUPDATEPROJREFREASON[] updateReason = new VSUPDATEPROJREFREASON[1];
-                        if (!VSErr.Succeeded(solution.GetItemOfProjref(projref, out project, out itemid, out updatedRef, updateReason)))
-                            continue;
-                    }
+                    if (!ErrorHandler.Succeeded(project.ParseCanonicalName(ci.FileName, out itemid)))
+                        continue;
 
                     foreach(string rawFile in walker.GetSccFiles(project, itemid, ProjectWalkDepth.AllDescendantsInHierarchy, null))
                     {
                         if (!SvnItem.IsValidPath(rawFile))
                             continue;
 
+                        // The clipboard somehow only has lowercase filenames. Obtain the full path
                         string file = SvnTools.GetNormalizedFullPath(rawFile);
 
                         if (_fileOrigins.ContainsKey(file))
@@ -416,7 +420,7 @@ namespace Ankh.Scc
         public int OnQueryAddDirectories(IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYADDDIRECTORYFLAGS[] rgFlags, VSQUERYADDDIRECTORYRESULTS[] pSummaryResult, VSQUERYADDDIRECTORYRESULTS[] rgResults)
         {
             if (pProject == null || rgpszMkDocuments == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             RegisterForSccCleanup(); // Clear the origins table after adding
             _collectHints = true;
@@ -430,7 +434,7 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYADDDIRECTORYRESULTS.VSQUERYADDDIRECTORYRESULTS_AddOK;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -447,7 +451,7 @@ namespace Ankh.Scc
         public int OnAfterAddDirectoriesEx(int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSADDDIRECTORYFLAGS[] rgFlags)
         {
             if (rgpProjects == null || rgpszMkDocuments == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             bool sccActive = SccProvider.IsActive;
 
@@ -495,7 +499,7 @@ namespace Ankh.Scc
                 }
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         internal void OnDocumentSaveAs(string oldName, string newName)

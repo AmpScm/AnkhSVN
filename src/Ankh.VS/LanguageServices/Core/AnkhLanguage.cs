@@ -31,9 +31,9 @@ namespace Ankh.VS.LanguageServices.Core
             codeWindowManager = CreateCodeWindowManager(codeWindow);
 
             if (codeWindowManager != null)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             else
-                return VSErr.E_NOTIMPL;
+                return VSConstants.E_NOTIMPL;
         }
 
         [CLSCompliant(false)]
@@ -47,9 +47,9 @@ namespace Ankh.VS.LanguageServices.Core
             colorizer = CreateColorizer(lines);
 
             if (colorizer != null)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             else
-                return VSErr.E_NOTIMPL;
+                return VSConstants.E_NOTIMPL;
         }
 
         [CLSCompliant(false)]
@@ -61,7 +61,7 @@ namespace Ankh.VS.LanguageServices.Core
         int IVsLanguageInfo.GetFileExtensions(out string pbstrExtensions)
         {
             pbstrExtensions = FileExtensions ?? "";
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         protected virtual string FileExtensions
@@ -72,7 +72,7 @@ namespace Ankh.VS.LanguageServices.Core
         public int GetLanguageName(out string name)
         {
             name = Name;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public abstract string Name

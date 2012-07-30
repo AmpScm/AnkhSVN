@@ -15,35 +15,37 @@
 //  limitations under the License.
 
 using System;
+using System.Collections.Generic;
+using System.Text;
 using Ankh.Commands;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
     [Command(AnkhCommand.LogShowLogMessage, AlwaysAvailable = true)]
     class ShowLogMessage : ICommandHandler
     {
-        LogToolWindowControl _ctrl;
-
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (_ctrl == null)
-                _ctrl = e.GetService<LogToolWindowControl>();
+            ILogControl lc = e.Selection.GetActiveControl<ILogControl>();
 
-            if (_ctrl == null)
+            if (lc == null)
             {
                 e.Enabled = false;
                 return;
             }
 
-            e.Checked = _ctrl.ShowLogMessage;
+            e.Checked = lc.ShowLogMessage;
         }
 
         public void OnExecute(CommandEventArgs e)
         {
-            if (_ctrl == null)
+            ILogControl lc = e.Selection.GetActiveControl<ILogControl>();
+
+            if (lc == null)
                 return;
 
-            _ctrl.ShowLogMessage = !_ctrl.ShowLogMessage;
+            lc.ShowLogMessage = !lc.ShowLogMessage;
         }
     }
 }

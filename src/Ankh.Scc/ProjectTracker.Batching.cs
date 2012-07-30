@@ -32,26 +32,26 @@ namespace Ankh.Scc
         /// Indicates that a project is about start a batch query process.
         /// </summary>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int OnBeginQueryBatch()
         {
             _inBatch = _batchOk = true;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
         /// This method is called to indicate that a batch query process has been canceled.
         /// </summary>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int OnCancelQueryBatch()
         {
             _inBatch = _batchOk = false;
             _batchErrors.Clear();
             RegisterForSccCleanup();
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="pfActionOK">[out] Returns nonzero if it is okay to continue with the proposed batch process. Returns zero if the proposed batch process should not proceed.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int OnEndQueryBatch(out int pfActionOK)
         {
@@ -73,7 +73,7 @@ namespace Ankh.Scc
                 pfActionOK = 1; // What batch?
 
             RegisterForSccCleanup();
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>

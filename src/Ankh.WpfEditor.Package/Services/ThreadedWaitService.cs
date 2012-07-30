@@ -23,7 +23,7 @@ namespace Ankh.WpfPackage.Services
                 if (factory == null)
                     return;
 
-                if (!VSErr.Succeeded(factory.CreateInstance(out _dlg2)))
+                if (!ErrorHandler.Succeeded(factory.CreateInstance(out _dlg2)))
                 {
                     _dlg2 = null;
                     return;

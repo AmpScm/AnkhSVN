@@ -76,7 +76,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             var vsShell = new Mock<SVsShell>().As<IVsShell>();
             object r = @"SOFTWARE\Microsoft\VisualStudio\8.0";
-            vsShell.Setup(x => x.GetProperty((int)__VSSPROPID.VSSPROPID_VirtualRegistryRoot, out r)).Returns(VSErr.S_OK);
+            vsShell.Setup(x => x.GetProperty((int)__VSSPROPID.VSSPROPID_VirtualRegistryRoot, out r)).Returns(VSConstants.S_OK);
 
             var vsTextMgr = new Mock<SVsTextManager>().As<IVsTextManager>();
 

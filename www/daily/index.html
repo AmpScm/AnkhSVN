@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.3.11560</title>
+          AnkhSVN-Daily Update - 2.3.11498</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,59 +16,20 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6393/AnkhSvn-Daily-2.3.11560.1414.msi">AnkhSVN 2.3.11560</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/6387/AnkhSvn-Daily-2.3.11498.1411.msi">AnkhSVN 2.3.11498</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11560">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=11498">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
-<tr class="d"><td colspan="4">2012-07-28</td></tr>
-<tr><td> </td><td class="r"><a id="11548" href="http://ankhsvn.net/rev/11548">
-            [r11548]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh.Scc/Commands/SccCheckoutFailedProject.cs, Ankh.WpfEditor.Package/Ankh.WpfEditor.Package.csproj, Ankh.WpfEditor.Package/Services/SccHelper.cs, Ankh.Services/Scc/ISccHelper.cs, Ankh.Scc/AnkhSccProvider.Enlistment.cs, Ankh.Scc/Resources.resx, Ankh.Ids/AnkhCommand.cs, Ankh.Scc/Resources.Designer.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement a quick and dirty perform enlist operation for missing projects.
-This allows automatically creating a secondary working copy when a project
-is not available.</td></tr>
-<tr><td> </td><td class="r"><a id="11545" href="http://ankhsvn.net/rev/11545">
-            [r11545]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> Native/SolutionExplorerDataItem.cs, ProjectTracker.Add.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update the clipboard handler to implement the official spec instead of a
-rough version.<br>
-The format is documented as part of the IVsSolution.GetItemOfProjref
-function, which is the function to parse this kind of strings.</td></tr>
-<tr><td> </td><td class="r"><a id="11543" href="http://ankhsvn.net/rev/11543">
-            [r11543]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.Projects.cs, Ankh.Scc/ProjectMap/SccProjectData.cs, Ankh.Package/AnkhSvnPackage.Scc.cs, Ankh.Scc/AnkhSccProvider.FileMap.cs, Ankh.Scc/ProjectMap/SccProjectData.ProjectRefresh.cs, Ankh.Scc/AnkhSccProvider.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use the project flag systems for identifying solution folders and websites
-instead of custom hardcoded behavior.</td></tr>
-<tr><td> </td><td class="r"><a id="11539" href="http://ankhsvn.net/rev/11539">
-            [r11539]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/AnkhSvnPackage.SolutionProperties.cs, Ankh.Scc/Ankh.Scc.csproj, Ankh.Scc/AnkhSccProvider.Enlistment.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Further tweaks to the enlist code: Make sure the state is kept stable when
-projects are unloaded (or not found). When reloading user settings also apply
-them in the path translations table.</td></tr>
-<tr><td> </td><td class="r"><a id="11532" href="http://ankhsvn.net/rev/11532">
-            [r11532]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.Projects.cs, Ankh.Scc/SettingsMap/SccTranslatePathInfo.cs, Ankh.Package/AnkhSvnPackage.SolutionProperties.cs, Ankh.VS.UnitTest/Mocks/PackageMock.cs, Ankh.Scc/AnkhSccProvider.FileMap.cs, Ankh.Services/IAnkhPackage.cs, Ankh.Ids/AnkhId.cs, Ankh.Scc/AnkhSccProvider.Enlistment.cs, Ankh.Services/Scc/IAnkhSccService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Enable the enlistment user setting store.<br>
-This avoids enlisting again for projects that already have a known location.</td></tr>
-<tr><td> </td><td class="r"><a id="11523" href="http://ankhsvn.net/rev/11523">
-            [r11523]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.Projects.cs, ProjectTracker.Solution.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">When opening a solution via a path that is not its true path, save it with its
-true path to make sure it is remembered with its true path for future opening.</td></tr>
-<tr class="d"><td colspan="4">2012-07-27</td></tr>
-<tr><td> </td><td class="r"><a id="11507" href="http://ankhsvn.net/rev/11507">
-            [r11507]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/ProjectMap/SccSvnOrigin.cs, Ankh.Scc/Native/ICOMPropertyBag.cs, Ankh.Scc/ProjectMap/SccProjectData.cs, Ankh.Scc/SccUI/ChangeSourceControl.cs, Ankh.Scc/SettingsMap/SccTranslatePathInfo.cs, Ankh.Package/AnkhSvnPackage.SolutionProperties.cs, Ankh.Scc/Ankh.Scc.csproj, Ankh.Ids/AnkhId.cs, Ankh.Scc/AnkhSccProvider.Enlistment.cs, Ankh.Services/Scc/IAnkhSccService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Checkpoint new -much simpler- enlist storage code. This new code will start
-storing enlist and svn origin information in the solution file for projects
-that need this knowledge for stability over multiple working copies.<br>
-This commit enables the storage handling and asking enlist for a default set
-of paths for translation. Which brings us at the point that the behavior doesn't
-change, but that we can start storing information that we can use to load back
-solutions that are split over multiple working copies.</td></tr>
 <tr class="d"><td colspan="4">2012-07-25</td></tr>
 <tr><td> </td><td class="r"><a id="11488" href="http://ankhsvn.net/rev/11488">
             [r11488]

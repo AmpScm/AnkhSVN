@@ -44,7 +44,7 @@ namespace Ankh.Scc
             : base(context)
         {
             uint cookie;
-            if (VSErr.Succeeded(Shell.AdviseBroadcastMessages(this, out cookie)))
+            if (ErrorHandler.Succeeded(Shell.AdviseBroadcastMessages(this, out cookie)))
                 _cookie = cookie;
         }
 
@@ -566,7 +566,7 @@ namespace Ankh.Scc
                     }
                     break;
             }
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion

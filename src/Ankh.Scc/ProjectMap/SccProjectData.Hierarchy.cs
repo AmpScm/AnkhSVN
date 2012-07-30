@@ -30,7 +30,7 @@ namespace Ankh.Scc.ProjectMap
             uint cookie;
             if (_hierarchyEventsCookie == 0 && hook)
             {
-                if (VSErr.Succeeded(ProjectHierarchy.AdviseHierarchyEvents(this, out cookie)))
+                if (ErrorHandler.Succeeded(ProjectHierarchy.AdviseHierarchyEvents(this, out cookie)))
                 {
                     _hierarchyEventsCookie = cookie;
                 }
@@ -46,14 +46,14 @@ namespace Ankh.Scc.ProjectMap
 
         public int OnInvalidateIcon(IntPtr hicon)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnInvalidateItems(uint itemidParent)
         {
             // Should be set the project dirty.. 
             // But is called in some cases when it really shouldn't
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         private void SetDirty()
@@ -90,15 +90,15 @@ namespace Ankh.Scc.ProjectMap
             string r;
 
             object var;
-            if (VSErr.Succeeded(ProjectHierarchy.GetProperty(itemidAdded, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
+            if (ErrorHandler.Succeeded(ProjectHierarchy.GetProperty(itemidAdded, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
                 && (bool)var)
             {
-                return VSErr.S_OK; // Extra item for show all files
+                return VSConstants.S_OK; // Extra item for show all files
             }
 
             if (_loaded)
             {
-                if (VSErr.Succeeded(VsProject.GetMkDocument(itemidAdded, out r))
+                if (ErrorHandler.Succeeded(VsProject.GetMkDocument(itemidAdded, out r))
                     && SvnItem.IsValidPath(r))
                 {
                     if (!SvnItem.PathExists(r))
@@ -114,7 +114,7 @@ namespace Ankh.Scc.ProjectMap
                 }
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnItemDeleted(uint itemid)
@@ -122,21 +122,21 @@ namespace Ankh.Scc.ProjectMap
             SetPreCreatedItem(VSConstants.VSITEMID_NIL);
 
             object var;
-            if (VSErr.Succeeded(ProjectHierarchy.GetProperty(itemid, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
+            if (ErrorHandler.Succeeded(ProjectHierarchy.GetProperty(itemid, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
                 && (bool)var)
             {
-                return VSErr.S_OK; // Extra item for show all files
+                return VSConstants.S_OK; // Extra item for show all files
             }
 
             SetDirty();
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnItemsAppended(uint itemidParent)
         {
             SetDirty();
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnPropertyChanged(uint itemid, int propid, uint flags)
@@ -151,7 +151,7 @@ namespace Ankh.Scc.ProjectMap
                 _sccBaseDirectory = null;
                 _checkedProjectFile = false;
             }
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
     }
 }

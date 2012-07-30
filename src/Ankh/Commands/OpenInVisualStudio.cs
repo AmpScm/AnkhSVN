@@ -145,7 +145,7 @@ namespace Ankh.Commands
                         int found;
                         uint id;
                         VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
-                        if (project != null && VSErr.Succeeded(project.IsDocumentInProject(item.FullPath, out found, prio, out id)) && found != 0)
+                        if (project != null && ErrorHandler.Succeeded(project.IsDocumentInProject(item.FullPath, out found, prio, out id)) && found != 0)
                         {
                             hierWindow.ExpandItem(project as IVsUIHierarchy, id, EXPANDFLAGS.EXPF_SelectItem);
                         }

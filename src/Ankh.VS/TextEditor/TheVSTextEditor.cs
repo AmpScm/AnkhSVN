@@ -766,7 +766,7 @@ namespace Ankh.VS.TextEditor
             IntPtr pText = Marshal.StringToCoTaskMemUni(text);
             try
             {
-                return VSErr.Succeeded(lines.ReplaceLines(s[0].Y, s[0].X, s[1].Y, s[1].X, pText, text.Length, null));
+                return ErrorHandler.Succeeded(lines.ReplaceLines(s[0].Y, s[0].X, s[1].Y, s[1].X, pText, text.Length, null));
             }
             finally
             {
@@ -779,7 +779,7 @@ namespace Ankh.VS.TextEditor
         Point[] GetSelection()
         {
             int y1, x1, y2, x2;
-            if (!VSErr.Succeeded(_textView.GetSelection(out y1, out x1, out y2, out x2)))
+            if (!ErrorHandler.Succeeded(_textView.GetSelection(out y1, out x1, out y2, out x2)))
                 return null;
 
             if (y1 < y2)
@@ -794,7 +794,7 @@ namespace Ankh.VS.TextEditor
         {
             int y, x;
 
-            if (!VSErr.Succeeded(_textView.GetCaretPos(out y, out x)))
+            if (!ErrorHandler.Succeeded(_textView.GetCaretPos(out y, out x)))
                 return new Point();
             else
                 return new Point(x, y);
@@ -849,14 +849,14 @@ namespace Ankh.VS.TextEditor
                             else
                             {
                                 Guid lid;
-                                if (VSErr.Succeeded(_textBuffer.GetLanguageServiceID(out lid)))
+                                if (ErrorHandler.Succeeded(_textBuffer.GetLanguageServiceID(out lid)))
                                 {
                                     lp = new LANGPREFERENCES2[1];
                                     lp[0].guidLang = lid;
                                 }
                             }
 
-                            if (VSErr.Succeeded(manager.GetUserPreferences2(null, items, lp, null)))
+                            if (ErrorHandler.Succeeded(manager.GetUserPreferences2(null, items, lp, null)))
                             {
                                 // Only hide the horizontal scrollbar if one would have been visible 
                                 if (items[0].fHorzScrollbar != 0 && (lp == null || lp[0].fWordWrap == 0))
@@ -1087,7 +1087,7 @@ namespace Ankh.VS.TextEditor
         void InternalSetReadOnly(bool value)
         {
             uint state;
-            if (VSErr.Succeeded(_textBuffer.GetStateFlags(out state)))
+            if (ErrorHandler.Succeeded(_textBuffer.GetStateFlags(out state)))
             {
                 if (value)
                     state |= (uint)BUFFERSTATEFLAGS.BSF_USER_READONLY;
@@ -1131,7 +1131,7 @@ namespace Ankh.VS.TextEditor
             if (HasFocus)
                 return commandTarget.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
             else
-                return VSErr.OLECMDERR_E_NOTSUPPORTED;
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
         }
 
 
@@ -1148,7 +1148,7 @@ namespace Ankh.VS.TextEditor
             if (HasFocus)
                 return commandTarget.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
             else
-                return VSErr.OLECMDERR_E_NOTSUPPORTED;
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
         }
 
         public IOleCommandTarget EditorCommandTarget
@@ -1232,7 +1232,7 @@ namespace Ankh.VS.TextEditor
             {
                 IOleUndoManager mgr;
 
-                if (VSErr.Succeeded(_textBuffer.GetUndoManager(out mgr)) && mgr != null)
+                if (ErrorHandler.Succeeded(_textBuffer.GetUndoManager(out mgr)) && mgr != null)
                 {
                     mgr.DiscardFrom(null);
                 }
@@ -1386,7 +1386,7 @@ namespace Ankh.VS.TextEditor
                 if (layeredView != null)
                 {
                     IVsTextLayer topLayer;
-                    if (VSErr.Succeeded(layeredView.GetTopmostLayer(out topLayer)))
+                    if (ErrorHandler.Succeeded(layeredView.GetTopmostLayer(out topLayer)))
                         return _topLayer = topLayer;
                 }
 
@@ -1413,7 +1413,7 @@ namespace Ankh.VS.TextEditor
                 return p;
 
             int bY, bX;
-            if (VSErr.Succeeded(topLayer.LocalLineIndexToBase(p.Y, p.X, out bY, out bX)))
+            if (ErrorHandler.Succeeded(topLayer.LocalLineIndexToBase(p.Y, p.X, out bY, out bX)))
                 return new Point(bX, bY);
             else
                 return new Point(-1, -1); // Not represented in buffer
@@ -1427,7 +1427,7 @@ namespace Ankh.VS.TextEditor
                 return p;
 
             int bY, bX;
-            if (VSErr.Succeeded(topLayer.BaseLineIndexToLocal(p.Y, p.X, out bY, out bX)))
+            if (ErrorHandler.Succeeded(topLayer.BaseLineIndexToLocal(p.Y, p.X, out bY, out bX)))
                 return new Point(bX, bY);
             else
                 return new Point(-1, -1); // Not represented in view

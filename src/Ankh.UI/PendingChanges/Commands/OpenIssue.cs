@@ -30,7 +30,7 @@ namespace Ankh.UI.PendingChanges.Commands
                 return null;
 
             int lastLine, lastIndex;
-            if (!VSErr.Succeeded(lines.GetLastLineIndex(out lastLine, out lastIndex)))
+            if (!ErrorHandler.Succeeded(lines.GetLastLineIndex(out lastLine, out lastIndex)))
                 return null;
 
             if (lineNr > lastLine)
@@ -38,7 +38,7 @@ namespace Ankh.UI.PendingChanges.Commands
 
             LINEDATA[] data = new LINEDATA[1];
 
-            if (!VSErr.Succeeded(lines.GetLineData(lineNr, data, null)))
+            if (!ErrorHandler.Succeeded(lines.GetLineData(lineNr, data, null)))
                 return null;
 
             return Marshal.PtrToStringUni(data[0].pszText, data[0].iLength);
@@ -62,11 +62,11 @@ namespace Ankh.UI.PendingChanges.Commands
             }
 
             int x, y;
-            if (!VSErr.Succeeded(tv.GetCaretPos(out y, out x)))
+            if (!ErrorHandler.Succeeded(tv.GetCaretPos(out y, out x)))
                 return false;
 
             IVsTextLines lines;
-            if (!VSErr.Succeeded(tv.GetBuffer(out lines)))
+            if (!ErrorHandler.Succeeded(tv.GetBuffer(out lines)))
                 return false;
 
             string text, pre = null, post = null;
@@ -91,10 +91,10 @@ namespace Ankh.UI.PendingChanges.Commands
 
             if (!string.IsNullOrEmpty(post))
                 combined += '\n' + post;
-            if ((y > 0) && !VSErr.Succeeded(tv.GetTextStream(y - 1, 0, y, 0, out pre)))
+            if ((y > 0) && !ErrorHandler.Succeeded(tv.GetTextStream(y - 1, 0, y, 0, out pre)))
                 return false;
 
-            if (!VSErr.Succeeded(tv.GetTextStream(y + 1, 0, y + 2, 0, out post)))
+            if (!ErrorHandler.Succeeded(tv.GetTextStream(y + 1, 0, y + 2, 0, out post)))
                 post = null;
 
             

@@ -106,7 +106,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
-            if (!data.WebLikeFileHandling)
+            if (!data.IsWebSite)
             {
                 // Do nothing
             }
@@ -158,7 +158,7 @@ namespace Ankh.Scc
         {
             // The solution file is renamed
 
-            _solutionFile = null; // Get new data after this rename
+            _solutionDirectory = _solutionFile = null; // Get new data after this rename
             Monitor.ScheduleGlyphUpdate(SolutionFilename);
         }
 
@@ -660,7 +660,7 @@ namespace Ankh.Scc
             {
                 // We have to know its contents to provide SCC info
                 // TODO: BH: Maybe only enable while reloading?
-                return projectData.WebLikeFileHandling;
+                return projectData.IsWebSite;
             }
 
             return false;
@@ -743,6 +743,15 @@ namespace Ankh.Scc
             {
                 get { return null; }
                 set { throw new InvalidOperationException(); }
+            }
+
+            /// <summary>
+            /// Gets the SCC enlist mode.
+            /// </summary>
+            /// <value>The SCC enlist mode.</value>
+            public SccEnlistMode SccEnlistMode
+            {
+                get { return _data.EnlistMode; }
             }
 
             public bool IsSccBindable

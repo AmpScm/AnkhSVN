@@ -28,7 +28,6 @@ using SharpSvn;
 
 using Ankh.Scc.ProjectMap;
 using Ankh.Scc.SettingMap;
-using Ankh.UI;
 
 namespace Ankh.Scc
 {
@@ -45,65 +44,53 @@ namespace Ankh.Scc
 
     partial class AnkhSccProvider
     {
-        bool _translateDataLoaded;
-        readonly Dictionary<string, string> _trueNameMap = new Dictionary<string, string>();
-        readonly Dictionary<string, SccSvnOrigin> _originMap = new Dictionary<string, SccSvnOrigin>();
+        bool _solutionLoaded;
+        readonly Dictionary<string, EnlistBase> _enlistStore = new Dictionary<string, EnlistBase>();
+        readonly List<EnlistData> _enlistState = new List<EnlistData>();
+        bool _enlistCompleted;// = false;
+        readonly List<SccTranslateData> _translations = new List<SccTranslateData>();
+        readonly Dictionary<string, SccTranslateData> _storedPaths = new Dictionary<string, SccTranslateData>(StringComparer.OrdinalIgnoreCase);
+        readonly Dictionary<string, SccTranslateData> _sccPaths = new Dictionary<string, SccTranslateData>(StringComparer.OrdinalIgnoreCase);
 
+        readonly Dictionary<string, string> _trueNameMap = new Dictionary<string, string>();
         int IVsSccEnlistmentPathTranslation.TranslateEnlistmentPathToProjectPath(string lpszEnlistmentPath, out string pbstrProjectPath)
         {
-            if (_trueNameMap.TryGetValue(lpszEnlistmentPath, out pbstrProjectPath))
+            SccTranslatePathInfo info;
+            if (SccStore.TryGetTranslation(false, lpszEnlistmentPath, out info))
             {
-                // Already set the path
-                return VSErr.S_OK;
-            }
-            else if (_trueNameMap.TryGetValue(lpszEnlistmentPath + "\\", out pbstrProjectPath))
-            {
-                pbstrProjectPath += "\\";
-                return VSErr.S_OK;
-            }
-            else if (_trueNameMap.TryGetValue(lpszEnlistmentPath.TrimEnd('\\'), out pbstrProjectPath))
-            {
-                return VSErr.S_OK;
+                pbstrProjectPath = info.SolutionPath;
+                return VSConstants.S_OK;
             }
 
             if (!IsSafeSccPath(lpszEnlistmentPath))
             {
                 pbstrProjectPath = lpszEnlistmentPath;
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
-            pbstrProjectPath = lpszEnlistmentPath;
+            if (_trueNameMap.TryGetValue(lpszEnlistmentPath, out pbstrProjectPath))
+            {
+                // Already set the path
+            }
+            else
+                pbstrProjectPath = lpszEnlistmentPath;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
-        /// <summary>
-        /// Translates a possibly virtual project path to a local path and an enlistment physical path.
-        /// </summary>
-        /// <param name="lpszProjectPath">[in] The project's (possibly) virtual path as obtained from the solution file.</param>
-        /// <param name="pbstrEnlistmentPath">[out] The local path used by the solution for loading and saving the project.</param>
-        /// <param name="pbstrEnlistmentPathUNC">[out] The path used by the source control system for managing the enlistment ("\\drive\path", "[drive]:\path", "file://server/path").</param>
-        /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"/>. If it fails, it returns an error code.
-        /// </returns>
-        public int TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
+        int IVsSccEnlistmentPathTranslation.TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
         {
-            // Summarized: lpszProjectPath         = Path as stored in the .sln
-            //             pbstrEnlistmentPath     = Path used to load the project (e.g. http://localhost/site)
-            //             pbstrEnlistmentPathUNC  = UNC Path to the project on disk
-            //                                       (e.g. c:\inetpub\wwwroot\site for http://localhost/site
             SccTranslatePathInfo info;
-            if (TryGetTranslation(lpszProjectPath, out info))
+            if (SccStore.TryGetTranslation(true, lpszProjectPath, out info))
             {
                 pbstrEnlistmentPath = info.EnlistmentPath;
-                pbstrEnlistmentPathUNC = info.EnlistmentUNCPath;
-                return VSErr.S_OK;
+                pbstrEnlistmentPathUNC = info.EnlistmentPathUNC;
             }
 
             if (!IsSafeSccPath(lpszProjectPath))
             {
                 pbstrEnlistmentPath = pbstrEnlistmentPathUNC = lpszProjectPath;
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             string trueProjectPath = CalculateTruePath(lpszProjectPath);
@@ -115,12 +102,12 @@ namespace Ankh.Scc
 
             pbstrEnlistmentPath = pbstrEnlistmentPathUNC = trueProjectPath;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         private string CalculateTruePath(string lpszProjectPath)
         {
-            string trueName = SvnTools.GetTruePath(lpszProjectPath, true) ?? SvnTools.GetNormalizedFullPath(lpszProjectPath);
+            string trueName = SvnTools.GetTruePath(lpszProjectPath, true);
 
             if (trueName != lpszProjectPath)
             {
@@ -169,13 +156,6 @@ namespace Ankh.Scc
 
             foreach (KeyValuePair<string, string> kv in oldNameMap)
             {
-                if (!IsSafeSccPath(kv.Key) || !IsSafeSccPath(kv.Value))
-                {
-                    // Just copy translations like http://localhost
-                    _trueNameMap.Add(kv.Key, kv.Value);
-                    continue;
-                }
-
                 string newRel = MakeRelativeNoCase(newName, kv.Key);
 
                 if (IsSafeSccPath(newRel))
@@ -191,406 +171,490 @@ namespace Ankh.Scc
 
         void Translate_ClearState()
         {
-            _translateDataLoaded = false;
+            _enlistStore.Clear();
+            _enlistState.Clear();
+            _enlistCompleted = false;
+
+            _translations.Clear();
+            _storedPaths.Clear();
+            _sccPaths.Clear();
             _trueNameMap.Clear();
-            _originMap.Clear();
-            _translationMap.Clear();
         }
 
-        public void ProjectLoadFailed(string pszProjectMk)
+        #region IAnkhSccService Members
+
+
+        public bool HasSolutionData
         {
+            get { return IsSolutionManaged; }
         }
 
-        Dictionary<string, SccTranslatePathInfo> _translationMap = new Dictionary<string, SccTranslatePathInfo>();
-        private bool TryGetTranslation(string path, out SccTranslatePathInfo info)
+
+        #endregion
+
+        protected IEnumerable<IVsHierarchy> GetAllProjectsInSolutionRaw()
         {
-            EnsureEnlistUserSettings();
-
-            if (string.IsNullOrEmpty(path))
-            {
-                info = null;
-                return false;
-            }
-
-            if (_translationMap.TryGetValue(path, out info))
-                return true;
-
-            if (_translationMap.TryGetValue(path + "\\", out info))
-                return true;
-
-            return false;
-        }
-
-        bool MapProject(IVsHierarchy pHierarchy, out string slnLocation, out SccProjectData data)
-        {
-            IVsSccProject2 sccProject = pHierarchy as IVsSccProject2;
-
-            if (sccProject != null && _projectMap.TryGetValue(sccProject, out data))
-            {
-                // data valid
-            }
-            else if (sccProject != null)
-            {
-                data = new SccProjectData(this, sccProject);
-            }
-            else
-                data = null;
-
-            string projectLocation = null;
-            try
-            {
-                if (data != null && !string.IsNullOrEmpty(data.ProjectLocation))
-                {
-                    projectLocation = data.ProjectLocation;
-                    return true;
-                }
-
-                IVsSolution2 sln = GetService<IVsSolution2>(typeof(SVsSolution));
-
-                if (sln != null
-                    && VSErr.Succeeded(pHierarchy.GetCanonicalName(VSConstants.VSITEMID_ROOT, out projectLocation)))
-                    return !string.IsNullOrEmpty(projectLocation);
-
-                projectLocation = null;
-                return false;
-            }
-            finally
-            {
-                if (projectLocation == null || !_trueNameMap.TryGetValue(projectLocation, out slnLocation))
-                    slnLocation = projectLocation;
-            }
-        }
-
-        public bool HasProjectProperties(IVsHierarchy pHierarchy)
-        {
-            string location;
-            SccProjectData data;
-
-            if (!MapProject(pHierarchy, out location, out data))
-                return false;
-
-            if (data != null)
-            {
-                if (!data.IsManaged)
-                    return false;
-                else if (data.EnlistMode != SccEnlistChoice.Never)
-                    return true;
-            }
-
-            return _originMap.ContainsKey(location);
-        }
-
-        public void StoreProjectProperties(IVsHierarchy pHierarchy, IPropertyMap map)
-        {
-            string location;
-            SccProjectData data;
-
-            if (!MapProject(pHierarchy, out location, out data))
-                return;
-
-            SccSvnOrigin origin;
-            if (!_originMap.TryGetValue(location, out origin))
-            {
-                if (data == null || data.EnlistMode == SccEnlistChoice.Never)
-                    return;
-
-                /* This project type wants to be enlisted.
-                 * Store that information now to allow handling it on sln opening
-                 */
-                _originMap[location] = origin = new SccSvnOrigin();
-            }
-
-            if (data != null)
-            {
-                SccEnlistChoice choice = data.EnlistMode;
-                if (choice != SccEnlistChoice.Never)
-                {
-                    origin.Enlist = choice.ToString();
-
-                    if (string.IsNullOrEmpty(origin.SvnUri))
-                        UpdateOriginUri(pHierarchy);
-                }
-                else
-                    origin.Enlist = null;
-            }
-
-            origin.Write(map);
-        }
-
-        private void UpdateOriginUri(IVsHierarchy pHierarchy)
-        {
-            string location;
-            SccProjectData data;
-
-            if (string.IsNullOrEmpty(SolutionDirectory))
-                return;
-
-            if (!MapProject(pHierarchy, out location, out data))
-                return;
-
-            if (data == null)
-                return;
-
-            SccSvnOrigin origin;
-            if (!_originMap.TryGetValue(location, out origin))
-                return;
-
-            if (data.ProjectDirectory == null)
-                return;
-
-            SvnItem dirItem = StatusCache[data.ProjectDirectory];
-            SvnItem slnDirItem = StatusCache[SolutionDirectory];
-
-            if (!dirItem.IsVersioned)
-                return;
-
-            Uri dirUri = dirItem.Uri;
-            Uri slnDirUri;
-
-            SvnWorkingCopy slnWc = slnDirItem.WorkingCopy;
-
-            if (slnWc == null)
-                return;
-
-            if (slnDirItem.IsVersioned)
-                slnDirUri = slnDirItem.Uri;
-            else
-            {
-                origin.SvnUri = dirItem.Uri.AbsoluteUri;
-                return;
-            }
-
-            Uri relUri = slnDirUri.MakeRelativeUri(dirUri);
-
-            if (relUri.IsAbsoluteUri)
-                origin.SvnUri = relUri.AbsoluteUri;
-            else
-                origin.SvnUri = relUri.ToString();
-        }
-
-        public void ReadProjectProperties(IVsHierarchy pHierarchy, string pszProjectName, string pszProjectMk, IPropertyMap map)
-        {
-            string slnProjectName;
-
-            if (!_trueNameMap.TryGetValue(pszProjectMk, out slnProjectName))
-                slnProjectName = pszProjectMk;
-
-            SccSvnOrigin origin = new SccSvnOrigin();
-            origin.Load(map);
-
-            _originMap[slnProjectName] = origin;
-
-            if (!string.IsNullOrEmpty(origin.Enlist))
-                EnsureEnlistment(slnProjectName, pszProjectMk, origin);
-        }
-
-        void EnsureEnlistment(string slnProjectName, string pszProjectMk, SccSvnOrigin origin)
-        {
-            SccTranslatePathInfo tpi;
-            if (TryGetTranslation(slnProjectName, out tpi))
-                return; // We have existing local data
-
-            IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
-
-            if (sol == null)
-                return;
-
-            IVsProjectFactory factory;
-            if (!VSErr.Succeeded(sol.GetProjectFactory(0, null, pszProjectMk, out factory)))
-                return;
-
-            IVsSccProjectEnlistmentFactory enlistFactory = factory as IVsSccProjectEnlistmentFactory;
-            if (enlistFactory == null)
-                return;
-
-            string enlistPath, enlistPathUNC;
-            if (!VSErr.Succeeded(enlistFactory.GetDefaultEnlistment(pszProjectMk, out enlistPath, out enlistPathUNC)))
-                return;
-
-            // ### We should now proceed with the editing operations as documented
-            // ### in IVsSccEnlistmentPathTranslation.idl
-
-            // ### But since we don't have per user settings yet we currently just
-            // ### pass the defaults as that happens to be the same behavior as
-            // ### before
-
-            if (IsSafeSccPath(pszProjectMk)
-                && !string.IsNullOrEmpty(SolutionSettings.ProjectRoot)
-                /*&& (SvnItem.IsBelowRoot(pszProjectMk, SolutionSettings.ProjectRoot) || string.IsNullOrEmpty(origin.SvnUri))*/
-                && StatusCache != null && StatusCache[pszProjectMk].Exists)
-            {
-                int pfValidEnlistment;
-                string chosenUNC;
-
-                // We have a website that has a default location below our project root or without a Svn Uri
-                // At least for now we should default to enlist at that location to make
-                // sure we don't break backwards compatibility
-                string suffix = ".sccEnlistAttemptLocation";
-
-                if (VSErr.Succeeded(enlistFactory.ValidateEnlistmentEdit(0, slnProjectName, pszProjectMk+suffix, out chosenUNC, out pfValidEnlistment))
-                    && pfValidEnlistment != 0
-                    && chosenUNC.EndsWith(suffix))
-                {
-                    enlistPath = pszProjectMk;
-                    enlistPathUNC = chosenUNC.Substring(0, chosenUNC.Length - suffix.Length);
-                }
-            }
-
-            string slnProjectMk;
-
-            // Maybe we already translated the path?
-            if (!_trueNameMap.TryGetValue(pszProjectMk, out slnProjectMk))
-                slnProjectMk = pszProjectMk;
-
-            tpi = new SccTranslatePathInfo(slnProjectMk, enlistPath, CalculateTruePath(enlistPathUNC));
-
-            _translationMap[slnProjectMk] = tpi;
-
-            if (enlistPathUNC != slnProjectMk)
-                _trueNameMap[enlistPathUNC] = slnProjectMk;
-        }
-
-        public IDictionary<string, object> GetProjectsThatNeedEnlisting()
-        {
-            if (_translationMap.Count == 0)
-                return null;
-
-            Guid guidEmpty = Guid.Empty;
-            IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
+            IVsSolution solution = (IVsSolution)Context.GetService(typeof(SVsSolution));
 
             if (solution == null)
-                return null;
+                yield break;
 
-            IEnumHierarchies ppEnum;
-            if (!VSErr.Succeeded(solution.GetProjectEnum((uint)Microsoft.VisualStudio.Shell.Interop.__VSENUMPROJFLAGS.EPF_UNLOADEDINSOLUTION, ref guidEmpty, out ppEnum)))
-                return null;
+            Guid none = Guid.Empty;
+            IEnumHierarchies hierEnum;
+            if (!ErrorHandler.Succeeded(solution.GetProjectEnum((uint)__VSENUMPROJFLAGS.EPF_ALLPROJECTS, ref none, out hierEnum)))
+                yield break;
 
-            IVsHierarchy[] hiers = new IVsHierarchy[16];
-
-            uint iFetched;
-            Dictionary<string, object> map = new Dictionary<string, object>();
-            while (VSErr.Succeeded(ppEnum.Next((uint)hiers.Length, hiers, out iFetched)))
+            IVsHierarchy[] hiers = new IVsHierarchy[32];
+            uint nFetched;
+            while (ErrorHandler.Succeeded(hierEnum.Next((uint)hiers.Length, hiers, out nFetched)))
             {
-                for (uint i = 0; i < iFetched; i++)
+                if (nFetched == 0)
+                    break;
+                for (int i = 0; i < nFetched; i++)
                 {
-                    string name;
-                    if (VSErr.Succeeded(hiers[i].GetCanonicalName(Microsoft.VisualStudio.VSConstants.VSITEMID_ROOT, out name)))
-                    {
-                        string slnName;
-                        if (!_trueNameMap.TryGetValue(name, out slnName))
-                            slnName = name;
+                    yield return hiers[i];
+                }
+            }
+        }
 
-                        SccSvnOrigin origin;
-                        if (_originMap.TryGetValue(slnName, out origin)
-                            && !string.IsNullOrEmpty(origin.Enlist))
+        /// <summary>
+        /// Writes the enlistment state to the solution
+        /// </summary>
+        /// <param name="pPropBag">The p prop bag.</param>
+        public void WriteSolutionProperties(IPropertyMap propertyBag)
+        {
+            if (!IsActive || !IsSolutionManaged)
+                return;
+#if DEBUG_ENLISTMENT
+            SortedList<string, string> projects = new SortedList<string, string>(StringComparer.Ordinal);
+            SortedList<string, string> values = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            string projectDir = SolutionDirectory;
+
+            IAnkhSolutionSettings ss = GetService<IAnkhSolutionSettings>();
+            Uri solutionUri = null;
+
+            if (ss != null)
+                projectDir = ss.ProjectRootWithSeparator;
+            else
+                projectDir = projectDir.TrimEnd('\\') + '\\';
+
+            string normalizedProjectDir = SvnTools.GetNormalizedFullPath(projectDir);
+
+            foreach (SccProjectData project in _projectMap.Values)
+            {
+                if (string.IsNullOrEmpty(project.ProjectDirectory) || !project.IsManaged)
+                    continue; // Solution folder or unmanaged?
+
+                bool enlist = false;
+                bool enlistOptional = true;
+                IVsSccProjectEnlistmentChoice projectChoice = project.VsProject as IVsSccProjectEnlistmentChoice;
+
+                if (projectChoice != null)
+                {
+                    VSSCCENLISTMENTCHOICE[] choice = new VSSCCENLISTMENTCHOICE[1];
+
+                    if (ErrorHandler.Succeeded(projectChoice.GetEnlistmentChoice(choice)))
+                    {
+                        switch (choice[0])
                         {
-                            map.Add(name, hiers[i]);
+                            case VSSCCENLISTMENTCHOICE.VSSCC_EC_NEVER:
+                                // Don't take any enlistment actions
+                                break;
+                            case VSSCCENLISTMENTCHOICE.VSSCC_EC_COMPULSORY:
+                                enlist = true;
+                                enlistOptional = false;
+                                break;
+                            case VSSCCENLISTMENTCHOICE.VSSCC_EC_OPTIONAL:
+                                enlistOptional = enlist = true;
+                                break;
                         }
                     }
                 }
 
-                if ((int)iFetched < hiers.Length)
-                    break;
-            }
+                string dir = SvnTools.GetNormalizedFullPath(project.ProjectDirectory);
+                string file = project.ProjectFile;
 
-            return map;
-        }
-
-        internal void EnlistAndCheckout(IVsHierarchy vsHierarchy, string pszProjectMk)
-        {
-            string slnProjectMk;
-
-            if (!_trueNameMap.TryGetValue(pszProjectMk, out slnProjectMk))
-                slnProjectMk = pszProjectMk;
-
-            SccSvnOrigin origin;
-
-            if (!_originMap.TryGetValue(slnProjectMk, out origin))
-                return;
-
-            if (string.IsNullOrEmpty(origin.SvnUri))
-                return;
-
-            IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
-            if (sol == null)
-                return;
-
-            IVsProjectFactory factory;
-            if (!VSErr.Succeeded(sol.GetProjectFactory(0, null, pszProjectMk, out factory)))
-                return;
-
-            IVsSccProjectEnlistmentFactory enlistFactory = factory as IVsSccProjectEnlistmentFactory;
-            if (enlistFactory == null)
-                return;
-
-            string enlistPath, enlistPathUNC;
-            if (!VSErr.Succeeded(enlistFactory.GetDefaultEnlistment(pszProjectMk, out enlistPath, out enlistPathUNC)))
-                return;
-
-            uint flags;
-            int hr;
-            // Website projects return E_NOTIMPL on these methods
-            if (!VSErr.Succeeded(hr = enlistFactory.GetEnlistmentFactoryOptions(out flags)))
-            {
-                if (hr != VSErr.E_NOTIMPL)
-                    return;
-                flags = 0;
-            }
-            if (!VSErr.Succeeded(hr = enlistFactory.OnBeforeEnlistmentCreate(pszProjectMk, enlistPath, enlistPathUNC)))
-                return;
-
-            Uri projectUri;
-            if (!Uri.TryCreate(origin.SvnUri, UriKind.Absolute, out projectUri))
-            {
-                Uri relativeUri;
-
-                if (!Uri.TryCreate(origin.SvnUri, UriKind.Relative, out relativeUri))
-                    return;
-
-                // We have a Uri relative from the solution file
-                if (StatusCache == null)
-                    return;
-
-                SvnItem slnDirItem = StatusCache[SolutionDirectory];
-
-                if (!slnDirItem.IsVersioned || slnDirItem.Uri == null)
-                    return;
-
-                projectUri = new Uri(slnDirItem.Uri, relativeUri);
-            }
-
-            GetService<IProgressRunner>().RunModal(Resources.CheckingOutProject,
-                delegate(object sender, ProgressWorkerArgs e)
+                if (!enlist && dir.StartsWith(projectDir, StringComparison.OrdinalIgnoreCase)
+                    || normalizedProjectDir.Equals(dir, StringComparison.OrdinalIgnoreCase))
                 {
-                    e.Client.CheckOut(projectUri, SvnTools.GetNormalizedFullPath(enlistPathUNC));
-                });
+                    // The directory is below our project root, we can ignore it
+                    //  - Yes we can, unless the directory is switched or nested below the root
 
-           if (!VSErr.Succeeded(hr = enlistFactory.OnAfterEnlistmentCreate(pszProjectMk, enlistPath, enlistPathUNC)))
-                return;
+                    // TODO: Check those conditions somewhere else and reuse here                    
+                    continue;
+                }
 
-           SccTranslatePathInfo tpi = new SccTranslatePathInfo(slnProjectMk, enlistPath, enlistPathUNC);
+                SvnItem item = StatusCache[dir];
 
-            _translationMap[tpi.SolutionPath] = tpi;
+                if (solutionUri == null)
+                {
+                    SvnItem solDirItem = StatusCache[SolutionDirectory];
 
-            if (tpi.SolutionPath != tpi.EnlistmentUNCPath)
-                _trueNameMap[tpi.EnlistmentUNCPath] = tpi.SolutionPath;
+                    if (solDirItem != null && solDirItem.IsVersioned && solDirItem.Status != null && solDirItem.Status.Uri != null)
+                        solutionUri = solDirItem.Status.Uri;
+                }
+
+                if (item == null || !item.IsVersioned || item.Status == null || item.Status.Uri == null)
+                    continue;
+
+                Uri itemUri = item.Status.Uri;
+
+                if (solutionUri != null)
+                    itemUri = solutionUri.MakeRelativeUri(itemUri);
+
+                if (StatusCache.IsValidPath(file))
+                    file = PackageUtilities.MakeRelative(dir, file);
+
+                // This should match the directory as specified in the solution!!!
+                // (It currently does, but only because we don't really support virtual folders yet)
+                dir = PackageUtilities.MakeRelative(projectDir, dir);
+
+                string prefix = project.ProjectGuid.ToString("B").ToUpperInvariant();
+                projects.Add(prefix, prefix);
+
+                prefix = "Project." + prefix;
+
+                values[prefix + ".Path"] = Quote(dir);
+
+                if (!string.IsNullOrEmpty(file))
+                    values[prefix + ".Project"] = Quote(PackageUtilities.MakeRelative(dir, file));
+
+                values[prefix + ".Uri"] = Quote(Uri.EscapeUriString(itemUri.ToString()));
+                if (enlist)
+                {
+                    // To enlist a project we need its project type (to get to the project factory)
+                    values[prefix + ".EnlistType"] = project.ProjectTypeGuid.ToString("B").ToUpperInvariant();
+                }
+            }
+
+            IVsSolution solution = null;
+            foreach (IVsHierarchy hier in GetAllProjectsInSolutionRaw())
+            {
+                IVsSccProject2 scc = hier as IVsSccProject2;
+
+                if (scc != null && _projectMap.ContainsKey(scc))
+                    continue;
+
+                // OK: 2 options
+                //  * Unloaded project
+                //    -> Keep state from previous version
+                //  * Not scc capable project
+                //    -> TODO: Look at our options
+
+                if(solution == null)
+                    solution = GetService<IVsSolution>(typeof(SVsSolution));
+
+                Guid projectGuid;
+                if(ErrorHandler.Succeeded(solution.GetGuidOfProject(hier, out projectGuid)))
+                {
+                    string id = projectGuid.ToString("B").ToUpperInvariant();
+                    foreach(EnlistData data in _enlistState)
+                    {
+                        if(data.ProjectId == id)
+                        {
+                            projects.Add(id, id);
+                            string prefix = "Project." + id;
+                            
+                            projects[prefix + ".Path"] = Quote(data.Directory);
+                            if(!string.IsNullOrEmpty(data.RawFile))
+                                projects[prefix + ".File"] =  Quote(data.RawFile);
+
+                            if(!string.IsNullOrEmpty(data.EnlistType))
+                                projects[prefix + ".EnlistType"] = Quote(data.EnlistType);
+
+                            projects[prefix + ".Uri"] = Quote(Uri.EscapeUriString(data.Uri.ToString()));
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // We write all values in alphabetical order to make sure we don't change the solution unnecessary
+            StringBuilder projectString = new StringBuilder();
+            foreach (string s in projects.Values)
+            {
+                if (projectString.Length > 0)
+                    projectString.Append(", ");
+
+                projectString.Append(s);
+            }
+
+            object value = projectString.ToString();
+            propertyBag.Write("Projects", ref value);            
+
+            foreach (KeyValuePair<string, string> kv in values)
+            {
+                value = kv.Value;
+                propertyBag.Write(kv.Key, ref value);
+            }
+#endif
         }
 
-        internal void EditEnlistment(IVsHierarchy vsHierarchy, string p)
+        class EnlistBase
         {
-            throw new NotImplementedException();
+            readonly string _projectId;
+
+            public EnlistBase(string projectId)
+            {
+                if (string.IsNullOrEmpty(projectId))
+                    throw new ArgumentNullException("projectId");
+
+                _projectId = projectId;
+            }
+
+            public string ProjectId
+            {
+                get { return _projectId; }
+            }
+
+            string[] _userData;
+
+            public virtual void LoadUserData(List<string> values)
+            {
+                _userData = values.ToArray();
+            }
+
+            internal string[] GetUserData()
+            {
+                return (string[])(_userData ?? new string[0]).Clone();
+            }
+
+            internal bool ShouldSerialize()
+            {
+                return true;
+            }
         }
 
-        private void EnsureEnlistUserSettings()
+        sealed class EnlistData : EnlistBase
         {
-            if (_translateDataLoaded)
+            readonly string _projectId;
+            readonly string _directory;
+            readonly string _path;
+            readonly string _rawFile;
+            readonly Uri _uri;
+            readonly string _enlistType;
+
+            public EnlistData(string projectId, string directory, string file, Uri uri, string enlistType)
+                : base(projectId)
+            {
+                if (string.IsNullOrEmpty(directory))
+                    throw new ArgumentNullException("directory");
+                else if (uri == null)
+                    throw new ArgumentNullException("uri");
+
+                _projectId = projectId;
+                _directory = directory;
+                _rawFile = file;
+                if (file == null)
+                    _path = directory.TrimEnd('\\') + '\\';
+                else
+                    _path = System.IO.Path.Combine(directory, file);
+
+                _uri = uri;
+                _enlistType = enlistType;
+            }
+
+            internal string RawFile
+            {
+                get { return _rawFile; }
+            }
+
+            public string Directory
+            {
+                get { return _directory; }
+            }
+
+            public string Path
+            {
+                get { return _directory; }
+            }
+
+            public string ProjectFile
+            {
+                get { return _path; }
+            }
+
+            public Uri Uri
+            {
+                get { return _uri; }
+            }
+
+            public string EnlistType
+            {
+                get { return _enlistType; }
+            }
+
+            public override void LoadUserData(List<string> values)
+            {
+                base.LoadUserData(values);
+            }
+        }
+
+        public void ReadSolutionProperties(IPropertyMap propertyBag)
+        {
+#if DEBUG_ENLISTMENT
+            IMyPropertyBag mpb = (IMyPropertyBag)propertyBag; // Stop HResult exception handling
+            object value;
+            string projects;
+
+            if(!ErrorHandler.Succeeded(mpb.Read("Projects", out value, null, 0, null)))
+                return;
+            
+            projects = ((string)value).Trim();
+
+            if (string.IsNullOrEmpty(projects))
                 return;
 
-            _translateDataLoaded = true;
-            IAnkhPackage pkg = GetService<IAnkhPackage>();
+            foreach(string project in projects.Split(','))
+            {
+                Guid projectId;
 
-            if (pkg != null)
-                pkg.ForceLoadUserSettings(AnkhId.SccTranslateStream);
+                if (string.IsNullOrEmpty(project))
+                    continue;
+
+                if (!TryParseGuid(project, out projectId))
+                    continue;
+
+                projectId = new Guid(project);
+                string prefix = "Project." + projectId.ToString("B").ToUpperInvariant();
+
+                string path, url, file= null, enlistType=null;
+
+                if (!ErrorHandler.Succeeded(mpb.Read(prefix + ".Path", out value, null, 0, null)))
+                    continue;
+
+                path = Unquote((string)value);
+
+                if (ErrorHandler.Succeeded(mpb.Read(prefix + ".Project", out value, null, 0, null)))
+                    file = Unquote((string)value);
+
+                if (!ErrorHandler.Succeeded(mpb.Read(prefix + ".Uri", out value, null, 0, null)))
+                    continue;
+
+                url = Unquote((string)value);
+                Uri uri;
+
+                if (string.IsNullOrEmpty(url) || !Uri.TryCreate(url, UriKind.Relative, out uri))
+                    continue;
+
+                if (ErrorHandler.Succeeded(mpb.Read(prefix + ".EnlistType", out value, null, 0, null)))
+                {
+                    Guid enlistG;
+                    enlistType = ((string)value).Trim();
+
+                    if (!TryParseGuid(enlistType, out enlistG))
+                        enlistType = null;
+                }
+
+                _enlistState.Add(new EnlistData(project, path, file, uri, enlistType));
+            }
+#endif
+        }
+
+        void PerformEnlist()
+        {
+            _enlistCompleted = true;
+            _solutionDirectory = _solutionFile = null; // Clear cache
+
+            if (_enlistState.Count == 0)
+                return; // Nothing to do here
+
+            IVsSolutionPersistence ps = GetService<IVsSolutionPersistence>(typeof(SVsSolutionPersistence));
+            if (ps != null)
+            {
+                int hr = ps.LoadPackageUserOpts((IVsPersistSolutionOpts)GetService<Ankh.UI.IAnkhPackage>(), AnkhId.SubversionSccName + "Enlist");
+
+            }
+
+#if DEBUG_ENLISTMENT
+
+            IVsSolution2 sol = GetService<IVsSolution2>(typeof(SVsSolution));
+            // TODO: Load previous enlist state
+
+            foreach (EnlistData item in _enlistState)
+            {
+                if (string.IsNullOrEmpty(item.EnlistType))
+                    continue;
+
+                Guid value;
+
+                if(!TryParseGuid(item.EnlistType, out value))
+                    continue;
+
+                Guid[] factoryGuid = new Guid[] { value };
+
+                IVsProjectFactory factory;
+                if (!ErrorHandler.Succeeded(sol.GetProjectFactory(0, factoryGuid, null, out factory)) || factory == null)
+                    continue;
+
+                IVsSccProjectEnlistmentFactory enlistmentFactory = factory as IVsSccProjectEnlistmentFactory;
+
+                if (enlistmentFactory == null)
+                    continue;
+
+                GC.KeepAlive(enlistmentFactory);
+                string enlistLocal, enlistUnc;
+                uint options;
+
+                //SolutionFilePath
+
+                string projectPath;
+
+                if(item.Path.Contains("://"))
+                    projectPath = item.Path;
+                else
+                    projectPath = Path.GetFullPath(Path.Combine(SolutionDirectory, item.Path));
+
+                if(!ErrorHandler.Succeeded(enlistmentFactory.GetDefaultEnlistment(projectPath, out enlistLocal, out enlistUnc)))
+                {
+                    continue;
+                }
+
+                if (!ErrorHandler.Succeeded(enlistmentFactory.GetEnlistmentFactoryOptions(out options)))
+                    options = (int)(__VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANBROWSEENLISTMENTPATH | __VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANEDITENLISTMENTPATH);
+
+                EnlistmentState state = new EnlistmentState(
+                    0 != (options & (int)(__VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANBROWSEENLISTMENTPATH | __VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANEDITENLISTMENTPATH)),
+                    0 != (options & (int)(__VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANEDITDEBUGGINGPATH| __VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANEDITDEBUGGINGPATH)));
+
+                state.Location = state.DebugLocation = enlistUnc;
+
+                if(0 != (options & (int)__VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANBROWSEENLISTMENTPATH))
+                    state.BrowseLocation += delegate(object sender, EnlistmentState.EnlistmentEventArgs e)
+                    {
+                        string location, uncLocation;
+
+                        if(ErrorHandler.Succeeded(enlistmentFactory.BrowseEnlistment(projectPath, e.State.Location, out location, out uncLocation)))
+                        {
+                            e.State.LocalLocation = location;
+                            e.State.Location = uncLocation;
+                        }
+                    };
+
+                if(0 != (options & (int)__VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANBROWSEDEBUGGINGPATH))
+                    state.BrowseDebugLocation += delegate(object sender, EnlistmentState.EnlistmentEventArgs e)
+                    {
+                        string location, uncLocation;
+
+                        if(ErrorHandler.Succeeded(enlistmentFactory.BrowseEnlistment(projectPath, e.State.DebugLocation, out location, out uncLocation)))
+                        {
+                            e.State.LocalDebugLocation = location;
+                            e.State.DebugLocation = uncLocation;
+                        }
+                    };
+
+                IUIShell uiShell = GetService<IUIShell>();
+
+                if(!uiShell.EditEnlistmentState(state))
+                {
+                    continue;
+                }                
+
+
+                GC.KeepAlive(enlistLocal);
+            }
+#endif
         }
 
         /// <summary>
@@ -598,20 +662,18 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="store">The store.</param>
         /// <param name="writeData">if set to <c>true</c> [write data].</param>
-        void IAnkhSccService.SerializeSccTranslateData(Stream store, bool writeData)
+        void IAnkhSccService.SerializeEnlistData(Stream store, bool writeData)
         {
             if (writeData)
-                WriteTranslateUserData(store);
+                WriteEnlistData(store);
             else
-                ReadTranslateUserData(store);
+                ReadEnlistUserData(store);
         }
 
-        const int TranslateSerializerVersion = 1;
-        const int MinSupportedTranslateSerializerVersion = 1;
+        const int EnlistSerializerVersion = 1;
 
-        private void ReadTranslateUserData(Stream store)
+        private void ReadEnlistUserData(Stream store)
         {
-            _translateDataLoaded = true;
             if (store.Length < 2 * sizeof(int))
                 return;
 
@@ -620,89 +682,306 @@ namespace Ankh.Scc
                 int version = br.ReadInt32(); // The enlist version used to write the data
                 int requiredVersion = br.ReadInt32(); // All enlist versions older then this should ignore all data
 
-                if ((requiredVersion > TranslateSerializerVersion) || version < MinSupportedTranslateSerializerVersion)
+                if ((requiredVersion > EnlistSerializerVersion) || version < requiredVersion)
                     return; // Older versions (we) should ignore this data
 
-                string oldSolutionDir = br.ReadString();
-                string slnDir = RawSolutionDirectory ?? oldSolutionDir;
-                int nItems = br.ReadInt32();
+                int count = br.ReadInt32();
 
-                for (int iItem = 0; iItem < nItems; iItem++)
+                for (int i = 0; i < count; i++)
                 {
-                    int nStrings = br.ReadInt32();
-                    string[] strings = new string[nStrings];
+                    Guid project = new Guid(br.ReadBytes(16));
+                    int stringCount = br.ReadInt32();
 
-                    for (int iString = 0; iString < nStrings; iString++)
-                    {
-                        bool relative = br.ReadBoolean();
+                    List<string> values = new List<string>();
 
-                        string path = br.ReadString();
+                    for (int j = 0; i < stringCount; j++)
+                        values.Add(br.ReadString());
 
-                        if (relative)
-                            path = Path.Combine(slnDir, path);
+                    string projectId = project.ToString("B").ToUpperInvariant();
 
-                        strings[iString] = path;
-                    }
+                    if (!_enlistStore.ContainsKey(projectId))
+                    {   // Don't overwrite; we load 1 or 2 times during solution opening
 
-                    if (strings.Length >= 3)
-                    {
-                        SccTranslatePathInfo tpi = new SccTranslatePathInfo(strings[0], strings[1], strings[2]);
+                        EnlistBase enlist = new EnlistBase(projectId);
 
-                        if (!_translationMap.ContainsKey(tpi.SolutionPath))
-                        {
-                            _translationMap[tpi.SolutionPath] = tpi;
-
-                            if (tpi.SolutionPath != tpi.EnlistmentUNCPath)
-                                _trueNameMap[tpi.EnlistmentUNCPath] = tpi.SolutionPath;
-                        }
+                        enlist.LoadUserData(values);
+                        _enlistStore[projectId] = enlist;
                     }
                 }
             }
         }
 
-        private void WriteTranslateUserData(Stream store)
+        private void WriteEnlistData(Stream store)
         {
-            // I use explicit casts in the writer function to document the type we write
-
             using (BinaryWriter bw = new BinaryWriter(store))
             {
                 bw.Write((int)1); // Minimum version required to read these settings; update if incompatible
-                bw.Write((int)TranslateSerializerVersion); // Writer version
+                bw.Write((int)EnlistSerializerVersion); // Writer version
 
-                string solutionDir = SolutionDirectory;
-                string rootDir = solutionDir;
+                List<EnlistBase> list = new List<EnlistBase>();
+                IVsSolution sol = GetService<IVsSolution2>(typeof(SVsSolution));
 
-                if (SolutionSettings != null && !string.IsNullOrEmpty(SolutionSettings.ProjectRoot))
-                    rootDir = SolutionSettings.ProjectRoot;
-
-                bw.Write((string)solutionDir);
-
-                bw.Write((int)_translationMap.Count);
-
-                foreach (SccTranslatePathInfo tpi in _translationMap.Values)
+                foreach (IVsHierarchy hier in GetAllProjectsInSolutionRaw())
                 {
-                    string[] paths = new string[] { tpi.SolutionPath, tpi.EnlistmentPath, tpi.EnlistmentUNCPath};
- 
-                    bw.Write((int)paths.Length);
+                    Guid g;
+                    if (!ErrorHandler.Succeeded(sol.GetGuidOfProject(hier, out g)))
+                        continue;
 
-                    foreach(string p in paths)
+                    string projectId = g.ToString("B").ToUpperInvariant();
+
+                    EnlistBase enlist;
+                    if (_enlistStore.TryGetValue(projectId, out enlist) && enlist.ShouldSerialize())
+                        list.Add(enlist);
+                }
+
+                bw.Write((int)list.Count);
+                foreach (EnlistBase b in list)
+                {
+                    string[] values = b.GetUserData();
+
+                    bw.Write((int)values.Length);
+
+                    foreach (string s in values)
+                        bw.Write(s);
+                }
+            }
+        }
+
+        string Quote(string value)
+        {
+            return '\"' + value + '\"';
+        }
+
+        private string Unquote(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return null;
+
+            value = value.Trim();
+
+            if (string.IsNullOrEmpty(value))
+                return "";
+
+            if (value.Length >= 2 && value[0] == '\"' && value[value.Length - 1] == '\"')
+            {
+                value = value.Substring(1, value.Length - 2).Replace("\"\"", "\"");
+            }
+
+            return value;
+        }
+
+        private bool TryParseGuid(string project, out Guid projectId)
+        {
+            projectId = Guid.Empty;
+
+            if (string.IsNullOrEmpty(project))
+                return false;
+
+            project = project.Trim();
+
+            if (project.Length != 38 || project[0] != '{' || project[37] != '}')
+                return false;
+
+            projectId = new Guid(project);
+            return true;
+        }
+
+        static string RemoveEndSlash(string path, out char end)
+        {
+            end = '\0';
+            if (SvnItem.IsValidPath(path))
+            {
+                string p = SvnTools.GetNormalizedFullPath(path);
+
+                if (p.Length == path.Length - 1 && string.Equals(p, path.Substring(0, p.Length), StringComparison.OrdinalIgnoreCase))
+                {
+                    char c = path[path.Length - 1];
+
+                    if (c == '\\' || c == '/')
                     {
-                        bool relative = false;
-                        string path = p;
-                        if (IsSafeSccPath(p) && SvnItem.IsBelowRoot(p, rootDir))
-                        {
-                            relative = true;
-                            path = MakeRelativeNoCase(solutionDir, p);
-
-                            if (p.EndsWith("\\") && !path.EndsWith("\\"))
-                                path += '\\';
-                        }
-
-                        bw.Write((bool)relative);
-                        bw.Write((string)path);
+                        end = c;
+                        return p;
                     }
                 }
             }
+
+            return path;
+        }
+
+        static string AddEndSlash(string path, char end)
+        {
+            if (end != '\0')
+                return path.TrimEnd(end) + end;
+            else
+                return path;
+        }
+
+        /// <summary>
+        /// Translates a physical project path to a (possibly) virtual project path.
+        /// </summary>
+        /// <param name="lpszEnlistmentPath">[in] The physical path (either the local path or the enlistment UNC path) to be translated.</param>
+        /// <param name="pbstrProjectPath">[out] The (possibly) virtual project path.</param>
+        /// <returns>
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"/>. If it fails, it returns an error code.
+        /// </returns>
+        public int TranslateEnlistmentPathToProjectPath(string lpszEnlistmentPath, out string pbstrProjectPath)
+        {
+            if (!_enlistCompleted)
+                PerformEnlist();
+
+            char end;
+            string path = RemoveEndSlash(lpszEnlistmentPath, out end);
+
+            SccTranslateData td;
+            if (_sccPaths.TryGetValue(lpszEnlistmentPath, out td) && !string.IsNullOrEmpty(td.StoredPathName))
+            {
+                if (SvnItem.IsValidPath(td.StoredPathName))
+                    pbstrProjectPath = AddEndSlash(td.StoredPathName, end);
+                else
+                    pbstrProjectPath = td.StoredPathName;
+
+                return VSConstants.S_OK;
+            }
+
+            pbstrProjectPath = lpszEnlistmentPath;
+            return VSConstants.S_OK;
+        }
+
+        /// <summary>
+        /// Translates a possibly virtual project path to a local path and an enlistment physical path.
+        /// </summary>
+        /// <param name="lpszProjectPath">[in] The project's (possibly) virtual path as obtained from the solution file.</param>
+        /// <param name="pbstrEnlistmentPath">[out] The local path used by the solution for loading and saving the project.</param>
+        /// <param name="pbstrEnlistmentPathUNC">[out] The path used by the source control system for managing the enlistment ("\\drive\path", "[drive]:\path", "file://server/path").</param>
+        /// <returns>
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"/>. If it fails, it returns an error code.
+        /// </returns>
+        public int TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
+        {
+            // Summarized: lpszProjectPath         = Path as stored in the .sln
+            //             pbstrEnlistmentPath     = Path used to load the project (e.g. http://localhost/site)
+            //             pbstrEnlistmentPathUNC  = UNC Path to the project on disk
+            //                                       (e.g. c:\inetpub\wwwroot\site for http://localhost/site
+
+            if (!_enlistCompleted)
+                PerformEnlist();
+
+            char end = '\0';
+            string path;
+
+            if (SvnItem.IsValidPath(lpszProjectPath))
+            {
+                path = RemoveEndSlash(lpszProjectPath, out end);
+                path = SvnTools.GetNormalizedFullPath(lpszProjectPath);
+            }
+            else
+                path = lpszProjectPath;
+
+            SccTranslateData td;
+            if (_storedPaths.TryGetValue(path, out td) && !string.IsNullOrEmpty(td.SccPathName))
+            {
+                pbstrEnlistmentPath = AddEndSlash(td.EnlistPathName ?? td.SccPathName, end);
+                pbstrEnlistmentPathUNC = AddEndSlash(td.SccPathName, end);
+
+                return VSConstants.S_OK;
+            }
+
+            pbstrEnlistmentPath = lpszProjectPath;
+            pbstrEnlistmentPathUNC = lpszProjectPath;
+            return VSConstants.S_OK;
+        }
+
+
+        /// <summary>
+        /// Called by SccTranslateData.set_StoredPath
+        /// </summary>
+        internal void Translate_SetStoredPath(SccTranslateData translateData, string oldValue, string newValue)
+        {
+            if (translateData == null)
+                throw new ArgumentNullException("translateData");
+            else if (string.IsNullOrEmpty(newValue))
+                throw new ArgumentNullException("newValue");
+
+            if (string.Equals(oldValue, newValue, StringComparison.OrdinalIgnoreCase))
+                return;
+
+            SccTranslateData td;
+
+            if (!string.IsNullOrEmpty(oldValue))
+            {
+                if (_storedPaths.TryGetValue(oldValue, out td))
+                {
+                    Debug.Assert(translateData == td, "Same translation");
+
+                    _storedPaths.Remove(translateData.StoredPathName);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(newValue))
+            {
+                Debug.Assert(!_storedPaths.ContainsKey(newValue));
+
+                _storedPaths[newValue] = translateData;
+            }
+        }
+
+        internal SccTranslateData GetTranslateData(Guid projectId, SccEnlistMode createType, string solutionName)
+        {
+            if (createType > SccEnlistMode.None && string.IsNullOrEmpty(solutionName))
+                throw new ArgumentNullException("solutionName");
+
+            foreach (SccTranslateData td in _translations)
+            {
+                if (td.ProjectId == projectId)
+                    return td;
+            }
+            if (createType > SccEnlistMode.None)
+            {
+                SccTranslateData td;
+                if (createType <= SccEnlistMode.SvnStateOnly)
+                    td = new SccTranslateData(this, projectId, solutionName);
+                else
+                    td = new SccTranslateEnlistData(this, projectId, solutionName);
+
+                _translations.Add(td);
+
+                return td;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Called by SccTranslateData.set_SccPath
+        /// </summary>
+        internal bool Translate_SetSccPath(SccTranslateData translateData, string value)
+        {
+            if (translateData == null)
+                throw new ArgumentNullException("translateData");
+
+            SccTranslateData td;
+
+            if (!string.IsNullOrEmpty(translateData.SccPathName) &&
+                !string.Equals(translateData.SccPathName, translateData.EnlistPathName, StringComparison.OrdinalIgnoreCase))
+            {
+                if (_sccPaths.TryGetValue(translateData.SccPathName, out td))
+                {
+                    Debug.Assert(translateData == td, "Same translation");
+
+                    // Keep the value in the list if the EnlistPathName still has this value
+                    _storedPaths.Remove(translateData.StoredPathName);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                if (!_storedPaths.TryGetValue(value, out td))
+                    _storedPaths.Add(value, translateData);
+                else if (td != translateData)
+                    throw new InvalidOperationException("Can't store a path twice");
+            }
+
+            return true;
         }
     }
 }

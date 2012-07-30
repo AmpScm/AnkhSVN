@@ -100,7 +100,7 @@ namespace Ankh.VS.LanguageServices.LogMessages
             string line = Source.GetLine(lineNr);
 
             if (line == null)
-                return VSErr.E_FAIL;
+                return VSConstants.E_FAIL;
 
             while (iFrom > 0 && iFrom < line.Length)
             {
@@ -121,19 +121,19 @@ namespace Ankh.VS.LanguageServices.LogMessages
             string text = iTo < line.Length ? line.Substring(iFrom, iTo - iFrom + 1) : null;
 
             if (string.IsNullOrEmpty(text))
-                return VSErr.E_FAIL;
+                return VSConstants.E_FAIL;
 
             IPendingChangesManager mgr = _service.Context.GetService<IPendingChangesManager>();
             PendingChange change = null;
             if (mgr == null || !mgr.TryMatchFile(text, out change))
-                return VSErr.E_FAIL;
+                return VSConstants.E_FAIL;
 
             aspan[0].iStartIndex = iFrom;
             aspan[0].iEndIndex = iTo;
 
             textValue = change.LogMessageToolTipText;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -165,13 +165,13 @@ namespace Ankh.VS.LanguageServices.LogMessages
             {
                 int cLine;
                 int cCol;
-                if (TextView.GetCaretPos(out cLine, out cCol) == VSErr.S_OK)
+                if (TextView.GetCaretPos(out cLine, out cCol) == VSConstants.S_OK)
                 {
                     TokenInfo ti = Source.GetTokenInfo(cLine, cCol);
                     if (ti != null && ti.Type == TokenType.Identifier)
                     {
                         // extract issue id
-                        if (TextView.GetTextStream(cLine, ti.StartIndex, cLine, ti.EndIndex + 1, out issueId) == VSErr.S_OK
+                        if (TextView.GetTextStream(cLine, ti.StartIndex, cLine, ti.EndIndex + 1, out issueId) == VSConstants.S_OK
                             && select)
                         {
                             // highlight the issue

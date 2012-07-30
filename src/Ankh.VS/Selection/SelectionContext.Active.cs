@@ -81,7 +81,7 @@ namespace Ankh.VS.Selection
             _activeDocumentFileName = null; // Flush on every document state change
             ClearCache();
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #region ISelectionContextEx Members
@@ -107,7 +107,7 @@ namespace Ankh.VS.Selection
                 if (_activeFrameObject == null && ActiveFrame != null)
                 {
                     object v;
-                    if (VSErr.Succeeded(ActiveFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out v)))
+                    if (ErrorHandler.Succeeded(ActiveFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out v)))
                     {
                         _activeFrameObject = v;
                     }
@@ -144,7 +144,7 @@ namespace Ankh.VS.Selection
                 if (_activeDocumentFrameObject == null && ActiveDocumentFrame != null)
                 {
                     object v;
-                    if (VSErr.Succeeded(ActiveDocumentFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out v)))
+                    if (ErrorHandler.Succeeded(ActiveDocumentFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out v)))
                     {
                         _activeFrameObject = v;
                     }
@@ -172,7 +172,7 @@ namespace Ankh.VS.Selection
                 {
                     object value;
                     string path;
-                    if (VSErr.Succeeded(_activeDocumentFrame.GetProperty((int)__VSFPROPID.VSFPROPID_pszMkDocument, out value))
+                    if (ErrorHandler.Succeeded(_activeDocumentFrame.GetProperty((int)__VSFPROPID.VSFPROPID_pszMkDocument, out value))
                         && null != (path = value as string))
                     {
                         if (SvnItem.IsValidPath(path))
@@ -394,19 +394,19 @@ namespace Ankh.VS.Selection
                     if (_ctx._currentContainer != null)
                         ppSC = Marshal.GetIUnknownForObject(_ctx._currentContainer);
                 }
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             public int IsMyHierarchyCurrent(out int pfCurrent)
             {
                 pfCurrent = 0; // Not used by our code
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             public int OnElementValueChange(uint elementid, int fDontPropagate, object varValue)
             {
                 // Not used by our code
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             public int OnSelectChange(ISelectionContainer pSC)
@@ -417,7 +417,7 @@ namespace Ankh.VS.Selection
                         _ctx.current.hierarchy, _ctx.current.id, _ctx.current.selection, pSC);
                 }
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             public int OnSelectChangeEx(IntPtr pHier, uint itemid, IVsMultiItemSelect pMIS, IntPtr pSC)
@@ -439,7 +439,7 @@ namespace Ankh.VS.Selection
                 if (pSC != IntPtr.Zero)
                     Marshal.Release(pSC);
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             #endregion

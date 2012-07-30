@@ -24,6 +24,11 @@ namespace Ankh.Scc.ProjectMap
 {
     partial class SccProjectData
     {
+        internal bool RequiresForcedRefresh()
+        {
+            return IsWebSite;
+        }
+
         sealed class RefreshState
         {
             readonly IFileStatusCache _cache;
@@ -97,7 +102,7 @@ namespace Ankh.Scc.ProjectMap
                 }
                 VSADDRESULT[] result = new VSADDRESULT[1];
 
-                return VSErr.Succeeded(VsProject.AddItem(parentId, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, item.FullPath,
+                return ErrorHandler.Succeeded(VsProject.AddItem(parentId, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, item.FullPath,
                     1, new string[] { item.FullPath }, IntPtr.Zero, result)) && result[0] == VSADDRESULT.ADDRESULT_Success;
             }
 
@@ -135,7 +140,7 @@ namespace Ankh.Scc.ProjectMap
 
         public void PerformRefresh(IEnumerable<SvnClientAction> sccRefreshItems)
         {
-            Debug.Assert(WebLikeFileHandling, "Refreshing a project that manages itself");
+            Debug.Assert(RequiresForcedRefresh(), "Refreshing a project that manages itself");
 
             RefreshState state = new RefreshState(_context, ProjectHierarchy, VsProject, ProjectDirectory);
 
@@ -160,7 +165,7 @@ namespace Ankh.Scc.ProjectMap
                 // Check the real project here instead of our cache to keep the update initiative
                 // at the project. Checking our cache might be unsafe, as we get file add and remove 
                 // events from the project while we are updating
-                if (!VSErr.Succeeded(VsProject.IsDocumentInProject(item.FullPath, out found, prio, out id)))
+                if (!ErrorHandler.Succeeded(VsProject.IsDocumentInProject(item.FullPath, out found, prio, out id)))
                     continue;
 
                 bool bFound = (found != 0);
@@ -172,14 +177,14 @@ namespace Ankh.Scc.ProjectMap
 
                     // We need this additional check to find directories in Websites
                     if (hierarchy != null
-                        && VSErr.Succeeded(hierarchy.ParseCanonicalName(item.FullPath, out id)))
+                        && ErrorHandler.Succeeded(hierarchy.ParseCanonicalName(item.FullPath, out id)))
                     {
                         bFound = (id != VSConstants.VSITEMID_NIL) && (id != VSConstants.VSITEMID_ROOT);
 
                         // Perform an extra validation step to avoid issue #700
                         string foundName;
                         if (bFound
-                            && VSErr.Succeeded(VsProject.GetMkDocument(id, out foundName)))
+                            && ErrorHandler.Succeeded(VsProject.GetMkDocument(id, out foundName)))
                         {
                             foundName = SharpSvn.SvnTools.GetNormalizedFullPath(foundName);
                             bFound = String.Equals(item.FullPath, foundName, StringComparison.OrdinalIgnoreCase);

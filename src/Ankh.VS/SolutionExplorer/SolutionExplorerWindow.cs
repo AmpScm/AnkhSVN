@@ -91,7 +91,7 @@ namespace Ankh.VS.SolutionExplorer
 
         void MaybeEnsure()
         {
-            if (_hookImageList && SolutionExplorerFrame.IsVisible() == VSErr.S_OK)
+            if (_hookImageList && SolutionExplorerFrame.IsVisible() == VSConstants.S_OK)
                 _manager.Ensure(this);
         }
 
@@ -179,29 +179,29 @@ namespace Ankh.VS.SolutionExplorer
 
         int IVsWindowFrameNotify.OnDockableChange(int fDockable)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         int IVsWindowFrameNotify.OnMove()
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         int IVsWindowFrameNotify.OnShow(int fShow)
         {
             _manager.Ensure(this);
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         int IVsWindowFrameNotify.OnSize()
         {
             _manager.Ensure(this);
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         int IVsWindowFrameNotify2.OnClose(ref uint pgrfSaveOptions)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #region IAnkhSolutionExplorerToolWindow Members

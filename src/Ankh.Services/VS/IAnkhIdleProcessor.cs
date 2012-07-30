@@ -95,7 +95,7 @@ namespace Ankh.VS
             if(_mgr == null)
                 _mgr = _context.GetService<IOleComponentManager>(typeof(SOleComponentManager));
 
-            return _mgr == null || 0 != _mgr.FContinueIdle();
+            return 0 != _mgr.FContinueIdle();
         }
     }
 

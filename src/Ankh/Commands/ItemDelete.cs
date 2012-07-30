@@ -60,7 +60,7 @@ namespace Ankh.Commands
             if (DialogResult.OK != mb.Show(body, "", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation))
                 return; // No delete
 
-            int hr = VSErr.S_OK;
+            int hr = VSConstants.S_OK;
             foreach (SvnItem item in toDelete)
             {
                 {
@@ -71,7 +71,7 @@ namespace Ankh.Commands
                     if (VsShellUtilities.IsDocumentOpen(e.Context, item.FullPath, Guid.Empty, out hier, out id, out frame))
                     {
                         hr = frame.CloseFrame((uint)__FRAMECLOSE.FRAMECLOSE_NoSave);
-                        if (!VSErr.Succeeded(hr))
+                        if (!ErrorHandler.Succeeded(hr))
                             break; // Show error and cancel further actions
                     }
                 }
@@ -117,17 +117,17 @@ namespace Ankh.Commands
                     VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
                     int found;
                     uint id;
-                    if (!VSErr.Succeeded(p2.IsDocumentInProject(item.FullPath, out found, prio, out id)) || found == 0)
+                    if (!ErrorHandler.Succeeded(p2.IsDocumentInProject(item.FullPath, out found, prio, out id)) || found == 0)
                         continue; // Probably already removed (mapping out of synch?)
 
                     hr = p2.RemoveItem(0, id, out found);
 
-                    if (!VSErr.Succeeded(hr))
+                    if (!ErrorHandler.Succeeded(hr))
                         break;
                 }
             }
 
-            if (!VSErr.Succeeded(hr))
+            if (!ErrorHandler.Succeeded(hr))
                 mb.Show(Marshal.GetExceptionForHR(hr).Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }

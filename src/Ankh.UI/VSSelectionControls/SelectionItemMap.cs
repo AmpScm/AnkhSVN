@@ -211,12 +211,12 @@ namespace Ankh.UI.VSSelectionControls
                 if (pEventSink == null)
                 {
                     pdwCookie = 0;
-                    return VSErr.E_POINTER;
+                    return VSConstants.E_POINTER;
                 }
 
                 _eventHandlers.Add(pdwCookie = ++lvId, pEventSink);
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             internal override int UnadviseHierarchyEvents(uint dwCookie)
@@ -224,7 +224,7 @@ namespace Ankh.UI.VSSelectionControls
                 if (_eventHandlers != null)
                     _eventHandlers.Remove(dwCookie);
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             internal override string GetCanonicalName(uint itemid)
@@ -247,7 +247,7 @@ namespace Ankh.UI.VSSelectionControls
                 if (!_ids.TryGetValue(itemid, out lv) && itemid != VSConstants.VSITEMID_ROOT)
                 {
                     pvar = null;
-                    return VSErr.E_FAIL;
+                    return VSConstants.E_FAIL;
                 }
 
                 switch ((__VSHPROPID)propid)
@@ -303,10 +303,10 @@ namespace Ankh.UI.VSSelectionControls
                         break;
                     default:
                         pvar = null;
-                        return VSErr.E_FAIL;
+                        return VSConstants.E_FAIL;
                 }
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             public override IList Selection
@@ -357,7 +357,7 @@ namespace Ankh.UI.VSSelectionControls
             pfSingleHierarchy = 1;  // If this line throws a nullreference exception, the bug is in the interop layer or the caller. 
             // Nothing we can do to fix it
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         int IVsMultiItemSelect.GetSelectedItems(uint grfGSI, uint cItems, VSITEMSELECTION[] rgItemSel)
@@ -367,7 +367,7 @@ namespace Ankh.UI.VSSelectionControls
             IList selection = _data.Selection;
 
             if (cItems > selection.Count || cItems > rgItemSel.Length)
-                return VSErr.E_FAIL;
+                return VSConstants.E_FAIL;
             
             for (int i = 0; i < cItems; i++)
             {
@@ -375,7 +375,7 @@ namespace Ankh.UI.VSSelectionControls
                 rgItemSel[i].itemid = _data.GetId(selection[i]);
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #region ISelectionContainer Members
@@ -390,12 +390,12 @@ namespace Ankh.UI.VSSelectionControls
             else
             {
                 pc = 0;
-                return VSErr.E_FAIL;
+                return VSConstants.E_FAIL;
             }
 
             pc = (uint)src.Count;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         object[] _sel;
@@ -411,7 +411,7 @@ namespace Ankh.UI.VSSelectionControls
         int ISelectionContainer.GetObjects(uint dwFlags, uint cObjects, object[] apUnkObjects)
         {
             if (apUnkObjects == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             IList src;
             if (dwFlags == (uint)Constants.GETOBJS_ALL)
@@ -419,10 +419,10 @@ namespace Ankh.UI.VSSelectionControls
             else if (dwFlags == (uint)Constants.GETOBJS_SELECTED)
                 src = _data.Selection;
             else
-                return VSErr.E_FAIL;
+                return VSConstants.E_FAIL;
 
             if (src == null || cObjects > src.Count)
-                return VSErr.E_FAIL;
+                return VSConstants.E_FAIL;
 
             if (_sel == null && src == _data.Selection)
             {
@@ -451,7 +451,7 @@ namespace Ankh.UI.VSSelectionControls
             {
                 Array.Copy(_sel, apUnkObjects, cObjects);
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             for (int i = 0; i < cObjects; i++)
@@ -459,7 +459,7 @@ namespace Ankh.UI.VSSelectionControls
                 apUnkObjects[i] = _data.GetSelectionObject(src[i]);
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         int ISelectionContainer.SelectObjects(uint cSelect, object[] apUnkSelect, uint dwFlags)
@@ -467,14 +467,14 @@ namespace Ankh.UI.VSSelectionControls
             object[] items = _data.CreateArray((int)cSelect);
 
             if (cSelect > 0 && apUnkSelect == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             for (int i = 0; i < cSelect; i++)
                 items[i] = _data.GetRealObject(apUnkSelect[i]);
 
             _data.SetSelection(items);
 
-            return VSErr.S_OK; // E_NOTIMPL kills VS from the property explorer
+            return VSConstants.S_OK; // E_NOTIMPL kills VS from the property explorer
         }
 
         #endregion
@@ -599,7 +599,7 @@ namespace Ankh.UI.VSSelectionControls
             uint itemid;
             IVsMultiItemSelect ms;
             IntPtr ppSc;
-            if (!VSErr.Succeeded(Tracker.GetCurrentSelection(out ppHier, out itemid, out ms, out ppSc)))
+            if (!ErrorHandler.Succeeded(Tracker.GetCurrentSelection(out ppHier, out itemid, out ms, out ppSc)))
                 return;
 
             if (ppHier != IntPtr.Zero)
@@ -651,7 +651,7 @@ namespace Ankh.UI.VSSelectionControls
 
             public int Close()
             {
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             public int GetCanonicalName(uint itemid, out string pbstrName)
@@ -663,7 +663,7 @@ namespace Ankh.UI.VSSelectionControls
                 else
                     pbstrName = name;
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             int IVsHierarchy.GetGuidProperty(uint itemid, int propid, out Guid pguid)
@@ -673,18 +673,18 @@ namespace Ankh.UI.VSSelectionControls
                 if (GetProperty(itemid, propid, out v) == 0 && v is Guid)
                 {
                     pguid = (Guid)v;
-                    return VSErr.S_OK;
+                    return VSConstants.S_OK;
                 }
 
                 pguid = Guid.Empty;
-                return VSErr.E_FAIL;
+                return VSConstants.E_FAIL;
             }
 
             int IVsHierarchy.GetNestedHierarchy(uint itemid, ref Guid iidHierarchyNested, out IntPtr ppHierarchyNested, out uint pitemidNested)
             {
                 ppHierarchyNested = IntPtr.Zero;
                 pitemidNested = VSConstants.VSITEMID_NIL;
-                return VSErr.E_FAIL;
+                return VSConstants.E_FAIL;
             }
 
             public int GetProperty(uint itemid, int propid, out object pvar)
@@ -695,59 +695,59 @@ namespace Ankh.UI.VSSelectionControls
             int IVsHierarchy.GetSite(out Microsoft.VisualStudio.OLE.Interop.IServiceProvider ppSP)
             {
                 ppSP = null;
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             public int ParseCanonicalName(string pszName, out uint pitemid)
             {
                 pitemid = uint.Parse(pszName.TrimStart('{').TrimEnd('}'));
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             public int QueryClose(out int pfCanClose)
             {
                 pfCanClose = 1;
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             int IVsHierarchy.SetGuidProperty(uint itemid, int propid, ref Guid rguid)
             {
-                return VSErr.E_FAIL;
+                return VSConstants.E_FAIL;
             }
 
             int IVsHierarchy.SetProperty(uint itemid, int propid, object var)
             {
-                return VSErr.E_FAIL;
+                return VSConstants.E_FAIL;
             }
 
             int IVsHierarchy.SetSite(Microsoft.VisualStudio.OLE.Interop.IServiceProvider psp)
             {
-                return VSErr.E_FAIL; // Should never be called
+                return VSConstants.E_FAIL; // Should never be called
             }
 
             int IVsHierarchy.Unused0()
             {
-                return VSErr.E_NOTIMPL;
+                return VSConstants.E_NOTIMPL;
             }
 
             int IVsHierarchy.Unused1()
             {
-                return VSErr.E_NOTIMPL;
+                return VSConstants.E_NOTIMPL;
             }
 
             int IVsHierarchy.Unused2()
             {
-                return VSErr.E_NOTIMPL;
+                return VSConstants.E_NOTIMPL;
             }
 
             int IVsHierarchy.Unused3()
             {
-                return VSErr.E_NOTIMPL;
+                return VSConstants.E_NOTIMPL;
             }
 
             int IVsHierarchy.Unused4()
             {
-                return VSErr.E_NOTIMPL;
+                return VSConstants.E_NOTIMPL;
             }
 
         }

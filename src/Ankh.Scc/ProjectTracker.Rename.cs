@@ -30,7 +30,7 @@ namespace Ankh.Scc
         public int OnQueryRenameFiles(IVsProject pProject, int cFiles, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEFILEFLAGS[] rgFlags, VSQUERYRENAMEFILERESULTS[] pSummaryResult, VSQUERYRENAMEFILERESULTS[] rgResults)
         {
             if (rgszMkNewNames == null || rgszMkOldNames == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             RegisterForSccCleanup(); // Clear the origins
             _collectHints = true;
@@ -59,13 +59,13 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterRenameFiles(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, VSRENAMEFILEFLAGS[] rgFlags)
         {
             if (rgszMkNewNames == null || rgpProjects == null || rgszMkOldNames == null || rgszMkOldNames.Length != rgszMkNewNames.Length)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             // TODO: C++ projects do not send directory renames; but do send OnAfterRenameFile() events
             //       for all files (one at a time). We should detect that case here and fix up this dirt!
@@ -82,7 +82,7 @@ namespace Ankh.Scc
             }
 
             if (!SccProvider.IsActive)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             ProcessRenames(rgszMkOldNames, rgszMkNewNames);
 
@@ -132,7 +132,7 @@ namespace Ankh.Scc
                 }
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace Ankh.Scc
         public int OnQueryRenameDirectories(IVsProject pProject, int cDirs, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEDIRECTORYFLAGS[] rgFlags, VSQUERYRENAMEDIRECTORYRESULTS[] pSummaryResult, VSQUERYRENAMEDIRECTORYRESULTS[] rgResults)
         {
             if (rgszMkNewNames == null || pProject == null || rgszMkOldNames == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             RegisterForSccCleanup(); // Clear the origins
             _collectHints = true;
@@ -252,13 +252,13 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYRENAMEDIRECTORYRESULTS.VSQUERYRENAMEDIRECTORYRESULTS_RenameOK;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterRenameDirectories(int cProjects, int cDirs, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, VSRENAMEDIRECTORYFLAGS[] rgFlags)
         {
             if (rgszMkNewNames == null || rgpProjects == null || rgszMkOldNames == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             int iDirectory = 0;
 
@@ -274,7 +274,7 @@ namespace Ankh.Scc
             }
 
             if (!SccProvider.IsActive)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             ProcessRenames(rgszMkOldNames, rgszMkNewNames);
 
@@ -297,7 +297,7 @@ namespace Ankh.Scc
                 }
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
     }
 }

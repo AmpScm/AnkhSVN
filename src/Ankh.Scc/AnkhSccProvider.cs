@@ -42,6 +42,7 @@ namespace Ankh.Scc
         bool _active;
         IFileStatusCache _statusCache;
         IAnkhOpenDocumentTracker _documentTracker;
+        AnkhSccSettingStorage _sccSettings;
 
         public AnkhSccProvider(IAnkhServiceProvider context)
             : base(context)
@@ -95,13 +96,19 @@ namespace Ankh.Scc
         {
             get { return _documentTracker ?? (_documentTracker = GetService<IAnkhOpenDocumentTracker>()); }
         }
+        
+        AnkhSccSettingStorage SccStore
+        {
+            get { return _sccSettings ?? (_sccSettings = GetService<AnkhSccSettingStorage>(typeof(ISccSettingsStore))); }
+        }
+
 
         /// <summary>
         /// Determines if any item in the solution are under source control.
         /// </summary>
         /// <param name="pfResult">[out] Returns non-zero (TRUE) if there is at least one item under source control; otherwise, returns zero (FALSE).</param>
         /// <returns>
-        /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
+        /// The method returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>.
         /// </returns>
         public int AnyItemsUnderSourceControl(out int pfResult)
         {
@@ -120,14 +127,14 @@ namespace Ankh.Scc
                 }
             }
             pfResult = oneManaged ? 1 : 0;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
         /// Called by environment to mark a particular source control package as active.
         /// </summary>
         /// <returns>
-        /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
+        /// The method returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>.
         /// </returns>
         public int SetActive()
         {
@@ -156,7 +163,7 @@ namespace Ankh.Scc
                                         OnSlnRefresh);
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         private void OnSlnRefresh(object sender, EventArgs e)
@@ -168,7 +175,7 @@ namespace Ankh.Scc
         /// Called by environment to mark a particular source control package as inactive.
         /// </summary>
         /// <returns>
-        /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
+        /// The method returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>.
         /// </returns>
         public int SetInactive()
         {
@@ -205,7 +212,7 @@ namespace Ankh.Scc
                 cmdHook.UnhookCommand(new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.SLNREFRESH),
                                       OnSlnRefresh);
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -218,7 +225,7 @@ namespace Ankh.Scc
         {
             pbInstalled = 1; // We are always installed as we have no external dependencies
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -246,7 +253,7 @@ namespace Ankh.Scc
             _syncMap = true;
             RegisterForSccCleanup();
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -262,7 +269,7 @@ namespace Ankh.Scc
                 data.IsRegistered = false;
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -286,7 +293,7 @@ namespace Ankh.Scc
             pbstrDirectory = null;
             pfOK = 0;
 
-            return VSErr.E_NOTIMPL;
+            return VSConstants.E_NOTIMPL;
         }
 
         /// <summary>
@@ -295,7 +302,7 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int CancelAfterBrowseForProject()
         {
-            return VSErr.E_NOTIMPL;
+            return VSConstants.E_NOTIMPL;
         }
         #endregion
     }

@@ -62,12 +62,6 @@ namespace Ankh.Selection
         /// <returns></returns>
         IEnumerable<SvnProject> GetSelectedProjects(bool recursive);
 
-        /// <summary>
-        /// Gets a list of currently selected hierarchies (non-recursive)
-        /// </summary>
-        /// <param name="recursive"></param>
-        /// <returns></returns>
-        IEnumerable<SvnHierarchy> GetSelectedHierarchies();
 
         /// <summary>
         /// Gets the item selection if it is available in the specified type

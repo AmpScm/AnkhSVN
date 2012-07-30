@@ -130,7 +130,7 @@ namespace Ankh.Scc.ProjectMap
             IVsHierarchy hier;
             IntPtr data;
             uint cookie; // We can't store the cookie, as that would mean it is in the lookup table
-            if (VSErr.Succeeded(rd.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_NoLock, Name, out hier, out id, out data, out cookie)))
+            if (ErrorHandler.Succeeded(rd.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_NoLock, Name, out hier, out id, out data, out cookie)))
             {
                 if (hier != null)
                     Hierarchy = hier;
@@ -464,7 +464,7 @@ namespace Ankh.Scc.ProjectMap
                     IntPtr docHandle = Marshal.GetIUnknownForObject(RawDocument);
                     try
                     {
-                        if (VSErr.Succeeded(phi.IsItemDirty(ItemId, docHandle, out dirty)))
+                        if (ErrorHandler.Succeeded(phi.IsItemDirty(ItemId, docHandle, out dirty)))
                         {
                             if (dirty != 0)
                                 return true;
@@ -488,7 +488,7 @@ namespace Ankh.Scc.ProjectMap
             if (!done && TryGetOpenDocumentFrame(out wf) && wf != null)
             {
                 object ok;
-                if (VSErr.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
+                if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
                 {
                     if (ok == null)
                     { }
@@ -519,7 +519,7 @@ namespace Ankh.Scc.ProjectMap
 
             try
             {
-                return VSErr.Succeeded(so.IsDocumentOpen(Hierarchy as IVsUIHierarchy, ItemId, this.Name, ref gV,
+                return ErrorHandler.Succeeded(so.IsDocumentOpen(Hierarchy as IVsUIHierarchy, ItemId, this.Name, ref gV,
                     (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView, out hier, openId, out wf, out open))
                     && (open != 0)
                     && (wf != null);
@@ -631,7 +631,7 @@ namespace Ankh.Scc.ProjectMap
 
         internal bool SaveDocument(IVsRunningDocumentTable rdt)
         {
-            if (VSErr.Succeeded(rdt.SaveDocuments(0, Hierarchy, ItemId, Cookie)))
+            if (ErrorHandler.Succeeded(rdt.SaveDocuments(0, Hierarchy, ItemId, Cookie)))
             {
                 SetDirty(false);
                 return true;
@@ -668,7 +668,7 @@ namespace Ankh.Scc.ProjectMap
                 for (int i = 0; i < items.Count; i++)
                 {
                     uint ck;
-                    if (VSErr.Succeeded(fileChange.AdviseFileChange(items[i].FullPath, (uint)(_VSFILECHANGEFLAGS.VSFILECHG_Size | _VSFILECHANGEFLAGS.VSFILECHG_Time), this, out ck)))
+                    if (ErrorHandler.Succeeded(fileChange.AdviseFileChange(items[i].FullPath, (uint)(_VSFILECHANGEFLAGS.VSFILECHG_Size | _VSFILECHANGEFLAGS.VSFILECHG_Time), this, out ck)))
                         cookies[i] = ck;
                 }
             }
@@ -676,13 +676,13 @@ namespace Ankh.Scc.ProjectMap
 
         public int DirectoryChanged(string pszDirectory)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
         {
             if (rgpszFile == null || cChanges == 0)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             try
             {
@@ -704,7 +704,7 @@ namespace Ankh.Scc.ProjectMap
                     throw;
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
         #endregion
     }

@@ -15,13 +15,16 @@
 //  limitations under the License.
 
 using System;
-using System.Drawing;
+using System.Collections.Generic;
+using System.Text;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Drawing;
 
-namespace Ankh.VS.Services
+namespace Ankh.VS
 {
     [GlobalService(typeof(IAnkhVSColor))]
-    sealed class AnkhVSColor : AnkhService, IAnkhVSColor
+    class AnkhVSColor : AnkhService, IAnkhVSColor
     {
         public AnkhVSColor(IAnkhServiceProvider context)
             : base(context)
@@ -37,7 +40,7 @@ namespace Ankh.VS.Services
         public bool TryGetColor(__VSSYSCOLOREX vsColor, out Color color)
         {
             uint rgb;
-            if (VSErr.Succeeded(UIShell.GetVSSysColorEx((int)vsColor, out rgb)))
+            if (ErrorHandler.Succeeded(UIShell.GetVSSysColorEx((int)vsColor, out rgb)))
             {
                 color = ColorTranslator.FromWin32(unchecked((int)rgb));
                 return true;

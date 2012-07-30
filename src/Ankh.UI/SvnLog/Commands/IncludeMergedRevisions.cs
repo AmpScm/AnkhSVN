@@ -23,30 +23,29 @@ using Ankh.Scc.UI;
 namespace Ankh.UI.SvnLog.Commands
 {
     [Command(AnkhCommand.LogIncludeMergedRevisions, AlwaysAvailable = true)]
-    sealed class IncludeMergedRevisions : ICommandHandler
+    class IncludeMergedRevisions : ICommandHandler
     {
-        LogToolWindowControl _ctrl;
-
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (_ctrl == null)
-                _ctrl = e.GetService<LogToolWindowControl>();
+            ILogControl lc = e.Selection.GetActiveControl<ILogControl>();
 
-            if (_ctrl == null)
+            if (lc == null)
             {
                 e.Enabled = false;
                 return;
             }
 
-            e.Checked = _ctrl.IncludeMergedRevisions;
+            e.Checked = lc.IncludeMergedRevisions;
         }
 
         public void OnExecute(CommandEventArgs e)
         {
-            if (_ctrl == null)
+            ILogControl lc = e.Selection.GetActiveControl<ILogControl>();
+
+            if (lc == null)
                 return;
 
-            _ctrl.IncludeMergedRevisions = !_ctrl.IncludeMergedRevisions;
+            lc.IncludeMergedRevisions = !lc.IncludeMergedRevisions;
         }
     }
 }

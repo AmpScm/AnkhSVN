@@ -47,7 +47,7 @@ namespace Ankh.Scc
         {
             _isInQuerySaveBatch = true;
             _querySaveBatchCancel = false; // Just to be sure
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Ankh.Scc
             // Reset the cancel flag
             _querySaveBatchCancel = false;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         bool IsInSaveBatch
@@ -95,7 +95,7 @@ namespace Ankh.Scc
                         _unreloadable.Remove(pszMkDocument);
                 }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Ankh.Scc
                         _unreloadable.Remove(pszMkDocument);
                 }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Ankh.Scc
                     pbResult = 1;
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Ankh.Scc
             if (IsSafeSccPath(pszMkDocument))
                 MarkDirty(pszMkDocument);
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
 
@@ -269,7 +269,7 @@ namespace Ankh.Scc
             bool? allowReadOnlyNonSccWrites = null;
 
             if (rgpszMkDocuments == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             try
             {
@@ -304,7 +304,7 @@ namespace Ankh.Scc
                             prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc
                                                    | tagVSQueryEditResultFlags.QER_NoisyCheckoutRequired);
 
-                            return VSErr.S_OK;
+                            return VSConstants.S_OK;
                         }
 
                         if (mustLockItems == null)
@@ -333,7 +333,7 @@ namespace Ankh.Scc
                                                        | tagVSQueryEditResultFlags.QER_ReadOnlyNotUnderScc
                                                        | tagVSQueryEditResultFlags.QER_NoisyPromptRequired);
 
-                                return VSErr.S_OK;
+                                return VSConstants.S_OK;
                             }
 
                             if (readOnlyEditFiles == null)
@@ -411,7 +411,7 @@ namespace Ankh.Scc
                     throw;
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         private int QueryEditForceWritable(string[] rgpszMkDocuments)
@@ -435,7 +435,7 @@ namespace Ankh.Scc
                     }
                 }
             }
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         bool AllowReadOnlyNonSccWrites()
@@ -445,7 +445,7 @@ namespace Ankh.Scc
                 return true;
 
             object o;
-            if (!VSErr.Succeeded(
+            if (!ErrorHandler.Succeeded(
                 sccToolsOptions.GetSccToolsOption(SccToolsOptionsEnum.ksctoAllowReadOnlyFilesNotUnderSccToBeEdited,
                                                   out o)))
                 return true;
@@ -495,12 +495,12 @@ namespace Ankh.Scc
             List<SvnItem> toBeSvnLocked = new List<SvnItem>();
 
             if (rgpszMkDocuments == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             if (_querySaveBatchCancel)
             {
                 pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel;
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             try
@@ -523,7 +523,7 @@ namespace Ankh.Scc
                         if (silent)
                         {
                             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_NoisyPromptRequired;
-                            return VSErr.S_OK;
+                            return VSConstants.S_OK;
                         }
                         toBeSvnLocked.Add(item);
                         continue;
@@ -533,7 +533,7 @@ namespace Ankh.Scc
                     else if (silent)
                     {
                         pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_NoisyPromptRequired;
-                        return VSErr.S_OK;
+                        return VSConstants.S_OK;
                     }
 
                     tagVSQuerySaveResult rslt = QueryReadOnlyFile(item);
@@ -543,7 +543,7 @@ namespace Ankh.Scc
                             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel;
                             if (IsInSaveBatch)
                                 _querySaveBatchCancel = true;
-                            return VSErr.S_OK;
+                            return VSConstants.S_OK;
                         case tagVSQuerySaveResult.QSR_ForceSaveAs:
                             saveAs = true;
                             break;
@@ -576,7 +576,7 @@ namespace Ankh.Scc
                         pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel;
                 }
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
             finally
             {
@@ -646,7 +646,7 @@ namespace Ankh.Scc
         {
             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
             prgfMoreInfo = (uint)tagVSQuerySaveResultFlags.QSR_DefaultFlag;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -664,7 +664,7 @@ namespace Ankh.Scc
         {
             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
             prgfMoreInfo = (uint)tagVSQuerySaveResultFlags.QSR_DefaultFlag;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 #endif
     }

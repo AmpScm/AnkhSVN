@@ -42,7 +42,7 @@ namespace Ankh.VSPackage
             crInfo[0].uIdleTimeInterval = 1000;
 
             uint id;
-            if (VSErr.Succeeded(mgr.FRegisterComponent(this, crInfo, out id)))
+            if (ErrorHandler.Succeeded(mgr.FRegisterComponent(this, crInfo, out id)))
                 _componentId = id;
         }
 
@@ -108,7 +108,7 @@ namespace Ankh.VSPackage
 
         int IOleComponent.FReserved1(uint dwReserved, uint message, IntPtr wParam, IntPtr lParam)
         {
-            return VSErr.E_NOTIMPL;
+            return VSConstants.E_NOTIMPL;
         }
 
         IntPtr IOleComponent.HwndGetWindow(uint dwWhich, uint dwReserved)

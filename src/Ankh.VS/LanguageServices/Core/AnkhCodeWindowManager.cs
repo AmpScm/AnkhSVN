@@ -63,10 +63,10 @@ namespace Ankh.VS.LanguageServices.Core
         public int AddAdornments()
         {
             IVsTextView primaryView, secondaryView;
-            if (VSErr.Succeeded(_window.GetPrimaryView(out primaryView)) && primaryView != null)
+            if (ErrorHandler.Succeeded(_window.GetPrimaryView(out primaryView)) && primaryView != null)
                 OnNewView(primaryView);
 
-            if (VSErr.Succeeded(_window.GetSecondaryView(out secondaryView)) && secondaryView != null)
+            if (ErrorHandler.Succeeded(_window.GetSecondaryView(out secondaryView)) && secondaryView != null)
                 OnNewView(secondaryView);
 
             if (primaryView != null || secondaryView != null)
@@ -81,7 +81,7 @@ namespace Ankh.VS.LanguageServices.Core
                 }
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int RemoveAdornments()
@@ -91,7 +91,7 @@ namespace Ankh.VS.LanguageServices.Core
 
             if (bar != null)
                 bar.Close();
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         [CLSCompliant(false)]
@@ -106,7 +106,7 @@ namespace Ankh.VS.LanguageServices.Core
                     _bar.OnNewView(view);
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #region IVsCodeWindowEvents Members
@@ -129,7 +129,7 @@ namespace Ankh.VS.LanguageServices.Core
                     Close();
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         [CLSCompliant(false)]

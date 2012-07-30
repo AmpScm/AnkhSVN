@@ -19,12 +19,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.CodeDom.Compiler;
 using System.IO;
-using Ankh.VS;
 
-namespace Ankh.Services
+namespace Ankh.VS
 {
     [GlobalService(typeof(IAnkhTempFileManager))]
-    sealed class TempFileManager : AnkhService, IAnkhTempFileManager
+    class TempFileManager : AnkhService, IAnkhTempFileManager
     {
         TempFileCollection _tempFileCollection;
 

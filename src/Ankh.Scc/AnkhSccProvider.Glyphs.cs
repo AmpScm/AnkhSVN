@@ -199,7 +199,7 @@ namespace Ankh.Scc
         public int GetSccGlyph(int cFiles, string[] rgpszFullPaths, VsStateIcon[] rgsiGlyphs, uint[] rgdwSccStatus)
         {
             if (rgpszFullPaths == null || rgsiGlyphs == null)
-                return VSErr.E_POINTER; // Documented as impossible
+                return VSConstants.E_POINTER; // Documented as impossible
 
             if (!_active)
             {
@@ -210,7 +210,7 @@ namespace Ankh.Scc
                     if (rgdwSccStatus != null)
                         rgdwSccStatus[i] = (uint)SccStatus.SCC_STATUS_NOTCONTROLLED;
                 }
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             for (int i = 0; i < cFiles; i++)
@@ -243,7 +243,7 @@ namespace Ankh.Scc
                 }
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -258,7 +258,7 @@ namespace Ankh.Scc
             // (Unfortunately classview uses a hardcoded mapping)
             psiGlyph[0] = VsStateIcon.STATEICON_BLANK;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         ISccProjectWalker _walker;
@@ -274,14 +274,14 @@ namespace Ankh.Scc
         /// <param name="itemidNode">[in] The ID of the node for which the ToolTip is requested.</param>
         /// <param name="pbstrTooltipText">[out] ToolTip text.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode, out string pbstrTooltipText)
         {
             pbstrTooltipText = null;
 
             if (Walker == null || StatusCache == null || phierHierarchy == null)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             HybridCollection<string> files = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -337,7 +337,7 @@ namespace Ankh.Scc
             if (sb.Length > 0)
                 pbstrTooltipText = sb.ToString().Trim(); // We added newlines
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public void UpdateSolutionGlyph()
@@ -378,7 +378,7 @@ namespace Ankh.Scc
             {
                 pdwImageListHandle = unchecked((uint)_glyphList.Handle);
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             if (_glyphList != null)
@@ -410,7 +410,7 @@ namespace Ankh.Scc
             if (StatusImages == null)
             {
                 pdwImageListHandle = 0;
-                return VSErr.E_FAIL; // Vital service missing
+                return VSConstants.E_FAIL; // Vital service missing
             }
 
             _glyphList = StatusImages.CreateStatusImageList();
@@ -436,7 +436,7 @@ namespace Ankh.Scc
             _baseIndex = baseIndex;
             pdwImageListHandle = unchecked((uint)_glyphList.Handle);
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         private bool SolutionNavigatorInstalled()
@@ -449,7 +449,7 @@ namespace Ankh.Scc
             Guid solutionNavigatorPackage = new Guid("{cf6a5c16-83b0-4d04-b702-195c35c6e887}");
 
             int bInstalled;
-            if (!VSErr.Succeeded(shell.IsPackageInstalled(ref solutionNavigatorPackage, out bInstalled)))
+            if (!ErrorHandler.Succeeded(shell.IsPackageInstalled(ref solutionNavigatorPackage, out bInstalled)))
                 return false;
 
             return (bInstalled != 0);

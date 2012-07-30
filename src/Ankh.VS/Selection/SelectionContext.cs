@@ -62,7 +62,6 @@ namespace Ankh.VS.Selection
         CachedEnumerable<SvnItem> _svnItemsRecursive;
         CachedEnumerable<SvnProject> _selectedProjects;
         CachedEnumerable<SvnProject> _selectedProjectsRecursive;
-        CachedEnumerable<SvnHierarchy> _selectedHierarchies;
         CachedEnumerable<SvnProject> _ownerProjects;
         Dictionary<Type, IEnumerable> _selectedItemsMap;
         readonly Hashtable _hashCache = new Hashtable();
@@ -126,7 +125,7 @@ namespace Ankh.VS.Selection
                 CmdUIContextChanged(this, new CmdUIContextChangeEventArgs(dwCmdUICookie, fActive != 0));
 
             /// Some global state change which might change UI cueues
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         Disposer _disposer;
@@ -159,7 +158,7 @@ namespace Ankh.VS.Selection
 
             ClearCache();
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         private void ClearCache()
@@ -172,7 +171,6 @@ namespace Ankh.VS.Selection
             _svnItemsRecursive = null;
             _selectedProjects = null;
             _selectedProjectsRecursive = null;
-            _selectedHierarchies = null;
             _ownerProjects = null;
 
             _isSolutionExplorer = null;
@@ -225,7 +223,7 @@ namespace Ankh.VS.Selection
                     if (Solution != null)
                     {
                         string solutionDir, solutionFile, solutionUserFile;
-                        if (VSErr.Succeeded(Solution.GetSolutionInfo(out solutionDir, out solutionFile, out solutionUserFile)))
+                        if (ErrorHandler.Succeeded(Solution.GetSolutionInfo(out solutionDir, out solutionFile, out solutionUserFile)))
                         {
                             if (!string.IsNullOrEmpty(solutionFile))
                             {
@@ -277,7 +275,7 @@ namespace Ankh.VS.Selection
                     if (hw == null)
                         return false;
 
-                    if (!VSErr.Succeeded(hw.GetCurrentSelection(out hierarchy, out itemId, out ms)))
+                    if (!ErrorHandler.Succeeded(hw.GetCurrentSelection(out hierarchy, out itemId, out ms)))
                         return false;
 
                     IVsHierarchy hier = null;
@@ -311,7 +309,7 @@ namespace Ankh.VS.Selection
                     {
                         uint nItems;
                         int withinSingleHierarchy;
-                        if (VSErr.Succeeded(current.selection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
+                        if (ErrorHandler.Succeeded(current.selection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
                         {
                             if (nItems == 1)
                                 _isSingleNodeSelection = true;
@@ -370,7 +368,7 @@ namespace Ankh.VS.Selection
                 uint nItems;
                 int withinSingleHierarchy;
 
-                if (sel.selection == null || !VSErr.Succeeded(sel.selection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
+                if (sel.selection == null || !ErrorHandler.Succeeded(sel.selection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
                     yield break;
 
                 uint flags = 0;
@@ -380,7 +378,7 @@ namespace Ankh.VS.Selection
 
                 VSITEMSELECTION[] items = new VSITEMSELECTION[nItems];
 
-                if (!VSErr.Succeeded(sel.selection.GetSelectedItems(flags, nItems, items)))
+                if (!ErrorHandler.Succeeded(sel.selection.GetSelectedItems(flags, nItems, items)))
                     yield break;
 
                 for (int i = 0; i < nItems; i++)
@@ -487,18 +485,18 @@ namespace Ankh.VS.Selection
             {
                 ExternalException ee = e as ExternalException;
 
-                if (ee != null && !VSErr.Succeeded(ee.ErrorCode))
+                if (ee != null && !ErrorHandler.Succeeded(ee.ErrorCode))
                     hr = ee.ErrorCode; // Should have been returned instead
                 else if (e is NotImplementedException)
-                    hr = VSErr.E_NOTIMPL; // From Microsoft.VisualStudio.PerformanceTools.DummyVsUIHierarchy.GetNestedHierarchy()
+                    hr = VSConstants.E_NOTIMPL; // From Microsoft.VisualStudio.PerformanceTools.DummyVsUIHierarchy.GetNestedHierarchy()
                 else
-                    hr = VSErr.E_FAIL;
+                    hr = VSConstants.E_FAIL;
 
                 hierPtr = IntPtr.Zero;
                 subId = VSConstants.VSITEMID_NIL;
             }
 
-            if (VSErr.Succeeded(hr) && hierPtr != IntPtr.Zero)
+            if (ErrorHandler.Succeeded(hr) && hierPtr != IntPtr.Zero)
             {
                 IVsHierarchy nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
                 Marshal.Release(hierPtr);
@@ -527,7 +525,7 @@ namespace Ankh.VS.Selection
                 yield break;
 
             object value;
-            if (!VSErr.Succeeded(si.Hierarchy.GetProperty(si.Id,
+            if (!ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
                 (int)__VSHPROPID.VSHPROPID_FirstChild, out value)))
             {
                 yield break;
@@ -543,7 +541,7 @@ namespace Ankh.VS.Selection
                     yield return ii;
                 }
 
-                if (!VSErr.Succeeded(si.Hierarchy.GetProperty(i.Id,
+                if (!ErrorHandler.Succeeded(si.Hierarchy.GetProperty(i.Id,
                     (int)__VSHPROPID.VSHPROPID_NextSibling, out value)))
                 {
                     yield break;
@@ -557,7 +555,7 @@ namespace Ankh.VS.Selection
         {
             object value;
 
-            if (VSErr.Succeeded(si.Hierarchy.GetProperty(si.Id,
+            if (ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
                 (int)__VSHPROPID.VSHPROPID_HasEnumerationSideEffects, out value)))
             {
                 if (value != null)
@@ -577,7 +575,7 @@ namespace Ankh.VS.Selection
                 }
             }
 
-            if (si.SccProject == null && VSErr.Succeeded(si.Hierarchy.GetProperty(si.Id,
+            if (si.SccProject == null && ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
                 (int)__VSHPROPID2.VSHPROPID_ChildrenEnumerated, out value)))
             {
                 if (value != null)
@@ -765,11 +763,6 @@ namespace Ankh.VS.Selection
             return recursive ? GetSelectedProjectsRecursive() : GetSelectedProjects();
         }
 
-        public IEnumerable<SvnHierarchy> GetSelectedHierarchies()
-        {
-            return _selectedHierarchies ?? (_selectedHierarchies = new CachedEnumerable<SvnHierarchy>(InternalGetSelectedHierarchies(false), Disposer));
-        }
-
         protected IEnumerable<SvnProject> InternalGetSelectedProjects(bool recursive)
         {
             foreach (SelectionItem item in GetSelectedItems(recursive))
@@ -778,18 +771,6 @@ namespace Ankh.VS.Selection
                 {
                     if (!item.IsSolution && item.SccProject != null)
                         yield return new SvnProject(null, item.SccProject);
-                }
-            }
-        }
-
-        protected IEnumerable<SvnHierarchy> InternalGetSelectedHierarchies(bool recursive)
-        {
-            foreach (SelectionItem item in GetSelectedItems(recursive))
-            {
-                if (item.Id == VSConstants.VSITEMID_ROOT)
-                {
-                    if (!item.IsSolution && item.Hierarchy != null)
-                        yield return new SvnHierarchy(item.Hierarchy);
                 }
             }
         }
@@ -837,11 +818,11 @@ namespace Ankh.VS.Selection
             ISelectionContainer sc = _currentContainer;
 
             uint nItems;
-            if (sc == null || !VSErr.Succeeded(sc.CountObjects((uint)ShellConstants.GETOBJS_SELECTED, out nItems)))
+            if (sc == null || !ErrorHandler.Succeeded(sc.CountObjects((uint)ShellConstants.GETOBJS_SELECTED, out nItems)))
                 yield break;
 
             object[] objs = new object[(int)nItems];
-            if (VSErr.Succeeded(sc.GetObjects((uint)ShellConstants.GETOBJS_SELECTED, nItems, objs)))
+            if (ErrorHandler.Succeeded(sc.GetObjects((uint)ShellConstants.GETOBJS_SELECTED, nItems, objs)))
             {
                 foreach (object o in objs)
                 {

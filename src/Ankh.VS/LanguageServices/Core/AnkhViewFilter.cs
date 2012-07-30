@@ -40,19 +40,19 @@ namespace Ankh.VS.LanguageServices.Core
         public int GetDataTipText(TextSpan[] pSpan, out string pbstrText)
         {
             pbstrText = null;
-            return VSErr.E_NOTIMPL;
+            return VSConstants.E_NOTIMPL;
         }
 
         [CLSCompliant(false)]
         public int GetPairExtents(int iLine, int iIndex, TextSpan[] pSpan)
         {
-            return VSErr.E_NOTIMPL;
+            return VSConstants.E_NOTIMPL;
         }
 
         [CLSCompliant(false)]
         public int GetWordExtent(int iLine, int iIndex, uint dwFlags, TextSpan[] pSpan)
         {
-            return VSErr.E_NOTIMPL;
+            return VSConstants.E_NOTIMPL;
         }
 
         #endregion
@@ -67,13 +67,13 @@ namespace Ankh.VS.LanguageServices.Core
 
             int hr = QueryStatus(ref cmdGroup, ref prgCmds[0], pCmdText);
 
-            if (hr != VSErr.E_FAIL)
+            if (hr != VSConstants.E_FAIL)
                 return hr;
 
             if (_fallThrough != null)
                 return _fallThrough.QueryStatus(ref cmdGroup, cCmds, prgCmds, pCmdText);
             else
-                return VSErr.E_FAIL; // delegate to next command target.
+                return VSConstants.E_FAIL; // delegate to next command target.
         }
 
         [CLSCompliant(false)]
@@ -85,14 +85,14 @@ namespace Ankh.VS.LanguageServices.Core
                 {
                     case VSConstants.VSStd2KCmdID.OUTLN_START_AUTOHIDING:
                     case VSConstants.VSStd2KCmdID.OUTLN_STOP_HIDING_ALL:
-                        return VSErr.OLECMDERR_E_NOTSUPPORTED;
+                        return (int)OleConstants.OLECMDERR_E_NOTSUPPORTED;
 
                     default:
-                        return VSErr.E_FAIL; ; /* Unhandled */
+                        return VSConstants.E_FAIL; ; /* Unhandled */
                 }
             }
 
-            return VSErr.E_FAIL;
+            return VSConstants.E_FAIL;
         }
 
         [CLSCompliant(false)]
@@ -109,13 +109,13 @@ namespace Ankh.VS.LanguageServices.Core
                             ShowContextMenu(AnkhId.CommandSetGuid, (int)menu, this);
                         else
                             ShowContextMenu(VsMenus.guidSHLMainMenu, VsMenus.IDM_VS_CTXT_CODEWIN, this);
-                        return VSErr.S_OK;
+                        return VSConstants.S_OK;
                 }
             }
             if (_fallThrough != null)
                 return _fallThrough.Exec(ref cmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
             else
-                return VSErr.E_FAIL; // delegate to next command target.
+                return VSConstants.E_FAIL; // delegate to next command target.
         }
 
         [CLSCompliant(false)]

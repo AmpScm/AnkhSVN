@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Ankh;
 using Ankh.UI;
@@ -141,12 +142,6 @@ namespace AnkhSvn_UnitTestProject.Mocks
             }
 
             #endregion
-
-
-            public bool ForceLoadUserSettings(string streamName)
-            {
-                return false;
-            }
         }
     }
 }

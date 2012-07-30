@@ -29,32 +29,34 @@ using Ankh.VS;
 
 namespace Ankh.Scc.ProjectMap
 {
-    [Flags]
-    public enum SccProjectFlags
+    /// <summary>
+    /// Enum of project types with workarounds
+    /// </summary>
+    enum SccProjectType
     {
-        None,
-        WebLikeFileHandling = 0x0010,
-        ForceSccGlyphChange = 0x0100,
-        StoredInSolution = 0x1000,
-        SolutionInfrastructure = 0x2000
+        Normal,
+        SolutionFolder,
+        WebSite,
     }
 
-    public enum SccEnlistChoice
-    {
-        Never,
-        Optional,
-        Required
-    }
+	[Flags]
+	public enum SccProjectFlags
+	{
+		None,
+		ForceSccGlyphChange = 0x100,
+	}
 
-    [DebuggerDisplay("Project={ProjectName}, Flags={_projectFlags}")]
+    [DebuggerDisplay("Project={ProjectName}, ProjectType={_projectType}")]
     sealed partial class SccProjectData : IDisposable
     {
         readonly IAnkhServiceProvider _context;
         readonly IVsSccProject2 _sccProject;
         readonly IVsHierarchy _hierarchy;
         readonly IVsProject _vsProject;
+        readonly SccProjectType _projectType;
         readonly SccProjectFlags _projectFlags;
         readonly SccProjectFileCollection _files;
+        SccTranslateData _translateData;
         bool _isManaged;
         bool _isRegistered;
         bool _loaded;
@@ -83,6 +85,7 @@ namespace Ankh.Scc.ProjectMap
             _hierarchy = (IVsHierarchy)project; // A project must be a hierarchy in VS
             _vsProject = (IVsProject)project; // A project must be a VS project
 
+            _projectType = GetProjectType(project);
             _projectFlags = GetProjectFlags(ProjectTypeGuid);
             _files = new SccProjectFileCollection();
         }
@@ -133,7 +136,7 @@ namespace Ankh.Scc.ProjectMap
                     _projectName = "";
                     object name;
 
-                    if (VSErr.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_Name, out name)))
+                    if (ErrorHandler.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_Name, out name)))
                     {
                         _projectName = name as string;
                     }
@@ -155,7 +158,7 @@ namespace Ankh.Scc.ProjectMap
                     IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
 
                     Guid value;
-                    if (VSErr.Succeeded(solution.GetGuidOfProject(ProjectHierarchy, out value)))
+                    if (ErrorHandler.Succeeded(solution.GetGuidOfProject(ProjectHierarchy, out value)))
                         _projectGuid = value;
                 }
 
@@ -173,7 +176,7 @@ namespace Ankh.Scc.ProjectMap
                 if (!_projectTypeGuid.HasValue)
                 {
                     Guid value;
-                    if (VSErr.Succeeded(_hierarchy.GetGuidProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_TypeGuid, out value)))
+                    if (ErrorHandler.Succeeded(_hierarchy.GetGuidProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_TypeGuid, out value)))
                         _projectTypeGuid = value;
                 }
 
@@ -194,7 +197,7 @@ namespace Ankh.Scc.ProjectMap
                     _projectDirectory = "";
                     object name;
 
-                    if (VSErr.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ProjectDir, out name)))
+                    if (ErrorHandler.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ProjectDir, out name)))
                     {
                         string dir = name as string;
 
@@ -240,7 +243,7 @@ namespace Ankh.Scc.ProjectMap
                     _checkedProjectFile = true;
                     string name;
 
-                    if (VSErr.Succeeded(_vsProject.GetMkDocument(VSConstants.VSITEMID_ROOT, out name)))
+                    if (ErrorHandler.Succeeded(_vsProject.GetMkDocument(VSConstants.VSITEMID_ROOT, out name)))
                     {
                         _projectLocation = name;
                         if (SvnItem.IsValidPath(name, true))
@@ -311,6 +314,47 @@ namespace Ankh.Scc.ProjectMap
             return ProjectDirectory;
         }
 
+        SccEnlistMode? _enlistMode;
+        public SccEnlistMode EnlistMode
+        {
+            get { return (_enlistMode ?? (_enlistMode = GetEnlistMode(true))).Value; }
+        }
+
+        SccEnlistMode GetEnlistMode(bool smart)
+        {
+            IVsSccProjectEnlistmentChoice enlistChoice = VsProject as IVsSccProjectEnlistmentChoice;
+
+            VSSCCENLISTMENTCHOICE[] choice = new VSSCCENLISTMENTCHOICE[1];
+            if (enlistChoice != null && ErrorHandler.Succeeded(enlistChoice.GetEnlistmentChoice(choice)))
+                switch (choice[0])
+                {
+                    case VSSCCENLISTMENTCHOICE.VSSCC_EC_COMPULSORY:
+                        return SccEnlistMode.SccEnlistCompulsory;
+                    case VSSCCENLISTMENTCHOICE.VSSCC_EC_OPTIONAL:
+                        return SccEnlistMode.SccEnlistOptional;
+                    default:
+                        break;
+                }
+
+            if (IsSolutionFolder)
+                return SccEnlistMode.None;
+
+            string dir;
+            if (smart && null != (dir = SccBaseDirectory))
+            {
+                IAnkhSolutionSettings settings = GetService<IAnkhSolutionSettings>();
+                SvnItem dirItem = GetService<IFileStatusCache>()[dir];
+
+                if (dirItem.IsBelowPath(settings.ProjectRootSvnItem))
+                {
+                    if (dirItem.WorkingCopy == settings.ProjectRootSvnItem.WorkingCopy)
+                        return SccEnlistMode.None; // All information available via working copy
+                }
+            }
+
+            return SccEnlistMode.SvnStateOnly;
+        }
+
         public bool IsSccBindable
         {
             get
@@ -319,7 +363,7 @@ namespace Ankh.Scc.ProjectMap
 
                 VSSCCPROVIDERBINDING[] ppb = new VSSCCPROVIDERBINDING[1];
                 if (providerBinding != null &&
-                    VSErr.Succeeded(providerBinding.GetProviderBinding(ppb)))
+                    Microsoft.VisualStudio.ErrorHandler.Succeeded(providerBinding.GetProviderBinding(ppb)))
                 {
                     VSSCCPROVIDERBINDING pb = ppb[0];
 
@@ -344,7 +388,7 @@ namespace Ankh.Scc.ProjectMap
                 {
                     string name;
 
-                    if (VSErr.Succeeded(solution.GetUniqueUINameOfProject(ProjectHierarchy, out name)))
+                    if (ErrorHandler.Succeeded(solution.GetUniqueUINameOfProject(ProjectHierarchy, out name)))
                         _uniqueName = name;
                 }
                 return _uniqueName ?? ProjectName;
@@ -401,19 +445,14 @@ namespace Ankh.Scc.ProjectMap
             internal set { _isRegistered = value; }
         }
 
-        public bool IsStoredInSolution
+        public bool IsSolutionFolder
         {
-            get { return (_projectFlags & SccProjectFlags.StoredInSolution) != SccProjectFlags.None; }
+            get { return _projectType == SccProjectType.SolutionFolder; }
         }
 
-        public bool WebLikeFileHandling
+        public bool IsWebSite
         {
-            get { return (_projectFlags & SccProjectFlags.WebLikeFileHandling) != SccProjectFlags.None; }
-        }
-
-        public bool IsSolutionInfrastructure
-        {
-            get { return (_projectFlags & SccProjectFlags.SolutionInfrastructure) != SccProjectFlags.None; }
+            get { return _projectType == SccProjectType.WebSite; }
         }
 
         internal void SetManaged(bool managed)
@@ -421,23 +460,15 @@ namespace Ankh.Scc.ProjectMap
             if (managed == IsManaged)
                 return;
 
-            bool ok;
-
             if (managed)
-            {
-                // Set some constant strings as marker
-                ok = VSErr.Succeeded(SccProject.SetSccLocation("Svn", "Svn", "Svn", AnkhId.SubversionSccName));
-            }
+                Marshal.ThrowExceptionForHR(SccProject.SetSccLocation("Svn", "Svn", "Svn", AnkhId.SubversionSccName));
             else
             {
                 // The managed package framework assumes empty strings for clearing; null will fail there
-                ok = VSErr.Succeeded(SccProject.SetSccLocation("", "", "", ""));
+                Marshal.ThrowExceptionForHR(SccProject.SetSccLocation("", "", "", ""));
             }
 
-            if (ok)
-            {
-                IsManaged = managed;
-            }
+            IsManaged = managed;
         }
 
         internal void OnClose()
@@ -543,7 +574,7 @@ namespace Ankh.Scc.ProjectMap
         {
             bool alreadyLoaded = _loaded && !_inLoad;
 
-            if (alreadyLoaded && WebLikeFileHandling)
+            if (alreadyLoaded && IsWebSite)
             {
                 uint fid = VSConstants.VSITEMID_NIL;
 
@@ -656,100 +687,102 @@ namespace Ankh.Scc.ProjectMap
             get { return _scc ?? (_scc = GetService<AnkhSccProvider>()); }
         }
 
-        SccEnlistChoice? _sccEnlistChoice;
-        public SccEnlistChoice EnlistMode
+        public SccTranslateData SccTranslateData
         {
             get
             {
-                if (!_sccEnlistChoice.HasValue)
+                if (_translateData == null)
                 {
-                    IVsSccProjectEnlistmentChoice pec = VsProject as IVsSccProjectEnlistmentChoice;
+                    _translateData = Scc.GetTranslateData(ProjectGuid, SccEnlistMode.None, null);
 
-                    VSSCCENLISTMENTCHOICE[] choiceList = new VSSCCENLISTMENTCHOICE[1];
-                    if (pec == null || !VSErr.Succeeded(pec.GetEnlistmentChoice(choiceList)))
-                    {
-                        _sccEnlistChoice = SccEnlistChoice.Never;
-
-                        return SccEnlistChoice.Never; // 99% case. Only Websites appear to use this
-                    }
-
-                    VSSCCENLISTMENTCHOICE choice = choiceList[0];
-
-                    switch (choice)
-                    {
-                        case VSSCCENLISTMENTCHOICE.VSSCC_EC_NEVER:
-                        default:
-                            _sccEnlistChoice = SccEnlistChoice.Never;
-                            break; // Valid for most projects
-                        case VSSCCENLISTMENTCHOICE.VSSCC_EC_OPTIONAL:
-                            _sccEnlistChoice = SccEnlistChoice.Optional;
-                            break;
-                        case VSSCCENLISTMENTCHOICE.VSSCC_EC_COMPULSORY:
-                            _sccEnlistChoice = SccEnlistChoice.Required;
-                            break;
-                    }
+                    if (_translateData == null)
+                        _translateData = Scc.GetTranslateData(ProjectGuid, GetEnlistMode(false), ProjectLocation);
                 }
 
-                return _sccEnlistChoice.Value;
+                return _translateData;
             }
         }
 
-        // Switch to dictionary when we have more than a handfull of items
-        static SortedList<Guid, SccProjectFlags> _projectFlagMap = new SortedList<Guid, SccProjectFlags>();
-        static bool _projectFlagMapLoaded;
-        SccProjectFlags GetProjectFlags(Guid projectId)
+
+        /// <summary>
+        /// Checks whether the specified project is a solution folder
+        /// </summary>
+        private static readonly Guid _solutionFolderProjectId = new Guid("2150e333-8fdc-42a3-9474-1a3956d46de8");
+        private static readonly Guid _websiteProjectId = new Guid("e24c65dc-7377-472b-9aba-bc803b73c61a");
+        static SccProjectType GetProjectType(IVsSccProject2 project)
         {
-            lock (_projectFlagMap)
+            IPersistFileFormat pFileFormat = project as IPersistFileFormat;
+            if (pFileFormat != null)
             {
-                if (!_projectFlagMapLoaded)
-                    LoadProjectFlagMap();
+                Guid guidClassID;
+                if (VSConstants.S_OK != pFileFormat.GetClassID(out guidClassID))
+                    return SccProjectType.Normal;
 
-                SccProjectFlags flags;
-                if (!_projectFlagMap.TryGetValue(projectId, out flags))
-                    return SccProjectFlags.None;
-
-                return flags;
+                if (guidClassID == _solutionFolderProjectId)
+                    return SccProjectType.SolutionFolder;
+                else if (guidClassID == _websiteProjectId)
+                    return SccProjectType.WebSite;
             }
+
+            return SccProjectType.Normal;
         }
 
-        void LoadProjectFlagMap()
-        {
-            _projectFlagMapLoaded = true;
+		// Switch to dictionary when we have more than a handfull of items
+		static SortedList<Guid, SccProjectFlags> _projectFlagMap = new SortedList<Guid, SccProjectFlags>();
+		static bool _projectFlagMapLoaded;
+		SccProjectFlags GetProjectFlags(Guid projectId)
+		{
+			lock (_projectFlagMap)
+			{
+				if (!_projectFlagMapLoaded)
+					LoadProjectFlagMap();
 
-            IAnkhConfigurationService configService = GetService<IAnkhConfigurationService>();
+				SccProjectFlags flags;
+				if (!_projectFlagMap.TryGetValue(projectId, out flags))
+					return SccProjectFlags.None;
 
-            if (configService == null)
-                return;
+				return flags;
+			}
+		}
 
-            using (RegistryKey projectHandlingKey = configService.OpenVSInstanceKey("Extensions\\AnkhSVN\\ProjectHandling"))
-            {
-                if (projectHandlingKey == null)
-                    return;
+		void LoadProjectFlagMap()
+		{
+			_projectFlagMapLoaded = true;
 
-                foreach (string typeValue in projectHandlingKey.GetSubKeyNames())
-                {
-                    if (typeValue.Length != 38) // No proper guid
-                        continue;
+			IAnkhConfigurationService configService = GetService<IAnkhConfigurationService>();
 
-                    try
-                    {
-                        using (RegistryKey projectTypeKey = projectHandlingKey.OpenSubKey(typeValue))
-                        {
-                            object v = projectTypeKey.GetValue("flags");
+			if (configService == null)
+				return;
 
-                            if (!(v is int))
-                                continue;
+			using (RegistryKey projectHandlingKey = configService.OpenVSInstanceKey("Extensions\\AnkhSVN\\ProjectHandling"))
+			{
+				if (projectHandlingKey == null)
+					return;
 
-                            Guid projectType = new Guid(typeValue);
-                            SccProjectFlags flags = (SccProjectFlags)(int)v;
-                            _projectFlagMap.Add(projectType, flags);
-                        }
-                    }
-                    catch
-                    { /* Parse Error */ }
-                }
-            }
-        }
+				foreach (string typeValue in projectHandlingKey.GetSubKeyNames())
+				{
+					if (typeValue.Length != 38) // No proper guid
+						continue;
+
+					try
+					{
+						using (RegistryKey projectTypeKey = projectHandlingKey.OpenSubKey(typeValue))
+						{
+							object v = projectTypeKey.GetValue("flags");
+
+							if (!(v is int))
+								continue;
+
+							Guid projectType = new Guid(typeValue);
+							SccProjectFlags flags = (SccProjectFlags)(int)v;
+							_projectFlagMap.Add(projectType, flags);
+						}
+					}
+					catch
+					{ /* Parse Error */ }
+				}
+			}
+		}
         #endregion
 
         /// <summary>
@@ -783,7 +816,7 @@ namespace Ankh.Scc.ProjectMap
 
                 _fetchedImgList = true;
                 object value;
-                if (VSErr.Succeeded(ProjectHierarchy.GetProperty(VSConstants.VSITEMID_ROOT,
+                if (ErrorHandler.Succeeded(ProjectHierarchy.GetProperty(VSConstants.VSITEMID_ROOT,
                     (int)__VSHPROPID.VSHPROPID_IconImgList, out value)))
                 {
                     _projectImgList = (IntPtr)(int)value; // Marshalled by VS as 32 bit integer
@@ -805,7 +838,7 @@ namespace Ankh.Scc.ProjectMap
             uint id;
             VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
 
-            if (VSErr.Succeeded(
+            if (ErrorHandler.Succeeded(
                 VsProject.IsDocumentInProject(path, out found, prio, out id)))
             {
                 // Priority also returns information on whether the file can be added
@@ -831,49 +864,49 @@ namespace Ankh.Scc.ProjectMap
             set { _unloading = value; }
         }
 
-        [DebuggerNonUserCode]
-        public void NotifyGlyphsChanged()
-        {
-            try
-            {
-                if ((_projectFlags & SccProjectFlags.ForceSccGlyphChange) == 0)
-                    SccProject.SccGlyphChanged(0, null, null, null);
-                else
-                    ForceGlyphChanges();
-            }
-            catch { }
-        }
+		[DebuggerNonUserCode]
+		public void NotifyGlyphsChanged()
+		{
+			try
+			{
+				if ((_projectFlags & SccProjectFlags.ForceSccGlyphChange) == 0)
+					SccProject.SccGlyphChanged(0, null, null, null);
+				else
+					ForceGlyphChanges();
+			}
+			catch { }
+		}
 
-        internal void ForceGlyphChanges()
-        {
-            uint[] idsArray;
-            string[] namesArray;
-            {
-                List<uint> ids = new List<uint>(_files.Count);
-                List<string> names = new List<string>(_files.Count);
+		internal void ForceGlyphChanges()
+		{
+			uint[] idsArray;
+			string[] namesArray;
+			{
+				List<uint> ids = new List<uint>(_files.Count);
+				List<string> names = new List<string>(_files.Count);
 
-                foreach (SccProjectFileReference r in _files)
-                {
-                    uint id = r.ProjectItemId;
-                    if (id == VSConstants.VSITEMID_NIL)
-                        continue;
+				foreach (SccProjectFileReference r in _files)
+				{
+					uint id = r.ProjectItemId;
+					if (id == VSConstants.VSITEMID_NIL)
+						continue;
 
-                    string name = r.ProjectFile.FullPath;
-                    if (string.IsNullOrEmpty(name))
-                        continue;
+					string name = r.ProjectFile.FullPath;
+					if (string.IsNullOrEmpty(name))
+						continue;
 
-                    ids.Add(id);
-                    names.Add(name);
-                }
-                idsArray = ids.ToArray();
-                namesArray = names.ToArray();
-            }
+					ids.Add(id);
+					names.Add(name);
+				}
+				idsArray = ids.ToArray();
+				namesArray = names.ToArray();
+			}
 
-            VsStateIcon[] newGlyphs = new VsStateIcon[idsArray.Length];
-            uint[] sccState = new uint[idsArray.Length];
+			VsStateIcon[] newGlyphs = new VsStateIcon[idsArray.Length];
+			uint[] sccState = new uint[idsArray.Length];
 
-            if (0 == Scc.GetSccGlyph(idsArray.Length, namesArray, newGlyphs, sccState))
-                SccProject.SccGlyphChanged(idsArray.Length, idsArray, newGlyphs, sccState);
-        }
-    }
+			if (0 == Scc.GetSccGlyph(idsArray.Length, namesArray, newGlyphs, sccState))
+				SccProject.SccGlyphChanged(idsArray.Length, idsArray, newGlyphs, sccState);
+		}
+	}
 }

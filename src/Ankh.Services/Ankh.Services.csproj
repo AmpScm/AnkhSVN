@@ -74,10 +74,7 @@
     <Compile Include="Commands\IAnkhCommandService.cs" />
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
-    <Compile Include="Scc\ISccHelper.cs" />
-    <Compile Include="Selection\SvnHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
-    <Compile Include="VSErr.cs" />
     <Compile Include="VS\IAnkhGlobalCommandHook.cs" />
     <Compile Include="VS\IssueMarker.cs" />
     <Compile Include="VS\ILinqInterfaceDelegateService.cs" />
@@ -112,6 +109,7 @@
     <Compile Include="Scc\IPendingChangeHandler.cs" />
     <Compile Include="UI\IAnkhToolWindowHost.cs" />
     <Compile Include="IAnkhScheduler.cs" />
+    <Compile Include="Scc\EnlistmentState.cs" />
     <Compile Include="Scc\UI\IAnkhToolWindowControl.cs" />
     <Compile Include="Scc\UI\IConflictHandler.cs" />
     <Compile Include="Scc\UI\ILastChangeInfo.cs" />

@@ -96,13 +96,13 @@ namespace Ankh.VSPackage
         public int IdBmpSplash(out uint pIdBmp)
         {
             pIdBmp = 0; // Not used by VS2005+
-            return VSErr.E_NOTIMPL;
+            return VSConstants.E_NOTIMPL;
         }
 
         public int IdIcoLogoForAboutbox(out uint pIdIco)
         {
             pIdIco = 400;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OfficialName(out string pbstrName)
@@ -117,7 +117,7 @@ namespace Ankh.VSPackage
                 // We are running with full UI. Probably used for the about box
                 pbstrName = Resources.AboutTitleName;
             }
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int ProductDetails(out string pbstrProductDetails)
@@ -172,14 +172,14 @@ namespace Ankh.VSPackage
 
             pbstrProductDetails = sb.ToString();
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int ProductID(out string pbstrPID)
         {
             pbstrPID = UIVersion.ToString();
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion

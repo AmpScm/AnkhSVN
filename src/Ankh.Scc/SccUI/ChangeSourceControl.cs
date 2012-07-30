@@ -296,6 +296,7 @@ namespace Ankh.Scc.SccUI
             string projectLocation = null;
             bool first = true;
             Uri projectUri = null;
+            SccEnlistMode enlistMode = (SccEnlistMode) (-1);
 
             foreach (SvnProject p in SelectedProjects)
             {
@@ -333,7 +334,7 @@ namespace Ankh.Scc.SccUI
                     if (ps != null)
                     {
                         string doc;
-                        if (VSErr.Succeeded(ps.GetMkDocument(VSConstants.VSITEMID_ROOT, out doc)))
+                        if (ErrorHandler.Succeeded(ps.GetMkDocument(VSConstants.VSITEMID_ROOT, out doc)))
                         {
                             if (SvnItem.IsValidPath(doc))
                                 pLoc = PackageUtilities.MakeRelative(SolutionSettings.SolutionFilename, doc);
@@ -358,6 +359,11 @@ namespace Ankh.Scc.SccUI
                 KeepOneIgnoreCase(ref projectLocation, pLoc, first);
 
                 KeepOne(ref projectUri, pUri, first);
+
+                if (first)
+                    enlistMode = info.SccEnlistMode;
+                else
+                    enlistMode = SccEnlistMode.None;
 
                 first = false;
             }
@@ -387,14 +393,13 @@ namespace Ankh.Scc.SccUI
 
             slnBindUrl.Text = (SolutionSettings.ProjectRootUri != null) ? SolutionSettings.ProjectRootUri.ToString() : "";
 
-            usProjectLocationBrowse.Visible = false;// enlistMode > SccEnlistMode.None;
-            usProjectLocationBrowse.Enabled = false;// enlistMode > SccEnlistMode.SvnStateOnly;
+            usProjectLocationBrowse.Visible = enlistMode > SccEnlistMode.None;
+            usProjectLocationBrowse.Enabled = enlistMode > SccEnlistMode.SvnStateOnly;
 
-            sharedProjectUrlBrowse.Enabled = false;// sharedBasePathBrowse.Visible
-            sharedProjectUrlBrowse.Visible = false;
-                 //= (enlistMode > SccEnlistMode.None)
-                 //&& (projectBase != null)
-                 //&& (enlistMode > SccEnlistMode.SvnStateOnly || projectBase != SolutionSettings.ProjectRoot);
+            sharedProjectUrlBrowse.Enabled = sharedBasePathBrowse.Visible 
+                = (enlistMode > SccEnlistMode.None) 
+                && (projectBase != null) 
+                && (enlistMode > SccEnlistMode.SvnStateOnly || projectBase != SolutionSettings.ProjectRoot);
 
             slnBindBrowse.Enabled = (SolutionSettings.ProjectRootSvnItem != null) && SolutionSettings.ProjectRootSvnItem.WorkingCopy != null;
         }

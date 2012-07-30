@@ -120,9 +120,6 @@
   <data name="AddToSubversionCommandName" xml:space="preserve">
     <value>Add to Sub&amp;version</value>
   </data>
-  <data name="CheckingOutProject" xml:space="preserve">
-    <value>Checking Out Project</value>
-  </data>
   <data name="MergeCompleted" xml:space="preserve">
     <value>File Merge Completed?</value>
   </data>

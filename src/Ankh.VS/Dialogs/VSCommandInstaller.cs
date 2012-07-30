@@ -141,7 +141,7 @@ namespace Ankh.VS.Dialogs
             List<CommandData> items;
 
             if (!_data.TryGetValue(cd, out items))
-                return VSErr.OLECMDERR_E_NOTSUPPORTED;
+                return (int)Constants.OLECMDERR_E_NOTSUPPORTED;
 
             foreach (CommandData d in items)
             {
@@ -156,21 +156,21 @@ namespace Ankh.VS.Dialogs
                     d.UpdateHandler(d.Control, ud);
 
                     if (!ud.Enabled)
-                        return VSErr.OLECMDERR_E_DISABLED;
+                        return (int)Constants.OLECMDERR_E_DISABLED;
                 }
 
                 d.Handler(d.Control, ce);
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
-            return VSErr.OLECMDERR_E_NOTSUPPORTED;
+            return (int)Constants.OLECMDERR_E_NOTSUPPORTED;
         }
 
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             if ((prgCmds == null))
-                return VSErr.E_INVALIDARG;
+                return Microsoft.VisualStudio.VSConstants.E_INVALIDARG;
 
             System.Diagnostics.Debug.Assert(cCmds == 1, "Multiple commands"); // Should never happen in VS
 
@@ -179,7 +179,7 @@ namespace Ankh.VS.Dialogs
             List<CommandData> items;
 
             if (!_data.TryGetValue(cd, out items))
-                return VSErr.OLECMDERR_E_NOTSUPPORTED;
+                return (int)Constants.OLECMDERR_E_NOTSUPPORTED;
 
             foreach (CommandData d in items)
             {
@@ -192,7 +192,7 @@ namespace Ankh.VS.Dialogs
                     d.UpdateHandler(d.Control, ee);
 
                 if (ee.DynamicMenuEnd)
-                    return VSErr.OLECMDERR_E_NOTSUPPORTED;
+                    return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
                 OLECMDF cmdf = OLECMDF.OLECMDF_SUPPORTED;
 
@@ -200,10 +200,10 @@ namespace Ankh.VS.Dialogs
 
                 prgCmds[0].cmdf = (uint)cmdf;
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
-            return VSErr.OLECMDERR_E_NOTSUPPORTED;
+            return (int)Constants.OLECMDERR_E_NOTSUPPORTED;
         }
 
         #endregion

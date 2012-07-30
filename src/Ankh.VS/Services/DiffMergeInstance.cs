@@ -27,7 +27,7 @@ namespace Ankh.VS.Services
             _frame = frame;
             _frame2 = frame as IVsWindowFrame2;
 
-            if (_frame2 != null && VSErr.Succeeded(_frame2.Advise(this, out  _frameCookie)))
+            if (_frame2 != null && ErrorHandler.Succeeded(_frame2.Advise(this, out  _frameCookie)))
             {
                 _frameHooked = true;
             }
@@ -83,24 +83,24 @@ namespace Ankh.VS.Services
 
         public int OnDockableChange(int fDockable)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnMove()
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnShow(int fShow)
         {
             if (fShow == (int)__FRAMESHOW.FRAMESHOW_WinClosed)
                 Dispose(true);
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnSize()
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnClose(ref uint pgrfSaveOptions)
@@ -109,22 +109,22 @@ namespace Ankh.VS.Services
             {
                 // Prompt for handled, etc?
             }
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnDockableChange(int fDockable, int x, int y, int w, int h)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnMove(int x, int y, int w, int h)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnSize(int x, int y, int w, int h)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
     }
 }

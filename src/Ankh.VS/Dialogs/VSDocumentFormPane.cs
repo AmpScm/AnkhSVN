@@ -251,12 +251,12 @@ namespace Ankh.VS.Dialogs
 
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
-            int hr = VSErr.OLECMDERR_E_NOTSUPPORTED;
+            int hr = (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
             foreach (IOleCommandTarget target in _targets)
             {
                 hr = target.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
 
-                if (hr != VSErr.OLECMDERR_E_NOTSUPPORTED && hr != VSErr.OLECMDERR_E_UNKNOWNGROUP)
+                if (hr != (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED && hr != (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)
                     return hr;
             }
 
@@ -270,12 +270,12 @@ namespace Ankh.VS.Dialogs
 
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
-            int hr = VSErr.OLECMDERR_E_NOTSUPPORTED;
+            int hr = (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
             foreach (IOleCommandTarget target in _targets)
             {
                 hr = target.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
 
-                if (hr != VSErr.OLECMDERR_E_NOTSUPPORTED && hr != VSErr.OLECMDERR_E_UNKNOWNGROUP)
+                if (hr != (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED && hr != (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)
                     return hr;
             }
 

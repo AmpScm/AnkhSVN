@@ -65,16 +65,16 @@ namespace Ankh.VSPackage
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             if ((prgCmds == null))
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
             else if (GuidRefIsNull(ref pguidCmdGroup))
-                return VSErr.OLECMDERR_E_NOTSUPPORTED;
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
             Debug.Assert(cCmds == 1, "Multiple commands"); // Should never happen in VS
 
             if (Zombied || pguidCmdGroup != AnkhId.CommandSetGuid)
             {
                 // Filter out commands that are not defined by this package
-                return VSErr.OLECMDERR_E_UNKNOWNGROUP;
+                return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
             }
 
             int hr = CommandMapper.QueryStatus(Context, cCmds, prgCmds, pCmdText);
@@ -86,11 +86,11 @@ namespace Ankh.VSPackage
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
             if (GuidRefIsNull(ref pguidCmdGroup))
-                return VSErr.OLECMDERR_E_NOTSUPPORTED;
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
             if (Zombied || pguidCmdGroup != AnkhId.CommandSetGuid)
             {
-                return VSErr.OLECMDERR_E_UNKNOWNGROUP;
+                return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
             }
 
             switch ((OLECMDEXECOPT)nCmdexecopt)
@@ -102,23 +102,23 @@ namespace Ankh.VSPackage
                 case OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP:
                 default:
                     // VS Doesn't use OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP                    
-                    return VSErr.E_NOTIMPL;
+                    return VSConstants.E_NOTIMPL;
                 case (OLECMDEXECOPT)0x00010000 | OLECMDEXECOPT.OLECMDEXECOPT_SHOWHELP:
                     // Retrieve parameter information of command for immediate window
                     // See http://blogs.msdn.com/dr._ex/archive/2005/03/16/396877.aspx for more info
 
                     if (pvaOut == IntPtr.Zero)
-                        return VSErr.E_POINTER;
+                        return VSConstants.E_POINTER;
 
                     string definition;
                     if (pvaOut != IntPtr.Zero && CommandMapper.TryGetParameterList((AnkhCommand)nCmdID, out definition))
                     {
                         Marshal.GetNativeVariantForObject(definition, pvaOut);
 
-                        return VSErr.S_OK;
+                        return VSConstants.S_OK;
                     }
 
-                    return VSErr.E_NOTIMPL;
+                    return VSConstants.E_NOTIMPL;
             }
 
             object argIn = null;
@@ -134,14 +134,14 @@ namespace Ankh.VSPackage
                 (OLECMDEXECOPT)nCmdexecopt == OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER);
 
             if (!CommandMapper.Execute(args.Command, args))
-                return VSErr.OLECMDERR_E_DISABLED;
+                return (int)OLEConstants.OLECMDERR_E_DISABLED;
 
             if (pvaOut != IntPtr.Zero)
             {
                 Marshal.GetNativeVariantForObject(args.Result, pvaOut);
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         [DebuggerStepThrough]

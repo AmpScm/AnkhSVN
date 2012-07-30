@@ -25,7 +25,6 @@ using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
 using System.IO;
 using SharpSvn;
-using Marshal=System.Runtime.InteropServices.Marshal;
 
 namespace Ankh.Scc
 {
@@ -111,7 +110,7 @@ namespace Ankh.Scc
 
                     foreach (SccProjectData p in _projectMap.Values)
                     {
-                        if (p.IsStoredInSolution)
+                        if (p.IsSolutionFolder || p.IsWebSite)
                         {
                             p.SetManaged(managed);
 
@@ -162,12 +161,18 @@ namespace Ankh.Scc
             set { _isDirty = value; }
         }
 
+        public bool IsSolutionLoaded
+        {
+            get { return _solutionLoaded; }
+        }
+
         /// <summary>
         /// Called by ProjectDocumentTracker when a solution is opened 
         /// </summary>
         internal void OnSolutionOpened(bool onLoad)
         {
-            _solutionFile = null;
+            _solutionLoaded = true;
+            _solutionFile = _solutionDirectory = null;
 
             if (!IsActive)
             {
@@ -199,7 +204,7 @@ namespace Ankh.Scc
 
             foreach (SccProjectData data in _projectMap.Values)
             {
-                if (data.IsSolutionInfrastructure)
+                if (data.IsSolutionFolder)
                 {
                     // Solution folders don't save their Scc management state
                     // We let them follow the solution settings
@@ -208,7 +213,7 @@ namespace Ankh.Scc
                         data.SetManaged(true);
                 }
 
-                if (data.IsStoredInSolution)
+                if (data.IsSolutionFolder || data.IsWebSite)
                 {
                     // Flush the glyph cache of solution folders
                     // (Well known VS bug: Initially clear)
@@ -223,76 +228,8 @@ namespace Ankh.Scc
             UpdateSolutionGlyph();
         }
 
-        public void VerifySolutionNaming()
-        {
-            IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
-
-            string dir, path, user;
-
-            if (sol == null
-                || !VSErr.Succeeded(sol.GetSolutionInfo(out dir, out path, out user))
-                || string.IsNullOrEmpty(path))
-            {
-                return;
-            }
-
-            string trueSln = SvnTools.GetTruePath(path, true) ?? SvnTools.GetNormalizedFullPath(path);
-
-            if (trueSln == path)
-                return; // Nothing to do for us
-
-            IVsRunningDocumentTable rdt = GetService<IVsRunningDocumentTable>(typeof(SVsRunningDocumentTable));
-
-            if (rdt == null)
-                return;
-
-            Guid IID_hier = typeof(IVsHierarchy).GUID;
-            IntPtr hier = IntPtr.Zero;
-            IntPtr unk = Marshal.GetIUnknownForObject(sol);
-            IntPtr ppunkDocData = IntPtr.Zero;
-            try
-            {
-                IVsHierarchy slnHier;
-                uint pitemid;
-                uint pdwCookie;
-
-                if (!VSErr.Succeeded(rdt.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_EditLock, path, out slnHier, out pitemid, out ppunkDocData, out pdwCookie)))
-                    return;
-                if (!VSErr.Succeeded(Marshal.QueryInterface(unk, ref IID_hier, out hier)))
-                {
-                    hier = IntPtr.Zero;
-                    return;
-                }
-
-                if (VSErr.Succeeded(rdt.RenameDocument(path, trueSln, hier, VSConstants.VSITEMID_ROOT)))
-                {
-                    int hr;
-
-                    hr = rdt.SaveDocuments((uint)(__VSRDTSAVEOPTIONS.RDTSAVEOPT_ForceSave | __VSRDTSAVEOPTIONS.RDTSAVEOPT_SaveNoChildren),
-                                           slnHier, pitemid, pdwCookie);
-
-                    hr = sol.SaveSolutionElement((uint)(__VSSLNSAVEOPTIONS.SLNSAVEOPT_ForceSave), (IVsHierarchy)sol, pdwCookie);
-
-                    //GC.KeepAlive(hr);
-                }
-                if (ppunkDocData != IntPtr.Zero)
-                {
-                    object doc = Marshal.GetObjectForIUnknown(ppunkDocData);
-                }
-            }
-            finally
-            {
-                System.Runtime.InteropServices.Marshal.Release(unk);
-                if (hier != IntPtr.Zero)
-                    System.Runtime.InteropServices.Marshal.Release(hier);
-                if (ppunkDocData != IntPtr.Zero)
-                    Marshal.Release(hier);
-            }
-        }
-
         string _solutionFile;
         string _solutionDirectory;
-        string _rawSolutionDirectory;
         public string SolutionFilename
         {
             get
@@ -308,21 +245,10 @@ namespace Ankh.Scc
         {
             get
             {
-                if (_solutionFile == null)
+                if (_solutionDirectory == null)
                     LoadSolutionInfo();
 
                 return _solutionDirectory;
-            }
-        }
-
-        public string RawSolutionDirectory
-        {
-            get
-            {
-                if (_solutionFile == null)
-                    LoadSolutionInfo();
-
-                return _rawSolutionDirectory;
             }
         }
 
@@ -330,32 +256,31 @@ namespace Ankh.Scc
         {
             string dir, path, user;
 
-            _rawSolutionDirectory = null;
-            _solutionDirectory = null;
-            _solutionFile = "";
-
             IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
 
             if (sol == null ||
-                !VSErr.Succeeded(sol.GetSolutionInfo(out dir, out path, out user)))
+                !ErrorHandler.Succeeded(sol.GetSolutionInfo(out dir, out path, out user)))
             {
+                _solutionDirectory = _solutionFile = "";
                 return;
             }
 
             if (string.IsNullOrEmpty(dir) || string.IsNullOrEmpty(path))
             {
                 // Cache negative result; will be returned as null
+                _solutionDirectory = _solutionFile = "";
             }
             else
             {
                 if (SvnItem.IsValidPath(dir))
-                {
-                    _rawSolutionDirectory = dir;
                     _solutionDirectory = SvnTools.GetTruePath(dir, true) ?? SvnTools.GetNormalizedFullPath(dir);
-                }
+                else
+                    _solutionDirectory = "";
 
                 if (SvnItem.IsValidPath(path))
                     _solutionFile = SvnTools.GetTruePath(path, true) ?? SvnTools.GetNormalizedFullPath(path);
+                else
+                    _solutionFile = "";
             }
         }
 
@@ -386,7 +311,7 @@ namespace Ankh.Scc
             Debug.Assert(_projectMap.Count == 0);
             Debug.Assert(_fileMap.Count == 0);
 
-            _solutionFile = null;
+            _solutionFile = _solutionDirectory = null;
             _projectMap.Clear();
             _fileMap.Clear();
             _unreloadable.Clear();
@@ -395,6 +320,7 @@ namespace Ankh.Scc
             // Clear status for reopening solution
             _managedSolution = false;
             _isDirty = false;
+            _solutionLoaded = false;
             _sccExcluded.Clear();
             Translate_ClearState();
 
@@ -422,11 +348,27 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 return;
 
-            // Mark the sln file edited, so it shows up in Pending Changes/Commit
-            if (!string.IsNullOrEmpty(SolutionFilename))
-                DocumentTracker.CheckDirty(SolutionFilename);
+            string oldLocation = data.ProjectLocation;
+            try
+            {
+                using (SccProjectData newData = new SccProjectData(Context, project))
+                {
+                    string newLocation = newData.ProjectLocation;
 
-            data.Reload(); // Reload project name, etc.
+                    if (newLocation == null && oldLocation == null)
+                        return; // No need to do anything for this case (e.g. solution folders)
+
+                    SccStore.OnProjectRenamed(oldLocation, newLocation);
+                }
+            }
+            finally
+            {
+                // Mark the sln file edited, so it shows up in Pending Changes/Commit
+                if (!string.IsNullOrEmpty(SolutionFilename))
+                    DocumentTracker.CheckDirty(SolutionFilename);
+
+                data.Reload(); // Reload project name, etc.
+            }
         }
 
         /// <summary>
@@ -440,12 +382,12 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 _projectMap.Add(project, data = new SccProjectData(Context, project));
 
-            if (data.IsStoredInSolution)
+            if (data.IsSolutionFolder || data.IsWebSite)
             {
                 if (IsSolutionManaged)
                 {
                     // We let them follow the solution settings (See OnSolutionOpen() for the not added case
-                    if (added && data.IsSolutionInfrastructure)
+                    if (added && data.IsSolutionFolder)
                         data.SetManaged(true);
                 }
 
@@ -458,7 +400,7 @@ namespace Ankh.Scc
 
             // Don't take the focus from naming the folder. The rename will perform the .Load()
             // and dirty check
-            if (added && data.IsSolutionInfrastructure)
+            if (added && data.IsSolutionFolder)
                 return;
 
             if (added && !string.IsNullOrEmpty(SolutionFilename))
@@ -507,11 +449,11 @@ namespace Ankh.Scc
             {
                 trackCopies = true;
 
-                if (data.WebLikeFileHandling)
+                if (data.IsWebSite)
                 {
                     int busy;
                     if (BuildManager != null &&
-                        VSErr.Succeeded(BuildManager.QueryBuildManagerBusy(out busy)) &&
+                        ErrorHandler.Succeeded(BuildManager.QueryBuildManagerBusy(out busy)) &&
                         busy != 0)
                     {
                         trackCopies = false;
@@ -625,7 +567,7 @@ namespace Ankh.Scc
                     bool sorted = false;
                     foreach (SccProjectData project in _projectMap.Values)
                     {
-                        if (project.WebLikeFileHandling && !string.IsNullOrEmpty(project.ProjectDirectory))
+                        if (project.RequiresForcedRefresh() && !string.IsNullOrEmpty(project.ProjectDirectory))
                         {
                             string dir = project.ProjectDirectory;
 

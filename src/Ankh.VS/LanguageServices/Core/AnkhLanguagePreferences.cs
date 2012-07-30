@@ -390,7 +390,7 @@ namespace Ankh.VS.LanguageServices.Core
                 {
                     LANGPREFERENCES2[] langPrefs2 = new LANGPREFERENCES2[1];
                     langPrefs2[0] = this.prefs;
-                    if (VSErr.Succeeded(textMgr2.GetUserPreferences2(null, null, langPrefs2, null)))
+                    if (ErrorHandler.Succeeded(textMgr2.GetUserPreferences2(null, null, langPrefs2, null)))
                     {
                         this.prefs = langPrefs2[0];
                     }
@@ -411,7 +411,7 @@ namespace Ankh.VS.LanguageServices.Core
                 this.prefs.guidLang = langSvc;
                 LANGPREFERENCES2[] langPrefs2 = new LANGPREFERENCES2[1];
                 langPrefs2[0] = this.prefs;
-                if (!VSErr.Succeeded(textMgr2.SetUserPreferences2(null, null, langPrefs2, null)))
+                if (!ErrorHandler.Succeeded(textMgr2.SetUserPreferences2(null, null, langPrefs2, null)))
                 {
                     Debug.Assert(false, "textMgr2.SetUserPreferences2");
                 }
@@ -446,29 +446,29 @@ namespace Ankh.VS.LanguageServices.Core
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.OnRegisterMarkerType"]/*' />
         public virtual int OnRegisterMarkerType(int iMarkerType)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.OnRegisterView"]/*' />
         [CLSCompliant(false)]
         public virtual int OnRegisterView(IVsTextView view)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.OnUnregisterView"]/*' />
         [CLSCompliant(false)]
         public virtual int OnUnregisterView(IVsTextView view)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.OnReplaceAllInFilesBegin"]/*' />
         public virtual int OnReplaceAllInFilesBegin()
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.OnReplaceAllInFilesEnd"]/*' />
         public virtual int OnReplaceAllInFilesEnd()
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <include file='doc\Preferences.uex' path='docs/doc[@for="LanguagePreferences.OnUserPreferencesChanged2"]/*' />
@@ -479,7 +479,7 @@ namespace Ankh.VS.LanguageServices.Core
             {
                 this.prefs = langPrefs[0];
             }
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion

@@ -24,7 +24,7 @@ using Microsoft.VisualStudio;
 namespace Ankh.VS.WebBrowser
 {
     [GlobalService(typeof(IAnkhWebBrowser))]
-    sealed class AnkhWebBrowser : AnkhService, IAnkhWebBrowser
+    class AnkhWebBrowser : AnkhService, IAnkhWebBrowser
     {
         public AnkhWebBrowser(IAnkhServiceProvider context)
             : base(context)
@@ -95,67 +95,67 @@ namespace Ankh.VS.WebBrowser
 
         public int Disconnect()
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int FilterDataObject(Microsoft.VisualStudio.OLE.Interop.IDataObject pDataObjIn, out Microsoft.VisualStudio.OLE.Interop.IDataObject ppDataObjOut)
         {
             ppDataObjOut = null;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int GetCmdUIGuid(out Guid pguidCmdUI)
         {
             pguidCmdUI = Guid.Empty;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int GetCustomMenuInfo(object pUnkCmdReserved, object pDispReserved, uint dwType, uint dwPosition, out Guid pguidCmdGroup, out int pdwMenuID)
         {
             pguidCmdGroup = Guid.Empty;
             pdwMenuID = 0;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int GetCustomURL(uint nPage, out string pbstrURL)
         {
             pbstrURL = null;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int GetDropTarget(Microsoft.VisualStudio.OLE.Interop.IDropTarget pDropTgtIn, out Microsoft.VisualStudio.OLE.Interop.IDropTarget ppDropTgtOut)
         {
             ppDropTgtOut = null;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int GetExternalObject(out object ppDispObject)
         {
 
             ppDispObject = null;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int GetOptionKeyPath(uint dwReserved, out string pbstrKey)
         {
             pbstrKey = null;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int Resize(int cx, int cy)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int TranslateAccelarator(Microsoft.VisualStudio.OLE.Interop.MSG[] lpmsg)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int TranslateUrl(uint dwReserved, string lpszURLIn, out string lppszURLOut)
         {
             lppszURLOut = null;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion

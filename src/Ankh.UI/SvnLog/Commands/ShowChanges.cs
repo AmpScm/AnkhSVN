@@ -31,14 +31,11 @@ namespace Ankh.UI.SvnLog.Commands
     [Command(AnkhCommand.LogShowChanges, AlwaysAvailable = true)]
     class ShowChanges : ICommandHandler
     {
-        LogToolWindowControl _ctrl;
-
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (_ctrl == null)
-                _ctrl = e.GetService<LogToolWindowControl>();
+            ILogControl logWindow = e.Selection.GetActiveControl<ILogControl>();
 
-            if (_ctrl == null)
+            if (logWindow == null || logWindow.Origins == null)
             {
                 e.Enabled = false;
                 return;
@@ -47,7 +44,7 @@ namespace Ankh.UI.SvnLog.Commands
             if (UpdateForChangedFiles(e))
                 return;
 
-            UpdateForRevChanges(_ctrl, e);
+            UpdateForRevChanges(logWindow, e);
         }
 
         void UpdateForRevChanges(ILogControl logWindow, CommandUpdateEventArgs e)
@@ -103,16 +100,15 @@ namespace Ankh.UI.SvnLog.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
-            if (_ctrl == null)
-                return;
+            ILogControl logWindow = e.Selection.GetActiveControl<ILogControl>();
 
-            if (PerformRevisionChanges(e))
+            if (PerformRevisionChanges(logWindow, e))
                 return;
 
             PerformFileChanges(e);
         }
 
-        bool PerformRevisionChanges(CommandEventArgs e)
+        bool PerformRevisionChanges(ILogControl log, CommandEventArgs e)
         {
             long min = long.MaxValue;
             long max = long.MinValue;
@@ -129,7 +125,7 @@ namespace Ankh.UI.SvnLog.Commands
 
             if (n > 0)
             {
-                ExecuteDiff(e, _ctrl.Origins, new SvnRevisionRange(n == 1 ? min - 1 : min, max));
+                ExecuteDiff(e, log.Origins, new SvnRevisionRange(n == 1 ? min - 1 : min, max));
                 return true;
             }
 
@@ -178,6 +174,24 @@ namespace Ankh.UI.SvnLog.Commands
             da.MineTitle = diff.GetTitle(diffTarget, range.EndRevision);
             da.ReadOnly = true;
             diff.RunDiff(da);
+        }
+    }
+
+    public static class LogHelper
+    {
+        public static IEnumerable<SvnItem> IntersectWorkingCopyItemsWithChangedPaths(IEnumerable<SvnItem> workingCopyItems, IEnumerable<string> changedPaths)
+        {
+            foreach (SvnItem i in workingCopyItems)
+            {
+                foreach (string s in changedPaths)
+                {
+                    if (i.Uri.ToString().EndsWith(s))
+                    {
+                        yield return i;
+                        break;
+                    }
+                }
+            }
         }
     }
 }

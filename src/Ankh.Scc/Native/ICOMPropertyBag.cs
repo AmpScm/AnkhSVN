@@ -37,7 +37,7 @@ namespace Ankh.Scc.Native
         int Write(string pszPropName, ref object pVar);
     }
 
-    public sealed class PropertyBag : IPropertyMap
+    sealed class PropertyBag : IPropertyMap
     {
         readonly ICOMPropertyBag _bag;
         readonly SortedList<string, string> _toWrite = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -49,7 +49,6 @@ namespace Ankh.Scc.Native
             _bag = bag;
         }
 
-        [CLSCompliant(false)]
         public PropertyBag(IPropertyBag bag)
             : this((ICOMPropertyBag)bag)
         {
@@ -67,7 +66,7 @@ namespace Ankh.Scc.Native
                 throw new ArgumentNullException("propName");
 
             object var;
-            if (VSErr.Succeeded(_bag.Read(propName, out var, null, 0, null)))
+            if (ErrorHandler.Succeeded(_bag.Read(propName, out var, null, 0, null)))
             {
                 value = var as string;
 
@@ -153,16 +152,6 @@ namespace Ankh.Scc.Native
             }
 
             return value;
-        }
-
-        public IEnumerable<string> WrittenKeys
-        {
-            get { return _toWrite.Keys; }
-        }
-
-        public bool WrittenKey(string key)
-        {
-            return _toWrite.ContainsKey(key);
         }
     }
 }

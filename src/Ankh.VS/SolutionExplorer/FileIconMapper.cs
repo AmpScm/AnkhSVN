@@ -322,7 +322,7 @@ namespace Ankh.VS.SolutionExplorer
             IntPtr pidl = IntPtr.Zero;
             try
             {
-                if (VSErr.S_OK != NativeMethods.SHGetFolderLocation(IntPtr.Zero, folder, IntPtr.Zero, 0, out pidl))
+                if (VSConstants.S_OK != NativeMethods.SHGetFolderLocation(IntPtr.Zero, folder, IntPtr.Zero, 0, out pidl))
                     return -1;
 
 

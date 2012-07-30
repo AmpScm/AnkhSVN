@@ -289,7 +289,7 @@ namespace Ankh.VS.LanguageServices.Core
             editorCaption = null;
             cmdUI = Guid.Empty;
             cancelled = 0;
-            int hr = VSErr.S_OK;
+            int hr = VSConstants.S_OK;
 
             if (this.promptFlags == __PROMPTONLOADFLAGS.codepagePrompt && existingDocData != IntPtr.Zero)
             {
@@ -476,16 +476,16 @@ namespace Ankh.VS.LanguageServices.Core
                 logicalView == VSConstants.LOGVIEWID_Primary)
             {
                 physicalView = null;
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
-            return VSErr.E_NOTIMPL;
+            return VSConstants.E_NOTIMPL;
         }
 
         /// <include file='doc\EditorFactory.uex' path='docs/doc[@for="EditorFactory.SetSite"]/*' />
         public virtual int SetSite(Microsoft.VisualStudio.OLE.Interop.IServiceProvider psp)
         {
             this.site = new Microsoft.VisualStudio.Shell.ServiceProvider(psp);
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         StringDictionary GetEditorExtensions()
@@ -658,7 +658,7 @@ namespace Ankh.VS.LanguageServices.Core
         {
             this.site = null;
             this.package = null;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
         #endregion
     }

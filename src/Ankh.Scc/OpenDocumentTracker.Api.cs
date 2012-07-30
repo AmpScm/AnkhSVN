@@ -93,7 +93,7 @@ namespace Ankh.Scc
                 return true; // Not/never modified, no need to save
 
             // Save the document if it is dirty
-            return VSErr.Succeeded(RunningDocumentTable.SaveDocuments((uint)__VSRDTSAVEOPTIONS.RDTSAVEOPT_PromptSave,
+            return ErrorHandler.Succeeded(RunningDocumentTable.SaveDocuments((uint)__VSRDTSAVEOPTIONS.RDTSAVEOPT_PromptSave,
                 data.Hierarchy, data.ItemId, data.Cookie));
         }
 
@@ -147,25 +147,18 @@ namespace Ankh.Scc
             if (paths == null)
                 throw new ArgumentNullException("paths");
 
-            HybridCollection<string> openDocs = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-            HybridCollection<string> dontSave = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+            HybridCollection<string> pathsCol = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
-            openDocs.UniqueAddRange(_docMap.Keys);
-            dontSave.UniqueAddRange(paths);
+            pathsCol.UniqueAddRange(paths);
 
             bool ok = true;
-            foreach(string name in openDocs)
+            foreach (SccDocumentData data in _docMap.Values)
             {
-                SccDocumentData data;
-
-                if (dontSave.Contains(name))
-                    continue;
-
-                if (!_docMap.TryGetValue(name, out data))
-                    continue; // File closed through saving another one
-
-                if (!data.SaveDocument(RunningDocumentTable))
-                    ok = false;
+                if (!pathsCol.Contains(data.Name))
+                {
+                    if (!data.SaveDocument(RunningDocumentTable))
+                        ok = false;
+                }
             }
 
             return ok;
@@ -305,7 +298,7 @@ namespace Ankh.Scc
                     // But to be able to tell if there are changes.. We keep some stats ourselves
 
                     if (!ignoring.Contains(file) &&
-                        VSErr.Succeeded(_change.IgnoreFile(0, file, 1)))
+                        ErrorHandler.Succeeded(_change.IgnoreFile(0, file, 1)))
                     {
                         _fsIgnored.Add(file);
                         FileInfo info = new FileInfo(file);
@@ -331,7 +324,7 @@ namespace Ankh.Scc
                     uint cky;
 
                     // BH: We don't monitor the attributes as some SVN actions put files temporary on read only!
-                    if (VSErr.Succeeded(_change.AdviseFileChange(path, (uint)(/*_VSFILECHANGEFLAGS.VSFILECHG_Attr |*/
+                    if (ErrorHandler.Succeeded(_change.AdviseFileChange(path, (uint)(/*_VSFILECHANGEFLAGS.VSFILECHG_Attr |*/
                         _VSFILECHANGEFLAGS.VSFILECHG_Size | _VSFILECHANGEFLAGS.VSFILECHG_Time), this, out cky)))
                     {
                         _monitor.Add(cky, path);
@@ -398,19 +391,19 @@ namespace Ankh.Scc
             int IVsFileChangeEvents.DirectoryChanged(string pszDirectory)
             {
                 if (string.IsNullOrEmpty(pszDirectory))
-                    return VSErr.S_OK;
+                    return VSConstants.S_OK;
 
                 if (!_changedPaths.Contains(pszDirectory))
                     _changedPaths.Add(pszDirectory);
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             // Called by the file monitor when a monitored file has changed
             int IVsFileChangeEvents.FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
             {
                 if (cChanges == 0 || rgpszFile == null)
-                    return VSErr.S_OK;
+                    return VSConstants.S_OK;
 
                 for (int i = 0; i < cChanges && i < rgpszFile.Length; i++)
                 {
@@ -422,7 +415,7 @@ namespace Ankh.Scc
                         _changedPaths.Add(file);
                 }
 
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
             #endregion
 

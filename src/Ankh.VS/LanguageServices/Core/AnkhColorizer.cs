@@ -77,7 +77,7 @@ namespace Ankh.VS.LanguageServices.Core
                 return null;
 
             int lastLine, lastIndex;
-            if (!VSErr.Succeeded(_lines.GetLastLineIndex(out lastLine, out lastIndex)))
+            if (!ErrorHandler.Succeeded(_lines.GetLastLineIndex(out lastLine, out lastIndex)))
                 return null;
 
             if (lineNr > lastLine)
@@ -85,7 +85,7 @@ namespace Ankh.VS.LanguageServices.Core
 
             LINEDATA[] data = new LINEDATA[1];
 
-            if (!VSErr.Succeeded(_lines.GetLineData(lineNr, data, null)))
+            if (!ErrorHandler.Succeeded(_lines.GetLineData(lineNr, data, null)))
                 return null;
 
             return Marshal.PtrToStringUni(data[0].pszText, data[0].iLength);
@@ -94,7 +94,7 @@ namespace Ankh.VS.LanguageServices.Core
         int IVsColorizer.GetStartState(out int startState)
         {
             startState = StartState;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         protected virtual int StartState
@@ -122,7 +122,7 @@ namespace Ankh.VS.LanguageServices.Core
         int IVsColorizer.GetStateMaintenanceFlag(out int pfFlag)
         {
             pfFlag = Language.NeedsPerLineState ? 1 : 0;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion
@@ -131,12 +131,12 @@ namespace Ankh.VS.LanguageServices.Core
 
         public int BeginColorization()
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int EndColorization()
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion

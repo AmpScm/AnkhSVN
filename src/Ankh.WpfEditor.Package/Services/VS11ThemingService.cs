@@ -216,7 +216,7 @@ namespace Ankh.WpfPackage.Services
                     return false; // Just use the os directly. (Allows caching)
 
                 object data;
-                if (!VSErr.Succeeded(uiOb.get_Data(out data)))
+                if (!ErrorHandler.Succeeded(uiOb.get_Data(out data)))
                     return false;
 
                 IVsUIWin32Icon vsIcon = data as IVsUIWin32Icon;
@@ -225,7 +225,7 @@ namespace Ankh.WpfPackage.Services
                     return false;
 
                 int iconHandle;
-                if (!VSErr.Succeeded(vsIcon.GetHICON(out iconHandle)))
+                if (!ErrorHandler.Succeeded(vsIcon.GetHICON(out iconHandle)))
                     return false;
 
                 hIcon = (IntPtr)iconHandle;

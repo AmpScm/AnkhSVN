@@ -41,12 +41,9 @@ namespace Ankh.Scc
 
             GetService<IAnkhServiceEvents>().OnSolutionOpened(EventArgs.Empty);
 
-            if (!SccProvider.IsActive)
-                return VSErr.S_OK;
+            if (SccProvider.IsActive)
             try
             {
-                SccProvider.VerifySolutionNaming();
-
                 IAnkhSolutionSettings ss = GetService<IAnkhSolutionSettings>();
 
                 if (ss != null && ss.ProjectRoot != null)
@@ -94,7 +91,7 @@ namespace Ankh.Scc
                     throw;
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnBeforeCloseSolution(object pUnkReserved)
@@ -103,7 +100,7 @@ namespace Ankh.Scc
             if (SccProvider.IsActive)
                 SccProvider.OnStartedSolutionClose();
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterCloseSolution(object pUnkReserved)
@@ -111,17 +108,18 @@ namespace Ankh.Scc
             if (SccProvider.IsActive)
             {
                 SccProvider.OnSolutionClosed();
+                SccStore.OnSolutionClosed();
             }
 
             GetService<IAnkhServiceEvents>().OnSolutionClosed(EventArgs.Empty);
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterLoadProject(IVsHierarchy pStubHierarchy, IVsHierarchy pRealHierarchy)
         {
             if (!SccProvider.IsActive)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             IVsSccProject2 project = pRealHierarchy as IVsSccProject2;
 
@@ -130,13 +128,13 @@ namespace Ankh.Scc
                 SccProvider.OnProjectLoaded(project);
             }
             
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
         {
             if (!SccProvider.IsActive)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             IVsSccProject2 project = pHierarchy as IVsSccProject2;
 
@@ -149,13 +147,13 @@ namespace Ankh.Scc
             //  IVsSccVirtualFolders vf = pHierarchy as IVsSccVirtualFolders; // Available for webprojects on a server
             //}
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved)
         {
             if (!SccProvider.IsActive)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             IVsSccProject2 project = pHierarchy as IVsSccProject2;
 
@@ -164,13 +162,13 @@ namespace Ankh.Scc
                 SccProvider.OnProjectClosed(project, fRemoved != 0);
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }        
 
         public int OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
         {
             if (!SccProvider.IsActive)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             IVsSccProject2 project = pRealHierarchy as IVsSccProject2;
 
@@ -179,23 +177,23 @@ namespace Ankh.Scc
                 SccProvider.OnProjectBeforeUnload(project, pStubHierarchy);
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnQueryCloseProject(IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel)
         {
             pfCancel = 0;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnQueryCloseSolution(object pUnkReserved, ref int pfCancel)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnQueryUnloadProject(IVsHierarchy pRealHierarchy, ref int pfCancel)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion
@@ -205,7 +203,7 @@ namespace Ankh.Scc
 
         public int OnAfterMergeSolution(object pUnkReserved)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion
@@ -215,22 +213,22 @@ namespace Ankh.Scc
 
         public int OnAfterClosingChildren(IVsHierarchy pHierarchy)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterOpeningChildren(IVsHierarchy pHierarchy)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnBeforeClosingChildren(IVsHierarchy pHierarchy)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnBeforeOpeningChildren(IVsHierarchy pHierarchy)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion
@@ -240,7 +238,7 @@ namespace Ankh.Scc
         public int OnAfterAsynchOpenProject(IVsHierarchy pHierarchy, int fAdded)
         {
             if (!SccProvider.IsActive)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             IVsSccProject2 project = pHierarchy as IVsSccProject2;
 
@@ -249,18 +247,18 @@ namespace Ankh.Scc
                 SccProvider.OnProjectOpened(project, fAdded != 0);
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterChangeProjectParent(IVsHierarchy pHierarchy)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterRenameProject(IVsHierarchy pHierarchy)
         {
             if (!SccProvider.IsActive)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             IVsSccProject2 project = pHierarchy as IVsSccProject2;
 
@@ -270,13 +268,13 @@ namespace Ankh.Scc
                 SccProvider.OnProjectRenamed(project);
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnQueryChangeProjectParent(IVsHierarchy pHierarchy, IVsHierarchy pNewParentHier, ref int pfCancel)
         {
             pfCancel = 0;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion
@@ -292,18 +290,18 @@ namespace Ankh.Scc
         /// <param name="stUpgradeTime">[in] A <see cref="T:Microsoft.VisualStudio.Shell.Interop.SYSTEMTIME"></see> value. The time the upgrade was done.</param>
         /// <param name="pLogger">[in] Pointer to an <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsUpgradeLogger"></see> interface to use for logging upgrade messages.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int OnAfterUpgradeProject(IVsHierarchy pHierarchy, uint fUpgradeFlag, string bstrCopyLocation, SYSTEMTIME stUpgradeTime, IVsUpgradeLogger pLogger)
         {
             if (!SccProvider.IsActive)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             IProjectFileMapper mapper = GetService<IProjectFileMapper>();
             IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
 
             if(monitor == null || mapper == null)
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             if (SccProvider.IsSafeSccPath(bstrCopyLocation))
                 monitor.ScheduleSvnStatus(bstrCopyLocation);
@@ -318,7 +316,7 @@ namespace Ankh.Scc
                     monitor.ScheduleSvnStatus(info.ProjectFile);
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion

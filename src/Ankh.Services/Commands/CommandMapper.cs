@@ -341,7 +341,7 @@ namespace Ankh.Commands
             }
 
             if (updateArgs.DynamicMenuEnd)
-                return VSErr.OLECMDERR_E_NOTSUPPORTED;
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
             if (textQuery != TextQueryType.None && !string.IsNullOrEmpty(updateArgs.Text))
             {

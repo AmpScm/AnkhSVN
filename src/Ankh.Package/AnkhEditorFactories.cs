@@ -24,6 +24,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 using Ankh.UI;
+using Ankh.VS.Dialogs;
 
 namespace Ankh.VSPackage
 {
@@ -40,7 +41,7 @@ namespace Ankh.VSPackage
 
         public int Close()
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public virtual int CreateEditorInstance(uint grfCreateDoc, string pszMkDocument, string pszPhysicalView, IVsHierarchy pvHier, uint itemid, IntPtr punkDocDataExisting, out IntPtr ppunkDocView, out IntPtr ppunkDocData, out string pbstrEditorCaption, out Guid pguidCmdUI, out int pgrfCDW)
@@ -53,7 +54,7 @@ namespace Ankh.VSPackage
             // Validate inputs
             if ((grfCreateDoc & (VSConstants.CEF_OPENFILE | VSConstants.CEF_SILENT)) == 0)
             {
-                return VSErr.E_INVALIDARG;
+                return VSConstants.E_INVALIDARG;
             }
 
             VSEditorControl form = CreateForm();
@@ -66,7 +67,7 @@ namespace Ankh.VSPackage
             ppunkDocData = Marshal.GetIUnknownForObject(doc);
 
             pbstrEditorCaption = form.Text;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         protected abstract Guid FactoryId { get; }
@@ -80,16 +81,16 @@ namespace Ankh.VSPackage
             if (rguidLogicalView == VSConstants.LOGVIEWID_Primary)
             {
                 pbstrPhysicalView = null;
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
-            return VSErr.E_NOTIMPL;
+            return VSConstants.E_NOTIMPL;
         }
 
         public int SetSite(IOleServiceProvider psp)
         {
             _site = psp;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion
@@ -161,7 +162,7 @@ namespace Ankh.VSPackage
                 pbstrEditorCaption = null;
                 pguidCmdUI = Guid.Empty;
                 pgrfCDW = 0;
-                return VSErr.E_UNEXPECTED;
+                return VSConstants.E_UNEXPECTED;
             }
 
             return base.CreateEditorInstance(grfCreateDoc, pszMkDocument, pszPhysicalView, pvHier, itemid, punkDocDataExisting, out ppunkDocView, out ppunkDocData, out pbstrEditorCaption, out pguidCmdUI, out pgrfCDW);

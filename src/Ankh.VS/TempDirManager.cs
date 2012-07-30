@@ -18,12 +18,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using SharpSvn;
-using Ankh.VS;
 
-namespace Ankh.Services
+namespace Ankh.VS
 {
     [GlobalService(typeof(IAnkhTempDirManager))]
-    sealed class TempDirManager : AnkhService, IAnkhTempDirManager
+    class TempDirManager : AnkhService, IAnkhTempDirManager
     {
         readonly TempDirCollection _tempDirs = new TempDirCollection();
 

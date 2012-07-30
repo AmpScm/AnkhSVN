@@ -28,7 +28,7 @@ namespace Ankh.Scc
         public int OnQueryRemoveFiles(IVsProject pProject, int cFiles, string[] rgpszMkDocuments, VSQUERYREMOVEFILEFLAGS[] rgFlags, VSQUERYREMOVEFILERESULTS[] pSummaryResult, VSQUERYREMOVEFILERESULTS[] rgResults)
         {
             if (rgpszMkDocuments == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             if (rgResults != null)
                 for (int i = 0; i < cFiles; i++)
@@ -39,13 +39,13 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYREMOVEFILERESULTS.VSQUERYREMOVEFILERESULTS_RemoveOK;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterRemoveFiles(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEFILEFLAGS[] rgFlags)
         {
             if (rgpProjects == null || rgpszMkDocuments == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             for (int iProject = 0, iFile = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
             {
@@ -72,13 +72,13 @@ namespace Ankh.Scc
                         SccProvider.AddDelayedDelete(file);
                 }
             }
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnQueryRemoveDirectories(IVsProject pProject, int cDirectories, string[] rgpszMkDocuments, VSQUERYREMOVEDIRECTORYFLAGS[] rgFlags, VSQUERYREMOVEDIRECTORYRESULTS[] pSummaryResult, VSQUERYREMOVEDIRECTORYRESULTS[] rgResults)
         {
             if (rgpszMkDocuments == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             for (int i = 0; i < cDirectories; i++)
             {
@@ -91,13 +91,13 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterRemoveDirectories(int cProjects, int cDirectories, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, VSREMOVEDIRECTORYFLAGS[] rgFlags)
         {
             if (rgpProjects == null || rgpszMkDocuments == null)
-                return VSErr.E_POINTER;
+                return VSConstants.E_POINTER;
 
             for (int iProject = 0, iDirectory = 0; (iProject < cProjects) && (iDirectory < cDirectories); iProject++)
             {
@@ -125,7 +125,7 @@ namespace Ankh.Scc
                 }
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
     }
 }

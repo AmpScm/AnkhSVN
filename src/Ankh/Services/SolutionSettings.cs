@@ -50,7 +50,7 @@ namespace Ankh.Settings
                 throw new InvalidOperationException("IVsShell not available");
 
             object r;
-            if (VSErr.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_VirtualRegistryRoot, out r)))
+            if (ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_VirtualRegistryRoot, out r)))
                 _vsUserRoot = (string)r;
             else
                 _vsUserRoot = @"SOFTWARE\Microsoft\VisualStudio\8.0";
@@ -526,7 +526,7 @@ namespace Ankh.Settings
                     return null;
 
                 object value;
-                if (VSErr.Succeeded(solution.GetProperty((int)__VSPROPID.VSPROPID_RegisteredProjExtns, out value)))
+                if (ErrorHandler.Succeeded(solution.GetProperty((int)__VSPROPID.VSPROPID_RegisteredProjExtns, out value)))
                     _allProjectTypesFilter = value as string;
 
                 return _allProjectTypesFilter;
@@ -547,7 +547,7 @@ namespace Ankh.Settings
                     return null;
 
                 object value;
-                if (VSErr.Succeeded(solution.GetProperty((int)__VSPROPID.VSPROPID_OpenProjectFilter, out value)))
+                if (ErrorHandler.Succeeded(solution.GetProperty((int)__VSPROPID.VSPROPID_OpenProjectFilter, out value)))
                     _projectFilterName = value as string;
 
                 return _projectFilterName;
@@ -563,12 +563,8 @@ namespace Ankh.Settings
                 if (shell != null)
                 {
                     object r;
-                    if (VSErr.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_VisualStudioProjDir, out r)))
-                    {
-                        string path = (string)r;
-
-                        return SvnTools.GetTruePath(path, true) ?? SvnTools.GetNormalizedFullPath(path);
-                    }
+                    if (ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_VisualStudioProjDir, out r)))
+                        return SvnTools.GetNormalizedFullPath((string)r);
                 }
 
                 return "C:\\";
@@ -586,7 +582,7 @@ namespace Ankh.Settings
                 if (shell != null)
                 {
                     object r;
-                    if (VSErr.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_OpenFileFilter, out r)))
+                    if (ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_OpenFileFilter, out r)))
                         return ((string)r).Replace('\0', '|').TrimEnd('|');
                 }
 
@@ -759,7 +755,7 @@ namespace Ankh.Settings
                     object filter;
 
                     // The VS11+ official route
-                    if (VSErr.Succeeded(solution.GetProperty(-8037 /* VSPROPID_SolutionFileExt */, out filter)))
+                    if (ErrorHandler.Succeeded(solution.GetProperty(-8037 /* VSPROPID_SolutionFileExt */, out filter)))
                     {
                         _solutionFilter = "*" + (string)filter;
                     }
@@ -811,7 +807,7 @@ namespace Ankh.Settings
                 hr = solution.CreateProject(ref gnull, projectFile, null, null, (uint)__VSCREATEPROJFLAGS.CPF_OPENFILE, ref gInterface, out pProj);
             }
 
-            if (!VSErr.Succeeded(hr))
+            if (!ErrorHandler.Succeeded(hr))
                 new AnkhMessageBox(this).Show(Marshal.GetExceptionForHR(hr).Message, "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
         }
 

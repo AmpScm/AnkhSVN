@@ -169,7 +169,7 @@ namespace Ankh.VSPackage
                 Guid gAnkhLoaded = new Guid(started ? AnkhId.AnkhRuntimeStarted : AnkhId.AnkhServicesAvailable);
 
                 uint cky;
-                if (VSErr.Succeeded(ms.GetCmdUIContextCookie(ref gAnkhLoaded, out cky)))
+                if (ErrorHandler.Succeeded(ms.GetCmdUIContextCookie(ref gAnkhLoaded, out cky)))
                 {
                     ms.SetCmdUIContext(cky, 1);
                 }
@@ -202,7 +202,7 @@ namespace Ankh.VSPackage
                     else
                     {
                         object value;
-                        if (VSErr.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_IsInCommandLineMode, out value)))
+                        if (ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_IsInCommandLineMode, out value)))
                         {
                             _inCommandLineMode = Convert.ToBoolean(value);
                         }
@@ -225,7 +225,7 @@ namespace Ankh.VSPackage
             if (sp == null)
                 return null;
 
-            if (!VSErr.Succeeded(sp.QueryService(ref serviceGuid, ref IID_IUnknown, out handle))
+            if (!ErrorHandler.Succeeded(sp.QueryService(ref serviceGuid, ref IID_IUnknown, out handle))
                 || handle == IntPtr.Zero)
                 return null;
 

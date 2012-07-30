@@ -76,8 +76,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Services\TempDirManager.cs" />
-    <Compile Include="Services\TempFileManager.cs" />
     <EmbeddedResource Include="Services\ServiceStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ServiceStrings.Designer.cs</LastGenOutput>

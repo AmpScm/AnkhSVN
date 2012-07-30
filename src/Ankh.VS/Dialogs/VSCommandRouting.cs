@@ -72,7 +72,7 @@ namespace Ankh.VS.Dialogs
 
             if (_priorityCommandTarget != null)
             {
-                if (!VSErr.Succeeded(_priorityCommandTarget.RegisterPriorityCommandTarget(0, this, out _csCookie)))
+                if (!ErrorHandler.Succeeded(_priorityCommandTarget.RegisterPriorityCommandTarget(0, this, out _csCookie)))
                     _priorityCommandTarget = null;
             }
 
@@ -192,11 +192,11 @@ namespace Ankh.VS.Dialogs
                 int lResult;
                 hr = host.ProcessMouseActivationModal(m.HWnd, (uint)m.Msg, (uint)m.WParam, (int)m.LParam, out lResult);
                 // Check for errors.
-                if (VSErr.Succeeded(hr))
+                if (ErrorHandler.Succeeded(hr))
                 {
                     // ProcessMouseActivationModal returns S_FALSE to stop the message processing, but this
                     // function has to return true in this case.
-                    if (hr == VSErr.S_FALSE)
+                    if (hr == VSConstants.S_FALSE)
                     {
                         m.Result = (IntPtr)lResult;
                         return true;
@@ -275,7 +275,7 @@ namespace Ankh.VS.Dialogs
                     out cmdTranslated,
                     out keyComboStarts);
 
-                if (hr == VSErr.S_OK)
+                if (hr == VSConstants.S_OK)
                 {
                     if (cmdTranslated != 0)
                         return true;
@@ -350,7 +350,7 @@ namespace Ankh.VS.Dialogs
                 Rectangle r = new Rectangle(_form.Location, _form.Size);
                 _form.Location = new Point(0, 0);
 
-                if (!VSErr.Succeeded(p.CreatePaneWindow(_form.Handle, 0, 0, r.Width, r.Height, out hwnd)))
+                if (!ErrorHandler.Succeeded(p.CreatePaneWindow(_form.Handle, 0, 0, r.Width, r.Height, out hwnd)))
                 {
                     _pane.Dispose();
                     _pane = null;
@@ -442,14 +442,14 @@ namespace Ankh.VS.Dialogs
         public int GetBorder(RECT[] prc)
         {
             if (_panel == null)
-                return VSErr.E_NOTIMPL;
+                return VSConstants.E_NOTIMPL;
 
             Size sz = _form.ClientRectangle.Size;
             prc[0].left = 0;
             prc[0].top = 0;
             prc[0].right = sz.Width;
             prc[0].bottom = sz.Height;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         bool _initialSet;
@@ -460,7 +460,7 @@ namespace Ankh.VS.Dialogs
                 (reserved.right == pbw[0].right) &&
                 (reserved.bottom == pbw[0].bottom))
             {
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
 
             reserved = pbw[0];
@@ -479,7 +479,7 @@ namespace Ankh.VS.Dialogs
 
             VSForm_SizeChanged(null, EventArgs.Empty);
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion
@@ -488,7 +488,7 @@ namespace Ankh.VS.Dialogs
 
         int IOleCommandTarget.Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
-            int hr = VSErr.OLECMDERR_E_NOTSUPPORTED;
+            int hr = (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
             if (!Enabled)
                 return hr;
@@ -499,12 +499,12 @@ namespace Ankh.VS.Dialogs
                 {
                     hr = ct.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
 
-                    if (((hr != VSErr.OLECMDERR_E_NOTSUPPORTED) && (hr != VSErr.OLECMDERR_E_UNKNOWNGROUP)))
+                    if (((hr != (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED) && (hr != (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)))
                         break;
                 }
             }
 
-            if (!VSErr.Succeeded(hr))
+            if (!ErrorHandler.Succeeded(hr))
             {
                 bool skipProcessing = false;
                 if (pguidCmdGroup == VSConstants.GUID_VSStandardCommandSet97)
@@ -543,7 +543,7 @@ namespace Ankh.VS.Dialogs
                 }
 
                 if (skipProcessing)
-                    return VSErr.S_OK;
+                    return VSConstants.S_OK;
             }
 
             return hr;
@@ -551,7 +551,7 @@ namespace Ankh.VS.Dialogs
 
         int IOleCommandTarget.QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
-            int hr = VSErr.OLECMDERR_E_NOTSUPPORTED;
+            int hr = (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
             if (Enabled && _ctList != null)
             {
@@ -559,7 +559,7 @@ namespace Ankh.VS.Dialogs
                 {
                     hr = ct.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
 
-                    if (((hr != VSErr.OLECMDERR_E_NOTSUPPORTED) && (hr != VSErr.OLECMDERR_E_UNKNOWNGROUP)))
+                    if (((hr != (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED) && (hr != (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)))
                         break;
                 }
             }

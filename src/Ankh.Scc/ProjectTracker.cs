@@ -39,6 +39,7 @@ namespace Ankh.Scc
         uint _projectCookie;
         uint _documentCookie;
         AnkhSccProvider _sccProvider;
+        AnkhSccSettingStorage _sccStore;
         bool _collectHints;
         bool _solutionLoaded;
         readonly HybridCollection<string> _fileHints = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -96,6 +97,12 @@ namespace Ankh.Scc
             get { return _sccProvider ?? (_sccProvider = GetService<AnkhSccProvider>()); }
         }
 
+        AnkhSccSettingStorage SccStore
+        {
+            [DebuggerStepThrough]
+            get { return _sccStore ?? (_sccStore = GetService<AnkhSccSettingStorage>(typeof(ISccSettingsStore))); }
+        }
+
         private void LoadInitial()
         {
             IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
@@ -104,7 +111,7 @@ namespace Ankh.Scc
                 return;
 
             string dir, file, user;
-            if (!VSErr.Succeeded(solution.GetSolutionInfo(out dir, out file, out user))
+            if (!ErrorHandler.Succeeded(solution.GetSolutionInfo(out dir, out file, out user))
                 || string.IsNullOrEmpty(file))
             {
                 return; // No solution loaded, nothing to load
@@ -112,12 +119,12 @@ namespace Ankh.Scc
 
             Guid none = Guid.Empty;
             IEnumHierarchies hierEnum;
-            if (!VSErr.Succeeded(solution.GetProjectEnum((uint)__VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION, ref none, out hierEnum)))
+            if (!ErrorHandler.Succeeded(solution.GetProjectEnum((uint)__VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION, ref none, out hierEnum)))
                 return;
 
             IVsHierarchy[] hiers = new IVsHierarchy[32];
             uint nFetched;
-            while (VSErr.Succeeded(hierEnum.Next((uint)hiers.Length, hiers, out nFetched)))
+            while (ErrorHandler.Succeeded(hierEnum.Next((uint)hiers.Length, hiers, out nFetched)))
             {
                 if (nFetched == 0)
                     break;
@@ -179,7 +186,7 @@ namespace Ankh.Scc
 
         public int OnAfterSccStatusChanged(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, uint[] rgdwSccStatus)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion
@@ -191,7 +198,7 @@ namespace Ankh.Scc
         /// <param name="cFiles">[in] The number of files in the rgpszMkDocuments array.</param>
         /// <param name="rgpszMkDocuments">[in] If there are any locks on this array of file names, the caller wants them to be released.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int HandsOffFiles(uint grfRequiredAccess, int cFiles, string[] rgpszMkDocuments)
         {
@@ -208,7 +215,7 @@ namespace Ankh.Scc
                         _fileHints.Add(fullFile);
                 }
             }
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -217,11 +224,11 @@ namespace Ankh.Scc
         /// <param name="cFiles">[in] Number of file names given in the rgpszMkDocuments array.</param>
         /// <param name="rgpszMkDocuments">[in] An array of file names.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int HandsOnFiles(int cFiles, string[] rgpszMkDocuments)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         bool _registeredSccCleanup;

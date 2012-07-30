@@ -67,7 +67,7 @@ namespace Ankh.Scc.SccUI.Commands
             List<IVsHierarchy> result = new List<IVsHierarchy>();
 
             uint fetched;
-            while(VSErr.Succeeded(hierEnum.Next((uint)hiers.Length, hiers, out fetched)))
+            while(ErrorHandler.Succeeded(hierEnum.Next((uint)hiers.Length, hiers, out fetched)))
             {
                 if((int)fetched == hiers.Length)
                     result.AddRange(hiers);

@@ -98,7 +98,7 @@ namespace Ankh.VS.Selection
                     CALPOLESTR[] str = new CALPOLESTR[1];
                     CADWORD[] dw = new CADWORD[1];
 
-                    if (VSErr.Succeeded(hr = sccProject.GetSccFiles(id, str, dw)))
+                    if (ErrorHandler.Succeeded(hr = sccProject.GetSccFiles(id, str, dw)))
                     {
                         files = GetFileNamesFromOleBuffer(str, true);
                         flags = GetFlagsFromOleBuffer(dw, true);
@@ -108,7 +108,7 @@ namespace Ankh.VS.Selection
                         else
                             ok = true; // Try the GetMkDocument route to find an alternative
                     }
-                    else if (hr != VSErr.E_NOTIMPL)
+                    else if (hr != VSConstants.E_NOTIMPL)
                         return false; // 
                 }
 
@@ -120,7 +120,7 @@ namespace Ankh.VS.Selection
                 {
                     string mkDocument;
 
-                    if (VSErr.Succeeded(project.GetMkDocument(id, out mkDocument)))
+                    if (ErrorHandler.Succeeded(project.GetMkDocument(id, out mkDocument)))
                     {
                         if (!IsValidPath(mkDocument))
                             files = new string[0];
@@ -141,7 +141,7 @@ namespace Ankh.VS.Selection
                 string name;
                 try
                 {
-                    if (VSErr.Succeeded(hierarchy.GetCanonicalName(id, out name)))
+                    if (ErrorHandler.Succeeded(hierarchy.GetCanonicalName(id, out name)))
                     {
                         if (IsValidPath(name, true))
                         {
@@ -264,7 +264,7 @@ namespace Ankh.VS.Selection
                     CALPOLESTR[] str = new CALPOLESTR[1];
                     CADWORD[] dw = new CADWORD[1];
 
-                    if (VSErr.Succeeded(sccProject.GetSccSpecialFiles(id, allFiles[i], str, dw)))
+                    if (ErrorHandler.Succeeded(sccProject.GetSccSpecialFiles(id, allFiles[i], str, dw)))
                     {
                         files = GetFileNamesFromOleBuffer(str, true);
                         GetFlagsFromOleBuffer(dw, true); // Free the flags (No need to parse at this time)
@@ -289,7 +289,7 @@ namespace Ankh.VS.Selection
 
             IVsSolution sol = (IVsSolution)context.GetService(typeof(SVsSolution));
             string solutionDirectory, solutionFile, solutionUserOptions;
-            if (VSErr.Succeeded(sol.GetSolutionInfo(out solutionDirectory, out solutionFile, out solutionUserOptions))
+            if (ErrorHandler.Succeeded(sol.GetSolutionInfo(out solutionDirectory, out solutionFile, out solutionUserOptions))
                 && IsValidPath(solutionFile))
             {
                 return solutionFile;
@@ -367,17 +367,17 @@ namespace Ankh.VS.Selection
                     pCaFlagsOut[0].cElems = 0;
                     pCaFlagsOut[0].pElems = IntPtr.Zero;
 
-                    return VSErr.S_OK;
+                    return VSConstants.S_OK;
                 }
 
-                return VSErr.E_NOTIMPL;
+                return VSConstants.E_NOTIMPL;
             }
 
             public int GetSccSpecialFiles(uint itemid, string pszSccFile, Microsoft.VisualStudio.OLE.Interop.CALPOLESTR[] pCaStringsOut, Microsoft.VisualStudio.OLE.Interop.CADWORD[] pCaFlagsOut)
             {
                 pCaStringsOut[0].cElems = 0;
                 pCaStringsOut[0].pElems = IntPtr.Zero;
-                return VSErr.E_NOTIMPL;
+                return VSConstants.E_NOTIMPL;
             }
 
             public int SccGlyphChanged(int cAffectedNodes, uint[] rgitemidAffectedNodes, VsStateIcon[] rgsiNewGlyphs, uint[] rgdwNewSccStatus)
@@ -397,7 +397,7 @@ namespace Ankh.VS.Selection
 
             public int SetSccLocation(string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszSccProvider)
             {
-                return VSErr.E_NOTIMPL;
+                return VSConstants.E_NOTIMPL;
             }
 
             #endregion

@@ -35,7 +35,7 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
         {
             IVsTextView view = EnumTools.GetFirst(manager.GetViews());
             
-            if (VSErr.Succeeded(view.GetBuffer(out _buffer)))
+            if (ErrorHandler.Succeeded(view.GetBuffer(out _buffer)))
             {
                 if (!TryHookConnectionPoint<IVsTextLinesEvents>(_buffer, this, out _linesCookie))
                     _linesCookie = 0;
@@ -158,7 +158,7 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
         public int OnLoadCompleted(int fReload)
         {
             _shouldParse = true;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion

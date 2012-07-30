@@ -67,7 +67,5 @@ namespace Ankh.UI
 		/// Gets a registry key that can be used to store user data. 
 		/// </summary>
 		RegistryKey UserRegistryRoot { get; }
-
-        bool ForceLoadUserSettings(string streamName);
     }
 }

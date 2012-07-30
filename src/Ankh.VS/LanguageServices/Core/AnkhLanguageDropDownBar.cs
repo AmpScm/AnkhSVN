@@ -59,11 +59,11 @@ namespace Ankh.VS.LanguageServices.Core
             for (int i = 0; i < combos; i++)
                 _combos.Add(new ComboMemberCollection(this, i));
 
-            if (!VSErr.Succeeded(dbm.AddDropdownBar(combos, this)))
+            if (!ErrorHandler.Succeeded(dbm.AddDropdownBar(combos, this)))
                 return;
 
             IVsDropdownBar bar;
-            if (!VSErr.Succeeded(dbm.GetDropdownBar(out bar)))
+            if (!ErrorHandler.Succeeded(dbm.GetDropdownBar(out bar)))
                 return;
 
             _added = true;
@@ -165,7 +165,7 @@ namespace Ankh.VS.LanguageServices.Core
                 if (_activeView != null)
                 {
                     int line, col;
-                    if (VSErr.Succeeded(_activeView.GetCaretPos(out line, out col)))
+                    if (ErrorHandler.Succeeded(_activeView.GetCaretPos(out line, out col)))
                     {
                         SynchronizeCombos(_activeView, line, col);
                     }
@@ -210,7 +210,7 @@ namespace Ankh.VS.LanguageServices.Core
             else
                 phImageList = imageList.Handle;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         [CLSCompliant(false)]
@@ -230,7 +230,7 @@ namespace Ankh.VS.LanguageServices.Core
             else
                 pbstrText = null;
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         int IVsDropdownBarClient.GetEntryAttributes(int iCombo, int iIndex, out uint pAttr)
@@ -238,16 +238,16 @@ namespace Ankh.VS.LanguageServices.Core
             if (iIndex < 0)
             {
                 pAttr = 0;
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
             pAttr = (uint)_combos[iCombo][iIndex].Attributes;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         int IVsDropdownBarClient.GetEntryImage(int iCombo, int iIndex, out int piImageIndex)
         {
             piImageIndex = GetEntryImage(iCombo, iIndex);
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         protected virtual int GetEntryImage(int iCombo, int iIndex)
@@ -260,10 +260,10 @@ namespace Ankh.VS.LanguageServices.Core
             if (iIndex < 0)
             {
                 ppszText = "";
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
             }
             ppszText = GetEntryText(iCombo, iIndex);
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         protected virtual string GetEntryText(int iCombo, int iIndex)
@@ -273,7 +273,7 @@ namespace Ankh.VS.LanguageServices.Core
 
         int IVsDropdownBarClient.OnComboGetFocus(int iCombo)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         int IVsDropdownBarClient.OnItemChosen(int iCombo, int iIndex)
@@ -282,7 +282,7 @@ namespace Ankh.VS.LanguageServices.Core
 
             if (iIndex >= 0 && _activeView != null)
                 OnItemChosen(iCombo, iIndex);
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         protected virtual void OnItemChosen(int iCombo, int iIndex)
@@ -292,14 +292,14 @@ namespace Ankh.VS.LanguageServices.Core
 
         public int OnItemSelected(int iCombo, int iIndex)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         [CLSCompliant(false)]
         public int SetDropdownBar(IVsDropdownBar pDropdownBar)
         {
             _bar = pDropdownBar;
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         #endregion

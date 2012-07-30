@@ -87,12 +87,12 @@ namespace Ankh.Scc
                 return;
 
             IEnumRunningDocuments docEnum;
-            if (!VSErr.Succeeded(rdt.GetRunningDocumentsEnum(out docEnum)))
+            if (!ErrorHandler.Succeeded(rdt.GetRunningDocumentsEnum(out docEnum)))
                 return;
 
             uint[] cookies = new uint[256];
             uint nFetched;
-            while (VSErr.Succeeded(docEnum.Next((uint)cookies.Length, cookies, out nFetched)))
+            while (ErrorHandler.Succeeded(docEnum.Next((uint)cookies.Length, cookies, out nFetched)))
             {
                 if (nFetched == 0)
                     break;
@@ -120,7 +120,7 @@ namespace Ankh.Scc
 
             if (enable)
             {
-                if (VSErr.Succeeded(rdt.AdviseRunningDocTableEvents(this, out _cookie)))
+                if (ErrorHandler.Succeeded(rdt.AdviseRunningDocTableEvents(this, out _cookie)))
                     _hooked = true;
             }
             else
@@ -157,7 +157,7 @@ namespace Ankh.Scc
             uint itemId;
             IntPtr ppunkDocData;
 
-            if (VSErr.Succeeded(RunningDocumentTable.GetDocumentInfo(cookie,
+            if (ErrorHandler.Succeeded(RunningDocumentTable.GetDocumentInfo(cookie,
                 out flags, out locks, out editLocks, out name, out hier, out itemId, out ppunkDocData)))
             {
                 object document = null;
@@ -211,13 +211,13 @@ namespace Ankh.Scc
         /// <param name="itemid">[in] The item ID in the hierarchy. This is a unique identifier or it can be one of the following values: <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_NIL"></see>, <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_ROOT"></see>, or <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_SELECTION"></see>.</param>
         /// <param name="pszMkDocument">[in] The path to the document about to be locked.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
         public int OnBeforeFirstDocumentLock(IVsHierarchy pHier, uint itemid, string pszMkDocument)
         {
             if (string.IsNullOrEmpty(pszMkDocument))
             {
-                return VSErr.S_OK; // Can't be a valid path; don't monitor
+                return VSConstants.S_OK; // Can't be a valid path; don't monitor
             }
 
             SccDocumentData data;
@@ -229,7 +229,7 @@ namespace Ankh.Scc
                 data.ItemId = itemid;
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Ankh.Scc
         public int OnAfterLastDocumentUnlock(IVsHierarchy pHier, uint itemid, string pszMkDocument, int fClosedWithoutSaving)
         {
             if (string.IsNullOrEmpty(pszMkDocument))
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
             SccDocumentData data;
             if (_docMap.TryGetValue(pszMkDocument, out data))
@@ -255,12 +255,12 @@ namespace Ankh.Scc
                     _cookieMap.Remove(data.Cookie);
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnBeforeSave(uint docCookie)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterSave(uint docCookie)
@@ -271,7 +271,7 @@ namespace Ankh.Scc
             {
                 data.OnSaved();
             }
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         /// <summary>
@@ -291,7 +291,7 @@ namespace Ankh.Scc
                 }
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterAttributeChange(uint docCookie, uint grfAttribs)
@@ -303,78 +303,68 @@ namespace Ankh.Scc
                 data.OnAttributeChange((__VSRDTATTRIB)grfAttribs);
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterAttributeChangeEx(uint docCookie, uint grfAttribs, IVsHierarchy pHierOld, uint itemidOld, string pszMkDocumentOld, IVsHierarchy pHierNew, uint itemidNew, string pszMkDocumentNew)
         {
             SccDocumentData data;
             if (!TryGetDocument(docCookie, true, out data))
-                return VSErr.S_OK;
+                return VSConstants.S_OK;
 
-            __VSRDTATTRIB attribs = (__VSRDTATTRIB)grfAttribs;
+            data.OnAttributeChange((__VSRDTATTRIB)grfAttribs);
 
-            data.OnAttributeChange(attribs);
-
-            if ((attribs & __VSRDTATTRIB.RDTA_ItemID) == __VSRDTATTRIB.RDTA_ItemID)
+            if (!string.IsNullOrEmpty(pszMkDocumentNew) && pszMkDocumentNew != pszMkDocumentOld)
             {
-                data.ItemId = itemidNew;
+                // The document changed names; for SCC this is a close without saving and setting dirty state on new document
+
+                SccDocumentData newData;
+
+                if (!_docMap.TryGetValue(pszMkDocumentNew, out newData))
+                {
+                    newData = new SccDocumentData(Context, pszMkDocumentNew);
+                    newData.CopyState(data);
+                    newData.Cookie = docCookie;
+                    data.Dispose();
+
+                    _docMap.Add(pszMkDocumentNew, newData);
+                }
+                else
+                {
+                    data.Dispose(); // Removes old item from docmap and cookie map if necessary
+                }
+
+                _cookieMap[newData.Cookie] = newData;
+                data = newData;
             }
 
-            if ((attribs & __VSRDTATTRIB.RDTA_Hierarchy) == __VSRDTATTRIB.RDTA_Hierarchy)
-            {
+            if (pHierNew != null)
                 data.Hierarchy = pHierNew;
-            }
+            if (itemidNew != VSConstants.VSITEMID_NIL)
+                data.ItemId = itemidNew;
 
-            if ((attribs & __VSRDTATTRIB.RDTA_MkDocument) == __VSRDTATTRIB.RDTA_MkDocument
-                && !string.IsNullOrEmpty(pszMkDocumentNew))
+            if (!string.IsNullOrEmpty(pszMkDocumentNew) && !string.IsNullOrEmpty(pszMkDocumentOld)
+                && pszMkDocumentNew != pszMkDocumentOld)
             {
-                if (data.Name != pszMkDocumentNew)
+                if (SvnItem.IsValidPath(pszMkDocumentNew) && SvnItem.IsValidPath(pszMkDocumentOld))
                 {
-                    // The document changed names; Handle this as opening a new document
-
-                    SccDocumentData newData;
-
-                    if (!_docMap.TryGetValue(pszMkDocumentNew, out newData))
-                    {
-                        newData = new SccDocumentData(Context, pszMkDocumentNew);
-                        newData.CopyState(data);
-                        newData.Cookie = docCookie;
-                        data.Dispose();
-
-                        _docMap.Add(pszMkDocumentNew, newData);
-                    }
-                    else
-                    {
-                        data.Dispose(); // Removes old item from docmap and cookie map if necessary
-                    }
-
-                    _cookieMap[newData.Cookie] = newData;
-                    data = newData;
-                }
-
-                if (!string.IsNullOrEmpty(pszMkDocumentOld) && pszMkDocumentNew != pszMkDocumentOld)
-                {
-                    if (SvnItem.IsValidPath(pszMkDocumentNew) && SvnItem.IsValidPath(pszMkDocumentOld))
-                    {
-                        string oldFile = SvnTools.GetNormalizedFullPath(pszMkDocumentOld);
-                        string newFile = SvnTools.GetNormalizedFullPath(pszMkDocumentNew);
-                        ProjectTracker.OnDocumentSaveAs(oldFile, newFile);
-                    }
+                    string oldFile = SvnTools.GetNormalizedFullPath(pszMkDocumentOld);
+                    string newFile = SvnTools.GetNormalizedFullPath(pszMkDocumentNew);
+                    ProjectTracker.OnDocumentSaveAs(oldFile, newFile);
                 }
             }
 
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnAfterFirstDocumentLock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         public int OnBeforeLastDocumentUnlock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
         {
-            return VSErr.S_OK;
+            return VSConstants.S_OK;
         }
 
         internal void DoDispose(SccDocumentData data)

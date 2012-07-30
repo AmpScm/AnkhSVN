@@ -314,8 +314,5 @@ namespace Ankh
         WCExplorerComboBoxFill,
         RepositoryExplorerComboBox,
         RepositoryExplorerComboBoxFill,
-
-        SccSccReCheckoutFailedProject,
-        SccEditFailedProjectLocation
     }
 }
