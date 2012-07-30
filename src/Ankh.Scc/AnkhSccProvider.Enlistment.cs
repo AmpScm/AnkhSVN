@@ -49,22 +49,42 @@ namespace Ankh.Scc
         readonly Dictionary<string, string> _trueNameMap = new Dictionary<string, string>();
         int IVsSccEnlistmentPathTranslation.TranslateEnlistmentPathToProjectPath(string lpszEnlistmentPath, out string pbstrProjectPath)
         {
+            if (_trueNameMap.TryGetValue(lpszEnlistmentPath, out pbstrProjectPath))
+            {
+                // Already set the path
+                return VSConstants.S_OK;
+            }
+            else if (_trueNameMap.TryGetValue(lpszEnlistmentPath + "\\", out pbstrProjectPath))
+            {
+                pbstrProjectPath += "\\";
+                return VSConstants.S_OK;
+            }
+            else if (_trueNameMap.TryGetValue(lpszEnlistmentPath.TrimEnd('\\'), out pbstrProjectPath))
+            {
+                pbstrProjectPath = pbstrProjectPath.TrimEnd('\\');
+                return VSConstants.S_OK;
+            }
+
             if (!IsSafeSccPath(lpszEnlistmentPath))
             {
                 pbstrProjectPath = lpszEnlistmentPath;
                 return VSConstants.S_OK;
             }
 
-            if (_trueNameMap.TryGetValue(lpszEnlistmentPath, out pbstrProjectPath))
-            {
-                // Already set the path
-            }
-            else
-                pbstrProjectPath = lpszEnlistmentPath;
+            pbstrProjectPath = lpszEnlistmentPath;
 
             return VSConstants.S_OK;
         }
 
+        /// <summary>
+        /// Translates a possibly virtual project path to a local path and an enlistment physical path.
+        /// </summary>
+        /// <param name="lpszProjectPath">[in] The project's (possibly) virtual path as obtained from the solution file.</param>
+        /// <param name="pbstrEnlistmentPath">[out] The local path used by the solution for loading and saving the project.</param>
+        /// <param name="pbstrEnlistmentPathUNC">[out] The path used by the source control system for managing the enlistment ("\\drive\path", "[drive]:\path", "file://server/path").</param>
+        /// <returns>
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"/>. If it fails, it returns an error code.
+        /// </returns>
         int IVsSccEnlistmentPathTranslation.TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
         {
             if (!IsSafeSccPath(lpszProjectPath))
@@ -136,6 +156,13 @@ namespace Ankh.Scc
 
             foreach (KeyValuePair<string, string> kv in oldNameMap)
             {
+                if (!IsSafeSccPath(kv.Key) || !IsSafeSccPath(kv.Value))
+                {
+                    // Just copy translations like http://localhost
+                    _trueNameMap.Add(kv.Key, kv.Value);
+                    continue;
+                }
+
                 string newRel = MakeRelativeNoCase(newName, kv.Key);
 
                 if (IsSafeSccPath(newRel))
