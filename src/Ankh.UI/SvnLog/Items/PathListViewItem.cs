@@ -33,7 +33,7 @@ namespace Ankh.UI.SvnLog
         readonly bool _isInSelection;
         readonly SvnOrigin _origin;
 
-        public PathListViewItem(LogChangedPathsView view, ISvnLogItem logItem, SvnChangeItem change, Uri reposRoot, bool isInSelection)
+        public PathListViewItem(LogChangedPathsView view, ISvnLogItem logItem, SvnChangeItem change, Uri reposRoot, bool isInSelection, Color[] colorInfo)
             : base(view)
         {
             if (logItem == null)
@@ -55,7 +55,7 @@ namespace Ankh.UI.SvnLog
             _origin = new SvnOrigin(new SvnUriTarget(uri, logItem.Revision), reposRoot);
 
             RefreshText();
-            UpdateColors();
+            UpdateColors(colorInfo);
         }
 
         public SvnOrigin Origin
@@ -81,24 +81,25 @@ namespace Ankh.UI.SvnLog
             return p;
         }
 
-        void UpdateColors()
+        void UpdateColors(Color[] colorInfo)
         {
-            if (SystemInformation.HighContrast)
+            if (colorInfo == null || colorInfo.Length < 4)
                 return;
+
             if (!_isInSelection)
-                ForeColor = Color.Gray;
+                ForeColor = colorInfo[0];
             else
             {
                 switch (_change.Action)
                 {
                     case SvnChangeAction.Add:
-                        ForeColor = Color.FromArgb(100, 0, 100);
+                        ForeColor = colorInfo[1];
                         break;
                     case SvnChangeAction.Delete:
-                        ForeColor = Color.DarkRed;
+                        ForeColor = colorInfo[2];
                         break;
                     case SvnChangeAction.Modify:
-                        ForeColor = Color.DarkBlue;
+                        ForeColor = colorInfo[3];
                         break;
                 }
             }
