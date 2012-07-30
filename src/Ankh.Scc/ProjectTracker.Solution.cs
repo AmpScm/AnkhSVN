@@ -41,9 +41,12 @@ namespace Ankh.Scc
 
             GetService<IAnkhServiceEvents>().OnSolutionOpened(EventArgs.Empty);
 
-            if (SccProvider.IsActive)
+            if (!SccProvider.IsActive)
+                return VSConstants.S_OK;
             try
             {
+                SccProvider.VerifySolutionNaming();
+
                 IAnkhSolutionSettings ss = GetService<IAnkhSolutionSettings>();
 
                 if (ss != null && ss.ProjectRoot != null)
