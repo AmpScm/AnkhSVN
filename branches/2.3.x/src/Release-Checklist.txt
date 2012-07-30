@@ -1,0 +1,28 @@
+Release Checklist
+-----------------
+
+The following things should be tested before releasing a stable. When possible
+these tests should be moved to automated testing, but until we have that
+completed all items in this file should be checked before release with at
+least a 2008 and 2010 release. Preferable 2005 too.
+
+1. General Use
+  [ ]     Create a new Solution containing a Windows Forms project
+     [ ]     Add this solution to Subversion
+     [ ]     Commit the rest of the changes via the PC window
+     [ ]     Rename Form1.cs to a different name and commit again at
+             the solution level
+
+2. Log Viewer
+  [ ]     TODO
+          (Check Word wrap)
+
+3. Pending Changes
+  [ ]     TODO
+          (Check extension support?)
+
+4. Annotate viewer
+   [ ]    TODO
+          (Check Word wrap+outlining)
+
+
