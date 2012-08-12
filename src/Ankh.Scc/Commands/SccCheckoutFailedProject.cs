@@ -27,11 +27,14 @@ namespace Ankh.Scc.Commands
                 map = scc.GetProjectsThatNeedEnlisting();
                 e.Selection.Cache[_failedProjectsKey] = map ?? _failedProjectsKey;
             }
+            
+            if (map != null)
+            {
+                SvnHierarchy hier = EnumTools.GetSingle(e.Selection.GetSelectedHierarchies());
 
-            SvnHierarchy hier = EnumTools.GetSingle(e.Selection.GetSelectedHierarchies());
-
-            if (hier != null && map.ContainsKey(hier.Name))
-                return;
+                if (hier != null && map.ContainsKey(hier.Name))
+                    return;
+            }
 
             e.Enabled = false;
         }
