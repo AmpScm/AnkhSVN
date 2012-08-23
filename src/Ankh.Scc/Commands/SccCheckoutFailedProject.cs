@@ -18,6 +18,13 @@ namespace Ankh.Scc.Commands
             object fm = e.Selection.Cache[_failedProjectsKey];
             IDictionary<string, object> map;
 
+#if !DEBUG
+            if (e.Command == AnkhCommand.SccEditFailedProjectLocation)
+            {
+                e.Enabled = false;
+                return;
+            }
+#endif
 
             if (fm != null)
                 map = (fm as IDictionary<string, object>);
