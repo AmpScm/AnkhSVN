@@ -432,7 +432,11 @@ namespace Ankh.VS.Selection
 
             if (currentTheme == null)
             {
-                _themed = false;
+                // Before the first theme switch no theme is set, but the light theme
+                // is used anyway
+                _themed = true;
+                _themeLight = true;
+                _themeDark = true;
                 return;
             }
                 
