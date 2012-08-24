@@ -112,23 +112,23 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="diffExeBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="diffExeBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 15</value>
   </data>
   <data name="diffExeBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>355, 21</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="diffExeBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
@@ -136,13 +136,13 @@
     <value>diffExeBox</value>
   </data>
   <data name="&gt;&gt;diffExeBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;diffExeBox.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;diffExeBox.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -163,13 +163,13 @@
     <value>label1</value>
   </data>
   <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label1.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="diffBrowseBtn.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -190,13 +190,13 @@
     <value>diffBrowseBtn</value>
   </data>
   <data name="&gt;&gt;diffBrowseBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;diffBrowseBtn.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;diffBrowseBtn.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -217,13 +217,13 @@
     <value>label2</value>
   </data>
   <data name="&gt;&gt;label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label2.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="mergeExeBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
@@ -241,13 +241,13 @@
     <value>mergeExeBox</value>
   </data>
   <data name="&gt;&gt;mergeExeBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;mergeExeBox.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;mergeExeBox.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="mergeBrowseBtn.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -268,19 +268,19 @@
     <value>mergeBrowseBtn</value>
   </data>
   <data name="&gt;&gt;mergeBrowseBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;mergeBrowseBtn.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;mergeBrowseBtn.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="patchBrowseBtn.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
   </data>
   <data name="patchBrowseBtn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>366, 94</value>
+    <value>366, 98</value>
   </data>
   <data name="patchBrowseBtn.Size" type="System.Drawing.Size, System.Drawing">
     <value>26, 23</value>
@@ -295,19 +295,19 @@
     <value>patchBrowseBtn</value>
   </data>
   <data name="&gt;&gt;patchBrowseBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;patchBrowseBtn.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;patchBrowseBtn.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="patchExeBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
   </data>
   <data name="patchExeBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 97</value>
+    <value>0, 101</value>
   </data>
   <data name="patchExeBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>355, 21</value>
@@ -319,19 +319,19 @@
     <value>patchExeBox</value>
   </data>
   <data name="&gt;&gt;patchExeBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;patchExeBox.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;patchExeBox.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>-3, 82</value>
+    <value>-3, 86</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
     <value>103, 13</value>
@@ -346,15 +346,42 @@
     <value>label3</value>
   </data>
   <data name="&gt;&gt;label3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label3.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="floatVSDiffViewers.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="floatVSDiffViewers.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 129</value>
+  </data>
+  <data name="floatVSDiffViewers.Size" type="System.Drawing.Size, System.Drawing">
+    <value>267, 17</value>
+  </data>
+  <data name="floatVSDiffViewers.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="floatVSDiffViewers.Text" xml:space="preserve">
+    <value>Create Visual Studio Diff/Merge documents floating</value>
+  </data>
+  <data name="&gt;&gt;floatVSDiffViewers.Name" xml:space="preserve">
+    <value>floatVSDiffViewers</value>
+  </data>
+  <data name="&gt;&gt;floatVSDiffViewers.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;floatVSDiffViewers.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;floatVSDiffViewers.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
@@ -367,6 +394,6 @@
     <value>UserToolSettingsControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.OptionsPages.AnkhOptionsPageControl, Ankh.UI, Version=2.2.3790.25214, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.OptionsPages.AnkhOptionsPageControl, Ankh.UI, Version=2.4.4619.22645, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>
