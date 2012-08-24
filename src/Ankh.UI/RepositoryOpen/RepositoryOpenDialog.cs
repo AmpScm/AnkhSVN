@@ -55,7 +55,7 @@ namespace Ankh.UI.RepositoryOpen
             _dirOffset = mapper.DirectoryIcon;
             _fileOffset = mapper.FileIcon;
 
-            if (VSVersion.VS11OrLater)
+            if (VSVersion.V2012OrLater)
             {
                 return;
             }

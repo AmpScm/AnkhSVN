@@ -56,7 +56,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         protected override void OnThemeChanged(EventArgs e)
         {
-            if (VSVersion.VS11OrLater)
+            if (VSVersion.V2012OrLater)
             {
                 // Remove the chrome
                 foldersStrip.Visible = foldersStrip.Enabled = false;

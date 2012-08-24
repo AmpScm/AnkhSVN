@@ -238,7 +238,7 @@ namespace Ankh.UI.SvnLog
 
         public void OnThemeChange(IAnkhServiceProvider sender, CancelEventArgs e)
         {
-            if (VSVersion.VS11OrLater)
+            if (VSVersion.V2012OrLater)
             {
                 // Remove the chrome
                 revisionBox.BorderStyle = BorderStyle.None;

@@ -46,7 +46,7 @@ namespace Ankh.Scc.SccUI
 
             if (Context != null)
             {
-                if (!VSVersion.VS11OrLater)
+                if (!VSVersion.V2012OrLater)
                 {
                     IUIService ds = Context.GetService<IUIService>();
 
