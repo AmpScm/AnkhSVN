@@ -36,6 +36,11 @@ namespace Ankh.UI.OptionsPages
             LoadBox(diffExeBox, Config.DiffExePath, diff.DiffToolTemplates);
             LoadBox(mergeExeBox, Config.MergeExePath, diff.MergeToolTemplates);
             LoadBox(patchExeBox, Config.PatchExePath, diff.PatchToolTemplates);
+
+            if (VSVersion.VS2008OrOlder)
+                floatVSDiffViewers.Enabled = floatVSDiffViewers.Visible = false;
+            else
+                floatVSDiffViewers.Checked = Config.FloatDiffEditors;
         }
 
         sealed class OtherTool
@@ -101,6 +106,9 @@ namespace Ankh.UI.OptionsPages
             Config.DiffExePath = SaveBox(diffExeBox);
             Config.MergeExePath = SaveBox(mergeExeBox);
             Config.PatchExePath = SaveBox(patchExeBox);
+
+            if (VSVersion.VS2010OrLater)
+                Config.FloatDiffEditors = floatVSDiffViewers.Checked;
         }
 
         static string SaveBox(ComboBox box)

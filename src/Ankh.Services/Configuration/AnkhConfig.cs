@@ -40,6 +40,7 @@ namespace Ankh.Configuration
         bool _disableUpdateCheck;
         bool _enableTsvnHooks;
         bool _dontHookSlnRefresh;
+        bool _floatDiffEditors;
 
         /// <summary>
         /// Gets or sets the merge exe path.
@@ -145,6 +146,13 @@ namespace Ankh.Configuration
         {
             get { return _dontHookSlnRefresh; }
             set { _dontHookSlnRefresh = value; }
+        }
+
+        [DefaultValue(false)]
+        public bool FloatDiffEditors
+        { 
+            get { return _floatDiffEditors; }
+            set { _floatDiffEditors = value; }
         }
     }
 }

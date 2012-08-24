@@ -44,95 +44,103 @@ namespace Ankh.UI.OptionsPages
         /// </summary>
         private void InitializeComponent()
         {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserToolSettingsControl));
-			this.diffExeBox = new System.Windows.Forms.ComboBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.diffBrowseBtn = new System.Windows.Forms.Button();
-			this.label2 = new System.Windows.Forms.Label();
-			this.mergeExeBox = new System.Windows.Forms.ComboBox();
-			this.mergeBrowseBtn = new System.Windows.Forms.Button();
-			this.patchBrowseBtn = new System.Windows.Forms.Button();
-			this.patchExeBox = new System.Windows.Forms.ComboBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.SuspendLayout();
-			// 
-			// diffExeBox
-			// 
-			resources.ApplyResources(this.diffExeBox, "diffExeBox");
-			this.diffExeBox.DisplayMember = "DisplayName";
-			this.diffExeBox.Name = "diffExeBox";
-			this.diffExeBox.SelectionChangeCommitted += new System.EventHandler(this.tool_selectionCommitted);
-			this.diffExeBox.TextChanged += new System.EventHandler(this.diffExeBox_TextChanged);
-			// 
-			// label1
-			// 
-			resources.ApplyResources(this.label1, "label1");
-			this.label1.Name = "label1";
-			// 
-			// diffBrowseBtn
-			// 
-			resources.ApplyResources(this.diffBrowseBtn, "diffBrowseBtn");
-			this.diffBrowseBtn.Name = "diffBrowseBtn";
-			this.diffBrowseBtn.UseVisualStyleBackColor = true;
-			this.diffBrowseBtn.Click += new System.EventHandler(this.diffBrowseBtn_Click);
-			// 
-			// label2
-			// 
-			resources.ApplyResources(this.label2, "label2");
-			this.label2.Name = "label2";
-			// 
-			// mergeExeBox
-			// 
-			resources.ApplyResources(this.mergeExeBox, "mergeExeBox");
-			this.mergeExeBox.DisplayMember = "DisplayName";
-			this.mergeExeBox.Name = "mergeExeBox";
-			this.mergeExeBox.ValueMember = "ToolTemplate";
-			this.mergeExeBox.SelectionChangeCommitted += new System.EventHandler(this.tool_selectionCommitted);
-			// 
-			// mergeBrowseBtn
-			// 
-			resources.ApplyResources(this.mergeBrowseBtn, "mergeBrowseBtn");
-			this.mergeBrowseBtn.Name = "mergeBrowseBtn";
-			this.mergeBrowseBtn.UseVisualStyleBackColor = true;
-			this.mergeBrowseBtn.Click += new System.EventHandler(this.mergeBrowseBtn_Click);
-			// 
-			// patchBrowseBtn
-			// 
-			resources.ApplyResources(this.patchBrowseBtn, "patchBrowseBtn");
-			this.patchBrowseBtn.Name = "patchBrowseBtn";
-			this.patchBrowseBtn.UseVisualStyleBackColor = true;
-			this.patchBrowseBtn.Click += new System.EventHandler(this.patchBrowseBtn_Click);
-			// 
-			// patchExeBox
-			// 
-			resources.ApplyResources(this.patchExeBox, "patchExeBox");
-			this.patchExeBox.DisplayMember = "DisplayName";
-			this.patchExeBox.Name = "patchExeBox";
-			this.patchExeBox.ValueMember = "ToolTemplate";
-			this.patchExeBox.SelectionChangeCommitted += new System.EventHandler(this.tool_selectionCommitted);
-			this.patchExeBox.SelectedIndexChanged += new System.EventHandler(this.tool_selectionCommitted);
-			// 
-			// label3
-			// 
-			resources.ApplyResources(this.label3, "label3");
-			this.label3.Name = "label3";
-			// 
-			// UserToolSettingsControl
-			// 
-			resources.ApplyResources(this, "$this");
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.diffExeBox);
-			this.Controls.Add(this.diffBrowseBtn);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.mergeExeBox);
-			this.Controls.Add(this.mergeBrowseBtn);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.patchExeBox);
-			this.Controls.Add(this.patchBrowseBtn);
-			this.Name = "UserToolSettingsControl";
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserToolSettingsControl));
+            this.diffExeBox = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.diffBrowseBtn = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.mergeExeBox = new System.Windows.Forms.ComboBox();
+            this.mergeBrowseBtn = new System.Windows.Forms.Button();
+            this.patchBrowseBtn = new System.Windows.Forms.Button();
+            this.patchExeBox = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.floatVSDiffViewers = new System.Windows.Forms.CheckBox();
+            this.SuspendLayout();
+            // 
+            // diffExeBox
+            // 
+            resources.ApplyResources(this.diffExeBox, "diffExeBox");
+            this.diffExeBox.DisplayMember = "DisplayName";
+            this.diffExeBox.Name = "diffExeBox";
+            this.diffExeBox.SelectionChangeCommitted += new System.EventHandler(this.tool_selectionCommitted);
+            this.diffExeBox.TextChanged += new System.EventHandler(this.diffExeBox_TextChanged);
+            // 
+            // label1
+            // 
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.Name = "label1";
+            // 
+            // diffBrowseBtn
+            // 
+            resources.ApplyResources(this.diffBrowseBtn, "diffBrowseBtn");
+            this.diffBrowseBtn.Name = "diffBrowseBtn";
+            this.diffBrowseBtn.UseVisualStyleBackColor = true;
+            this.diffBrowseBtn.Click += new System.EventHandler(this.diffBrowseBtn_Click);
+            // 
+            // label2
+            // 
+            resources.ApplyResources(this.label2, "label2");
+            this.label2.Name = "label2";
+            // 
+            // mergeExeBox
+            // 
+            resources.ApplyResources(this.mergeExeBox, "mergeExeBox");
+            this.mergeExeBox.DisplayMember = "DisplayName";
+            this.mergeExeBox.Name = "mergeExeBox";
+            this.mergeExeBox.ValueMember = "ToolTemplate";
+            this.mergeExeBox.SelectionChangeCommitted += new System.EventHandler(this.tool_selectionCommitted);
+            // 
+            // mergeBrowseBtn
+            // 
+            resources.ApplyResources(this.mergeBrowseBtn, "mergeBrowseBtn");
+            this.mergeBrowseBtn.Name = "mergeBrowseBtn";
+            this.mergeBrowseBtn.UseVisualStyleBackColor = true;
+            this.mergeBrowseBtn.Click += new System.EventHandler(this.mergeBrowseBtn_Click);
+            // 
+            // patchBrowseBtn
+            // 
+            resources.ApplyResources(this.patchBrowseBtn, "patchBrowseBtn");
+            this.patchBrowseBtn.Name = "patchBrowseBtn";
+            this.patchBrowseBtn.UseVisualStyleBackColor = true;
+            this.patchBrowseBtn.Click += new System.EventHandler(this.patchBrowseBtn_Click);
+            // 
+            // patchExeBox
+            // 
+            resources.ApplyResources(this.patchExeBox, "patchExeBox");
+            this.patchExeBox.DisplayMember = "DisplayName";
+            this.patchExeBox.Name = "patchExeBox";
+            this.patchExeBox.ValueMember = "ToolTemplate";
+            this.patchExeBox.SelectedIndexChanged += new System.EventHandler(this.tool_selectionCommitted);
+            this.patchExeBox.SelectionChangeCommitted += new System.EventHandler(this.tool_selectionCommitted);
+            // 
+            // label3
+            // 
+            resources.ApplyResources(this.label3, "label3");
+            this.label3.Name = "label3";
+            // 
+            // floatVSDiffViewers
+            // 
+            resources.ApplyResources(this.floatVSDiffViewers, "floatVSDiffViewers");
+            this.floatVSDiffViewers.Name = "floatVSDiffViewers";
+            this.floatVSDiffViewers.UseVisualStyleBackColor = true;
+            // 
+            // UserToolSettingsControl
+            // 
+            resources.ApplyResources(this, "$this");
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.floatVSDiffViewers);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.diffExeBox);
+            this.Controls.Add(this.diffBrowseBtn);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.mergeExeBox);
+            this.Controls.Add(this.mergeBrowseBtn);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.patchExeBox);
+            this.Controls.Add(this.patchBrowseBtn);
+            this.Name = "UserToolSettingsControl";
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -147,5 +155,6 @@ namespace Ankh.UI.OptionsPages
         private System.Windows.Forms.Button patchBrowseBtn;
         private System.Windows.Forms.ComboBox patchExeBox;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox floatVSDiffViewers;
     }
 }
