@@ -27,7 +27,7 @@ using System.Resources;
 [assembly: AssemblyTitle("Ankh.ExtensionPoints")]
 [assembly: AssemblyDescription("AnkhSVN Extension Points")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("AnkhSVN")]
+[assembly: AssemblyCompany("AnkhSVN Team")]
 [assembly: AssemblyProduct("AnkhSVN - Subversion Support for Visual Studio")]
 [assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2011")]
 [assembly: AssemblyTrademark("")]
