@@ -274,6 +274,12 @@ namespace Ankh.UI
 
         #endregion
 
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), CLSCompliant(false)]
+        public IVsWindowFrame WindowFrame
+        {
+            get { return _frame; }
+        }
+
         #region IVsWindowFrameNotify Members
 
         int IVsWindowFrameNotify.OnDockableChange(int fDockable)

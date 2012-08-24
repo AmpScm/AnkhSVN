@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.Shell.Interop;
+
 using Ankh.Scc.UI;
-using Ankh.UI;
 using Ankh.UI.DiffWindow;
-using Ankh.Selection;
 using Ankh.VS;
 
 namespace Ankh.Diff
@@ -45,6 +45,9 @@ namespace Ankh.Diff
             IAnkhEditorResolver er = GetService<IAnkhEditorResolver>();
 
             diffEditor.CreateDiffEditor(this, args);
+
+            if (diffEditor.WindowFrame != null && !args.ShowDiffAsDocument && VSVersion.VS2010OrLater)
+                diffEditor.WindowFrame.SetProperty((int)__VSFPROPID.VSFPROPID_FrameMode, (int)VSFRAMEMODE.VSFM_Float);
 
             return true;
         }
