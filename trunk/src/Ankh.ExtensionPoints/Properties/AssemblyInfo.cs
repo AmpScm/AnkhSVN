@@ -29,7 +29,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("AnkhSVN Team")]
 [assembly: AssemblyProduct("AnkhSVN - Subversion Support for Visual Studio")]
-[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2011")]
+[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-US")]
