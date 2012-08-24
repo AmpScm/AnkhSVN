@@ -100,7 +100,7 @@ namespace Ankh.UI.PendingChanges
         public override void OnThemeChanged(EventArgs e)
         {
             base.OnThemeChanged(e);
-            if (VSVersion.VS11OrLater)
+            if (VSVersion.V2012OrLater)
             {
                 borderPanel.BorderStyle = BorderStyle.None;
                 conflictView.BorderStyle = BorderStyle.None;

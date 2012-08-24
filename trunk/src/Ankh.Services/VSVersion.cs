@@ -69,7 +69,7 @@ namespace Ankh
             get { return FullVersion >= new Version(10, 0); }
         }
 
-        public static bool VS11OrLater
+        public static bool V2012OrLater
         {
             get { return FullVersion.Major >= 11; }
         }

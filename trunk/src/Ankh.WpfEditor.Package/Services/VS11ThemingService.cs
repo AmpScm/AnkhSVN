@@ -61,7 +61,7 @@ namespace Ankh.WpfPackage.Services
         SelectedItemInactiveGlyphMouseOverBrush,
     }
 
-    [GlobalService(typeof(IWinFormsThemingService), MinVersion = VSInstance.VS11)]
+    [GlobalService(typeof(IWinFormsThemingService), MinVersion = VSInstance.VS2012)]
     sealed class VS11ThemingService : AnkhService, IWinFormsThemingService
     {
         public VS11ThemingService(IAnkhServiceProvider context)
@@ -471,7 +471,7 @@ namespace Ankh.WpfPackage.Services
             grid.LineColor = clrBackground;
             grid.CategoryForeColor = clrTitle;
 
-            if (VSVersion.VS11OrLater)
+            if (VSVersion.V2012OrLater)
             {
                 // New in 4.5 properties. Properly added for VS2012.
                 SetProperty(grid, "HelpBorderColor", clrFill);

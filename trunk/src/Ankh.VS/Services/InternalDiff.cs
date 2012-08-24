@@ -10,7 +10,7 @@ using SharpSvn;
 
 namespace Ankh.VS.Services
 {
-    [GlobalService(typeof(IAnkhInternalDiff), AllowPreRegistered = true, MinVersion = VSInstance.VS11)]
+    [GlobalService(typeof(IAnkhInternalDiff), AllowPreRegistered = true, MinVersion = VSInstance.VS2012)]
     sealed class InternalDiff : AnkhService, IAnkhInternalDiff
     {
         public InternalDiff(IAnkhServiceProvider context)
