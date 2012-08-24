@@ -68,6 +68,7 @@ namespace Ankh.Commands.RepositoryExplorer
         {
             Uri target = null;
             Uri root = null;
+            bool up = false;
 
             List<SvnUriTarget> copyFrom = new List<SvnUriTarget>();
             foreach (ISvnRepositoryItem item in e.Selection.GetSelection<ISvnRepositoryItem>())
@@ -104,10 +105,10 @@ namespace Ankh.Commands.RepositoryExplorer
                         break;
                     }
 
-                    while(r.ToString().StartsWith("../"))
+                    if (!up && r.ToString().StartsWith("../"))
                     {
                         target = new Uri(target, "../");
-                        r = item.Origin.Uri.MakeRelativeUri(target);
+                        up = true;
                     }
                 }
             }
