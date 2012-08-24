@@ -38,6 +38,7 @@ namespace Ankh.Scc.UI
         DiffMode _diffMode;
         string _caption;
         string _label;
+        bool _asDocument;
 
         /// <summary>
         /// Gets or sets the mode.
@@ -65,6 +66,12 @@ namespace Ankh.Scc.UI
         {
             get { return _label; }
             set { _label = value; }
+        }
+
+        public bool ShowDiffAsDocument
+        {
+            get { return _asDocument; }
+            set { _asDocument = false; }
         }
 
         /// <summary>
@@ -132,7 +139,6 @@ namespace Ankh.Scc.UI
             get { return _readOnly; }
             set { _readOnly = value; }
         }
-
         /// <summary>
         /// Validates this instance.
         /// </summary>

@@ -69,6 +69,8 @@ namespace Ankh.Services
             else if (!args.Validate())
                 throw new ArgumentException("Arguments not filled correctly", "args");
 
+            SetFloat(args);
+
             string diffApp = this.GetDiffPath(args.Mode);
 
             if (string.IsNullOrEmpty(diffApp))
@@ -119,6 +121,14 @@ namespace Ankh.Services
             }
         }
 
+        private void SetFloat(AnkhDiffToolArgs args)
+        {
+            IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
+
+            if (cs != null)
+                args.ShowDiffAsDocument = cs.Instance.FloatDiffEditors;
+        }
+
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.
         /// </summary>
@@ -143,6 +153,8 @@ namespace Ankh.Services
                 throw new ArgumentNullException("args");
             else if (!args.Validate())
                 throw new ArgumentException("Arguments not filled correctly", "args");
+
+            SetFloat(args);
 
             string mergeApp = this.GetMergePath(args.Mode);
 
@@ -220,6 +232,8 @@ namespace Ankh.Services
                 throw new ArgumentNullException("args");
             else if (!args.Validate())
                 throw new ArgumentException("Arguments not filled correctly", "args");
+
+            SetFloat(args);
 
             string diffApp = GetPatchPath(args.Mode);
 

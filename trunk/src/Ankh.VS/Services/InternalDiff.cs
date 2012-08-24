@@ -86,6 +86,10 @@ namespace Ankh.VS.Services
             if (frame != null)
             {
                 GC.KeepAlive(new DiffMergeInstance(this, frame));
+
+                if (!args.ShowDiffAsDocument)
+                    frame.SetProperty((int)__VSFPROPID.VSFPROPID_FrameMode, (int)VSFRAMEMODE.VSFM_Float);
+
                 return true;
             }
 
@@ -160,6 +164,9 @@ namespace Ankh.VS.Services
             if (frame != null)
             {
                 GC.KeepAlive(new DiffMergeInstance(this, frame, _umw, _qmws, cookie));
+
+                if (!args.ShowDiffAsDocument)
+                    frame.SetProperty((int)__VSFPROPID.VSFPROPID_FrameMode, (int)VSFRAMEMODE.VSFM_Float);
 
                 return true;
             }
