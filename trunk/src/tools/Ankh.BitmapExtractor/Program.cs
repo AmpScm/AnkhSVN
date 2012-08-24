@@ -14,6 +14,19 @@ namespace Ankh.BitmapExtractor
         // and as part of The VSCT Powertoy
         static void Main(string[] args)
         {
+            try
+            {
+                Run(args);
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e.ToString());
+                Environment.ExitCode = 1;
+            }
+        }
+
+        static void Run(string[] args)
+        {
             List<string> argList = new List<string>(args);
             bool _transparentHack = false;
             while (argList.Count > 0 && argList[0].StartsWith("-"))
