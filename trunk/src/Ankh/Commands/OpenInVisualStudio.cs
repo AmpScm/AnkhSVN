@@ -15,6 +15,7 @@
 //  limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -34,41 +35,32 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            bool first = true;
+            bool foundOne = false;
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 if (!item.Exists)
                     continue;
 
-                switch (e.Command)
+                if (!item.IsFile)
                 {
-                    case AnkhCommand.ItemOpenTextEditor:
-                    case AnkhCommand.ItemOpenVisualStudio:
-                        if (!item.IsFile)
-                        {
-                            e.Enabled = false;
-                            return;
-                        }
-                        first = false;
-                        break;
-                    default:
-                        if (!first)
-                        {
-                            e.Enabled = false;
-                            return;
-                        }
-
-                        first = false;
-                        break;
+                    e.Enabled = false;
+                    return;
                 }
+                foundOne = true;
             }
 
-            e.Enabled = !first;
+            if (!foundOne)
+                e.Enabled = false;
         }
+
         public override void OnExecute(CommandEventArgs e)
         {
             AnkhMessageBox mb = new AnkhMessageBox(e.Context);
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+
+            // Cache items to avoid problems when selection changes by opening editor
+            List<SvnItem> items = new List<SvnItem>(e.Selection.GetSelectedSvnItems(false));
+
+            foreach (SvnItem item in items)
             {
                 if (!item.Exists)
                     continue;
@@ -88,13 +80,7 @@ namespace Ankh.Commands
                                 break;
                             }
                             if (item.IsDirectory)
-                            {
-                                System.Diagnostics.Process.Start(item.FullPath);
-                                break;
-                            }
-
-                            if (!item.IsFile || !item.Exists)
-                                continue;
+                                goto case AnkhCommand.ItemOpenWindows;
 
                             VsShellUtilities.OpenDocument(e.Context, item.FullPath);
                             break;
