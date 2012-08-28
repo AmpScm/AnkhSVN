@@ -425,6 +425,8 @@ namespace Ankh
         {
             if (lead == null)
                 throw new ArgumentNullException("lead");
+            else if (lead._status == null)
+                throw new InvalidOperationException("Lead status = null");
 
             _status = lead._status;
             _statusDirty = lead._statusDirty;
