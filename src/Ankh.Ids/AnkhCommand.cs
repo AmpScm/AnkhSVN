@@ -167,7 +167,7 @@ namespace Ankh
         ItemOpenWindows,
         ItemOpenTextEditor,
 
-        SvnLogRefresh, // Unused
+        ItemSelectInFileExplorer,
         SvnLogComboBox,
         SvnLogComboBoxFill,
 
