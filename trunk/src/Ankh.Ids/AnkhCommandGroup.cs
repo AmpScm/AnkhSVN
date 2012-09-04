@@ -197,5 +197,7 @@ namespace Ankh
         SvnLogTarget,
         SvnLogShow,
         SvnLogOptions,
+
+        FileSccItems,
     }
 }

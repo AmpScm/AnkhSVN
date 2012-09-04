@@ -18,12 +18,15 @@ using System;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio;
+using SharpSvn;
+using System.Runtime.InteropServices;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.ItemSelectInWorkingCopyExplorer)]
+    [Command(AnkhCommand.ItemSelectInFileExplorer)]
     [Command(AnkhCommand.ItemSelectInRepositoryExplorer)]
     [Command(AnkhCommand.ItemSelectInSolutionExplorer)]
+    [Command(AnkhCommand.ItemSelectInWorkingCopyExplorer)]
     class OpenInXExplorer : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -38,7 +41,7 @@ namespace Ankh.Commands
                 enable = false;
             else if (e.Command == AnkhCommand.ItemSelectInRepositoryExplorer)
                 enable = node.Uri != null;
-            else if (e.Command == AnkhCommand.ItemSelectInWorkingCopyExplorer)
+            else if (e.Command == AnkhCommand.ItemSelectInWorkingCopyExplorer || e.Command == AnkhCommand.ItemSelectInFileExplorer)
                 enable = node.Exists;
             else if (e.Command == AnkhCommand.ItemSelectInSolutionExplorer)
             {
@@ -72,6 +75,12 @@ namespace Ankh.Commands
 
                     if (cmd != null)
                         cmd.DirectlyExecCommand(AnkhCommand.WorkingCopyBrowse, node.FullPath);
+                    break;
+                case AnkhCommand.ItemSelectInFileExplorer:
+                    if (node == null || !node.Exists)
+                        return;
+
+                    SelectInFileExplorer(node.FullPath);
                     break;
                 case AnkhCommand.ItemSelectInSolutionExplorer:
                     if (node == null)
@@ -109,6 +118,39 @@ namespace Ankh.Commands
                     }
                     break;
             }
+        }
+
+        private void SelectInFileExplorer(string fullPath)
+        {
+            if (string.IsNullOrEmpty(fullPath))
+                throw new ArgumentNullException("fullPath");
+
+            fullPath = SvnTools.GetNormalizedFullPath(fullPath);
+
+            IntPtr pidlList = NativeMethods.ILCreateFromPathW(fullPath);
+            if (pidlList != IntPtr.Zero)
+                try
+                {
+                    // Open parent folder and select item
+                    Marshal.ThrowExceptionForHR(NativeMethods.SHOpenFolderAndSelectItems(pidlList, 0, IntPtr.Zero, 0));
+                }
+                finally
+                {
+                    NativeMethods.ILFree(pidlList);
+                }
+        }
+
+        static class NativeMethods
+        {
+
+            [DllImport("shell32.dll", ExactSpelling=true)]
+            public static extern void ILFree(IntPtr pidlList);
+
+            [DllImport("shell32.dll", CharSet=CharSet.Unicode, ExactSpelling=true)]
+            public static extern IntPtr ILCreateFromPathW(string pszPath);
+
+            [DllImport("shell32.dll", ExactSpelling=true)]
+            public static extern int SHOpenFolderAndSelectItems(IntPtr pidlList, uint cild, IntPtr children, uint dwFlags);
         }
     }
 }
