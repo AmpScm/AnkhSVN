@@ -117,15 +117,33 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Added" xml:space="preserve">
+    <value>Added</value>
+  </data>
   <data name="CompareRevisionXToY" xml:space="preserve">
     <value>&amp;Compare revision {0} to {1}</value>
   </data>
   <data name="CreateBranchTagFromRevisionX" xml:space="preserve">
     <value>Create &amp;branch/tag from revision {0}</value>
   </data>
+  <data name="Deleted" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+  <data name="Modified" xml:space="preserve">
+    <value>Changed</value>
+  </data>
+  <data name="ModifiedTextOnly" xml:space="preserve">
+    <value>Changed File</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Plus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PropertiesModified" xml:space="preserve">
+    <value>Changed Properties</value>
+  </data>
+  <data name="Replaced" xml:space="preserve">
+    <value>Replaced</value>
   </data>
   <data name="RetrievingRevisionProperties" xml:space="preserve">
     <value>Retrieving Revision Properties</value>

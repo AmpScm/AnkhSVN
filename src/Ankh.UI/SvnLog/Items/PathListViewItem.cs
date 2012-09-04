@@ -66,11 +66,35 @@ namespace Ankh.UI.SvnLog
         void RefreshText()
         {
             SetValues(
-                _change.Action.ToString(),
+                ChangeText(),
                 NodeKind == SvnNodeKind.Directory ? EnsureEndSlash(_change.Path) : _change.Path,
                 _change.CopyFromPath ?? "",
                 _change.CopyFromPath != null ? _change.CopyFromRevision.ToString() : ""
             );
+        }
+
+        private string ChangeText()
+        {
+            switch (_change.Action)
+            {
+                case SvnChangeAction.Add:
+                    return LogStrings.Added;
+                case SvnChangeAction.Replace:
+                    return LogStrings.Replaced;
+                case SvnChangeAction.Delete:
+                    return LogStrings.Deleted;
+                case SvnChangeAction.Modify:
+                    if (!_change.PropertiesModified.HasValue)
+                        return LogStrings.Modified;
+                    else if (!_change.PropertiesModified.Value)
+                        return LogStrings.ModifiedTextOnly;
+                    else if (_change.PropertiesModified.Value && !_change.ContentModified.HasValue || !_change.ContentModified.Value)
+                        return LogStrings.PropertiesModified;
+                    else
+                        return LogStrings.Modified;
+                default:
+                    return _change.Action.ToString();
+            }
         }
 
         private string EnsureEndSlash(string p)
