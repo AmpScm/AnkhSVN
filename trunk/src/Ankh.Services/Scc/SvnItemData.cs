@@ -138,7 +138,7 @@ namespace Ankh.Scc
             get
             {
                 AnkhStatus status = _item.Status;
-                PendingChangeKind kind = PendingChange.CombineStatus(status.LocalNodeStatus, status.LocalPropertyStatus, SvnItem.IsTreeConflicted, SvnItem);
+                PendingChangeKind kind = PendingChange.CombineStatus(status.LocalNodeStatus, status.LocalTextStatus, status.LocalPropertyStatus, SvnItem.IsTreeConflicted, SvnItem);
 
                 if (kind == PendingChangeKind.None)
                     return "";
