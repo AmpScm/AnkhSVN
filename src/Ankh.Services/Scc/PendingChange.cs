@@ -207,7 +207,7 @@ namespace Ankh.Scc
         PendingChangeStatus GetStatus(RefreshContext context, SvnItem item)
         {
             AnkhStatus status = item.Status;
-            _kind = CombineStatus(status.LocalNodeStatus, status.LocalPropertyStatus, item.IsTreeConflicted, item);
+            _kind = CombineStatus(status.LocalNodeStatus, status.LocalTextStatus, status.LocalPropertyStatus, item.IsTreeConflicted, item);
 
             if (_kind != PendingChangeKind.None)
                 return new PendingChangeStatus(_kind);
@@ -378,7 +378,7 @@ namespace Ankh.Scc
         /// <param name="treeConflict">if set to <c>true</c> [tree conflict].</param>
         /// <param name="item">The item or null if no on disk representation is availavke</param>
         /// <returns></returns>
-        public static PendingChangeKind CombineStatus(SvnStatus nodeStatus, SvnStatus propertyStatus, bool treeConflict, SvnItem item)
+        public static PendingChangeKind CombineStatus(SvnStatus nodeStatus, SvnStatus textStatus, SvnStatus propertyStatus, bool treeConflict, SvnItem item)
         {
             // item can be null!
             if (treeConflict || (item != null && item.IsTreeConflicted))
@@ -398,7 +398,10 @@ namespace Ankh.Scc
                     }
                     return PendingChangeKind.None;
                 case SvnStatus.Modified:
-                    return PendingChangeKind.Modified;
+                    if (textStatus == SvnStatus.Modified)
+                        return PendingChangeKind.Modified;
+                    else
+                        break; // Property modified
                 case SvnStatus.Replaced:
                     return PendingChangeKind.Replaced;
                 case SvnStatus.Added:
