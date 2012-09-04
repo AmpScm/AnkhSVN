@@ -106,7 +106,7 @@ namespace Ankh.UI.SvnLog {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Changed File.
+        ///   Looks up a localized string similar to File Changed.
         /// </summary>
         internal static string ModifiedTextOnly {
             get {
@@ -125,7 +125,7 @@ namespace Ankh.UI.SvnLog {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Changed Properties.
+        ///   Looks up a localized string similar to Properties Changed.
         /// </summary>
         internal static string PropertiesModified {
             get {
