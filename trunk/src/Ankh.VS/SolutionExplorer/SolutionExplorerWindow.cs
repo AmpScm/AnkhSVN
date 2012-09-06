@@ -43,7 +43,7 @@ namespace Ankh.VS.SolutionExplorer
         public SolutionExplorerWindow(IAnkhServiceProvider context)
             : base(context)
         {
-            if (!VSVersion.V2012OrLater)
+            if (!VSVersion.VS2012OrLater)
             {
                 _hookImageList = true;
                 _manager = new SolutionTreeViewManager(Context);
