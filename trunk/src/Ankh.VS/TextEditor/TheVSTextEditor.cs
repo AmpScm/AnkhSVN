@@ -272,7 +272,7 @@ namespace Ankh.VS.TextEditor
         {
             if (_nativeWindow == null)
             {
-                Init(ownerForm.Context, true);
+                Init(ownerForm.Context, true, false);
             }
 
             IAnkhVSContainerForm cf = ownerForm;
@@ -286,7 +286,7 @@ namespace Ankh.VS.TextEditor
         void InitializeToolWindow(IAnkhToolWindowControl toolWindow)
         {
             _inToolWindow = true;
-            Init(toolWindow.ToolWindowHost, false);
+            Init(toolWindow.ToolWindowHost, false, false);
             toolWindow.ToolWindowHost.AddCommandTarget(_nativeWindow);
         }
 
@@ -294,7 +294,7 @@ namespace Ankh.VS.TextEditor
         void InitializeDocumentForm(VSEditorControl documentForm)
         {
             _inDocumentForm = true;
-            Init(documentForm.Context, false);
+            Init(documentForm.Context, false, false);
             documentForm.AddCommandTarget(_nativeWindow);
         }
 
@@ -302,8 +302,8 @@ namespace Ankh.VS.TextEditor
         /// Creation and initialization of <see cref="CodeEditorWindow"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="allowModal">if set to <c>true</c> [allow modal].</param>
-        protected virtual void Init(IAnkhServiceProvider context, bool allowModal)
+        /// <param name="modal">if set to <c>true</c> [allow modal].</param>
+        protected void Init(IAnkhServiceProvider context, bool modal, bool toolWindow)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -320,7 +320,7 @@ namespace Ankh.VS.TextEditor
                 _nativeWindow.EnableNavigationBar = EnableNavigationBar;
                 _nativeWindow.InteractiveEditor = InteractiveEditor;
 
-                _nativeWindow.Init(allowModal, ForceLanguageService);
+                _nativeWindow.Init(modal, toolWindow, ForceLanguageService);
 
                 _nativeWindow.ShowHorizontalScrollBar = !HideHorizontalScrollBar;
                 _nativeWindow.SetWordWrapDisabling(DisableWordWrap);
@@ -905,15 +905,18 @@ namespace Ankh.VS.TextEditor
 
         #region Methods
 
+        const uint VIF_ENABLEAUTONOMOUSFIND = 0x00010000;
+
         /// <summary>
         /// Used to create Code Window
         /// </summary>
         /// <param name="parentHandle">Parent window handle</param>
         /// <param name="place">The place.</param>
-        /// <param name="allowModal">if set to <c>true</c> [allow modal].</param>
+        /// <param name="modal">if set to <c>true</c> [allow modal].</param>
+        /// <param name="toolWindow"></param>
         /// <param name="forceLanguageService"></param>
         /// <param name="codeWindow">Represents a multiple-document interface (MDI) child that contains one or more code views.</param>
-        private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, bool allowModal, Guid? forceLanguageService, out IVsCodeWindow codeWindow)
+        private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, bool modal, bool toolWindow, Guid? forceLanguageService, out IVsCodeWindow codeWindow)
         {
             codeWindow = CreateLocalInstance<IVsCodeWindow>(typeof(VsCodeWindowClass), _serviceProvider);
 
@@ -933,9 +936,14 @@ namespace Ankh.VS.TextEditor
                 //(uint)TextViewInitFlags2.VIF_SUPPRESS_STATUS_BAR_UPDATE |
                 (uint)TextViewInitFlags2.VIF_SUPPRESSTRACKCHANGES;
 
-            if (allowModal)
-                initViewFlags |= (uint)TextViewInitFlags2.VIF_ACTIVEINMODALSTATE;
+            if (modal || toolWindow)
+                initViewFlags |= (uint)TextViewInitFlags2.VIF_SUPPRESSTRACKGOBACK;
 
+            //if (VSVersion.V2012OrLater)
+            //    initViewFlags |= VIF_ENABLEAUTONOMOUSFIND;
+
+            if (modal)
+                initViewFlags |= (uint)TextViewInitFlags2.VIF_ACTIVEINMODALSTATE;
 
             _codewindowbehaviorflags cwFlags = _codewindowbehaviorflags.CWB_DEFAULT;
 
@@ -1025,10 +1033,10 @@ namespace Ankh.VS.TextEditor
         /// </summary>
         /// <param name="allowModal">if set to <c>true</c> [allow modal].</param>
         /// <param name="forceLanguageService"><c>null</c> or the language service to force.</param>
-        public void Init(bool allowModal, Guid? forceLanguageService)
+        public void Init(bool allowModal, bool toolWindow, Guid? forceLanguageService)
         {
             //Create window
-            CreateCodeWindow(_container.Handle, _container.ClientRectangle, allowModal, forceLanguageService, out _codeWindow);
+            CreateCodeWindow(_container.Handle, _container.ClientRectangle, allowModal, toolWindow, forceLanguageService, out _codeWindow);
             commandTarget = _codeWindow as IOleCommandTarget;
 
             IVsTextView textView;
