@@ -97,6 +97,51 @@ namespace Ankh.UI.SvnLog {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Author: {0}.
+        /// </summary>
+        internal static string LogAuthor {
+            get {
+                return ResourceManager.GetString("LogAuthor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date: {0:F}.
+        /// </summary>
+        internal static string LogDate {
+            get {
+                return ResourceManager.GetString("LogDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message:.
+        /// </summary>
+        internal static string LogMessagePrefix {
+            get {
+                return ResourceManager.GetString("LogMessagePrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  ---- .
+        /// </summary>
+        internal static string LogMessageSuffix {
+            get {
+                return ResourceManager.GetString("LogMessageSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revision: {0}.
+        /// </summary>
+        internal static string LogRevision {
+            get {
+                return ResourceManager.GetString("LogRevision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Changed.
         /// </summary>
         internal static string Modified {

@@ -27,6 +27,9 @@ using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.UI.RepositoryExplorer;
 using Ankh.UI.VSSelectionControls;
+using System.ComponentModel.Design;
+using Microsoft.VisualStudio;
+using System.Text;
 
 namespace Ankh.UI.SvnLog
 {
@@ -76,9 +79,53 @@ namespace Ankh.UI.SvnLog
             }
         }
 
+        bool _installed;
+
         private void OnContextChanged()
         {
             SelectionPublishServiceProvider = Context;
+
+            if (Context != null && !_installed)
+            {
+                _installed = true;
+
+                VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Copy), OnCopy, OnUpdateCopy);
+            }
+        }
+
+        private void OnUpdateCopy(object sender, CommandUpdateEventArgs e)
+        {
+            if (SelectedIndices.Count == 0)
+            {
+                e.Enabled = false;
+            }
+        }
+
+        private void OnCopy(object sender, CommandEventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (LogRevisionItem lri in SelectedItems)
+            {
+                if (sb.Length > 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine();
+                }
+
+                sb.AppendFormat(LogStrings.LogRevision, lri.Revision);
+                sb.AppendLine();
+                sb.AppendFormat(LogStrings.LogAuthor, lri.Author);
+                sb.AppendLine();
+                sb.AppendFormat(LogStrings.LogDate, lri.Date);
+                sb.AppendLine();
+                sb.Append(LogStrings.LogMessagePrefix);
+                sb.AppendLine();
+                sb.Append(lri.LogMessage);
+                sb.AppendLine();
+                sb.Append(LogStrings.LogMessageSuffix);
+                sb.AppendLine();
+            }
+            Clipboard.SetText(sb.ToString(), TextDataFormat.UnicodeText);
         }
 
         public void Start(LogMode mode)
@@ -299,7 +346,7 @@ namespace Ankh.UI.SvnLog
         bool _extending;
         void ExtendList()
         {
-            if (VScrollPos < VScrollMax - 30)
+            if (!IsHandleCreated || (VScrollPos < VScrollMax - 30))
                 return;
 
             if (!_extending)
