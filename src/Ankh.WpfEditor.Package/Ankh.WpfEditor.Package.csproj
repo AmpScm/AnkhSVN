@@ -106,7 +106,7 @@
     <Compile Include="Services\SccHelper.cs" />
     <Compile Include="Services\ServiceMethodResolver.cs" />
     <Compile Include="Services\ThreadedWaitService.cs" />
-    <Compile Include="Services\VS11ThemingService.cs" />
+    <Compile Include="Services\VS2012ThemingService.cs" />
     <Compile Include="Services\WpfEditorInfo.cs" />
   </ItemGroup>
   <ItemGroup>
