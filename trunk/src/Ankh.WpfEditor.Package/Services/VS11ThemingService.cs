@@ -168,7 +168,13 @@ namespace Ankh.WpfPackage.Services
         bool VSThemeWindow(IntPtr handle)
         {
             if (_twd == null)
+            {
                 _twd = GetInterfaceDelegate<ThemeWindow>(Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), GetService(typeof(SVsUIShell)));
+
+                if (_twd == null)
+                    _twd = delegate(IntPtr h) { return false; };
+            }
+
             return _twd(handle);
         }
 
