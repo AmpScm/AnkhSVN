@@ -56,7 +56,7 @@ namespace Ankh.Commands
         public ISelectionContext Selection
         {
             [DebuggerStepThrough]
-            get { return _selection ?? (_selection = GetService<ISelectionContext>()); }
+            get { return _selection ?? (_selection = Context.Selection); }
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Ankh.Commands
         public IAnkhCommandStates State
         {
             [DebuggerStepThrough]
-            get { return _context.State; }
+            get { return _state ?? (_state = Context.State); }
         }
 
         [GuidAttribute("3C536122-57B1-46DE-AB34-ACC524140093")]

@@ -22,6 +22,7 @@ using System.Diagnostics;
 using Ankh.VS;
 using System.Windows.Forms.Design;
 using Ankh.Commands;
+using Ankh.Selection;
 
 namespace Ankh
 {
@@ -135,6 +136,13 @@ namespace Ankh
         {
             [DebuggerStepThrough]
             get { return _state ?? (_state = GetService<IAnkhCommandStates>()); }
+        }
+
+        ISelectionContext _selection;
+        public ISelectionContext Selection
+        {
+            [DebuggerStepThrough]
+            get { return _selection ?? (_selection = GetService<ISelectionContext>()); }
         }
     }
 }
