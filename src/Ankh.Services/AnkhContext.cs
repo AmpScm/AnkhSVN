@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using Ankh.VS;
 using System.Windows.Forms.Design;
+using Ankh.Commands;
 
 namespace Ankh
 {
@@ -28,11 +29,11 @@ namespace Ankh
     /// Globally available context; the entry point for the service framework.
     /// </summary>
     /// <remarks>Members should only be added for the most common operations. Everything else should be handled via the <see cref="IAnkhServiceProvider"/> methods</remarks>
-    public class AnkhContext : AnkhService, IAnkhServiceProvider
+    public sealed class AnkhContext : AnkhService, IAnkhServiceProvider
     {
         readonly IAnkhServiceProvider _runtime;
 
-        protected AnkhContext(IAnkhServiceProvider context)
+        AnkhContext(IAnkhServiceProvider context)
             : base(context)
         {
             if (context == null)
@@ -127,6 +128,13 @@ namespace Ankh
         public new object GetService(Type serviceType)
         {
             return base.GetService(serviceType);
+        }
+
+        IAnkhCommandStates _state;
+        public IAnkhCommandStates State
+        {
+            [DebuggerStepThrough]
+            get { return _state ?? (_state = GetService<IAnkhCommandStates>()); }
         }
     }
 }

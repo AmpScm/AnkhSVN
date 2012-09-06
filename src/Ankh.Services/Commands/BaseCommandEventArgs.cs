@@ -66,7 +66,7 @@ namespace Ankh.Commands
         public IAnkhCommandStates State
         {
             [DebuggerStepThrough]
-            get { return _state ?? (_state = GetService<IAnkhCommandStates>()); }
+            get { return _context.State; }
         }
 
         [GuidAttribute("3C536122-57B1-46DE-AB34-ACC524140093")]

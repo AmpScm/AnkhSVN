@@ -320,7 +320,7 @@ namespace Ankh.VS.TextEditor
                 _nativeWindow.EnableNavigationBar = EnableNavigationBar;
                 _nativeWindow.InteractiveEditor = InteractiveEditor;
 
-                _nativeWindow.Init(modal, toolWindow, ForceLanguageService);
+                _nativeWindow.Init(modal, toolWindow, _readOnly, ForceLanguageService);
 
                 _nativeWindow.ShowHorizontalScrollBar = !HideHorizontalScrollBar;
                 _nativeWindow.SetWordWrapDisabling(DisableWordWrap);
@@ -916,7 +916,7 @@ namespace Ankh.VS.TextEditor
         /// <param name="toolWindow"></param>
         /// <param name="forceLanguageService"></param>
         /// <param name="codeWindow">Represents a multiple-document interface (MDI) child that contains one or more code views.</param>
-        private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, bool modal, bool toolWindow, Guid? forceLanguageService, out IVsCodeWindow codeWindow)
+        private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, bool modal, bool toolWindow, bool readOnly, Guid? forceLanguageService, out IVsCodeWindow codeWindow)
         {
             codeWindow = CreateLocalInstance<IVsCodeWindow>(typeof(VsCodeWindowClass), _serviceProvider);
 
@@ -944,6 +944,9 @@ namespace Ankh.VS.TextEditor
 
             if (modal)
                 initViewFlags |= (uint)TextViewInitFlags2.VIF_ACTIVEINMODALSTATE;
+
+            if (readOnly)
+                initViewFlags |= (uint)TextViewInitFlags2.VIF_READONLY;
 
             _codewindowbehaviorflags cwFlags = _codewindowbehaviorflags.CWB_DEFAULT;
 
@@ -1033,10 +1036,10 @@ namespace Ankh.VS.TextEditor
         /// </summary>
         /// <param name="allowModal">if set to <c>true</c> [allow modal].</param>
         /// <param name="forceLanguageService"><c>null</c> or the language service to force.</param>
-        public void Init(bool allowModal, bool toolWindow, Guid? forceLanguageService)
+        public void Init(bool allowModal, bool toolWindow, bool readOnly, Guid? forceLanguageService)
         {
             //Create window
-            CreateCodeWindow(_container.Handle, _container.ClientRectangle, allowModal, toolWindow, forceLanguageService, out _codeWindow);
+            CreateCodeWindow(_container.Handle, _container.ClientRectangle, allowModal, toolWindow, readOnly, forceLanguageService, out _codeWindow);
             commandTarget = _codeWindow as IOleCommandTarget;
 
             IVsTextView textView;
