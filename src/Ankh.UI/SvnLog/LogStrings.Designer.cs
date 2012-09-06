@@ -215,7 +215,7 @@ namespace Ankh.UI.SvnLog {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Reverting.
         /// </summary>
         internal static string Reverting {
             get {

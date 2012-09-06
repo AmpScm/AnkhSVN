@@ -170,7 +170,7 @@
     <value>&amp;Revert changes from revision {0} to {1}</value>
   </data>
   <data name="Reverting" xml:space="preserve">
-    <value />
+    <value>Reverting</value>
   </data>
   <data name="SwitchToRevisionX" xml:space="preserve">
     <value>&amp;Switch to revision {0}</value>
