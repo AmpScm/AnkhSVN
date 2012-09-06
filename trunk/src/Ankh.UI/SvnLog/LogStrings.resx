@@ -129,6 +129,21 @@
   <data name="Deleted" xml:space="preserve">
     <value>Deleted</value>
   </data>
+  <data name="LogAuthor" xml:space="preserve">
+    <value>Author: {0}</value>
+  </data>
+  <data name="LogDate" xml:space="preserve">
+    <value>Date: {0:F}</value>
+  </data>
+  <data name="LogMessagePrefix" xml:space="preserve">
+    <value>Message:</value>
+  </data>
+  <data name="LogMessageSuffix" xml:space="preserve">
+    <value> ---- </value>
+  </data>
+  <data name="LogRevision" xml:space="preserve">
+    <value>Revision: {0}</value>
+  </data>
   <data name="Modified" xml:space="preserve">
     <value>Changed</value>
   </data>
