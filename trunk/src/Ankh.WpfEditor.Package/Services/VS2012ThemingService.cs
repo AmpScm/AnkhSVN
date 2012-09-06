@@ -62,9 +62,9 @@ namespace Ankh.WpfPackage.Services
     }
 
     [GlobalService(typeof(IWinFormsThemingService), MinVersion = VSInstance.VS2012)]
-    sealed class VS11ThemingService : AnkhService, IWinFormsThemingService
+    sealed class VS2012ThemingService : AnkhService, IWinFormsThemingService
     {
-        public VS11ThemingService(IAnkhServiceProvider context)
+        public VS2012ThemingService(IAnkhServiceProvider context)
             : base(context)
         {
 
