@@ -471,7 +471,7 @@ namespace Ankh.WpfPackage.Services
             grid.LineColor = clrBackground;
             grid.CategoryForeColor = clrTitle;
 
-            if (VSVersion.V2012OrLater)
+            if (VSVersion.VS2012OrLater)
             {
                 // New in 4.5 properties. Properly added for VS2012.
                 SetProperty(grid, "HelpBorderColor", clrFill);

@@ -415,7 +415,7 @@ namespace Ankh.Scc
 
             _glyphList = StatusImages.CreateStatusImageList();
 
-            if (VSVersion.V2012OrLater || SolutionNavigatorInstalled())
+            if (VSVersion.VS2012OrLater || SolutionNavigatorInstalled())
             {
                 for (int i = 0; i < 16; i++)
                 {

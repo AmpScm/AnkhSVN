@@ -391,7 +391,7 @@ namespace Ankh.VS.Selection
 
         void LoadThemeData()
         {
-            if (!VSVersion.V2012OrLater)
+            if (!VSVersion.VS2012OrLater)
             {
                 _themed = false;
                 return;

@@ -37,7 +37,7 @@ namespace Ankh.UI.PendingChanges
         {
             InitializeComponent();
 
-            if (VSVersion.V2012OrLater)
+            if (VSVersion.VS2012OrLater)
             {
                 pendingCommits.BorderStyle = BorderStyle.None;
                 borderPanel.BorderStyle = BorderStyle.None;

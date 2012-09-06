@@ -189,7 +189,7 @@ namespace Ankh.UI.RepositoryExplorer
 
         protected override void OnThemeChanged(EventArgs e)
         {
-            if (VSVersion.V2012OrLater)
+            if (VSVersion.VS2012OrLater)
             {
                 // Remove the chrome
                 toolFolders.Visible = toolFolders.Enabled = false;
