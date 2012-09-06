@@ -126,13 +126,19 @@ namespace Ankh.Commands
                             else
                                 diffArgs.RelativeToPath = null;
 
-                            if (!ee.Client.Diff(item.FullPath, revRange, diffArgs, stream) && diffArgs.LastException != null)
+                            if (!ee.Client.Diff(item.FullPath, revRange, diffArgs, stream))
                             {
-                                StreamWriter sw = new StreamWriter(stream);
-                                sw.WriteLine();
-                                sw.WriteLine(string.Format("# {0}: {1}", item.FullPath, diffArgs.LastException.Message));
-                                sw.Flush();
-                                // Don't dispose the writer as that might close the stream
+                                if (diffArgs.LastException != null)
+                                {
+                                    StreamWriter sw = new StreamWriter(stream);
+                                    sw.WriteLine();
+                                    sw.WriteLine(string.Format("# {0}: {1}", item.FullPath, diffArgs.LastException.Message));
+                                    sw.Flush();
+                                    // Don't dispose the writer as that might close the stream
+                                }
+
+                                if (diffArgs.IsLastInvocationCanceled)
+                                    break;
                             }
                         }
 
