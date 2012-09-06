@@ -31,7 +31,6 @@ namespace Ankh.Commands
         readonly Dictionary<AnkhCommand, CommandMapItem> _map;
         readonly AnkhCommandContext _commandContext;
 
-
         public CommandMapper(IAnkhServiceProvider context)
             : base(context)
         {
@@ -43,6 +42,12 @@ namespace Ankh.Commands
             _commandContext = commandContext;
         }
 
+        IAnkhCommandStates _states;
+        IAnkhCommandStates States
+        {
+            get { return _states ?? (_states = GetService<IAnkhCommandStates>()); }
+        }
+
         public bool PerformUpdate(AnkhCommand command, CommandUpdateEventArgs e)
         {
             EnsureLoaded();
@@ -50,7 +55,7 @@ namespace Ankh.Commands
 
             if (_map.TryGetValue(command, out item))
             {
-                if (!item.AlwaysAvailable && !e.State.SccProviderActive)
+                if (!item.AlwaysAvailable && !States.SccProviderActive)
                     e.Enabled = false;
                 else
                     try
