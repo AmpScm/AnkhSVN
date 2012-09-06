@@ -199,5 +199,8 @@ namespace Ankh
         SvnLogOptions,
 
         FileSccItems,
+        LogViewerCompare,
+        LogViewerRevision,
+        LogViewerEdit,
     }
 }

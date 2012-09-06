@@ -827,21 +827,28 @@
     <GroupRef id="Grp_AnkhContextMenus">
       <Menu id="Menu_LogViewerContextMenu" name="LogViewContext" text="Log Viewer List" type="Context"
             priority="0" notInTBList="true">
-        <Group id="Grp_LogViewerContextMenu" priority="0x1000">
-          <Button id="Cmd_LogCompareWithWorkingCopy" name="Svn.LogCompareWithWorkingCopy" priority="0x100"
+        <Group id="Grp_LogViewerCompare" priority="0x0100">
+          <Button id="Cmd_LogCompareWithWorkingCopy" name="Svn.LogCompareWithWorkingCopy" priority="0x0100"
                   text="Compare with &amp;Working copy" iconFile="Scc/TfsCompare.png" dynamicVisibility="true"/>
+          <Button id="Cmd_LogShowChanges" name="LogShowChanges" priority="0x0200"
+                  text="Show &amp;Changes" iconFile="Scc/TfsCompare.png" dynamicVisibility="true"/>
+        </Group>
+        <Group id="Grp_LogViewerContextMenu" priority="0x1000">
           <Button id="Cmd_LogChangeLogMessage" name="LogChangeLogMessage" priority="0xB000"
                   text="Change Log &amp;Message" dynamicVisibility="true"/>
-          <Button id="Cmd_LogShowChanges" name="LogShowChanges" priority="0xB100"
-                  text="Show &amp;Changes" iconFile="Scc/TfsCompare.png" dynamicVisibility="true"/>
           <Button id="Cmd_LogRevertTo" name="LogRevertTo" priority="0xB200"
                   text="&amp;Revert to this Revision" dynamicVisibility="true" iconFile="Scc/Undo.png"/>
           <Button id="Cmd_LogRevertThisRevisions" name="LogRevertChangesFrom" priority="0xB300"
                   text="Revert &amp;Changes from this revision" dynamicVisibility="true" iconFile="Scc/Undo.png"/>
+        </Group>
+        <Group id="Grp_LogViewerRevision" priority="0xA000">
           <Button id="Cmd_LogShowRevisionProperties" name="LogShowRevisionProperties" priority="0xB400"
                   text="Show Revision &amp;Properties" dynamicVisibility="true" iconFile="Scc/CompareProperties.png"/>
           <Button id="Cmd_LogOpenIssue" name="LogOpenIssue" priority="0xB500"
                   text="Open &amp;Issue" dynamicVisibility="true"/>
+        </Group>
+        <Group id="Grp_LogViewerEdit" priority="0xE000">
+          <ButtonRef id="guidVSStd97:cmdidCopy" priority="0x100" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
