@@ -143,8 +143,9 @@ namespace Ankh.Commands
                         }
 
                         stream.Flush();
-                        stream.Position = 0;
                     });
+
+                stream.Position = 0;
                 using (StreamReader sr = new StreamReader(stream))
                 {
                     File.WriteAllText(tempFile, sr.ReadToEnd(), Encoding.UTF8);
