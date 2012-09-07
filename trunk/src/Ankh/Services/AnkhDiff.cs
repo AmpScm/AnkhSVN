@@ -126,7 +126,7 @@ namespace Ankh.Services
             IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
 
             if (cs != null)
-                args.ShowDiffAsDocument = cs.Instance.FloatDiffEditors;
+                args.ShowDiffAsDocument = !cs.Instance.FloatDiffEditors;
         }
 
         /// <summary>
