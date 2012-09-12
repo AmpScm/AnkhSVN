@@ -210,7 +210,13 @@ namespace Ankh.Scc
 
         protected override string ComponentName
         {
-            get { return Name; }
+            get 
+            {
+                if (string.IsNullOrEmpty(Name))
+                    return FullPath;
+                else
+                    return Name; 
+            }
         }
 
         protected override string ClassName

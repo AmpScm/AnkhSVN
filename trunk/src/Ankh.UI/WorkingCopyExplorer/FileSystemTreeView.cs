@@ -218,12 +218,9 @@ namespace Ankh.UI.WorkingCopyExplorer
             SvnItem item = e.Item.SvnItem;
 
             if (item != null)
-            {
                 e.SelectionItem = new SvnItemData(Context, item);
-                return;
-            }
-
-            base.OnRetrieveSelection(e);
+            else
+                e.SelectionItem = null;
         }
 
         protected override void OnResolveItem(TreeViewWithSelection<FileSystemTreeNode>.ResolveItemEventArgs e)
