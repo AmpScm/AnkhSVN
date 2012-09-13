@@ -868,15 +868,17 @@
     <GroupRef id="Grp_AnkhContextMenus">
       <Menu id="Menu_AnnotateContextMenu" name="AnnotateContextMenu" text="Annotate Context Menu"
             type="Context" priority="0" notInTBList="true">
-        <Group id="Grp_AnnotateContextMenu" priority="0x100">
+        <Group id="Grp_AnnotateCompare" priority="0x100">
           <Button id="Cmd_RepositoryCompareWithWc" priority="0x100" name="RepositoryCompareToWc"
                   text="Compare with &amp;Working copy"
                   iconFile="Scc/TfsCompare.png" dynamicVisibility="true" />
-          <Button id="Cmd_AnnotateShowLog" priority="0x200" name="AnnotateShowLog" text="View &amp;History"
-                  iconFile="Scc/TfsHistory.png" dynamicVisibility="true"/>
-          <Button id="Cmd_RepositoryShowChanges" priority="0x300" name="RepositoryShowChanges"
+          <Button id="Cmd_RepositoryShowChanges" priority="0x200" name="RepositoryShowChanges"
                   text="Show &amp;Changes"
                   iconFile="Scc/TfsCompare.png" dynamicVisibility="true" />
+        </Group>
+        <Group id="Grp_AnnotateContextMenu" priority="0x200">
+          <Button id="Cmd_AnnotateShowLog" priority="0x200" name="AnnotateShowLog" text="View &amp;History"
+                  iconFile="Scc/TfsHistory.png" dynamicVisibility="true"/>          
           <Button id="Cmd_SvnNodeAnnotate" priority="0x400" name="SvnNodeAnnotate" text="&amp;Annotate..."
                   iconFile="Scc/TfsContextExplorerAnnotate.png" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_CopyToWorkingCopy" priority="0x800" />
