@@ -202,5 +202,6 @@ namespace Ankh
         LogViewerCompare,
         LogViewerRevision,
         LogViewerEdit,
+        AnnotateCompare,
     }
 }
