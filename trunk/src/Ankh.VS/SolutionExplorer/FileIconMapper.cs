@@ -154,7 +154,7 @@ namespace Ankh.VS.SolutionExplorer
                 themeService = GetService<IWinFormsThemingService>();
 
             IntPtr hIcon;
-            if (!themeService.TryGetIcon(path, out hIcon))
+            if (themeService == null || !themeService.TryGetIcon(path, out hIcon))
                 return -1;
 
             return ResolveReference(new ProjectIconReference(hIcon));
