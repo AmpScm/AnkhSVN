@@ -212,21 +212,22 @@ namespace Ankh.Commands
                     switch (pai.SelectedMode)
                     {
                         case ProjectAddMode.External:
-                            using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
-                            {
-                                string externals;
-                                if (!cl.TryGetProperty(pai.ExternalLocation, SvnPropertyNames.SvnExternals, out externals))
-                                    externals = "";
+                            if (pai.ExternalLocation != null)
+                                using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
+                                {
+                                    string externals;
+                                    if (!cl.TryGetProperty(pai.ExternalLocation, SvnPropertyNames.SvnExternals, out externals))
+                                        externals = "";
 
-                                SvnExternalItem sei;
-                                if (pai.ExternalLocked)
-                                    sei = new SvnExternalItem(SvnItem.SubPath(localDir, pai.ExternalLocation), checkoutLocation.Uri, revision, revision);
-                                else
-                                    sei = new SvnExternalItem(SvnItem.SubPath(localDir, pai.ExternalLocation), checkoutLocation.Uri);
+                                    SvnExternalItem sei;
+                                    if (pai.ExternalLocked)
+                                        sei = new SvnExternalItem(SvnItem.SubPath(localDir, pai.ExternalLocation), checkoutLocation.Uri, revision, revision);
+                                    else
+                                        sei = new SvnExternalItem(SvnItem.SubPath(localDir, pai.ExternalLocation), checkoutLocation.Uri);
 
-                                externals = sei.ToString(true) + Environment.NewLine + externals;
-                                cl.SetProperty(pai.ExternalLocation, SvnPropertyNames.SvnExternals, externals);
-                            }
+                                    externals = sei.ToString(true) + Environment.NewLine + externals;
+                                    cl.SetProperty(pai.ExternalLocation, SvnPropertyNames.SvnExternals, externals);
+                                }
                             break;
                         case ProjectAddMode.Copy:
                             using (SvnWorkingCopyClient cl = e.GetService<ISvnClientPool>().GetWcClient())
