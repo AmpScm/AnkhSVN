@@ -213,6 +213,8 @@ namespace Ankh.Services.PendingChanges
                         if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'first'
                             return false;
 
+                        // Verify this before verifying log message
+                        // so that issue tracker integration has precedence 
                         if (!PreCommit_VerifyIssueTracker(state))
                             return false;
 
@@ -373,15 +375,34 @@ namespace Ankh.Services.PendingChanges
 
             string msg = sb.ToString();
 
-            // Use the project commit settings class to add an issue number (if available)
-            IProjectCommitSettings pcs = state.GetService<IProjectCommitSettings>();
-            if (pcs.WarnIfNoIssue && pcs.ShowIssueBox && string.IsNullOrEmpty(state.IssueText) &&
-                state.MessageBox.Show(PccStrings.NoIssueNumber, "",
-                                      MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            // bool flag that tells if issue tracker integration (if there is one) has already
+            // modified the log message, and inserted issue ids.
+            // IT IS ASSUMED THAT issue tracker integration has been given the chance to process
+            // the commit msg before this logic (i.e. PreCommit_VerifyIssueTracker).
+            bool didIssueTrackerProcess = false;
+            IAnkhIssueService iService = state.GetService<IAnkhIssueService>();
+            if (iService != null)
             {
-                return false;
+                IssueRepository iRepo = iService.CurrentIssueRepository;
+                if (iRepo != null && !string.IsNullOrEmpty(iRepo.IssueIdPattern))
+                {
+                    didIssueTrackerProcess = System.Text.RegularExpressions.Regex.IsMatch(msg, iRepo.IssueIdPattern);
+                }
             }
-            msg = pcs.BuildLogMessage(msg, state.IssueText);
+
+            // no need to check for issue id if issue tracker integration already did it.
+            if (!didIssueTrackerProcess)
+            {
+                // Use the project commit settings class to add an issue number (if available)
+                IProjectCommitSettings pcs = state.GetService<IProjectCommitSettings>();
+                if (pcs.WarnIfNoIssue && pcs.ShowIssueBox && string.IsNullOrEmpty(state.IssueText) &&
+                    state.MessageBox.Show(PccStrings.NoIssueNumber, "",
+                                          MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                {
+                    return false;
+                }
+                msg = pcs.BuildLogMessage(msg, state.IssueText);
+            }
 
             // And make sure the log message ends with a single newline
             state.LogMessage = msg.TrimEnd() + Environment.NewLine;
