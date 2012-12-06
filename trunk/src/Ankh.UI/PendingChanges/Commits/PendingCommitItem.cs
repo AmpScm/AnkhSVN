@@ -59,7 +59,7 @@ namespace Ankh.UI.PendingChanges.Commits
             SvnItem item = cache[FullPath];
 
             if (item == null)
-                throw new InvalidOperationException(); // Item no longer valued
+                throw new InvalidOperationException(); // Every path should return a SvnItem
 
             PendingChangeStatus pcs = PendingChange.Change ?? new PendingChangeStatus(PendingChangeKind.None);
 
