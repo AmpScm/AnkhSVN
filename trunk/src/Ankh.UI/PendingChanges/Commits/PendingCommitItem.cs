@@ -52,7 +52,10 @@ namespace Ankh.UI.PendingChanges.Commits
 
             IFileStatusCache cache = context.GetService<IFileStatusCache>();
 
-            ImageIndex = PendingChange.IconIndex;
+            int idx = PendingChange.IconIndex;
+            if (idx >= 0)
+                ImageIndex = idx; // Setting to -1 raises an exception
+
             SvnItem item = cache[FullPath];
 
             if (item == null)
