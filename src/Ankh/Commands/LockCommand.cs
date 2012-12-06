@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using SharpSvn;
 using Ankh.Configuration;
@@ -111,10 +112,13 @@ namespace Ankh.Commands
                                       {
                                           if (notifyArgs.Action == SvnNotifyAction.LockFailedLock)
                                           {
-                                              string userName = "?";
+                                              string userName;
 
                                               if (notifyArgs.Lock != null)
                                                   userName = notifyArgs.Lock.Owner;
+                                              else
+                                                  userName = GuessUserFromError(notifyArgs.Error.Message) ?? "?";
+
 
                                               alreadyLockedFiles.Add(notifyArgs.FullPath, userName);
                                           }
@@ -158,6 +162,27 @@ namespace Ankh.Commands
                          ee.Client.Lock(files, la);
                      });
             }
+        }
+
+        static Regex _guessRx;
+        private string GuessUserFromError(string message)
+        {
+            // Parses errors in the formats:
+            // "Path '%s' is already locked by user '%s' in filesystem '%s'" (Used by most languages)
+            // "Pfad »%s« ist bereits vom Benutzer »%s« im Dateisystem »%s« gesperrt" (German)
+            //
+            // Ordering is used in both FS backends and unlikely to change over versions
+            // but additional fields might be added later
+            if (_guessRx == null)
+                _guessRx = new Regex("^[^']+ ['»](?<path>.*?)['«][^']+ ['»](?<user>.*?)['«][^']+( ['»].*?['«][^']*)*$", RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Singleline);
+
+            Match m = _guessRx.Match(message);
+
+            string user = null;
+            if (m.Success)
+                user = m.Groups["user"].Value;
+
+            return user;
         }
     }
 }
