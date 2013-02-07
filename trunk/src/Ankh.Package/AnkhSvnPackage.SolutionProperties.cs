@@ -311,6 +311,10 @@ namespace Ankh.VSPackage
                 }
                 return VSErr.S_OK; // Our data is in subversion properties
             }
+            catch (EndOfStreamException)
+            {
+                // Ignore: Old version? Broken Solution File? (Common error)
+            }
             catch (Exception ex)
             {
                 IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
