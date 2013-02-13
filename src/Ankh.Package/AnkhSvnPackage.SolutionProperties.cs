@@ -313,7 +313,7 @@ namespace Ankh.VSPackage
             }
             catch (EndOfStreamException)
             {
-                // Ignore: Old version? Broken Solution File? (Common error)
+                return VSErr.S_OK; // Ignore: Old version? Broken Solution File? (Common error)
             }
             catch (Exception ex)
             {
