@@ -260,6 +260,12 @@ namespace Ankh.Scc
 
         public int OnBeforeSave(uint docCookie)
         {
+            SccDocumentData data;
+            if (TryGetDocument(docCookie, out data))
+            {
+                data.Saving = DateTime.Now;
+            }
+
             return VSErr.S_OK;
         }
 
@@ -270,6 +276,7 @@ namespace Ankh.Scc
             if (TryGetDocument(docCookie, out data))
             {
                 data.OnSaved();
+                data.Saving = null;
             }
             return VSErr.S_OK;
         }

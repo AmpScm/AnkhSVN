@@ -112,5 +112,13 @@ namespace Ankh.Scc
         /// Refreshes all dirty flags
         /// </summary>
         void RefreshDirtyState();
+
+        /// <summary>
+        /// Gets a boolean indicating whether this document is just saved by the VS Editor (and not some
+        /// outside change)
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        bool NoReloadNecessary(string file);
     }
 }
