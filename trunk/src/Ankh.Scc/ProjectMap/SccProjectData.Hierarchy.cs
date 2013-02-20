@@ -101,6 +101,7 @@ namespace Ankh.Scc.ProjectMap
                 if (VSErr.Succeeded(VsProject.GetMkDocument(itemidAdded, out r))
                     && SvnItem.IsValidPath(r))
                 {
+                    // Check out VSHPROPID_IsNewUnsavedItem
                     if (!SvnItem.PathExists(r))
                     {
                         SetPreCreatedItem(itemidAdded);
