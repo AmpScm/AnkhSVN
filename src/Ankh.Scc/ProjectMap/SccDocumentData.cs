@@ -182,7 +182,7 @@ namespace Ankh.Scc.ProjectMap
             statusMonitor.ScheduleSvnStatus(FullPath);
         }
 
-        internal void OnClosed(bool closedWithoutSaving)
+        internal void OnClosed()
         {
             SetDirty(false); // Mark as undirty
             Dispose();
