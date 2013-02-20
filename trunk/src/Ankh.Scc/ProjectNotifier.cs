@@ -445,6 +445,9 @@ namespace Ankh.Scc
             if (path == null)
                 throw new ArgumentNullException("path");
 
+            if (DocumentTracker.NoReloadNecessary(path))
+                return;
+
             ScheduleSvnStatus(path);
 
             lock (_externallyChanged)

@@ -586,6 +586,23 @@ namespace Ankh.Scc
                 data.CheckDirty();
             }
         }
+
+        public bool NoReloadNecessary(string file)
+        {
+            if (string.IsNullOrEmpty(file))
+                throw new ArgumentNullException("file");
+
+            SccDocumentData dd;
+            if (!_docMap.TryGetValue(file, out dd))
+                return false;
+
+            if (dd.Saving.HasValue && (DateTime.Now - dd.Saving) < new TimeSpan(0, 0, 15))
+            {
+                return true;
+            }
+            return false;
+        }
+
     }
 }
 

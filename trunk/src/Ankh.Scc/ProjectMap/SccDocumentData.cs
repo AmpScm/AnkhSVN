@@ -44,6 +44,7 @@ namespace Ankh.Scc.ProjectMap
         uint[] _fileChangeCookies;
         bool _disposed;
         int _reloadTick;
+        DateTime? _saving;
 
         internal SccDocumentData(IAnkhServiceProvider context, string name)
             : base(context)
@@ -639,6 +640,13 @@ namespace Ankh.Scc.ProjectMap
 
             return false;
         }
+
+        public DateTime? Saving
+        {
+            get { return _saving; }
+            set { _saving = value; }
+        }
+
 
         #region IVsFileChangeEvents Members
         private void HookFileChanges(bool reHook)
