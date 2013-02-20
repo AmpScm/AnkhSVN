@@ -248,7 +248,7 @@ namespace Ankh.Scc
             SccDocumentData data;
             if (_docMap.TryGetValue(pszMkDocument, out data))
             {
-                data.OnClosed(fClosedWithoutSaving != 0);
+                data.OnClosed();
                 _docMap.Remove(data.Name);
 
                 if (data.Cookie != 0)
