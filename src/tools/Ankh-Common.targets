@@ -12,7 +12,7 @@
     <UseVsSdkVersion Condition="'$(UseVS2005MPF)' != 'true'">9.0</UseVsSdkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == ''">
-    <!-- Follow 'Visual Studio 11 Developer Preview': Assume Visual Studio 2010. -->
+    <!-- Follow 'Visual Studio 2012': Assume Visual Studio 2010. -->
     <VisualStudioVersion>10.0</VisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(UseVsSdkVersion)' == '' and '$(VisualStudioVersion)' != ''">
@@ -38,9 +38,8 @@
     <MsVsShellAssembly>Microsoft.VisualStudio.Shell.10.0</MsVsShellAssembly>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(UseVsSdkVersion)' == '11.0'">
-    <!-- 'Visual Studio 11 Developer Preview'-->
-    <MsVsShellAssembly>Microsoft.VisualStudio.Shell.11.0</MsVsShellAssembly>
+  <PropertyGroup Condition="'$(UseVsSdkVersion)' &gt;= '11.0'">
+    <MsVsShellAssembly>Microsoft.VisualStudio.Shell.$(UseVsSdkVersion)</MsVsShellAssembly>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="..\..\local\Common.targets.local" Condition="('$(ApplyLocalCustomizations)' != 'false') and Exists('..\..\local\Common.targets.local')" />
