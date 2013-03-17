@@ -33,6 +33,9 @@
     <PropertyRef Id="VS11DEVENV" />
     <PropertyRef Id="VS11_EXTENSIONS_DIR" />
 
+    <PropertyRef Id="VS12DEVENV" />
+    <PropertyRef Id="VS12_EXTENSIONS_DIR" />
+
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="APPLICATIONFOLDER" Name="AnkhSVN 2">
@@ -99,11 +102,25 @@
           <Directory Name="2.X" Id="ANKHSVN_EXTENSION_2012">
             <Component Id="C_Reg2012" Guid="06D5D441-6469-49B5-9FA7-FF8B2FD7382E">
               <Condition>VS11DEVENV</Condition>
-              <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS2010-Info" Value="[ANKHSVN_EXTENSION_2012]" Type="string" KeyPath="yes" />
+              <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS2012-Info" Value="[ANKHSVN_EXTENSION_2012]" Type="string" KeyPath="yes" />
               <CopyFile Id="Vsix_Mnf_2012" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
               <CopyFile Id="Vsix_Lic_2012" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
               <CopyFile Id="Vsix_Ico_2012" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
               <CopyFile Id="Vsix_Pvw_2012" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
+      <Directory Name="Extensions" Id="VS12_EXTENSIONS_DIR">
+        <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_12.0">
+          <Directory Name="2.X" Id="ANKHSVN_EXTENSION_12.0">
+            <Component Id="C_Reg12.0" Guid="D98F2A8C-3C9F-4291-AB4C-0CE74232CE38">
+              <Condition>VS12DEVENV</Condition>
+              <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS12.0-Info" Value="[ANKHSVN_EXTENSION_12.0]" Type="string" KeyPath="yes" />
+              <CopyFile Id="Vsix_Mnf_12.0" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_12.0" />
+              <CopyFile Id="Vsix_Lic_12.0" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_12.0" />
+              <CopyFile Id="Vsix_Ico_12.0" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_12.0" />
+              <CopyFile Id="Vsix_Pvw_12.0" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_12.0" />
             </Component>
           </Directory>
         </Directory>
@@ -114,11 +131,13 @@
     <CustomActionRef Id="AnkhVS2008Setup" />
     <CustomActionRef Id="AnkhVS2010Setup" />
     <CustomActionRef Id="AnkhVS2012Setup" />
+    <CustomActionRef Id="AnkhVS12.0Setup" />
     <UI>
       <ProgressText Action="AnkhVS2005Setup" Template="[1]">Updating Visual Studio 2005 registration</ProgressText>
       <ProgressText Action="AnkhVS2008Setup" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
       <ProgressText Action="AnkhVS2010Setup" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
       <ProgressText Action="AnkhVS2012Setup" Template="[1]">Updating Visual Studio 2012 registration</ProgressText>
+      <ProgressText Action="AnkhVS12.0Setup" Template="[1]">Updating Visual Studio 2012 registration</ProgressText>
     </UI>
 
     <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
@@ -163,8 +182,14 @@
       <Feature Id="RegVS11" Title="Register in Microsoft Visual Studio 2012" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2012" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg2012" />
         <ComponentGroupRef Id="PkgWpfReg2012" />
-        <!-- VS2012 allows binding redirects in the registry, so no Extension2012 -->
+        <!-- VS2012+ allows binding redirects in the registry, so no Extension* -->
         <ComponentRef Id="C_Reg2012" />
+      </Feature>
+      <Feature Id="RegVS12" Title="Register in Microsoft Visual Studio 12.0" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 12.0" Level="1" AllowAdvertise="no">
+        <ComponentGroupRef Id="PkgReg12.0" />
+        <ComponentGroupRef Id="PkgWpfReg12.0" />
+        <!-- VS2012+ allows binding redirects in the registry, so no Extension* -->
+        <ComponentRef Id="C_Reg12.0" />
       </Feature>
     </Feature>
   </Product>
