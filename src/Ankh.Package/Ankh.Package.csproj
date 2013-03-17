@@ -226,7 +226,9 @@
     <Compile Include="Attributes\ProvideTextMarker.cs" />
     <Compile Include="Attributes\ProvideToolsOptionsPageVisibility.cs" />
     <Compile Include="Attributes\ProvideUIVersion.cs" />
-    <Content Include="Ankh.Package.wxs" />
+    <Content Include="Ankh.Package.wxs">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Gui\Gui-To-Vsct.xsl" />
     <None Include="Gui\Gui-Common.xsl" />
     <Content Include="Gui\menu\CopyUrlToClipboard.png" />

@@ -37,4 +37,68 @@
     </InstallExecuteSequence>
   </Fragment>
 
+  <Fragment>
+    <CustomAction Id="AnkhVS12.0Setup" Property="VS12DEVENV" ExeCommand="/setup /NoSetupVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
+    <PropertyRef Id="VS11DEVENV" />
+
+    <InstallExecuteSequence>
+      <Custom Action="AnkhVS12.0Setup" Before="InstallFinalize" Overridable="yes">VS12DEVENV And Not UPGRADINGPRODUCTCODE</Custom>
+    </InstallExecuteSequence>
+  </Fragment>
+
+    <!-- Visual Studio 12.0 -->
+  <Fragment>
+    <Property Id="VS12DEVENV" Secure="yes">
+      <RegistrySearch Id="VS12DevEnvSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\12.0\Setup\VS" Name="EnvironmentPath" Type="raw" />
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS12_ITEMTEMPLATES_DIR" Secure="yes">
+      <RegistrySearch Id="VS11DevEnvForItemTemplatesSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\12.0\Setup\VS" Name="EnvironmentPath" Type="raw">
+        <DirectorySearch Id="VS12ItemTemplatesPathSearch" Path="ItemTemplates" Depth="1" />
+      </RegistrySearch>
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS12_PROJECTTEMPLATES_DIR" Secure="yes">
+      <RegistrySearch Id="VS12DevEnvForProjectTemplatesSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\12.0\Setup\VS" Name="EnvironmentPath" Type="raw">
+        <DirectorySearch Id="VS12ProjectTemplatesPathSearch" Path="ProjectTemplates" Depth="1" />
+      </RegistrySearch>
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS12_SCHEMAS_DIR" Secure="yes">
+      <RegistrySearch Id="VS12ProductPathSearch" Root="HKLM" Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="12.0" Type="raw">
+        <DirectorySearch Id="VS12XmlPathSearch" Path="Xml" Depth="1">
+          <DirectorySearch Id="VS12XmlSchemasPathSearch" Path="Schemas" Depth="1" />
+        </DirectorySearch>
+      </RegistrySearch>
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <CustomAction Id="VS12Setup" Property="VS12DEVENV" ExeCommand="/setup" Execute="deferred" Return="ignore" Impersonate="no" />
+    <PropertyRef Id="VS12DEVENV" />
+
+    <InstallExecuteSequence>
+      <Custom Action="VS12Setup" Before="InstallFinalize" Overridable="yes">VS12DEVENV</Custom>
+    </InstallExecuteSequence>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS12_ROOT_FOLDER" Secure="yes">
+      <RegistrySearch Id="SearchForVS12RootPath" Root="HKLM" Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="12.0" Type="raw" />
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS12_EXTENSIONS_DIR" Secure="yes">
+      <RegistrySearch Id="VS12DevEnvForExtensionsSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\12.0\Setup\VS" Name="EnvironmentDirectory" Type="raw">
+        <DirectorySearch Id="VS12ExtensionsPathSearch" Path="Extensions" Depth="1" />
+      </RegistrySearch>
+    </Property>
+  </Fragment>
 </Wix>
