@@ -137,7 +137,7 @@
       <ProgressText Action="AnkhVS2008Setup" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
       <ProgressText Action="AnkhVS2010Setup" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
       <ProgressText Action="AnkhVS2012Setup" Template="[1]">Updating Visual Studio 2012 registration</ProgressText>
-      <ProgressText Action="AnkhVS12.0Setup" Template="[1]">Updating Visual Studio 2012 registration</ProgressText>
+      <ProgressText Action="AnkhVS12.0Setup" Template="[1]">Updating Visual Studio 12.0 registration</ProgressText>
     </UI>
 
     <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
