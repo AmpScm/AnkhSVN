@@ -238,7 +238,12 @@ namespace Ankh.Commands
                 hwr.UserAgent = string.Format("AnkhSVN/{0} VisualStudio/{1} Windows/{2}", version, VSVersion.FullVersion, osVersion);
             }
 
-            wr.BeginGetResponse(OnResponse, wr);
+            try
+            {
+                wr.BeginGetResponse(OnResponse, wr);
+            }
+            catch (NotSupportedException)
+            { /* Raised when an invalid proxy server setting is set */ }
         }
 
         static bool? _isDevVersion;
