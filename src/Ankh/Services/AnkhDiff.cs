@@ -668,6 +668,12 @@ namespace Ankh.Services
                         // Use the WOW64 program files directory if available, otherwise just program files
                         value = Environment.GetEnvironmentVariable("PROGRAMW6432") ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
                         break;
+                    case "APPDATA":
+                        value = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                        break;
+                    case "LOCALAPPDATA":
+                        value = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                        break;
                     case "READONLY":
                         if (DiffArgs != null && DiffArgs.ReadOnly)
                             value = "1";
