@@ -166,6 +166,13 @@ namespace Ankh.Services
                     ?? "$(HostProgramFiles)\\Coode Software\\Compare++\\Compare++.exe",
                 "'$(Base)' '$(Mine)'", true));
 
+            tools.Add(new DiffTool(this, "SemanticMerge", "Semanticmerge",
+                SubPath(RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SemanticMerge", "InstallLocation")
+                             ?? UserRegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SemanticMerge", "InstallLocation"),
+                             "semanticmergetool.exe")
+                    ?? "$(LocalAppData)\\PlasticSCM4\\semanticmerge\\semanticmergetool.exe",
+                "--source='$(Base)' --destination='$(Mine)' --srcsymbolicname='$(BaseName)' --dstsymbolicname='$(MineName)'", true));
+
             LoadRegistryTools(DiffToolMode.Diff, tools);
 
             SortTools(tools);
@@ -250,6 +257,15 @@ namespace Ankh.Services
                     ?? "$(HostProgramFiles)\\Devart\\Code Compare\\CodeMerge.exe",
                 "/WAIT /SC=SVN /REMOVEFILES '/BF=$(Base)' '/MF=$(Mine)' '/MT=$(MineName)' " +
                 "'/TF=$(Theirs)' '/TT=$(TheirsName)' '/RF=$(Merged)'", true));
+
+            tools.Add(new DiffTool(this, "SemanticMerge", "Semanticmerge",
+                SubPath(RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SemanticMerge", "InstallLocation")
+                        ?? UserRegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SemanticMerge", "InstallLocation"),
+                        "semanticmergetool.exe")
+                ?? "$(LocalAppData)\\PlasticSCM4\\semanticmerge\\semanticmergetool.exe",
+                "--base='$(Base)' --source='$(Theirs)' --destination='$(Mine)' --result='$(Merged)' " +
+                "--basesymbolicname='$(BaseName)' --srcsymbolicname='$(TheirsName)' --dstsymbolicname='$(MineName)'", true));
+
 
             LoadRegistryTools(DiffToolMode.Merge, tools);
 
