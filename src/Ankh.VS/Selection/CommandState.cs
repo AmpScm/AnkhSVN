@@ -658,7 +658,11 @@ namespace Ankh.VS.Selection
                         _zombie = (bool)var;
 
                         if (!_zombie)
-                            GetService<IAnkhServiceEvents>().OnUIShellActivate(EventArgs.Empty);
+                        {
+                            IAnkhServiceEvents se = GetService<IAnkhServiceEvents>();
+                            if (se != null)
+                                se.OnUIShellActivate(EventArgs.Empty);
+                        }
                     }
                     break;
             }
