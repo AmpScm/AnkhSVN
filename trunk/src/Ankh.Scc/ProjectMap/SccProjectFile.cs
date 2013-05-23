@@ -198,7 +198,7 @@ namespace Ankh.Scc.ProjectMap
                 if (_firstReference == null)
                 {
                     _context.GetService<IFileStatusCache>().SetSolutionContained(this.FullPath, false, false);
-                    _context.GetService<AnkhSccProvider>().RemoveFile(this);
+                    _context.GetService<SvnSccProvider>().RemoveFile(this);
                 }
                 return;
             }

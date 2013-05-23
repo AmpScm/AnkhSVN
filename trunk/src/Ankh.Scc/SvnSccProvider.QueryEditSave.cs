@@ -34,7 +34,7 @@ namespace Ankh.Scc
     /// <summary>
     /// 
     /// </summary>
-    partial class AnkhSccProvider : IVsQueryEditQuerySave2
+    partial class SvnSccProvider : IVsQueryEditQuerySave2
     {
         readonly SortedList<string, int> _unreloadable = new SortedList<string, int>(StringComparer.OrdinalIgnoreCase);
 

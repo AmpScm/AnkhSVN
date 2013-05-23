@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Scc
 {
-    partial class AnkhSccProvider : EnvDTESourceControl2, EnvDTESourceControl
+    partial class SvnSccProvider : EnvDTESourceControl2, EnvDTESourceControl
     {
         readonly HybridCollection<string> _sccExcluded = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -198,11 +198,11 @@ namespace Ankh.Scc
 
         sealed class AnkhSccSourceControlBinding : EnvDTE80.SourceControlBindings
         {
-            readonly AnkhSccProvider _provider;
+            readonly SvnSccProvider _provider;
             readonly string _path;
 
 
-            internal AnkhSccSourceControlBinding(AnkhSccProvider provider, string path)
+            internal AnkhSccSourceControlBinding(SvnSccProvider provider, string path)
             {
                 if (provider == null)
                     throw new ArgumentNullException("provider");

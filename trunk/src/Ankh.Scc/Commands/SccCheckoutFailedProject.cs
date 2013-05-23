@@ -30,7 +30,7 @@ namespace Ankh.Scc.Commands
                 map = (fm as IDictionary<string, object>);
             else
             {
-                AnkhSccProvider scc = e.GetService<AnkhSccProvider>();
+                SvnSccProvider scc = e.GetService<SvnSccProvider>();
                 map = scc.GetProjectsThatNeedEnlisting();
                 e.Selection.Cache[_failedProjectsKey] = map ?? _failedProjectsKey;
             }
@@ -48,7 +48,7 @@ namespace Ankh.Scc.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
-            AnkhSccProvider scc = e.GetService<AnkhSccProvider>();
+            SvnSccProvider scc = e.GetService<SvnSccProvider>();
             SvnHierarchy hier = EnumTools.GetSingle(e.Selection.GetSelectedHierarchies());
 
             if (hier == null)

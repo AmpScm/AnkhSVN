@@ -23,7 +23,7 @@ using Ankh.Commands;
 
 namespace Ankh.Scc
 {
-    partial class AnkhSccProvider : IVsSccControlNewSolution, IVsSccOpenFromSourceControl
+    partial class SvnSccProvider : IVsSccControlNewSolution, IVsSccOpenFromSourceControl
 	{
         /// <summary>
         /// Adds the current solution to source control.

@@ -668,7 +668,7 @@ namespace Ankh.Scc.ProjectMap
                 if (fileChange == null)
                     fileChange = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
 
-                List<SvnItem> items = new List<SvnItem>(GetService<AnkhSccProvider>(typeof(ITheAnkhSvnSccProvider)).GetAllDocumentItems(_name));
+                List<SvnItem> items = new List<SvnItem>(GetService<SvnSccProvider>(typeof(ITheAnkhSvnSccProvider)).GetAllDocumentItems(_name));
 
                 uint[] cookies = new uint[items.Count];
                 _fileChangeCookies = cookies;

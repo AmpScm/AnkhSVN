@@ -117,11 +117,11 @@ namespace Ankh.Scc
             get { return _selection ?? (_selection = GetService<ISelectionContextEx>(typeof(ISelectionContext))); }
         }
 
-        AnkhSccProvider _sccProvider;
-        AnkhSccProvider SccProvider
+        SvnSccProvider _sccProvider;
+        SvnSccProvider SccProvider
         {
             [DebuggerStepThrough]
-            get { return _sccProvider ?? (_sccProvider = GetService<AnkhSccProvider>(typeof(IAnkhSccService))); }
+            get { return _sccProvider ?? (_sccProvider = GetService<SvnSccProvider>(typeof(IAnkhSccService))); }
         }
 
         void PostDirty(bool checkDelay)
@@ -240,7 +240,7 @@ namespace Ankh.Scc
             HybridCollection<string> dirtyCheck;
             HybridCollection<string> maybeAdd;
 
-            AnkhSccProvider provider = GetService<AnkhSccProvider>();
+            SvnSccProvider provider = GetService<SvnSccProvider>();
 
             lock (_lock)
             {

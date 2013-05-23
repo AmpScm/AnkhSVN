@@ -66,11 +66,11 @@ namespace Ankh.Scc
             get { return _docTable ?? (_docTable = GetService<IVsRunningDocumentTable>(typeof(SVsRunningDocumentTable))); }
         }
 
-        AnkhSccProvider _sccProvider;
-        protected AnkhSccProvider SccProvider
+        SvnSccProvider _sccProvider;
+        protected SvnSccProvider SccProvider
         {
             [DebuggerStepThrough]
-            get { return _sccProvider ?? (_sccProvider = GetService<AnkhSccProvider>()); }
+            get { return _sccProvider ?? (_sccProvider = GetService<SvnSccProvider>()); }
         }
 
         ProjectTracker _projectTracker;

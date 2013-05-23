@@ -60,7 +60,7 @@ namespace Ankh.Scc.ProjectMap
         bool _loaded;
         string _projectFile;
         bool _checkedProjectFile;
-        AnkhSccProvider _scc;
+        SvnSccProvider _scc;
         SvnProject _svnProjectInstance;
         string _projectLocation;
         string _projectName;
@@ -651,9 +651,9 @@ namespace Ankh.Scc.ProjectMap
 
         #region Helper code
 
-        AnkhSccProvider Scc
+        SvnSccProvider Scc
         {
-            get { return _scc ?? (_scc = GetService<AnkhSccProvider>()); }
+            get { return _scc ?? (_scc = GetService<SvnSccProvider>()); }
         }
 
         SccEnlistChoice? _sccEnlistChoice;

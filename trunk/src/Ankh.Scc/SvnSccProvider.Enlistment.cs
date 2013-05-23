@@ -43,7 +43,7 @@ namespace Ankh.Scc
         int Write(string pszPropName, ref object pVar);
     }
 
-    partial class AnkhSccProvider
+    partial class SvnSccProvider
     {
         bool _translateDataLoaded;
         readonly Dictionary<string, string> _trueNameMap = new Dictionary<string, string>();
