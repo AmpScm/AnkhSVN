@@ -6,7 +6,7 @@
     <PropertyRef Id="VS2005DEVENV" />
 
     <InstallExecuteSequence>
-      <Custom Action="AnkhVS2005Setup" Before="InstallFinalize" Overridable="yes">VS2005DEVENV And Not UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action="AnkhVS2005Setup" Before="InstallFinalize" Overridable="yes">VS2005DEVENV And ((Not UPGRADINGPRODUCTCODE) Or REINSTALL)</Custom>
     </InstallExecuteSequence>
   </Fragment>
 
@@ -15,7 +15,7 @@
     <PropertyRef Id="VS90DEVENV" />
 
     <InstallExecuteSequence>
-      <Custom Action="AnkhVS2008Setup" Before="InstallFinalize" Overridable="yes">VS90DEVENV And Not UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action="AnkhVS2008Setup" Before="InstallFinalize" Overridable="yes">VS90DEVENV And ((Not UPGRADINGPRODUCTCODE) Or REINSTALL)</Custom>
     </InstallExecuteSequence>
   </Fragment>
 
@@ -24,7 +24,7 @@
     <PropertyRef Id="VS2010DEVENV" />
 
     <InstallExecuteSequence>
-      <Custom Action="AnkhVS2010Setup" Before="InstallFinalize" Overridable="yes">VS2010DEVENV And Not UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action="AnkhVS2010Setup" Before="InstallFinalize" Overridable="yes">VS2010DEVENV And ((Not UPGRADINGPRODUCTCODE) Or REINSTALL)</Custom>
     </InstallExecuteSequence>
   </Fragment>
 
@@ -33,16 +33,16 @@
     <PropertyRef Id="VS11DEVENV" />
 
     <InstallExecuteSequence>
-      <Custom Action="AnkhVS2012Setup" Before="InstallFinalize" Overridable="yes">VS11DEVENV And Not UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action="AnkhVS2012Setup" Before="InstallFinalize" Overridable="yes">VS11DEVENV And ((Not UPGRADINGPRODUCTCODE) Or REINSTALL)</Custom>
     </InstallExecuteSequence>
   </Fragment>
 
   <Fragment>
     <CustomAction Id="AnkhVS12.0Setup" Property="VS12DEVENV" ExeCommand="/setup /NoSetupVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
-    <PropertyRef Id="VS11DEVENV" />
+    <PropertyRef Id="VS12DEVENV" />
 
     <InstallExecuteSequence>
-      <Custom Action="AnkhVS12.0Setup" Before="InstallFinalize" Overridable="yes">VS12DEVENV And Not UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action="AnkhVS12.0Setup" Before="InstallFinalize" Overridable="yes">VS12DEVENV And ((Not UPGRADINGPRODUCTCODE) Or REINSTALL)</Custom>
     </InstallExecuteSequence>
   </Fragment>
 
