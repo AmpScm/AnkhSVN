@@ -27,7 +27,7 @@ namespace Ankh.Commands.RepositoryExplorer
     /// <summary>
     /// Command to checkout a Subversion repository.
     /// </summary>
-    [Command(AnkhCommand.Checkout, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.Checkout, AlwaysAvailable=true)]
     class CheckoutCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

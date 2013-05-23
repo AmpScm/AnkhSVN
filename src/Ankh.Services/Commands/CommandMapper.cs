@@ -220,7 +220,7 @@ namespace Ankh.Commands
 
                     ICommandHandler instance = null;
 
-                    foreach (CommandAttribute cmdAttr in type.GetCustomAttributes(typeof(CommandAttribute), false))
+                    foreach (SvnCommandAttribute cmdAttr in type.GetCustomAttributes(typeof(CommandAttribute), false))
                     {
                         if (cmdAttr.Context != _commandContext || !cmdAttr.Applies())
                             continue;

@@ -28,8 +28,8 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to revert current item to last updated revision.
     /// </summary>
-    [Command(AnkhCommand.RevertItem)]
-    [Command(AnkhCommand.ItemRevertBase, HideWhenDisabled = false)]
+    [SvnCommand(AnkhCommand.RevertItem)]
+    [SvnCommand(AnkhCommand.ItemRevertBase, HideWhenDisabled = false)]
     class RevertItemCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

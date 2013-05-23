@@ -22,9 +22,9 @@ using Ankh.UI.PendingChanges.Commits;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
-    [Command(AnkhCommand.CommitPendingChanges)]
-    [Command(AnkhCommand.CommitPendingChangesKeepingLocks)]
-    [Command(AnkhCommand.PendingChangesApplyWorkingCopy)]
+    [SvnCommand(AnkhCommand.CommitPendingChanges)]
+    [SvnCommand(AnkhCommand.CommitPendingChangesKeepingLocks)]
+    [SvnCommand(AnkhCommand.PendingChangesApplyWorkingCopy)]
     class CommitPendingChanges : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

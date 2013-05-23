@@ -29,9 +29,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to lock the selected item.
     /// </summary>
-    [Command(AnkhCommand.Lock)]
-    [Command(AnkhCommand.LockMustLock)]
-    [Command(AnkhCommand.SccLock)]
+    [SvnCommand(AnkhCommand.Lock)]
+    [SvnCommand(AnkhCommand.LockMustLock)]
+    [SvnCommand(AnkhCommand.SccLock)]
     class LockCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

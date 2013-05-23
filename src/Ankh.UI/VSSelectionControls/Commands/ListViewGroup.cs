@@ -22,8 +22,8 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.VSSelectionControls.Commands
 {
-    [Command(AnkhCommand.ListViewGroup0, LastCommand = AnkhCommand.ListViewGroupMax, AlwaysAvailable = true)]
-    [Command((AnkhCommand)AnkhCommandMenu.ListViewGroup, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.ListViewGroup0, LastCommand = AnkhCommand.ListViewGroupMax, AlwaysAvailable = true)]
+    [SvnCommand((AnkhCommand)AnkhCommandMenu.ListViewGroup, AlwaysAvailable=true)]
     class ListViewGroup : ListViewCommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

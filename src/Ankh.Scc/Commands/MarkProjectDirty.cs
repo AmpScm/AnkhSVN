@@ -19,7 +19,7 @@ using Ankh.Commands;
 
 namespace Ankh.Scc.Commands
 {
-    [Command(AnkhCommand.MarkProjectDirty, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.MarkProjectDirty, AlwaysAvailable = true)]
     public class MarkProjectDirty : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

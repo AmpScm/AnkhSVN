@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.UpgradeWorkingCopy)]
+    [SvnCommand(AnkhCommand.UpgradeWorkingCopy)]
     sealed class UpgradeWorkingCopy : CommandBase, IComponent
     {
         ISite _site;

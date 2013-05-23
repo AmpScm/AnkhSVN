@@ -6,8 +6,8 @@ using Ankh.Scc;
 
 namespace Ankh.UI.SvnInfoGrid.Commands
 {
-    [Command(AnkhCommand.SvnInfoComboBox, AlwaysAvailable=true)]
-    [Command(AnkhCommand.SvnInfoComboBoxFill, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.SvnInfoComboBox, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.SvnInfoComboBoxFill, AlwaysAvailable = true)]
     class SvnInfoComboCommand : ICommandHandler
     {
         SvnInfoGridControl _control;

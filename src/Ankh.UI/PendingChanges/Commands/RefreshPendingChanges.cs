@@ -23,7 +23,7 @@ using Ankh.UI.PendingChanges.Synchronize;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
-    [Command(AnkhCommand.RefreshPendingChanges)]
+    [SvnCommand(AnkhCommand.RefreshPendingChanges)]
     public class RefreshPendingChanges : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

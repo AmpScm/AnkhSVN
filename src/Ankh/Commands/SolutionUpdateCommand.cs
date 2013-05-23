@@ -26,13 +26,13 @@ using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.PendingChangesUpdateLatest, HideWhenDisabled = false)]
-    [Command(AnkhCommand.SolutionUpdateLatest)]
-    [Command(AnkhCommand.SolutionUpdateSpecific)]
-    [Command(AnkhCommand.ProjectUpdateLatest)]
-    [Command(AnkhCommand.ProjectUpdateSpecific)]
-    [Command(AnkhCommand.FolderUpdateSpecific)]
-    [Command(AnkhCommand.FolderUpdateLatest)]
+    [SvnCommand(AnkhCommand.PendingChangesUpdateLatest, HideWhenDisabled = false)]
+    [SvnCommand(AnkhCommand.SolutionUpdateLatest)]
+    [SvnCommand(AnkhCommand.SolutionUpdateSpecific)]
+    [SvnCommand(AnkhCommand.ProjectUpdateLatest)]
+    [SvnCommand(AnkhCommand.ProjectUpdateSpecific)]
+    [SvnCommand(AnkhCommand.FolderUpdateSpecific)]
+    [SvnCommand(AnkhCommand.FolderUpdateLatest)]
     class SolutionUpdateCommand : CommandBase
     {
         static bool IsSolutionCommand(AnkhCommand command)

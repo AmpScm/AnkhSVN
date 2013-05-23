@@ -24,7 +24,7 @@ using System.Windows.Forms;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
-    [Command(AnkhCommand.RenameRepositoryItem, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.RenameRepositoryItem, AlwaysAvailable=true)]
     class RenameNode : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

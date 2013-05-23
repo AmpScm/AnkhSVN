@@ -26,7 +26,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to add selected items to the working copy.
     /// </summary>
-    [Command(AnkhCommand.AddItem, ArgumentDefinition = "d")]
+    [SvnCommand(AnkhCommand.AddItem, ArgumentDefinition = "d")]
     class AddItemCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

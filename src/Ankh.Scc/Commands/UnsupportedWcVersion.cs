@@ -22,8 +22,8 @@ using Ankh.UI;
 
 namespace Ankh.Scc.Commands
 {
-    [Command(AnkhCommand.NotifyWcToNew, AlwaysAvailable=true)]
-    [Command(AnkhCommand.NotifyUpgradeRequired, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.NotifyWcToNew, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.NotifyUpgradeRequired, AlwaysAvailable=true)]
     class UnsupportedWcVersion : ICommandHandler
     {
 

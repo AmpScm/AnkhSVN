@@ -29,14 +29,14 @@ namespace Ankh.Commands
     /// <summary>
     /// Shows differences compared to local text base.
     /// </summary>
-    [Command(AnkhCommand.DiffLocalItem)]
-    [Command(AnkhCommand.ItemCompareBase)]
-    [Command(AnkhCommand.ItemCompareCommitted)]
-    [Command(AnkhCommand.ItemCompareLatest)]
-    [Command(AnkhCommand.ItemComparePrevious)]
-    [Command(AnkhCommand.ItemCompareSpecific)]
-    [Command(AnkhCommand.ItemShowChanges)]
-    [Command(AnkhCommand.DocumentShowChanges)]
+    [SvnCommand(AnkhCommand.DiffLocalItem)]
+    [SvnCommand(AnkhCommand.ItemCompareBase)]
+    [SvnCommand(AnkhCommand.ItemCompareCommitted)]
+    [SvnCommand(AnkhCommand.ItemCompareLatest)]
+    [SvnCommand(AnkhCommand.ItemComparePrevious)]
+    [SvnCommand(AnkhCommand.ItemCompareSpecific)]
+    [SvnCommand(AnkhCommand.ItemShowChanges)]
+    [SvnCommand(AnkhCommand.DocumentShowChanges)]
     public sealed class DiffLocalItem : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

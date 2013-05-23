@@ -7,8 +7,8 @@ using System.Text;
 
 namespace Ankh.Scc.Commands
 {
-    [Command(AnkhCommand.SccSccReCheckoutFailedProject)]
-    [Command(AnkhCommand.SccEditFailedProjectLocation)]
+    [SvnCommand(AnkhCommand.SccSccReCheckoutFailedProject)]
+    [SvnCommand(AnkhCommand.SccEditFailedProjectLocation)]
     sealed class SccCheckoutFailedProject : ICommandHandler
     {
         static readonly object _failedProjectsKey = new object();

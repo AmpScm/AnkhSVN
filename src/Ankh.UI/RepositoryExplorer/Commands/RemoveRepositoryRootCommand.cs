@@ -22,7 +22,7 @@ namespace Ankh.UI.RepositoryExplorer.Commands
     /// <summary>
     /// Command to remove a URL from the Repository Explorer.
     /// </summary>
-    [Command(AnkhCommand.RemoveRepositoryRoot, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.RemoveRepositoryRoot, AlwaysAvailable=true)]
     sealed class RemoveRepositoryRootCommand : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

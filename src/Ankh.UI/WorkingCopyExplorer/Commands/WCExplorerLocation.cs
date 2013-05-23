@@ -5,8 +5,8 @@ using Ankh.Commands;
 
 namespace Ankh.UI.WorkingCopyExplorer.Commands
 {
-    [Command(AnkhCommand.WCExplorerComboBox, AlwaysAvailable=true)]
-    [Command(AnkhCommand.WCExplorerComboBoxFill, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.WCExplorerComboBox, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.WCExplorerComboBoxFill, AlwaysAvailable = true)]
     sealed class WCExplorerLocation : ICommandHandler
     {
         WorkingCopyExplorerControl _ctrl;

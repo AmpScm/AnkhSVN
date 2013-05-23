@@ -5,7 +5,7 @@ using Ankh.Commands;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
-    [Command(AnkhCommand.PendingChangesSpacer, AlwaysAvailable=true, HideWhenDisabled=false)]
+    [SvnCommand(AnkhCommand.PendingChangesSpacer, AlwaysAvailable=true, HideWhenDisabled=false)]
     sealed class SpacerHider : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

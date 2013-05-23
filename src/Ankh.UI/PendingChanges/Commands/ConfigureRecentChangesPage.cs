@@ -6,7 +6,7 @@ using Ankh.Configuration;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
-    [Command(AnkhCommand.PendingChangesConfigureRecentChangesPage)]
+    [SvnCommand(AnkhCommand.PendingChangesConfigureRecentChangesPage)]
     class ConfigureRecentChangesPage : ICommandHandler
     {
         #region ICommandHandler Members

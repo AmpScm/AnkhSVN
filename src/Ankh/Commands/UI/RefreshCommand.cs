@@ -21,7 +21,7 @@ namespace Ankh.Commands.UI
     /// <summary>
     /// Command to refresh this view.
     /// </summary>
-    [Command(AnkhCommand.Refresh)]
+    [SvnCommand(AnkhCommand.Refresh)]
     class RefreshCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

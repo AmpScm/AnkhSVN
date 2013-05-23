@@ -27,7 +27,7 @@ using Ankh.Commands;
 
 namespace Ankh.Scc.SccUI.Commands
 {
-    [Command(AnkhCommand.FileSccChangeSourceControl)]
+    [SvnCommand(AnkhCommand.FileSccChangeSourceControl)]
     sealed class ChangeSourceControlCommand : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

@@ -29,10 +29,10 @@ namespace Ankh.Commands
     /// <remarks>
     /// If project/solution (logical) node is selected, target for this command is the project/solution (physical) folder.
     /// </remarks>
-    [Command(AnkhCommand.ItemEditProperties)]
-    [Command(AnkhCommand.ProjectEditProperties)]
-    [Command(AnkhCommand.SolutionEditProperties)]
-    [Command(AnkhCommand.ItemShowPropertyChanges)]
+    [SvnCommand(AnkhCommand.ItemEditProperties)]
+    [SvnCommand(AnkhCommand.ProjectEditProperties)]
+    [SvnCommand(AnkhCommand.SolutionEditProperties)]
+    [SvnCommand(AnkhCommand.ItemShowPropertyChanges)]
     class ItemEditPropertiesCommand : CommandBase
     {
         /// <summary>

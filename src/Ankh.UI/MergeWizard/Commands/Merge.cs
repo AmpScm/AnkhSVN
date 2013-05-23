@@ -26,9 +26,9 @@ using Ankh.Selection;
 
 namespace Ankh.UI.MergeWizard.Commands
 {
-    [Command(AnkhCommand.ItemMerge)]
-    [Command(AnkhCommand.ProjectMerge)]
-    [Command(AnkhCommand.SolutionMerge)]
+    [SvnCommand(AnkhCommand.ItemMerge)]
+    [SvnCommand(AnkhCommand.ProjectMerge)]
+    [SvnCommand(AnkhCommand.SolutionMerge)]
     class Merge : ICommandHandler
     {
         /// <see cref="Ankh.Commands.ICommandHandler.OnUpdate" />

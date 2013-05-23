@@ -25,7 +25,7 @@ using Ankh.IssueTracker;
 
 namespace Ankh.UI.IssueTracker
 {
-    [Command(AnkhCommand.SolutionIssueTrackerSetup)]
+    [SvnCommand(AnkhCommand.SolutionIssueTrackerSetup)]
     class IssueTrackerSetupCommand : ICommandHandler
     {
         #region ICommandHandler Members

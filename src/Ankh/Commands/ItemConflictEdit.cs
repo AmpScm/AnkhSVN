@@ -21,9 +21,9 @@ using Ankh.UI;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.ItemConflictEdit)]
-    [Command(AnkhCommand.DocumentConflictEdit)]
-    [Command(AnkhCommand.ItemConflictEditVisualStudio)]
+    [SvnCommand(AnkhCommand.ItemConflictEdit)]
+    [SvnCommand(AnkhCommand.DocumentConflictEdit)]
+    [SvnCommand(AnkhCommand.ItemConflictEditVisualStudio)]
     class ItemConflictEdit : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

@@ -18,7 +18,7 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
-    [Command(AnkhCommand.PendingChangesCreatePatch)]
+    [SvnCommand(AnkhCommand.PendingChangesCreatePatch)]
     class CreatePatch : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

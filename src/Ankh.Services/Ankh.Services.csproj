@@ -61,11 +61,12 @@
     <Compile Include="AnkhServiceEvents.cs" />
     <Compile Include="Commands\AnkhAction.cs" />
     <Compile Include="Commands\CommandTarget.cs" />
+    <Compile Include="Commands\CommandAttribute.cs" />
     <Compile Include="ContextServices\GuidUtils.cs" />
     <Compile Include="EnumHelpers.cs" />
     <Compile Include="GlobalServiceAttribute.cs" />
     <Compile Include="Commands\BaseCommandEventArgs.cs" />
-    <Compile Include="Commands\CommandAttribute.cs" />
+    <Compile Include="Commands\SvnCommandAttribute.cs" />
     <Compile Include="Commands\CommandEventArgs.cs" />
     <Compile Include="Commands\CommandMapItem.cs" />
     <Compile Include="Commands\CommandMapper.cs" />

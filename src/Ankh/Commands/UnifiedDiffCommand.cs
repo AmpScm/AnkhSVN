@@ -27,7 +27,7 @@ using Ankh.VS;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.UnifiedDiff)]
+    [SvnCommand(AnkhCommand.UnifiedDiff)]
     class UnifiedDiffCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

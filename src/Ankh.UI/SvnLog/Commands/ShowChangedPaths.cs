@@ -19,7 +19,7 @@ using Ankh.Commands;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogShowChangedPaths, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.LogShowChangedPaths, AlwaysAvailable = true)]
     sealed class ShowChangedPaths : ICommandHandler
     {
         LogToolWindowControl _ctrl;

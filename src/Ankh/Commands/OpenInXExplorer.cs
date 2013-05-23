@@ -23,10 +23,10 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.ItemSelectInFileExplorer)]
-    [Command(AnkhCommand.ItemSelectInRepositoryExplorer)]
-    [Command(AnkhCommand.ItemSelectInSolutionExplorer)]
-    [Command(AnkhCommand.ItemSelectInWorkingCopyExplorer)]
+    [SvnCommand(AnkhCommand.ItemSelectInFileExplorer)]
+    [SvnCommand(AnkhCommand.ItemSelectInRepositoryExplorer)]
+    [SvnCommand(AnkhCommand.ItemSelectInSolutionExplorer)]
+    [SvnCommand(AnkhCommand.ItemSelectInWorkingCopyExplorer)]
     class OpenInXExplorer : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

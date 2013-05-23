@@ -24,8 +24,8 @@ using Ankh.UI.SccManagement;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
-    [Command(AnkhCommand.ReposCopyTo, AlwaysAvailable=true)]
-    [Command(AnkhCommand.ReposMoveTo, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.ReposCopyTo, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.ReposMoveTo, AlwaysAvailable=true)]
     class CopyToOrMove : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

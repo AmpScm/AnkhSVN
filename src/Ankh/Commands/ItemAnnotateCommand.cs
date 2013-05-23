@@ -32,10 +32,10 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to identify which users to blame for which lines.
     /// </summary>
-    [Command(AnkhCommand.ItemAnnotate)]
-    [Command(AnkhCommand.LogAnnotateRevision)]
-    [Command(AnkhCommand.SvnNodeAnnotate)]
-    [Command(AnkhCommand.DocumentAnnotate)]
+    [SvnCommand(AnkhCommand.ItemAnnotate)]
+    [SvnCommand(AnkhCommand.LogAnnotateRevision)]
+    [SvnCommand(AnkhCommand.SvnNodeAnnotate)]
+    [SvnCommand(AnkhCommand.DocumentAnnotate)]
     class ItemAnnotateCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

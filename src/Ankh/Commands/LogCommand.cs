@@ -29,12 +29,12 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to show the change log for the selected item.
     /// </summary>
-    [Command(AnkhCommand.Log)]
-    [Command(AnkhCommand.DocumentHistory)]
-    [Command(AnkhCommand.ProjectHistory)]
-    [Command(AnkhCommand.SolutionHistory)]
-    [Command(AnkhCommand.ReposExplorerLog, AlwaysAvailable = true)]
-    [Command(AnkhCommand.AnnotateShowLog, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.Log)]
+    [SvnCommand(AnkhCommand.DocumentHistory)]
+    [SvnCommand(AnkhCommand.ProjectHistory)]
+    [SvnCommand(AnkhCommand.SolutionHistory)]
+    [SvnCommand(AnkhCommand.ReposExplorerLog, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.AnnotateShowLog, AlwaysAvailable = true)]
     sealed class LogCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

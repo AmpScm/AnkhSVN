@@ -23,8 +23,8 @@ using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.ProjectCommit)]
-    [Command(AnkhCommand.SolutionCommit)]
+    [SvnCommand(AnkhCommand.ProjectCommit)]
+    [SvnCommand(AnkhCommand.SolutionCommit)]
     class SolutionCommitCommand : CommandBase
     {
         string logMessage;

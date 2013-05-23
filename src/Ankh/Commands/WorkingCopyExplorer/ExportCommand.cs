@@ -24,7 +24,7 @@ namespace Ankh.Commands.WorkingCopyExplorer
     /// <summary>
     /// Command to export a Subversion repository or local folder.
     /// </summary>
-    [Command(AnkhCommand.Export, HideWhenDisabled = false)]
+    [SvnCommand(AnkhCommand.Export, HideWhenDisabled = false)]
     class ExportCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

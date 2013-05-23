@@ -24,7 +24,7 @@ using Ankh.UI.PathSelector;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.CreatePatch)]
+    [SvnCommand(AnkhCommand.CreatePatch)]
     class CreatePatch : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

@@ -26,7 +26,7 @@ using Ankh.VS;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogChangeLogMessage, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.LogChangeLogMessage, AlwaysAvailable = true)]
     class ChangeLogMessage : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

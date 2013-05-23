@@ -7,8 +7,8 @@ using Ankh.UI.SvnInfoGrid;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.SvnLogComboBox, AlwaysAvailable = true)]
-    [Command(AnkhCommand.SvnLogComboBoxFill, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.SvnLogComboBox, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.SvnLogComboBoxFill, AlwaysAvailable = true)]
     sealed class LogComboBox : ICommandHandler
     {
         LogToolWindowControl _ctrl;

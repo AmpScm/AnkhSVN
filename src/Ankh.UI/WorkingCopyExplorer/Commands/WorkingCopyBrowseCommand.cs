@@ -25,8 +25,8 @@ namespace Ankh.UI.WorkingCopyExplorer.Commands
     /// <summary>
     /// Command to add a new root to the Working Copy Explorer.
     /// </summary>
-    [Command(AnkhCommand.WorkingCopyBrowse, ArgumentDefinition="d")]
-    [Command(AnkhCommand.WorkingCopyAdd, ArgumentDefinition = "d")]
+    [SvnCommand(AnkhCommand.WorkingCopyBrowse, ArgumentDefinition="d")]
+    [SvnCommand(AnkhCommand.WorkingCopyAdd, ArgumentDefinition = "d")]
     class AddWorkingCopyExplorerRootCommand : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

@@ -30,7 +30,7 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.ItemDelete)]
+    [SvnCommand(AnkhCommand.ItemDelete)]
     class ItemDelete : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

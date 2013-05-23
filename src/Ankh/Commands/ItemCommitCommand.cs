@@ -24,8 +24,8 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to commit selected items to the Subversion repository.
     /// </summary>
-    [Command(AnkhCommand.CommitItem)]
-    [Command(AnkhCommand.CommitProjectFile)]
+    [SvnCommand(AnkhCommand.CommitItem)]
+    [SvnCommand(AnkhCommand.CommitProjectFile)]
     class ItemCommitCommand : CommandBase
     {
         string storedLogMessage;

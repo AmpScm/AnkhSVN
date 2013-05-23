@@ -24,7 +24,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to cleanup the working copy.
     /// </summary>
-    [Command(AnkhCommand.Cleanup)]
+    [SvnCommand(AnkhCommand.Cleanup)]
     class Cleanup : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

@@ -22,7 +22,7 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogIncludeMergedRevisions, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.LogIncludeMergedRevisions, AlwaysAvailable = true)]
     sealed class IncludeMergedRevisions : ICommandHandler
     {
         LogToolWindowControl _ctrl;

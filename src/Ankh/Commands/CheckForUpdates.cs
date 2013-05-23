@@ -78,7 +78,7 @@ using Ankh.UI.SccManagement;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.CheckForUpdates, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.CheckForUpdates, AlwaysAvailable = true)]
     sealed class CheckForUpdates : CommandBase, IComponent
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

@@ -25,7 +25,7 @@ using Ankh.UI;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
-    [Command(AnkhCommand.CopyToWorkingCopy, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.CopyToWorkingCopy, AlwaysAvailable = true)]
     class CopyToWorkingCopy : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
