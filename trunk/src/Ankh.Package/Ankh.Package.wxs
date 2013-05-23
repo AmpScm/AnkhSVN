@@ -60,22 +60,27 @@
     <ComponentGroup Id="PkgReg2005">
       <ComponentGroupRef Id="Ankh.Package" />
       <ComponentRef Id="CR_Pkg_2005" />
+      <ComponentGroupRef Id="Tick_VS80"/>
     </ComponentGroup>
     <ComponentGroup Id="PkgReg2008">
       <ComponentGroupRef Id="Ankh.Package" />
       <ComponentRef Id="CR_Pkg_2008" />
+      <ComponentGroupRef Id="Tick_VS90"/>
     </ComponentGroup>
     <ComponentGroup Id="PkgReg2010">
       <ComponentGroupRef Id="Ankh.Package" />
       <ComponentRef Id="CR_Pkg_2010" />
+      <ComponentGroupRef Id="Tick_VS100"/>
     </ComponentGroup>
     <ComponentGroup Id="PkgReg2012">
       <ComponentGroupRef Id="Ankh.Package" />
       <ComponentRef Id="CR_Pkg_2012" />
+      <ComponentGroupRef Id="Tick_VS110"/>
     </ComponentGroup>
     <ComponentGroup Id="PkgReg12.0">
       <ComponentGroupRef Id="Ankh.Package" />
       <ComponentRef Id="CR_Pkg_12.0"/>
+      <ComponentGroupRef Id="Tick_VS120"/>
     </ComponentGroup>
   </Fragment>
 </Wix>
