@@ -30,10 +30,10 @@ namespace Ankh.Commands.RepositoryExplorer
     /// <summary>
     /// A command that opens a file from the server in VS.NET
     /// </summary>
-    [Command(AnkhCommand.ViewInVsNet, AlwaysAvailable=true)]
-    [Command(AnkhCommand.ViewInWindows, AlwaysAvailable=true)]
-    [Command(AnkhCommand.ViewInVsText, AlwaysAvailable=true)]
-    [Command(AnkhCommand.ViewInWindowsWith, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.ViewInVsNet, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.ViewInWindows, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.ViewInVsText, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.ViewInWindowsWith, AlwaysAvailable=true)]
     class ViewInVSNetCommand : ViewRepositoryFileCommand
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

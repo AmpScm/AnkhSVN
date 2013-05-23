@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Ankh.UI.RepositoryExplorer.Commands
 {
-    [Command(AnkhCommand.RepositoryExplorerComboBox, AlwaysAvailable=true)]
-    [Command(AnkhCommand.RepositoryExplorerComboBoxFill, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.RepositoryExplorerComboBox, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.RepositoryExplorerComboBoxFill, AlwaysAvailable = true)]
     sealed class RepositoryExplorerLocation : ICommandHandler
     {
         RepositoryExplorerControl _ctrl;

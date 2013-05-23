@@ -19,7 +19,7 @@ using Ankh.Commands;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogFetchAll, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.LogFetchAll, AlwaysAvailable=true)]
     class FetchAll : ICommandHandler
     {
         LogToolWindowControl _ctrl;

@@ -21,7 +21,7 @@ using Ankh.Commands;
 
 namespace Ankh.UI.Commands
 {
-    [Command(AnkhCommand.ForceUIShow, AlwaysAvailable=true, MaxVersion=VSInstance.VS2008)]
+    [SvnCommand(AnkhCommand.ForceUIShow, AlwaysAvailable=true, MaxVersion=VSInstance.VS2008)]
     sealed class UIEditCommand : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

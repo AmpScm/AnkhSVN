@@ -7,7 +7,7 @@ using Ankh.Commands;
 
 namespace Ankh.Scc.SccUI.Commands
 {
-    [Command(AnkhCommand.MakeNonSccFileWriteable, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.MakeNonSccFileWriteable, AlwaysAvailable=true)]
     class MakeNonSccFileWritableCommand : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

@@ -23,8 +23,8 @@ using SharpSvn;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
-    [Command(AnkhCommand.RepositoryShowChanges, AlwaysAvailable = true)]
-    [Command(AnkhCommand.RepositoryCompareWithWc, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.RepositoryShowChanges, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.RepositoryCompareWithWc, AlwaysAvailable = true)]
     class ShowRepositoryItemChanges : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

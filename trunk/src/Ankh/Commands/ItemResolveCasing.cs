@@ -23,7 +23,7 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.ItemResolveCasing)]
+    [SvnCommand(AnkhCommand.ItemResolveCasing)]
     class ItemResolveCasing : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

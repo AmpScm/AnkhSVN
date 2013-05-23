@@ -24,8 +24,8 @@ using System.ComponentModel.Design;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
-    [Command(AnkhCommand.SolutionSwitchComboFill)]
-    [Command(AnkhCommand.SolutionSwitchCombo)]
+    [SvnCommand(AnkhCommand.SolutionSwitchComboFill)]
+    [SvnCommand(AnkhCommand.SolutionSwitchCombo)]
     class PendingChangeLocationCombo : ICommandHandler, IComponent
     {
         ISite _site;

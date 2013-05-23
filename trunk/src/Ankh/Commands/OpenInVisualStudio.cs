@@ -28,9 +28,9 @@ using Ankh.Scc;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.ItemOpenVisualStudio)]
-    [Command(AnkhCommand.ItemOpenTextEditor)]
-    [Command(AnkhCommand.ItemOpenWindows)]
+    [SvnCommand(AnkhCommand.ItemOpenVisualStudio)]
+    [SvnCommand(AnkhCommand.ItemOpenTextEditor)]
+    [SvnCommand(AnkhCommand.ItemOpenWindows)]
     class OpenInVisualStudio : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

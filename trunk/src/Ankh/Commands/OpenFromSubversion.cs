@@ -27,10 +27,10 @@ using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.FileFileOpenFromSubversion, AlwaysAvailable = true, ArgumentDefinition = "u")]
-    [Command(AnkhCommand.FileFileAddFromSubversion, AlwaysAvailable = true, ArgumentDefinition = "u")]
-    [Command(AnkhCommand.FileSccOpenFromSubversion)]
-    [Command(AnkhCommand.FileSccAddFromSubversion)]
+    [SvnCommand(AnkhCommand.FileFileOpenFromSubversion, AlwaysAvailable = true, ArgumentDefinition = "u")]
+    [SvnCommand(AnkhCommand.FileFileAddFromSubversion, AlwaysAvailable = true, ArgumentDefinition = "u")]
+    [SvnCommand(AnkhCommand.FileSccOpenFromSubversion)]
+    [SvnCommand(AnkhCommand.FileSccAddFromSubversion)]
     class OpenFromSubversion : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

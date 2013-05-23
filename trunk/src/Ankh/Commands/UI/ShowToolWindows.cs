@@ -23,10 +23,10 @@ namespace Ankh.Commands.UI
     /// <summary>
     /// Command implementation of the show toolwindow commands
     /// </summary>
-    [Command(AnkhCommand.ShowPendingChanges)]
-    [Command(AnkhCommand.ShowWorkingCopyExplorer)]
-    [Command(AnkhCommand.ShowSubversionInfo)]
-    [Command(AnkhCommand.ShowRepositoryExplorer, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.ShowPendingChanges)]
+    [SvnCommand(AnkhCommand.ShowWorkingCopyExplorer)]
+    [SvnCommand(AnkhCommand.ShowSubversionInfo)]
+    [SvnCommand(AnkhCommand.ShowRepositoryExplorer, AlwaysAvailable=true)]
     class ShowToolWindows : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

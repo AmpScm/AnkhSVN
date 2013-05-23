@@ -23,10 +23,10 @@ using Ankh.Scc;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.ItemIgnoreFile)]
-    [Command(AnkhCommand.ItemIgnoreFileType)]
-    [Command(AnkhCommand.ItemIgnoreFilesInFolder)]
-    [Command(AnkhCommand.ItemIgnoreFolder)]
+    [SvnCommand(AnkhCommand.ItemIgnoreFile)]
+    [SvnCommand(AnkhCommand.ItemIgnoreFileType)]
+    [SvnCommand(AnkhCommand.ItemIgnoreFilesInFolder)]
+    [SvnCommand(AnkhCommand.ItemIgnoreFolder)]
     class ItemIgnore : CommandBase
     {
         static bool Skip(SvnItem item)

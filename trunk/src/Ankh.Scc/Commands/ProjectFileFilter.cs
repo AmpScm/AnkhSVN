@@ -22,7 +22,7 @@ using Ankh.Selection;
 
 namespace Ankh.Scc.Commands
 {
-    [Command((AnkhCommand)AnkhCommandMenu.ProjectFileScc)]
+    [SvnCommand((AnkhCommand)AnkhCommandMenu.ProjectFileScc)]
     class ProjectFileFilter : ICommandHandler
     {
         #region ICommandHandler Members

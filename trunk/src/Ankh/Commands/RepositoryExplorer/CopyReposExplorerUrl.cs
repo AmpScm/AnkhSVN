@@ -24,7 +24,7 @@ namespace Ankh.Commands.RepositoryExplorer
     /// <summary>
     /// Command to copy the URL of this item to the clipboard in Repository Explorer.
     /// </summary>
-    [Command(AnkhCommand.CopyReposExplorerUrl, AlwaysAvailable=true)]
+    [SvnCommand(AnkhCommand.CopyReposExplorerUrl, AlwaysAvailable=true)]
     class CopyReposExplorerUrl : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

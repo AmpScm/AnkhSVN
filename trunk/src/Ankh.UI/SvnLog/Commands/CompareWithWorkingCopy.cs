@@ -24,7 +24,7 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogCompareWithWorkingCopy, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.LogCompareWithWorkingCopy, AlwaysAvailable = true)]
     public class CompareWithWorkingCopy : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

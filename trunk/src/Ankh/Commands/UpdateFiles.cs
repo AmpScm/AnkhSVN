@@ -27,10 +27,10 @@ namespace Ankh.Commands
     /// <summary>
     /// A command that updates an item.
     /// </summary>
-    [Command(AnkhCommand.UpdateItemSpecific)]
-    [Command(AnkhCommand.UpdateItemLatest)]
-    [Command(AnkhCommand.UpdateItemLatestRecursive)]
-    [Command(AnkhCommand.UpdateProjectFileSpecific)]
+    [SvnCommand(AnkhCommand.UpdateItemSpecific)]
+    [SvnCommand(AnkhCommand.UpdateItemLatest)]
+    [SvnCommand(AnkhCommand.UpdateItemLatestRecursive)]
+    [SvnCommand(AnkhCommand.UpdateProjectFileSpecific)]
     sealed class UpdateFiles : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

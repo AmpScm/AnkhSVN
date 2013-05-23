@@ -22,10 +22,10 @@ using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.MoveToNewChangeList)]
-    [Command(AnkhCommand.MoveToIgnoreChangeList)]
-    [Command(AnkhCommand.RemoveFromChangeList)]
-    [Command(AnkhCommand.MoveToExistingChangeList0, LastCommand=AnkhCommand.MoveToExistingChangeListMax)]
+    [SvnCommand(AnkhCommand.MoveToNewChangeList)]
+    [SvnCommand(AnkhCommand.MoveToIgnoreChangeList)]
+    [SvnCommand(AnkhCommand.RemoveFromChangeList)]
+    [SvnCommand(AnkhCommand.MoveToExistingChangeList0, LastCommand=AnkhCommand.MoveToExistingChangeListMax)]
     class ItemMoveToChangeList : CommandBase
     {
         const string IgnoreOnCommit = "ignore-on-commit";

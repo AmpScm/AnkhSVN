@@ -25,8 +25,8 @@ using Ankh.UI.Commands;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
-    [Command(AnkhCommand.PcLogEditorPasteFileList, HideWhenDisabled=false)]
-    [Command(AnkhCommand.PcLogEditorPasteRecentLog, HideWhenDisabled=false)]
+    [SvnCommand(AnkhCommand.PcLogEditorPasteFileList, HideWhenDisabled=false)]
+    [SvnCommand(AnkhCommand.PcLogEditorPasteRecentLog, HideWhenDisabled=false)]
     class PasteToEditorList : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

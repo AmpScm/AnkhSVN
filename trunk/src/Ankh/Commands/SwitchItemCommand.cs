@@ -29,9 +29,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to switch current item to a different URL.
     /// </summary>
-    [Command(AnkhCommand.SwitchItem)]
-    [Command(AnkhCommand.SolutionSwitchDialog)]
-    [Command(AnkhCommand.SwitchProject)]
+    [SvnCommand(AnkhCommand.SwitchItem)]
+    [SvnCommand(AnkhCommand.SolutionSwitchDialog)]
+    [SvnCommand(AnkhCommand.SwitchProject)]
     class SwitchItemCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

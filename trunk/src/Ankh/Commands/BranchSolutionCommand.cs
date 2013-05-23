@@ -25,8 +25,8 @@ using Ankh.Selection;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.ProjectBranch)]
-    [Command(AnkhCommand.SolutionBranch)]
+    [SvnCommand(AnkhCommand.ProjectBranch)]
+    [SvnCommand(AnkhCommand.SolutionBranch)]
     class BranchSolutionCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

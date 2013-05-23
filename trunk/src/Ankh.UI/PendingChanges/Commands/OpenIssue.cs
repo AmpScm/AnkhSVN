@@ -16,8 +16,8 @@ namespace Ankh.UI.PendingChanges.Commands
     /// <summary>
     /// Command to open an identified issue in Log Message view, or on a Log entry
     /// </summary>
-    [Command(AnkhCommand.PcLogEditorOpenIssue)]
-    [Command(AnkhCommand.LogOpenIssue)]
+    [SvnCommand(AnkhCommand.PcLogEditorOpenIssue)]
+    [SvnCommand(AnkhCommand.LogOpenIssue)]
     public class OpenIssue : ICommandHandler
     {
         IAnkhIssueService _issueService;

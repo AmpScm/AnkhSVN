@@ -22,8 +22,8 @@ using Ankh.VS;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.SolutionApplyPatch)]
-    [Command(AnkhCommand.PendingChangesApplyPatch, HideWhenDisabled=false)]
+    [SvnCommand(AnkhCommand.SolutionApplyPatch)]
+    [SvnCommand(AnkhCommand.PendingChangesApplyPatch, HideWhenDisabled=false)]
     public class ApplyPatch : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

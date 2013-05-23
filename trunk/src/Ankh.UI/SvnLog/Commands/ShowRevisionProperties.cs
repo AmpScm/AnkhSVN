@@ -27,7 +27,7 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogShowRevisionProperties, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.LogShowRevisionProperties, AlwaysAvailable = true)]
     class ShowRevisionProperties : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

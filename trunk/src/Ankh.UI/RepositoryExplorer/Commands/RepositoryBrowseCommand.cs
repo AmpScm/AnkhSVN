@@ -25,7 +25,7 @@ namespace Ankh.UI.RepositoryExplorer.Commands
     /// <summary>
     /// Command to add a new URL to the Repository Explorer.
     /// </summary>
-    [Command(AnkhCommand.RepositoryBrowse, ArgumentDefinition = "u|d", AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.RepositoryBrowse, ArgumentDefinition = "u|d", AlwaysAvailable = true)]
     sealed class RepositoryBrowseCommand : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

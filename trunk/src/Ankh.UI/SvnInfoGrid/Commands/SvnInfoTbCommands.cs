@@ -7,8 +7,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.UI.SvnInfoGrid.Commands
 {
-    [Command(AnkhCommand.SvnInfoCategorized, AlwaysAvailable = true)]
-    [Command(AnkhCommand.SvnInfoAlphabetical, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.SvnInfoCategorized, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.SvnInfoAlphabetical, AlwaysAvailable = true)]
     class SvnInfoTbCommands : ICommandHandler
     {
         SvnInfoGridControl _control;

@@ -23,7 +23,7 @@ using Ankh.Commands;
 
 namespace Ankh.UI.VSSelectionControls.Commands
 {
-    [Command(AnkhCommand.ListViewShow0, LastCommand = AnkhCommand.ListViewShowMax, AlwaysAvailable = true, HideWhenDisabled = false)]
+    [SvnCommand(AnkhCommand.ListViewShow0, LastCommand = AnkhCommand.ListViewShowMax, AlwaysAvailable = true, HideWhenDisabled = false)]
     class ListViewShow : ListViewCommandBase
     {
         protected override void OnUpdate(SmartListView list, CommandUpdateEventArgs e)

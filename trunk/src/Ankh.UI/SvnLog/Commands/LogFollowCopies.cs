@@ -19,7 +19,7 @@ using Ankh.Commands;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogFollowCopies, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.LogFollowCopies, AlwaysAvailable = true)]
     sealed class LogFollowCopies : ICommandHandler
     {
         LogToolWindowControl _ctrl;

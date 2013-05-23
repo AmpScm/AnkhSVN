@@ -27,7 +27,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to unlock the selected items.
     /// </summary>
-    [Command(AnkhCommand.Unlock)]
+    [SvnCommand(AnkhCommand.Unlock)]
     class UnlockCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

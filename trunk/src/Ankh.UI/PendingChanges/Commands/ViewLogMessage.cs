@@ -22,7 +22,7 @@ using Ankh.UI.PendingChanges.Commits;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
-    [Command(AnkhCommand.PendingChangesViewLogMessage)]
+    [SvnCommand(AnkhCommand.PendingChangesViewLogMessage)]
     public class ViewLogMessage : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

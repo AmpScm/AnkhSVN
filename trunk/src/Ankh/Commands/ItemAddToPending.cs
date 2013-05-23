@@ -24,10 +24,10 @@ using Ankh.Scc;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.ItemAddToPending)]
-    [Command(AnkhCommand.ItemRemoveFromPending)]
-    [Command(AnkhCommand.DocumentAddToPending)]
-    [Command(AnkhCommand.DocumentRemoveFromPending)]
+    [SvnCommand(AnkhCommand.ItemAddToPending)]
+    [SvnCommand(AnkhCommand.ItemRemoveFromPending)]
+    [SvnCommand(AnkhCommand.DocumentAddToPending)]
+    [SvnCommand(AnkhCommand.DocumentRemoveFromPending)]
     class ItemAddToPending : CommandBase
     {
         IEnumerable<SvnItem> GetSelection(BaseCommandEventArgs e)

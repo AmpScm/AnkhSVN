@@ -28,7 +28,7 @@ using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogShowChanges, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.LogShowChanges, AlwaysAvailable = true)]
     class ShowChanges : ICommandHandler
     {
         LogToolWindowControl _ctrl;

@@ -19,8 +19,8 @@ using Ankh.Commands;
 
 namespace Ankh.Scc.StatusCache.Commands
 {
-    [Command(AnkhCommand.FileCacheFinishTasks, AlwaysAvailable = true)]
-    [Command(AnkhCommand.TickRefreshSvnItems, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.FileCacheFinishTasks, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.TickRefreshSvnItems, AlwaysAvailable = true)]
     public class FileStatusCleanup : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

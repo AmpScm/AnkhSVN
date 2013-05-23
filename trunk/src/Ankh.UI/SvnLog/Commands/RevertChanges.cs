@@ -23,8 +23,8 @@ using SharpSvn;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogRevertThisRevisions, AlwaysAvailable = true)]
-    [Command(AnkhCommand.LogRevertTo, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.LogRevertThisRevisions, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.LogRevertTo, AlwaysAvailable = true)]
     class RevertChanges : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

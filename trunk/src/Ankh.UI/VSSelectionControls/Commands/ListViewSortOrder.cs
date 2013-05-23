@@ -21,8 +21,8 @@ using Ankh.Commands;
 
 namespace Ankh.UI.VSSelectionControls.Commands
 {
-    [Command(AnkhCommand.ListViewSortAscending, AlwaysAvailable = true, HideWhenDisabled = false)]
-    [Command(AnkhCommand.ListViewSortDescending, AlwaysAvailable = true, HideWhenDisabled = false)]
+    [SvnCommand(AnkhCommand.ListViewSortAscending, AlwaysAvailable = true, HideWhenDisabled = false)]
+    [SvnCommand(AnkhCommand.ListViewSortDescending, AlwaysAvailable = true, HideWhenDisabled = false)]
     class ListViewSortOrder : ListViewCommandBase
     {
         protected override void OnUpdate(SmartListView list, Ankh.Commands.CommandUpdateEventArgs e)

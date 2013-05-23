@@ -24,14 +24,14 @@ using Ankh.Configuration;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.ItemResolveMerge)]
-    [Command(AnkhCommand.ItemResolveMineFull)]
-    [Command(AnkhCommand.ItemResolveTheirsFull)]
-    [Command(AnkhCommand.ItemResolveMineConflict)]
-    [Command(AnkhCommand.ItemResolveTheirsConflict)]
-    [Command(AnkhCommand.ItemResolveBase)]
-    [Command(AnkhCommand.ItemResolveWorking)]
-    [Command(AnkhCommand.ItemResolveMergeTool)]
+    [SvnCommand(AnkhCommand.ItemResolveMerge)]
+    [SvnCommand(AnkhCommand.ItemResolveMineFull)]
+    [SvnCommand(AnkhCommand.ItemResolveTheirsFull)]
+    [SvnCommand(AnkhCommand.ItemResolveMineConflict)]
+    [SvnCommand(AnkhCommand.ItemResolveTheirsConflict)]
+    [SvnCommand(AnkhCommand.ItemResolveBase)]
+    [SvnCommand(AnkhCommand.ItemResolveWorking)]
+    [SvnCommand(AnkhCommand.ItemResolveMergeTool)]
     class ItemResolveCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

@@ -30,8 +30,8 @@ using System.Diagnostics;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.FileSccAddProjectToSubversion)]
-    [Command(AnkhCommand.FileSccAddSolutionToSubversion, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.FileSccAddProjectToSubversion)]
+    [SvnCommand(AnkhCommand.FileSccAddSolutionToSubversion, AlwaysAvailable = true)]
     sealed class AddToSccCommands : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
