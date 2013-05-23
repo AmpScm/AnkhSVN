@@ -32,7 +32,7 @@ namespace Ankh.Scc.Commands
 
         IAnkhCommandService _commandService;
         ProjectTracker _projectTracker;
-        AnkhSccProvider _sccProvider;
+        SvnSccProvider _sccProvider;
 
         public void OnExecute(CommandEventArgs e)
         {
@@ -41,7 +41,7 @@ namespace Ankh.Scc.Commands
             if (_projectTracker == null)
                 _projectTracker = e.GetService<ProjectTracker>(typeof(IAnkhProjectDocumentTracker));
             if(_sccProvider == null)
-                _sccProvider = e.GetService<AnkhSccProvider>(typeof(IAnkhSccService));            
+                _sccProvider = e.GetService<SvnSccProvider>(typeof(IAnkhSccService));            
 
             _commandService.TockCommand(e.Command);
 

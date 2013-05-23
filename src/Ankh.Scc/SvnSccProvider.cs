@@ -34,16 +34,16 @@ namespace Ankh.Scc
     {
     }
 
-    [GlobalService(typeof(AnkhSccProvider))]
+    [GlobalService(typeof(SvnSccProvider))]
     [GlobalService(typeof(IAnkhSccService))]
     [GlobalService(typeof(ITheAnkhSvnSccProvider), true)]
-    partial class AnkhSccProvider : AnkhService, ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService, IVsSccEnlistmentPathTranslation
+    partial class SvnSccProvider : AnkhService, ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService, IVsSccEnlistmentPathTranslation
     {
         bool _active;
         IFileStatusCache _statusCache;
         IAnkhOpenDocumentTracker _documentTracker;
 
-        public AnkhSccProvider(IAnkhServiceProvider context)
+        public SvnSccProvider(IAnkhServiceProvider context)
             : base(context)
         {
         }

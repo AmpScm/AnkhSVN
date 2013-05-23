@@ -52,7 +52,7 @@ namespace Ankh.Scc
         SCC_STATUS_RESERVED_2 = 0x8000
     }
 
-    partial class AnkhSccProvider : IVsSccManager2, IVsSccManagerTooltip, IVsSccGlyphs
+    partial class SvnSccProvider : IVsSccManager2, IVsSccManagerTooltip, IVsSccGlyphs
     {
         IStatusImageMapper _statusImages;
         IStatusImageMapper StatusImages

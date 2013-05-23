@@ -27,7 +27,7 @@ namespace Ankh.Scc
         bool IsBSLSupported();
     }
 
-    partial class AnkhSccProvider : ICOMVsSccManager3
+    partial class SvnSccProvider : ICOMVsSccManager3
     {
         public bool IsBSLSupported()
         {

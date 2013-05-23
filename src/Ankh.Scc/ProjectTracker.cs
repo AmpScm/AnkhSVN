@@ -38,7 +38,7 @@ namespace Ankh.Scc
         bool _hookedProjects;
         uint _projectCookie;
         uint _documentCookie;
-        AnkhSccProvider _sccProvider;
+        SvnSccProvider _sccProvider;
         bool _collectHints;
         bool _solutionLoaded;
         readonly HybridCollection<string> _fileHints = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -90,10 +90,10 @@ namespace Ankh.Scc
             }
         }
 
-        AnkhSccProvider SccProvider
+        SvnSccProvider SccProvider
         {
             [DebuggerStepThrough]
-            get { return _sccProvider ?? (_sccProvider = GetService<AnkhSccProvider>()); }
+            get { return _sccProvider ?? (_sccProvider = GetService<SvnSccProvider>()); }
         }
 
         private void LoadInitial()

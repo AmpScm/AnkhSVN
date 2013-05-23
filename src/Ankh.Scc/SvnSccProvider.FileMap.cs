@@ -33,7 +33,7 @@ namespace Ankh.Scc
     /// </summary>
     [GlobalService(typeof(IProjectFileMapper))]
     [GlobalService(typeof(IAnkhProjectLayoutService))]
-    partial class AnkhSccProvider : IProjectFileMapper, IAnkhProjectLayoutService
+    partial class SvnSccProvider : IProjectFileMapper, IAnkhProjectLayoutService
     {
         // ********************************************************
         // This file contains two very important features of the Scc provider:

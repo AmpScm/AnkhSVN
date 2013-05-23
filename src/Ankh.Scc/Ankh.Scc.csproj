@@ -85,30 +85,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnkhSccModule.cs" />
-    <Compile Include="AnkhSccProvider.cs" />
-    <Compile Include="AnkhSccProvider.Enlistment.cs">
-      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    <Compile Include="SvnSccProvider.cs" />
+    <Compile Include="SvnSccProvider.Enlistment.cs">
+      <DependentUpon>SvnSccProvider.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnkhSccProvider.Glyphs.cs">
-      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    <Compile Include="SvnSccProvider.Glyphs.cs">
+      <DependentUpon>SvnSccProvider.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnkhSccProvider.IVsSccManager3.cs">
-      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    <Compile Include="SvnSccProvider.IVsSccManager3.cs">
+      <DependentUpon>SvnSccProvider.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnkhSccProvider.Projects.cs">
-      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    <Compile Include="SvnSccProvider.Projects.cs">
+      <DependentUpon>SvnSccProvider.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnkhSccProvider.QueryEditSave.cs">
-      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    <Compile Include="SvnSccProvider.QueryEditSave.cs">
+      <DependentUpon>SvnSccProvider.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnkhSccProvider.Solution.cs">
-      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    <Compile Include="SvnSccProvider.Solution.cs">
+      <DependentUpon>SvnSccProvider.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnkhSccProvider.FileMap.cs">
-      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    <Compile Include="SvnSccProvider.FileMap.cs">
+      <DependentUpon>SvnSccProvider.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnkhSccProvider.SourceControl.cs">
-      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    <Compile Include="SvnSccProvider.SourceControl.cs">
+      <DependentUpon>SvnSccProvider.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\PendingChangeTicker.cs" />
     <Compile Include="Commands\ProjectFileFilter.cs" />

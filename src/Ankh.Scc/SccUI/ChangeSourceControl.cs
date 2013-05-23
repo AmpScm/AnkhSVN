@@ -125,10 +125,10 @@ namespace Ankh.Scc.SccUI
             RefreshGrid();
         }
 
-        AnkhSccProvider _scc;
-        AnkhSccProvider Scc
+        SvnSccProvider _scc;
+        SvnSccProvider Scc
         {
-            get { return _scc ?? (_scc = Context.GetService<AnkhSccProvider>(typeof(IAnkhSccService))); }
+            get { return _scc ?? (_scc = Context.GetService<SvnSccProvider>(typeof(IAnkhSccService))); }
         }
 
         void RefreshGrid()
