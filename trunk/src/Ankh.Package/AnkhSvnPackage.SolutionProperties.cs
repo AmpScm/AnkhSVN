@@ -56,6 +56,9 @@ namespace Ankh.VSPackage
         // can be done on several project types using IVsProjectStartupServices
         public int QuerySaveSolutionProps(IVsHierarchy pHierarchy, VSQUERYSAVESLNPROPS[] pqsspSave)
         {
+            if (pqsspSave == null)
+                return VSErr.E_POINTER;
+
             try
             {
                 // This function is called by the IDE to determine if something needs to be saved in the solution.
