@@ -156,6 +156,12 @@
     <Compile Include="Commands\UpdateDialog.Designer.cs">
       <DependentUpon>UpdateDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CloudForgeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CloudForgeControl.Designer.cs">
+      <DependentUpon>CloudForgeControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\StatusPanelTestForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1197,6 +1203,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AnnotateResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CloudForgeControl.resx">
+      <DependentUpon>CloudForgeControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\StatusPanelResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>StatusPanelResources.Designer.cs</LastGenOutput>
@@ -1259,6 +1268,7 @@
     <None Include="PendingChanges\Resources\Issues.png" />
     <None Include="PendingChanges\Resources\RecentChanges.png" />
     <Content Include="PropertyEditors\Images\Properties.ico" />
+    <Content Include="Resources\cloudforge.png" />
     <Content Include="Resources\TabConflicts.png" />
     <None Include="SvnLog\Plus.png" />
   </ItemGroup>
