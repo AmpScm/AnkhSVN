@@ -231,21 +231,30 @@ namespace Ankh.UI.PendingChanges
         {
             foreach (string path in roots)
             {
-                // TODO: Find some way to get this information safely in the status cache
-                // (Might not be possible because of delays in network check)
-                client.Status(path, sa,
-                    delegate(object s, SvnStatusEventArgs stat)
-                    {
-                        if (IgnoreStatus(stat))
-                            return; // Not a synchronization item
-                        else if (found.ContainsKey(stat.FullPath))
-                            return; // Already reported
+                if (IsWorkingCopy(client, path) || !IgnoreStatus(SvnStatus.NotVersioned, SvnStatus.None))
+                {
+                    // TODO: Find some way to get this information safely in the status cache
+                    // (Might not be possible because of delays in network check)
+                    client.Status(path, sa,
+                        delegate(object s, SvnStatusEventArgs stat)
+                        {
+                            if (IgnoreStatus(stat))
+                                return; // Not a synchronization item
+                            else if (found.ContainsKey(stat.FullPath))
+                                return; // Already reported
 
-                        stat.Detach();
-                        resultList.Add(stat);
-                        found.Add(stat.FullPath, "");
-                    });
+                            stat.Detach();
+                            resultList.Add(stat);
+                            found.Add(stat.FullPath, "");
+                        });
+                }
             }
+        }
+
+        private bool IsWorkingCopy(SvnClient client, string aRoot)
+        {
+            Guid repoId;
+            return client.TryGetRepositoryId(aRoot, out repoId) && repoId != Guid.Empty;
         }
 
         void ShowBusyIndicator()
@@ -275,15 +284,20 @@ namespace Ankh.UI.PendingChanges
 
         static bool IgnoreStatus(SvnStatusEventArgs stat)
         {
-            switch (stat.LocalContentStatus)
+            return IgnoreStatus(stat.LocalContentStatus, stat.RemoteContentStatus);
+        }
+
+        static bool IgnoreStatus(SvnStatus localContentStatus, SvnStatus remoteContentStatus)
+        {
+            switch (localContentStatus)
             {
                 case SvnStatus.NotVersioned:
                 case SvnStatus.Ignored:
                 case SvnStatus.External: // External root will be handled inside
-                    return (stat.RemoteContentStatus == SvnStatus.None);
+                    return (remoteContentStatus == SvnStatus.None);
                 case SvnStatus.None:
                     // Hide remote locked files
-                    return (stat.RemoteContentStatus == SvnStatus.None);
+                    return (remoteContentStatus == SvnStatus.None);
                 default:
                     return false;
             }
