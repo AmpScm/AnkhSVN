@@ -134,34 +134,38 @@ namespace Ankh.Services.IssueTracker
         /// <returns></returns>
         public bool TryGetIssues(string text, out IEnumerable<IssueMarker> issues)
         {
-            // potentially triggers 
-            // Issue Tracker Connector Package initialization
-            IssueRepository repository = CurrentIssueRepository;
-            if (repository != null)
+            if (!string.IsNullOrEmpty(text))
             {
-                if (_issueIdRegex == null)
+                // potentially triggers 
+                // Issue Tracker Connector Package initialization
+                IssueRepository repository = CurrentIssueRepository;
+                if (repository != null)
                 {
-                    string pattern = repository.IssueIdPattern;
-                    if (!string.IsNullOrEmpty(pattern))
+                    if (_issueIdRegex == null)
                     {
-                        _issueIdRegex = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Multiline);
+                        string pattern = repository.IssueIdPattern;
+                        if (!string.IsNullOrEmpty(pattern))
+                        {
+                            _issueIdRegex = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Multiline);
+                        }
+                    }
+                    if (_issueIdRegex != null)
+                    {
+                        issues = PerformRegex(text);
+                        return true;
                     }
                 }
-                if (_issueIdRegex != null)
+                else if (GetService<IProjectCommitSettings>() != null)
                 {
-                    issues = PerformRegex(text);
+                    issues = GetIssuesFromCommitSettings(text);
                     return true;
                 }
-            }
-            else if (GetService<IProjectCommitSettings>() != null)
-            {
-                issues = GetIssuesFromCommitSettings(text);
-                return true;
             }
             // meaning 
             // no solution
             // or no issue repository is associated with the solution
             // or issue repository does not provide an issue id pattern
+            // or text is empty
             issues = new IssueMarker[0];
             return false;
         }
