@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Ankh.UI.Controls
@@ -14,13 +13,17 @@ namespace Ankh.UI.Controls
         public CloudForgeControl()
         {
             InitializeComponent();
-            this.cloudForgePictureBox.MaximumSize = Size.Add(this.cloudForgePictureBox.Image.Size, this.cloudForgePictureBox.Margin.Size);
-            this.cloudForgePictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         private void cloudForgePictureBox_Click(object sender, EventArgs e)
         {
-            IAnkhServiceProvider sp = Parent as IAnkhServiceProvider;
+            Control control = this;
+            IAnkhServiceProvider sp = control as IAnkhServiceProvider;
+            while (control != null && sp == null)
+            {
+                control = control.Parent;
+                sp = control as IAnkhServiceProvider;
+            }
             if (sp != null)
             {
                 Ankh.VS.IAnkhWebBrowser wb = sp.GetService<Ankh.VS.IAnkhWebBrowser>();
