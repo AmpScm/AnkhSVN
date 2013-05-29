@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Ankh.UI.Controls
@@ -13,6 +14,8 @@ namespace Ankh.UI.Controls
         public CloudForgeControl()
         {
             InitializeComponent();
+            this.cloudForgePictureBox.MaximumSize = Size.Add(this.cloudForgePictureBox.Image.Size, this.cloudForgePictureBox.Margin.Size);
+            this.cloudForgePictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         private void cloudForgePictureBox_Click(object sender, EventArgs e)
