@@ -169,7 +169,7 @@
         DjoMXrjleuvyba/b1++svDMwFDJ0dzhyeOQu++7kvaR7L+9n3J9/sOkh+mHhI6lH5Y+VHtf9qPdj64jl
         yJlR19G+J0FPHoyxxp7/lP7Th/H8p+Sn5ROqE42TZpOnp9ynbj5b/Wz8eerz+emCn6V/rn6h++K7Xxx/
         6ZtZNTP+kv9y4dfiV/Kvjrxe9rp71n/28ZvkN/NzhW/l3x59x3jX+z7s/cR85gfsh4qPeh+7Pnl/eriQ
-        vLDwG/eE8/s3BCkeAAAACXBIWXMAAAsRAAALEQF/ZF+RAAABbmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAA
+        vLDwG/eE8/s3BCkeAAAACXBIWXMAAAsQAAALEAGtI711AAABbmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAA
         AAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNC40
         LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRm
         LXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAg
@@ -343,8 +343,14 @@
   <data name="cloudForgePictureBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
+  <data name="cloudForgePictureBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
   <data name="cloudForgePictureBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>454, 54</value>
+  </data>
+  <data name="cloudForgePictureBox.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>CenterImage</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="cloudForgePictureBox.TabIndex" type="System.Int32, mscorlib">
