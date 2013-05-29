@@ -76,6 +76,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\RepositoryProvider\AnkhRepositoryProviderService.cs" />
+    <Compile Include="Services\RepositoryProvider\ScmRepositoryProviderProxy.cs" />
     <Compile Include="Services\TempDirManager.cs" />
     <Compile Include="Services\TempFileManager.cs" />
     <EmbeddedResource Include="Services\ServiceStrings.resx">
