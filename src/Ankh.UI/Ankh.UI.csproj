@@ -1305,6 +1305,7 @@
     <None Include="PendingChanges\Resources\RecentChanges.png" />
     <Content Include="PropertyEditors\Images\Properties.ico" />
     <Content Include="Resources\cloudforge.png" />
+    <Content Include="Resources\RepositoryWizardHeader.gif" />
     <Content Include="Resources\TabConflicts.png" />
     <None Include="SvnLog\Plus.png" />
   </ItemGroup>

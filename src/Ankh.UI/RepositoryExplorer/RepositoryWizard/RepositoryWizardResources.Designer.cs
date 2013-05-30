@@ -96,6 +96,13 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard {
             }
         }
         
+        internal static System.Drawing.Bitmap RepositoryWizardHeaderImage {
+            get {
+                object obj = ResourceManager.GetObject("RepositoryWizardHeaderImage", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Repository Selection Wizard.
         /// </summary>

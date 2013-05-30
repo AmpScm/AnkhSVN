@@ -21,6 +21,10 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
             : this()
         {
             this.repoProvider = repoProvider;
+            if (this.repoProvider != null)
+            {
+                Name = string.Format("ProviderPage_{0}", this.repoProvider.Id);
+            }
         }
 
         /// <summary>
