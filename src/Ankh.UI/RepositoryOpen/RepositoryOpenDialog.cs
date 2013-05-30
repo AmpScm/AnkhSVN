@@ -22,13 +22,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using Ankh.Configuration;
+using Ankh.UI.RepositoryExplorer;
+using Ankh.UI.RepositoryExplorer.RepositoryWizard;
+using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
 using SharpSvn;
 using SharpSvn.Remote;
-using Ankh.Configuration;
-using Ankh.UI.RepositoryExplorer;
-using Ankh.VS;
 
 namespace Ankh.UI.RepositoryOpen
 {
@@ -487,6 +488,7 @@ namespace Ankh.UI.RepositoryOpen
         void ShowAddUriDialog()
         {
             Uri dirUri;
+            /*
             using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog())
             {
                 if (dlg.ShowDialog(Context) != DialogResult.OK || dlg.Uri == null)
@@ -494,7 +496,16 @@ namespace Ankh.UI.RepositoryOpen
 
                 dirUri = dlg.Uri;
             }
-
+            */
+            using (RepositorySelectionWizard dialog = new RepositorySelectionWizard(Context))
+            {
+                DialogResult result = dialog.ShowDialog(Context);
+                if (result != DialogResult.OK)
+                {
+                    return;
+                }
+                dirUri = dialog.GetSelectedRepositoryUri();
+            }
             AnkhAction action = delegate
             {
                 CheckResult(dirUri, true);
