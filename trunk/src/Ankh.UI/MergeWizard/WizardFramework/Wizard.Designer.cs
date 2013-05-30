@@ -166,16 +166,15 @@ namespace Ankh.UI.WizardFramework
             this.headerImage.Name = "headerImage";
             this.headerImage.TabStop = false;
             // 
-            // WizardDialog
+            // Wizard
             // 
             this.AcceptButton = this.nextButton;
             resources.ApplyResources(this, "$this");
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.Controls.Add(this.headerPanel);
             this.Controls.Add(this.wizardPagePanel);
+            this.Controls.Add(this.headerPanel);
             this.Controls.Add(this.controlPanel);
-            this.Name = "WizardDialog";
+            this.Name = "Wizard";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.controlPanel.ResumeLayout(false);
             this.headerPanel.ResumeLayout(false);
