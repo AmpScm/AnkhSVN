@@ -338,6 +338,29 @@
     <Compile Include="RepositoryExplorer\Dialogs\RenameDialog.Designer.cs">
       <DependentUpon>RenameDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="RepositoryExplorer\RepositoryWizard\RepositoryProviderPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RepositoryExplorer\RepositoryWizard\RepositoryProviderPage.Designer.cs">
+      <DependentUpon>RepositoryProviderPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RepositoryExplorer\RepositoryWizard\RepositorySelectionPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RepositoryExplorer\RepositoryWizard\RepositorySelectionPage.Designer.cs">
+      <DependentUpon>RepositorySelectionPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RepositoryExplorer\RepositoryWizard\RepositorySelectionWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RepositoryExplorer\RepositoryWizard\RepositorySelectionWizard.Designer.cs">
+      <DependentUpon>RepositorySelectionWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RepositoryExplorer\RepositoryWizard\RepositoryWizardResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RepositoryWizardResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="RepositoryOpen\ProjectAddInfoDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1228,6 +1251,19 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PendingChanges\PendingActivationPage.resx">
       <DependentUpon>PendingActivationPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RepositoryExplorer\RepositoryWizard\RepositoryProviderPage.resx">
+      <DependentUpon>RepositoryProviderPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RepositoryExplorer\RepositoryWizard\RepositorySelectionPage.resx">
+      <DependentUpon>RepositorySelectionPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RepositoryExplorer\RepositoryWizard\RepositorySelectionWizard.resx">
+      <DependentUpon>RepositorySelectionWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RepositoryExplorer\RepositoryWizard\RepositoryWizardResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RepositoryWizardResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\ItemUpdateDialog.resx">
       <DependentUpon>ItemUpdateDialog.cs</DependentUpon>
