@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Forms;
+using Ankh.Configuration;
 using Ankh.ExtensionPoints.RepositoryProvider;
 using Ankh.UI.VSSelectionControls;
-using Ankh.Configuration;
 
 namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
 {
@@ -14,6 +15,13 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
             Text = RepositoryWizardResources.RepoProviderPageHeaderTitle;
             Description = RepositoryWizardResources.RepoProviderPageHeaderMessage;
             InitializeComponent();
+            SmartColumn providerName = new SmartColumn(this.providerListView, "&Provider", 200, "RepositoryProviderName");
+            this.providerListView.AllColumns.Add(providerName);
+            this.providerListView.Columns.AddRange(
+                new ColumnHeader[]
+                {
+                    providerName
+                });
         }
 
         /// <summary>

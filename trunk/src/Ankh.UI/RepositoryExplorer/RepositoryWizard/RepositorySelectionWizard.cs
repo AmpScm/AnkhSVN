@@ -21,8 +21,7 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
         {
             InitializeComponent();
             Context = context;
-            // TODO wizard image
-            DefaultPageImage = MergeWizard.MergeStrings.MergeWizardHeaderImage;
+            DefaultPageImage = RepositoryWizardResources.RepositoryWizardHeaderImage;
             Text = RepositoryWizardResources.Title;
 
             this.providerSelectionPage = new RepositoryProviderPage();
@@ -38,6 +37,18 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
         {
             Pages.Add(this.providerSelectionPage);
             // the pages for repository providers are added lazily in 'GetNextPage'
+        }
+
+        public override bool NextIsFinish
+        {
+            get
+            {
+                if (CurrentPage == this.providerSelectionPage)
+                {
+                    return this.providerSelectionPage.Uri != null;
+                }
+                return base.NextIsFinish;
+            }
         }
 
         public override WizardPage GetNextPage(WizardPage page)
