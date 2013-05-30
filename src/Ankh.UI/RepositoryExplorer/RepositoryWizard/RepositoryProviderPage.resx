@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="providerPanel.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="urlRadioButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="urlRadioButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="urlRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="urlRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 17</value>
+  </data>
+  <data name="urlRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="urlRadioButton.Text" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="&gt;&gt;urlRadioButton.Name" xml:space="preserve">
+    <value>urlRadioButton</value>
+  </data>
+  <data name="&gt;&gt;urlRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;urlRadioButton.Parent" xml:space="preserve">
+    <value>providerPanel</value>
+  </data>
+  <data name="&gt;&gt;urlRadioButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="urlComboBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="urlComboBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 26</value>
+  </data>
+  <data name="urlComboBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>444, 21</value>
+  </data>
+  <data name="urlComboBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;urlComboBox.Name" xml:space="preserve">
+    <value>urlComboBox</value>
+  </data>
+  <data name="&gt;&gt;urlComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;urlComboBox.Parent" xml:space="preserve">
+    <value>providerPanel</value>
+  </data>
+  <data name="&gt;&gt;urlComboBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="providerRadioButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="providerRadioButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="providerRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 121</value>
+  </data>
+  <data name="providerRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 10, 3, 3</value>
+  </data>
+  <data name="providerRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>116, 17</value>
+  </data>
+  <data name="providerRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="providerRadioButton.Text" xml:space="preserve">
+    <value>Repository provider</value>
+  </data>
+  <data name="&gt;&gt;providerRadioButton.Name" xml:space="preserve">
+    <value>providerRadioButton</value>
+  </data>
+  <data name="&gt;&gt;providerRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;providerRadioButton.Parent" xml:space="preserve">
+    <value>providerPanel</value>
+  </data>
+  <data name="&gt;&gt;providerRadioButton.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="wikiLinkLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="wikiLinkLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="wikiLinkLabel.LinkArea" type="System.Windows.Forms.LinkArea, System.Windows.Forms">
+    <value>144, 194</value>
+  </data>
+  <data name="wikiLinkLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 53</value>
+  </data>
+  <data name="wikiLinkLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="wikiLinkLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>421, 55</value>
+  </data>
+  <data name="wikiLinkLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="wikiLinkLabel.Text" xml:space="preserve">
+    <value>Tired of typing in long URL's?  Your repository provider might provide a plug-in that would allow you to select your repository from a list.
+
+Click here to see the list of available providers.</value>
+  </data>
+  <data name="&gt;&gt;wikiLinkLabel.Name" xml:space="preserve">
+    <value>wikiLinkLabel</value>
+  </data>
+  <data name="&gt;&gt;wikiLinkLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;wikiLinkLabel.Parent" xml:space="preserve">
+    <value>providerPanel</value>
+  </data>
+  <data name="&gt;&gt;wikiLinkLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="providerListView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="providerListView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 144</value>
+  </data>
+  <data name="providerListView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>444, 113</value>
+  </data>
+  <data name="providerListView.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;providerListView.Name" xml:space="preserve">
+    <value>providerListView</value>
+  </data>
+  <data name="&gt;&gt;providerListView.Type" xml:space="preserve">
+    <value>Ankh.UI.VSSelectionControls.SmartListView, Ankh.UI, Version=2.4.4897.38923, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  </data>
+  <data name="&gt;&gt;providerListView.Parent" xml:space="preserve">
+    <value>providerPanel</value>
+  </data>
+  <data name="&gt;&gt;providerListView.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="providerPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="providerPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 10</value>
+  </data>
+  <data name="providerPanel.RowCount" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="providerPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>450, 260</value>
+  </data>
+  <data name="providerPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;providerPanel.Name" xml:space="preserve">
+    <value>providerPanel</value>
+  </data>
+  <data name="&gt;&gt;providerPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;providerPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;providerPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="providerPanel.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="urlRadioButton" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="urlComboBox" Row="1" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="providerRadioButton" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="wikiLinkLabel" Row="2" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="providerListView" Row="4" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="cloudForgeControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="cloudForgeControl1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 270</value>
+  </data>
+  <data name="cloudForgeControl1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>450, 70</value>
+  </data>
+  <data name="cloudForgeControl1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;cloudForgeControl1.Name" xml:space="preserve">
+    <value>cloudForgeControl1</value>
+  </data>
+  <data name="&gt;&gt;cloudForgeControl1.Type" xml:space="preserve">
+    <value>Ankh.UI.Controls.CloudForgeControl, Ankh.UI, Version=2.4.4897.38923, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  </data>
+  <data name="&gt;&gt;cloudForgeControl1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;cloudForgeControl1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="nameColumn.Text" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>10, 10, 10, 10</value>
+  </data>
+  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
+    <value>470, 350</value>
+  </data>
+  <data name="&gt;&gt;nameColumn.Name" xml:space="preserve">
+    <value>nameColumn</value>
+  </data>
+  <data name="&gt;&gt;nameColumn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>RepositoryProviderPage</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>Ankh.UI.WizardFramework.WizardPage, Ankh.UI, Version=2.4.4897.38923, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  </data>
+</root>
