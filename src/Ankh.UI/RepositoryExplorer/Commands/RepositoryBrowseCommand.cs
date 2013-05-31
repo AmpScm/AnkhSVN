@@ -16,9 +16,9 @@
 
 using System;
 using System.Windows.Forms;
-
-using Ankh.Scc;
 using Ankh.Commands;
+using Ankh.Scc;
+using Ankh.UI.RepositoryExplorer.RepositoryWizard;
 
 namespace Ankh.UI.RepositoryExplorer.Commands
 {
@@ -60,12 +60,13 @@ namespace Ankh.UI.RepositoryExplorer.Commands
             else if (e.Argument is Uri)
                 info = (Uri)e.Argument;
             else
-                using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog())
+                using (RepositorySelectionWizard wizard = new RepositorySelectionWizard(e.Context))
                 {
-                    if (dlg.ShowDialog(e.Context) != DialogResult.OK || dlg.Uri == null)
+                    if (wizard.ShowDialog(e.Context) != DialogResult.OK)
+                    {
                         return;
-
-                    info = dlg.Uri;
+                    }
+                    info = wizard.GetSelectedRepositoryUri();
                 }
 
             if (info != null)
