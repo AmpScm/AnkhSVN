@@ -41,8 +41,34 @@ namespace Ankh.ExtensionPoints.RepositoryProvider
 
     public class ScmRepositorySelectionControlEventArgs : EventArgs
     {
-        // TODO
-        private string message;
-        private Exception exception;
+        private string msg;
+        private Exception exc;
+        private string repoUri;
+
+        public ScmRepositorySelectionControlEventArgs(string repositoryUri, string message, Exception exception)
+        {
+            this.repoUri = repositoryUri;
+            this.msg = message;
+            this.exc = exception;
+        }
+
+        /// <summary>
+        /// Gets the repository URI string
+        /// </summary>
+        /// <remarks>this property is exposed here for convenience, and it must not be return a different value from ScmRepositorySelectionControl's SelectedUri property</remarks>
+        public string RepositoryUri
+        {
+            get { return this.repoUri; }
+        }
+
+        public string Message
+        {
+            get { return this.msg; }
+        }
+
+        public Exception Exception
+        {
+            get { return this.exc; }
+        }
     }
 }
