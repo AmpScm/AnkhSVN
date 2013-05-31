@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Ankh.ExtensionPoints.RepositoryProvider;
+using Ankh.UI.WizardFramework;
 
 namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
 {
@@ -57,12 +58,11 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
                     this.repoProviderControl = repoProvider.RepositorySelectionControl;
                     if (this.repoProviderControl != null)
                     {
-                        IWin32Window window = this.repoProviderControl.Window;
-                        if (window is Control)
+                        Control c = GetControlFor(this.repoProviderControl);
+                        if (c != null)
                         {
                             this.repoProviderControl.ScmRepositorySelectionControlEvent += new System.EventHandler<ScmRepositorySelectionControlEventArgs>(repoProviderControl_ScmRepositorySelectionControlEvent);
                             this.repoProviderControlPanel.Controls.Clear();
-                            Control c = (Control)window;
                             c.Dock = DockStyle.Fill;
                             this.repoProviderControlPanel.Controls.Add(c);
                         }
@@ -77,14 +77,44 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
 
         private void repoProviderControl_ScmRepositorySelectionControlEvent(object sender, ScmRepositorySelectionControlEventArgs e)
         {
-            EvaluagePage();
+            bool isComplete = Uri != null;
+            IsPageComplete = isComplete;
+            WizardMessage msg = null;
+            if (!isComplete)
+            {
+                string wMsgStr = e.Message;
+                if (string.IsNullOrEmpty(wMsgStr) && e.Exception != null)
+                {
+                    wMsgStr = e.Exception.Message;
+                }
+                if (!string.IsNullOrEmpty(wMsgStr))
+                {
+                    msg = new WizardMessage(wMsgStr, WizardMessage.MessageType.Error);
+                }
+            }
+            if (Message != msg) // for null
+            {
+                Message = msg;
+                Wizard.UpdateMessage();
+            }
         }
 
-        private void EvaluagePage()
+        private static Control GetControlFor(ScmRepositorySelectionControl providerControl)
         {
-            IsPageComplete = true
-                && this.repoProviderControl != null
-                && Uri != null;
+            Control result = null;
+            if (providerControl != null)
+            {
+                IWin32Window window = providerControl.Window;
+                if (window != null)
+                {
+                    IntPtr handle = window.Handle;
+                    if (handle != null && handle != IntPtr.Zero)
+                    {
+                        result = Control.FromHandle(window.Handle);
+                    }
+                }
+            }
+            return result;
         }
     }
 }
