@@ -62,7 +62,9 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
                         {
                             this.repoProviderControl.ScmRepositorySelectionControlEvent += new System.EventHandler<ScmRepositorySelectionControlEventArgs>(repoProviderControl_ScmRepositorySelectionControlEvent);
                             this.repoProviderControlPanel.Controls.Clear();
-                            this.repoProviderControlPanel.Controls.Add((Control)window);
+                            Control c = (Control)window;
+                            c.Dock = DockStyle.Fill;
+                            this.repoProviderControlPanel.Controls.Add(c);
                         }
                     }
                 }
