@@ -10,6 +10,8 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
 {
     public partial class RepositoryProviderPage : WizardFramework.WizardPage
     {
+        public static readonly string EXTENSIONS_WIKI_URL = @"http://ankhsvn.open.collab.net/ankhsvn/extensions";
+
         public RepositoryProviderPage()
         {
             Text = RepositoryWizardResources.RepoProviderPageHeaderTitle;
@@ -63,8 +65,6 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            this.urlRadioButton.Checked = true;
-            this.providerRadioButton.Checked = false;
             if (Context != null)
             {
                 foreach (string url in Context.GetService<IAnkhConfigurationService>().GetRecentReposUrls())
@@ -102,6 +102,7 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
             // show link to the WIKI that lists the available third party repository providers
             // only if there are not providers installed
             this.wikiLinkLabel.Enabled = this.wikiLinkLabel.Visible = providers == null || providers.Count == 0;
+            this.wikiLinkLabel1.Enabled = this.wikiLinkLabel1.Visible = providers != null && providers.Count > 0;
             if (providers != null && providers.Count > 0)
             {
                 this.providerListView.BeginUpdate();
@@ -122,6 +123,7 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
                     this.providerListView.EndUpdate();
                 }
             }
+            UpdateUI();
         }
 
         private ICollection<ScmRepositoryProvider> GetRepositoryProviders()
@@ -147,14 +149,53 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
 
         private void providerListView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.providerRadioButton.Checked = true;
             EvaluatePage();
         }
 
         private void urlComboBox_TextChanged(object sender, EventArgs e)
         {
-            this.urlRadioButton.Checked = true;
             EvaluatePage();
+        }
+
+        private void urlRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateUI();
+            if (this.urlRadioButton.Checked)
+            {
+                this.urlComboBox.Select();
+            }
+        }
+
+        private void providerRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateUI();
+            if (this.providerRadioButton.Checked)
+            {
+                this.providerListView.Focus();
+            }
+
+        }
+
+        private void UpdateUI()
+        {
+            this.urlComboBox.Enabled = this.urlRadioButton.Checked;
+            this.providerListView.Enabled = this.providerRadioButton.Checked;
+            EvaluatePage();
+        }
+
+        private void wikiLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (Context != null)
+            {
+                Ankh.VS.IAnkhWebBrowser wb = Context.GetService<Ankh.VS.IAnkhWebBrowser>();
+                if (wb != null)
+                {
+                    Ankh.VS.AnkhBrowserArgs args = new Ankh.VS.AnkhBrowserArgs();
+                    args.External = true;
+                    Uri cfSignUpUrl = new Uri(EXTENSIONS_WIKI_URL);
+                    wb.Navigate(cfSignUpUrl, args);
+                }
+            }
         }
     }
 
