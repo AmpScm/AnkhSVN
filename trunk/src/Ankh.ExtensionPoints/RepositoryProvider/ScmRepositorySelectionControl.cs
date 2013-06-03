@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace Ankh.ExtensionPoints.RepositoryProvider
@@ -37,6 +38,15 @@ namespace Ankh.ExtensionPoints.RepositoryProvider
                 ScmRepositorySelectionControlEvent(this, e);
             }
         }
+
+        /// <summary>
+        /// Populates the username, password information for a SCM repository
+        /// </summary>
+        /// <param name="e">Arguments</param>
+        public virtual void UserNamePasswordCallback(ScmUserNamePasswordEventArgs e)
+        {
+            e.Cancel = false;
+        }
     }
 
     public class ScmRepositorySelectionControlEventArgs : EventArgs
@@ -69,6 +79,38 @@ namespace Ankh.ExtensionPoints.RepositoryProvider
         public Exception Exception
         {
             get { return this.exc; }
+        }
+    }
+
+    public class ScmUserNamePasswordEventArgs : CancelEventArgs
+    {
+        private string userName;
+        private string password;
+        private string repoUri;
+
+        public ScmUserNamePasswordEventArgs(string repositoryUri)
+        {
+            this.repoUri = repositoryUri;
+        }
+
+        public string UserName
+        {
+            get { return this.userName; }
+            set { this.userName = value; }
+        }
+
+        public string Password
+        {
+            get { return this.password; }
+            set { this.password = value; }
+        }
+
+        /// <summary>
+        /// Gets the repository URI string
+        /// </summary>
+        public string RepositoryUri
+        {
+            get { return this.repoUri; }
         }
     }
 }
