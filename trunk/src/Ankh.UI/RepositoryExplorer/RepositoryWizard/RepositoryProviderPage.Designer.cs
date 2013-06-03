@@ -37,6 +37,7 @@
             this.providerListView = new Ankh.UI.VSSelectionControls.SmartListView();
             this.cloudForgeControl1 = new Ankh.UI.Controls.CloudForgeControl();
             this.nameColumn = new System.Windows.Forms.ColumnHeader();
+            this.wikiLinkLabel1 = new System.Windows.Forms.LinkLabel();
             this.providerPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,15 +49,18 @@
             this.providerPanel.Controls.Add(this.providerRadioButton, 0, 3);
             this.providerPanel.Controls.Add(this.wikiLinkLabel, 0, 2);
             this.providerPanel.Controls.Add(this.providerListView, 0, 4);
+            this.providerPanel.Controls.Add(this.wikiLinkLabel1, 0, 5);
             this.providerPanel.Name = "providerPanel";
             // 
             // urlRadioButton
             // 
             resources.ApplyResources(this.urlRadioButton, "urlRadioButton");
+            this.urlRadioButton.Checked = true;
             this.providerPanel.SetColumnSpan(this.urlRadioButton, 2);
             this.urlRadioButton.Name = "urlRadioButton";
             this.urlRadioButton.TabStop = true;
             this.urlRadioButton.UseVisualStyleBackColor = true;
+            this.urlRadioButton.CheckedChanged += new System.EventHandler(this.urlRadioButton_CheckedChanged);
             // 
             // urlComboBox
             // 
@@ -74,6 +78,7 @@
             this.providerRadioButton.Name = "providerRadioButton";
             this.providerRadioButton.TabStop = true;
             this.providerRadioButton.UseVisualStyleBackColor = true;
+            this.providerRadioButton.CheckedChanged += new System.EventHandler(this.providerRadioButton_CheckedChanged);
             // 
             // wikiLinkLabel
             // 
@@ -82,12 +87,15 @@
             this.wikiLinkLabel.Name = "wikiLinkLabel";
             this.wikiLinkLabel.TabStop = true;
             this.wikiLinkLabel.UseCompatibleTextRendering = true;
+            this.wikiLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.wikiLinkLabel_LinkClicked);
             // 
             // providerListView
             // 
             this.providerPanel.SetColumnSpan(this.providerListView, 2);
             resources.ApplyResources(this.providerListView, "providerListView");
+            this.providerListView.GridLines = true;
             this.providerListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.providerListView.HideSelection = false;
             this.providerListView.MultiSelect = false;
             this.providerListView.Name = "providerListView";
             this.providerListView.SelectedIndexChanged += new System.EventHandler(this.providerListView_SelectedIndexChanged);
@@ -101,6 +109,14 @@
             // nameColumn
             // 
             resources.ApplyResources(this.nameColumn, "nameColumn");
+            // 
+            // wikiLinkLabel1
+            // 
+            resources.ApplyResources(this.wikiLinkLabel1, "wikiLinkLabel1");
+            this.providerPanel.SetColumnSpan(this.wikiLinkLabel1, 2);
+            this.wikiLinkLabel1.Name = "wikiLinkLabel1";
+            this.wikiLinkLabel1.TabStop = true;
+            this.wikiLinkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.wikiLinkLabel_LinkClicked);
             // 
             // RepositoryProviderPage
             // 
@@ -125,5 +141,6 @@
         private System.Windows.Forms.LinkLabel wikiLinkLabel;
         private Ankh.UI.VSSelectionControls.SmartListView providerListView;
         private System.Windows.Forms.ColumnHeader nameColumn;
+        private System.Windows.Forms.LinkLabel wikiLinkLabel1;
     }
 }
