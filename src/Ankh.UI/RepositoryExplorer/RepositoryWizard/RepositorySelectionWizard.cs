@@ -4,6 +4,7 @@ using Ankh.ExtensionPoints.RepositoryProvider;
 using Ankh.UI.WizardFramework;
 using SharpSvn;
 using SharpSvn.Remote;
+using SharpSvn.Security;
 
 namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
 {
@@ -81,6 +82,7 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
             WizardMessage newMsg = null;
             this.resultUri = null;
             EnablePageAndButtons(false);
+            ScmUserNamePasswordEventArgs credentialsArgs = null;
             try
             {
                 Uri uri = this.providerSelectionPage.Uri;
@@ -93,6 +95,15 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
                         if (this.repositorySelectionPages.TryGetValue(repoProvider.Id, out repoSelectionPage))
                         {
                             uri = repoSelectionPage.Uri;
+                            if (uri != null)
+                            {
+                                credentialsArgs = new ScmUserNamePasswordEventArgs(uri.AbsoluteUri);
+                                repoSelectionPage.FillUsernamePassword(credentialsArgs);
+                                if (credentialsArgs.Cancel)
+                                {
+                                    credentialsArgs = null;
+                                }
+                            }
                         }
                     }
                 }
@@ -104,6 +115,26 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
                 else
                 {
                     Exception exc = null;
+                    if (credentialsArgs != null)
+                    {
+                        try
+                        {
+                            ProgressRunnerArgs runnerArgs = new ProgressRunnerArgs();
+                            runnerArgs.CreateLog = false;
+                            // Make sure username and password is saved for future use
+                            ProgressRunnerResult result = Context.GetService<IProgressRunner>().RunModal("Checking repository",
+                                runnerArgs,
+                                delegate(object sender, ProgressWorkerArgs ee)
+                                { EnsureCredentials(credentialsArgs); });
+                            cancel = !(result.Succeeded || result.Exception == null);
+                            exc = result.Exception;
+                        }
+                        catch (Exception runnere)
+                        {
+                            cancel = true;
+                            exc = runnere.InnerException == null ? runnere : runnere.InnerException;
+                        }
+                    }
                     // TODO (BA) Should we validate here?
                     /*
                     try
@@ -144,16 +175,16 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
             }
         }
 
-        private void CheckResult(Uri combined)
+        private void CheckResult(Uri repositoryUri)
         {
-            using (SvnPoolRemoteSession session = GetSession(combined))
+            using (SvnPoolRemoteSession session = GetSession(repositoryUri))
             {
                 SvnRemoteNodeKindArgs nka = new SvnRemoteNodeKindArgs();
                 nka.ThrowOnError = true;
 
                 SvnNodeKind kind;
 
-                string path = session.MakeRelativePath(combined);
+                string path = session.MakeRelativePath(repositoryUri);
 
                 if (session.GetNodeKind(path, nka, out kind))
                 {
@@ -161,7 +192,7 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
                     {
                         case SvnNodeKind.Directory:
                             {
-                                Uri parentUri = new Uri(combined, combined.PathAndQuery.EndsWith("/", StringComparison.Ordinal) ? "../" : "./");
+                                Uri parentUri = new Uri(repositoryUri, repositoryUri.PathAndQuery.EndsWith("/", StringComparison.Ordinal) ? "../" : "./");
                                 return;
                             }
                         case SvnNodeKind.File:
@@ -169,7 +200,7 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
                                 SvnRemoteCommonArgs ca = new SvnRemoteCommonArgs();
                                 ca.ThrowOnError = true;
 
-                                Uri parentUri = new Uri(combined, "./");
+                                Uri parentUri = new Uri(repositoryUri, "./");
                                 Uri reposRoot;
                                 if (!session.GetRepositoryRoot(ca, out reposRoot))
                                     return;
@@ -190,6 +221,28 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
             }
 
             throw new InvalidOperationException();
+        }
+
+        private void EnsureCredentials(ScmUserNamePasswordEventArgs e)
+        {
+            ISvnClientPool pool = (Context != null) ? Context.GetService<ISvnClientPool>() : null;
+            if (pool != null)
+            {
+                using (SvnPoolClient client = pool.GetClient())
+                {
+                    client.Authentication.UserNamePasswordHandlers += delegate(object sender, SvnUserNamePasswordEventArgs args)
+                    {
+                        args.Save = true;
+                        args.UserName = e.UserName;
+                        args.Password = e.Password;
+                    };
+                    SvnInfoArgs infoArgs = new SvnInfoArgs();
+                    infoArgs.ThrowOnError = false;
+                    System.Collections.ObjectModel.Collection<SvnInfoEventArgs> info;
+                    if (client.GetInfo(SvnTarget.FromString(e.RepositoryUri), infoArgs, out info))
+                    { }
+                }
+            }
         }
     }
 }

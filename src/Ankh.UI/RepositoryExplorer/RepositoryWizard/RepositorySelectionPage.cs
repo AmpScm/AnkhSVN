@@ -48,6 +48,18 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
             }
         }
 
+        internal void FillUsernamePassword(ScmUserNamePasswordEventArgs e)
+        {
+            if (this.repoProviderControl != null)
+            {
+                this.repoProviderControl.UserNamePasswordCallback(e);
+                if (!e.Cancel && (string.IsNullOrEmpty(e.UserName) || string.IsNullOrEmpty(e.Password)))
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
         protected override void OnLoad(System.EventArgs e)
         {
             base.OnLoad(e);
