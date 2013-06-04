@@ -228,7 +228,7 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
             ISvnClientPool pool = (Context != null) ? Context.GetService<ISvnClientPool>() : null;
             if (pool != null)
             {
-                using (SvnPoolClient client = pool.GetClient())
+                using (SvnPoolClient client = pool.GetNoUIClient())
                 {
                     client.Authentication.UserNamePasswordHandlers += delegate(object sender, SvnUserNamePasswordEventArgs args)
                     {
