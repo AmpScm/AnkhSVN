@@ -9,7 +9,7 @@ using Microsoft.Win32;
 
 namespace Ankh.Services.RepositoryProvider
 {
-    //[GlobalService(typeof(IAnkhRepositoryProviderService))]
+    [GlobalService(typeof(IAnkhRepositoryProviderService))]
     sealed class AnkhRepositoryProviderService : AnkhService, IAnkhRepositoryProviderService
     {
         private Dictionary<string, ScmRepositoryProvider> _nameProviderMap;
