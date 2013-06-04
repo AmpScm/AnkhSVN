@@ -186,7 +186,6 @@ namespace Ankh.UI.RepositoryOpen
             // 
             // cloudForgeControl1
             // 
-            this.cloudForgeControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.cloudForgeControl1, "cloudForgeControl1");
             this.cloudForgeControl1.Name = "cloudForgeControl1";
             // 

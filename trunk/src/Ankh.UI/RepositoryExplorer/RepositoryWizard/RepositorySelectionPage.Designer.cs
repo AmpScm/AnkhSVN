@@ -36,7 +36,6 @@
             // 
             // cloudForgeControl1
             // 
-            this.cloudForgeControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cloudForgeControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.cloudForgeControl1.Location = new System.Drawing.Point(10, 270);
             this.cloudForgeControl1.Name = "cloudForgeControl1";
