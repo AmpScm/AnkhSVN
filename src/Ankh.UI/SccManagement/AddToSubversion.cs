@@ -19,10 +19,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-using SharpSvn;
 using Ankh.Configuration;
 using Ankh.UI.RepositoryExplorer;
+using Ankh.UI.RepositoryExplorer.RepositoryWizard;
 using Ankh.VS;
+using SharpSvn;
 
 namespace Ankh.UI.SccManagement
 {
@@ -130,26 +131,54 @@ namespace Ankh.UI.SccManagement
             timer1.Enabled = true;
         }
 
+        private void selectRepositoryButton_Click(object sender, EventArgs e)
+        {
+            Uri dirUri;
+            using (RepositorySelectionWizard dialog = new RepositorySelectionWizard(Context))
+            {
+                DialogResult result = dialog.ShowDialog(Context);
+                if (result != DialogResult.OK)
+                {
+                    return;
+                }
+                dirUri = dialog.GetSelectedRepositoryUri();
+            }
+            if (dirUri != null)
+            {
+                this.repositoryUrl.Text = dirUri.AbsoluteUri;
+                repositoryTree.AddRoot(dirUri);
+            }
+        }
+
         public Uri RepositoryAddUrl
         {
             get
             {
-                if (repositoryTree.SelectedNode == null)
-                    return null;
-
-                Uri u = repositoryTree.SelectedNode.RawUri;
-                if (u == null)
-                    return null;
-
-                if (!string.IsNullOrEmpty(projectNameBox.Text))
-                    u = new Uri(u, projectNameBox.Text + "/");
-                if (addTrunk.Checked)
-                    u = new Uri(u, "trunk/");
-                return u;
+                Uri result = RepositoryUri;
+                if (result != null)
+                {
+                    if (!string.IsNullOrEmpty(projectNameBox.Text))
+                        result = new Uri(result, projectNameBox.Text + "/");
+                    if (addTrunk.Checked)
+                        result = new Uri(result, "trunk/");
+                }
+                return result;
             }
             set
             {
                 repositoryTree.BrowseItem(value);
+            }
+        }
+
+        private Uri RepositoryUri
+        {
+            get
+            {
+                if (repositoryTree.SelectedNode == null)
+                {
+                    return null;
+                }
+                return repositoryTree.SelectedNode.RawUri;
             }
         }
 
@@ -168,9 +197,10 @@ namespace Ankh.UI.SccManagement
 
             createFolderButton.Enabled = repositoryTree.CanCreateDirectory;
 
-            if (repositoryTree.SelectedNode != null && repositoryTree.SelectedNode.NormalizedUri != null)
+            Uri repoUri = RepositoryUri;
+            if (repoUri != null)
             {
-                repositoryUrl.Text = repositoryTree.SelectedNode.RawUri.AbsoluteUri;
+                repositoryUrl.Text = repoUri.AbsoluteUri;
             }
         }
 
@@ -217,7 +247,7 @@ namespace Ankh.UI.SccManagement
                 SvnInfoArgs ia = new SvnInfoArgs();
                 ia.ThrowOnError = false;
                 Collection<SvnInfoEventArgs> info;
-                bool result = sc.GetInfo(repositoryTree.SelectedNode.RawUri, ia, out info);
+                bool result = sc.GetInfo(RepositoryUri, ia, out info);
                 if (!result)
                 {
                     errorProvider1.SetError(repositoryTree, "Please select a valid location in the repository to add to");
