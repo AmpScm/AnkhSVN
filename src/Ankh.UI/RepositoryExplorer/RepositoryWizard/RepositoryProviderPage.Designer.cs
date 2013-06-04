@@ -35,9 +35,9 @@
             this.providerRadioButton = new System.Windows.Forms.RadioButton();
             this.wikiLinkLabel = new System.Windows.Forms.LinkLabel();
             this.providerListView = new Ankh.UI.VSSelectionControls.SmartListView();
+            this.wikiLinkLabel1 = new System.Windows.Forms.LinkLabel();
             this.cloudForgeControl1 = new Ankh.UI.Controls.CloudForgeControl();
             this.nameColumn = new System.Windows.Forms.ColumnHeader();
-            this.wikiLinkLabel1 = new System.Windows.Forms.LinkLabel();
             this.providerPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -100,16 +100,6 @@
             this.providerListView.Name = "providerListView";
             this.providerListView.SelectedIndexChanged += new System.EventHandler(this.providerListView_SelectedIndexChanged);
             // 
-            // cloudForgeControl1
-            // 
-            this.cloudForgeControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            resources.ApplyResources(this.cloudForgeControl1, "cloudForgeControl1");
-            this.cloudForgeControl1.Name = "cloudForgeControl1";
-            // 
-            // nameColumn
-            // 
-            resources.ApplyResources(this.nameColumn, "nameColumn");
-            // 
             // wikiLinkLabel1
             // 
             resources.ApplyResources(this.wikiLinkLabel1, "wikiLinkLabel1");
@@ -117,6 +107,15 @@
             this.wikiLinkLabel1.Name = "wikiLinkLabel1";
             this.wikiLinkLabel1.TabStop = true;
             this.wikiLinkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.wikiLinkLabel_LinkClicked);
+            // 
+            // cloudForgeControl1
+            // 
+            resources.ApplyResources(this.cloudForgeControl1, "cloudForgeControl1");
+            this.cloudForgeControl1.Name = "cloudForgeControl1";
+            // 
+            // nameColumn
+            // 
+            resources.ApplyResources(this.nameColumn, "nameColumn");
             // 
             // RepositoryProviderPage
             // 

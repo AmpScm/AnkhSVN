@@ -264,7 +264,7 @@ Click here to see the list of available providers.</value>
     <value>providerListView</value>
   </data>
   <data name="&gt;&gt;providerListView.Type" xml:space="preserve">
-    <value>Ankh.UI.VSSelectionControls.SmartListView, Ankh.UI, Version=2.4.4899.16031, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.VSSelectionControls.SmartListView, Ankh.UI, Version=2.4.4901.39388, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;providerListView.Parent" xml:space="preserve">
     <value>providerPanel</value>
@@ -292,6 +292,9 @@ Click here to see the list of available providers.</value>
   </data>
   <data name="wikiLinkLabel1.Text" xml:space="preserve">
     <value>Click here to see the list of available providers.</value>
+  </data>
+  <data name="wikiLinkLabel1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
   </data>
   <data name="wikiLinkLabel1.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -354,7 +357,7 @@ Click here to see the list of available providers.</value>
     <value>cloudForgeControl1</value>
   </data>
   <data name="&gt;&gt;cloudForgeControl1.Type" xml:space="preserve">
-    <value>Ankh.UI.Controls.CloudForgeControl, Ankh.UI, Version=2.4.4899.16031, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.Controls.CloudForgeControl, Ankh.UI, Version=2.4.4901.39388, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;cloudForgeControl1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -387,6 +390,6 @@ Click here to see the list of available providers.</value>
     <value>RepositoryProviderPage</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.WizardFramework.WizardPage, Ankh.UI, Version=2.4.4899.16031, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.WizardFramework.WizardPage, Ankh.UI, Version=2.4.4901.39388, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>
