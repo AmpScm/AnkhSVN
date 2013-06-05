@@ -48,6 +48,10 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
                 {
                     return this.providerSelectionPage.Uri != null;
                 }
+                else if (CurrentPage is RepositorySelectionPage)
+                {
+                    return CurrentPage.IsPageComplete;
+                }
                 return base.NextIsFinish;
             }
         }
