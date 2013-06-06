@@ -45,16 +45,24 @@ namespace Ankh.ExtensionPoints.RepositoryProvider
         /// <param name="e">Arguments</param>
         public virtual void UserNamePasswordCallback(ScmUserNamePasswordEventArgs e)
         {
-            e.Cancel = false;
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class ScmRepositorySelectionControlEventArgs : EventArgs
     {
         private string msg;
         private Exception exc;
         private string repoUri;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="repositoryUri"></param>
+        /// <param name="message"></param>
+        /// <param name="exception"></param>
         public ScmRepositorySelectionControlEventArgs(string repositoryUri, string message, Exception exception)
         {
             this.repoUri = repositoryUri;
@@ -71,34 +79,53 @@ namespace Ankh.ExtensionPoints.RepositoryProvider
             get { return this.repoUri; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string Message
         {
             get { return this.msg; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Exception Exception
         {
             get { return this.exc; }
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class ScmUserNamePasswordEventArgs : CancelEventArgs
     {
         private string userName;
         private string password;
         private string repoUri;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="repositoryUri"></param>
         public ScmUserNamePasswordEventArgs(string repositoryUri)
         {
             this.repoUri = repositoryUri;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string UserName
         {
             get { return this.userName; }
             set { this.userName = value; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string Password
         {
             get { return this.password; }

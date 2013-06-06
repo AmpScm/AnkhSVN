@@ -11,7 +11,7 @@ namespace Ankh.Services.RepositoryProvider
     /// The actual provider package initialization is delayed until a non-descriptive property is needed.
     /// Provider id, name, and SCM type are the descriptive properties.
     /// </remarks>
-    class ScmRepositoryProviderProxy : ScmRepositoryProvider
+    sealed class ScmRepositoryProviderProxy : ScmRepositoryProvider
     {
         private ScmRepositoryProvider _delegate;
         private readonly IAnkhServiceProvider _context;
@@ -21,12 +21,12 @@ namespace Ankh.Services.RepositoryProvider
         public ScmRepositoryProviderProxy(IAnkhServiceProvider context, 
             string delegateServiceId, 
             string name,
-            string scmType)
+            RepositoryType scmType)
         {
             _context = context;
             _name = name;
             _delegateId = delegateServiceId;
-            ScmType = scmType;
+            Type = scmType;
         }
 
         #region ScmRepositoryProvider members

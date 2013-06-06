@@ -6,10 +6,7 @@ namespace Ankh.ExtensionPoints.RepositoryProvider
     /// </summary>
     public abstract class ScmRepositoryProvider
     {
-        public static readonly string TYPE_SVN = "svn";
-        public static readonly string TYPE_GIT = "git";
-
-        private string scmType;
+        RepositoryType _reposType;
 
         /// <summary>
         /// Gets the identifier of this provider
@@ -29,10 +26,10 @@ namespace Ankh.ExtensionPoints.RepositoryProvider
         /// <summary>
         /// Gets or sets the type of the repositories that this provider supplies.
         /// </summary>
-        public virtual string ScmType
+        public virtual RepositoryType Type
         {
-            get { return this.scmType; }
-            set { this.scmType = value; }
+            get { return _reposType; }
+            set { _reposType = value; }
         }
     }
 }

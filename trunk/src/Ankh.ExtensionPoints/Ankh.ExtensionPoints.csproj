@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryProvider\ScmRepositoryProvider.cs" />
     <Compile Include="RepositoryProvider\ScmRepositorySelectionControl.cs" />
+    <Compile Include="RepositoryProvider\ScmRepositoryType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.ExtensionPoints.snk" />
