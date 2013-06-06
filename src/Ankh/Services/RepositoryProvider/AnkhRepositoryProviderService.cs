@@ -12,11 +12,13 @@ namespace Ankh.Services.RepositoryProvider
     [GlobalService(typeof(IAnkhRepositoryProviderService))]
     sealed class AnkhRepositoryProviderService : AnkhService, IAnkhRepositoryProviderService
     {
-        private Dictionary<string, ScmRepositoryProvider> _nameProviderMap;
+        readonly Dictionary<string, ScmRepositoryProvider> _nameProviderMap;
 
         public AnkhRepositoryProviderService(IAnkhServiceProvider context)
             : base(context)
-        { }
+        {
+            _nameProviderMap = new Dictionary<string, ScmRepositoryProvider>();
+        }
 
         #region IAnkhRepositoryProviderService Members
 
@@ -42,13 +44,13 @@ namespace Ankh.Services.RepositoryProvider
         /// </summary>
         /// <param name="type">SCM type</param>
         /// <remarks>This call DOES NOT trigger provider package initialization.</remarks>
-        public ICollection<ScmRepositoryProvider> GetRepositoryProviders(string type)
+        public ICollection<ScmRepositoryProvider> GetRepositoryProviders(RepositoryType type)
         {
             ICollection<ScmRepositoryProvider> allProviders = RepositoryProviders;
             List<ScmRepositoryProvider> result = new List<ScmRepositoryProvider>();
             foreach (ScmRepositoryProvider provider in allProviders)
             {
-                if (string.Equals(type, provider.ScmType, StringComparison.InvariantCultureIgnoreCase))
+                if (type == RepositoryType.Any || type ==provider.Type)
                 {
                     result.Add(provider);
                 }
@@ -104,12 +106,6 @@ namespace Ankh.Services.RepositoryProvider
 
         #endregion
 
-        protected override void OnPreInitialize()
-        {
-            base.OnPreInitialize();
-            _nameProviderMap = new Dictionary<string, ScmRepositoryProvider>();
-        }
-
         protected override void OnInitialize()
         {
             base.OnInitialize();
@@ -137,8 +133,8 @@ namespace Ankh.Services.RepositoryProvider
                             using (RegistryKey provider = aKey.OpenSubKey(providerKey))
                             {
                                 string serviceName = (string)provider.GetValue("");
-                                string scmType = (string)provider.GetValue("ScmType");
-                                ScmRepositoryProvider descriptor = new ScmRepositoryProviderProxy(this, providerKey, serviceName, scmType);
+                                RepositoryType rt = GetRepositoryType(provider.GetValue("ScmType") as string);
+                                ScmRepositoryProvider descriptor = new ScmRepositoryProviderProxy(this, providerKey, serviceName, rt);
                                 if (!_nameProviderMap.ContainsKey(providerKey))
                                 {
                                     _nameProviderMap.Add(providerKey, descriptor);
@@ -148,6 +144,16 @@ namespace Ankh.Services.RepositoryProvider
                     }
                 }
             }
+        }
+
+        private RepositoryType GetRepositoryType(string typeString)
+        {
+            if (string.Equals(typeString, "svn", StringComparison.OrdinalIgnoreCase))
+                return RepositoryType.Subversion;
+            if (string.Equals(typeString, "git", StringComparison.OrdinalIgnoreCase))
+                return RepositoryType.Git;
+
+            return RepositoryType.Any;
         }
     }
 }

@@ -53,8 +53,6 @@ namespace Ankh.ExtensionPoints.IssueTracker
         {
             if (args == null)
                 throw new ArgumentNullException("args");
-
-            args.Cancel = false;
         }
 
         /// <summary>

@@ -246,7 +246,7 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
                         SvnInfoArgs infoArgs = new SvnInfoArgs();
                         infoArgs.ThrowOnError = false;
                         System.Collections.ObjectModel.Collection<SvnInfoEventArgs> info;
-                        if (client.GetInfo(SvnTarget.FromString(e.RepositoryUri), infoArgs, out info))
+                        if (client.GetInfo(SvnUriTarget.FromString(e.RepositoryUri), infoArgs, out info))
                         { }
                     }
                     finally

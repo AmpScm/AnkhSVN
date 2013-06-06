@@ -15,7 +15,7 @@ namespace Ankh
         /// Gets all the registered SCM repository providers for the given SCM type(svn, git).
         /// </summary>
         /// <remarks>This call DOES NOT trigger provider package initialization.</remarks>
-        ICollection<ScmRepositoryProvider> GetRepositoryProviders(string type);
+        ICollection<ScmRepositoryProvider> GetRepositoryProviders(RepositoryType type);
 
         /// <summary>
         /// Tries to find a registered provider with the given name.

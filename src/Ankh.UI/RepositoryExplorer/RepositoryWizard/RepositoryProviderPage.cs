@@ -133,7 +133,7 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
                 IAnkhRepositoryProviderService repoProviderSvc = Wizard.Context.GetService<IAnkhRepositoryProviderService>();
                 if (repoProviderSvc != null)
                 {
-                    return repoProviderSvc.GetRepositoryProviders(ScmRepositoryProvider.TYPE_SVN);
+                    return repoProviderSvc.GetRepositoryProviders(RepositoryType.Subversion);
                 }
             }
             return new ScmRepositoryProvider[] { };
