@@ -234,17 +234,25 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
             {
                 using (SvnPoolClient client = pool.GetNoUIClient())
                 {
-                    client.Authentication.UserNamePasswordHandlers += delegate(object sender, SvnUserNamePasswordEventArgs args)
+                    EventHandler<SvnUserNamePasswordEventArgs> handler = delegate(object sender, SvnUserNamePasswordEventArgs args)
                     {
                         args.Save = true;
                         args.UserName = e.UserName;
                         args.Password = e.Password;
                     };
-                    SvnInfoArgs infoArgs = new SvnInfoArgs();
-                    infoArgs.ThrowOnError = false;
-                    System.Collections.ObjectModel.Collection<SvnInfoEventArgs> info;
-                    if (client.GetInfo(SvnTarget.FromString(e.RepositoryUri), infoArgs, out info))
-                    { }
+                    client.Authentication.UserNamePasswordHandlers += handler;
+                    try
+                    {
+                        SvnInfoArgs infoArgs = new SvnInfoArgs();
+                        infoArgs.ThrowOnError = false;
+                        System.Collections.ObjectModel.Collection<SvnInfoEventArgs> info;
+                        if (client.GetInfo(SvnTarget.FromString(e.RepositoryUri), infoArgs, out info))
+                        { }
+                    }
+                    finally
+                    {
+                        client.Authentication.UserNamePasswordHandlers -= handler;
+                    }
                 }
             }
         }
