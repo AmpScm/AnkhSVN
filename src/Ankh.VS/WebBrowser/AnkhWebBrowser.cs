@@ -15,11 +15,8 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio;
 
 namespace Ankh.VS.WebBrowser
 {
@@ -40,6 +37,15 @@ namespace Ankh.VS.WebBrowser
         public void Navigate(Uri url, AnkhBrowserArgs args)
         {
             AnkhBrowserResults results;
+            if (args != null && args.External)
+            {
+                try
+                {
+                    NavigateInExternalBrowser(url);
+                    return;
+                }
+                catch { } // BA: log/ignore the exception, and open the URL using VS's browser service
+            }
             Navigate(url, args, out results);
         }
 
@@ -59,6 +65,15 @@ namespace Ankh.VS.WebBrowser
                 out browser,
                 out ppFrame);
             results = new Results(browser, ppFrame);
+        }
+
+        private void NavigateInExternalBrowser(Uri url)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = url.AbsoluteUri;
+            startInfo.UseShellExecute = true;
+            startInfo.Verb = "Open";
+            Process.Start(startInfo);
         }
 
         private class Results : AnkhBrowserResults
