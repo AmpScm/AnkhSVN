@@ -79,7 +79,7 @@ namespace Ankh.Commands
                             if (a.Client.Upgrade(tryDir, ua)
                                 || ua.LastException.SvnErrorCode != SvnErrorCode.SVN_ERR_WC_INVALID_OP_ON_CWD)
                             {
-                                if (!done.Contains(tryDir))
+                                if (ua.LastException == null && !done.Contains(tryDir))
                                     done.Add(tryDir);
                                 break;
                             }
