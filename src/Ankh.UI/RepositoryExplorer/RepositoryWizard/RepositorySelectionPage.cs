@@ -67,7 +67,7 @@ namespace Ankh.UI.RepositoryExplorer.RepositoryWizard
             {
                 if (this.repoProvider != null)
                 {
-                    this.repoProviderControl = repoProvider.RepositorySelectionControl;
+                    this.repoProviderControl = repoProvider.CreateSelectionControl();
                     if (this.repoProviderControl != null)
                     {
                         Control c = GetControlFor(this.repoProviderControl);

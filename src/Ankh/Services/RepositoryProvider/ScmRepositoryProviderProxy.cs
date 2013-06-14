@@ -41,22 +41,19 @@ namespace Ankh.Services.RepositoryProvider
             get { return _name; }
         }
 
-        public override ScmRepositorySelectionControl RepositorySelectionControl
+        public override ScmRepositorySelectionControl CreateSelectionControl()
         {
-            get
+            ScmRepositoryProvider dlg = Target;
+            if (dlg != null)
             {
-                ScmRepositoryProvider dlg = Delegate;
-                if (dlg != null)
-                {
-                    return dlg.RepositorySelectionControl;
-                }
-                return null;
+                return dlg.CreateSelectionControl();
             }
+            return null;
         }
 
         #endregion
 
-        private ScmRepositoryProvider Delegate
+        private ScmRepositoryProvider Target
         {
             get
             {

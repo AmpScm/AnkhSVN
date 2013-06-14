@@ -1,4 +1,5 @@
 ﻿
+using System;
 namespace Ankh.ExtensionPoints.RepositoryProvider
 {
     /// <summary>
@@ -19,9 +20,9 @@ namespace Ankh.ExtensionPoints.RepositoryProvider
         public abstract string Name { get; }
 
         /// <summary>
-        /// Gets the SCM repository selection control which provides the UI to select  a repository
+        /// Creates a SCM repository selection control which provides the UI to select  a repository
         /// </summary>
-        public abstract ScmRepositorySelectionControl RepositorySelectionControl { get; }
+        public abstract ScmRepositorySelectionControl CreateSelectionControl();
 
         /// <summary>
         /// Gets or sets the type of the repositories that this provider supplies.
