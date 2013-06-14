@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="Ankh.Scc">
+      <ComponentGroupRef Id="Ankh.Ids" />
+      <ComponentGroupRef Id="Ankh.Services" />
+      <ComponentRef Id="C_Ankh.Scc.dll" />
+    </ComponentGroup>
+    <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Scc.TargetDir)">
+      <Component Id="C_Ankh.Scc.dll" Guid="B4F6A88C-FD9E-47ED-A754-C2A993F2DC92">
+        <File Id="CF_Ankh.Scc.dll" Name="Ankh.Scc.dll" Checksum="yes" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
