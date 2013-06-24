@@ -106,9 +106,9 @@
         <h1>AnkhSVN-Daily Update</h1>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
-        <p>If you don't want to upgrade to Subversion 1.7, you can use an <a href="/daily/2.2.x">
-           AnkhSVN 2.2 daily</a> for Subversion 1.6 and an <a href="/daily/2.0.x">AnkhSVN 2.0 daily</a>
-           for the latest daily build based on Subversion 1.5</p>
+        <p>If you don't want to upgrade to Subversion 1.8, you can use an <a href="/daily/2.4.x">
+           AnkhSVN 2.4 daily</a> for Subversion 1.7 and an <a href="/daily/2.2.x">AnkhSVN 2.2 daily</a>
+           for the latest daily build based on Subversion 1.6</p>
         <xsl:text>&#13;&#10;</xsl:text>
         <p>
           The AnkhSVN project provides Daily builds of the current development tree. These versions
