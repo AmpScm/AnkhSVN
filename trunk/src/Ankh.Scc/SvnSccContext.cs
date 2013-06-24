@@ -106,34 +106,22 @@ namespace Ankh.Scc
             return entry;
         }
 
-        public void MetaMove(string oldName, string newName, bool tryRevert)
+        public void MetaMove(string oldName, string newName)
         {
-            SvnEntry toBefore = null;
-
-            if (tryRevert)
-                toBefore = SafeGetEntry(newName);
-
-            SvnWorkingCopyMoveArgs ma = new SvnWorkingCopyMoveArgs();
+            SvnMoveArgs ma = new SvnMoveArgs();
             ma.ThrowOnError = false;
-            ma.MetaDataOnly = true;
+            ma.MetadataOnly = true;
 
-            if(WcClient.Move(oldName, newName, ma) && tryRevert)
-                MaybeRevert(newName, toBefore);
+            Client.Move(oldName, newName, ma);
         }
 
-        public void MetaCopy(string from, string newName, bool tryRevert)
+        public void MetaCopy(string from, string newName)
         {
-            SvnEntry toBefore = null;
-
-            if (tryRevert)
-                toBefore = SafeGetEntry(newName);
-
             SvnWorkingCopyCopyArgs ca = new SvnWorkingCopyCopyArgs();
             ca.ThrowOnError = false;
             ca.MetaDataOnly = true;
 
-            if (WcClient.Copy(from, newName, ca) && tryRevert)
-                MaybeRevert(newName, toBefore);
+            WcClient.Copy(from, newName, ca);
         }
 
         public bool MetaDelete(string path)

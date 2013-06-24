@@ -207,7 +207,7 @@ namespace Ankh.Scc
                     if (opp != null && !opp.IsVersioned)
                         ctx.AddParents(newName);
 
-                    ctx.MetaMove(oldName, newName, true);
+                    ctx.MetaMove(oldName, newName);
 
                     _alreadyProcessed.Add(newName);
 

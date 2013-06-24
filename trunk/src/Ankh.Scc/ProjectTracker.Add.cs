@@ -186,7 +186,7 @@ namespace Ankh.Scc
                     foreach (KeyValuePair<string, string> kv in copies)
                     {
                         svn.AddParents(kv.Key);
-                        svn.MetaCopy(kv.Value, kv.Key, true);
+                        svn.MetaCopy(kv.Value, kv.Key);
                     }
                 }
 
@@ -489,7 +489,7 @@ namespace Ankh.Scc
                         using (SvnSccContext svn = new SvnSccContext(this))
                         {
                             svn.AddParents(dir);
-                            svn.MetaCopy(origin, dir, true);
+                            svn.MetaCopy(origin, dir);
                         }
                     }
                 }
