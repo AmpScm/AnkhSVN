@@ -407,10 +407,20 @@ namespace Ankh.Scc
                 case SvnStatus.Added:
                     if (item != null && item.HasCopyableHistory)
                     {
-                        if (item.Status.LocalTextStatus == SvnStatus.Normal)
-                            return PendingChangeKind.Copied;
+                        if (item.IsMoved)
+                        {
+                            if (item.Status.LocalTextStatus == SvnStatus.Normal)
+                                return PendingChangeKind.Moved;
+                            else
+                                return PendingChangeKind.ModifiedMove;
+                        }
                         else
-                            return PendingChangeKind.ModifiedCopy;
+                        {
+                            if (item.Status.LocalTextStatus == SvnStatus.Normal)
+                                return PendingChangeKind.Copied;
+                            else
+                                return PendingChangeKind.ModifiedCopy;
+                        }
                     }
 
                     return PendingChangeKind.Added;
