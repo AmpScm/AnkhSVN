@@ -78,11 +78,7 @@ namespace Ankh.Commands
                         {
                             if (a.Client.Upgrade(tryDir, ua)
                                 || ua.LastException.SvnErrorCode != SvnErrorCode.SVN_ERR_WC_INVALID_OP_ON_CWD)
-                            {
-                                if (ua.LastException == null && !done.Contains(tryDir))
-                                    done.Add(tryDir);
                                 break;
-                            }
 
                             string pd = SvnTools.GetNormalizedDirectoryName(tryDir);
 
@@ -95,12 +91,7 @@ namespace Ankh.Commands
                 });
 
             if (dirs.Count > 0)
-            {
                 StatusCache.ResetUpgradeWarning();
-
-                foreach (string i in dirs)
-                    StatusCache.MarkDirtyRecursive(i);
-            }
         }
 
         event EventHandler IComponent.Disposed
