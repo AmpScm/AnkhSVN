@@ -111,5 +111,15 @@ namespace Ankh.Scc
         /// The node was copied and has local changes
         /// </summary>
         ModifiedCopy,
+
+        /// <summary>
+        /// The node was moved
+        /// </summary>
+        Moved,
+
+        /// <summary>
+        /// The node was moved and has local changes
+        /// </summary>
+        ModifiedMove,
     }
 }

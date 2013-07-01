@@ -149,17 +149,19 @@ namespace Ankh.Scc
         /// The item is marked as ignored in subversion
         /// </summary>
         Ignored                 = 0x00800000,
+
+        MovedHere               = 0x01000000,
         #endregion
 
         /// <summary>
         /// The item is the root of a working copy
         /// </summary>
-        IsWCRoot                = 0x01000000,
+        IsWCRoot                = 0x10000000,
 
         /// <summary>
         /// The item is a textfile
         /// </summary>
-        IsTextFile              = 0x02000000,
+        IsTextFile              = 0x20000000,
 
         /// <summary>
         /// The item is (part of) the administrative area

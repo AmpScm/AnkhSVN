@@ -150,6 +150,12 @@
   <data name="StateModifiedCopy" xml:space="preserve">
     <value>Copied and Modified</value>
   </data>
+  <data name="StateModifiedMove" xml:space="preserve">
+    <value>Moved and Modified</value>
+  </data>
+  <data name="StateMoved" xml:space="preserve">
+    <value>Moved</value>
+  </data>
   <data name="StateNew" xml:space="preserve">
     <value>New</value>
   </data>

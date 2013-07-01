@@ -137,7 +137,8 @@ namespace Ankh
                 | SvnItemState.Obstructed | SvnItemState.Replaced | SvnItemState.Versioned
                 | SvnItemState.SvnDirty | SvnItemState.PropertyModified | SvnItemState.PropertiesConflicted | SvnItemState.Conflicted
                 | SvnItemState.Obstructed | SvnItemState.MustLock | SvnItemState.IsWCRoot
-                | SvnItemState.HasProperties | SvnItemState.HasLockToken | SvnItemState.HasCopyOrigin;
+                | SvnItemState.HasProperties | SvnItemState.HasLockToken | SvnItemState.HasCopyOrigin
+                | SvnItemState.MovedHere;
 
             switch (status)
             {
@@ -218,7 +219,8 @@ namespace Ankh
 
             const SvnItemState unset = SvnItemState.Modified | SvnItemState.Added |
                 SvnItemState.HasCopyOrigin | SvnItemState.Deleted | SvnItemState.ContentConflicted |
-                SvnItemState.Ignored | SvnItemState.Obstructed | SvnItemState.Replaced;
+                SvnItemState.Ignored | SvnItemState.Obstructed | SvnItemState.Replaced |
+                SvnItemState.MovedHere;
 
             const SvnItemState managed = SvnItemState.Versioned;
 
@@ -250,16 +252,30 @@ namespace Ankh
                     svnDirty = false;
                     break;
                 case SvnStatus.Added:
-                    if (status.IsCopied)
+                    if (status.IsMoved && status.IsCopied)
+                        SetState(managed | SvnItemState.Added | SvnItemState.HasCopyOrigin | SvnItemState.MovedHere, unset);
+                    else if (status.IsCopied)
                         SetState(managed | SvnItemState.Added | SvnItemState.HasCopyOrigin, unset);
                     else
                         SetState(managed | SvnItemState.Added, unset);
+
+                    if (status.LocalTextStatus == SvnStatus.Modified)
+                        SetState(SvnItemState.Modified, SvnItemState.None);
+                    else if (status.LocalTextStatus == SvnStatus.Normal)
+                        SetState(SvnItemState.None, SvnItemState.Modified);
                     break;
                 case SvnStatus.Replaced:
-                    if (status.IsCopied)
+                    if (status.IsMoved && status.IsCopied)
+                        SetState(managed | SvnItemState.Replaced | SvnItemState.HasCopyOrigin | SvnItemState.MovedHere, unset);
+                    else if (status.IsCopied)
                         SetState(managed | SvnItemState.Replaced | SvnItemState.HasCopyOrigin, unset);
                     else
                         SetState(managed | SvnItemState.Replaced, unset);
+
+                    if (status.LocalTextStatus == SvnStatus.Modified)
+                        SetState(SvnItemState.Modified, SvnItemState.None);
+                    else if (status.LocalTextStatus == SvnStatus.Normal)
+                        SetState(SvnItemState.None, SvnItemState.Modified);
                     break;
                 case SvnStatus.Modified:
                 case SvnStatus.Conflicted:
@@ -591,6 +607,11 @@ namespace Ankh
         public bool IsDirectory
         {
             get { return GetState(SvnItemState.IsDiskFolder) == SvnItemState.IsDiskFolder; }
+        }
+
+        public bool IsMoved
+        {
+            get { return GetState(SvnItemState.MovedHere) == SvnItemState.MovedHere; }
         }
 
 

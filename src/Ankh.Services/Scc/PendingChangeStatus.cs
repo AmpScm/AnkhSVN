@@ -82,6 +82,10 @@ namespace Ankh.Scc
                     return PendingChangeText.StateIgnored;
                 case PendingChangeKind.ModifiedCopy:
                     return PendingChangeText.StateModifiedCopy;
+                case PendingChangeKind.Moved:
+                    return PendingChangeText.StateMoved;
+                case PendingChangeKind.ModifiedMove:
+                    return PendingChangeText.StateModifiedMove;
                 default:
                     return State.ToString();
             }            

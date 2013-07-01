@@ -48,6 +48,8 @@ namespace Ankh
         readonly long _lastChangeRevision;
         readonly long _revision;
         readonly bool _localFileExists;
+        readonly bool _movedHere;
+        readonly bool _movedAway;
 
         public AnkhStatus(SvnStatusEventArgs status)
         {
@@ -73,6 +75,8 @@ namespace Ankh
             }
 
             _conflicted = status.Conflicted;
+            _movedHere = (status.MovedFrom != null);
+            _movedAway = (status.MovedTo != null);
         }
 
         /// <summary>
@@ -212,7 +216,12 @@ namespace Ankh
         {
             get { return _localCopied; }
         }
-        
+
+        public bool IsMoved
+        {
+            get { return _movedHere; }
+        }
+
         /// <summary>
         /// Gets a boolean indicating whether the workingcopy is locked in the local working copy
         /// </summary>

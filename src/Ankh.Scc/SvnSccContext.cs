@@ -110,7 +110,7 @@ namespace Ankh.Scc
         {
             SvnMoveArgs ma = new SvnMoveArgs();
             ma.ThrowOnError = false;
-            ma.MetadataOnly = true;
+            ma.MetaDataOnly = true;
 
             Client.Move(oldName, newName, ma);
         }
