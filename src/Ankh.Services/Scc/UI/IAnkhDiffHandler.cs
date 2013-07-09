@@ -71,7 +71,7 @@ namespace Ankh.Scc.UI
         public bool ShowDiffAsDocument
         {
             get { return _asDocument; }
-            set { _asDocument = false; }
+            set { _asDocument = value; }
         }
 
         /// <summary>
