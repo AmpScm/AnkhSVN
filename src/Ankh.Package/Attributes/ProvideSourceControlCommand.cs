@@ -22,33 +22,48 @@ using System.Globalization;
 
 namespace Ankh.VSPackage.Attributes
 {
+    public enum SccProviderCommand
+    {
+        Open,
+        Share
+    }
     /// <summary>
     /// This attribute registers the package as source control provider.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    internal sealed class ProvideSourceControlProviderAttribute : RegistrationAttribute
+    internal sealed class ProvideSourceControlCommandAttribute : RegistrationAttribute
     {
         readonly string _providerId;
-        readonly string _regName;
-        readonly string _uiName;
-        readonly Type _serviceType;
+        readonly SccProviderCommand _command;
+        readonly Guid _commandGroup;
+        readonly int _commandId;
 
         /// <summary>
         /// </summary>
-        public ProvideSourceControlProviderAttribute(string providerId, string regName, string uiName, Type serviceType)
+        public ProvideSourceControlCommandAttribute(string providerId, SccProviderCommand command, Guid commandGroup, int commandId)
         {
-            _regName = regName;
-            _uiName = uiName;
             _providerId = providerId;
-            _serviceType = serviceType;
+            _command = command;
+            _commandGroup = commandGroup;
+            _commandId = commandId;
         }
 
-        /// <summary>
-        /// Get the friendly name of the provider (written in registry)
-        /// </summary>
-        public string RegName
+        public ProvideSourceControlCommandAttribute(string providerId, SccProviderCommand command, object commandValue)
+            : this(providerId, command, commandValue.GetType().GUID, GetEnumValue(commandValue))
         {
-            get { return _regName; }
+        }
+
+        private static int GetEnumValue(object commandValue)
+        {
+            if (commandValue == null)
+                return 0;
+
+            Type enumType = commandValue.GetType();
+            Type undertype = Enum.GetUnderlyingType(enumType);
+
+            commandValue  = Convert.ChangeType(commandValue, undertype);
+
+            return (int)commandValue;
         }
 
         /// <summary>
@@ -60,27 +75,11 @@ namespace Ankh.VSPackage.Attributes
         }
 
         /// <summary>
-        /// Get the UI name of the provider (string resource ID)
-        /// </summary>
-        public string UIName
-        {
-            get { return _uiName; }
-        }
-
-        /// <summary>
         /// Get the package containing the UI name of the provider
         /// </summary>
         public Guid UINamePkg
         {
             get { return AnkhId.PackageGuid; }
-        }
-
-        /// <summary>
-        /// Get the guid of the provider's service
-        /// </summary>
-        public Guid SccProviderService
-        {
-            get { return _serviceType.GUID; }
         }
 
         /// <summary>
@@ -90,31 +89,20 @@ namespace Ankh.VSPackage.Attributes
         /// </summary>
         public override void Register(RegistrationContext context)
         {
-            // Write to the context's log what we are about to do
-            context.Log.WriteLine(String.Format(CultureInfo.CurrentCulture,
-                "Ankh Source Control Provider:\t\t{0}\n", RegName));
-
             // Declare the source control provider, its name, the provider's service 
             // and aditionally the packages implementing this provider
             using (Key sccProviders = context.CreateKey("SourceControlProviders"))
             {
-                // BH: Set ourselves as current default SCC Provider
-                sccProviders.SetValue("", RegGuid.ToString("B"));
-
                 using (Key sccProviderKey = sccProviders.CreateSubkey(RegGuid.ToString("B")))
                 {
-                    sccProviderKey.SetValue("", RegName);
-                    sccProviderKey.SetValue("Service", SccProviderService.ToString("B"));
-
-                    using (Key sccProviderNameKey = sccProviderKey.CreateSubkey("Name"))
+                    using (Key sccProviderNameKey = sccProviderKey.CreateSubkey("Commands"))
                     {
-                        sccProviderNameKey.SetValue("", UIName);
-                        sccProviderNameKey.SetValue("Package", UINamePkg.ToString("B"));
-                    }
+                        sccProviderNameKey.SetValue(
+                            string.Format("{0}Command", _command),
+                            string.Format("{0:B}|{1}", _commandGroup, _commandId));
 
-                    // Additionally, you can create a "Packages" subkey where you can enumerate the dll
-                    // that are used by the source control provider, something like "Package1"="BasicSccProvider.dll"
-                    // but this is not a requirement.
+                        sccProviderNameKey.Close();
+                    }
                 }
             }
         }
@@ -125,7 +113,6 @@ namespace Ankh.VSPackage.Attributes
         /// <param name="context"></param>
         public override void Unregister(RegistrationContext context)
         {
-            context.RemoveKey("SourceControlProviders\\" + AnkhId.SccProviderGuid.ToString("B"));
         }
     }
 }
