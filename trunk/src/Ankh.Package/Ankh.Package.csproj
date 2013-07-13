@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ProvideAnkhExtensionRedirectAttribute.cs" />
+    <Compile Include="Attributes\ProvideSourceControlCommand.cs" />
     <Compile Include="Attributes\ProvideThemeInformation.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
