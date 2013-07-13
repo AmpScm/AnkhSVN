@@ -73,9 +73,7 @@ namespace Ankh.VSPackage
 
     [ProvideAnkhExtensionRedirect()]
 
-    [CLSCompliant(false)]
-    [ProvideSourceControlProvider(AnkhId.SccProviderTitle, "#100")]
-    [ProvideService(typeof(ITheAnkhSvnSccProvider), ServiceName = AnkhId.SubversionSccName)]
+    [CLSCompliant(false)]    
     [ProvideOutputWindow(AnkhId.AnkhOutputPaneId, "#111", InitiallyInvisible = false, Name = AnkhId.PlkProduct, ClearWithSolution = false)]
     sealed partial class AnkhSvnPackage : Package, IAnkhPackage, IAnkhQueryService
     {
