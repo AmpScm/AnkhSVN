@@ -37,6 +37,13 @@ namespace Ankh.UI.SvnLog
         public LogRevisionItem(LogRevisionControl listView, IAnkhServiceProvider context, SvnLoggingEventArgs e)
             : base(listView)
         {
+            if (listView == null)
+                throw new ArgumentNullException("listView");
+            else if (context == null)
+                throw new ArgumentNullException("listView");
+            else if (e == null)
+                throw new ArgumentNullException("e");
+
             _args = e;
             _context = context;
             RefreshText();

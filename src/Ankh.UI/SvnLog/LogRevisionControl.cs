@@ -89,7 +89,14 @@ namespace Ankh.UI.SvnLog
             {
                 _installed = true;
 
-                VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Copy), OnCopy, OnUpdateCopy);
+                try
+                {
+                    VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Copy), OnCopy, OnUpdateCopy);
+                }
+                catch (InvalidOperationException)
+                {
+                    // ### Dialog is not ready yet :(
+                }
             }
         }
 
@@ -250,8 +257,11 @@ namespace Ankh.UI.SvnLog
 
         void OnReceivedItem(object sender, SvnLoggingEventArgs e)
         {
-            if (sender != _currentRequest)
+            if (sender != _currentRequest || _context == null)
+            {
+                e.Cancel = true;
                 return;
+            }
 
             e.Detach();
 
