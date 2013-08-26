@@ -64,14 +64,19 @@ namespace Ankh
             get { return _osVersion ?? (_osVersion = Environment.OSVersion.Version); }
         }
 
-        public static bool VS2010OrLater
+        public static bool VS2013OrLater
         {
-            get { return FullVersion >= new Version(10, 0); }
+            get { return FullVersion.Major >= 12; }
         }
 
         public static bool VS2012OrLater
         {
             get { return FullVersion.Major >= 11; }
+        }
+
+        public static bool VS2010OrLater
+        {
+            get { return FullVersion.Major >= 10; }
         }
 
         public static bool VS2008OrOlder
