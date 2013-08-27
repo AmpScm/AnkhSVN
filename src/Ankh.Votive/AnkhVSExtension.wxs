@@ -94,7 +94,7 @@
   </Fragment>
 
   <Fragment>
-    <CustomAction Id="AnkhVS12.0Setup" Property="VS12DEVENV" ExeCommand="/setup /NoSetupVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
+    <CustomAction Id="AnkhVS2013Setup" Property="VS12DEVENV" ExeCommand="/setup /NoSetupVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
     <PropertyRef Id="VS12DEVENV" />
 
     <DirectoryRef Id="APP_bin">
@@ -112,7 +112,7 @@
     </Property>
 
     <InstallExecuteSequence>
-      <Custom Action="AnkhVS12.0Setup" Before="InstallFinalize" Overridable="yes">VS12DEVENV And ((Not UPGRADINGPRODUCTCODE) Or REINSTALL Or (Not VS120_TICKED))</Custom>
+      <Custom Action="AnkhVS2013Setup" Before="InstallFinalize" Overridable="yes">VS12DEVENV And ((Not UPGRADINGPRODUCTCODE) Or REINSTALL Or (Not VS120_TICKED))</Custom>
     </InstallExecuteSequence>
   </Fragment>
 
