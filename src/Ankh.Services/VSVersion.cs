@@ -35,26 +35,30 @@ namespace Ankh
             {
                 if (_vsVersion == null)
                 {
+                    _vsVersion = new Version(0, 0); // Assume not running inside Visual Studio!
                     string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "msenv.dll");
 
                     if (File.Exists(path))
                     {
                         FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(path);
+                        string verName = null;
 
-                        string verName = fvi.ProductVersion;
+                        if (fvi != null)
+                            verName = fvi.ProductVersion ?? fvi.FileVersion;
 
-                        for (int i = 0; i < verName.Length; i++)
+                        if (!string.IsNullOrEmpty(verName))
                         {
-                            if (!char.IsDigit(verName, i) && verName[i] != '.')
+                            for (int i = 0; i < verName.Length; i++)
                             {
-                                verName = verName.Substring(0, i);
-                                break;
+                                if (!char.IsDigit(verName, i) && verName[i] != '.')
+                                {
+                                    verName = verName.Substring(0, i);
+                                    break;
+                                }
                             }
+                            _vsVersion = new Version(verName);
                         }
-                        _vsVersion = new Version(verName);
                     }
-                    else
-                        _vsVersion = new Version(0, 0); // Not running inside Visual Studio!
                 }
 
                 return _vsVersion;
@@ -94,7 +98,7 @@ namespace Ankh
         private static bool TryGetDteVersion(IAnkhServiceProvider context, out Version version)
         {
             version = null;
-            Type dteType  = Type.GetType("EnvDTE._DTE, EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+            Type dteType = Type.GetType("EnvDTE._DTE, EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
 
             if (dteType == null)
                 return false;
@@ -126,7 +130,7 @@ namespace Ankh
                 return;
 
             value = value.Trim();
-                    
+
             Regex re = new Regex("^[0-9]+(\\.[0-9]+){0,3}"); // Avoid suffix. No compilation necessary
             Match m = re.Match(value);
             if (m.Success)
