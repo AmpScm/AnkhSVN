@@ -19,6 +19,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.VisualStudio.Shell.Interop;
+using System.Text.RegularExpressions;
 
 namespace Ankh
 {
@@ -57,6 +59,42 @@ namespace Ankh
 
                 return _vsVersion;
             }
+        }
+
+        const int VSSPROPID_ReleaseVersion = -9068; // VS 12+
+
+        internal static void Ensure(IAnkhServiceProvider context)
+        {
+            if (FullVersion.Major == 0)
+            {
+                IVsShell shell = context.GetService<IVsShell>(typeof(SVsShell));
+                string versionStr = null;
+
+                if (shell != null)
+                {
+                    object v;
+                    if (VSErr.Succeeded(shell.GetProperty(VSSPROPID_ReleaseVersion, out v)))
+                        versionStr = v as string;
+                    // TODO: Add compatible code for older versions
+
+                }
+
+                if (!string.IsNullOrEmpty(versionStr))
+                    ParseVersion(versionStr);
+            }
+        }
+
+        static void ParseVersion(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return;
+
+            value = value.Trim();
+                    
+            Regex re = new Regex("^[0-9]+(\\.[0-9]+){0,3}"); // Avoid suffix. No compilation necessary
+            Match m = re.Match(value);
+            if (m.Success)
+                _vsVersion = new Version(m.Value);
         }
 
         public static Version OSVersion

@@ -132,6 +132,8 @@ namespace Ankh.VSPackage
 
         void InitializeRuntime()
         {
+            _runtime.PreLoad();
+
             IServiceContainer container = GetService<IServiceContainer>();
             container.AddService(typeof(IAnkhPackage), this, true);
             container.AddService(typeof(IAnkhQueryService), this, true);
