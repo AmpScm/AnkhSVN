@@ -67,21 +67,57 @@ namespace Ankh
         {
             if (FullVersion.Major == 0)
             {
-                IVsShell shell = context.GetService<IVsShell>(typeof(SVsShell));
+                // Use the old DTE api in an attempt to get the version
+                Version ver;
+                if (TryGetDteVersion(context, out ver))
+                    _vsVersion = ver;
+            }
+
+            if (FullVersion.Major == 0)
+            {
                 string versionStr = null;
 
+                // VS 2012 has a shell property
+                IVsShell shell = context.GetService<IVsShell>(typeof(SVsShell));
                 if (shell != null)
                 {
                     object v;
                     if (VSErr.Succeeded(shell.GetProperty(VSSPROPID_ReleaseVersion, out v)))
                         versionStr = v as string;
-                    // TODO: Add compatible code for older versions
-
                 }
 
                 if (!string.IsNullOrEmpty(versionStr))
                     ParseVersion(versionStr);
             }
+        }
+
+        private static bool TryGetDteVersion(IAnkhServiceProvider context, out Version version)
+        {
+            version = null;
+            Type dteType  = Type.GetType("EnvDTE._DTE, EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+
+            if (dteType == null)
+                return false;
+
+            Object dte = context.GetService(typeof(SDTE));
+
+            if (dte == null)
+                return false;
+
+            System.Reflection.MethodInfo method = dteType.GetMethod("get_Version");
+
+            if (method == null)
+                return false;
+
+            string verStr = method.Invoke(dte, null) as string;
+
+            if (verStr != null)
+            {
+                version = new Version(verStr);
+                return true;
+            }
+
+            return false;
         }
 
         static void ParseVersion(string value)
