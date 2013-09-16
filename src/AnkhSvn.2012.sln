@@ -237,7 +237,4 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		DPBuild = 5
 	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 EndGlobal
