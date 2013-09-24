@@ -427,14 +427,16 @@ namespace Ankh.Scc.ProjectMap
             int dirty;
             bool done = false;
 
-            IVsPersistDocData pdd;
-            IPersistFileFormat pff;
-            IVsPersistHierarchyItem phi;
+            
             IVsWindowFrame wf;
             object rawDoc = RawDocument;
 
             if (rawDoc != null)
             {
+                IVsPersistDocData pdd;
+                IPersistFileFormat pff;
+                IVsPersistHierarchyItem phi;
+
                 // Implemented by most editors
                 if (null != (pdd = rawDoc as IVsPersistDocData))
                 {
