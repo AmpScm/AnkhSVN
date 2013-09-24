@@ -28,7 +28,7 @@ using Ankh.Scc.ProjectMap;
 namespace Ankh.Scc
 {
     [GlobalService(typeof(IAnkhOpenDocumentTracker))]
-    partial class OpenDocumentTracker : AnkhService, IAnkhOpenDocumentTracker, IVsRunningDocTableEvents4, IVsRunningDocTableEvents3, IVsRunningDocTableEvents2, IVsRunningDocTableEvents
+    partial class OpenDocumentTracker : AnkhService, IAnkhOpenDocumentTracker, IVsRunningDocTableEvents3, IVsRunningDocTableEvents2, IVsRunningDocTableEvents
     {
         readonly Dictionary<string, SccDocumentData> _docMap = new Dictionary<string, SccDocumentData>(StringComparer.OrdinalIgnoreCase);
         readonly Dictionary<uint, SccDocumentData> _cookieMap = new Dictionary<uint, SccDocumentData>();
@@ -203,10 +203,12 @@ namespace Ankh.Scc
 
         static class VSReflection
         {
+            public delegate uint GetDocumentCookie(string moniker);
             public delegate string GetDocumentMoniker(uint cookie);
             public delegate uint GetDocumentFlags(uint cookie);
             public delegate bool IsDocumentDirty(uint cookie);
         }
+        VSReflection.GetDocumentCookie GetDocumentCookie_cb;
         VSReflection.GetDocumentMoniker GetDocumentMoniker_cb;
         VSReflection.GetDocumentFlags GetDocumentFlags_cb;
         VSReflection.IsDocumentDirty IsDocumentDirty_cb;
@@ -218,15 +220,16 @@ namespace Ankh.Scc
             {
                 Type IVsRunningDocumentTable4_type = VSAssemblies.VSShellInterop12.GetType("Microsoft.VisualStudio.Shell.Interop.IVsRunningDocumentTable4", false);
 
-                GetDocumentMoniker_cb = base.GetInterfaceDelegate<VSReflection.GetDocumentMoniker>(IVsRunningDocumentTable4_type, RunningDocumentTable);
-                GetDocumentFlags_cb = base.GetInterfaceDelegate<VSReflection.GetDocumentFlags>(IVsRunningDocumentTable4_type, RunningDocumentTable);
+                GetDocumentCookie_cb = GetInterfaceDelegate<VSReflection.GetDocumentCookie>(IVsRunningDocumentTable4_type, RunningDocumentTable);
+                GetDocumentMoniker_cb = GetInterfaceDelegate<VSReflection.GetDocumentMoniker>(IVsRunningDocumentTable4_type, RunningDocumentTable);
+                GetDocumentFlags_cb = GetInterfaceDelegate<VSReflection.GetDocumentFlags>(IVsRunningDocumentTable4_type, RunningDocumentTable);
             }
 
             if (VSVersion.VS2012OrLater)
             {
                 Type IVsRunningDocumentTable3_type = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsRunningDocumentTable3", false);
 
-                IsDocumentDirty_cb = base.GetInterfaceDelegate<VSReflection.IsDocumentDirty>(IVsRunningDocumentTable3_type, RunningDocumentTable);
+                IsDocumentDirty_cb = GetInterfaceDelegate<VSReflection.IsDocumentDirty>(IVsRunningDocumentTable3_type, RunningDocumentTable);
             }
         }
 
@@ -362,16 +365,6 @@ namespace Ankh.Scc
             }
             return VSErr.S_OK;
         }
-
-        /// <summary>
-        /// Fired after a Save All command is executed.
-        /// </summary>
-        /// <returns></returns>
-        public int OnAfterSaveAll()
-        {
-            return VSErr.S_OK;
-        }
-        
 
         internal const __VSRDTATTRIB RDTA_DocumentInitialized = (__VSRDTATTRIB)0x00100000; // VS2013+
         internal const __VSRDTATTRIB RDTA_HierarchyInitialized = (__VSRDTATTRIB)0x00200000; // VS2013+
@@ -510,6 +503,21 @@ namespace Ankh.Scc
                 DocumentInfoInit();
             }
 
+            if (data.Cookie == 0 && GetDocumentCookie_cb != null)
+            {
+                try
+                {
+                    uint cookie = GetDocumentCookie_cb(data.Name);
+
+                    if (cookie != 0)
+                    {
+                        data.Cookie = cookie;
+                        _cookieMap[cookie] = data;
+                    }
+                }
+                catch
+                { }
+            }
             if (IsDocumentDirty_cb != null && data.Cookie != 0)
             {
                 try
