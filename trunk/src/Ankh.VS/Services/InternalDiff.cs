@@ -30,11 +30,11 @@ namespace Ankh.VS.Services
                 if (!_triedFindDiff)
                 {
                     _triedFindDiff = true;
-                    _type_IVsDifferenceService = Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsDifferenceService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+                    _type_IVsDifferenceService = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsDifferenceService", false);
                     if (_type_IVsDifferenceService == null)
                         return false;
 
-                    Type type_SVsDifferenceService = Type.GetType("Microsoft.VisualStudio.Shell.Interop.SVsDifferenceService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+                    Type type_SVsDifferenceService = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.SVsDifferenceService", false);
 
                     if (type_SVsDifferenceService == null)
                         return false;
@@ -110,11 +110,11 @@ namespace Ankh.VS.Services
                 {
                     _triedFindMerge = true;
 
-                    _type_IVsFileMergeService = Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsFileMergeService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+                    _type_IVsFileMergeService = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsFileMergeService", false);
                     if (_type_IVsFileMergeService == null)
                         return false;
 
-                    Type type_SVsFileMergeService = Type.GetType("Microsoft.VisualStudio.Shell.Interop.SVsFileMergeService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+                    Type type_SVsFileMergeService = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.SVsFileMergeService", false);
 
                     if (type_SVsFileMergeService == null)
                         return false;
