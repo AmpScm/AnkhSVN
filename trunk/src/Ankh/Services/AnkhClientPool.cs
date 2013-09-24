@@ -56,12 +56,6 @@ namespace Ankh.Services
             get { return _dialogOwner ?? (_dialogOwner = GetService<IAnkhDialogOwner>()); }
         }
 
-        IFileStatusCache _cache;
-        IFileStatusCache StatusCache
-        {
-            get { return _cache ?? (_cache = GetService<IFileStatusCache>()); }
-        }
-
         IFileStatusMonitor _monitor;
         IFileStatusMonitor StatusMonitor
         {
