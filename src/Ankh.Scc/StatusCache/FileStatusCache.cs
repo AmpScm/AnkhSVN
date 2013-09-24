@@ -52,9 +52,15 @@ namespace Ankh.Scc.StatusCache
 
         protected override void Dispose(bool disposing)
         {
-            ReleaseShellMonitor(disposing);
-
-            base.Dispose(disposing);
+            try
+            {
+                ReleaseShellMonitor(disposing);
+                _client.Dispose();
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
         }
 
         /// <summary>

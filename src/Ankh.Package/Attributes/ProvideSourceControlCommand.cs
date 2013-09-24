@@ -100,8 +100,6 @@ namespace Ankh.VSPackage.Attributes
                         sccProviderNameKey.SetValue(
                             string.Format("{0}Command", _command),
                             string.Format("{0:B}|{1}", _commandGroup, _commandId));
-
-                        sccProviderNameKey.Close();
                     }
                 }
             }
