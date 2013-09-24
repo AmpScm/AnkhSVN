@@ -281,12 +281,6 @@ namespace Ankh.Scc
             }
         }
 
-        internal bool TryGetIsDirtyFromVS(SccDocumentData data, out bool dirty)
-        {
-            dirty = false;
-            return false;
-        }
-
         /// <summary>
         /// Called before a document is locked in the Running Document Table (RDT) for the first time.
         /// </summary>
