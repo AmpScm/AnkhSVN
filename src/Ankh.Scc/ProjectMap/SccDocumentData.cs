@@ -183,10 +183,10 @@ namespace Ankh.Scc.ProjectMap
         /// <summary>
         /// Called when initialized from existing state; instead of document creation
         /// </summary>
-        internal void OnCookieLoad()
+        internal void OnCookieLoad(TryDocumentDirtyPoller poller)
         {
             _initialUpdateCompleted = true;
-            _isDirty = GetIsDirty(true);
+            _isDirty = PollDirty(poller);
         }
 
         internal void OnSaved()
@@ -210,7 +210,7 @@ namespace Ankh.Scc.ProjectMap
         const _VSRDTFLAGS RDT_PendingInitialization = (_VSRDTFLAGS)0x00040000;
         const _VSRDTFLAGS RDT_PendingHierarchyInitialization = (_VSRDTFLAGS)0x00080000;
 
-        internal void OnAttributeChange(__VSRDTATTRIB attributes)
+        internal void OnAttributeChange(__VSRDTATTRIB attributes, TryDocumentDirtyPoller poller)
         {
             if (0 != (attributes & OpenDocumentTracker.RDTA_DocumentInitialized))
             {
@@ -230,9 +230,14 @@ namespace Ankh.Scc.ProjectMap
 
                     if (monitor != null)
                     {
-                        bool dirty = GetIsDirty(false);
-                        if (dirty != IsDirty)
-                            SetDirty(dirty);
+                        bool wasDirty = _isDirty;
+                        _isDirty = false;
+                        bool dirty = PollDirty(poller);
+                        if (wasDirty != IsDirty)
+                        {
+                            _isDirty = wasDirty;
+                            SetDirty(IsDirty);
+                        }
 
                         monitor.ScheduleGlyphUpdate(FullPath);
                     }
@@ -278,14 +283,12 @@ namespace Ankh.Scc.ProjectMap
             UpdateGlyph(true);
         }
 
-        internal void CheckDirty()
+        internal void CheckDirty(TryDocumentDirtyPoller poller)
         {
-            if ((_flags & (RDT_DontPollForState | RDT_PendingInitialization)) != 0)
-                return;
             if (IsDirty)
                 return;
 
-            if (GetIsDirty(true))
+            if (PollDirty(poller))
             {
                 SetDirty(true);
             }
@@ -444,6 +447,8 @@ namespace Ankh.Scc.ProjectMap
             return SafeSucceeded(pdd2.SetDocDataReadOnly, readOnly ? 1 : 0);
         }
 
+        internal delegate bool TryDocumentDirtyPoller(SccDocumentData data, out bool dirty);
+
         /// <summary>
         /// Determines whether this instance is dirty
         /// </summary>
@@ -452,123 +457,22 @@ namespace Ankh.Scc.ProjectMap
         /// 	<c>true</c> if this instance is dirty; otherwise, <c>false</c>.
         /// </returns>
         /// <remarks>Gets the live data; or if that fails the cached data</remarks>
-        internal bool GetIsDirty(bool fallback)
+        bool PollDirty(TryDocumentDirtyPoller tryPoll)
         {
             if (!_isFileDocument)
                 return false; // Not interested
+            else if ((_flags & RDT_PendingInitialization) != 0)
+                return false; // Not initialized, so no in memory dirty state
+            else if ((_flags & RDT_DontPollForState) != 0)
+                return _isDirty; // Don't poll. "Don't call us, we call you"
 
-            int dirty;
-            bool done = false;
-
-            if ((_flags & RDT_DontPollForState) != 0)
+            bool dirty;
+            if (tryPoll(this, out dirty))
             {
-                // The document told us that it will explicitly call us
+                return dirty;
+            }
+            else
                 return _isDirty;
-            }
-
-            IVsWindowFrame wf;
-            object rawDoc = RawDocument;
-
-            if (rawDoc != null)
-            {
-                IVsPersistDocData pdd;
-                IPersistFileFormat pff;
-                IVsPersistHierarchyItem phi;
-
-                // Implemented by most editors
-                if (null != (pdd = rawDoc as IVsPersistDocData))
-                {
-                    if (SafeSucceeded(pdd.IsDocDataDirty, out dirty))
-                    {
-                        if (dirty != 0)
-                            return true;
-
-                        done = true;
-                    }
-                }
-
-                // Implemented by the common project types (Microsoft Project Base)
-                if (!done && null != (pff = rawDoc as IPersistFileFormat))
-                {
-                    if (SafeSucceeded(pff.IsDirty, out dirty))
-                    {
-                        if (dirty != 0)
-                            return true;
-
-                        done = true;
-                    }
-                }
-
-                // Project based documents will probably handle this
-                if (!done && null != (phi = Hierarchy as IVsPersistHierarchyItem) && rawDoc != null)
-                {
-                    IntPtr docHandle = Marshal.GetIUnknownForObject(rawDoc);
-                    try
-                    {
-                        if (VSErr.Succeeded(phi.IsItemDirty(ItemId, docHandle, out dirty)))
-                        {
-                            if (dirty != 0)
-                                return true;
-
-                            done = true;
-                        }
-                    }
-                    catch
-                    {
-                        // MPF throws a cast exception when docHandle doesn't implement IVsPersistDocData..
-                        // which we tried before getting here*/
-                    }
-                    finally
-                    {
-                        Marshal.Release(docHandle);
-                    }
-                }
-            }
-
-            // Literally look if the frame window has a modified *
-            if (!done && TryGetOpenDocumentFrame(out wf) && wf != null)
-            {
-                object ok;
-                if (VSErr.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
-                {
-                    if (ok == null)
-                    { }
-                    else if (ok is bool) // Implemented by VS as bool
-                    {
-                        if ((bool)ok)
-                            return true;
-                    }
-                }
-            }
-
-            return fallback && _isDirty;
-        }
-
-        private bool TryGetOpenDocumentFrame(out IVsWindowFrame wf)
-        {
-            Guid gV = Guid.Empty;
-            IVsUIHierarchy hier;
-            uint[] openId = new uint[1];
-
-            int open;
-
-            IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
-            wf = null;
-
-            if (so == null)
-                return false;
-
-            try
-            {
-                return VSErr.Succeeded(so.IsDocumentOpen(Hierarchy as IVsUIHierarchy, ItemId, this.Name, ref gV,
-                    (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView, out hier, openId, out wf, out open))
-                    && (open != 0)
-                    && (wf != null);
-            }
-            catch
-            {
-                return false;
-            }
         }
 
         /// <summary>
