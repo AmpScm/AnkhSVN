@@ -72,7 +72,7 @@ namespace Ankh.Scc
                 return false;
 
             if (poll)
-                data.CheckDirty();
+                data.CheckDirty(_poller);
 
             return data.IsDirty;
         }
@@ -87,7 +87,7 @@ namespace Ankh.Scc
             if (!_docMap.TryGetValue(path, out data))
                 return false;
 
-            data.CheckDirty();
+            data.CheckDirty(_poller);
 
             if (!data.IsDirty || (data.Cookie == 0))
                 return true; // Not/never modified, no need to save
@@ -107,7 +107,7 @@ namespace Ankh.Scc
             if (!_docMap.TryGetValue(path, out data))
                 return true;
 
-            data.CheckDirty();
+            data.CheckDirty(_poller);
 
             // Save the document if it is dirty
             return data.SaveDocument(RunningDocumentTable);
@@ -123,7 +123,7 @@ namespace Ankh.Scc
             if (!_docMap.TryGetValue(path, out data))
                 return;
 
-            data.CheckDirty();
+            data.CheckDirty(_poller);
         }
 
         public bool SaveDocuments(IEnumerable<string> paths)
@@ -564,15 +564,15 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(file))
                 throw new ArgumentNullException("file");
 
-            SccDocumentData dd;
-            if (!_docMap.TryGetValue(file, out dd))
+            SccDocumentData data;
+            if (!_docMap.TryGetValue(file, out data))
                 return false;
 
-            dd.CheckDirty();
+            data.CheckDirty(_poller);
 
-            if (!dd.IsDirty && dd.IsReloadable())
+            if (!data.IsDirty && data.IsReloadable())
             {
-                dd.Reload(clearUndo, true);
+                data.Reload(clearUndo, true);
                 return true;
             }
 
@@ -583,7 +583,7 @@ namespace Ankh.Scc
         {
             foreach (SccDocumentData data in _docMap.Values)
             {
-                data.CheckDirty();
+                data.CheckDirty(_poller);
             }
         }
 

@@ -32,12 +32,14 @@ namespace Ankh.Scc
     {
         readonly Dictionary<string, SccDocumentData> _docMap = new Dictionary<string, SccDocumentData>(StringComparer.OrdinalIgnoreCase);
         readonly Dictionary<uint, SccDocumentData> _cookieMap = new Dictionary<uint, SccDocumentData>();
+        readonly SccDocumentData.TryDocumentDirtyPoller _poller;
         bool _hooked;
         uint _cookie;
 
         public OpenDocumentTracker(IAnkhServiceProvider context)
             : base(context)
         {
+            _poller = VSVersion.VS2012OrLater ? (SccDocumentData.TryDocumentDirtyPoller)TryPollDirty : TryPollDirtyFallback;
         }
 
         protected override void OnInitialize()
@@ -102,7 +104,7 @@ namespace Ankh.Scc
                     SccDocumentData data;
                     if (TryGetDocument(cookies[i], out data))
                     {
-                        data.OnCookieLoad();
+                        data.OnCookieLoad(_poller);
                     }
                 }
             }
@@ -397,7 +399,7 @@ namespace Ankh.Scc
                 __VSRDTATTRIB attribs = (__VSRDTATTRIB)grfAttribs;
 
                 bool wasInitialized = data.IsDocumentInitialized;
-                data.OnAttributeChange(attribs);
+                data.OnAttributeChange(attribs, _poller);
 
                 if (!wasInitialized
                     && GetDocumentFlags_cb != null
@@ -425,7 +427,7 @@ namespace Ankh.Scc
             {
                 bool wasInitialized = data.IsDocumentInitialized;
 
-                data.OnAttributeChange(attribs);
+                data.OnAttributeChange(attribs, _poller);
 
                 if (!wasInitialized
                     && GetDocumentFlags_cb != null
@@ -496,6 +498,164 @@ namespace Ankh.Scc
         public int OnBeforeLastDocumentUnlock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
         {
             return VSErr.S_OK;
+        }
+
+        bool TryPollDirty(SccDocumentData data, out bool dirty)
+        {
+            if (data == null)
+                throw new ArgumentNullException("data");
+
+            if (!_documentInfo_init)
+            {
+                _documentInfo_init = true;
+                DocumentInfoInit();
+            }
+
+            if (IsDocumentDirty_cb != null && data.Cookie != 0)
+            {
+                try
+                {
+                    dirty = IsDocumentDirty_cb(data.Cookie);
+                    return true;
+                }
+                catch
+                { }
+            }
+
+            return TryPollDirtyFallback(data, out dirty);
+        }
+
+        bool TryPollDirtyFallback(SccDocumentData data, out bool dirty)
+        {
+            if (data == null)
+                throw new ArgumentNullException("data");
+
+            bool done = false;
+
+            int dv;
+            IVsWindowFrame wf;
+            object rawDoc = data.RawDocument;
+
+            if (rawDoc != null)
+            {
+                IVsPersistDocData pdd;
+                IPersistFileFormat pff;
+                IVsPersistHierarchyItem phi;
+
+                // Implemented by most editors
+                if (null != (pdd = rawDoc as IVsPersistDocData))
+                {
+                    if (SafeSucceeded(pdd.IsDocDataDirty, out dv))
+                    {
+                        if (dv != 0)
+                        {
+                            dirty = true;
+                            return true;
+                        }
+
+                        done = true;
+                    }
+                }
+
+                // Implemented by the common project types (Microsoft Project Base)
+                if (!done && null != (pff = rawDoc as IPersistFileFormat))
+                {
+                    if (SafeSucceeded(pff.IsDirty, out dv))
+                    {
+                        if (dv != 0)
+                        {
+                            dirty = true;
+                            return true;
+                        }
+
+                        done = true;
+                    }
+                }
+
+                // Project based documents will probably handle this
+                if (!done && null != (phi = data.Hierarchy as IVsPersistHierarchyItem) && rawDoc != null)
+                {
+                    IntPtr docHandle = Marshal.GetIUnknownForObject(rawDoc);
+                    try
+                    {
+                        if (VSErr.Succeeded(phi.IsItemDirty(data.ItemId, docHandle, out dv)))
+                        {
+                            if (dv != 0)
+                            {
+                                dirty = true;
+                                return true;
+                            }
+
+                            done = true;
+                        }
+                    }
+                    catch
+                    {
+                        // MPF throws a cast exception when docHandle doesn't implement IVsPersistDocData..
+                        // which we tried before getting here*/
+                    }
+                    finally
+                    {
+                        Marshal.Release(docHandle);
+                    }
+                }
+            }
+
+            // Literally look if the frame window has a modified *
+            if (!done && TryGetOpenDocumentFrame(data, out wf) && wf != null)
+            {
+                object ok;
+                if (VSErr.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
+                {
+                    if (ok == null)
+                    { }
+                    else if (ok is bool) // Implemented by VS as bool
+                    {
+                        if ((bool)ok)
+                        {
+                            dirty = true;
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            dirty = false;
+            return false;
+        }
+
+        private bool TryGetOpenDocumentFrame(SccDocumentData data, out IVsWindowFrame wf)
+        {
+            if (data == null)
+                throw new ArgumentNullException("data");
+            if (data.Hierarchy == null)
+            {
+                wf = null;
+                return false;
+            }
+            Guid gV = Guid.Empty;
+            IVsUIHierarchy hier;
+            uint[] openId = new uint[1];
+
+            int open;
+
+            IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
+            wf = null;
+
+            if (so == null)
+                return false;
+
+            try
+            {
+                return VSErr.Succeeded(so.IsDocumentOpen(data.Hierarchy as IVsUIHierarchy, data.ItemId, data.Name, ref gV,
+                    (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView, out hier, openId, out wf, out open))
+                    && (open != 0)
+                    && (wf != null);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         internal void DoDispose(SccDocumentData data)

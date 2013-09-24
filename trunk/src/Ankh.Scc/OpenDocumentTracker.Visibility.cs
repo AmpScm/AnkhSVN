@@ -32,7 +32,7 @@ namespace Ankh.Scc
 
             if (TryGetDocument(docCookie, out dd))
             {
-                dd.CheckDirty();
+                dd.CheckDirty(_poller);
 
                 if (dd.IsProjectPropertyPageHost)
                 {
@@ -48,7 +48,7 @@ namespace Ankh.Scc
 
             if (docCookie != 0 && TryGetDocument(docCookie, out dd))
             {
-                dd.CheckDirty();
+                dd.CheckDirty(_poller);
 
                 if (dd.IsProjectPropertyPageHost)
                 {
@@ -77,9 +77,9 @@ namespace Ankh.Scc
 
                 foreach (string file in GetService<IProjectFileMapper>().GetAllFilesOf(project))
                 {
-                    SccDocumentData itemData;
-                    if (_docMap.TryGetValue(file, out itemData))
-                        itemData.CheckDirty();
+                    SccDocumentData data;
+                    if (_docMap.TryGetValue(file, out data))
+                        data.CheckDirty(_poller);
                 }
             }
         }
