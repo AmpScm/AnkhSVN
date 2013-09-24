@@ -52,13 +52,17 @@ namespace Ankh.Scc
                     {
                         string path = br.ReadString();
 
-                        if (baseDir != null)
-                            path = SvnTools.GetNormalizedFullPath(Path.Combine(baseDir, path));
-                        else
-                            path = SvnTools.GetNormalizedFullPath(path);
+                        try
+                        {
+                            if (baseDir != null)
+                                path = SvnTools.GetNormalizedFullPath(Path.Combine(baseDir, path));
+                            else
+                                path = SvnTools.GetNormalizedFullPath(path);
 
-                        if (!_sccExcluded.Contains(path))
-                            _sccExcluded.Add(path);
+                            if (!_sccExcluded.Contains(path))
+                                _sccExcluded.Add(path);
+                        }
+                        catch { }
                     }
                 }
             }
