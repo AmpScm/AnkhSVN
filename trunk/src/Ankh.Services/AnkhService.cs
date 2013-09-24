@@ -208,7 +208,14 @@ namespace Ankh
         /// </summary>
         void IDisposable.Dispose()
         {
-            Dispose(true);
+            try
+            {
+                Dispose(true);
+            }
+            finally
+            {
+                GC.SuppressFinalize(this);
+            }
         }
 
         #endregion
