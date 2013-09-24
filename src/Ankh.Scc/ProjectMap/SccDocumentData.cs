@@ -537,43 +537,6 @@ namespace Ankh.Scc.ProjectMap
                 return false;
         }
 
-        /// <summary>
-        /// Tells the data document (object implementing IVsPersistDocData) to release
-        /// any hold it has on its storage (i.e. release any file system locks on its file).
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// After a call to HandsOff the document is either closed
-        /// (by reloading a changed project or solution file), or reloaded by calling ReloadDocData or ReloadItem.
-        ///
-        /// If the data document hasn't been modified, HandsOnDocDataStorage will be called.
-        ///
-        /// Most calls to the data document are expected to fail when the object is in hands off mode.
-        /// The only methods expected to work are IsDocDataReloadable and IsDocDataDirty.
-        /// </remarks>
-        public bool HandsOff()
-        {
-            IVsPersistDocData3 pdd3 = RawDocument as IVsPersistDocData3;
-
-            if (pdd3 == null)
-                return false;
-
-            return SafeSucceeded(pdd3.HandsOffDocDataStorage);
-        }
-
-        /// <summary>
-        /// Enables the data document to place locks on its storage.
-        /// </summary>
-        public bool HandsOn()
-        {
-            IVsPersistDocData3 pdd3 = RawDocument as IVsPersistDocData3;
-
-            if (pdd3 == null)
-                return false;
-
-            return SafeSucceeded(pdd3.HandsOnDocDataStorage);
-        }
-
         internal bool SaveDocument(IVsRunningDocumentTable rdt)
         {
             if ((_flags & _VSRDTFLAGS.RDT_DontSave) != 0)
