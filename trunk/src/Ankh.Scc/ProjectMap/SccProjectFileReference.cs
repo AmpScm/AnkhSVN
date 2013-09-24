@@ -108,12 +108,6 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        public void ClearReferences()
-        {
-            _refCount = 0;
-            _project.InvokeRemoveReference(this);
-        }
-
         /// <summary>
         /// Gets the item id of the file within the project or <see cref="VSConstants.VSITEMID_NIL"/> if no id is assigned
         /// </summary>
@@ -202,16 +196,6 @@ namespace Ankh.Scc.ProjectMap
             _subFiles = files.AsReadOnly();
 
             return _subFiles;
-        }
-
-        public bool OpenAsDocument()
-        {
-            Guid editorType = Guid.Empty;
-
-            IntPtr DOCDATAEXISTING_UNKNOWN = (IntPtr)(int)-1;
-            IVsWindowFrame frame;
-            return VSErr.Succeeded(
-                Project.VsProject.OpenItem(ProjectItemId, ref editorType, DOCDATAEXISTING_UNKNOWN, out frame));
         }
 
         internal void ClearIdCache()

@@ -48,12 +48,6 @@ namespace Ankh.Scc.ProjectMap
             _filename = filename;
         }
 
-        [DebuggerStepThrough]
-        private T GetService<T>()
-            where T : class
-        {
-            return _context.GetService<T>();
-        }
 
         /// <summary>
         /// Gets the filename.
@@ -62,27 +56,6 @@ namespace Ankh.Scc.ProjectMap
         public string FullPath
         {
             get { return _filename; }
-        }
-
-        /// <summary>
-        /// Gets the number of projects containing this file
-        /// </summary>
-        public int ProjectCount
-        {
-            get
-            {
-                SccProjectFileReference rf = FirstReference;
-                int i = 0;
-
-                while (rf != null)
-                {
-                    i++;
-
-                    rf = rf.NextReference;
-                }
-
-                return i;
-            }
         }
 
         public bool IsProjectFile
@@ -100,26 +73,6 @@ namespace Ankh.Scc.ProjectMap
                 }
 
                 return false;
-            }
-        }
-
-        /// <summary>
-        /// Gets the total number of references to this file
-        /// </summary>
-        public int TotalReferenceCount
-        {
-            get
-            {
-                SccProjectFileReference rf = FirstReference;
-                int i = 0;
-
-                while (rf != null)
-                {
-                    i += rf.ReferenceCount;
-                    rf = rf.NextReference;
-                }
-
-                return i;
             }
         }
 
@@ -143,7 +96,7 @@ namespace Ankh.Scc.ProjectMap
             return pd;
         }
 
-        public IList<SccProjectFileReference> GetAllReferences()
+        public IEnumerable<SccProjectFileReference> GetAllReferences()
         {
             List<SccProjectFileReference> refs = new List<SccProjectFileReference>();
 
@@ -151,12 +104,10 @@ namespace Ankh.Scc.ProjectMap
 
             while (rf != null)
             {
-                refs.Add(rf);
+                yield return rf;
 
                 rf = rf.NextReference;
             }
-
-            return refs;
         }
 
         /// <summary>
