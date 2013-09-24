@@ -138,7 +138,7 @@ namespace Ankh.Scc
             return TryGetDocument(cookie, false, out data);
         }
 
-        bool TryGetDocument(uint cookie, bool forUpdate, out SccDocumentData data)
+        bool TryGetDocument(uint cookie, bool create, out SccDocumentData data)
         {
             if (cookie == 0)
             {
@@ -149,25 +149,19 @@ namespace Ankh.Scc
             if (_cookieMap.TryGetValue(cookie, out data))
                 return true;
 
-            uint flags;
-            uint locks;
-            uint editLocks;
+            if (!create)
+            {
+                data = null;
+                return false;
+            }
+
             string name;
             IVsHierarchy hier;
             uint itemId;
-            IntPtr ppunkDocData;
+            object document;
 
-            if (VSErr.Succeeded(RunningDocumentTable.GetDocumentInfo(cookie,
-                out flags, out locks, out editLocks, out name, out hier, out itemId, out ppunkDocData)))
+            if (TryGetDocumentInfo(cookie, out name, out hier, out itemId, out document))
             {
-                object document = null;
-
-                if (ppunkDocData != IntPtr.Zero)
-                {
-                    document = Marshal.GetUniqueObjectForIUnknown(ppunkDocData);
-                    Marshal.Release(ppunkDocData);
-                }
-
                 if (!string.IsNullOrEmpty(name))
                 {
                     if (_docMap.TryGetValue(name, out data))
@@ -177,18 +171,16 @@ namespace Ankh.Scc
                             _cookieMap.Remove(data.Cookie);
                             data.Cookie = 0;
                         }
-
-                        if (!forUpdate)
-                        {
-                            Debug.Assert(data.Hierarchy == hier, "Hierarchy not the same", string.Format("File={0}", data.FullPath));
-                            Debug.Assert(data.ItemId == itemId, "Id not the same", string.Format("File={0}; from {1} into {2}", data.FullPath, data.ItemId, itemId));
-                        }
                     }
                     else
                     {
                         _docMap.Add(name, data = new SccDocumentData(Context, name));
-                        data.Hierarchy = hier;
-                        data.ItemId = itemId;
+
+                        if (hier != null)
+                        {
+                            data.Hierarchy = hier;
+                            data.ItemId = itemId;
+                        }
                     }
 
                     if (document != null)
@@ -202,6 +194,71 @@ namespace Ankh.Scc
                 data = null;
 
             return (data != null);
+        }
+
+        delegate string GetDocumentMoniker(uint cookie);
+        bool _documentInfo_init;
+        GetDocumentMoniker GetDocumentMoniker_cb;
+
+        void DocumentInfoInit()
+        {
+            if (VSVersion.VS2013OrLater)
+            {
+                Type IVsRunningDocumentTable4_type = Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsRunningDocumentTable4, Microsoft.VisualStudio.Shell.Interop.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+
+                GetDocumentMoniker_cb = base.GetInterfaceDelegate<GetDocumentMoniker>(IVsRunningDocumentTable4_type, RunningDocumentTable);
+            }
+        }
+
+        private bool TryGetDocumentInfo(uint cookie, out string name, out IVsHierarchy hier, out uint itemId, out object document)
+        {
+            if (!_documentInfo_init)
+            {
+                _documentInfo_init = true;
+                DocumentInfoInit();
+            }
+
+            if (GetDocumentMoniker_cb != null)
+            {
+                // Allow VS2013 to delayload windows
+                try
+                {
+                    name = GetDocumentMoniker_cb(cookie);
+
+                    hier = null;
+                    itemId = VSConstants.VSITEMID_NIL;
+                    document = null;
+                    return true;
+                }
+                catch
+                { }
+            }
+
+            IntPtr ppunkDocData;
+            uint flags;
+            uint locks;
+            uint editLocks;
+
+            if (VSErr.Succeeded(RunningDocumentTable.GetDocumentInfo(cookie,
+                out flags, out locks, out editLocks, out name, out hier, out itemId, out ppunkDocData)))
+            {
+                if (ppunkDocData != IntPtr.Zero)
+                {
+                    document = Marshal.GetUniqueObjectForIUnknown(ppunkDocData);
+                    Marshal.Release(ppunkDocData);
+                }
+                else
+                    document = null;
+
+                return true;
+            }
+            else
+            {
+                hier = null;
+                itemId = VSConstants.VSITEMID_NIL;
+                document = null;
+                return false;
+            }
         }
 
         /// <summary>
@@ -301,11 +358,23 @@ namespace Ankh.Scc
             return VSErr.S_OK;
         }
 
+        const uint HandledRDTAttributes = (uint)(__VSRDTATTRIB.RDTA_DocDataReloaded
+                                                 | __VSRDTATTRIB.RDTA_DocDataIsDirty
+                                                 | __VSRDTATTRIB.RDTA_DocDataIsNotDirty);
+
+        const uint TrackedRDTAttributes = HandledRDTAttributes
+                                          | (uint)(__VSRDTATTRIB.RDTA_ItemID
+                                                   | __VSRDTATTRIB.RDTA_Hierarchy
+                                                   | __VSRDTATTRIB.RDTA_MkDocument);
+
         public int OnAfterAttributeChange(uint docCookie, uint grfAttribs)
         {
+            if ((grfAttribs & HandledRDTAttributes) == 0)
+                return VSErr.S_OK; // Not interested
+
             SccDocumentData data;
 
-            if (TryGetDocument(docCookie, false, out data))
+            if (TryGetDocument(docCookie, out data))
             {
                 data.OnAttributeChange((__VSRDTATTRIB)grfAttribs);
             }
@@ -315,6 +384,9 @@ namespace Ankh.Scc
 
         public int OnAfterAttributeChangeEx(uint docCookie, uint grfAttribs, IVsHierarchy pHierOld, uint itemidOld, string pszMkDocumentOld, IVsHierarchy pHierNew, uint itemidNew, string pszMkDocumentNew)
         {
+            if ((grfAttribs & TrackedRDTAttributes) == 0)
+                return VSErr.S_OK; // Not interested
+
             SccDocumentData data;
             if (!TryGetDocument(docCookie, true, out data))
                 return VSErr.S_OK;
