@@ -35,7 +35,7 @@ namespace Ankh.Scc.ProjectMap
     sealed class SccDocumentData : AnkhService, IVsFileChangeEvents, IDisposable
     {
         readonly string _name;
-        readonly bool _isFileDocument;
+        bool _isFileDocument;
         uint _cookie;
         bool _isDirty;
         bool _initialUpdateCompleted;
@@ -66,6 +66,14 @@ namespace Ankh.Scc.ProjectMap
         internal void SetFlags(_VSRDTFLAGS flags)
         {
             _flags = flags;
+            bool isVirtual = ((flags & (_VSRDTFLAGS.RDT_VirtualDocument | _VSRDTFLAGS.RDT_ProjSlnDocument)) == _VSRDTFLAGS.RDT_VirtualDocument);
+
+            if (_isFileDocument && isVirtual)
+            {
+                HookFileChanges(false);
+                _isFileDocument = false;
+                _fullPath = null;
+            }
         }
 
         /// <summary>
@@ -272,15 +280,14 @@ namespace Ankh.Scc.ProjectMap
 
         internal void CheckDirty()
         {
+            if ((_flags & (RDT_DontPollForState | RDT_PendingInitialization)) != 0)
+                return;
             if (IsDirty)
                 return;
 
-            bool wasDirty = IsDirty;
-            bool dirty = GetIsDirty(true);
-
-            if (dirty != wasDirty)
+            if (GetIsDirty(true))
             {
-                SetDirty(dirty);
+                SetDirty(true);
             }
         }
 
@@ -402,20 +409,23 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
-                if (!_isPropertyDesigner.HasValue && ItemId == VSConstants.VSITEMID_ROOT)
+                if (!_isPropertyDesigner.HasValue)
                 {
                     _isPropertyDesigner = false;
-
-                    IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
-                    Guid editorType;
-                    if (pdd != null && SafeSucceeded(pdd.GetGuidEditorType, out editorType))
+                    if (ItemId == VSConstants.VSITEMID_ROOT
+                        && (_flags & _VSRDTFLAGS.RDT_VirtualDocument) != 0)
                     {
-                        if (editorType == ProjectPropertyPageHostGuid)
-                            _isPropertyDesigner = true;
+                        IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
+                        Guid editorType;
+                        if (pdd != null && SafeSucceeded(pdd.GetGuidEditorType, out editorType))
+                        {
+                            if (editorType == ProjectPropertyPageHostGuid)
+                                _isPropertyDesigner = true;
+                        }
                     }
                 }
 
-                return _isPropertyDesigner.HasValue && _isPropertyDesigner.Value;
+                return _isPropertyDesigner.Value;
             }
         }
 
@@ -748,5 +758,13 @@ namespace Ankh.Scc.ProjectMap
             return VSErr.S_OK;
         }
         #endregion
+
+        internal bool IsDocumentInitialized
+        {
+            get
+            {
+                return (_flags & RDT_PendingInitialization) == 0;
+            }
+        }
     }
 }

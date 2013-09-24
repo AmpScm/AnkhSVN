@@ -405,7 +405,18 @@ namespace Ankh.Scc
 
             if (TryGetDocument(docCookie, out data))
             {
-                data.OnAttributeChange((__VSRDTATTRIB)grfAttribs);
+                __VSRDTATTRIB attribs = (__VSRDTATTRIB)grfAttribs;
+
+                bool wasInitialized = data.IsDocumentInitialized;
+                data.OnAttributeChange(attribs);
+
+                if (!wasInitialized
+                    && GetDocumentFlags_cb != null
+                    && (attribs & (RDTA_DocumentInitialized | RDTA_HierarchyInitialized)) != 0)
+                {
+                    uint newFlags = GetDocumentFlags_cb(data.Cookie);
+                    data.SetFlags((_VSRDTFLAGS)newFlags);
+                }
             }
 
             return VSErr.S_OK;
@@ -422,7 +433,20 @@ namespace Ankh.Scc
 
             __VSRDTATTRIB attribs = (__VSRDTATTRIB)grfAttribs;
 
-            data.OnAttributeChange(attribs);
+            {
+                bool wasInitialized = data.IsDocumentInitialized;
+
+                data.OnAttributeChange(attribs);
+
+                if (!wasInitialized
+                    && GetDocumentFlags_cb != null
+                    && (attribs & (RDTA_DocumentInitialized | RDTA_HierarchyInitialized)) != 0)
+                {
+                    uint newFlags = GetDocumentFlags_cb(data.Cookie);
+                    data.SetFlags((_VSRDTFLAGS)newFlags);
+                }
+            }
+
 
             if ((attribs & __VSRDTATTRIB.RDTA_ItemID) == __VSRDTATTRIB.RDTA_ItemID)
             {
