@@ -360,6 +360,11 @@ namespace Ankh.Scc
             {
                 data.OnSaved();
                 data.Saving = null;
+
+                if (data.IsProjectPropertyPageHost)
+                {
+                    ProjectPropertyPageFixup(data);
+                }
             }
             return VSErr.S_OK;
         }
