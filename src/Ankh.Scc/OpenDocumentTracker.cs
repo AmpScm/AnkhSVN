@@ -368,17 +368,6 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int OnAfterSaveAll()
         {
-            // Copy the list to allow changes while we are busy
-            foreach (SccDocumentData dd in new List<SccDocumentData>(_docMap.Values))
-            {
-                if (dd.IsDirty && !dd.GetIsDirty(false))
-                {
-                    // We marked this document as dirty and it still says its not dirty; 
-                    // so it probably was not dirty after all
-                    dd.SetDirty(false);
-                }
-            }
-
             return VSErr.S_OK;
         }
         
