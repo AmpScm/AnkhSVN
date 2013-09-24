@@ -45,6 +45,7 @@ namespace Ankh.Scc.ProjectMap
         bool _disposed;
         int _reloadTick;
         DateTime? _saving;
+        _VSRDTFLAGS _flags;
 
         internal SccDocumentData(IAnkhServiceProvider context, string name)
             : base(context)
@@ -60,6 +61,11 @@ namespace Ankh.Scc.ProjectMap
 
                 HookFileChanges(true);
             }
+        }
+
+        internal void SetFlags(_VSRDTFLAGS flags)
+        {
+            _flags = flags;
         }
 
         /// <summary>
@@ -113,14 +119,18 @@ namespace Ankh.Scc.ProjectMap
                 if (_fetchedRaw)
                     return _rawDocument;
 
-                _fetchedRaw = true;
-                return _rawDocument ?? (_rawDocument = FetchDocument());
+                return _rawDocument ?? FetchDocument();
             }
-            internal set { _rawDocument = value; }
+            internal set { _rawDocument = value; _fetchedRaw = _fetchedRaw || (value != null); }
         }
 
         private object FetchDocument()
         {
+            if ((_flags & RDT_PendingInitialization) != 0)
+                return null;
+
+            _fetchedRaw = true;
+
             // Normally when a document is open we get a handle via the opendocument tracker; but we might be to soon
             IVsRunningDocumentTable rd = GetService<IVsRunningDocumentTable>(typeof(SVsRunningDocumentTable));
 
@@ -188,8 +198,21 @@ namespace Ankh.Scc.ProjectMap
             Dispose();
         }
 
+        const _VSRDTFLAGS RDT_DontPollForState = (_VSRDTFLAGS)0x00020000;
+        const _VSRDTFLAGS RDT_PendingInitialization = (_VSRDTFLAGS)0x00040000;
+        const _VSRDTFLAGS RDT_PendingHierarchyInitialization = (_VSRDTFLAGS)0x00080000;
+
         internal void OnAttributeChange(__VSRDTATTRIB attributes)
         {
+            if (0 != (attributes & OpenDocumentTracker.RDTA_DocumentInitialized))
+            {
+                _flags = (_VSRDTFLAGS)((uint)_flags & ~(uint)RDT_PendingInitialization);
+            }
+            if (0 != (attributes & OpenDocumentTracker.RDTA_HierarchyInitialized))
+            {
+                _flags = (_VSRDTFLAGS)((uint)_flags & ~(uint)RDT_PendingHierarchyInitialization);
+            }
+
             if (0 != (attributes & __VSRDTATTRIB.RDTA_DocDataReloaded))
             {
                 _reloadTick++;
@@ -427,7 +450,12 @@ namespace Ankh.Scc.ProjectMap
             int dirty;
             bool done = false;
 
-            
+            if ((_flags & RDT_DontPollForState) != 0)
+            {
+                // The document told us that it will explicitly call us
+                return _isDirty;
+            }
+
             IVsWindowFrame wf;
             object rawDoc = RawDocument;
 
@@ -462,9 +490,9 @@ namespace Ankh.Scc.ProjectMap
                 }
 
                 // Project based documents will probably handle this
-                if (!done && null != (phi = Hierarchy as IVsPersistHierarchyItem) && RawDocument != null)
+                if (!done && null != (phi = Hierarchy as IVsPersistHierarchyItem) && rawDoc != null)
                 {
-                    IntPtr docHandle = Marshal.GetIUnknownForObject(RawDocument);
+                    IntPtr docHandle = Marshal.GetIUnknownForObject(rawDoc);
                     try
                     {
                         if (VSErr.Succeeded(phi.IsItemDirty(ItemId, docHandle, out dirty)))
@@ -634,6 +662,9 @@ namespace Ankh.Scc.ProjectMap
 
         internal bool SaveDocument(IVsRunningDocumentTable rdt)
         {
+            if ((_flags & _VSRDTFLAGS.RDT_DontSave) != 0)
+                return true;
+
             if (VSErr.Succeeded(rdt.SaveDocuments(0, Hierarchy, ItemId, Cookie)))
             {
                 SetDirty(false);
