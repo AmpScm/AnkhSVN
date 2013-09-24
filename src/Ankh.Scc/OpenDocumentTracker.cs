@@ -156,11 +156,12 @@ namespace Ankh.Scc
             }
 
             string name;
+            uint flags;
             IVsHierarchy hier;
             uint itemId;
             object document;
 
-            if (TryGetDocumentInfo(cookie, out name, out hier, out itemId, out document))
+            if (TryGetDocumentInfo(cookie, out name, out flags, out hier, out itemId, out document))
             {
                 if (!string.IsNullOrEmpty(name))
                 {
@@ -183,6 +184,8 @@ namespace Ankh.Scc
                         }
                     }
 
+                    data.SetFlags((_VSRDTFLAGS)flags);
+
                     if (document != null)
                         data.RawDocument = document;
 
@@ -196,9 +199,16 @@ namespace Ankh.Scc
             return (data != null);
         }
 
-        delegate string GetDocumentMoniker(uint cookie);
+        static class VSReflection
+        {
+            public delegate string GetDocumentMoniker(uint cookie);
+            public delegate uint GetDocumentFlags(uint cookie);
+            public delegate bool IsDocumentDirty(uint cookie);
+        }
+        VSReflection.GetDocumentMoniker GetDocumentMoniker_cb;
+        VSReflection.GetDocumentFlags GetDocumentFlags_cb;
+        VSReflection.IsDocumentDirty IsDocumentDirty_cb;
         bool _documentInfo_init;
-        GetDocumentMoniker GetDocumentMoniker_cb;
 
         void DocumentInfoInit()
         {
@@ -206,11 +216,19 @@ namespace Ankh.Scc
             {
                 Type IVsRunningDocumentTable4_type = VSAssemblies.VSShellInterop12.GetType("Microsoft.VisualStudio.Shell.Interop.IVsRunningDocumentTable4", false);
 
-                GetDocumentMoniker_cb = base.GetInterfaceDelegate<GetDocumentMoniker>(IVsRunningDocumentTable4_type, RunningDocumentTable);
+                GetDocumentMoniker_cb = base.GetInterfaceDelegate<VSReflection.GetDocumentMoniker>(IVsRunningDocumentTable4_type, RunningDocumentTable);
+                GetDocumentFlags_cb = base.GetInterfaceDelegate<VSReflection.GetDocumentFlags>(IVsRunningDocumentTable4_type, RunningDocumentTable);
+            }
+
+            if (VSVersion.VS2012OrLater)
+            {
+                Type IVsRunningDocumentTable3_type = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsRunningDocumentTable3", false);
+
+                IsDocumentDirty_cb = base.GetInterfaceDelegate<VSReflection.IsDocumentDirty>(IVsRunningDocumentTable3_type, RunningDocumentTable);
             }
         }
 
-        private bool TryGetDocumentInfo(uint cookie, out string name, out IVsHierarchy hier, out uint itemId, out object document)
+        private bool TryGetDocumentInfo(uint cookie, out string name, out uint flags, out IVsHierarchy hier, out uint itemId, out object document)
         {
             if (!_documentInfo_init)
             {
@@ -224,6 +242,7 @@ namespace Ankh.Scc
                 try
                 {
                     name = GetDocumentMoniker_cb(cookie);
+                    flags = GetDocumentFlags_cb(cookie);
 
                     hier = null;
                     itemId = VSConstants.VSITEMID_NIL;
@@ -235,7 +254,6 @@ namespace Ankh.Scc
             }
 
             IntPtr ppunkDocData;
-            uint flags;
             uint locks;
             uint editLocks;
 
@@ -259,6 +277,12 @@ namespace Ankh.Scc
                 document = null;
                 return false;
             }
+        }
+
+        internal bool TryGetIsDirtyFromVS(SccDocumentData data, out bool dirty)
+        {
+            dirty = false;
+            return false;
         }
 
         /// <summary>
@@ -357,15 +381,20 @@ namespace Ankh.Scc
 
             return VSErr.S_OK;
         }
+        
 
+        internal const __VSRDTATTRIB RDTA_DocumentInitialized = (__VSRDTATTRIB)0x00100000; // VS2013+
+        internal const __VSRDTATTRIB RDTA_HierarchyInitialized = (__VSRDTATTRIB)0x00200000; // VS2013+
         const uint HandledRDTAttributes = (uint)(__VSRDTATTRIB.RDTA_DocDataReloaded
                                                  | __VSRDTATTRIB.RDTA_DocDataIsDirty
-                                                 | __VSRDTATTRIB.RDTA_DocDataIsNotDirty);
+                                                 | __VSRDTATTRIB.RDTA_DocDataIsNotDirty
+                                                 | /*__VSRDTATTRIB3.*/RDTA_DocumentInitialized
+                                                 | /*__VSRDTATTRIB3.*/RDTA_HierarchyInitialized);
 
         const uint TrackedRDTAttributes = HandledRDTAttributes
                                           | (uint)(__VSRDTATTRIB.RDTA_ItemID
-                                                   | __VSRDTATTRIB.RDTA_Hierarchy
-                                                   | __VSRDTATTRIB.RDTA_MkDocument);
+                                          | __VSRDTATTRIB.RDTA_Hierarchy
+                                          | __VSRDTATTRIB.RDTA_MkDocument);
 
         public int OnAfterAttributeChange(uint docCookie, uint grfAttribs)
         {
