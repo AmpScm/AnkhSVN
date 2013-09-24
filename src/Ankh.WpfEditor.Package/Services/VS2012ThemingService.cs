@@ -95,7 +95,7 @@ namespace Ankh.WpfPackage.Services
 
         private GetThemedColorType FetchThemedColor()
         {
-            Type vsUIShell5 = Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+            Type vsUIShell5 = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5", false);
 
             if (vsUIShell5 == null)
                 throw new InvalidOperationException();
@@ -169,7 +169,7 @@ namespace Ankh.WpfPackage.Services
         {
             if (_twd == null)
             {
-                _twd = GetInterfaceDelegate<ThemeWindow>(Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), GetService(typeof(SVsUIShell)));
+                _twd = GetInterfaceDelegate<ThemeWindow>(VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5"), GetService(typeof(SVsUIShell)));
 
                 if (_twd == null)
                     _twd = delegate(IntPtr h) { return false; };
@@ -190,7 +190,7 @@ namespace Ankh.WpfPackage.Services
 
             if (_giff == null)
             {
-                Type type_SVsImageService = Type.GetType("Microsoft.VisualStudio.Shell.Interop.SVsImageService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+                Type type_SVsImageService = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.SVsImageService", false);
 
                 if (type_SVsImageService == null)
                     return false;
@@ -200,12 +200,17 @@ namespace Ankh.WpfPackage.Services
                 if (service == null)
                     return false;
 
-                _giff = GetInterfaceDelegate<GetIconForFile>(Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsImageService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), service);
+                Type type_IVsImageService = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsImageService", false);
+
+                if (type_IVsImageService == null)
+                    return false;
+
+                _giff = GetInterfaceDelegate<GetIconForFile>(type_IVsImageService, service);
 
                 if (_giff == null)
                     return false;
 
-                _giffEx = GetInterfaceDelegate<GetIconForFileEx>(Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsImageService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), service);
+                _giffEx = GetInterfaceDelegate<GetIconForFileEx>(type_IVsImageService, service);
             }
 
             try

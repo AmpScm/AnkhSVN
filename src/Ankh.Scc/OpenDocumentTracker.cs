@@ -204,7 +204,7 @@ namespace Ankh.Scc
         {
             if (VSVersion.VS2013OrLater)
             {
-                Type IVsRunningDocumentTable4_type = Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsRunningDocumentTable4, Microsoft.VisualStudio.Shell.Interop.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+                Type IVsRunningDocumentTable4_type = VSAssemblies.VSShellInterop12.GetType("Microsoft.VisualStudio.Shell.Interop.IVsRunningDocumentTable4", false);
 
                 GetDocumentMoniker_cb = base.GetInterfaceDelegate<GetDocumentMoniker>(IVsRunningDocumentTable4_type, RunningDocumentTable);
             }
