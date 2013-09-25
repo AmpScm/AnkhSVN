@@ -119,7 +119,9 @@
     <Compile Include="Commands\UnsupportedWcVersion.cs" />
     <Compile Include="Native\ICOMPropertyBag.cs" />
     <Compile Include="Native\SolutionExplorerDataItem.cs" />
-    <Compile Include="ProjectMap\SccProjectData.ProjectRefresh.cs" />
+    <Compile Include="ProjectMap\SccProjectData.ProjectRefresh.cs">
+      <DependentUpon>SccProjectData.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProjectMap\SccSvnOrigin.cs" />
     <Compile Include="ProjectMap\SccSvnProject.cs" />
     <Compile Include="SettingsMap\SccTranslatePathInfo.cs" />
