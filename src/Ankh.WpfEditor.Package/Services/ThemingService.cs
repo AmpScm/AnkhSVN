@@ -349,11 +349,37 @@ namespace Ankh.WpfPackage.Services
             if (listView.Font != DialogFont)
                 listView.Font = DialogFont;
 
-            if (listView.BackColor != listView.Parent.BackColor)
-                listView.BackColor = listView.Parent.BackColor;
+            Color oldBack = listView.BackColor;
+            Color oldFore = listView.ForeColor;
+            Color newBack = listView.Parent.BackColor;
+            Color newFore = listView.Parent.ForeColor;
+            bool updateBack= false, updateFore = false;
 
-            if (listView.ForeColor != listView.Parent.ForeColor)
-                listView.ForeColor = listView.Parent.ForeColor;
+            if (oldBack != newBack)
+            {
+                listView.BackColor = newBack;
+                updateBack = true;
+            }
+
+            if (oldFore != newFore)
+            {
+                listView.ForeColor = newFore;
+                updateFore = true;
+            }
+
+            if (updateBack || updateFore)
+            {
+                foreach(ListViewItem lvi in listView.Items)
+                {
+                    if (updateFore && lvi.ForeColor == oldFore)
+                        lvi.ForeColor = newFore;
+
+                    if (updateBack && lvi.BackColor == oldBack)
+                        lvi.BackColor = newBack;
+                }
+            }
+
+
 
             if (listView.BorderStyle == BorderStyle.Fixed3D)
                 listView.BorderStyle = BorderStyle.FixedSingle;
@@ -407,6 +433,40 @@ namespace Ankh.WpfPackage.Services
                 userControl.BorderStyle = BorderStyle.FixedSingle;
         }
 
+        private void ThemeOne(ContainerControl container)
+        {
+            if (container.Parent != null)
+            {
+            }
+            else
+                ThemeForm(container);
+        }
+
+        private void ThemeForm(ContainerControl form)
+        {
+            if (form.Parent != null && form.Font != form.Parent.Font)
+                form.Font = form.Parent.Font;
+
+            Color color;
+            if (ColorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
+            {
+                if (form.BackColor != color)
+                    form.BackColor = color;
+            }
+
+            if (ColorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_TEXT, out color))
+            {
+                if (form.ForeColor != color)
+                    form.ForeColor = color;
+            }
+        }
+
+        private void ThemeOne(ScrollableControl one)
+        {
+
+        }
+
+
         void ThemeOne(Panel panel)
         {
             if (panel.Parent != null && panel.Font != panel.Parent.Font)
@@ -438,6 +498,18 @@ namespace Ankh.WpfPackage.Services
 
             if (renderer != null)
                 toolBar.Renderer = renderer;
+        }
+
+        private void ThemeOne(Button button)
+        {
+            if (button.Parent != null && button.Font != button.Parent.Font)
+                button.Font = button.Parent.Font;
+
+            if (button.BackColor != SystemColors.ButtonFace)
+                button.BackColor = SystemColors.ButtonFace;
+
+            if (button.ForeColor != SystemColors.WindowText)
+                button.ForeColor = SystemColors.WindowText;
         }
 
         const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_TITLE = (__VSSYSCOLOREX)__VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_TITLE;
@@ -568,7 +640,7 @@ namespace Ankh.WpfPackage.Services
             public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
         }
 
-        public void VSThemeWindow(Control control)
+        void VSThemeWindow(Control control)
         {
             bool ok =
                 MaybeTheme<ToolStrip>(ThemeOne, control)
@@ -581,7 +653,10 @@ namespace Ankh.WpfPackage.Services
                 || MaybeTheme<PropertyGrid>(ThemeOne, control)
                 || MaybeTheme<ComboBox>(ThemeOne, control)
                 || MaybeTheme<SplitContainer>(ThemeOne, control)
-                || MaybeTheme<IHasSplitterColor>(ThemeOne, control);
+                || MaybeTheme<IHasSplitterColor>(ThemeOne, control)
+                || MaybeTheme<Button>(ThemeOne, control)
+                || MaybeTheme<ContainerControl>(ThemeOne, control)
+                || MaybeTheme<ScrollableControl>(ThemeOne, control);
         }
     }
 }

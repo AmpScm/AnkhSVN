@@ -145,7 +145,7 @@
     <value>pendingList</value>
   </data>
   <data name="&gt;&gt;pendingList.Type" xml:space="preserve">
-    <value>Ankh.UI.PendingChanges.Commits.PendingCommitsView, Ankh.UI, Version=2.2.4052.41253, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.PendingChanges.Commits.PendingCommitsView, Ankh.UI, Version=2.5.5016.36573, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;pendingList.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -247,7 +247,7 @@
     <value>logMessage</value>
   </data>
   <data name="&gt;&gt;logMessage.Type" xml:space="preserve">
-    <value>Ankh.UI.PendingChanges.LogMessageEditor, Ankh.UI, Version=2.2.4052.41253, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.PendingChanges.LogMessageEditor, Ankh.UI, Version=2.5.5016.36573, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;logMessage.Parent" xml:space="preserve">
     <value>splitContainer1.Panel2</value>
@@ -307,7 +307,7 @@
     <value>splitContainer1</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>Ankh.UI.VSSelectionControls.SmartSplitContainer, Ankh.UI, Version=2.5.5016.36573, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -448,6 +448,6 @@
     <value>ProjectCommitDialog</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.VSContainerForm, Ankh.Services, Version=2.2.4052.41198, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
+    <value>Ankh.UI.VSContainerForm, Ankh.Services, Version=2.5.5016.36451, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
   </data>
 </root>
