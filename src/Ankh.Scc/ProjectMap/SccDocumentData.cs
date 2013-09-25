@@ -642,9 +642,11 @@ namespace Ankh.Scc.ProjectMap
 
                 if ((_flags & RDT_DontPollForState) != 0)
                     return true;
-                else if ((_flags & projectFlags) == projectFlags 
-                         && !Name.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+                else if (!IsDocumentInitialized)
                     return true;
+                //else if ((_flags & projectFlags) == projectFlags 
+                //         && !Name.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+                //                    return true;
 
                 return false;
             }
