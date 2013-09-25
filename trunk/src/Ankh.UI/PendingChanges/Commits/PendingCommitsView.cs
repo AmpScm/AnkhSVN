@@ -320,32 +320,16 @@ namespace Ankh.UI.PendingChanges.Commits
         public override void OnThemeChange(IAnkhServiceProvider sender, CancelEventArgs e)
         {
             IAnkhCommandStates states;
-            
-            if (!VSVersion.VS2012OrLater || !VSVersion.SupportsTheming
-                || null == (states = sender.GetService<IAnkhCommandStates>()))
-            {
-                base.OnThemeChange(sender, e);
-                return;
-            }
 
-            if (states.ThemeLight)
+            if (!VSVersion.SupportsTheming
+                || null == (states = sender.GetService<IAnkhCommandStates>())
+                || !states.ThemeLight)
             {
                 e.Cancel = true; // Don't ask VS to theme the header
                 base.OnThemeChange(sender, e); /* Recreate handle while keeping state lists valid */
 
-                // But apply the colors anyway
-                Color clrFill, clrText;
-                IAnkhVSColor VSColors = sender.GetService<IAnkhVSColor>();
-                const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_FILL = (__VSSYSCOLOREX)(-191); // __VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_FILL;
-                const __VSSYSCOLOREX VSCOLOR_BRANDEDUI_TEXT = (__VSSYSCOLOREX)(-189); // __VSSYSCOLOREX2.VSCOLOR_BRANDEDUI_TEXT;
-
-                if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_FILL, out clrFill))
-                    clrFill = SystemColors.Control;
-                if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_TEXT, out clrText))
-                    clrText = SystemColors.WindowText;
-
-                ForeColor = clrText;
-                BackColor = clrFill;
+                ForeColor = Parent.ForeColor;
+                BackColor = Parent.BackColor;
 
                 // Re-enable after undoing theming
                 ShowSelectAllCheckBox = true;
