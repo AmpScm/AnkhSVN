@@ -321,9 +321,9 @@ namespace Ankh.UI.PendingChanges.Commits
         {
             IAnkhCommandStates states;
 
-            if (!VSVersion.SupportsTheming
-                || null == (states = sender.GetService<IAnkhCommandStates>())
-                || !states.ThemeLight)
+            if (VSVersion.SupportsTheming
+                && null != (states = sender.GetService<IAnkhCommandStates>())
+                && states.ThemeLight)
             {
                 e.Cancel = true; // Don't ask VS to theme the header
                 base.OnThemeChange(sender, e); /* Recreate handle while keeping state lists valid */
