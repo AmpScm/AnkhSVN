@@ -62,9 +62,9 @@ namespace Ankh.WpfPackage.Services
     }
 
     [GlobalService(typeof(IWinFormsThemingService), MinVersion = VSInstance.VS2012)]
-    sealed class VS2012ThemingService : AnkhService, IWinFormsThemingService
+    sealed class ThemingService : AnkhService, IWinFormsThemingService
     {
-        public VS2012ThemingService(IAnkhServiceProvider context)
+        public ThemingService(IAnkhServiceProvider context)
             : base(context)
         {
 
@@ -339,21 +339,14 @@ namespace Ankh.WpfPackage.Services
 
         void ThemeOne(ListView listView)
         {
-            Color clrFill, clrText;
-
-            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_FILL, out clrFill))
-                clrFill = SystemColors.Control;
-            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_TEXT, out clrText))
-                clrText = SystemColors.WindowText;
-
             if (listView.Font != DialogFont)
                 listView.Font = DialogFont;
 
-            if (listView.BackColor != clrFill)
-                listView.BackColor = clrFill;
+            if (listView.BackColor != listView.Parent.BackColor)
+                listView.BackColor = listView.Parent.BackColor;
 
-            if (listView.ForeColor != clrText)
-                listView.ForeColor = clrText;
+            if (listView.ForeColor != listView.Parent.ForeColor)
+                listView.ForeColor = listView.Parent.ForeColor;
 
             if (listView.BorderStyle == BorderStyle.Fixed3D)
                 listView.BorderStyle = BorderStyle.FixedSingle;
