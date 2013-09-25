@@ -46,7 +46,7 @@ namespace Ankh.UI.SccManagement
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProjectCommitDialog));
-            this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
+            this.splitContainer1 = new Ankh.UI.VSSelectionControls.SmartSplitContainer(this.components);
             this.pendingList = new Ankh.UI.PendingChanges.Commits.PendingCommitsView(this.components);
             this.issueNumberBox = new System.Windows.Forms.TextBox();
             this.issueLabel = new System.Windows.Forms.Label();
@@ -56,6 +56,7 @@ namespace Ankh.UI.SccManagement
             this.keepChangelistsBox = new System.Windows.Forms.CheckBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -147,10 +148,12 @@ namespace Ankh.UI.SccManagement
             this.Controls.Add(this.keepChangelistsBox);
             this.Controls.Add(this.keepLocksBox);
             this.Controls.Add(this.splitContainer1);
+            this.EnableTheming = true;
             this.Name = "ProjectCommitDialog";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

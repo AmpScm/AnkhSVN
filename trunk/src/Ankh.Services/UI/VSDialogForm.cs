@@ -46,6 +46,7 @@ namespace Ankh.UI
     {
         IAnkhServiceProvider _context;
         IAnkhDialogOwner _dlgOwner;
+        bool _enableTheming;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VSContainerForm"/> class.
@@ -70,6 +71,13 @@ namespace Ankh.UI
         {
             if (container != null)
                 container.Add(this);
+        }
+
+        [DefaultValue(false), Localizable(false)]
+        public bool EnableTheming
+        {
+            get { return _enableTheming; }
+            set { _enableTheming = value; }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -117,6 +125,7 @@ namespace Ankh.UI
         }
 
         private bool _preserveWindowPlacement;
+        [DefaultValue(false)]
         public bool PreserveWindowPlacement
         {
             get { return _preserveWindowPlacement; }
@@ -160,6 +169,9 @@ namespace Ankh.UI
 
             if (DesignMode)
                 return;
+
+            if (EnableTheming)
+                ThemeDialog(EventArgs.Empty);
 
             if (!HelpButton && ControlBox && !_addedHelp)
             {
@@ -356,6 +368,21 @@ namespace Ankh.UI
                 return uiService.ShowDialog(this);
             else
                 return base.ShowDialog(owner);
+        }
+
+        protected virtual void ThemeDialog(EventArgs eventArgs)
+        {
+            if (!DesignMode && VSVersion.SupportsTheming)
+            {
+                IWinFormsThemingService themer = GetService<IWinFormsThemingService>();
+
+                if (themer != null)
+                {
+                    if (!IsHandleCreated)
+                        CreateHandle();
+                    themer.ThemeRecursive(this);
+                }
+            }
         }
 
         protected virtual void OnBeforeShowDialog(EventArgs e)
