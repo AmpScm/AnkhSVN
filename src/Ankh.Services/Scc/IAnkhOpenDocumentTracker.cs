@@ -120,5 +120,10 @@ namespace Ankh.Scc
         /// <param name="path"></param>
         /// <returns></returns>
         bool NoReloadNecessary(string file);
+
+        /// <summary>
+        /// Provide API to avoid dirty scheduling
+        /// </summary>
+        bool NoDirtyCheck(SvnItem item);
     }
 }
