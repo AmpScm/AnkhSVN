@@ -327,9 +327,12 @@ namespace Ankh.WpfPackage.Services
             if (textBox.Font != DialogFont)
                 textBox.Font = DialogFont;
 
-            // TODO: Find proper color for !ReadOnly
-
-            Color backColor = textBox.ReadOnly ? textBox.Parent.BackColor : textBox.Parent.BackColor;
+            Color backColor;
+            if (!textBox.ReadOnly
+                || !ColorSvc.TryGetColor((__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_COMBOBOX_BACKGROUND, out backColor))
+            {
+                backColor = textBox.Parent.BackColor;
+            }
 
             if (textBox.BackColor != backColor)
                 textBox.BackColor = backColor;
