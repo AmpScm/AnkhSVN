@@ -603,6 +603,16 @@ namespace Ankh.Scc
             return false;
         }
 
+        public bool NoDirtyCheck(SvnItem item)
+        {
+            SccDocumentData dd;
+
+            if (!_docMap.TryGetValue(item.FullPath, out dd))
+                return false;
+
+            return dd.NeedsNoDirtyCheck;
+        }
+
     }
 }
 

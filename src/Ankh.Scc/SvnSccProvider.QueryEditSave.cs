@@ -285,16 +285,17 @@ namespace Ankh.Scc
 
                 for (int i = 0; i < cFiles; i++)
                 {
-                    string file = rgpszMkDocuments[i];
+                    SvnItem item;
+                    {
+                        string file = rgpszMkDocuments[i];
 
-                    if (!IsSafeSccPath(file))
-                        continue; // Skip non scc paths (Includes %TEMP%\*)
+                        if (!IsSafeSccPath(file))
+                            continue; // Skip non scc paths (Includes %TEMP%\*)
 
-                    file = SvnTools.GetNormalizedFullPath(file);
+                        item = StatusCache[file];
+                    }
 
-                    Monitor.ScheduleDirtyCheck(file);
-
-                    SvnItem item = StatusCache[file];
+                    Monitor.ScheduleDirtyCheck(item);
 
                     if (item.IsReadOnlyMustLock && !item.IsDirectory)
                     {

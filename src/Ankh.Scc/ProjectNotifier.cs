@@ -191,15 +191,13 @@ namespace Ankh.Scc
         /// <summary>
         /// Schedules a dirty check for the specified document
         /// </summary>
-        /// <param name="path">The path.</param>
-        public void ScheduleDirtyCheck(string path)
+        /// <param name="item">The item.</param>
+        public void ScheduleDirtyCheck(SvnItem item)
         {
-            if (path == null)
+            if (item == null)
                 throw new ArgumentNullException("path");
 
-            SvnItem item = Cache[path];
-
-            if (!item.IsVersioned || item.IsModified)
+            if (!item.IsVersioned || item.IsModified || DocumentTracker.NoDirtyCheck(item))
                 return; // Not needed
 
             lock (_lock)
@@ -207,28 +205,8 @@ namespace Ankh.Scc
                 if (_dirtyCheck == null)
                     _dirtyCheck = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
-                if (!_dirtyCheck.Contains(path))
-                    _dirtyCheck.Add(path);
-
-                PostIdle();
-            }
-        }
-
-        /// <summary>
-        /// Schedules a dirty check for the specified documents.
-        /// </summary>
-        /// <param name="paths">The paths.</param>
-        public void ScheduleDirtyCheck(IEnumerable<string> paths)
-        {
-            if (paths == null)
-                throw new ArgumentNullException("paths");
-
-            lock (_lock)
-            {
-                if (_dirtyCheck == null)
-                    _dirtyCheck = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-
-                _dirtyCheck.UniqueAddRange(paths);
+                if (!_dirtyCheck.Contains(item.FullPath))
+                    _dirtyCheck.Add(item.FullPath);
 
                 PostIdle();
             }
