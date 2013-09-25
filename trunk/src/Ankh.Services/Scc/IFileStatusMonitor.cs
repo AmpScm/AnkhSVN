@@ -77,13 +77,7 @@ namespace Ankh.Scc
         /// Schedules a dirty check for the specified document
         /// </summary>
         /// <param name="path">The path.</param>
-        void ScheduleDirtyCheck(string path);
-
-        /// <summary>
-        /// Schedules a dirty check for the specified documents.
-        /// </summary>
-        /// <param name="paths">The paths.</param>
-        void ScheduleDirtyCheck(IEnumerable<string> paths);
+        void ScheduleDirtyCheck(SvnItem item);
 
         /// <summary>
         /// Called when a file is changed outside VS (E.g. via a diff tool)
