@@ -29,10 +29,8 @@ namespace Ankh.UI.PendingChanges
     /// <seealso cref="UserControl"/>
     public class LogMessageEditor : VSTextEditor
     {
-        
         public LogMessageEditor()
         {
-            BackColor = SystemColors.Window;
             base.ForceLanguageService = new Guid(AnkhId.LogMessageLanguageServiceId);
         }
 
