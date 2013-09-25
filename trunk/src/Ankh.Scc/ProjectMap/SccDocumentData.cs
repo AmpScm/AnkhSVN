@@ -633,5 +633,20 @@ namespace Ankh.Scc.ProjectMap
                 return (_flags & RDT_PendingInitialization) == 0;
             }
         }
+
+        internal bool NeedsNoDirtyCheck
+        {
+            get
+            {
+                const _VSRDTFLAGS projectFlags = (_VSRDTFLAGS.RDT_ProjSlnDocument | _VSRDTFLAGS.RDT_VirtualDocument);
+
+                if ((_flags & RDT_DontPollForState) != 0)
+                    return true;
+                else if ((_flags & projectFlags) == projectFlags)
+                    return true;
+
+                return false;
+            }
+        }
     }
 }
