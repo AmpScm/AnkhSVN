@@ -119,6 +119,7 @@ namespace Ankh.UI.WizardFramework
         }
 
         /// <see cref="WizardFramework.IWizardPage.IsPageComplete" />
+        [DefaultValue(false)]
         public virtual bool IsPageComplete
         {
             get { return _pageComplete; }
@@ -208,6 +209,7 @@ namespace Ankh.UI.WizardFramework
         /// <see cref="WizardFramework.IWizardPage.Image" />
         /// <para>If the page hasn't explicitly created an image
         /// for this page, return the wizard's default page image.</para>
+        [DefaultValue(null)]
         public virtual Image Image
         {
             get
@@ -221,21 +223,6 @@ namespace Ankh.UI.WizardFramework
             }
 
             set { _image = value; }
-        }
-
-        bool ShouldSerializeImage()
-        {
-            return _image != null;
-        }
-
-        /// <see cref="WizardFramework.IWizardPage.Title" />
-        [Obsolete("Please use .Text")]
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public virtual string Title
-        {
-            get { return Text; }
-            set { Text = value; }
         }
 
         [Bindable(true)]
