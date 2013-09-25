@@ -107,6 +107,10 @@ namespace Ankh.UI.PendingChanges.Commits
 
                 ForeColor = clr;
             }
+            else if (this.ListView != null)
+            {
+                ForeColor = this.ListView.ForeColor;
+            }
         }
 
         private string GetRevision(PendingChange PendingChange)
