@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.5.12155</title>
+          AnkhSVN-Daily Update - 2.5.12170</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,20 +16,41 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/7774/AnkhSvn-Daily-2.5.12155.414.msi">AnkhSVN 2.5.12155</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/7780/AnkhSvn-Daily-2.5.12170.415.msi">AnkhSVN 2.5.12170</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=12155">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=12170">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2013-09-25</td></tr>
+<tr><td> </td><td class="r"><a id="12167" href="http://ankhsvn.net/rev/12167">
+            [r12167]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/UI/IWinFormsThemingService.cs, Ankh.Services/UI/VSDialogForm.cs, Ankh.WpfEditor.Package/Services/ThemingService.cs, Ankh.UI/SccManagement/ProjectCommitDialog.resx, Ankh.UI/SccManagement/ProjectCommitDialog.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Extend our theming support to allow theming specific dialogs. Enable this
+support for the commit dialog to make it properly handle the dark theme.</td></tr>
+<tr><td> </td><td class="r"><a id="12165" href="http://ankhsvn.net/rev/12165">
+            [r12165]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/Scc/IAnkhOpenDocumentTracker.cs, Ankh.Scc/ProjectMap/SccDocumentData.cs, Ankh.Services/Scc/IFileStatusMonitor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Following up on <a href="http://ankhsvn.net/rev/12164">r12164</a>, further tweak dirty check behavior and fix compilation.</td></tr>
+<tr><td> </td><td class="r"><a id="12164" href="http://ankhsvn.net/rev/12164">
+            [r12164]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> SvnSccProvider.QueryEditSave.cs, OpenDocumentTracker.Api.cs, ProjectMap/SccDocumentData.cs, ProjectNotifier.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">If a document is open as a project or in an editor that sends explicit change
+notifications, don't schedule an explicit dirty check from QueryEdit.</td></tr>
+<tr><td> </td><td class="r"><a id="12162" href="http://ankhsvn.net/rev/12162">
+            [r12162]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.WpfEditor.Package/Services:</strong> ThemingService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix theming of standard editboxes that are not read-only in VS2012 and 2013.
+This resolves some dark theme issues.</td></tr>
+<tr><td> </td><td class="r"><a id="12158" href="http://ankhsvn.net/rev/12158">
+            [r12158]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.WpfEditor.Package/Services/VS2012ThemingService.cs, Ankh.WpfEditor.Package/Services/ThemingService.cs, Ankh.UI/PendingChanges/Commits/PendingCommitsView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Simplify theming code for listviews by using the parent backcolor, just like
+the treeview. This makes the pending changes window behave much better in the
+VS Blue theme.</td></tr>
 <tr class="d"><td colspan="4">2013-09-24</td></tr>
 <tr><td> </td><td class="r"><a id="12145" href="http://ankhsvn.net/rev/12145">
             [r12145]
