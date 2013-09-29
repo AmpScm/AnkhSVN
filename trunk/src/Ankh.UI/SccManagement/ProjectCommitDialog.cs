@@ -26,6 +26,7 @@ using Ankh.Scc;
 using Ankh.UI.PendingChanges.Commits;
 using Ankh.VS;
 using System.ComponentModel;
+using Ankh.UI.VSSelectionControls;
 
 namespace Ankh.UI.SccManagement
 {
@@ -212,8 +213,14 @@ namespace Ankh.UI.SccManagement
 
         private void pendingList_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            okButton.Enabled = sender is ListView
-                && ((ListView)sender).CheckedItems.Count > 0;
+            if (e.Item.Checked)
+                okButton.Enabled = true;
+            else
+            {
+                SmartListView lv = sender as SmartListView;
+
+                okButton.Enabled = (lv != null && lv.HasCheckedItems);
+            }
         }
 
         bool _issueNummeric;

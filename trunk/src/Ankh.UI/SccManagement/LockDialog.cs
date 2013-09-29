@@ -235,7 +235,7 @@ namespace Ankh.UI.SccManagement
 
         void UpdateOkButton()
         {
-            okButton.Enabled = (pendingList.CheckedItems.Count > 0);
+            okButton.Enabled = pendingList.HasCheckedItems;
         }
     }
 }
