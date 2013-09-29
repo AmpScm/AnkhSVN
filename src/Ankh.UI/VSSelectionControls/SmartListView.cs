@@ -1266,7 +1266,37 @@ namespace Ankh.UI.VSSelectionControls
             ShowSelectAllCheckBox = false; // Not supported by VS theming. Disable to avoid problems and unnecessary work :(
 
             _isThemed = !e.Cancel;
-            base.OnParentChanged(EventArgs.Empty); // Recreate handle, keeping state
+            try
+            {
+                base.OnParentChanged(EventArgs.Empty); // Recreate handle, keeping state
+            }
+            catch(Exception ee)
+            {
+                IAnkhErrorHandler handler = sender.GetService<IAnkhErrorHandler>();
+
+                if (handler != null && handler.IsEnabled(ee))
+                    handler.OnError(ee);
+                else
+                    throw;
+            }
+        }
+
+        public bool HasCheckedItems
+        {
+            get
+            {
+                foreach (ListViewItem lvi in this.Items)
+                {
+                    try
+                    {
+                        if (lvi.Checked)
+                            return true;
+                    }
+                    catch
+                    { }
+                }
+                return false;
+            }
         }
     }
 }

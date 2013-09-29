@@ -82,7 +82,7 @@ namespace Ankh.UI.PathSelector
 
         private void UpdateOkButton()
         {
-            okButton.Enabled = (pendingList.CheckedItems.Count > 0);
+            okButton.Enabled = pendingList.HasCheckedItems;
         }
 
         class ItemLister : AnkhService, IEnumerable<PendingChange>
@@ -360,7 +360,7 @@ namespace Ankh.UI.PathSelector
 
         private void pendingList_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            if (pendingList.CheckedItems.Count > 0)
+            if (pendingList.HasCheckedItems)
             {
                 SvnItem parent = SvnItem.GetCommonParent(GetCheckedItems());
 

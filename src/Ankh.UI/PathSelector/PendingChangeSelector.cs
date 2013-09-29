@@ -153,7 +153,7 @@ namespace Ankh.UI.PathSelector
 
         private void pendingList_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            okButton.Enabled = (pendingList.CheckedItems.Count > 0);
+            okButton.Enabled = pendingList.HasCheckedItems;
         }
     }
 }
