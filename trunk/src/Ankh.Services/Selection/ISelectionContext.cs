@@ -179,6 +179,8 @@ namespace Ankh.Selection
 
         IVsTextView ActiveFrameTextView { get; }
 
+        IVsTextView ActiveDocumentFrameTextView { get; }
+
         /// <summary>
         /// Maybes the install delay handler.
         /// </summary>
