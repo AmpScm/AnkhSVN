@@ -193,6 +193,12 @@ namespace AnkhSvn_UnitTestProject.Mocks
             {
                 yield break;
             }
+
+
+            public Microsoft.VisualStudio.TextManager.Interop.IVsTextView ActiveDocumentFrameTextView
+            {
+                get { throw new NotImplementedException(); }
+            }
         }
     }
 }

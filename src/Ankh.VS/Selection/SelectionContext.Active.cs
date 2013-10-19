@@ -40,6 +40,8 @@ namespace Ankh.VS.Selection
         string _activeDocumentFileName;
         IVsTextView _activeFrameTextView;
         bool _determinedActiveFrameTextView;
+        IVsTextView _activeDocumentFrameTextView;
+        bool _determinedActiveDocumentFrameTextView;
 
         static Guid IID_IVsClassView = typeof(IVsClassView).GUID;
 
@@ -55,8 +57,8 @@ namespace Ankh.VS.Selection
                     break;
                 case VSConstants.VSSELELEMID.SEID_DocumentFrame:
                     _activeDocumentFrameObject = _activeDocumentControl = null;
-                    _activeFrameTextView = null;
-                    _determinedActiveFrameTextView = false;
+                    _activeDocumentFrameTextView = null;
+                    _determinedActiveDocumentFrameTextView = false;
                     _activeDocumentFrame = varValueNew as IVsWindowFrame;
                     break;
 #if NEVER
@@ -221,6 +223,34 @@ namespace Ankh.VS.Selection
                 }
 
                 return _activeFrameTextView;
+            }
+        }
+
+        public IVsTextView ActiveDocumentFrameTextView
+        {
+            get
+            {
+                if (!_determinedActiveDocumentFrameTextView)
+                {
+                    _determinedActiveDocumentFrameTextView = true;
+                    _activeDocumentFrameTextView = null;
+                    IVsWindowFrame frame = ActiveDocumentFrame;
+
+                    if (frame != null)
+                    {
+                        _activeDocumentFrameTextView = GetTextView(frame);
+
+                        if (_activeDocumentFrameTextView == null)
+                        {
+                            IAnkhHasVsTextView hasView = ActiveDocumentFrameControl as IAnkhHasVsTextView;
+
+                            if (hasView != null)
+                                _activeFrameTextView = hasView.TextView;
+                        }
+                    }
+                }
+
+                return _activeDocumentFrameTextView;
             }
         }
 
