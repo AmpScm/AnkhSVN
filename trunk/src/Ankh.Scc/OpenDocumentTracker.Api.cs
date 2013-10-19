@@ -583,7 +583,7 @@ namespace Ankh.Scc
             if (!_docMap.TryGetValue(file, out dd))
                 return false;
 
-            if (dd.Saving.HasValue && (DateTime.Now - dd.Saving) < new TimeSpan(0, 0, 15))
+            if (dd.Saving.HasValue && (DateTime.Now - dd.Saving) < new TimeSpan(0, 0, 2))
             {
                 return true;
             }
