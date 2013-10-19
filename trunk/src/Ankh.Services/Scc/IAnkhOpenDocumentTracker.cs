@@ -92,13 +92,12 @@ namespace Ankh.Scc
         void ForceDirty(string path);
 
         /// <summary>
-        /// Reloads the specified file if the document is open and not dirty
+        /// 
         /// </summary>
-        /// <param name="file">The file.</param>
-        /// <param name="clearUndo">if set to <c>true</c> [clear undo].</param>
+        /// <param name="path"></param>
+        /// <param name="ignore"></param>
         /// <returns></returns>
-        bool ReloadIfNotDirty(string file, bool clearUndo);
-
+        bool IgnoreChanges(string path, bool ignore);
         /// <summary>
         /// Determines whether the document is open in a standard editor
         /// </summary>

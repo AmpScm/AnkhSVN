@@ -356,7 +356,6 @@ namespace Ankh.Scc
             if (TryGetDocument(docCookie, out data))
             {
                 data.OnSaved();
-                data.Saving = null;
 
                 if (data.IsProjectPropertyPageHost)
                 {
