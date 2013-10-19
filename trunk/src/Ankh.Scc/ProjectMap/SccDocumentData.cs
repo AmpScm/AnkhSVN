@@ -214,16 +214,17 @@ namespace Ankh.Scc.ProjectMap
         {
             if (0 != (attributes & OpenDocumentTracker.RDTA_DocumentInitialized))
             {
-                _flags = (_VSRDTFLAGS)((uint)_flags & ~(uint)RDT_PendingInitialization);
+                _flags = (_VSRDTFLAGS)((int)_flags & ~(int)RDT_PendingInitialization);
             }
             if (0 != (attributes & OpenDocumentTracker.RDTA_HierarchyInitialized))
             {
-                _flags = (_VSRDTFLAGS)((uint)_flags & ~(uint)RDT_PendingHierarchyInitialization);
+                _flags = (_VSRDTFLAGS)((int)_flags & ~(int)RDT_PendingHierarchyInitialization);
             }
 
             if (0 != (attributes & __VSRDTATTRIB.RDTA_DocDataReloaded))
             {
                 _reloadTick++;
+                _saving = null;
                 if (_initialUpdateCompleted && _isFileDocument)
                 {
                     IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
@@ -335,7 +336,7 @@ namespace Ankh.Scc.ProjectMap
         /// <param name="clearUndo">if set to <c>true</c> [clear undo].</param>
         /// <param name="ignoreNextChange">if set to <c>true</c> [ignore next change].</param>
         /// <returns><c>true</c> if the document is reloaded, otherwise false</returns>
-        public bool Reload(bool clearUndo, bool ignoreNextChange)
+        public bool Reload(bool clearUndo)
         {
             if (_disposed)
                 return false;
@@ -351,13 +352,25 @@ namespace Ankh.Scc.ProjectMap
                 uint flags = 0;
                 if (clearUndo)
                     flags |= (uint)_VSRELOADDOCDATA.RDD_RemoveUndoStack;
-                if (ignoreNextChange)
-                    flags |= (uint)_VSRELOADDOCDATA.RDD_IgnoreNextFileChange;
 
-                if (ignoreNextChange)
-                    IgnoreFileChanges(true);
+                bool ok;
 
-                if (SafeSucceeded(vsPersistDocData.ReloadDocData, flags))
+                // Temporarily suspend our ignore 'lock' as without that documents
+                // don't reload properly.
+
+                if (_ignoring)
+                    EnsureIgnored(false);
+
+                try
+                {
+                    ok = SafeSucceeded(vsPersistDocData.ReloadDocData, flags);
+                }
+                finally
+                {
+                    EnsureIgnored(_ignored > 0);
+                }
+
+                if (ok)
                 {
                     if (_disposed || (reloadCookie != _reloadTick) || (wasDirty != IsDirty))
                         return true;
@@ -461,7 +474,7 @@ namespace Ankh.Scc.ProjectMap
         {
             if (!_isFileDocument)
                 return false; // Not interested
-            else if ((_flags & RDT_PendingInitialization) != 0)
+            else if (!IsDocumentInitialized)
                 return false; // Not initialized, so no in memory dirty state
             else if ((_flags & RDT_DontPollForState) != 0)
                 return _isDirty; // Don't poll. "Don't call us, we call you"
@@ -500,14 +513,12 @@ namespace Ankh.Scc.ProjectMap
         /// <returns></returns>
         public bool IgnoreFileChanges(bool ignore)
         {
-            IVsDocDataFileChangeControl ddfcc = RawDocument as IVsDocDataFileChangeControl;
-
-            if (ddfcc == null)
+            if (!IsDocumentInitialized)
                 return false;
 
             if (ignore)
             {
-                if (_ignored > 0)
+                if (EnsureIgnored(ignore))
                 {
                     _ignored++;
                     return true;
@@ -515,31 +526,33 @@ namespace Ankh.Scc.ProjectMap
             }
             else
             {
-                if (_ignored > 1)
+                if (EnsureIgnored(ignore))
                 {
                     _ignored--;
                     return true;
                 }
-                else if (_ignored == 0)
-                    return false; // We were not ignoring (Are we 100% reloaded?)
             }
+        }
 
-            if (SafeSucceeded(ddfcc.IgnoreFileChanges, ignore ? 1 : 0))
-            {
-                if (ignore)
-                    _ignored++;
-                else
-                    _ignored--;
-
-                return true;
-            }
-            else
+        bool _ignoring;
+        bool EnsureIgnored(bool ignore)
+        {
+            if (!IsDocumentInitialized)
                 return false;
+            else if (_ignoring == ignore)
+                return true;
+
+            IVsDocDataFileChangeControl ddfcc = RawDocument as IVsDocDataFileChangeControl;
+
+            if (ddfcc != null)
+                return SafeSucceeded(ddfcc.IgnoreFileChanges, ignore ? 1 : 0);
+
+            return false;
         }
 
         internal bool SaveDocument(IVsRunningDocumentTable rdt)
         {
-            if ((_flags & _VSRDTFLAGS.RDT_DontSave) != 0)
+            if (!IsDocumentInitialized || (_flags & _VSRDTFLAGS.RDT_DontSave) != 0)
                 return true;
 
             if (VSErr.Succeeded(rdt.SaveDocuments(0, Hierarchy, ItemId, Cookie)))
@@ -630,7 +643,8 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
-                return (_flags & RDT_PendingInitialization) == 0;
+                // Documents that are not initialized yet, and ones that don't have a lock
+                return (_flags & RDT_PendingInitialization) == 0 && (_flags != 0);
             }
         }
 
