@@ -418,23 +418,34 @@ namespace Ankh.Scc
 
         readonly Dictionary<string, DocumentLock> _externallyChanged = new Dictionary<string, DocumentLock>(StringComparer.OrdinalIgnoreCase);
 
-        public void ExternallyChanged(string path)
+        public void ExternallyChanged(string path, out bool isDirty)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
+
+            isDirty = false;
 
             if (DocumentTracker.NoReloadNecessary(path))
                 return;
 
             lock (_externallyChanged)
             {
-                if (!_externallyChanged.ContainsKey(path))
+                if (DocumentTracker.IsDocumentOpenInTextEditor(path))
                 {
-                    _externallyChanged.Add(path, null);
-                    if (DocumentTracker.IsDocumentOpenInTextEditor(path) && !DocumentTracker.IsDocumentDirty(path, true))
+                    if (!DocumentTracker.IsDocumentDirty(path, true))
                     {
-                        // Locking will trigger a file change!
-                        _externallyChanged[path] = DocumentTracker.LockDocument(path, DocumentLockType.ReadOnly);
+                        if (!_externallyChanged.ContainsKey(path))
+                            _externallyChanged[path] = DocumentTracker.LockDocument(path, DocumentLockType.ReadOnly);
+                    }
+                    else
+                    {
+                        DocumentLock dl;
+                        if (_externallyChanged.TryGetValue(path, out dl))
+                        {
+                            _externallyChanged.Remove(path);
+                            dl.Dispose();
+                        }
+                        isDirty = true; // Unhook external change handling: Make VS ask user
                     }
                 }
             }

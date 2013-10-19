@@ -429,7 +429,13 @@ namespace Ankh.Services
                         IFileStatusMonitor m = GetService<IFileStatusMonitor>();
 
                         if (m != null)
-                            m.ExternallyChanged(_toMonitor);
+                        {
+                            bool isDirty;
+                            m.ExternallyChanged(_toMonitor, out isDirty);
+
+                            if (isDirty)
+                                Dispose();
+                        }
 
                         break;
                     }

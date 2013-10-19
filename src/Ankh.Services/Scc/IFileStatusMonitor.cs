@@ -83,7 +83,7 @@ namespace Ankh.Scc
         /// Called when a file is changed outside VS (E.g. via a diff tool)
         /// </summary>
         /// <param name="path"></param>
-        void ExternallyChanged(string path);
+        void ExternallyChanged(string path, out bool isDirty);
 
         /// <summary>
         /// Schedules the addition of the specified file
