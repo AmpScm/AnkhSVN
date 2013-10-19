@@ -535,11 +535,11 @@ namespace Ankh.WpfPackage.Services
                 clrTitle = SystemColors.WindowText;
             if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_BORDER, out clrBorder))
                 clrBorder = SystemColors.WindowFrame;
-            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_TEXT, out clrText))
+            if (!VSColors.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_TEXT, out clrText))
                 clrText = SystemColors.WindowText;
             if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_BACKGROUND, out clrBackground))
                 clrBackground = SystemColors.InactiveBorder;
-            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_FILL, out clrFill))
+            if (!VSColors.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out clrFill))
                 clrFill = SystemColors.Control;
             if (!VSColors.TryGetColor(VSCOLOR_GRAYTEXT, out clrGrayText))
                 clrGrayText = SystemColors.WindowText;
