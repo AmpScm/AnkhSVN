@@ -122,6 +122,24 @@ namespace Ankh.Commands
             return Context.GetService<T>(serviceType);
         }
 
+        /// <summary>
+        /// Gets a specific service by its uuid.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serviceGuid"></param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public T QueryService<T>(Guid serviceGuid)
+            where T : class
+        {
+            IAnkhQueryService qs = GetService<IAnkhQueryService>();
+
+            if (qs != null)
+                return qs.QueryService<T>(serviceGuid);
+
+            return null;
+        }
+
         internal void Prepare(CommandMapItem item)
         {
             _mapItem = item;
