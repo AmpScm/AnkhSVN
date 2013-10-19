@@ -27,6 +27,7 @@ using Ankh.Scc.UI;
 using Ankh.UI;
 using Ankh.VS;
 using Ankh.Configuration;
+using Ankh.Commands;
 
 namespace Ankh.Services
 {
@@ -391,7 +392,12 @@ namespace Ankh.Services
 
             void OnExited(object sender, EventArgs e)
             {
-                Dispose();
+                IAnkhCommandService cmd = GetService<IAnkhCommandService>();
+
+                if (cmd != null)
+                    cmd.PostIdleAction(Dispose);
+                else
+                    Dispose();
 
                 if (_monitorDir)
                 {
@@ -413,19 +419,19 @@ namespace Ankh.Services
 
             public int FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
             {
-                if (rgpszFile != null)
+                if (rgpszFile == null)
+                    return VSErr.E_POINTER;
+
+                foreach (string file in rgpszFile)
                 {
-                    foreach (string file in rgpszFile)
+                    if (string.Equals(file, _toMonitor, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (string.Equals(file, _toMonitor, StringComparison.OrdinalIgnoreCase))
-                        {
-                            IFileStatusMonitor m = GetService<IFileStatusMonitor>();
+                        IFileStatusMonitor m = GetService<IFileStatusMonitor>();
 
-                            if (m != null)
-                                m.ExternallyChanged(_toMonitor);
+                        if (m != null)
+                            m.ExternallyChanged(_toMonitor);
 
-                            break;
-                        }
+                        break;
                     }
                 }
 
