@@ -518,20 +518,40 @@ namespace Ankh.Scc.ProjectMap
 
             if (ignore)
             {
-                if (EnsureIgnored(ignore))
+                if (_ignored > 0)
                 {
                     _ignored++;
+                    EnsureIgnored(true);
                     return true;
+                }
+                else if(_ignored == 0)
+                {
+                    if (EnsureIgnored(true))
+                    {
+                        _ignored++;
+                        return true;
+                    }
                 }
             }
             else
             {
-                if (EnsureIgnored(ignore))
+                if (_ignored > 1)
                 {
                     _ignored--;
+                    EnsureIgnored(true);
                     return true;
                 }
+                else if (_ignored == 1)
+                {
+                    if (EnsureIgnored(false))
+                    {
+                        _ignored = 0;
+                        return true;
+                    }
+                }
             }
+
+            return false;
         }
 
         bool _ignoring;
@@ -545,7 +565,13 @@ namespace Ankh.Scc.ProjectMap
             IVsDocDataFileChangeControl ddfcc = RawDocument as IVsDocDataFileChangeControl;
 
             if (ddfcc != null)
-                return SafeSucceeded(ddfcc.IgnoreFileChanges, ignore ? 1 : 0);
+            {
+                if (SafeSucceeded(ddfcc.IgnoreFileChanges, ignore ? 1 : 0))
+                {
+                    _ignoring = ignore;
+                    return true;
+                }
+            }
 
             return false;
         }
