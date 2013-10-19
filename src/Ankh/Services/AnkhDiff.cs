@@ -312,6 +312,7 @@ namespace Ankh.Services
             uint _cookie;
             readonly string _toMonitor;
             readonly bool _monitorDir;
+            IAnkhOpenDocumentTracker _odt;
 
             public DiffToolMonitor(IAnkhServiceProvider context, string monitor, bool monitorDir)
                 : base(context)
@@ -348,6 +349,14 @@ namespace Ankh.Services
                         _cookie = 0;
                     }
                 }
+
+                IAnkhOpenDocumentTracker odt = GetService<IAnkhOpenDocumentTracker>();
+
+                if (odt != null)
+                {
+                    if (odt.IgnoreChanges(_toMonitor, true))
+                        _odt = odt;
+                }
             }
 
             public void Dispose()
@@ -366,6 +375,12 @@ namespace Ankh.Services
                         else
                             fx.UnadviseDirChange(ck);
                     }
+                }
+
+                if (_odt != null)
+                {
+                    _odt.IgnoreChanges(_toMonitor, false);
+                    _odt = null;
                 }
             }
 

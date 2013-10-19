@@ -459,7 +459,7 @@ namespace Ankh.Scc
                     SccDocumentData dd;
                     if (_tracker._docMap.TryGetValue(ch, out dd))
                     {
-                        if (!dd.Reload(true, false))
+                        if (!dd.Reload(true))
                         {
                             string parentDocument = _tracker.GetParentDocument(dd);
 
@@ -554,27 +554,14 @@ namespace Ankh.Scc
             return null;
         }
 
-        /// <summary>
-        /// Reloads the specified file if the document is open and not dirty
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        public bool ReloadIfNotDirty(string file, bool clearUndo)
+        public bool IgnoreChanges(string path, bool ignore)
         {
-            if (string.IsNullOrEmpty(file))
-                throw new ArgumentNullException("file");
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
 
-            SccDocumentData data;
-            if (!_docMap.TryGetValue(file, out data))
-                return false;
-
-            data.CheckDirty(_poller);
-
-            if (!data.IsDirty && data.IsReloadable())
-            {
-                data.Reload(clearUndo, true);
-                return true;
-            }
+            SccDocumentData dd;
+            if (_docMap.TryGetValue(path, out dd))
+                return dd.IgnoreFileChanges(ignore);
 
             return false;
         }
