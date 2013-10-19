@@ -28,7 +28,7 @@ using Ankh.Scc.ProjectMap;
 namespace Ankh.Scc
 {
     [GlobalService(typeof(IAnkhOpenDocumentTracker))]
-    partial class OpenDocumentTracker : AnkhService, IAnkhOpenDocumentTracker, IVsRunningDocTableEvents3, IVsRunningDocTableEvents2, IVsRunningDocTableEvents
+    partial class OpenDocumentTracker : AnkhService, IAnkhOpenDocumentTracker, IVsRunningDocTableEvents4, IVsRunningDocTableEvents3, IVsRunningDocTableEvents2, IVsRunningDocTableEvents
     {
         readonly Dictionary<string, SccDocumentData> _docMap = new Dictionary<string, SccDocumentData>(StringComparer.OrdinalIgnoreCase);
         readonly Dictionary<uint, SccDocumentData> _cookieMap = new Dictionary<uint, SccDocumentData>();
@@ -365,6 +365,16 @@ namespace Ankh.Scc
             }
             return VSErr.S_OK;
         }
+
+        /// <summary>
+        /// Fired after a Save All command is executed.
+        /// </summary>
+        /// <returns></returns>
+        public int OnAfterSaveAll()
+        {
+            return VSErr.S_OK;
+        }
+
 
         internal const __VSRDTATTRIB RDTA_DocumentInitialized = (__VSRDTATTRIB)0x00100000; // VS2013+
         internal const __VSRDTATTRIB RDTA_HierarchyInitialized = (__VSRDTATTRIB)0x00200000; // VS2013+
