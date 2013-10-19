@@ -426,8 +426,6 @@ namespace Ankh.Scc
             if (DocumentTracker.NoReloadNecessary(path))
                 return;
 
-            ScheduleSvnStatus(path);
-
             lock (_externallyChanged)
             {
                 if (!_externallyChanged.ContainsKey(path))
@@ -456,9 +454,9 @@ namespace Ankh.Scc
 
             try
             {
+                ScheduleSvnStatus(modified.Keys);
                 foreach (KeyValuePair<string, DocumentLock> file in modified)
                 {
-                    ScheduleSvnStatus(file.Key);
                     SvnItem item = Cache[file.Key];
 
                     if (item.IsConflicted)
