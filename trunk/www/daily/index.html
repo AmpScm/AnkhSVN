@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.5.12212</title>
+          AnkhSVN-Daily Update - 2.5.12213</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,14 +16,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/7863/AnkhSvn-Daily-2.5.12212.443.msi">AnkhSVN 2.5.12212</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/7865/AnkhSvn-Daily-2.5.12213.444.msi">AnkhSVN 2.5.12213</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=12212">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=12213">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -75,27 +75,6 @@ This resolves some dark theme issues.</td></tr>
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.WpfEditor.Package/Services/VS2012ThemingService.cs, Ankh.WpfEditor.Package/Services/ThemingService.cs, Ankh.UI/PendingChanges/Commits/PendingCommitsView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Simplify theming code for listviews by using the parent backcolor, just like
 the treeview. This makes the pending changes window behave much better in the
 VS Blue theme.</td></tr>
-<tr class="d"><td colspan="4">2013-09-24</td></tr>
-<tr><td> </td><td class="r"><a id="12145" href="http://ankhsvn.net/rev/12145">
-            [r12145]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> OpenDocumentTracker.cs, OpenDocumentTracker.Visibility.cs, OpenDocumentTracker.Api.cs, ProjectMap/SccDocumentData.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">When polling documents for changed state in VS2012 or later, use the VS2012
-service to handle the polling. Fall back to our older implementation when
-VS can't answer the question for us.</td></tr>
-<tr><td> </td><td class="r"><a id="12143" href="http://ankhsvn.net/rev/12143">
-            [r12143]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> OpenDocumentTracker.cs, ProjectMap/SccDocumentData.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Optimize a few more RDT_DontPollForState cases in VS2013, to avoid polling.</td></tr>
-<tr><td> </td><td class="r"><a id="12142" href="http://ankhsvn.net/rev/12142">
-            [r12142]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> OpenDocumentTracker.cs, ProjectMap/SccDocumentData.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Start processing a few more open document flags to avoid polling documents
-for their dirty state. In VS2012+ editors explicitly tell that they notify
-their state changes and in that case we can avoid a lot of processing.</td></tr>
-<tr><td> </td><td class="r"><a id="12140" href="http://ankhsvn.net/rev/12140">
-            [r12140]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/VSAssemblies.cs, Ankh.Scc/OpenDocumentTracker.cs, Ankh.WpfEditor.Package/Services/VS2012ThemingService.cs, Ankh.VS/Services/InternalDiff.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update Shell Interop reflection code to use common assembly references.</td></tr>
-<tr><td> </td><td class="r"><a id="12139" href="http://ankhsvn.net/rev/12139">
-            [r12139]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> OpenDocumentTracker.cs, Ankh.Scc.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use a less expensive way to initialize our open document tracking in an
-attempt to avoid breaking VS2013's text editor delay loading.</td></tr>
 
 </table>
 <!--/Recent changes-->
