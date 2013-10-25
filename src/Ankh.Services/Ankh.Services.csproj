@@ -208,8 +208,8 @@
     <Content Include="Ankh.Services.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <DependencyDownload Include="SSvn-1.8004.2592.zip">
-      <Url>http://sharpsvn.open.collab.net/files/documents/180/7870/</Url>
+    <DependencyDownload Include="SSvn-1.8004.2600.zip">
+      <Url>http://sharpsvn.open.collab.net/files/documents/180/7875/</Url>
       <TargetDir>..\autolib</TargetDir>
       <Version>1</Version>
       <Visible>false</Visible>
