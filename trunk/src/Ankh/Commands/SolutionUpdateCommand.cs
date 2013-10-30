@@ -16,13 +16,13 @@
 
 using System;
 using System.Collections.Generic;
-using Ankh.VS;
-using Ankh.Selection;
-using SharpSvn;
-using Ankh.Scc;
-using Ankh.UI.Commands;
 using System.Diagnostics;
 using System.Windows.Forms;
+using Ankh.Scc;
+using Ankh.Selection;
+using Ankh.UI.Commands;
+using Ankh.VS;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -312,7 +312,7 @@ namespace Ankh.Commands
             }
 
             Dictionary<string, SvnItem> itemsToUpdate = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
-            Dictionary<string, List<string>> groups = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+            SortedList<string, List<string>> groups = new SortedList<string, List<string>>(StringComparer.OrdinalIgnoreCase);
 
             // Get a list of all documents below the specified paths that are open in editors inside VS
             HybridCollection<string> lockPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -406,6 +406,8 @@ namespace Ankh.Commands
 
             foreach (List<string> group in groups)
             {
+                group.Sort(StringComparer.OrdinalIgnoreCase);
+
                 // Currently Subversion runs update per item passed and in
                 // Subversion 1.6 passing each item separately is actually 
                 // a tiny bit faster than passing them all at once. 
