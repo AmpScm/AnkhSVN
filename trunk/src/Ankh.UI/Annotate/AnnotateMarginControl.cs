@@ -463,9 +463,16 @@ namespace Ankh.UI.Annotate
             return false;
         }
 
+        int? _oldTopLine;
         internal void NotifyVerticalScroll(VSTextEditorScrollEventArgs scrollInfo)
         {
-            int dy = (_firstLine - scrollInfo.FirstVisibleUnit) * LineHeight;
+            int diff = 0;
+            _topLine = null;
+            int topLine = TopLine;
+            if (_oldTopLine.HasValue)
+                diff = _oldTopLine.Value - topLine;
+            _oldTopLine = topLine;
+            int dy = (_firstLine - scrollInfo.FirstVisibleUnit) * LineHeight - diff;
             _firstLine = scrollInfo.FirstVisibleUnit;
             _lastLine = scrollInfo.VisibleUnits + scrollInfo.FirstVisibleUnit;
 

@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.Text.Formatting;
 
 using Ankh.VS;
 
@@ -87,10 +88,13 @@ namespace Ankh.WpfPackage.Services
                     return new SystemPoint();
 
                 FrameworkElement el = textView.VisualElement;
-
+                IWpfTextViewLine line = textView.TextViewLines.FirstVisibleLine;
+                int textTop = (int)line.TextTop;
+                int visibleTop = (int)line.VisibleArea.Top;
+                int diff = (textTop - visibleTop) % (int)textView.LineHeight;
                 GeneralTransform toRoot = el.TransformToAncestor(source.RootVisual);
 
-                Point p = toRoot.Transform(new Point(0, 0));
+                Point p = toRoot.Transform(new Point(0, diff));
 
                 return new SystemPoint((int)p.X, (int)p.Y);
             }
