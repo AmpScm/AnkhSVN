@@ -316,6 +316,8 @@ namespace Ankh
         RepositoryExplorerComboBoxFill,
 
         SccSccReCheckoutFailedProject,
-        SccEditFailedProjectLocation
+        SccEditFailedProjectLocation,
+
+        CopyRevisionNumber,
     }
 }

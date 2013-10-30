@@ -219,7 +219,7 @@ namespace Ankh.UI.SvnLog
 
         [Category("Subversion")]
         [DisplayName("Commit date")]
-        public DateTime CommitDate
+        public DateTime Time
         {
             get { return _lvi.Date.ToLocalTime(); }
         }
@@ -244,7 +244,7 @@ namespace Ankh.UI.SvnLog
         }
 
         [Browsable(false)]
-        public SvnChangeItemCollection ChangedPaths
+        public KeyedCollection<string, SvnChangeItem> ChangedPaths
         {
             get { return _lvi.RawData.ChangedPaths; }
         }

@@ -151,12 +151,13 @@ namespace Ankh.UI.SvnLog
                     origins.Add(origin.TrimEnd('/'));
                 }
 
-                foreach (SvnChangeItem i in item.ChangedPaths)
-                {
-                    bool hasFocus = (colorInfo != null) && HasFocus(origins, i.Path);
+                if (item.ChangedPaths != null)
+                    foreach (SvnChangeItem i in item.ChangedPaths)
+                    {
+                        bool hasFocus = (colorInfo != null) && HasFocus(origins, i.Path);
 
-                    paths.Add(new PathListViewItem(this, item, i, item.RepositoryRoot, hasFocus, colorInfo));
-                }
+                        paths.Add(new PathListViewItem(this, item, i, item.RepositoryRoot, hasFocus, colorInfo));
+                    }
 
                 Items.AddRange(paths.ToArray());
             }
