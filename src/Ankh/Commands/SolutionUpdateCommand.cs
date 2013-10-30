@@ -181,6 +181,31 @@ namespace Ankh.Commands
             }
         }
 
+        sealed class UpdateGroup
+        {
+            readonly string _wcroot;
+            readonly List<string> _files;
+
+            public UpdateGroup(string wcroot)
+            {
+                if (string.IsNullOrEmpty(wcroot))
+                    throw new ArgumentNullException("wcroot");
+
+                _wcroot = wcroot;
+                _files = new List<string>();
+            }
+
+            public string WorkingCopyRoot
+            {
+                get { return _wcroot; }
+            }
+
+            public List<string> Nodes
+            {
+                get { return _files; }
+            }
+        }
+
         public override void OnExecute(CommandEventArgs e)
         {
             ILastChangeInfo ci = e.GetService<ILastChangeInfo>();
@@ -312,7 +337,7 @@ namespace Ankh.Commands
             }
 
             Dictionary<string, SvnItem> itemsToUpdate = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
-            SortedList<string, List<string>> groups = new SortedList<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+            SortedList<string, UpdateGroup> groups = new SortedList<string, UpdateGroup>(StringComparer.OrdinalIgnoreCase);
 
             // Get a list of all documents below the specified paths that are open in editors inside VS
             HybridCollection<string> lockPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -334,15 +359,15 @@ namespace Ankh.Commands
                         continue;
                 }
 
-                List<string> inWc;
+                UpdateGroup group;
 
-                if (!groups.TryGetValue(wc.FullPath, out inWc))
+                if (!groups.TryGetValue(wc.FullPath, out group))
                 {
-                    inWc = new List<string>();
-                    groups.Add(wc.FullPath, inWc);
+                    group = new UpdateGroup(wc.FullPath);
+                    groups.Add(wc.FullPath, group);
                 }
 
-                inWc.Add(item.FullPath);
+                group.Nodes.Add(item.FullPath);
                 itemsToUpdate.Add(item.FullPath, item);
 
                 foreach (string file in documentTracker.GetDocumentsBelow(item.FullPath))
@@ -384,7 +409,7 @@ namespace Ankh.Commands
             }
         }
 
-        private static void PerformUpdate(CommandEventArgs e, ProgressWorkerArgs wa, SvnRevision rev, bool allowUnversionedObstructions, bool updateExternals, bool setDepthInfinity, IEnumerable<List<string>> groups, out SvnUpdateResult updateResult)
+        private static void PerformUpdate(CommandEventArgs e, ProgressWorkerArgs wa, SvnRevision rev, bool allowUnversionedObstructions, bool updateExternals, bool setDepthInfinity, IEnumerable<UpdateGroup> groups, out SvnUpdateResult updateResult)
         {
             SvnUpdateArgs ua = new SvnUpdateArgs();
             ua.Revision = rev;
@@ -404,15 +429,18 @@ namespace Ankh.Commands
             };
             e.Context.GetService<IConflictHandler>().RegisterConflictHandler(ua, wa.Synchronizer);
 
-            foreach (List<string> group in groups)
+            foreach (UpdateGroup group in groups)
             {
-                group.Sort(StringComparer.OrdinalIgnoreCase);
+                if (handledExternals.Contains(group.WorkingCopyRoot))
+                    continue;
+
+                group.Nodes.Sort(StringComparer.OrdinalIgnoreCase);
 
                 // Currently Subversion runs update per item passed and in
                 // Subversion 1.6 passing each item separately is actually 
                 // a tiny bit faster than passing them all at once. 
                 // (sleep_for_timestamp fails its fast route)
-                foreach (string path in group)
+                foreach (string path in group.Nodes)
                 {
                     if (handledExternals.Contains(path))
                         continue;
