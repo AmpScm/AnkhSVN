@@ -341,6 +341,9 @@ namespace Ankh.Scc.ProjectMap
             if (_disposed)
                 return false;
 
+            if (!IsDocumentInitialized)
+                return true; // Not loaded, so no reload necessary!
+
             int reloadCookie = _reloadTick;
             bool wasDirty = IsDirty;
 
