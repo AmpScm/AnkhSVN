@@ -42,22 +42,5 @@ namespace Ankh.Commands
                 return (0 != (System.Windows.Forms.Control.ModifierKeys & System.Windows.Forms.Keys.Shift));
             }
         }
-
-        /// <summary>
-        /// Saves all dirty documents within the provided selection
-        /// </summary>
-        /// <param name="selection">The selection.</param>
-        /// <param name="context">The context.</param>
-        protected static void SaveAllDirtyDocuments(ISelectionContext selection, IAnkhServiceProvider context)
-        {
-            if (selection == null)
-                throw new ArgumentNullException("selection");
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            IAnkhOpenDocumentTracker tracker = context.GetService<IAnkhOpenDocumentTracker>();
-            if (tracker != null)
-                tracker.SaveDocuments(selection.GetSelectedFiles(true));
-        }
     }
 }
