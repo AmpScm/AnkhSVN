@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using SharpSvn;
 using SharpSvn.Implementation;
@@ -24,13 +25,17 @@ namespace Ankh.Scc
 {
     public interface ISvnLogItem
     {
-        DateTime CommitDate { get; }
+        DateTime Time { get; }
         string Author { get; }
         string LogMessage { get; }
         IEnumerable<Ankh.VS.IssueMarker> Issues { get; }
         long Revision { get; }
         int Index { get; }
-        SvnChangeItemCollection ChangedPaths { get; }
+
+        /// <summary>
+        /// List of changed paths for this revision or NULL if that information is not available
+        /// </summary>
+        KeyedCollection<string, SvnChangeItem> ChangedPaths { get; }
 
         Uri RepositoryRoot { get; }
     }

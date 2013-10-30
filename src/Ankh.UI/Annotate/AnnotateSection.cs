@@ -16,12 +16,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using SharpSvn;
-using Ankh.Scc;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Ankh.Scc.UI;
 using System.Globalization;
+using Ankh.Scc;
+using Ankh.Scc.UI;
+using SharpSvn;
 
 namespace Ankh.UI.Annotate
 {
@@ -78,7 +78,7 @@ namespace Ankh.UI.Annotate
         #endregion
     }
 
-    class AnnotateSource : AnkhPropertyGridItem, IAnnotateSection, ISvnRepositoryItem
+    class AnnotateSource : AnkhPropertyGridItem, IAnnotateSection, ISvnRepositoryItem, ISvnLogItem
     {
         readonly SvnBlameEventArgs _args;
         readonly SvnOrigin _origin;
@@ -164,6 +164,28 @@ namespace Ankh.UI.Annotate
             // Ignore
         }
 
-        #endregion
+        #endregion Members
+
+        #region ISvnLogItem
+        IEnumerable<VS.IssueMarker> ISvnLogItem.Issues
+        {
+            get { return new VS.IssueMarker[0]; }
+        }
+
+        int ISvnLogItem.Index
+        {
+            get { return -1; }
+        }
+
+        KeyedCollection<string, SvnChangeItem> ISvnLogItem.ChangedPaths
+        {
+            get { return null; }
+        }
+
+        Uri ISvnLogItem.RepositoryRoot
+        {
+            get { return Origin.RepositoryRoot; }
+        }
+        #endregion Members
     }
 }

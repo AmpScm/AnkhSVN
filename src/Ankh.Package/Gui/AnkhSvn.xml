@@ -848,7 +848,9 @@
                   text="Open &amp;Issue" dynamicVisibility="true"/>
         </Group>
         <Group id="Grp_LogViewerEdit" priority="0xE000">
-          <ButtonRef id="guidVSStd97:cmdidCopy" priority="0x100" />
+          <Button id="Cmd_CopyRevisionNumber" name="CopyRevisionNumber" priority="0x100"
+                  text="Copy &amp;Revision" toolTip="Copy Revision number." />
+          <ButtonRef id="guidVSStd97:cmdidCopy" priority="0x200" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
@@ -883,6 +885,7 @@
                   iconFile="Scc/TfsContextExplorerAnnotate.png" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_CopyToWorkingCopy" priority="0x800" />
         </Group>
+        <GroupRef id="Grp_LogViewerEdit" priority="0x300" />
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>

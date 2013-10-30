@@ -242,7 +242,7 @@ namespace Ankh.UI.SvnLog
         [Description("Time of the Last Commit")]
         public DateTime LastCommitted
         {
-            get { return _lvi.LogItem.CommitDate.ToLocalTime(); }
+            get { return _lvi.LogItem.Time.ToLocalTime(); }
         }
 
         /// <summary>

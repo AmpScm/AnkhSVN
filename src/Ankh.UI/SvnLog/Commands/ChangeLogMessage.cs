@@ -31,15 +31,7 @@ namespace Ankh.UI.SvnLog.Commands
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            int count = 0;
-            foreach (ISvnLogItem i in e.Selection.GetSelection<ISvnLogItem>())
-            {
-                count++;
-
-                if (count > 1)
-                    break;
-            }
-            if (count != 1)
+            if (EnumTools.GetSingle(e.Selection.GetSelection<ISvnLogItem>()) == null)
                 e.Enabled = false;
         }
 
