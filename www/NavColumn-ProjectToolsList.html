@@ -66,6 +66,9 @@
   var _gaq = _gaq || []; 
   _gaq.push(['_setAccount', 'UA-15818662-1']); 
   _gaq.push(['_trackPageview']);
+  
+  // We prefer the AnkhSVN tracking. Sorry
+  _gaq[0][1] = 'UA-15818662-1';
 
  (function() { 
    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; 
