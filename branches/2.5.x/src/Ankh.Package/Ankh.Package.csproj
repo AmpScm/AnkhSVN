@@ -1,0 +1,568 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="../tools/Ankh-Common.targets" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FA90174C-5763-46E8-9C95-328CA8451072}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>Ankh.VSPackage</RootNamespace>
+    <AssemblyName>Ankh.Package</AssemblyName>
+    <TargetFrameworkVersion Condition="'$(TargetFrameworkVersion)' == ''">v2.0</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Ankh.Package.snk</AssemblyOriginatorKeyFile>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release %28With MSI%29|x86'">
+    <OutputPath>bin\Release %28With MSI%29\</OutputPath>
+    <DefineConstants>FOR_MSI</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RegisterOutputPackage>true</RegisterOutputPackage>
+    <RegisterWithCodebase>true</RegisterWithCodebase>
+    <CtcCompileDependsOn>ApplyXslTemplates;$(CtcCompileDependsOn)</CtcCompileDependsOn>
+    <VSCTCompileDependsOn>ApplyXslTemplates;$(VsctCompileDependsOn)</VSCTCompileDependsOn>
+    <ApplyXslTemplatesDependsOn>ResolveAssemblyReferences;$(ResolveAssemblyReferences)</ApplyXslTemplatesDependsOn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\Package.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0" />
+    <Reference Include="$(MsVsShellAssembly)" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="'$(UseVsSdkVersion)' &gt;= '9.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="'$(UseVsSdkVersion)' &gt;= '10.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.11.0" Condition="'$(UseVsSdkVersion)' &gt;= '11.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0" Condition="'$(UseVsSdkVersion)' &gt;= '12.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' &gt;= '10.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" Condition="'$(UseVsSdkVersion)' &gt;= '11.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" Condition="'$(UseVsSdkVersion)' &gt;= '12.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="SharpSvn">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\ProvideAnkhExtensionRedirectAttribute.cs" />
+    <Compile Include="Attributes\ProvideSourceControlCommand.cs" />
+    <Compile Include="Attributes\ProvideThemeInformation.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Only edit this block if you really know what you are doing; part of the command compilation -->
+    <CtcFile Include="$(IntermediateOutputPath)AnkhSvn.ctc" Condition="'$(UseCtcInsteadOfVsct)' == 'true'">
+      <ResourceName>1000.ctmenu</ResourceName>
+      <Visible>false</Visible>
+    </CtcFile>
+    <VSCTCompile Include="$(IntermediateOutputPath)..\AnkhSvn.vsct" Condition="'$(UseCtcInsteadOfVsct)' != 'true'">
+      <ResourceName>1000.ctmenu</ResourceName>
+      <Visible>false</Visible>
+    </VSCTCompile>
+    <CtcFile Include="$(IntermediateOutputPath)AnkhSvn-legacy.ctc" Condition="'$(UseCtcInsteadOfVsct)' == 'true'">
+      <ResourceName>1001.ctmenu</ResourceName>
+      <Visible>false</Visible>
+    </CtcFile>
+    <VSCTCompile Include="$(IntermediateOutputPath)..\AnkhSvn-legacy.vsct" Condition="'$(UseCtcInsteadOfVsct)' != 'true'">
+      <ResourceName>1001.ctmenu</ResourceName>
+      <Visible>false</Visible>
+    </VSCTCompile>
+    <!-- The input of the ctc action is generated by a Xsl transform -->
+    <!-- The result of the ctc action is automatically compiled into the following resource (MergeWithCTO) -->
+    <EmbeddedResource Include="VSPackage.resx">
+      <MergeWithCTO>true</MergeWithCTO>
+      <SubType>Designer</SubType>
+      <ManifestResourceName>VSPackage</ManifestResourceName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Xml based ctc generation; also generates Gui\Ctc\AnkhSvn.bmp -->
+    <XslSource Include="Gui\AnkhSvn.xml">
+      <Transform Condition="'$(UseCtcInsteadOfVsct)' == 'true'">Gui\Gui-To-Ctc.xsl</Transform>
+      <To Condition="'$(UseCtcInsteadOfVsct)' == 'true'">$(IntermediateOutputPath)AnkhSvn.ctc</To>
+      <Transform Condition="'$(UseCtcInsteadOfVsct)' != 'true'">Gui\Gui-To-Vsct.xsl</Transform>
+      <To Condition="'$(UseCtcInsteadOfVsct)' != 'true'">$(IntermediateOutputPath)..\AnkhSvn.vsct</To>
+      <Debug>true</Debug>
+      <Variables>BitmapResId=Bmp_AnkhBmp</Variables>
+      <SubType>Designer</SubType>
+    </XslSource>
+    <XslSource Include="Gui\AnkhSvn.xml">
+      <Transform Condition="'$(UseCtcInsteadOfVsct)' == 'true'">Gui\Gui-To-Ctc.xsl</Transform>
+      <To Condition="'$(UseCtcInsteadOfVsct)' == 'true'">$(IntermediateOutputPath)AnkhSvn-legacy.ctc</To>
+      <Transform Condition="'$(UseCtcInsteadOfVsct)' != 'true'">Gui\Gui-To-Vsct.xsl</Transform>
+      <To Condition="'$(UseCtcInsteadOfVsct)' != 'true'">$(IntermediateOutputPath)..\AnkhSvn-legacy.vsct</To>
+      <Debug>true</Debug>
+      <Variables>BitmapResId=Bmp_AnkhBmpLegacy;BitmapFile=../obj/CtCBitmap-legacy.bmp;ImgSubdir=legacy</Variables>
+      <SubType>Designer</SubType>
+      <Visible>false</Visible>
+    </XslSource>
+    <None Include="Ankh.Package.snk" />
+    <None Include="Gui\Scc\CompareProperties.pdn" />
+    <None Include="source.extension.VsixManifest" />
+    <None Include="Gui\Gui-To-Ctc.xsl" />
+    <None Include="Gui\Gui.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Gui\Gui.xsx">
+      <DependentUpon>Gui.xsd</DependentUpon>
+    </None>
+    <None Include="Gui\Scc\Legacy\CompareProperties.pdn" />
+    <None Include="Gui\PendingChanges\Legacy\RepositoryExplorer.pdn" />
+    <None Include="Gui\Scc\Legacy\FindInFiles.pdn" />
+    <None Include="Resources\AnkhLogo32x32.pdn" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnkhEditorFactories.cs" />
+    <Compile Include="Attributes\ProvideOutputWindow.cs" />
+    <Compile Include="Attributes\ProvideProjectTypeSettings.cs" />
+    <Compile Include="OptionPages\EnvironmentSettingsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="OptionPages\IssueTrackerPage.cs" />
+    <Compile Include="OptionPages\SolutionSettingsPage.cs" />
+    <Compile Include="OptionPages\UserToolsSettingsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AnkhSvnPackage.cs" />
+    <Compile Include="AnkhSvnPackage.About.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSvnPackage.Commands.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSvnPackage.Editors.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSvnPackage.Languages.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSvnPackage.OptionPages.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSvnPackage.ToolWindows.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSvnPackage.SolutionProperties.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSvnPackage.OleComponent.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSvnPackage.Scc.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSvnPackage.Themes.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Attributes\ProvideLanguageSettings.cs" />
+    <Compile Include="Attributes\ProvideMenuResourceEx.cs" />
+    <Compile Include="Attributes\ProvideSolutionProperties.cs" />
+    <Compile Include="Attributes\ProvideSourceControlProvider.cs" />
+    <Compile Include="Attributes\ProvideTextMarker.cs" />
+    <Compile Include="Attributes\ProvideToolsOptionsPageVisibility.cs" />
+    <Compile Include="Attributes\ProvideUIVersion.cs" />
+    <Content Include="Ankh.Package.wxs">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Gui\Gui-To-Vsct.xsl" />
+    <None Include="Gui\Gui-Common.xsl" />
+    <Content Include="Gui\menu\CopyUrlToClipboard.png" />
+    <Content Include="Gui\menu\Legacy\AddUrl.png" />
+    <Content Include="Gui\menu\Legacy\CopyUrlToClipboard.png" />
+    <Content Include="Gui\menu\Legacy\ViewInVSNet.png" />
+    <Content Include="Gui\menu\Legacy\ViewInWindows.png" />
+    <Content Include="Gui\PendingChanges\Export.png" />
+    <Content Include="Gui\PendingChanges\FileMove.png" />
+    <Content Include="Gui\PendingChanges\Legacy\Export.png" />
+    <Content Include="Gui\PendingChanges\ApplyPatch.png" />
+    <Content Include="Gui\PendingChanges\CreatePatch.png" />
+    <Content Include="Gui\PendingChanges\Legacy\EditConflict.png" />
+    <Content Include="Gui\PendingChanges\Legacy\FetchAll.png" />
+    <Content Include="Gui\PendingChanges\Legacy\ShowChangedPaths.png" />
+    <Content Include="Gui\PendingChanges\SortDescending.png" />
+    <Content Include="Gui\PendingChanges\SortAscending.png" />
+    <Content Include="Gui\Scc\FolderUp.png" />
+    <Content Include="Gui\Scc\Legacy\Linkto.png" />
+    <Content Include="Gui\menu\AddUrl.png" />
+    <Content Include="Gui\menu\RemoveUrl.png" />
+    <Content Include="Gui\Scc\Legacy\FolderUp.png" />
+    <Content Include="Gui\PendingChanges\RepositoryExplorer.png" />
+    <Content Include="Gui\Scc\Brush.png" />
+    <Content Include="Gui\Scc\CompareProperties.png" />
+    <Content Include="Gui\Scc\CopyProject.png" />
+    <Content Include="Gui\Scc\FindinFiles.png" />
+    <Content Include="Gui\Scc\Legacy\SortPropertiesAlphabetically.png" />
+    <Content Include="Gui\Scc\Legacy\SortPropertiesByCategory.png" />
+    <Content Include="Gui\menu\PBPage.png" />
+    <Content Include="Gui\Scc\Legacy\CompareProperties.png" />
+    <Content Include="Gui\menu\Legacy\RemoveUrl.png" />
+    <Content Include="Gui\menu\Revert.png" />
+    <Content Include="Gui\menu\RevertToVersion.png" />
+    <Content Include="Gui\Scc\Legacy\LockControls.png" />
+    <Content Include="Gui\Scc\Legacy\Unlock.png" />
+    <Content Include="Gui\menu\ViewInVSNet.png" />
+    <Content Include="Gui\menu\ViewInWindows.png" />
+    <Content Include="Gui\PendingChanges\Legacy\ApplyPatch.png" />
+    <Content Include="Gui\PendingChanges\Blank.png" />
+    <Content Include="Gui\Scc\Legacy\Brush.png" />
+    <Content Include="Gui\Scc\Legacy\CopyProject.png" />
+    <Content Include="Gui\PendingChanges\Legacy\CreatePatch.png" />
+    <Content Include="Gui\PendingChanges\EditConflict.png" />
+    <Content Include="Gui\PendingChanges\FetchAll.png" />
+    <Content Include="Gui\PendingChanges\FilterOnSolution.png" />
+    <Content Include="Gui\Scc\Legacy\PasteFilenames.png" />
+    <Content Include="Gui\Scc\Linkto.png" />
+    <Content Include="Gui\Scc\LockControls.png" />
+    <Content Include="Gui\Scc\PasteFilenames.png" />
+    <Content Include="Gui\PendingChanges\Legacy\FileMove.png" />
+    <Content Include="Gui\Scc\Legacy\Open.png" />
+    <Content Include="Gui\PendingChanges\Legacy\RepositoryExplorer.png" />
+    <Content Include="Gui\Scc\Legacy\ShowAll.png" />
+    <Content Include="Gui\PendingChanges\ShowChangedPaths.png" />
+    <Content Include="Gui\Scc\Legacy\SolutionExplorer.png" />
+    <Content Include="Gui\PendingChanges\Legacy\SortAscending.png" />
+    <Content Include="Gui\PendingChanges\Legacy\SortDescending.png" />
+    <Content Include="Gui\Scc\Legacy\Switch.png" />
+    <Content Include="Gui\Scc\Legacy\FindInFiles.png" />
+    <Content Include="Gui\Scc\AddItem.png" />
+    <Content Include="Gui\Scc\AddItemstoFolder.png" />
+    <Content Include="Gui\Scc\AddSelectedProjectstoSourceControl.png" />
+    <Content Include="Gui\Scc\AddSolutiontoSourceControl.png" />
+    <Content Include="Gui\Scc\Branch.png" />
+    <Content Include="Gui\Scc\Browse.png" />
+    <Content Include="Gui\Scc\BUGBUG.png" />
+    <Content Include="Gui\Scc\ChangeLabeledVersion.png" />
+    <Content Include="Gui\Scc\ChangeSourceControl.png" />
+    <Content Include="Gui\Scc\CheckIn.png" />
+    <Content Include="Gui\Scc\CheckInDynamicSilent.png" />
+    <Content Include="Gui\Scc\CheckInSilent.png" />
+    <Content Include="Gui\Scc\CheckOut.png" />
+    <Content Include="Gui\Scc\CheckoutDynamicSilent.png" />
+    <Content Include="Gui\Scc\CheckOutforEdit.png" />
+    <Content Include="Gui\Scc\CheckOutSilent.png" />
+    <Content Include="Gui\Scc\Columns.png" />
+    <Content Include="Gui\Scc\Comments.png" />
+    <Content Include="Gui\Scc\Compare.png" />
+    <Content Include="Gui\Scc\CompareFolders.png" />
+    <Content Include="Gui\Scc\CompareVersions.png" />
+    <Content Include="Gui\Scc\CompareWithLatestVersion.png" />
+    <Content Include="Gui\Scc\CompareWithLocalVersion.png" />
+    <Content Include="Gui\Scc\Connect.png" />
+    <Content Include="Gui\Scc\ContextGetLatestVersion.png" />
+    <Content Include="Gui\Scc\Delete.png" />
+    <Content Include="Gui\Scc\Disconnect.png" />
+    <Content Include="Gui\Scc\FindChangesets.png" />
+    <Content Include="Gui\Scc\FlatView.png" />
+    <Content Include="Gui\Scc\Folders.png" />
+    <Content Include="Gui\Scc\Forceexclusive.png" />
+    <Content Include="Gui\Scc\Get.png" />
+    <Content Include="Gui\Scc\GetLatestSolutionFiles.png" />
+    <Content Include="Gui\Scc\GetLatestVersion%28Recursive%29.png" />
+    <Content Include="Gui\Scc\GetLatestVersion.png" />
+    <Content Include="Gui\Scc\GetLatestVersionDynamicSilent.png" />
+    <Content Include="Gui\Scc\History.png" />
+    <Content Include="Gui\Scc\Legacy\AddItem.png" />
+    <Content Include="Gui\Scc\Legacy\AddItemstoFolder.png" />
+    <Content Include="Gui\Scc\Legacy\AddSelectedProjectstoSourceControl.png" />
+    <Content Include="Gui\Scc\Legacy\AddSolutiontoSourceControl.png" />
+    <Content Include="Gui\Scc\Legacy\Branch.png" />
+    <Content Include="Gui\Scc\Legacy\Browse.png" />
+    <Content Include="Gui\Scc\Legacy\BUGBUG.png" />
+    <Content Include="Gui\Scc\Legacy\ChangeLabeledVersion.png" />
+    <Content Include="Gui\Scc\Legacy\ChangeSourceControl.png" />
+    <Content Include="Gui\Scc\Legacy\CheckIn.png" />
+    <Content Include="Gui\Scc\Legacy\CheckInDynamicSilent.png" />
+    <Content Include="Gui\Scc\Legacy\CheckInSilent.png" />
+    <Content Include="Gui\Scc\Legacy\CheckOut.png" />
+    <Content Include="Gui\Scc\Legacy\CheckoutDynamicSilent.png" />
+    <Content Include="Gui\Scc\Legacy\CheckOutforEdit.png" />
+    <Content Include="Gui\Scc\Legacy\CheckOutSilent.png" />
+    <Content Include="Gui\Scc\Legacy\Columns.png" />
+    <Content Include="Gui\Scc\Legacy\Comments.png" />
+    <Content Include="Gui\Scc\Legacy\Compare.png" />
+    <Content Include="Gui\Scc\Legacy\CompareFolders.png" />
+    <Content Include="Gui\Scc\Legacy\CompareVersions.png" />
+    <Content Include="Gui\Scc\Legacy\CompareWithLatestVersion.png" />
+    <Content Include="Gui\Scc\Legacy\CompareWithLocalVersion.png" />
+    <Content Include="Gui\Scc\Legacy\Connect.png" />
+    <Content Include="Gui\Scc\Legacy\ContextGetLatestVersion.png" />
+    <Content Include="Gui\Scc\Legacy\Delete.png" />
+    <Content Include="Gui\Scc\Legacy\Disconnect.png" />
+    <Content Include="Gui\Scc\Legacy\FindChangesets.png" />
+    <Content Include="Gui\Scc\Legacy\FlatView.png" />
+    <Content Include="Gui\Scc\Legacy\Folders.png" />
+    <Content Include="Gui\Scc\Legacy\Forceexclusive.png" />
+    <Content Include="Gui\Scc\Legacy\Get.png" />
+    <Content Include="Gui\Scc\Legacy\GetLatestSolutionFiles.png" />
+    <Content Include="Gui\Scc\Legacy\GetLatestVersion%28Recursive%29.png" />
+    <Content Include="Gui\Scc\Legacy\GetLatestVersion.png" />
+    <Content Include="Gui\Scc\Legacy\GetLatestVersionDynamicSilent.png" />
+    <Content Include="Gui\Scc\Legacy\History.png" />
+    <Content Include="Gui\Scc\Legacy\Merge.png" />
+    <Content Include="Gui\Scc\Legacy\NewFolder.png" />
+    <Content Include="Gui\Scc\Legacy\Options.png" />
+    <Content Include="Gui\Scc\Legacy\PendingCheckins.png" />
+    <Content Include="Gui\Scc\Legacy\Properties.png" />
+    <Content Include="Gui\Scc\Legacy\Refresh.png" />
+    <Content Include="Gui\Scc\Legacy\RefreshStatus.png" />
+    <Content Include="Gui\Scc\Legacy\RemovefromLabel.png" />
+    <Content Include="Gui\Scc\Legacy\Share.png" />
+    <Content Include="Gui\Scc\Legacy\Sort.png" />
+    <Content Include="Gui\Scc\Legacy\SourceControlManager.png" />
+    <Content Include="Gui\Scc\Legacy\TfsAddSelectedProjectsToSourceControl.png" />
+    <Content Include="Gui\Scc\Legacy\TfsAddSolutionToSourceControl.png" />
+    <Content Include="Gui\Scc\Legacy\TfsChangeSourceControl.png" />
+    <Content Include="Gui\Scc\Legacy\TfsCheckIn.png" />
+    <Content Include="Gui\Scc\Legacy\TfsCheckInDynamicSilent.png" />
+    <Content Include="Gui\Scc\Legacy\TfsCheckInSilent.png" />
+    <Content Include="Gui\Scc\Legacy\TfsCheckOut.png" />
+    <Content Include="Gui\Scc\Legacy\TfsCheckoutDynamicSilent.png" />
+    <Content Include="Gui\Scc\Legacy\TfsCheckOutSilent.png" />
+    <Content Include="Gui\Scc\Legacy\TfsCompare.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextAddSelectedProjectsToSourceControl.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextCheckIn.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextCheckOutForEdit.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextCompare.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerAdd.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerAnnotate.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerBranch.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerCloak.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerDelete.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerFolderDiff.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerMerge.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerNewFolder.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerProperties.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerSetLocalFolder.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerShelvePendingChanges.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerUncloak.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerUnmap.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextExplorerView.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextGetLatestVersion.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextGetSpecificVersion.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextUndoCheckout.png" />
+    <Content Include="Gui\Scc\Legacy\TfsContextViewPendingChanges.png" />
+    <Content Include="Gui\Scc\Legacy\TfsConvertBranchToFolder.png" />
+    <Content Include="Gui\Scc\Legacy\TfsConvertFolderToBranch.png" />
+    <Content Include="Gui\Scc\Legacy\TfsGetAllFilesInSolution.png" />
+    <Content Include="Gui\Scc\Legacy\TfsGetLatestVersion.png" />
+    <Content Include="Gui\Scc\Legacy\TfsGetLatestVersionDynamicSilent.png" />
+    <Content Include="Gui\Scc\Legacy\TfsGetSpecificVersion.png" />
+    <Content Include="Gui\Scc\Legacy\TfsHistory.png" />
+    <Content Include="Gui\Scc\Legacy\TfsLabelAnnotate.png" />
+    <Content Include="Gui\Scc\Legacy\TfsLabelChangeVersion.png" />
+    <Content Include="Gui\Scc\Legacy\TfsLabelCompare.png" />
+    <Content Include="Gui\Scc\Legacy\TfsLabelFolderDiff.png" />
+    <Content Include="Gui\Scc\Legacy\TfsLabelGetThisVersion.png" />
+    <Content Include="Gui\Scc\Legacy\TfsLabelHistory.png" />
+    <Content Include="Gui\Scc\Legacy\TfsLabelRemoveFromLabel.png" />
+    <Content Include="Gui\Scc\Legacy\TfsLabelView.png" />
+    <Content Include="Gui\Scc\Legacy\TfsOptions.png" />
+    <Content Include="Gui\Scc\Legacy\TfsRefreshStatus.png" />
+    <Content Include="Gui\Scc\Legacy\TfsReparentBranch.png" />
+    <Content Include="Gui\Scc\Legacy\TfsUndoCheckout.png" />
+    <Content Include="Gui\Scc\Legacy\TfsViewBranchHierarchy.png" />
+    <Content Include="Gui\Scc\Legacy\TreeView.png" />
+    <Content Include="Gui\Scc\Legacy\Undo.png" />
+    <Content Include="Gui\Scc\Legacy\UndoCheckout.png" />
+    <Content Include="Gui\Scc\Legacy\ViewHistory.png" />
+    <Content Include="Gui\Scc\Legacy\ViewPendingCheckins.png" />
+    <Content Include="Gui\Scc\Merge.png" />
+    <Content Include="Gui\Scc\NewFolder.png" />
+    <Content Include="Gui\Scc\Open.png" />
+    <Content Include="Gui\Scc\Options.png" />
+    <Content Include="Gui\Scc\PendingCheckins.png" />
+    <Content Include="Gui\Scc\Properties.png" />
+    <Content Include="Gui\Scc\Refresh.png" />
+    <Content Include="Gui\Scc\RefreshStatus.png" />
+    <Content Include="Gui\Scc\RemovefromLabel.png" />
+    <Content Include="Gui\Scc\SaveAsLocalCopy.png" />
+    <Content Include="Gui\Scc\Share.png" />
+    <Content Include="Gui\Scc\ShowAll.png" />
+    <Content Include="Gui\Scc\SolutionExplorer.png" />
+    <Content Include="Gui\Scc\Sort.png" />
+    <Content Include="Gui\Scc\SortPropertiesAlphabetically.png" />
+    <Content Include="Gui\Scc\SortPropertiesByCategory.png" />
+    <Content Include="Gui\Scc\SourceControlManager.png" />
+    <Content Include="Gui\Scc\Switch.png" />
+    <Content Include="Gui\Scc\TfsAddFilesToSourceControl.png" />
+    <Content Include="Gui\Scc\TfsAddSelectedProjectsToSourceControl.png" />
+    <Content Include="Gui\Scc\TfsAddSolutionToSourceControl.png" />
+    <Content Include="Gui\Scc\TfsChangeSourceControl.png" />
+    <Content Include="Gui\Scc\TfsCheckIn.png" />
+    <Content Include="Gui\Scc\TfsCheckInDynamicSilent.png" />
+    <Content Include="Gui\Scc\TfsCheckOut.png" />
+    <Content Include="Gui\Scc\TfsCheckoutDynamicSilent.png" />
+    <Content Include="Gui\Scc\TfsCheckOutSilent.png" />
+    <Content Include="Gui\Scc\TfsCompare.png" />
+    <Content Include="Gui\Scc\TfsContextAddSelectedProjectsToSourceControl.png" />
+    <Content Include="Gui\Scc\TfsContextCheckIn.png" />
+    <Content Include="Gui\Scc\TfsContextCheckOutForEdit.png" />
+    <Content Include="Gui\Scc\TfsContextCompare.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerAdd.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerAnnotate.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerBranch.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerCloak.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerDelete.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerFolderDiff.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerMerge.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerNewFolder.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerProperties.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerSetLocalFolder.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerShelvePendingChanges.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerUncloak.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerUnmap.png" />
+    <Content Include="Gui\Scc\TfsContextExplorerView.png" />
+    <Content Include="Gui\Scc\TfsContextGetLatestVersion.png" />
+    <Content Include="Gui\Scc\TfsContextGetSpecificVersion.png" />
+    <Content Include="Gui\Scc\TfsContextUndoCheckout.png" />
+    <Content Include="Gui\Scc\TfsContextViewPendingChanges.png" />
+    <Content Include="Gui\Scc\TfsConvertBranchToFolder.png" />
+    <Content Include="Gui\Scc\TfsConvertFolderToBranch.png" />
+    <Content Include="Gui\Scc\TfsGetAllFilesInSolution.png" />
+    <Content Include="Gui\Scc\TfsGetLatestVersion.png" />
+    <Content Include="Gui\Scc\TfsGetLatestVersionDynamicSilent.png" />
+    <Content Include="Gui\Scc\TfsGetSpecificVersion.png" />
+    <Content Include="Gui\Scc\TfsHistory.png" />
+    <Content Include="Gui\Scc\TfsLabelAnnotate.png" />
+    <Content Include="Gui\Scc\TfsLabelChangeVersion.png" />
+    <Content Include="Gui\Scc\TfsLabelCompare.png" />
+    <Content Include="Gui\Scc\TfsLabelFolderDiff.png" />
+    <Content Include="Gui\Scc\TfsLabelGetThisVersion.png" />
+    <Content Include="Gui\Scc\TfsLabelHistory.png" />
+    <Content Include="Gui\Scc\TfsLabelRemoveFromLabel.png" />
+    <Content Include="Gui\Scc\TfsLabelView.png" />
+    <Content Include="Gui\Scc\TfsOptions.png" />
+    <Content Include="Gui\Scc\TfsRefreshStatus.png" />
+    <Content Include="Gui\Scc\TfsReparentBranch.png" />
+    <Content Include="Gui\Scc\TfsUndoCheckout.png" />
+    <Content Include="Gui\Scc\TfsViewBranchHierarchy.png" />
+    <Content Include="Gui\Scc\TreeView.png" />
+    <Content Include="Gui\Scc\Undo.png" />
+    <Content Include="Gui\Scc\UndoCheckout.png" />
+    <Content Include="Gui\Scc\Unlock.png" />
+    <Content Include="Gui\Scc\ViewHistory.png" />
+    <Content Include="Gui\Scc\ViewPendingCheckins.png" />
+    <Content Include="Resources\Package.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ankh.Diff\Ankh.Diff.csproj">
+      <Project>{62F97060-6A9E-477D-B15B-E1A1F5320039}</Project>
+      <Name>Ankh.Diff</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.ExtensionPoints\Ankh.ExtensionPoints.csproj">
+      <Project>{B7168874-E05E-458D-95CC-5D7BBC243986}</Project>
+      <Name>Ankh.ExtensionPoints</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
+      <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
+      <Name>Ankh.Ids</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.Scc\Ankh.Scc.csproj">
+      <Project>{ECE36A69-DD85-4AAB-B329-12BAE4675056}</Project>
+      <Name>Ankh.Scc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
+      <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>
+      <Name>Ankh.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.UI\Ankh.UI.csproj">
+      <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
+      <Name>Ankh.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.VS.Interop\Ankh.VS.Interop.csproj">
+      <Project>{b99cb919-1a2c-4e3b-9c15-8789b358ea99}</Project>
+      <Name>Ankh.VS.Interop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.VS\Ankh.VS.csproj">
+      <Project>{906E3F01-CD79-4F80-BCA7-1105224328C4}</Project>
+      <Name>Ankh.VS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh\Ankh.csproj">
+      <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
+      <Name>Ankh</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) &gt;= '10.0'" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '9.0'" />
+  <Import Project="..\tools\VSSdk2005Tasks\VS9.0-fixes.targets" Condition="$(VisualStudioVersion) == '9.0'" />
+  <Import Project="..\tools\VSSdk2005Tasks\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '8.0'" />
+  <Import Project="..\tools\turtletasks\QQn.TurtleTasks.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
