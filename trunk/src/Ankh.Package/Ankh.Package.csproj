@@ -43,7 +43,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release %28With MSI%29|x86'">
     <OutputPath>bin\Release %28With MSI%29\</OutputPath>
-    <DefineConstants>FOR_MSI</DefineConstants>
+    <DefineConstants>TRACE;FOR_MSI</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
