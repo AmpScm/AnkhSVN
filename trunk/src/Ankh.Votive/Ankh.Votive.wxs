@@ -21,6 +21,15 @@
     <Property Id="ARPHELPLINK">http://www.ankhsvn.net/help/</Property>
     <Property Id="ARPURLUPDATEINFO">http://www.ankhsvn.net/changes/?v=$(var.ankhVersion)</Property>
     <Property Id="ARPPRODUCTICON">ICON_AnkhSvn</Property>
+
+    <!-- Some strings to help repackages such as Chocolatey -->
+    <Property Id="Pkg_LicenseUrl">http://ankhsvn.open.collab.net/ankhsvn/license/</Property>
+    <Property Id="Pkg_ProjectUrl">http://ankhsvn.net/</Property>
+    <Property Id="Pkg_IconUrl">http://ankhsvn.open.collab.net/images/ankhsvn-logo.png</Property>
+    <Property Id="Pkg_Description">AnkhSVN is a Subversion Source Control Provider for Microsoft Visual Studio 2005, 2008, 2010, 2012 and 2013.</Property>
+    <Property Id="Pkg_Copyright">Copyright (C) 2003-2013 The AnkhSVN Team.</Property>
+    <Property Id="Pkg_Tags">Subversion svn VisualStudio SCM</Property>
+
     <!-- Error messages -->
 
     <!-- Errormessages -->
