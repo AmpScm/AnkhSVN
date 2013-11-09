@@ -367,7 +367,10 @@ namespace Ankh.WpfPackage.Services
                 updateFore = true;
             }
 
-            if (updateBack || updateFore)
+            // In some cases we can iterate over third party components here,
+            // so make sure we don't fail because we try to iterate a virtual
+            // listview
+            if ((updateBack || updateFore) && !listView.VirtualMode)
             {
                 foreach(ListViewItem lvi in listView.Items)
                 {
@@ -378,7 +381,6 @@ namespace Ankh.WpfPackage.Services
                         lvi.BackColor = newBack;
                 }
             }
-
 
 
             if (listView.BorderStyle == BorderStyle.Fixed3D)
