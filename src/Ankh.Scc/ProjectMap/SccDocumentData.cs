@@ -673,7 +673,7 @@ namespace Ankh.Scc.ProjectMap
             get
             {
                 // Documents that are not initialized yet, and ones that don't have a lock
-                return (_flags & RDT_PendingInitialization) == 0 && (_flags != 0);
+                return (_flags & RDT_PendingInitialization) == 0;
             }
         }
 
@@ -681,7 +681,7 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
-                const _VSRDTFLAGS projectFlags = (_VSRDTFLAGS.RDT_ProjSlnDocument | _VSRDTFLAGS.RDT_VirtualDocument);
+                //const _VSRDTFLAGS projectFlags = (_VSRDTFLAGS.RDT_ProjSlnDocument | _VSRDTFLAGS.RDT_VirtualDocument);
 
                 if ((_flags & RDT_DontPollForState) != 0)
                     return true;
