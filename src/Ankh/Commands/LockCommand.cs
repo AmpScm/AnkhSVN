@@ -114,7 +114,7 @@ namespace Ankh.Commands
                                           {
                                               string userName;
 
-                                              if (notifyArgs.Lock != null)
+                                              if (notifyArgs.Lock != null && !string.IsNullOrEmpty(notifyArgs.Lock.Owner))
                                                   userName = notifyArgs.Lock.Owner;
                                               else
                                                   userName = GuessUserFromError(notifyArgs.Error.Message) ?? "?";
@@ -148,7 +148,8 @@ namespace Ankh.Commands
                 msg.ToString().TrimEnd(),
                 "",
                 MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
+                MessageBoxIcon.Question,
+                MessageBoxDefaultButton.Button2);
 
             if (rslt == DialogResult.Yes)
             {
