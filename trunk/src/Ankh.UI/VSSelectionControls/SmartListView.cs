@@ -75,7 +75,7 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        [DefaultValue(false)]
+        [DefaultValue(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected virtual bool SelectAllChecked
         {
             get { return _selectAllChecked; }

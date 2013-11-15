@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.UI;
 using Ankh.VS;
+using Ankh.ExtensionPoints.UI;
 
 namespace Ankh.WpfPackage.Services
 {
@@ -249,24 +250,41 @@ namespace Ankh.WpfPackage.Services
         }
 
         public void ThemeRecursive(System.Windows.Forms.Control control)
-        {            
-            if (control.IsHandleCreated)
+        {
+            bool recurse = true;
+            bool autoTheme = true;
+            ISupportsVSTheming themeControl = control as ISupportsVSTheming;
+            if (themeControl != null)
             {
-                ISupportsVSTheming themeControl = control as ISupportsVSTheming;
                 CancelEventArgs ca = new CancelEventArgs(false);
                 if (themeControl != null)
                     themeControl.OnThemeChange(this, ca);
 
                 if (ca.Cancel)
-                    return; // No recurse!
+                    recurse = autoTheme = false; // No recurse!
+            }
 
+            IThemedControl themed = control as IThemedControl;
+            if (themed != null)
+            {
+                ApplyThemeEventArgs atea = new ApplyThemeEventArgs(this);
+
+                themed.OnApplyTheme(atea);
+
+                recurse = !atea.NoRecurse;
+                autoTheme = !atea.DontTheme;
+            }
+
+            if (autoTheme && control.IsHandleCreated)
+            {
                 VSThemeWindow(control);
             }
 
-            foreach (Control c in control.Controls)
-            {
-                ThemeRecursive(c);
-            }
+            if (recurse)
+                foreach (Control c in control.Controls)
+                {
+                    ThemeRecursive(c);
+                }
         }
 
         bool MaybeTheme<T>(Action<T> how, Control control) where T : class
