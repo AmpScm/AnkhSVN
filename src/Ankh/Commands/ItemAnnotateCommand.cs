@@ -15,17 +15,19 @@
 //  limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Forms;
+using Microsoft.VisualStudio.TextManager.Interop;
+using SharpSvn;
 using Ankh.Scc;
 using Ankh.Scc.UI;
+using Ankh.Selection;
 using Ankh.UI;
 using Ankh.UI.Annotate;
-using Ankh.VS;
-using SharpSvn;
-using System.Collections.Generic;
 using Ankh.UI.Commands;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {
@@ -103,6 +105,7 @@ namespace Ankh.Commands
                     }
                     break;
                 case AnkhCommand.DocumentAnnotate:
+                    TryObtainBlock(e);
                     targets.Add(new SvnOrigin(e.GetService<IFileStatusCache>()[e.Selection.ActiveDocumentFilename]));
                     endRev = SvnRevision.Working;
                     break;
@@ -151,6 +154,36 @@ namespace Ankh.Commands
             }
 
             DoBlame(e, target, startRev, endRev, ignoreEols, ignoreSpacing, retrieveMergeInfo);
+        }
+
+        private void TryObtainBlock(CommandEventArgs e)
+        {
+            ISelectionContextEx ex = e.GetService<ISelectionContextEx>(typeof(ISelectionContext));
+
+            if (ex == null)
+                return;
+
+            IVsTextView view = ex.ActiveDocumentFrameTextView;
+            IVsTextLines lines;
+            Guid languageService;
+            IVsLanguageInfo info;
+
+            if (view != null
+                && VSErr.Succeeded(view.GetBuffer(out lines))
+                && VSErr.Succeeded(lines.GetLanguageServiceID(out languageService))
+                && null != (info = e.QueryService<IVsLanguageInfo>(languageService)))
+            {
+                GC.KeepAlive(info);
+                IVsLanguageBlock b = info as IVsLanguageBlock;
+                if (b != null)
+                {
+                    GC.KeepAlive(b);
+                }
+            }
+            //IVsLanguageBlock
+
+
+            GC.KeepAlive(ex);
         }
 
         static void DoBlame(CommandEventArgs e, SvnOrigin item, SvnRevision revisionStart, SvnRevision revisionEnd, bool ignoreEols, SvnIgnoreSpacing ignoreSpacing, bool retrieveMergeInfo)

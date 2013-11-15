@@ -4,6 +4,7 @@
     <ComponentGroup Id="Ankh.WpfEditor.Package">
       <ComponentGroupRef Id="Ankh.Ids" />
       <ComponentGroupRef Id="Ankh.Services" />
+      <ComponentGroupRef Id="Ankh.ExtensionPoints"/>
       <ComponentRef Id="C_Ankh.WpfEditor.Package.dll" />
     </ComponentGroup>
     <DirectoryRef Id="APP_bin" FileSource="$(sys.SOURCEFILEDIR)bin\$(var.Configuration)">

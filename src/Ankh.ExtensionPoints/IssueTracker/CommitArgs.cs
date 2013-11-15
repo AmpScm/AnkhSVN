@@ -22,7 +22,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// <summary>
     /// 
     /// </summary>
-    public abstract class CommitArgs
+    public abstract class CommitArgs : EventArgs
     {
         private readonly ICollection<Uri> _paths;
         private readonly long _revision;
