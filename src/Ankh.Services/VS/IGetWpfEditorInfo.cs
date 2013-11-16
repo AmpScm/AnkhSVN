@@ -9,13 +9,13 @@ namespace Ankh.VS
     [CLSCompliant(false)]
     public interface IGetWpfEditorInfo
     {
-        WpfEditorInfo GetWpfInfo(IVsTextView textView);
+        IWpfEditorInfo GetWpfInfo(IVsTextView textView);
     }
 
-    public abstract class WpfEditorInfo
+    public interface IWpfEditorInfo
     {
-        public abstract Point GetTopLeft();
+        Point GetTopLeft();
 
-        public abstract int GetLineHeight();
+        int GetLineHeight();
     }
 }
