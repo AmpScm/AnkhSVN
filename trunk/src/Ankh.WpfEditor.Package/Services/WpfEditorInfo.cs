@@ -20,7 +20,7 @@ namespace Ankh.WpfPackage.Services
         {
         }
 
-        sealed class TheWpfEditorInfo : WpfEditorInfo
+        sealed class TheWpfEditorInfo : IWpfEditorInfo
         {
             readonly IAnkhServiceProvider _context;
             readonly IVsEditorAdaptersFactoryService _adapterFactory;
@@ -79,7 +79,7 @@ namespace Ankh.WpfPackage.Services
                 _source = PresentationSource.FromVisual(wpfTextView.VisualElement);
             }
 
-            public override System.Drawing.Point GetTopLeft()
+            public System.Drawing.Point GetTopLeft()
             {
                 IWpfTextView textView = WpfTextView;
                 PresentationSource source = Source;
@@ -99,7 +99,7 @@ namespace Ankh.WpfPackage.Services
                 return new SystemPoint((int)p.X, (int)p.Y);
             }
 
-            public override int GetLineHeight()
+            public int GetLineHeight()
             {
                 IWpfTextView wpfTextView = WpfTextView;
 
@@ -110,7 +110,7 @@ namespace Ankh.WpfPackage.Services
             }
         }
 
-        public WpfEditorInfo GetWpfInfo(IVsTextView textView)
+        public IWpfEditorInfo GetWpfInfo(IVsTextView textView)
         {
             if (textView == null)
                 throw new ArgumentNullException("textView");

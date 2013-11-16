@@ -44,7 +44,7 @@ namespace Ankh.VS.TextEditor
         IAnkhServiceProvider _context;
         Guid? _forceLanguageService;
         IGetWpfEditorInfo _wpfEditorInfo;
-        WpfEditorInfo _wpfInfo;
+        IWpfEditorInfo _wpfInfo;
 
         public TheVSTextEditor()
         {
@@ -1444,7 +1444,7 @@ namespace Ankh.VS.TextEditor
                 return new Point(-1, -1); // Not represented in view
         }
 
-        internal WpfEditorInfo GetWpfInfo(IGetWpfEditorInfo wpfEditorInfo)
+        internal IWpfEditorInfo GetWpfInfo(IGetWpfEditorInfo wpfEditorInfo)
         {
             return wpfEditorInfo.GetWpfInfo(_textView);
         }
