@@ -79,6 +79,11 @@ namespace Ankh.Scc.UI
         /// </summary>
         /// <returns></returns>
         public abstract bool Validate();
+
+        public virtual int[] GetMergedExitCodes()
+        {
+            return null;
+        }
     }
 
     public class AnkhDiffArgs : AnkhDiffToolArgs
@@ -155,6 +160,7 @@ namespace Ankh.Scc.UI
         string _theirsTitle;
         string _mergedFile;
         string _mergedTitle;
+        int[] _mergedExitCodes;
 
         /// <summary>
         /// Gets or sets the theirs file.
@@ -191,6 +197,16 @@ namespace Ankh.Scc.UI
         public override bool Validate()
         {
             return base.Validate() && !string.IsNullOrEmpty(TheirsFile) && !string.IsNullOrEmpty(MergedFile);
+        }
+
+        public override int[] GetMergedExitCodes()
+        {
+            return _mergedExitCodes;
+        }
+
+        public void SetMergedExitCodes(int[] list)
+        {
+            _mergedExitCodes = list;
         }
     }
 

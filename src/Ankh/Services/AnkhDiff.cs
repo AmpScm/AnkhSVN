@@ -15,6 +15,7 @@
 //  limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -101,7 +102,7 @@ namespace Ankh.Services
             DiffToolMonitor monitor = null;
             if (!string.IsNullOrEmpty(mergedFile))
             {
-                monitor = new DiffToolMonitor(Context, mergedFile, false);
+                monitor = new DiffToolMonitor(Context, mergedFile, false, null);
 
                 p.EnableRaisingEvents = true;
                 monitor.Register(p);
@@ -193,7 +194,7 @@ namespace Ankh.Services
             DiffToolMonitor monitor = null;
             if (!string.IsNullOrEmpty(mergedFile))
             {
-                monitor = new DiffToolMonitor(Context, mergedFile, false);
+                monitor = new DiffToolMonitor(Context, mergedFile, false, args.GetMergedExitCodes());
 
                 p.EnableRaisingEvents = true;
                 monitor.Register(p);
@@ -261,7 +262,7 @@ namespace Ankh.Services
             DiffToolMonitor monitor = null;
             if (applyTo != null)
             {
-                monitor = new DiffToolMonitor(Context, applyTo, true);
+                monitor = new DiffToolMonitor(Context, applyTo, true, args.GetMergedExitCodes());
 
                 p.EnableRaisingEvents = true;
                 monitor.Register(p);
@@ -314,8 +315,9 @@ namespace Ankh.Services
             readonly string _toMonitor;
             readonly bool _monitorDir;
             IAnkhOpenDocumentTracker _odt;
+            int[] _resolvedExitCodes;
 
-            public DiffToolMonitor(IAnkhServiceProvider context, string monitor, bool monitorDir)
+            public DiffToolMonitor(IAnkhServiceProvider context, string monitor, bool monitorDir, int[] resolvedExitCodes)
                 : base(context)
             {
                 if (string.IsNullOrEmpty(monitor))
@@ -358,6 +360,9 @@ namespace Ankh.Services
                     if (odt.IgnoreChanges(_toMonitor, true))
                         _odt = odt;
                 }
+
+                if (resolvedExitCodes != null)
+                    _resolvedExitCodes = (int[])resolvedExitCodes.Clone();
             }
 
             public void Dispose()
@@ -385,6 +390,19 @@ namespace Ankh.Services
                 }
             }
 
+            private void MarkResolved()
+            {
+                ISvnClientPool pool = GetService<ISvnClientPool>();
+                if (pool == null)
+                    return;
+
+                using(SvnClient client = pool.GetClient())
+                {
+                    client.Resolved(_toMonitor);
+                }
+            }
+
+
             public void Register(Process p)
             {
                 p.Exited += new EventHandler(OnExited);
@@ -392,6 +410,7 @@ namespace Ankh.Services
 
             void OnExited(object sender, EventArgs e)
             {
+                Process process = sender as Process;
                 IAnkhCommandService cmd = GetService<IAnkhCommandService>();
 
                 if (cmd != null)
@@ -399,9 +418,21 @@ namespace Ankh.Services
                 else
                     Dispose();
 
-                if (_monitorDir)
+                if (process != null && _resolvedExitCodes != null)
+                    foreach(int ec in _resolvedExitCodes)
+                    {
+                        if (ec == process.ExitCode)
+                        {
+                            cmd.PostIdleAction(MarkResolved);
+                            break;
+                        }
+                    }
+
+                IFileStatusMonitor m = GetService<IFileStatusMonitor>();
+
+                if (m != null)
                 {
-                    // TODO: Schedule status for all changed files
+                    m.ScheduleSvnStatus(_toMonitor);
                 }
             }
 
@@ -513,9 +544,11 @@ namespace Ankh.Services
             {
                 const string ifBody = "\\?(?<tick>['\"])(?<ifbody>([^'\"]|('')|(\"\"))*)\\k<tick>";
                 const string elseBody = "(:(?<tick2>['\"])(?<elsebody>([^'\"]|('')|(\"\"))*)\\k<tick2>)?";
+                const string isBody = "=(?<tick3>['\"])(?<isbody>([^'\"]|('')|(\"\"))*)\\k<tick3>";
 
                 _re = new Regex(@"(\%(?<pc>[a-zA-Z0-9_]+)(\%|\b))|(\$\((?<vs>[a-zA-Z0-9_-]*)(\((?<arg>[a-zA-Z0-9_-]*)\))?\))" +
-                "|(\\$\\((?<if>[a-zA-Z0-9_-]+)" + ifBody + elseBody + "\\))");
+                "|(\\$\\((?<if>[a-zA-Z0-9_-]+)" + ifBody + elseBody + "\\))" +
+                "|(\\$\\((?<is>[a-zA-Z0-9_-]+)" + isBody + "\\))");
             }
 
             return _re.Replace(arguments, new Replacer(this, diffArgs, toolMode).Replace).TrimEnd();
@@ -588,6 +621,15 @@ namespace Ankh.Services
 
                     return _diff.SubstituteArguments(value, _diffArgs, _toolMode);
                 }
+                else if (match.Groups["is"].Length > 1)
+                {
+                    string k = match.Groups["is"].Value;
+                    value = match.Groups["isbody"].Value;
+                    value = value.Replace("''", "'").Replace("\"\"", "\"");
+
+                    SetValue(k, value);
+                    return "";
+                }
                 else
                     return match.Value; // Don't replace if not matched
 
@@ -595,6 +637,28 @@ namespace Ankh.Services
                 TryGetValue(key, vsStyle, arg, out value);
 
                 return value ?? "";
+            }
+
+            private void SetValue(string key, string value)
+            {
+                switch (key)
+                {
+                    case "ResolveConflictOn":
+                        List<int> intVals = new List<int>();
+
+                        foreach (string s in value.Split(','))
+                        {
+                            int i;
+                            if (int.TryParse(s.Trim(), out i))
+                            {
+                                intVals.Add(i);
+                            }
+                        }
+
+                        if (intVals.Count > 0 && MergeArgs != null)
+                            MergeArgs.SetMergedExitCodes(intVals.ToArray());
+                        break;
+                }
             }
 
             bool TryGetValue(string key, bool vsStyle, string arg, out string value)
