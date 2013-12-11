@@ -67,8 +67,6 @@ namespace Ankh.VS.LanguageServices.LogMessages
                     return;
                 }
             }
-            for (int i = 0; i < attrs.Length; i++)
-                attrs[i] = (uint)TokenColor.Text | (uint)COLORIZER_ATTRIBUTE.HUMAN_TEXT_ATTR;
 
             string combined = null;
             int start = 0, end;
@@ -91,17 +89,29 @@ namespace Ankh.VS.LanguageServices.LogMessages
             if (!string.IsNullOrEmpty(line))
                 endState = 0;
 
-            IEnumerable<TextMarker> markers;
-            if (IssueService != null &&
-                IssueService.TryGetIssues(combined, out markers))
-                foreach (TextMarker im in markers)
-                {
-                    int from = Math.Max(im.Index, start);
-                    int to = Math.Min(end, im.Index + im.Length);
+            if (IssueService != null)
+            {
+                IEnumerable<TextMarker> markers;
+                if (IssueService.TryGetRevisions(combined, out markers))
+                    foreach (TextMarker im in markers)
+                    {
+                        int from = Math.Max(im.Index, start);
+                        int to = Math.Min(end, im.Index + im.Length);
 
-                    for (int i = from; i < to; i++)
-                        attrs[i-start] = (uint)TokenColor.Keyword | (uint)COLORIZER_ATTRIBUTE.HUMAN_TEXT_ATTR;
-                }
+                        for (int i = from; i < to; i++)
+                            attrs[i - start] = (uint)TokenColor.String | (uint)COLORIZER_ATTRIBUTE.HUMAN_TEXT_ATTR;
+                    }
+
+                if (IssueService.TryGetIssues(combined, out markers))
+                    foreach (TextMarker im in markers)
+                    {
+                        int from = Math.Max(im.Index, start);
+                        int to = Math.Min(end, im.Index + im.Length);
+
+                        for (int i = from; i < to; i++)
+                            attrs[i - start] = (uint)TokenColor.Keyword | (uint)COLORIZER_ATTRIBUTE.HUMAN_TEXT_ATTR;
+                    }
+            }
         }
     }
 }

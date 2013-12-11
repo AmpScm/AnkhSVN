@@ -70,6 +70,17 @@ namespace Ankh
         /// <param name="issueId"></param>
         void OpenIssue(string issueId);
 
-		void ShowConnectHelp();
-	}
+        /// <summary>
+        /// 
+        /// </summary>
+        void ShowConnectHelp();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="combined"></param>
+        /// <param name="markers"></param>
+        /// <returns></returns>
+        bool TryGetRevisions(string text, out IEnumerable<TextMarker> markers);
+    }
 }

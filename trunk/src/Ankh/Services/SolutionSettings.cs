@@ -94,6 +94,7 @@ namespace Ankh.Settings
             public bool? BugTrackNumber;
             public string BugTrackUrl;
             public bool? BugTrackWarnIfNoIssue;
+            public string RevisionRegex;
 
             public int? LogMessageMinSize;
             public int? LockMessageMinSize;
@@ -105,6 +106,7 @@ namespace Ankh.Settings
             public Regex LogPrepareRe;
             public Regex LogSplitRe;
             public Regex LogSummaryRe;
+            public Regex RevisionRe;
 
             public bool BrokenRegex;
 
@@ -360,6 +362,10 @@ namespace Ankh.Settings
                 case SvnPropertyNames.TortoiseSvnLogSummary:
                     if (cache.LogSummary == null)
                         cache.LogSummary = pv.StringValue;
+                    break;
+                case SvnPropertyNames.TortoiseSvnLogRevRegex:
+                    if (cache.RevisionRegex == null)
+                        cache.RevisionRegex = pv.StringValue;
                     break;
                 case AnkhSccPropertyNames.IssueRepositoryConnector:
                     cache.IssueRepositoryConnectorName = pv.StringValue;

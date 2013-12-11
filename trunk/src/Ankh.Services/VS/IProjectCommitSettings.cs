@@ -78,9 +78,9 @@ namespace Ankh.VS
         /// <summary>
         /// Gets the issue references from the specified logmessage
         /// </summary>
-        /// <param name="logmessage">The logmessage.</param>
+        /// <param name="text">The logmessage.</param>
         /// <returns></returns>
-        IEnumerable<TextMarker> GetIssues(string logmessage);
+        IEnumerable<TextMarker> GetIssues(string text);
 
         /// <summary>
         /// Builds a log message from the specified message and issueId
@@ -96,5 +96,12 @@ namespace Ankh.VS
         /// <param name="message">The message.</param>
         /// <returns></returns>
         string GetLogSummary(string message);
+
+        /// <summary>
+        /// Gets the revision references from the specified logmessage
+        /// </summary>
+        /// <param name="text">The logmessage.</param>
+        /// <returns></returns>
+        IEnumerable<TextMarker> GetRevisions(string text);
     }
 }
