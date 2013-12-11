@@ -91,10 +91,10 @@ namespace Ankh.VS.LanguageServices.LogMessages
             if (!string.IsNullOrEmpty(line))
                 endState = 0;
 
-            IEnumerable<IssueMarker> markers;
+            IEnumerable<TextMarker> markers;
             if (IssueService != null &&
                 IssueService.TryGetIssues(combined, out markers))
-                foreach (IssueMarker im in markers)
+                foreach (TextMarker im in markers)
                 {
                     int from = Math.Max(im.Index, start);
                     int to = Math.Min(end, im.Index + im.Length);

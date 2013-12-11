@@ -167,9 +167,9 @@ namespace Ankh.UI.Annotate
         #endregion Members
 
         #region ISvnLogItem
-        IEnumerable<VS.IssueMarker> ISvnLogItem.Issues
+        IEnumerable<VS.TextMarker> ISvnLogItem.Issues
         {
-            get { return new VS.IssueMarker[0]; }
+            get { return new VS.TextMarker[0]; }
         }
 
         int ISvnLogItem.Index

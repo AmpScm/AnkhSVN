@@ -11,7 +11,7 @@ namespace Ankh.UI.IssueTracker
 {
     public partial class IssueSelector : VSDialogForm
     {
-        IEnumerable<IssueMarker> _issueWalker;
+        IEnumerable<TextMarker> _issueWalker;
 
         public IssueSelector()
         {
@@ -36,7 +36,7 @@ namespace Ankh.UI.IssueTracker
             ConfigurationService.SaveColumnsWidths(GetType(), widths);
         }
 
-        public void LoadIssues(IEnumerable<IssueMarker> issueWalker)
+        public void LoadIssues(IEnumerable<TextMarker> issueWalker)
         {
             if (issueWalker == null)
                 throw new ArgumentNullException("issueWalker");
@@ -49,7 +49,7 @@ namespace Ankh.UI.IssueTracker
         {
             issuesView1.ClearItems();
             ICollection<string> issues = new List<string>();
-            foreach (IssueMarker im in _issueWalker)
+            foreach (TextMarker im in _issueWalker)
             {
                 // skip duplicate items
                 if (!issues.Contains(im.Value))

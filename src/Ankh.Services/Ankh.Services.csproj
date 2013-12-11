@@ -82,7 +82,7 @@
     <Compile Include="VSAssemblies.cs" />
     <Compile Include="VSErr.cs" />
     <Compile Include="VS\IAnkhGlobalCommandHook.cs" />
-    <Compile Include="VS\IssueMarker.cs" />
+    <Compile Include="VS\TextMarker.cs" />
     <Compile Include="VS\ILinqInterfaceDelegateService.cs" />
     <Compile Include="Scc\SvnItemAnnotation.cs" />
     <Compile Include="UI\AnkhToolWindowControl.cs">

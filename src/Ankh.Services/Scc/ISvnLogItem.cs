@@ -28,7 +28,7 @@ namespace Ankh.Scc
         DateTime Time { get; }
         string Author { get; }
         string LogMessage { get; }
-        IEnumerable<Ankh.VS.IssueMarker> Issues { get; }
+        IEnumerable<Ankh.VS.TextMarker> Issues { get; }
         long Revision { get; }
         int Index { get; }
 

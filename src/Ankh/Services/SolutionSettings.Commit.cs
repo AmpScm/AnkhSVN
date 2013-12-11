@@ -154,14 +154,14 @@ namespace Ankh.Settings
             }
         }
 
-        public IEnumerable<IssueMarker> GetIssues(string logmessage)
+        public IEnumerable<TextMarker> GetIssues(string logmessage)
         {
             ReadOnlyCollection<string> items = RawLogIssueRegexes;
 
             SettingsCache sc = _cache;
 
             if (_cache.BrokenRegex)
-                return new IssueMarker[0];
+                return new TextMarker[0];
 
             if (sc.AllInOneRe == null && sc.LogPrepareRe == null && items != null)
                 try
@@ -191,10 +191,10 @@ namespace Ankh.Settings
                 return PerformSplit(sc, logmessage);
 
             sc.BrokenRegex = true;
-            return new IssueMarker[0];
+            return new TextMarker[0];
         }
 
-        private IEnumerable<IssueMarker> PerformAllInOne(SettingsCache sc, string logmessage)
+        private IEnumerable<TextMarker> PerformAllInOne(SettingsCache sc, string logmessage)
         {
             foreach (Match m in sc.AllInOneRe.Matches(logmessage))
             {
@@ -208,12 +208,12 @@ namespace Ankh.Settings
                         first = false;
                     else
                         foreach (Capture c in g.Captures)
-                            yield return new IssueMarker(c.Index, c.Length, c.Value);
+                            yield return new TextMarker(c.Index, c.Length, c.Value);
                 }
             }
         }
 
-        private IEnumerable<IssueMarker> PerformSplit(SettingsCache cache, string logmessage)
+        private IEnumerable<TextMarker> PerformSplit(SettingsCache cache, string logmessage)
         {
             foreach (Match m in cache.LogPrepareRe.Matches(logmessage))
             {
@@ -231,7 +231,7 @@ namespace Ankh.Settings
 
                         foreach (Capture sc in sm.Captures)
                         {
-                            yield return new IssueMarker(c.Index + sc.Index, sc.Length, sc.Value);
+                            yield return new TextMarker(c.Index + sc.Index, sc.Length, sc.Value);
                         }
                     }
                 }

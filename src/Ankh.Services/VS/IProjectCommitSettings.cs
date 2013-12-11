@@ -80,7 +80,7 @@ namespace Ankh.VS
         /// </summary>
         /// <param name="logmessage">The logmessage.</param>
         /// <returns></returns>
-        IEnumerable<IssueMarker> GetIssues(string logmessage);
+        IEnumerable<TextMarker> GetIssues(string logmessage);
 
         /// <summary>
         /// Builds a log message from the specified message and issueId
