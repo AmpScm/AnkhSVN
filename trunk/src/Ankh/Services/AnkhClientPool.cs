@@ -443,7 +443,13 @@ namespace Ankh.Services
                     SvnClientAction action;
 
                     if (!_changes.TryGetValue(fp, out action))
-                        _changes.Add(fp, action = new SvnClientAction(fp));
+                        _changes.Add(fp, new SvnClientAction(fp));
+
+                    if (!string.IsNullOrEmpty(item.MovedFrom))
+                    {
+                        if (!_changes.TryGetValue(item.MovedFrom, out action))
+                            _changes.Add(fp, new SvnClientAction(item.MovedFrom));
+                    }
                 }
             }
 
