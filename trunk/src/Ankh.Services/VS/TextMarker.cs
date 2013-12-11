@@ -20,13 +20,13 @@ using System.Text;
 
 namespace Ankh.VS
 {
-    public class IssueMarker
+    public sealed class TextMarker
     {
         readonly int _index;
         readonly int _length;
         readonly string _value;
 
-        public IssueMarker(int index, int length, string value)
+        public TextMarker(int index, int length, string value)
         {
             _index = index;
             _length = length;

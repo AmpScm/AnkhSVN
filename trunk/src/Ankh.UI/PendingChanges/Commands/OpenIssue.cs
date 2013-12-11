@@ -46,7 +46,7 @@ namespace Ankh.UI.PendingChanges.Commands
 
         #region ICommandHandler Members
 
-        bool TryGetIssue(BaseCommandEventArgs e, out IssueMarker value)
+        bool TryGetIssue(BaseCommandEventArgs e, out TextMarker value)
         {
             value = null;
             IVsTextView tv = ((ISelectionContextEx)e.Selection).ActiveFrameTextView;
@@ -115,14 +115,14 @@ namespace Ankh.UI.PendingChanges.Commands
             if (_issueService == null)
                 _issueService = e.GetService<IAnkhIssueService>();
 
-            IEnumerable<IssueMarker> markers;
+            IEnumerable<TextMarker> markers;
 
             int posToCheck = x + start;
 
             if (!_issueService.TryGetIssues(combined, out markers))
                 return false;
 
-            foreach (IssueMarker im in markers)
+            foreach (TextMarker im in markers)
             {
                 if (im.Index > posToCheck)
                     break;
@@ -143,7 +143,7 @@ namespace Ankh.UI.PendingChanges.Commands
             {
                 case AnkhCommand.PcLogEditorOpenIssue:
                     {
-                        IssueMarker im;
+                        TextMarker im;
                         if (!TryGetIssue(e, out im))
                             e.Enabled = false;
                     }
@@ -177,8 +177,8 @@ namespace Ankh.UI.PendingChanges.Commands
                             return;
 
                         string issueid = null;
-                        IEnumerable<IssueMarker> issues = selectedLog.Issues;
-                        if (!EnumTools.IsEmpty<IssueMarker>(issues))
+                        IEnumerable<TextMarker> issues = selectedLog.Issues;
+                        if (!EnumTools.IsEmpty<TextMarker>(issues))
                         {
                             using (Ankh.UI.IssueTracker.IssueSelector dlg = new Ankh.UI.IssueTracker.IssueSelector())
                             {
@@ -198,7 +198,7 @@ namespace Ankh.UI.PendingChanges.Commands
 
                     break;
                 case AnkhCommand.PcLogEditorOpenIssue:
-                    IssueMarker marker;
+                    TextMarker marker;
 
                     if (TryGetIssue(e, out marker))
                     {

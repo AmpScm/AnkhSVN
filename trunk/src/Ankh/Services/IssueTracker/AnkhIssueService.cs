@@ -132,7 +132,7 @@ namespace Ankh.Services.IssueTracker
         /// <param name="text"></param>
         /// <param name="issues"></param>
         /// <returns></returns>
-        public bool TryGetIssues(string text, out IEnumerable<IssueMarker> issues)
+        public bool TryGetIssues(string text, out IEnumerable<TextMarker> issues)
         {
             if (!string.IsNullOrEmpty(text))
             {
@@ -166,7 +166,7 @@ namespace Ankh.Services.IssueTracker
             // or no issue repository is associated with the solution
             // or issue repository does not provide an issue id pattern
             // or text is empty
-            issues = new IssueMarker[0];
+            issues = new TextMarker[0];
             return false;
         }
 
@@ -296,7 +296,7 @@ namespace Ankh.Services.IssueTracker
 
         #endregion
 
-        private IEnumerable<IssueMarker> PerformRegex(string text)
+        private IEnumerable<TextMarker> PerformRegex(string text)
         {
             foreach (Match m in _issueIdRegex.Matches(text))
             {
@@ -308,14 +308,14 @@ namespace Ankh.Services.IssueTracker
                 if (grp != null && grp.Success)
                 {
                     foreach (Capture c in grp.Captures)
-                        yield return new IssueMarker(c.Index, c.Length, c.Value);
+                        yield return new TextMarker(c.Index, c.Length, c.Value);
                 }
                 else
                 {
                     foreach (Group g in m.Groups)
                     {
                         foreach (Capture c in g.Captures)
-                            yield return new IssueMarker(c.Index, c.Length, c.Value);
+                            yield return new TextMarker(c.Index, c.Length, c.Value);
                     }
                 }
             }
@@ -324,9 +324,9 @@ namespace Ankh.Services.IssueTracker
         /// <summary>
         /// Gets issue ids from project commit settings
         /// </summary>
-        private IEnumerable<IssueMarker> GetIssuesFromCommitSettings(string text)
+        private IEnumerable<TextMarker> GetIssuesFromCommitSettings(string text)
         {
-            foreach (IssueMarker issue in GetService<IProjectCommitSettings>().GetIssues(text))
+            foreach (TextMarker issue in GetService<IProjectCommitSettings>().GetIssues(text))
             {
                 yield return issue;
             }

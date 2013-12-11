@@ -71,7 +71,7 @@ namespace Ankh.UI.SvnLog
         {
             StringBuilder sb = null;
             ICollection<string> issueList = new List<string>();
-            foreach (IssueMarker issue in Issues)
+            foreach (TextMarker issue in Issues)
             {
                 if (!issueList.Contains(issue.Value))
                 {
@@ -148,7 +148,7 @@ namespace Ankh.UI.SvnLog
         /// <summary>
         /// Returns IEnumerable for issue ids combining the issues found via associated issue repository and project commit settings.
         /// </summary>
-        internal IEnumerable<IssueMarker> Issues
+        internal IEnumerable<TextMarker> Issues
         {
             get
             {
@@ -160,10 +160,10 @@ namespace Ankh.UI.SvnLog
                 IAnkhIssueService iService = Context.GetService<IAnkhIssueService>();
                 if (iService != null)
                 {
-                    IEnumerable<IssueMarker> issues;
+                    IEnumerable<TextMarker> issues;
                     if (iService.TryGetIssues(logMessage, out issues))
                     {
-                        foreach (IssueMarker issue in issues)
+                        foreach (TextMarker issue in issues)
                         {
                             yield return issue;
                         }
@@ -270,7 +270,7 @@ namespace Ankh.UI.SvnLog
         /// <summary>
         /// Returns IEnumerable combining the issues found via associated issue repository and project commit settings.
         /// </summary>
-        public System.Collections.Generic.IEnumerable<IssueMarker> Issues
+        public System.Collections.Generic.IEnumerable<TextMarker> Issues
         {
             get 
             {
