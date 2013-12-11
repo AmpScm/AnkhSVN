@@ -160,7 +160,7 @@ namespace Ankh.Settings
 
             SettingsCache sc = _cache;
 
-            if (_cache.BrokenRegex)
+            if (sc.BrokenRegex)
                 return new TextMarker[0];
 
             if (sc.AllInOneRe == null && sc.LogPrepareRe == null && items != null)
@@ -191,7 +191,25 @@ namespace Ankh.Settings
                 return PerformSplit(sc, logmessage);
 
             sc.BrokenRegex = true;
-            return new TextMarker[0];
+            return null;
+        }
+
+        const string defaultRevisionRegex = @"\br[0-9]+\b";
+        public IEnumerable<TextMarker> GetRevisions(string text)
+        {
+            SettingsCache sc = _cache;
+
+            if (sc.RevisionRe == null && !string.IsNullOrEmpty(sc.RevisionRegex))
+                try
+                {
+                    sc.RevisionRe = new Regex(sc.RevisionRegex ?? defaultRevisionRegex, RegexOptions.CultureInvariant | RegexOptions.Multiline);
+                }
+                catch (ArgumentException)
+                {}
+
+            sc.RevisionRe = new Regex(defaultRevisionRegex, RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Compiled);
+
+            return PerformRevisionScan(sc, text);
         }
 
         private IEnumerable<TextMarker> PerformAllInOne(SettingsCache sc, string logmessage)
@@ -225,6 +243,35 @@ namespace Ankh.Settings
                     string text = logmessage.Substring(c.Index, c.Length);
 
                     foreach (Match sm in cache.LogSplitRe.Matches(c.Value))
+                    {
+                        if (!sm.Success)
+                            continue;
+
+                        foreach (Capture sc in sm.Captures)
+                        {
+                            yield return new TextMarker(c.Index + sc.Index, sc.Length, sc.Value);
+                        }
+                    }
+                }
+            }
+        }
+
+        static Regex _revRe;
+        private IEnumerable<TextMarker> PerformRevisionScan(SettingsCache cache, string logmessage)
+        {
+            if (_revRe == null)
+                _revRe = new Regex(@"\d+", RegexOptions.Multiline | RegexOptions.CultureInvariant);
+
+            foreach (Match m in cache.RevisionRe.Matches(logmessage))
+            {
+                if (!m.Success)
+                    continue;
+
+                foreach (Capture c in m.Captures)
+                {
+                    string text = logmessage.Substring(c.Index, c.Length);
+
+                    foreach (Match sm in _revRe.Matches(c.Value))
                     {
                         if (!sm.Success)
                             continue;

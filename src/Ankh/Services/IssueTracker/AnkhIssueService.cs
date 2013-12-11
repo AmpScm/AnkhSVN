@@ -37,10 +37,16 @@ namespace Ankh.Services.IssueTracker
         private Dictionary<string, IssueRepositoryConnector> _nameConnectorMap;
         private IssueRepository _repository;
         private Regex _issueIdRegex;
+        IProjectCommitSettings _commitSettings;
 
         public AnkhIssueService(IAnkhServiceProvider context)
             : base(context)
         {
+        }
+
+        IProjectCommitSettings CommitSettings
+        {
+            get { return _commitSettings ?? (_commitSettings = GetService<IProjectCommitSettings>()); }
         }
 
         #region IAnkhIssueService Members
@@ -130,9 +136,9 @@ namespace Ankh.Services.IssueTracker
         /// Gets the issue references from the specified text
         /// </summary>
         /// <param name="text"></param>
-        /// <param name="issues"></param>
+        /// <param name="markers"></param>
         /// <returns></returns>
-        public bool TryGetIssues(string text, out IEnumerable<TextMarker> issues)
+        public bool TryGetIssues(string text, out IEnumerable<TextMarker> markers)
         {
             if (!string.IsNullOrEmpty(text))
             {
@@ -151,13 +157,13 @@ namespace Ankh.Services.IssueTracker
                     }
                     if (_issueIdRegex != null)
                     {
-                        issues = PerformRegex(text);
+                        markers = PerformRegex(text);
                         return true;
                     }
                 }
-                else if (GetService<IProjectCommitSettings>() != null)
+                else
                 {
-                    issues = GetIssuesFromCommitSettings(text);
+                    markers = GetIssuesFromCommitSettings(text);
                     return true;
                 }
             }
@@ -166,7 +172,19 @@ namespace Ankh.Services.IssueTracker
             // or no issue repository is associated with the solution
             // or issue repository does not provide an issue id pattern
             // or text is empty
-            issues = new TextMarker[0];
+            markers = null;
+            return false;
+        }
+
+        public bool TryGetRevisions(string text, out IEnumerable<TextMarker> markers)
+        {
+            if (!string.IsNullOrEmpty(text))
+            {
+                markers = GetRevisionsFromCommitSettings(text);
+                return true;
+            }
+
+            markers = null;
             return false;
         }
 
@@ -326,9 +344,26 @@ namespace Ankh.Services.IssueTracker
         /// </summary>
         private IEnumerable<TextMarker> GetIssuesFromCommitSettings(string text)
         {
-            foreach (TextMarker issue in GetService<IProjectCommitSettings>().GetIssues(text))
+            if (CommitSettings == null)
+                yield break;
+
+            foreach (TextMarker issue in CommitSettings.GetIssues(text))
             {
                 yield return issue;
+            }
+        }
+
+        /// <summary>
+        /// Gets issue ids from project commit settings
+        /// </summary>
+        private IEnumerable<TextMarker> GetRevisionsFromCommitSettings(string text)
+        {
+            if (CommitSettings == null)
+                yield break;
+
+            foreach (TextMarker rev in CommitSettings.GetRevisions(text))
+            {
+                yield return rev;
             }
         }
 
@@ -352,7 +387,7 @@ namespace Ankh.Services.IssueTracker
             }
         }
 
-		IIssueTrackerSettings _settings;
+        IIssueTrackerSettings _settings;
         private IIssueTrackerSettings Settings
         {
             get { return _settings ?? (_settings = GetService<IIssueTrackerSettings>()); }
@@ -386,37 +421,37 @@ namespace Ankh.Services.IssueTracker
             }
         }
 
-		#region IAnkhIssueService Members
+        #region IAnkhIssueService Members
 
 
-		public void ShowConnectHelp()
-		{
-			// Shamelessly copied from the AnkhHelService
+        public void ShowConnectHelp()
+        {
+            // Shamelessly copied from the AnkhHelService
 
-			UriBuilder ub = new UriBuilder("http://svc.ankhsvn.net/svc/go/");
-			ub.Query = string.Format("t=ctrlHelp&v={0}&l={1}&dt={2}", GetService<IAnkhPackage>().UIVersion, CultureInfo.CurrentUICulture.LCID, Uri.EscapeUriString("Ankh.UI.PendingChanges.PendingIssuesPage"));
+            UriBuilder ub = new UriBuilder("http://svc.ankhsvn.net/svc/go/");
+            ub.Query = string.Format("t=ctrlHelp&v={0}&l={1}&dt={2}", GetService<IAnkhPackage>().UIVersion, CultureInfo.CurrentUICulture.LCID, Uri.EscapeUriString("Ankh.UI.PendingChanges.PendingIssuesPage"));
 
-			try
-			{
-				bool showHelpInBrowser = true;
-				IVsHelpSystem help = GetService<IVsHelpSystem>(typeof(SVsHelpService));
-				if (help != null)
-					showHelpInBrowser = !VSErr.Succeeded(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (uint)VHS_COMMAND.VHS_Default));
+            try
+            {
+                bool showHelpInBrowser = true;
+                IVsHelpSystem help = GetService<IVsHelpSystem>(typeof(SVsHelpService));
+                if (help != null)
+                    showHelpInBrowser = !VSErr.Succeeded(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (uint)VHS_COMMAND.VHS_Default));
 
-				if (showHelpInBrowser)
-					Help.ShowHelp(null, ub.Uri.AbsoluteUri);
-			}
-			catch (Exception ex)
-			{
-				IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
+                if (showHelpInBrowser)
+                    Help.ShowHelp(null, ub.Uri.AbsoluteUri);
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
 
-				if (eh != null && eh.IsEnabled(ex))
-					eh.OnError(ex);
-				else
-					throw;
-			}
-		}
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
+                else
+                    throw;
+            }
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }
