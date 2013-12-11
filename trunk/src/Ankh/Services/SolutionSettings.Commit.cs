@@ -235,7 +235,7 @@ namespace Ankh.Settings
             if (sc.RevisionRe == null && !string.IsNullOrEmpty(sc.RevisionRegex))
                 try
                 {
-                    sc.RevisionRe = new Regex(sc.RevisionRegex ?? defaultRevisionRegex, RegexOptions.CultureInvariant | RegexOptions.Multiline);
+                    sc.RevisionRe = new Regex(sc.RevisionRegex, RegexOptions.CultureInvariant | RegexOptions.Multiline);
                 }
                 catch (ArgumentException)
                 {}
