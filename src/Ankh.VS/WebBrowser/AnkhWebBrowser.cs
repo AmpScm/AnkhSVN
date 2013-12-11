@@ -31,8 +31,7 @@ namespace Ankh.VS.WebBrowser
 
         public void Navigate(Uri url)
         {
-            AnkhBrowserResults results;
-            Navigate(url, new AnkhBrowserArgs(), out results);
+            Navigate(url, new AnkhBrowserArgs());
         }
 
         public void Navigate(Uri url, AnkhBrowserArgs args)
