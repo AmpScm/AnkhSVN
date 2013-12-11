@@ -319,5 +319,6 @@ namespace Ankh
         SccEditFailedProjectLocation,
 
         CopyRevisionNumber,
+        PcLogEditorOpenRevision,
     }
 }

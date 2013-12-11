@@ -223,6 +223,40 @@ namespace Ankh.Services.IssueTracker
             }
         }
 
+        public void OpenRevision(string revisionText)
+        {
+            if (string.IsNullOrEmpty(revisionText))
+                throw new ArgumentNullException("revisionText");
+
+            long rev;
+
+            IssueRepository repository = CurrentIssueRepository;
+            if (repository != null
+                && repository.CanNavigateToRevision
+                && long.TryParse(revisionText, out rev))
+            {
+                try
+                {
+                    repository.NavigateToRevision(rev);
+                }
+                catch { } // connector code
+            }
+            else
+            {
+                IProjectCommitSettings projectSettings = GetService<IProjectCommitSettings>();
+                if (projectSettings != null)
+                {
+                    IAnkhWebBrowser web = GetService<IAnkhWebBrowser>();
+                    if (web != null)
+                    {
+                        Uri uri = projectSettings.GetRevisionUri(revisionText);
+                        if (uri != null && !uri.IsFile && !uri.IsUnc)
+                            web.Navigate(uri);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Gets or sets the Current Issue Repository
         /// </summary>

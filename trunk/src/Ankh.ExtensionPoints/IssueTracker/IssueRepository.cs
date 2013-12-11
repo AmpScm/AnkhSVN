@@ -46,6 +46,13 @@ namespace Ankh.ExtensionPoints.IssueTracker
         {
         }
 
+        public virtual bool CanNavigateToRevision { get; protected set; }
+
+        public virtual void NavigateToRevision(long revision)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Called just before the changes are committed.
         /// </summary>

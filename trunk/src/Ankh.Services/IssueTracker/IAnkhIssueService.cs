@@ -82,5 +82,7 @@ namespace Ankh
         /// <param name="markers"></param>
         /// <returns></returns>
         bool TryGetRevisions(string text, out IEnumerable<TextMarker> markers);
+
+        void OpenRevision(string revisionText);
     }
 }

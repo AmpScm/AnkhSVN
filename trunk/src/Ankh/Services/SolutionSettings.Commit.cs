@@ -60,6 +60,39 @@ namespace Ankh.Settings
             return null;
         }
 
+        public Uri GetRevisionUri(string revisionText)
+        {
+            if (revisionText == null)
+                throw new ArgumentNullException("revisionText");
+
+            if (string.IsNullOrEmpty(revisionText))
+                return null;
+
+            RefreshIfDirty();
+            SettingsCache cache = _cache;
+
+            if (cache == null || cache.BugTrackUrl == null)
+                return null;
+
+            string url = cache.RevisionUrl.Replace("%REVISION%", Uri.EscapeDataString(revisionText));
+
+            if (url.StartsWith("^/"))
+            {
+                Uri repositoryRoot = RepositoryRoot;
+
+                if (repositoryRoot == null)
+                    return null;
+
+                url = repositoryRoot.AbsoluteUri + url.Substring(2);
+            }
+
+            Uri result;
+            if (Uri.TryCreate(url, UriKind.Absolute, out result))
+                return result;
+
+            return null;
+        }
+
         public string RawIssueTrackerUri
         {
             get
@@ -191,10 +224,10 @@ namespace Ankh.Settings
                 return PerformSplit(sc, logmessage);
 
             sc.BrokenRegex = true;
-            return null;
+            return new TextMarker[0];
         }
-
-        const string defaultRevisionRegex = @"\br[0-9]+\b";
+        
+        const string defaultRevisionRegex = @"\b(r\d+)|(rev(ision)?(s|\(s\))?\s+\d+(\s*(,|and)\s*\d+)*)\b";
         public IEnumerable<TextMarker> GetRevisions(string text)
         {
             SettingsCache sc = _cache;
@@ -207,7 +240,8 @@ namespace Ankh.Settings
                 catch (ArgumentException)
                 {}
 
-            sc.RevisionRe = new Regex(defaultRevisionRegex, RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Compiled);
+            if (sc.RevisionRe == null)
+                sc.RevisionRe = new Regex(defaultRevisionRegex, RegexOptions.CultureInvariant | RegexOptions.Multiline | RegexOptions.Compiled);
 
             return PerformRevisionScan(sc, text);
         }

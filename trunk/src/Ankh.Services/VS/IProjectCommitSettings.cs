@@ -103,5 +103,12 @@ namespace Ankh.VS
         /// <param name="text">The logmessage.</param>
         /// <returns></returns>
         IEnumerable<TextMarker> GetRevisions(string text);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="revisionText"></param>
+        /// <returns></returns>
+        Uri GetRevisionUri(string revisionText);
     }
 }
