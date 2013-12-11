@@ -202,7 +202,7 @@ namespace Ankh.Settings
                     cache.ProjectRootItem = parent;
                 }
 
-                LoadSolutionProperties(cache, item);
+                bool loaded = LoadSolutionProperties(cache, item);
 
                 if (cache.ProjectRoot != null)
                 {
@@ -214,7 +214,8 @@ namespace Ankh.Settings
                     cache.ProjectRootItem = parent;
                     cache.RootCookie = parent.ChangeCookie;
 
-                    LoadRootProperties(cache, parent);
+                    if (!loaded)
+                        LoadRootProperties(cache, parent);
                 }
             }
             finally
@@ -223,26 +224,31 @@ namespace Ankh.Settings
             }
         }
 
-        private void LoadSolutionProperties(SettingsCache cache, SvnItem item)
+        private bool LoadSolutionProperties(SettingsCache cache, SvnItem item)
         {
             // Subversion -1.5 loads all properties in memory at once; loading them 
             // all is always faster than loading a few
             // We must change this algorithm if Subversions implementation changes
-            SvnPropertyCollection pc = GetAllProperties(item.FullPath);
 
-            if (pc != null)
-                foreach (SvnPropertyValue pv in pc)
+            using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
+            {
+                string value;
+                if (client.TryGetProperty(item.FullPath, AnkhSccPropertyNames.ProjectRoot, out value))
+                    SetProjectRootViaProperty(cache, value);
+
+                SvnPropertyCollection pc;
+                if (client.TryGetAllInheritedProperties(item.FullPath, out pc))
                 {
-                    switch (pv.Key)
+                    foreach (SvnPropertyValue pv in pc)
                     {
-                        case AnkhSccPropertyNames.ProjectRoot:
-                            SetProjectRootViaProperty(cache, pv.StringValue);
-                            break;
-                        default:
-                            LoadPropertyBoth(cache, pv);
-                            break;
+                        LoadPropertyBoth(cache, pv);
                     }
+
+                    return true; // Got properties for solution and parent dirs
                 }
+
+                return false;
+            }
         }
 
         private void SetProjectRootViaProperty(SettingsCache cache, string value)
@@ -281,21 +287,19 @@ namespace Ankh.Settings
 
         private void LoadRootProperties(SettingsCache cache, SvnItem item)
         {
-            // Subversion -1.5 loads all properties in memory at once; loading them 
+            // Subversion loads all properties in memory at once; loading them 
             // all at once is always faster than loading a few
-            // We must change this algorithm if Subversions implementation changes
-            SvnPropertyCollection pc = GetAllProperties(item.FullPath);
-
-            if (pc != null)
-                foreach (SvnPropertyValue pv in pc)
+            using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
+            {
+                SvnPropertyCollection pc;
+                if (client.TryGetAllInheritedProperties(item.FullPath, out pc))
                 {
-                    switch (pv.Key)
+                    foreach (SvnPropertyValue pv in pc)
                     {
-                        default:
-                            LoadPropertyBoth(cache, pv);
-                            break;
+                        LoadPropertyBoth(cache, pv);
                     }
                 }
+            }
         }
 
         private void LoadPropertyBoth(SettingsCache cache, SvnPropertyValue pv)
@@ -385,7 +389,7 @@ namespace Ankh.Settings
 
             if (string.Equals(val, "true", StringComparison.OrdinalIgnoreCase)
                 || string.Equals(val, "yes", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(val, SvnPropertyNames.SvnBooleanValue, StringComparison.OrdinalIgnoreCase))
+                || string.Equals(val, SvnPropertyNames.SvnBooleanValue))
             {
                 boolValue = true;
                 return true;
@@ -399,27 +403,6 @@ namespace Ankh.Settings
             }
 
             return false;
-        }
-
-        SvnPropertyCollection GetAllProperties(string path)
-        {
-            // Subversion -1.5 loads all properties in memory at once; loading them 
-            // all at once is always faster than loading a few
-            // We must change this algorithm if Subversions implementation changes
-            SvnPropertyCollection pc = null;
-            using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
-            {
-                SvnPropertyListArgs pl = new SvnPropertyListArgs();
-                pl.ThrowOnError = false;
-                client.PropertyList(path, pl,
-                    delegate(object sender, SvnPropertyListEventArgs e)
-                    {
-                        e.Detach();
-                        pc = e.Properties;
-                    });
-            }
-
-            return pc;
         }
 
         public string SolutionFilename
