@@ -262,7 +262,8 @@ namespace Ankh.Services
                     ?? SubPath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "HelpFile"), "CodeMerge.exe")
                     ?? "$(HostProgramFiles)\\Devart\\Code Compare\\CodeMerge.exe",
                 "/WAIT /SC=SVN /REMOVEFILES '/BF=$(Base)' '/MF=$(Mine)' '/MT=$(MineName)' " +
-                "'/TF=$(Theirs)' '/TT=$(TheirsName)' '/RF=$(Merged)'", true));
+                "'/TF=$(Theirs)' '/TT=$(TheirsName)' '/RF=$(Merged)' " +
+                "$(ResolveConflictOn='0')", true));
 
             tools.Add(new DiffTool(this, "SemanticMerge", "Semanticmerge",
                 SubPath(RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SemanticMerge", "InstallLocation")
