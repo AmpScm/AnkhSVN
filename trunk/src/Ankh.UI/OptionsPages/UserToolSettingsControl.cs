@@ -37,6 +37,8 @@ namespace Ankh.UI.OptionsPages
             LoadBox(mergeExeBox, Config.MergeExePath, diff.MergeToolTemplates);
             LoadBox(patchExeBox, Config.PatchExePath, diff.PatchToolTemplates);
 
+            forceExternalBrowser.Checked = Config.ForceExternalBrowser;
+
             if (VSVersion.VS2008OrOlder)
                 floatVSDiffViewers.Enabled = floatVSDiffViewers.Visible = false;
             else
@@ -106,6 +108,7 @@ namespace Ankh.UI.OptionsPages
             Config.DiffExePath = SaveBox(diffExeBox);
             Config.MergeExePath = SaveBox(mergeExeBox);
             Config.PatchExePath = SaveBox(patchExeBox);
+            Config.ForceExternalBrowser = forceExternalBrowser.Checked;
 
             if (VSVersion.VS2010OrLater)
                 Config.FloatDiffEditors = floatVSDiffViewers.Checked;

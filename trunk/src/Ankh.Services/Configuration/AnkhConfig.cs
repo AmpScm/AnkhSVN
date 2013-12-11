@@ -41,6 +41,7 @@ namespace Ankh.Configuration
         bool _enableTsvnHooks;
         bool _dontHookSlnRefresh;
         bool _floatDiffEditors;
+        bool _useExternalWebbrowser;
 
         /// <summary>
         /// Gets or sets the merge exe path.
@@ -153,6 +154,13 @@ namespace Ankh.Configuration
         { 
             get { return _floatDiffEditors; }
             set { _floatDiffEditors = value; }
+        }
+
+        [DefaultValue(false)]
+        public bool ForceExternalBrowser
+        {
+            get { return _useExternalWebbrowser; }
+            set { _useExternalWebbrowser = value; }
         }
     }
 }
