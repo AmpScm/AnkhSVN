@@ -206,7 +206,7 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe",
                 "/m /r='$(Merged)' '$(Mine)' '$(Base)' '$(Theirs)' " +
                     "/t1='$(MineName)' /t2='$(MergedName)' /t3='$(TheirName)'" +
-                    "$(ResolveConflictOn=0)", true));
+                    "$(ResolveConflictOn='0')", true));
 
             tools.Add(new DiffTool(this, "KDiff3", "KDiff3",
                 RegistrySearch("SOFTWARE\\KDiff3\\diff-ext", "diffcommand")

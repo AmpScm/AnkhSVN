@@ -546,9 +546,10 @@ namespace Ankh.Services
                 const string elseBody = "(:(?<tick2>['\"])(?<elsebody>([^'\"]|('')|(\"\"))*)\\k<tick2>)?";
                 const string isBody = "=(?<tick3>['\"])(?<isbody>([^'\"]|('')|(\"\"))*)\\k<tick3>";
 
-                _re = new Regex(@"(\%(?<pc>[a-zA-Z0-9_]+)(\%|\b))|(\$\((?<vs>[a-zA-Z0-9_-]*)(\((?<arg>[a-zA-Z0-9_-]*)\))?\))" +
-                "|(\\$\\((?<if>[a-zA-Z0-9_-]+)" + ifBody + elseBody + "\\))" +
-                "|(\\$\\((?<is>[a-zA-Z0-9_-]+)" + isBody + "\\))");
+                _re = new Regex(@"(\%(?<pc>[a-zA-Z0-9_]+)(\%|\b))" +
+                                "|(\\$\\((?<vs>[a-zA-Z0-9_-]+)(\\((?<arg>[a-zA-Z0-9_-]*)\\))?\\))" +
+                                "|(\\$\\((?<if>[a-zA-Z0-9_-]+)" + ifBody + elseBody + "\\))" +
+                                "|(\\$\\((?<is>[a-zA-Z0-9_-]+)" + isBody + "\\))");
             }
 
             return _re.Replace(arguments, new Replacer(this, diffArgs, toolMode).Replace).TrimEnd();
