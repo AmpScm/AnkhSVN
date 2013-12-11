@@ -112,8 +112,7 @@ namespace Ankh.Services
                     ?? RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location")
                     ?? "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe",
                 "'$(Base)' '$(Mine)' /t1='$(BaseName)' /t2='$(MineName)' "
-                + "$(ReadOnly?'/ro2')"
-                , true));
+                + "$(ReadOnly?'/ro2')" , true));
 
             tools.Add(new DiffTool(this, "KDiff3", "KDiff3",
                 RegistrySearch("SOFTWARE\\KDiff3\\diff-ext", "diffcommand")
@@ -123,7 +122,7 @@ namespace Ankh.Services
             tools.Add(new DiffTool(this, "WinMerge", "WinMerge",
                 RegistrySearch("SOFTWARE\\Thingamahoochie\\WinMerge", "Executable")
                     ?? "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
-                "-e -u -wl $(ReadOnly?'-wr':'') -dl '$(BaseName)' -dr '$(MineName)' '$(base)' '$(mine)'", true));
+                "-e -u -wl$(ReadOnly?' -wr') -dl '$(BaseName)' -dr '$(MineName)' '$(base)' '$(mine)'", true));
 
             tools.Add(new DiffTool(this, "P4Merge", "Perforce Visual Merge",
                 Path.Combine((RegistrySearch("SOFTWARE\\Perforce\\Environment", "P4INSTROOT")
@@ -236,7 +235,8 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
                 "'$(Mine)' '$(Theirs)' '$(Base)' '$(Merged)' " +
                 "/title1='$(MineName)' /title2='$(TheirsName)' " +
-                "/title3='$(BaseName)' /title4='$(MergedName)' ", true));
+                "/title3='$(BaseName)' /title4='$(MergedName)' " +
+                "$(ResolveConflictOn='0')", true));
 
             tools.Add(new DiffTool(this, "BeyondCompare2W", "Beyond Compare (2-Way)",
                 RelativePath(ShellOpenSearch("BeyondCompare.Snapshot"), "BComp.exe")
