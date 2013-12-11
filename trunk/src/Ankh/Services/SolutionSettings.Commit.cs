@@ -147,7 +147,7 @@ namespace Ankh.Settings
                 if(!string.IsNullOrEmpty(_cache.BugTrackLogRegexes))
                     foreach (String s in _cache.BugTrackLogRegexes.Split('\n'))
                     {
-                        rl.Add(s.TrimEnd('\r'));
+                        rl.Add(s.TrimEnd('\r').Trim());
                     }
 
                 return _cache.LogRegexes = rl.AsReadOnly();
