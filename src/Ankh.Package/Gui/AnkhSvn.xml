@@ -1104,6 +1104,8 @@
         <Group id="Grp_PendingChangesLogEditor3" priority="0x500">
           <Button id="Cmd_PcLogEditorOpenIssue" name="OpenIssue" priority="0x100"
                   text="Open &amp;Issue" dynamicVisibility="true"/>
+          <Button id="Cmd_PcLogEditorOpenRevision" name="OpenRevision" priority="0x110"
+                  text="Open &amp;Revision" dynamicVisibility="true"/>
         </Group>
       </Menu>
     </GroupRef>
