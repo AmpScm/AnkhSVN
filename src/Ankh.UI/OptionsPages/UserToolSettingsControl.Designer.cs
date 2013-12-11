@@ -55,6 +55,7 @@ namespace Ankh.UI.OptionsPages
             this.patchExeBox = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.floatVSDiffViewers = new System.Windows.Forms.CheckBox();
+            this.forceExternalBrowser = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // diffExeBox
@@ -124,10 +125,17 @@ namespace Ankh.UI.OptionsPages
             this.floatVSDiffViewers.Name = "floatVSDiffViewers";
             this.floatVSDiffViewers.UseVisualStyleBackColor = true;
             // 
+            // forceExternalBrowser
+            // 
+            resources.ApplyResources(this.forceExternalBrowser, "forceExternalBrowser");
+            this.forceExternalBrowser.Name = "forceExternalBrowser";
+            this.forceExternalBrowser.UseVisualStyleBackColor = true;
+            // 
             // UserToolSettingsControl
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.forceExternalBrowser);
             this.Controls.Add(this.floatVSDiffViewers);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.diffExeBox);
@@ -156,5 +164,6 @@ namespace Ankh.UI.OptionsPages
         private System.Windows.Forms.ComboBox patchExeBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox floatVSDiffViewers;
+        private System.Windows.Forms.CheckBox forceExternalBrowser;
     }
 }

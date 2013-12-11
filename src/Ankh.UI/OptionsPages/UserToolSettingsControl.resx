@@ -142,7 +142,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;diffExeBox.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -169,7 +169,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="diffBrowseBtn.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -196,7 +196,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;diffBrowseBtn.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -223,7 +223,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="mergeExeBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
@@ -247,7 +247,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;mergeExeBox.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="mergeBrowseBtn.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -274,7 +274,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;mergeBrowseBtn.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="patchBrowseBtn.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -301,7 +301,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;patchBrowseBtn.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="patchExeBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
@@ -325,7 +325,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;patchExeBox.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -352,19 +352,19 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="floatVSDiffViewers.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="floatVSDiffViewers.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 129</value>
+    <value>0, 151</value>
   </data>
   <data name="floatVSDiffViewers.Size" type="System.Drawing.Size, System.Drawing">
     <value>267, 17</value>
   </data>
   <data name="floatVSDiffViewers.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="floatVSDiffViewers.Text" xml:space="preserve">
     <value>Create Visual Studio Diff/Merge documents floating</value>
@@ -379,6 +379,36 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;floatVSDiffViewers.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="forceExternalBrowser.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="forceExternalBrowser.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="forceExternalBrowser.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 128</value>
+  </data>
+  <data name="forceExternalBrowser.Size" type="System.Drawing.Size, System.Drawing">
+    <value>302, 17</value>
+  </data>
+  <data name="forceExternalBrowser.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="forceExternalBrowser.Text" xml:space="preserve">
+    <value>Use E&amp;xternal Webbrowser instead of Visual Studio browser</value>
+  </data>
+  <data name="&gt;&gt;forceExternalBrowser.Name" xml:space="preserve">
+    <value>forceExternalBrowser</value>
+  </data>
+  <data name="&gt;&gt;forceExternalBrowser.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;forceExternalBrowser.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;forceExternalBrowser.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -394,6 +424,6 @@
     <value>UserToolSettingsControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.OptionsPages.AnkhOptionsPageControl, Ankh.UI, Version=2.4.4619.22645, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.OptionsPages.AnkhOptionsPageControl, Ankh.UI, Version=2.5.5093.27798, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>
