@@ -91,25 +91,6 @@ namespace Ankh.UI.PendingChanges.Commands
 
             if (!string.IsNullOrEmpty(post))
                 combined += '\n' + post;
-            if ((y > 0) && !VSErr.Succeeded(tv.GetTextStream(y - 1, 0, y, 0, out pre)))
-                return false;
-
-            if (!VSErr.Succeeded(tv.GetTextStream(y + 1, 0, y + 2, 0, out post)))
-                post = null;
-
-            if (!string.IsNullOrEmpty(pre))
-            {
-                combined = pre.TrimEnd('\r', '\n') + '\n';
-                start = combined.Length;
-            }
-
-            combined += text;
-
-            if (!string.IsNullOrEmpty(post))
-            {
-                post = post.TrimEnd('\r', '\n');
-                combined += '\n' + post;
-            }
 
             if (_issueService == null)
                 _issueService = e.GetService<IAnkhIssueService>();
