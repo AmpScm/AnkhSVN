@@ -36,14 +36,21 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        IAnkhIssueService _issueService;
+
+        IAnkhIssueService IssueService
+        {
+            get { return _issueService ?? (_issueService = ((Context != null) ? Context.GetService<IAnkhIssueService>() : null)); }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            IAnkhIssueService issueService = Context.GetService<IAnkhIssueService>();
-            if (issueService != null)
+
+            if (IssueService != null)
             {
                 RefreshPageContents();
-                issueService.IssueRepositoryChanged += new EventHandler(issueService_IssueRepositoryChanged);
+                IssueService.IssueRepositoryChanged += new EventHandler(issueService_IssueRepositoryChanged);
             }
         }
 
@@ -64,11 +71,11 @@ namespace Ankh.UI.PendingChanges
         {
             Controls.Clear();
 
-            IAnkhIssueService issueService = Context.GetService<IAnkhIssueService>();
-            if (issueService != null)
+            if (IssueService != null)
             {
-                IssueRepository repository = issueService.CurrentIssueRepository;
+                IssueRepository repository = IssueService.CurrentIssueRepository;
                 IWin32Window window = null;
+
                 if (repository != null
                     && (window = repository.Window) != null)
                 {
@@ -92,19 +99,17 @@ namespace Ankh.UI.PendingChanges
             Controls.Add(pleaseConfigureLabel);
         }
 
-		protected override void OnFontChanged(EventArgs e)
-		{
-			base.OnFontChanged(e);
+        protected override void OnFontChanged(EventArgs e)
+        {
+            base.OnFontChanged(e);
 
-			pleaseConfigureLabel.Font = new Font(Font, FontStyle.Bold);
-		}
+            pleaseConfigureLabel.Font = new Font(Font, FontStyle.Bold);
+        }
 
-		private void pleaseConfigureLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			IAnkhIssueService issueService = Context.GetService<IAnkhIssueService>();
-
-			if (issueService != null)
-				issueService.ShowConnectHelp();
-		}
+        private void pleaseConfigureLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (IssueService != null)
+                IssueService.ShowConnectHelp();
+        }
     }
 }
