@@ -56,7 +56,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// <remarks>This value can be used to identify a specific (sub) issue repository on RepositoryUri</remarks>
         public virtual string RepositoryId
         {
-            get { return string.Empty; }
+            get { return ""; }
         }
 
         /// <summary>
@@ -148,9 +148,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
                 if (!props2.ContainsKey(key)) 
                     return false;
 
-                object value1 = props1[key];
-                object value2 = props2[key];
-                if (!object.Equals(value1, value2)) 
+                if (!object.Equals(props1[key], props2[key]))
                     return false;
             }
             return true;
