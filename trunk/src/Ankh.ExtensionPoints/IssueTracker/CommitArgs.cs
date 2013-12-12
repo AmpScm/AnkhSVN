@@ -77,6 +77,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
     public sealed class PreCommitArgs : CommitArgs
     {
         bool _cancel;
+        string _issueText;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PreCommitArgs"/> class.
@@ -117,6 +118,15 @@ namespace Ankh.ExtensionPoints.IssueTracker
         {
             get { return InternalCommitMessage; }
             set { InternalCommitMessage = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the issuetext (as set in the issue box)
+        /// </summary>
+        public string IssueText
+        {
+            get { return _issueText; }
+            set { _issueText = value;  }
         }
     }
 
