@@ -117,10 +117,9 @@ namespace Ankh.Commands
                         if (item == null || item.Origin == null)
                             continue;
                         i++;
-                        if (i > 1)
-                            break;
+                        break;
                     }
-                    if (i == 1)
+                    if (i >= 1)
                         return;
                     break;
                 case AnkhCommand.AnnotateShowLog:
@@ -183,16 +182,14 @@ namespace Ankh.Commands
                     PerformLog(e.Context, new SvnOrigin[] { new SvnOrigin(docItem) }, null, null);
                     break;
                 case AnkhCommand.ReposExplorerLog:
-                    ISvnRepositoryItem item = null;
                     foreach (ISvnRepositoryItem i in e.Selection.GetSelection<ISvnRepositoryItem>())
                     {
-                        if (i != null && i.Uri != null)
-                            item = i;
-                        break;
+                        if (i != null && i.Origin != null)
+                            selected.Add(i.Origin);
                     }
 
-                    if (item != null)
-                        PerformLog(e.Context, new SvnOrigin[] { item.Origin }, null, null);
+                    if (selected.Count > 0)
+                        PerformLog(e.Context, selected, null, null);
                     break;
                 case AnkhCommand.AnnotateShowLog:
                     IAnnotateSection section = EnumTools.GetSingle(e.Selection.GetSelection<IAnnotateSection>());
