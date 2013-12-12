@@ -195,7 +195,9 @@ namespace Ankh.Services
 
             private void DoHandle(Exception ex, ExceptionInfo info)
             {
-                _handler.ShowErrorDialog(ex, true, true, info);
+                bool svnException = (ex is SvnException);
+
+                _handler.ShowErrorDialog(ex, !svnException, !svnException, info);
             }
         }
 
