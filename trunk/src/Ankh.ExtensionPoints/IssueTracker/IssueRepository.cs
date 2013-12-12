@@ -15,6 +15,7 @@
 //  limitations under the License.
 
 using System;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Ankh.ExtensionPoints.IssueTracker
@@ -24,6 +25,9 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// </summary>
     public abstract class IssueRepository : IssueRepositorySettings
     {
+        string _reValue;
+        Regex _re;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -80,11 +84,47 @@ namespace Ankh.ExtensionPoints.IssueTracker
         }
 
         /// <summary>
-        /// Gets the RegEx pattern to recognize issues in a text.
+        /// Obsolete: Gets the RegEx pattern to recognize issues in a text.
         /// </summary>
+        [Obsolete("Please return a (compiled) regex from IssueIdRegex")]
         public virtual string IssueIdPattern
         {
-            get { return string.Empty; }
+            get { return ""; }
+        }
+
+        /// <summary>
+        /// Gets the pre-compiled issue id regex or NULL if there is no issue regex
+        /// </summary>
+        /// <remarks>The default implementation caches a regex built from IssueIdPattern</remarks>
+        public virtual Regex IssueIdRegex
+        {
+            get
+            {
+                // Disable Obsolete warning
+#pragma warning disable 618
+                string pattern = IssueIdPattern;
+#pragma warning restore 618
+                // /Disable Obsolete warning
+
+                if (string.Equals(pattern, _reValue))
+                {
+                    return _re ?? (_re = new Regex(_reValue, RegexOptions.CultureInvariant));
+                }
+                else if (!string.IsNullOrEmpty(pattern))
+                {
+                    try
+                    {
+                        Regex re = new Regex(pattern, RegexOptions.CultureInvariant);
+                        _re = re;
+                        _reValue = pattern;
+                        return re;
+                    }
+                    catch
+                    { }
+                }
+
+                return null;
+            }
         }
 
         /// <summary>
