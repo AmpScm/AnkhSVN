@@ -136,7 +136,7 @@ namespace Ankh.UI
 
         private const int STACKTRACEHEIGHT = 250;
 
-        private void button2_Click(object sender, System.EventArgs e)
+        private void showStackTraceBtn_Click(object sender, System.EventArgs e)
         {
             this.ShowStackTrace = !this.ShowStackTrace;
         }
