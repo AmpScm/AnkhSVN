@@ -71,7 +71,7 @@ namespace Ankh.Settings
             RefreshIfDirty();
             SettingsCache cache = _cache;
 
-            if (cache == null || cache.BugTrackUrl == null)
+            if (cache == null || cache.RevisionUrl == null)
                 return null;
 
             string url = cache.RevisionUrl.Replace("%REVISION%", Uri.EscapeDataString(revisionText));
