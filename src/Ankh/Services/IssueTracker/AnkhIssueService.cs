@@ -36,7 +36,6 @@ namespace Ankh.Services.IssueTracker
 
         private Dictionary<string, IssueRepositoryConnector> _nameConnectorMap;
         private IssueRepository _repository;
-        private Regex _issueIdRegex;
         IProjectCommitSettings _commitSettings;
 
         public AnkhIssueService(IAnkhServiceProvider context)
@@ -140,52 +139,33 @@ namespace Ankh.Services.IssueTracker
         /// <returns></returns>
         public bool TryGetIssues(string text, out IEnumerable<TextMarker> markers)
         {
-            if (!string.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(text))
             {
-                // potentially triggers 
-                // Issue Tracker Connector Package initialization
-                IssueRepository repository = CurrentIssueRepository;
-                if (repository != null)
-                {
-                    if (_issueIdRegex == null)
-                    {
-                        string pattern = repository.IssueIdPattern;
-                        if (!string.IsNullOrEmpty(pattern))
-                        {
-                            _issueIdRegex = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Multiline);
-                        }
-                    }
-                    if (_issueIdRegex != null)
-                    {
-                        markers = PerformRegex(text);
-                        return true;
-                    }
-                }
-                else
-                {
-                    markers = GetIssuesFromCommitSettings(text);
-                    return true;
-                }
+                markers = null;
+                return false;
             }
-            // meaning 
-            // no solution
-            // or no issue repository is associated with the solution
-            // or issue repository does not provide an issue id pattern
-            // or text is empty
-            markers = null;
-            return false;
+
+            // potentially triggers 
+            // Issue Tracker Connector Package initialization
+            IssueRepository repository = CurrentIssueRepository;
+            if (repository != null)
+                markers = PerformRepositoryRegex(repository.IssueIdRegex, text);
+            else
+                markers = GetIssuesFromCommitSettings(text);
+
+            return true;
         }
 
         public bool TryGetRevisions(string text, out IEnumerable<TextMarker> markers)
         {
-            if (!string.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(text))
             {
-                markers = GetRevisionsFromCommitSettings(text);
-                return true;
+                markers = null;
+                return false;
             }
 
-            markers = null;
-            return false;
+            markers = GetRevisionsFromCommitSettings(text);
+            return true;
         }
 
         /// <summary>
@@ -204,22 +184,18 @@ namespace Ankh.Services.IssueTracker
                 try
                 {
                     repository.NavigateTo(issueId);
+                    return;
                 }
                 catch { } // connector code
             }
-            else
+
+            IAnkhWebBrowser web = GetService<IAnkhWebBrowser>();
+            if (web != null)
             {
-                IProjectCommitSettings projectSettings = GetService<IProjectCommitSettings>();
-                if (projectSettings != null)
-                {
-                    IAnkhWebBrowser web = GetService<IAnkhWebBrowser>();
-                    if (web != null)
-                    {
-                        Uri uri = projectSettings.GetIssueTrackerUri(issueId);
-                        if (uri != null && !uri.IsFile && !uri.IsUnc)
-                            web.Navigate(uri);
-                    }
-                }
+                Uri uri = CommitSettings.GetIssueTrackerUri(issueId);
+
+                if (uri != null && !uri.IsFile && !uri.IsUnc)
+                    web.Navigate(uri);
             }
         }
 
@@ -238,22 +214,17 @@ namespace Ankh.Services.IssueTracker
                 try
                 {
                     repository.NavigateToRevision(rev);
+                    return;
                 }
                 catch { } // connector code
             }
-            else
+
+            IAnkhWebBrowser web = GetService<IAnkhWebBrowser>();
+            if (web != null)
             {
-                IProjectCommitSettings projectSettings = GetService<IProjectCommitSettings>();
-                if (projectSettings != null)
-                {
-                    IAnkhWebBrowser web = GetService<IAnkhWebBrowser>();
-                    if (web != null)
-                    {
-                        Uri uri = projectSettings.GetRevisionUri(revisionText);
-                        if (uri != null && !uri.IsFile && !uri.IsUnc)
-                            web.Navigate(uri);
-                    }
-                }
+                Uri uri = CommitSettings.GetRevisionUri(revisionText);
+                if (uri != null && !uri.IsFile && !uri.IsUnc)
+                    web.Navigate(uri);
             }
         }
 
@@ -293,7 +264,6 @@ namespace Ankh.Services.IssueTracker
             {
                 IssueRepository oldRepository = _repository;
                 _repository = value;
-                _issueIdRegex = null; // reset RegEx
                 OnIssueRepositoryChanged();
                 if (oldRepository != null && oldRepository != _repository)
                 {
@@ -348,9 +318,12 @@ namespace Ankh.Services.IssueTracker
 
         #endregion
 
-        private IEnumerable<TextMarker> PerformRegex(string text)
+        private IEnumerable<TextMarker> PerformRepositoryRegex(Regex re, string text)
         {
-            foreach (Match m in _issueIdRegex.Matches(text))
+            if (re == null)
+                yield break;
+            
+            foreach (Match m in re.Matches(text))
             {
                 if (!m.Success)
                     continue;

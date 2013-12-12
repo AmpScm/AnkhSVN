@@ -39,6 +39,18 @@ namespace Ankh.Services.PendingChanges
         {
         }
 
+        IAnkhIssueService _issueService;
+        IAnkhIssueService IssueService
+        {
+            get { return _issueService ?? (_issueService = GetService<IAnkhIssueService>()); }
+        }
+
+        IProjectCommitSettings _commitSettings;
+        IProjectCommitSettings CommitSettings
+        {
+            get { return _commitSettings ?? (_commitSettings = GetService<IProjectCommitSettings>()); }
+        }
+
         public bool ApplyChanges(IEnumerable<PendingChange> changes, PendingChangeApplyArgs args)
         {
             using (PendingCommitState state = new PendingCommitState(Context, changes))
@@ -333,23 +345,30 @@ namespace Ankh.Services.PendingChanges
 
         private bool PreCommit_VerifyIssueTracker(PendingCommitState state)
         {
-            IAnkhIssueService iService = state.GetService<IAnkhIssueService>();
-            if (iService != null)
+            IssueRepository iRepo = IssueService.CurrentIssueRepository;
+            if (iRepo != null)
             {
-                IssueRepository iRepo = iService.CurrentIssueRepository;
-                if (iRepo != null)
+                List<Uri> uris = new List<Uri>();
+                foreach (PendingChange pc in state.Changes)
                 {
-                    List<Uri> uris = new List<Uri>();
-                    foreach (PendingChange pc in state.Changes)
-                    {
-                        uris.Add(pc.Uri);
-                    }
-                    PreCommitArgs args = new PreCommitArgs(uris.ToArray(), 1);
-                    args.CommitMessage = state.LogMessage;
-                    iRepo.PreCommit(args);
-                    if (args.Cancel) { return false; }
-                    state.LogMessage = args.CommitMessage;
+                    uris.Add(pc.Uri);
                 }
+                PreCommitArgs args = new PreCommitArgs(uris.ToArray(), 1);
+                args.CommitMessage = state.LogMessage;
+                args.IssueText = state.IssueText;
+
+                iRepo.PreCommit(args);
+                if (args.Cancel)
+                    return false;
+
+                state.LogMessage = args.CommitMessage;
+                state.IssueText = null;
+
+                if (args.SkipIssueVerify)
+                    state.SkipIssueVerify = true;
+
+                foreach (KeyValuePair<string, string> kv in args.CustomProperties)
+                    state.CustomProperties[kv.Key] = kv.Value;
             }
             return true;
         }
@@ -375,34 +394,32 @@ namespace Ankh.Services.PendingChanges
 
             string msg = sb.ToString();
 
-            // bool flag that tells if issue tracker integration (if there is one) has already
-            // modified the log message, and inserted issue ids.
-            // IT IS ASSUMED THAT issue tracker integration has been given the chance to process
-            // the commit msg before this logic (i.e. PreCommit_VerifyIssueTracker).
-            bool didIssueTrackerProcess = false;
-            IAnkhIssueService iService = state.GetService<IAnkhIssueService>();
-            if (iService != null)
-            {
-                IssueRepository iRepo = iService.CurrentIssueRepository;
-                if (iRepo != null && !string.IsNullOrEmpty(iRepo.IssueIdPattern))
-                {
-                    didIssueTrackerProcess = System.Text.RegularExpressions.Regex.IsMatch(msg, iRepo.IssueIdPattern);
-                }
-            }
-
             // no need to check for issue id if issue tracker integration already did it.
-            if (!didIssueTrackerProcess)
+            if (CommitSettings.WarnIfNoIssue && !state.SkipIssueVerify)
             {
+                bool haveIssue = false;
                 // Use the project commit settings class to add an issue number (if available)
-                IProjectCommitSettings pcs = state.GetService<IProjectCommitSettings>();
-                if (pcs.WarnIfNoIssue && pcs.ShowIssueBox && string.IsNullOrEmpty(state.IssueText) &&
+
+                if (CommitSettings.ShowIssueBox && !string.IsNullOrEmpty(state.IssueText))
+                    haveIssue = true;
+
+                IEnumerable<TextMarker> markers;
+                if (!haveIssue
+                    && !string.IsNullOrEmpty(state.LogMessage)
+                    && IssueService.TryGetIssues(state.LogMessage, out markers)
+                    && !EnumTools.IsEmpty(markers))
+                {
+                    haveIssue = true;
+                }
+
+                if (!haveIssue &&
                     state.MessageBox.Show(PccStrings.NoIssueNumber, "",
                                           MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                 {
                     return false;
                 }
-                msg = pcs.BuildLogMessage(msg, state.IssueText);
             }
+            msg = CommitSettings.BuildLogMessage(msg, state.IssueText);
 
             // And make sure the log message ends with a single newline
             state.LogMessage = msg.TrimEnd() + Environment.NewLine;
@@ -654,6 +671,10 @@ namespace Ankh.Services.PendingChanges
                     ca.KeepLocks = state.KeepLocks;
                     ca.KeepChangeLists = state.KeepChangeLists;
                     ca.LogMessage = state.LogMessage;
+
+                    foreach(KeyValuePair<string, string> kv in state.CustomProperties)
+                        ca.LogProperties.Add(kv.Key, kv.Value);
+
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_WC_NOT_UP_TO_DATE);
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_CLIENT_FORBIDDEN_BY_SERVER);
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_CLIENT_NO_LOCK_TOKEN);
@@ -737,11 +758,7 @@ namespace Ankh.Services.PendingChanges
 
         private void PostCommit_IssueTracker(PendingCommitState state, SvnCommitResult result)
         {
-            IAnkhIssueService iService = GetService<IAnkhIssueService>();
-            if (iService == null)
-                return;
-            
-            IssueRepository iRepo = iService.CurrentIssueRepository;
+            IssueRepository iRepo = IssueService.CurrentIssueRepository;
             if (iRepo == null)
                 return;
 

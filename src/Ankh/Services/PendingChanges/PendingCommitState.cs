@@ -28,15 +28,17 @@ using Ankh.UI;
 
 namespace Ankh.Services.PendingChanges
 {
-    class PendingCommitState : AnkhService, IDisposable
+    sealed class PendingCommitState : AnkhService, IDisposable
     {
+        readonly HybridCollection<PendingChange> _changes = new HybridCollection<PendingChange>();
+        readonly HybridCollection<string> _commitPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+        readonly SortedDictionary<string, string> _customProperties = new SortedDictionary<string, string>();
         SvnClient _client;
         bool _keepLocks;
         bool _keepChangeLists;
-        HybridCollection<PendingChange> _changes = new HybridCollection<PendingChange>();
-        HybridCollection<string> _commitPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
         string _logMessage;
         string _issueText;
+        bool _skipIssueVerify;
 
         public PendingCommitState(IAnkhServiceProvider context, IEnumerable<PendingChange> changes)
             : base(context)
@@ -143,6 +145,17 @@ namespace Ankh.Services.PendingChanges
                 _client = null;
                 cl.Dispose();
             }
+        }
+
+        public bool SkipIssueVerify 
+        {
+            get { return _skipIssueVerify; }
+            set { _skipIssueVerify = value; }
+        }
+
+        public SortedDictionary<string, string> CustomProperties
+        {
+            get { return _customProperties; }
         }
     }
 }
