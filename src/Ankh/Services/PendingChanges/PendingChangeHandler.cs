@@ -51,6 +51,12 @@ namespace Ankh.Services.PendingChanges
             get { return _commitSettings ?? (_commitSettings = GetService<IProjectCommitSettings>()); }
         }
 
+        IAnkhConfigurationService _config;
+        IAnkhConfigurationService Config
+        {
+            get { return _config ?? (_config = GetService<IAnkhConfigurationService>()); }
+        }
+
         public bool ApplyChanges(IEnumerable<PendingChange> changes, PendingChangeApplyArgs args)
         {
             using (PendingCommitState state = new PendingCommitState(Context, changes))
@@ -214,80 +220,75 @@ namespace Ankh.Services.PendingChanges
                 if (state == null)
                     return false;
 
-                using (state)
-                    try
+                try
+                {
+                    state.KeepLocks = args.KeepLocks;
+                    state.KeepChangeLists = args.KeepChangeLists;
+                    state.LogMessage = args.LogMessage;
+                    state.IssueText = args.IssueText;
+
+                    if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'first'
+                        return false;
+
+                    // Verify this before verifying log message
+                    // so that issue tracker integration has precedence 
+                    if (!PreCommit_VerifyIssueTracker(state))
+                        return false;
+
+                    if (!PreCommit_VerifyLogMessage(state))
+                        return false;
+
+                    if (!PreCommit_VerifyNoConflicts(state))
+                        return false;
+
+                    if (!PreCommit_SaveDirty(state))
+                        return false;
+
+                    if (!PreCommit_AddNewFiles(state))
+                        return false;
+
+                    if (!PreCommit_HandleMissingFiles(state))
+                        return false;
+
+                    state.FlushState();
+
+                    if (!PreCommit_AddNeededParents(state))
+                        return false;
+
+                    if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'again'
+                        return false;
+
+                    if (!PreCommit_VerifyTargetsVersioned(state))
+                        return false;
+                    // if(!PreCommit_....())
+                    //  return;
+
+
+                    bool ok = false;
+                    using (DocumentLock dl = GetService<IAnkhOpenDocumentTracker>().LockDocuments(state.CommitPaths, DocumentLockType.NoReload))
+                    using (dl.MonitorChangesForReload()) // Monitor files that are changed by keyword expansion
                     {
-                        state.KeepLocks = args.KeepLocks;
-                        state.KeepChangeLists = args.KeepChangeLists;
-                        state.LogMessage = args.LogMessage;
-                        state.IssueText = args.IssueText;
-
-                        if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'first'
-                            return false;
-
-                        // Verify this before verifying log message
-                        // so that issue tracker integration has precedence 
-                        if (!PreCommit_VerifyIssueTracker(state))
-                            return false;
-
-                        if (!PreCommit_VerifyLogMessage(state))
-                            return false;
-
-                        if (!PreCommit_VerifyNoConflicts(state))
-                            return false;
-
-                        if (!PreCommit_SaveDirty(state))
-                            return false;
-
-                        if (!PreCommit_AddNewFiles(state))
-                            return false;
-
-                        if (!PreCommit_HandleMissingFiles(state))
-                            return false;
-
-                        state.FlushState();
-
-                        if (!PreCommit_AddNeededParents(state))
-                            return false;
-
-                        if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'again'
-                            return false;
-
-                        if (!PreCommit_VerifyTargetsVersioned(state))
-                            return false;
-                        // if(!PreCommit_....())
-                        //  return;
-
-
-                        bool ok = false;
-                        using (DocumentLock dl = GetService<IAnkhOpenDocumentTracker>().LockDocuments(state.CommitPaths, DocumentLockType.NoReload))
-                        using (dl.MonitorChangesForReload()) // Monitor files that are changed by keyword expansion
+                        if (Commit_CommitToRepository(state))
                         {
-                            if (Commit_CommitToRepository(state))
-                            {
-                                storeMessage = true;
-                                ok = true;
-                            }
-                        }
-
-                        if (!ok)
-                            return false;
-                    }
-                    finally
-                    {
-                        if (storeMessage)
-                        {
-                            if (state.LogMessage != null && state.LogMessage.Trim().Length > 0)
-                            {
-                                IAnkhConfigurationService config = GetService<IAnkhConfigurationService>();
-
-                                if (config != null)
-                                {
-                                    config.GetRecentLogMessages().Add(state.LogMessage);
-                                }
-                            }
+                            storeMessage = true;
+                            ok = true;
                         }
                     }
+
+                    if (!ok)
+                        return false;
+                }
+                finally
+                {
+                    string msg = state.LogMessage;
+
+                    state.Dispose();
+
+                    if (storeMessage && msg != null && msg.Trim().Length > 0)
+                    {
+                        Config.GetRecentLogMessages().Add(msg);
+                    }
+                }
             }
 
             return true;
@@ -656,7 +657,7 @@ namespace Ankh.Services.PendingChanges
             bool ok = false;
             SvnCommitResult rslt = null;
 
-            bool enableHooks = GetService<IAnkhConfigurationService>().Instance.EnableTortoiseSvnHooks;
+            bool enableHooks = Config.Instance.EnableTortoiseSvnHooks;
 
             bool outOfDateError = false;
             bool otherError = false;
@@ -672,7 +673,7 @@ namespace Ankh.Services.PendingChanges
                     ca.KeepChangeLists = state.KeepChangeLists;
                     ca.LogMessage = state.LogMessage;
 
-                    foreach(KeyValuePair<string, string> kv in state.CustomProperties)
+                    foreach (KeyValuePair<string, string> kv in state.CustomProperties)
                         ca.LogProperties.Add(kv.Key, kv.Value);
 
                     ca.AddExpectedError(SvnErrorCode.SVN_ERR_WC_NOT_UP_TO_DATE);
@@ -700,7 +701,7 @@ namespace Ankh.Services.PendingChanges
                                             if (notifyE.Error != null)
                                                 ca.AddExpectedError(notifyE.Error.SvnErrorCode); // Don't throw an exception for this error
                                             otherError = true;
-                                            itemPath = itemPath ?? notifyE.FullPath;                                            
+                                            itemPath = itemPath ?? notifyE.FullPath;
                                             break;
                                     }
                                 };
@@ -748,10 +749,8 @@ namespace Ankh.Services.PendingChanges
 
                 if (!string.IsNullOrEmpty(rslt.PostCommitError))
                     state.MessageBox.Show(rslt.PostCommitError, PccStrings.PostCommitError, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                else
-                {
-                    PostCommit_IssueTracker(state, rslt);
-                }
+
+                PostCommit_IssueTracker(state, rslt);
             }
             return ok;
         }
