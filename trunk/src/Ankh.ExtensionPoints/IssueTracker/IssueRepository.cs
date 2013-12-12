@@ -46,8 +46,17 @@ namespace Ankh.ExtensionPoints.IssueTracker
         {
         }
 
+        /// <summary>
+        /// Gets a boolean indicating whether the issue repository implements
+        /// <see cref="NavigateToRevision"/>
+        /// </summary>
         public virtual bool CanNavigateToRevision { get; protected set; }
 
+        /// <summary>
+        /// Called when a user uses 'Open Revision' on a log message that refers to
+        /// some revision when <see cref="CanNavigateToRevision"/> is true.
+        /// </summary>
+        /// <param name="revision"></param>
         public virtual void NavigateToRevision(long revision)
         {
             throw new NotImplementedException();
