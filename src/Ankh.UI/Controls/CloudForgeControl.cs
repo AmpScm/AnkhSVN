@@ -8,7 +8,7 @@ namespace Ankh.UI.Controls
     /// </summary>
     public partial class CloudForgeControl : UserControl
     {
-        private static readonly string CF_SIGNUP_URL = "https://app.cloudforge.com/subscriptions/new/?product=Free&source=ankhsvn";
+        private static readonly string CF_SIGNUP_URL = "http://svc.ankhsvn.net/svc/go/?t=CloudForgeSignup";
 
         public CloudForgeControl()
         {
