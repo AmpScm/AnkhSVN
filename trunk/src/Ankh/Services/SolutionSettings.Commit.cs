@@ -147,9 +147,7 @@ namespace Ankh.Settings
             {
                 RefreshIfDirty();
 
-                if (!string.IsNullOrEmpty(_cache.BugTrackLogRegexes))
-                    return false; // Has higher priority
-                else if (!string.IsNullOrEmpty(_cache.BugTrackMessage))
+                if (!string.IsNullOrEmpty(_cache.BugTrackMessage))
                     return true;
 
                 return false;
