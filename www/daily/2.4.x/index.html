@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.4.12012</title>
+          AnkhSVN-Daily Update - 2.4.12338</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -16,144 +16,20 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/7387/AnkhSvn-Daily-2.4.12012.1.msi">AnkhSVN 2.4.12012</a>.
+          The latest daily build is <a href="https://ankhsvn.open.collab.net/files/documents/175/8129/AnkhSvn-Daily-2.4.12338.2.msi">AnkhSVN 2.4.12338</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=12012">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=12338">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
-<tr class="d"><td colspan="4">2013-06-14</td></tr>
-<tr><td> </td><td class="r"><a id="11998" href="http://ankhsvn.net/rev/11998">
-            [r11998]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">:</strong> 2.4.x</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Create 2.4.x branch</td></tr>
-<tr><td> </td><td class="r"><a id="11996" href="http://ankhsvn.net/rev/11996">
-            [r11996]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Services/RepositoryProvider/ScmRepositoryProviderProxy.cs, Ankh.ExtensionPoints/Ankh.ExtensionPoints.csproj, Ankh.UI/RepositoryExplorer/RepositoryWizard/RepositorySelectionPage.cs, Ankh.ExtensionPoints/RepositoryProvider/ScmRepositoryProvider.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Break the ScmRepositoryProvider compatibility one more time: Controls used in
-dialogs should not be reused after the dialog is disposed. This is different
-to the control hosted in toolwindows which are typically long-lived, because
-toolwindows are never destroyed.
-(Another problematic case would be if the dialog somehow gets nested)<br>
-Not following this rule will introduce subtle bugs in future implementations,
-which we can now still avoid without really breaking backwards compatibility.</td></tr>
-<tr class="d"><td colspan="4">2013-06-13</td></tr>
-<tr><td> </td><td class="r"><a id="11994" href="http://ankhsvn.net/rev/11994">
-            [r11994]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src:</strong> LICENSE.rtf</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update Copyright year range in GUI to include 2013</td></tr>
-<tr class="d"><td colspan="4">2013-06-10</td></tr>
-<tr><td> </td><td class="r"><a id="11990" href="http://ankhsvn.net/rev/11990">
-            [r11990]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.VS/WebBrowser:</strong> AnkhWebBrowser.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">start external web browser (using process start) if requested</td></tr>
-<tr class="d"><td colspan="4">2013-06-06</td></tr>
-<tr><td> </td><td class="r"><a id="11985" href="http://ankhsvn.net/rev/11985">
-            [r11985]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints/RepositoryProvider:</strong> ScmRepositoryType.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">remove using System.Linq</td></tr>
-<tr><td> </td><td class="r"><a id="11984" href="http://ankhsvn.net/rev/11984">
-            [r11984]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/RepositoryProvider/IAnkhRepositoryProviderService.cs, Ankh.UI/RepositoryExplorer/RepositoryWizard/RepositorySelectionWizard.cs, Ankh.UI/RepositoryExplorer/RepositoryWizard/RepositoryProviderPage.cs, Ankh.ExtensionPoints/IssueTracker/IssueRepository.cs, Ankh.ExtensionPoints/RepositoryProvider/ScmRepositoryType.cs, Ankh/Services/RepositoryProvider/AnkhRepositoryProviderService.cs, Ankh.ExtensionPoints/RepositoryProvider/ScmRepositorySelectionControl.cs, Ankh/Services/RepositoryProvider/ScmRepositoryProviderProxy.cs, Ankh.ExtensionPoints/Ankh.ExtensionPoints.csproj, Ankh.ExtensionPoints/RepositoryProvider/ScmRepositoryProvider.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use an enum instead of a string for the recently added repository type.</td></tr>
-<tr><td> </td><td class="r"><a id="11983" href="http://ankhsvn.net/rev/11983">
-            [r11983]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/RepositoryExplorer/RepositoryWizard:</strong> RepositorySelectionWizard.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">remove the UserNamePasswordEventHandler before returning SvnPoolClient to the pool</td></tr>
-<tr class="d"><td colspan="4">2013-06-05</td></tr>
-<tr><td> </td><td class="r"><a id="11981" href="http://ankhsvn.net/rev/11981">
-            [r11981]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/RepositoryExplorer/RepositoryWizard:</strong> RepositorySelectionWizard.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">next is finish if the current page is supplied by third party and it is complete</td></tr>
-<tr class="d"><td colspan="4">2013-06-04</td></tr>
-<tr><td> </td><td class="r"><a id="11979" href="http://ankhsvn.net/rev/11979">
-            [r11979]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh/Services/RepositoryProvider:</strong> AnkhRepositoryProviderService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">enable IAnkhRepositoryProviderService</td></tr>
-<tr><td> </td><td class="r"><a id="11978" href="http://ankhsvn.net/rev/11978">
-            [r11978]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/RepositoryExplorer/RepositoryWizard:</strong> RepositorySelectionWizard.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">use NoUIClient when adding credentials to cache for the selected repository</td></tr>
-<tr><td> </td><td class="r"><a id="11977" href="http://ankhsvn.net/rev/11977">
-            [r11977]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/SccManagement:</strong> AddToSubversion.resx, AddToSubversion.Designer.cs, AddToSubversion.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">show CloudForge banner on AddToSubversion dialog, add a button to bring up repository selection wizard</td></tr>
-<tr><td> </td><td class="r"><a id="11976" href="http://ankhsvn.net/rev/11976">
-            [r11976]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> RepositoryExplorer/RepositoryWizard/RepositoryProviderPage.Designer.cs, RepositoryExplorer/RepositoryWizard/RepositorySelectionPage.Designer.cs, RepositoryOpen/RepositoryOpenDialog.Designer.cs, RepositoryExplorer/RepositoryWizard/RepositoryProviderPage.resx</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">remove the border around CloudForge banner</td></tr>
-<tr class="d"><td colspan="4">2013-06-03</td></tr>
-<tr><td> </td><td class="r"><a id="11974" href="http://ankhsvn.net/rev/11974">
-            [r11974]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/RepositoryExplorer/RepositoryWizard:</strong> RepositoryProviderPage.Designer.cs, RepositorySelectionWizard.cs, RepositorySelectionPage.cs, RepositoryProviderPage.resx</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">make sure username and password are saved (if supplied by repo provider)</td></tr>
-<tr><td> </td><td class="r"><a id="11973" href="http://ankhsvn.net/rev/11973">
-            [r11973]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints/RepositoryProvider:</strong> ScmRepositorySelectionControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">add a callback method to allow repo providers to supply username and password</td></tr>
-<tr class="d"><td colspan="4">2013-05-31</td></tr>
-<tr><td> </td><td class="r"><a id="11972" href="http://ankhsvn.net/rev/11972">
-            [r11972]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/RepositoryExplorer/RepositoryWizard:</strong> RepositoryProviderPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">open Extensions wiki page when user clicks on the link to see available providers.</td></tr>
-<tr><td> </td><td class="r"><a id="11971" href="http://ankhsvn.net/rev/11971">
-            [r11971]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src:</strong> Ankh.ExtensionPoints/RepositoryProvider/ScmRepositorySelectionControl.cs, Ankh.UI/RepositoryExplorer/RepositoryWizard/RepositorySelectionPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">- implement the event arg properties for event raised by repository provider,
-- show the exception/message if provider raises one in repository selection wizard.</td></tr>
-<tr><td> </td><td class="r"><a id="11970" href="http://ankhsvn.net/rev/11970">
-            [r11970]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/RepositoryExplorer/RepositoryWizard:</strong> RepositorySelectionPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">fill the wizard page with the user control supplied by repository provider</td></tr>
-<tr><td> </td><td class="r"><a id="11969" href="http://ankhsvn.net/rev/11969">
-            [r11969]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/RepositoryExplorer/Commands:</strong> RepositoryBrowseCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">use the new RepositorySelection wizard</td></tr>
-<tr class="d"><td colspan="4">2013-05-30</td></tr>
-<tr><td> </td><td class="r"><a id="11967" href="http://ankhsvn.net/rev/11967">
-            [r11967]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/RepositoryOpen:</strong> RepositoryOpenDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">use the new RepositorySelection wizard</td></tr>
-<tr><td> </td><td class="r"><a id="11966" href="http://ankhsvn.net/rev/11966">
-            [r11966]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> RepositoryExplorer/RepositoryWizard/RepositorySelectionWizard.cs, RepositoryExplorer/RepositoryWizard/RepositoryProviderPage.cs, RepositoryExplorer/RepositoryWizard/RepositoryWizardResources.resx, Ankh.UI.csproj, RepositoryExplorer/RepositoryWizard/RepositoryWizardResources.Designer.cs, RepositoryExplorer/RepositoryWizard/RepositorySelectionPage.cs, Resources/RepositoryWizardHeader.gif</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">- make sure wizard pages (for each provider) have unique names,
-- update wizard header image,</td></tr>
-<tr><td> </td><td class="r"><a id="11965" href="http://ankhsvn.net/rev/11965">
-            [r11965]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> RepositoryExplorer/RepositoryWizard/RepositorySelectionWizard.Designer.cs, RepositoryExplorer/RepositoryWizard/RepositoryProviderPage.Designer.cs, RepositoryExplorer/RepositoryWizard/RepositorySelectionWizard.cs, RepositoryExplorer/RepositoryWizard/RepositoryProviderPage.cs, RepositoryExplorer/RepositoryWizard/RepositoryWizardResources.resx, Ankh.UI.csproj, RepositoryExplorer/RepositoryWizard/RepositoryWizardResources.Designer.cs, RepositoryExplorer/RepositoryWizard, RepositoryExplorer/RepositoryWizard/RepositorySelectionPage.resx, RepositoryExplorer/RepositoryWizard/RepositorySelectionPage.Designer.cs, RepositoryExplorer/RepositoryWizard/RepositorySelectionPage.cs, RepositoryExplorer/RepositoryWizard/RepositorySelectionWizard.resx, RepositoryExplorer/RepositoryWizard/RepositoryProviderPage.resx</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Repository selection wizard</td></tr>
-<tr><td> </td><td class="r"><a id="11964" href="http://ankhsvn.net/rev/11964">
-            [r11964]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/MergeWizard/WizardFramework:</strong> Wizard.resx, Wizard.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">dock (fill) wizard page panel</td></tr>
-<tr class="d"><td colspan="4">2013-05-29</td></tr>
-<tr><td> </td><td class="r"><a id="11961" href="http://ankhsvn.net/rev/11961">
-            [r11961]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> Controls/CloudForgeControl.resx, Controls/CloudForgeControl.cs, RepositoryOpen/RepositoryOpenDialog.resx, RepositoryOpen/RepositoryOpenDialog.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">show CloudForge link on RepositoryOpenDialog (used from '...OpenFromSubversion' and '...AddFromSubversion' commands)</td></tr>
-<tr><td> </td><td class="r"><a id="11960" href="http://ankhsvn.net/rev/11960">
-            [r11960]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/Controls:</strong> CloudForgeControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">stretch the image and set maximum size.</td></tr>
-<tr><td> </td><td class="r"><a id="11959" href="http://ankhsvn.net/rev/11959">
-            [r11959]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh:</strong> Services/RepositoryProvider, Services/RepositoryProvider/AnkhRepositoryProviderService.cs, Ankh.csproj, Services/RepositoryProvider/ScmRepositoryProviderProxy.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Ankh service implementation for SCM repository provider extension point</td></tr>
-<tr><td> </td><td class="r"><a id="11958" href="http://ankhsvn.net/rev/11958">
-            [r11958]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> RepositoryProvider/IAnkhRepositoryProviderService.cs, RepositoryProvider, Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Ankh service interface for SCM repository provider extension point</td></tr>
-<tr><td> </td><td class="r"><a id="11957" href="http://ankhsvn.net/rev/11957">
-            [r11957]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints:</strong> RepositoryProvider/ScmRepositorySelectionControl.cs, Ankh.ExtensionPoints.csproj, RepositoryProvider, RepositoryProvider/ScmRepositoryProvider.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">RepositoryProvider extension point (work in progress)</td></tr>
-<tr class="d"><td colspan="4">2013-05-28</td></tr>
-<tr><td> </td><td class="r"><a id="11955" href="http://ankhsvn.net/rev/11955">
-            [r11955]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh/Services/IssueTracker:</strong> AnkhIssueService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">don't try to get issue list from the current issue repository if the text is empty</td></tr>
-<tr class="d"><td colspan="4">2013-05-25</td></tr>
-<tr><td> </td><td class="r"><a id="11951" href="http://ankhsvn.net/rev/11951">
-            [r11951]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> RecentChangesPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">ignore root path if it is not a working copy when refreshing recent changes</td></tr>
-<tr class="d"><td colspan="4">2013-05-24</td></tr>
-<tr><td> </td><td class="r"><a id="11949" href="http://ankhsvn.net/rev/11949">
-            [r11949]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> Ankh.UI.csproj, Controls/CloudForgeControl.resx, Controls/CloudForgeControl.Designer.cs, Controls/CloudForgeControl.cs, Resources/cloudforge.png</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">user control for sponsor (CloudForge) promo</td></tr>
-<tr class="d"><td colspan="4">2013-05-23</td></tr>
-<tr><td> </td><td class="r"><a id="11945" href="http://ankhsvn.net/rev/11945">
-            [r11945]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> SvnSccProvider.SourceControl.cs, SvnSccProvider.cs, OpenDocumentTracker.cs, AnkhSccProvider.Projects.cs, SccUI/ChangeSourceControl.cs, AnkhSccProvider.QueryEditSave.cs, SvnSccProvider.Glyphs.cs, SvnSccProvider.IVsSccManager3.cs, ProjectTracker.cs, Ankh.Scc.csproj, SvnSccProvider.Solution.cs, AnkhSccProvider.cs, AnkhSccProvider.SourceControl.cs, SvnSccProvider.FileMap.cs (and 12 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Rename the AnkhSccProvider class to SvnSccProvider.</td></tr>
-<tr><td> </td><td class="r"><a id="11944" href="http://ankhsvn.net/rev/11944">
-            [r11944]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Ankh.Package.wxs, Ankh.Votive/AnkhVSExtension.wxs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Try to fix some installer scenarios on upgrading to/from versions that
-don't support all VS versions that the other installer supports
-(including explicit disables) using a registry key.</td></tr>
-<tr><td> </td><td class="r"><a id="11942" href="http://ankhsvn.net/rev/11942">
-            [r11942]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Commands/ItemEditPropertiesCommand.cs, Ankh.UI/SvnLog/Commands/ChangeLogMessage.cs, Ankh/Commands/ItemDelete.cs, Ankh/Commands/UpgradeWorkingCopy.cs, Ankh.Scc/SccUI/Commands/ChangeSourceControlCommand.cs, Ankh/Commands/SolutionCommitCommand.cs, Ankh.UI/PendingChanges/Commands/RefreshPendingChanges.cs, Ankh/Commands/RepositoryExplorer/CreateDirectoryCommand.cs, Ankh/Commands/LockCommand.cs, Ankh/Commands/ItemAnnotateCommand.cs, Ankh/Commands/RepositoryExplorer/ShowRepositoryItemChanges.cs, Ankh/Commands/UnlockCommand.cs, Ankh.UI/SvnLog/Commands/ShowChanges.cs, Ankh/Commands/ItemResolveCommand.cs (and 77 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Rename CommandAttribute to SvnCommandAttribute in preparation for adding a
-GitCommandAttribute specifying a different command context.</td></tr>
 
 </table>
 <!--/Recent changes-->
