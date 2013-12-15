@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using System.Windows.Forms;
 using Ankh.Commands;
 using Ankh.Scc;
@@ -18,15 +20,24 @@ namespace Ankh.UI.SvnLog.Commands
         {
             StringBuilder sb = new StringBuilder();
 
+            List<long> revs = new List<long>();
+
             foreach (ISvnLogItem li in e.Selection.GetSelection<ISvnLogItem>())
+            {
+                revs.Add(li.Revision);
+            }
+
+            revs.Sort();
+
+            foreach(long r in revs)
             {
                 if (sb.Length > 0)
                     sb.Append(",");
 
-                sb.Append(li.Revision);
+                sb.Append(r);
             }
 
-            Clipboard.SetText(sb.ToString(), TextDataFormat.UnicodeText);
+            Clipboard.SetText(sb.ToString(), TextDataFormat.Text);
         }
     }
 }
