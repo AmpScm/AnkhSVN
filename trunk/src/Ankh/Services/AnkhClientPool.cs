@@ -448,7 +448,7 @@ namespace Ankh.Services
                     if (!string.IsNullOrEmpty(item.MovedFrom))
                     {
                         if (!_changes.TryGetValue(item.MovedFrom, out action))
-                            _changes.Add(fp, new SvnClientAction(item.MovedFrom));
+                            _changes.Add(item.MovedFrom, new SvnClientAction(item.MovedFrom));
                     }
                 }
             }
