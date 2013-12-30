@@ -85,6 +85,28 @@ namespace Ankh.UI.SvnLog
             }
         }
 
+        Uri _baseUri;
+        public Uri CommonBaseUri
+        {
+            get
+            {
+                if (_baseUri == null && _origins != null && _origins.Count > 0)
+                {
+                    Uri baseUri;
+                    Uri[] uris = new Uri[_origins.Count];
+                    int n = 0;
+                    foreach(SvnOrigin o in _origins)
+                        uris[n++] = o.Uri;
+
+                    if (SvnTools.TryGetUriAncestor(uris, out baseUri))
+                    {
+                        _baseUri = baseUri;
+                    }
+                }
+                return _baseUri;
+            }
+        }
+
         void UpdateTitle()
         {
             Text = _originalText;
@@ -131,6 +153,7 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("targets");
 
             _origins = new List<SvnOrigin>(targets);
+            _baseUri = null;
             _rqStart = start;
             _rqEnd = end;
 
@@ -146,6 +169,7 @@ namespace Ankh.UI.SvnLog
 
             SvnOrigin origin = new SvnOrigin(target);
             _origins = new SvnOrigin[] { origin };
+            _baseUri = null;
             UpdateTitle();
             logControl.StartMergesEligible(context, origin, source);
         }
@@ -157,6 +181,7 @@ namespace Ankh.UI.SvnLog
 
             SvnOrigin origin = new SvnOrigin(target);
             _origins = new SvnOrigin[] { origin };
+            _baseUri = null;
             UpdateTitle();
             logControl.StartMergesMerged(context, origin, source);
         }

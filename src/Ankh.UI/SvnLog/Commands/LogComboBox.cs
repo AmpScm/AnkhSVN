@@ -86,7 +86,14 @@ namespace Ankh.UI.SvnLog.Commands
                     }
             }
             else if (origins.Count > 1)
-                e.Result = string.Format(SvnInfoStrings.NrOfFileInfo, origins.Count);
+            {
+                Uri baseUri = _ctrl.CommonBaseUri;
+
+                if (baseUri != null)
+                    e.Result = string.Format(SvnInfoStrings.NrOfFilesBelow, origins.Count, baseUri);
+                else
+                    e.Result = string.Format(SvnInfoStrings.NrOfFileInfo, origins.Count);
+            }
             else if (origins.Count == 1)
                 e.Result = _ctrl.Origins[0].Target.FileName;
         }
