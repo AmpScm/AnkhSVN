@@ -42,6 +42,9 @@
     <MsVsShellAssembly>Microsoft.VisualStudio.Shell.$(UseVsSdkVersion)</MsVsShellAssembly>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(VisualStudioVersion)' &gt;= '10.0'">
+    <LangVersion>3</LangVersion>
+  </PropertyGroup>
   <Import Project="..\..\local\Common.targets.local" Condition="('$(ApplyLocalCustomizations)' != 'false') and Exists('..\..\local\Common.targets.local')" />
   <Import Project="..\..\local\$(MSBuildProjectName)\$(MSBuildProjectFile).local" Condition="('$(ApplyLocalCustomizations)' != 'false') and Exists('..\..\local\$(MSBuildProjectName)\$(MSBuildProjectFile).local')" />
   <PropertyGroup>
