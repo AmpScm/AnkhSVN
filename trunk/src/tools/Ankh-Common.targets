@@ -6,14 +6,14 @@
     <UseCtcInsteadOfVsct>true</UseCtcInsteadOfVsct>
   </PropertyGroup>
   <Choose>
-    <When Condition="'$(ToolsetVersion)' == 'v90' and $(UseVS2005MPF) == 'true'">
+    <When Condition="'$(PlatformToolset)' == 'v90' and $(UseVS2005MPF) == 'true'">
       <PropertyGroup>
         <!-- Used for VS2005+ compatible build on the buildbot -->
         <VisualStudioVersion>9.0</VisualStudioVersion>
         <UseVsSdkVersion>8.0</UseVsSdkVersion>
       </PropertyGroup>
     </When>
-    <When Condition="'$(ToolsetVersion)' == 'v100' and $(UseVS2005MPF) == 'true'">
+    <When Condition="'$(PlatformToolset)' == 'v100' and $(UseVS2005MPF) == 'true'">
       <PropertyGroup>
         <!-- Used for VS2010+ compatible build on the buildbot -->
         <VisualStudioVersion>10.0</VisualStudioVersion>
