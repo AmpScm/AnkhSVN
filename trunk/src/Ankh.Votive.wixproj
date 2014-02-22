@@ -199,7 +199,7 @@
     <CompileDependsOn>$(CompileDependsOn);AddVersionDefines</CompileDependsOn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(DistBuild)' == 'true'">
-    <SuppressValidation Condition="">True</SuppressValidation>
+    <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
   <Target Name="AddVersionDefines" DependsOnTargets="FindSDKInstallation;AddProjectReferenceDefineConstants">
     <GetAssemblyIdentity AssemblyFiles="Ankh.ExtensionPoints\bin\$(Configuration)\Ankh.ExtensionPoints.dll">
