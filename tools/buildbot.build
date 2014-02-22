@@ -43,6 +43,7 @@
 </echo>
     <if test="${property::exists('CCNetNumericLabel')}">
       <echo append="true" file="msbuildprops.txt">/P:ForceAssemblyVersion="${versionBase}.${checkout-rev}.${CCNetNumericLabel}"
+/P:SolutionDefineConstants="ankhVersion=${versionBase}.${checkout-rev}.${CCNetNumericLabel}"
 </echo>
 
       <property name="versionBase" value="" />
