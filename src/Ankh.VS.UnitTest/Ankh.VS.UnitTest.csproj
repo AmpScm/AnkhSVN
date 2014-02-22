@@ -95,7 +95,6 @@
     <Compile Include="Helpers\CommandExecutor.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Helpers\ServiceProviderHelper.cs" />
-    <Compile Include="MergeWizard.cs" />
     <Compile Include="Mocks\PackageMock.cs" />
     <Compile Include="Mocks\SelectionContext.cs" />
     <Compile Include="Mocks\VsShellMock.cs" />
