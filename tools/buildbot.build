@@ -7,12 +7,11 @@
   <property name="sevenZipExe" value="${path::combine(assembly::get-location(nant::get-assembly()), '../7z.exe')}" />
   <property name="buildImports" value="true" overwrite="false" />
   
-  <property name="build.depends" value="" overwrite="false" />
   <if test="${property::exists('build.include')}">
     <include buildfile="${build.include}" />
   </if>
   
-  <target name="prepare" depends="${build.depends}">
+  <target name="prepare">
     <exec program="svn.exe" output=".svn-info"><arg line="info . --xml" /></exec>
     <xmlpeek file=".svn-info" xpath="/info/entry/url" property="svn_url" />
     <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="svn_rev" />
