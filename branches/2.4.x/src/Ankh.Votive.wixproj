@@ -193,12 +193,13 @@
     <Content Include="Ankh.Votive\SetupPage.pdn" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v11.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '11.0'" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '10.0'" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '9.0'" />
-  <Import Project="tools\VSSdk2005Tasks\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '8.0'" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(ImportVsSdkVersion)\VSSDK\Microsoft.VsSDK.targets" Condition="$(ImportVsSdkVersion) != '8.0'" />
+  <Import Project="tools\VSSdk2005Tasks\Microsoft.VsSDK.targets" Condition="$(ImportVsSdkVersion) == '8.0'" />
   <PropertyGroup>
     <CompileDependsOn>$(CompileDependsOn);AddVersionDefines</CompileDependsOn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DistBuild)' == 'true'">
+    <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
   <Target Name="AddVersionDefines" DependsOnTargets="FindSDKInstallation;AddProjectReferenceDefineConstants">
     <GetAssemblyIdentity AssemblyFiles="Ankh.ExtensionPoints\bin\$(Configuration)\Ankh.ExtensionPoints.dll">

@@ -5,12 +5,33 @@
     <UseVsSdkVersion>8.0</UseVsSdkVersion>
     <UseCtcInsteadOfVsct>true</UseCtcInsteadOfVsct>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
-    <VisualStudioVersion>9.0</VisualStudioVersion>
-    <!-- The Visual Studio 2008 SDK allows building a 2005 compatible version -->
-    <UseVsSdkVersion Condition="'$(UseVS2005MPF)' == 'true'">8.0</UseVsSdkVersion>
-    <UseVsSdkVersion Condition="'$(UseVS2005MPF)' != 'true'">9.0</UseVsSdkVersion>
-  </PropertyGroup>
+  <Choose>
+    <When Condition="'$(DistBuild)' == 'true'">
+      <PropertyGroup>
+        <UseVS2005MPF>true</UseVS2005MPF>
+        <DeployExtension>false</DeployExtension>
+        <RegisterOutputPackage>false</RegisterOutputPackage>
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(MinVSVersion)' == ''">
+        <!-- Used for VS2005+ compatible build on the buildbot -->
+        <VisualStudioVersion>9.0</VisualStudioVersion>
+        <UseVsSdkVersion>8.0</UseVsSdkVersion>
+        <ImportVsSdkVersion>9.0</ImportVsSdkVersion>
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(MinVSVersion)' != ''">
+        <VisualStudioVersion>$(MinVSVersion)</VisualStudioVersion>
+        <UseVsSdkVersion>$(MinVSVersion)</UseVsSdkVersion>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(MSBuildToolsVersion)' == '3.5'">
+      <PropertyGroup>
+        <VisualStudioVersion>9.0</VisualStudioVersion>
+        <!-- The Visual Studio 2008 SDK allows building a 2005 compatible version -->
+        <UseVsSdkVersion Condition="'$(UseVS2005MPF)' == 'true'">8.0</UseVsSdkVersion>
+        <UseVsSdkVersion Condition="'$(UseVS2005MPF)' != 'true'">9.0</UseVsSdkVersion>
+      </PropertyGroup>
+    </When>
+  </Choose>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == ''">
     <!-- Follow 'Visual Studio 2012': Assume Visual Studio 2010. -->
     <VisualStudioVersion>10.0</VisualStudioVersion>
@@ -42,9 +63,13 @@
     <MsVsShellAssembly>Microsoft.VisualStudio.Shell.$(UseVsSdkVersion)</MsVsShellAssembly>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(VisualStudioVersion)' &gt;= '10.0'">
+    <LangVersion>3</LangVersion>
+  </PropertyGroup>
   <Import Project="..\..\local\Common.targets.local" Condition="('$(ApplyLocalCustomizations)' != 'false') and Exists('..\..\local\Common.targets.local')" />
   <Import Project="..\..\local\$(MSBuildProjectName)\$(MSBuildProjectFile).local" Condition="('$(ApplyLocalCustomizations)' != 'false') and Exists('..\..\local\$(MSBuildProjectName)\$(MSBuildProjectFile).local')" />
   <PropertyGroup>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ImportVsSdkVersion Condition="'$(ImportVsSdkVersion)' == ''">$(UseVsSdkVersion)</ImportVsSdkVersion>
   </PropertyGroup>
 </Project>

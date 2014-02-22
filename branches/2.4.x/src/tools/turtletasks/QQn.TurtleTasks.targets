@@ -11,6 +11,7 @@
 		
 		<MSBuildAllProjects>$(MSBuildAllProjects);$(QQnTurtleTasksFolder)QQn.TurtleTasks.targets</MSBuildAllProjects>
 		<CoreCompileDependsOn>ApplyXslTemplates;DownloadDependencies;$(CoreCompileDependsOn)</CoreCompileDependsOn>
+		<ResolveReferencesDependsOn>DownloadDependencies;$(ResolveReferencesDependsOn)</ResolveReferencesDependsOn>
 		<MergeCtoResourceDependsOn>ApplyXslTemplates;$(MergeCtoResourceDependsOn)</MergeCtoResourceDependsOn>
 		<CoreResGenDependsOn>ApplyXslTemplates;$(CoreResGenDependsOn)</CoreResGenDependsOn>
 		<ApplyXslTemplatesDependsOn>$(ApplyXslTemplatesDependsOn);</ApplyXslTemplatesDependsOn>
