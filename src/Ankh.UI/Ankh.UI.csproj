@@ -894,6 +894,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RepositoryOpen\ProjectAddInfoDialog.resx">
       <DependentUpon>ProjectAddInfoDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\LockDialog.resx">
       <DependentUpon>LockDialog.cs</DependentUpon>
@@ -1279,6 +1280,7 @@
     <EmbeddedResource Include="SvnInfoGrid\SvnInfoStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SvnInfoStrings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Controls\Status.Suggestion.png" />
     <Content Include="Controls\Status.Exclamation.png" />
