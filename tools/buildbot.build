@@ -29,7 +29,7 @@
     <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="checkout-rev" />    
 
     <property name="versionBase" value="" />
-    <property name="versionBase" value="${string::replace(string::replace(build.branch, 'v', ''), '.x', '.')}" 
+    <property name="versionBase" value="${string::replace(string::replace(build.branch, 'v', ''), '.x', '')}" 
                 if="${property::exists('build.branch')}" />
 
     <echo append="false" file="msbuildprops.txt">/P:AnnotatePdbFile=true
