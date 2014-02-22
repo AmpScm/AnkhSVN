@@ -6,19 +6,21 @@
     <UseCtcInsteadOfVsct>true</UseCtcInsteadOfVsct>
   </PropertyGroup>
   <Choose>
-    <When Condition="'$(PlatformToolset)' == 'v90' and $(UseVS2005MPF) == 'true'">
+    <When Condition="'$(DistBuild)' == 'true'">
       <PropertyGroup>
+        <UseVS2005MPF>true</UseVS2005MPF>
+        <DeployExtension>false</DeployExtension>
+        <RegisterOutputPackage>false</RegisterOutputPackage>
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(MinVSVersion)' == ''">
         <!-- Used for VS2005+ compatible build on the buildbot -->
         <VisualStudioVersion>9.0</VisualStudioVersion>
         <UseVsSdkVersion>8.0</UseVsSdkVersion>
         <ImportVsSdkVersion>9.0</ImportVsSdkVersion>
       </PropertyGroup>
-    </When>
-    <When Condition="'$(PlatformToolset)' == 'v100' and $(UseVS2005MPF) == 'true'">
-      <PropertyGroup>
-        <!-- Used for VS2010+ compatible build on the buildbot -->
-        <VisualStudioVersion>10.0</VisualStudioVersion>
-        <UseVsSdkVersion>10.0</UseVsSdkVersion>
+      <PropertyGroup Condition="'$(MinVSVersion)' != ''">
+        <VisualStudioVersion>$(MinVSVersion)</VisualStudioVersion>
+        <UseVsSdkVersion>$(MinVSVersion)</UseVsSdkVersion>
       </PropertyGroup>
     </When>
     <When Condition="'$(MSBuildToolsVersion)' == '3.5'">
