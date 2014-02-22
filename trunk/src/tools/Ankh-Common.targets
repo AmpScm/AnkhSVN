@@ -5,12 +5,26 @@
     <UseVsSdkVersion>8.0</UseVsSdkVersion>
     <UseCtcInsteadOfVsct>true</UseCtcInsteadOfVsct>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
-    <VisualStudioVersion>9.0</VisualStudioVersion>
-    <!-- The Visual Studio 2008 SDK allows building a 2005 compatible version -->
-    <UseVsSdkVersion Condition="'$(UseVS2005MPF)' == 'true'">8.0</UseVsSdkVersion>
-    <UseVsSdkVersion Condition="'$(UseVS2005MPF)' != 'true'">9.0</UseVsSdkVersion>
-  </PropertyGroup>
+  <Choose>
+    <When Condition="'$(ToolsetVersion)' == 'v90' and $(UseVS2005MPF) == 'true'">
+      <!-- Used for VS2005+ compatible build on the buildbot -->
+      <VisualStudioVersion>9.0</VisualStudioVersion>
+      <UseVsSdkVersion>8.0</UseVsSdkVersion>
+    </When>
+    <When Condition="'$(ToolsetVersion)' == 'v100' and $(UseVS2005MPF) == 'true'">
+      <!-- Used for VS2010+ compatible build on the buildbot -->
+      <VisualStudioVersion>10.0</VisualStudioVersion>
+      <UseVsSdkVersion>10.0</UseVsSdkVersion>
+    </When>
+    <When Condition="'$(MSBuildToolsVersion)' == '3.5'">
+      <PropertyGroup>
+        <VisualStudioVersion>9.0</VisualStudioVersion>
+        <!-- The Visual Studio 2008 SDK allows building a 2005 compatible version -->
+        <UseVsSdkVersion Condition="'$(UseVS2005MPF)' == 'true'">8.0</UseVsSdkVersion>
+        <UseVsSdkVersion Condition="'$(UseVS2005MPF)' != 'true'">9.0</UseVsSdkVersion>
+      </PropertyGroup>
+    </When>
+  </Choose>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == ''">
     <!-- Follow 'Visual Studio 2012': Assume Visual Studio 2010. -->
     <VisualStudioVersion>10.0</VisualStudioVersion>
