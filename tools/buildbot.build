@@ -12,15 +12,6 @@
   </if>
   
   <target name="prepare">
-    <exec program="svn.exe" output=".svn-info"><arg line="info . --xml" /></exec>
-    <xmlpeek file=".svn-info" xpath="/info/entry/url" property="svn_url" />
-    <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="svn_rev" />
-    <exec program="svn.exe">
-      <arg line="checkout ${svn_url}" unless="${directory::exists('v40')}" />
-      <arg line="update"                  if="${directory::exists('v40')}" />
-      <arg line="-r ${svn_rev} v40/" />      
-    </exec>
-    
     <delete dir="release" if="${directory::exists('release')}" />
     <mkdir dir="release" />
     
