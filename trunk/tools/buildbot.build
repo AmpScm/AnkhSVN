@@ -23,6 +23,10 @@
     
     <delete dir="release" if="${directory::exists('release')}" />
     <mkdir dir="release" />
+    
+    <exec program="svn.exe" output=".svn-info"><arg line="info src --xml" /></exec>
+    <xmlpeek file=".svn-info" xpath="/info/entry/commit/@revision" property="imports-rev" />
+    <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="checkout-rev" />    
 
     <echo append="false" file="msbuildprops.txt">/P:AnnotatePdbFile=true
 /P:ForceAssemblyCopyright="Copyright (c) 2003-${datetime::get-year(datetime::now())} The AnkhSVN Project. This code and its source is licensed under the Apache 2.0 license. Check http://ankhsvn.net/ for details."
