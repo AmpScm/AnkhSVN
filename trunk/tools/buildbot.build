@@ -76,7 +76,7 @@
         <fileset basedir="src">
           <include name="Ankh*/bin/release/*.pdb" />
         </fileset>
-      <zip>
+      </zip>
     </if>
     
     <exec program="${sevenZipExe}">
