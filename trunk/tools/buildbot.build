@@ -40,6 +40,8 @@
   </target>
   
   <target name="package" if="${property::exists('CCNetNumericLabel')}">
+    <property name="artifactLabel" value="${CCNetNumericLabel}" />
+    
     <if test="${file::exists('release/ver.txt')}">
       <loadfile file="release/ver.txt" property="ankhVersion" />
       <copy file="src/Ankh.Votive/bin/Release/AnkhSvn.msi"
@@ -59,17 +61,19 @@
           <include name="Ankh*/bin/release/*.pdb" />
         </fileset>
       </zip>
+      
+      <property name="artifactLabel" value="${ankhVersion}" />
     </if>
     
     <exec program="${sevenZipExe}">
       <arg line="a -y" />
-      <arg value="release\${CCNetProject}-${CCNetNumericLabel}.7z" />
+      <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
       <arg value="release" />
     </exec>
       
-    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${CCNetNumericLabel}.7z" />
-    <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${CCNetNumericLabel}.7z"  />
-    <echo  file="D:\artifacts\${CCNetProject}\_last.txt" message="${CCNetProject}-${CCNetNumericLabel}.7z" />
+    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${artifactLabel}.7z" />
+    <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${artifactLabel}.7z"  />
+    <echo  file="D:\artifacts\${CCNetProject}\_last.txt" message="${CCNetProject}-${artifactLabel}.7z" />
   </target>
   
   <mkdir dir="D:\artifacts\${CCNetProject}" />
