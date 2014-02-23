@@ -54,7 +54,7 @@
         <arg value="release/AnkhSvn-${ankhVersion}.msi" />
       </exec>
       
-      <zip zipfile="release/AnkhSvn-${ankhVersion}-Symbols.zip" flatten="true">
+      <zip zipfile="release/AnkhSvn-${ankhVersion}-Symbols.zip" flatten="true" duplicate="preserve">
         <fileset basedir="src">
           <include name="Ankh*/bin/release/*.pdb" />
         </fileset>
