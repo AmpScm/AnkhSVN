@@ -2,21 +2,20 @@
 <project basedir=".." default="build">
   <!-- This nant script is used by the SharpSvn buildbot -->
   
-  <property name="programfilesX86" value="C:\Program Files (x86)" overwrite="false" />
-  <property name="nantExe" value="${assembly::get-location(nant::get-assembly())}" />
-  <property name="sevenZipExe" value="${path::combine(assembly::get-location(nant::get-assembly()), '../7z.exe')}" />
-  <property name="buildImports" value="true" overwrite="false" />
-  
   <if test="${property::exists('build.include')}">
     <include buildfile="${build.include}" />
   </if>
+
+  <property name="programfilesX86" value="C:\Program Files (x86)" overwrite="false" />
+  <property name="nantExe" value="${assembly::get-location(nant::get-assembly())}" overwrite="false" />
+  <property name="sevenZipExe" value="7z.exe" overwrite="false" />
+  <property name="signtoolExe" value="" overwrite="false" />
   
   <target name="prepare">
     <delete dir="release" if="${directory::exists('release')}" />
     <mkdir dir="release" />
     
     <exec program="svn.exe" output=".svn-info"><arg line="info src --xml" /></exec>
-    <xmlpeek file=".svn-info" xpath="/info/entry/commit/@revision" property="imports-rev" />
     <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="checkout-rev" />    
 
     <property name="versionBase" value="" />
@@ -25,30 +24,12 @@
 
     <echo append="false" file="msbuildprops.txt">/P:AnnotatePdbFile=true
 /P:ForceAssemblyCopyright="Copyright (c) 2003-${datetime::get-year(datetime::now())} The AnkhSVN Project. This code and its source is licensed under the Apache 2.0 license. Check http://ankhsvn.net/ for details."
-/P:ForceAssemblyCompany="AnkhSVN - http://ankhvn.net/"
+/P:ForceAssemblyCompany="AnkhSVN Project - http://ankhsvn.net/"
 /P:ForceAssemblyProduct="AnkhSVN - Apache Subversion support for Visual Studio"
 </echo>
     <if test="${property::exists('CCNetNumericLabel')}">
       <echo append="true" file="msbuildprops.txt">/P:ForceAssemblyVersion="${versionBase}.${checkout-rev}.${CCNetNumericLabel}"
 </echo>
-
-      <echo file="release\_${versionBase}.${checkout-rev}.${CCNetNumericLabel}_.txt">${versionBase}.${checkout-rev}.${CCNetNumericLabel}</echo>
-      <echo file="release\ver.txt" message="${versionBase}.${checkout-rev}.${CCNetNumericLabel}" />
-    </if>    
-
-    <echo append="false" file="msbuildprops.txt">/P:AnnotatePdbFile=true
-/P:ForceAssemblyCopyright="Copyright (c) 2003-${datetime::get-year(datetime::now())} The AnkhSVN Project. This code and its source is licensed under the Apache 2.0 license. Check http://ankhsvn.net/ for details."
-/P:ForceAssemblyCompany="AnkhSVN - http://ankhvn.net/"
-/P:ForceAssemblyProduct="AnkhSVN - Apache Subversion support for Visual Studio"
-</echo>
-    <if test="${property::exists('CCNetNumericLabel')}">
-      <echo append="true" file="msbuildprops.txt">/P:ForceAssemblyVersion="${versionBase}.${checkout-rev}.${CCNetNumericLabel}"
-/P:SolutionDefineConstants="ankhVersion=${versionBase}.${checkout-rev}.${CCNetNumericLabel}"
-</echo>
-
-      <property name="versionBase" value="" />
-      <property name="versionBase" value="${string::replace(string::replace(build.branch, 'v', ''), '.x', '.')}" 
-                if="${property::exists('build.branch')}" />
 
       <echo file="release\_${versionBase}.${checkout-rev}.${CCNetNumericLabel}_.txt">${versionBase}.${checkout-rev}.${CCNetNumericLabel}</echo>
       <echo file="release\ver.txt" message="${versionBase}.${checkout-rev}.${CCNetNumericLabel}" />
@@ -59,6 +40,40 @@
   </target>
   
   <target name="package" if="${property::exists('CCNetNumericLabel')}">
+    <property name="artifactLabel" value="${CCNetNumericLabel}" />
+    
+    <if test="${file::exists('release/ver.txt')}">
+      <loadfile file="release/ver.txt" property="ankhVersion" />
+      <copy file="src/Ankh.Votive/bin/Release/AnkhSvn.msi"
+          tofile="release/AnkhSvn-${ankhVersion}.msi" />
+
+      <exec program="${signtoolExe}" if="${signtoolExe != ''}">
+        <arg line='sign /v /n "Open Source"' />
+        <arg line='/du http://ankhsvn.open.collab.net/' />
+        <arg line='/d' />
+        <arg value="AnkhSVN ${ankhVersion}" />
+        <arg line='/t http://timestamp.certum.pl/authenticode' />
+        <arg value="release/AnkhSvn-${ankhVersion}.msi" />
+      </exec>
+      
+      <zip zipfile="release/AnkhSvn-${ankhVersion}-Symbols.zip" flatten="true" duplicate="preserve">
+        <fileset basedir="src">
+          <include name="Ankh*/bin/release/*.pdb" />
+        </fileset>
+      </zip>
+      
+      <property name="artifactLabel" value="${ankhVersion}" />
+    </if>
+    
+    <exec program="${sevenZipExe}">
+      <arg line="a -y" />
+      <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
+      <arg value="release" />
+    </exec>
+      
+    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${artifactLabel}.7z" />
+    <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${artifactLabel}.7z"  />
+    <echo  file="D:\artifacts\${CCNetProject}\_last.txt" message="${CCNetProject}-${artifactLabel}.7z" />
   </target>
   
   <mkdir dir="D:\artifacts\${CCNetProject}" />
