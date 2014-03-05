@@ -235,15 +235,12 @@ namespace Ankh.Services
                             if (sessionUri.AbsolutePath.StartsWith(reposUri.AbsolutePath, StringComparison.Ordinal))
                             {
                                 reuse = rs;
-                                break;
                             }
                         }
                     }
 
                     if (reuse != null)
-                    {
                         _remoteSessions.Remove(reuse);
-                    }
                 }
             }
 
@@ -257,9 +254,7 @@ namespace Ankh.Services
                         rca.ThrowOnError = false;
 
                         if (!reuse.Reparent(sessionUri, rca))
-                        {
                             reuse = null;
-                        }
                     }
                 }
 
