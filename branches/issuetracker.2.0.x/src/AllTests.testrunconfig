@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<TestRunConfiguration name="IntegrationTests" id="0af6b64c-46e5-4d20-a1b5-4d2a86380e98" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2006">
-  <Description>This is a default test run configuration for a local test run.</Description>
-  <Hosts>
-    <VSSDKTestHostRunConfig name="VS IDE" HiveName="9.0Exp" IsRANU="true" xmlns="http://microsoft.com/schemas/VisualStudio/SDK/Tools/IdeHostAdapter/2006/06" />
-  </Hosts>
-  <Deployment enabled="false" />
-  <TestTypeSpecific />
-</TestRunConfiguration>
