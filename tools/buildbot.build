@@ -29,6 +29,8 @@
 /P:RegisterOutputPackage=false
 /P:DeployExtension=false
 /P:DistBuild=true
+/P:Configuration=ReleaseMSI
+/P:Platform=x86
 /P:WpfRegPkg="${VS2010SDKDIR}\VisualStudioIntegration\Tools\Bin\RegPkg.exe"
 </echo>
     <if test="${property::exists('CCNetNumericLabel')}">
