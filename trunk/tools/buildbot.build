@@ -71,37 +71,39 @@
       
       <property name="artifactLabel" value="${ankhVersion}" />
       
-      <exec program="CollabUpload.exe" if="${property::exists('collabUploadCredentials')}">
-        <arg line="${collabUploadCredentials}" />
-        <arg line="--site https://ankhsvn.open.collab.net" />
-        <arg line="--max-uploads 30" />
-        <arg line="--keep 28.0:00" />
-        <!--arg line="- -result resulting.uri" /-->
+      <if test="${property::exists('collabUploadCredentials') and property::exists('collabUploadExe')}">
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://ankhsvn.open.collab.net" />
+          <arg line="--max-uploads 30" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 707" />
+          
+          <arg value="--name" />
+            <arg value="AnkhSVN-${artifactLabel}-Daily.msi" />
+          <arg value="--description" />
+            <arg value="Build ${artifactLabel} MSI" />
+          <arg value="release/AnkhSvn-${ankhVersion}.msi" />
+        </exec>
         
-        <arg line="--folder 707" />
-        
-        <arg value="--name" />
-          <arg value="AnkhSVN-${artifactLabel}-Daily.msi" />
-        <arg value="--description" />
-          <arg value="Build ${artifactLabel} MSI" />
-        <arg value="release/AnkhSvn-${ankhVersion}.msi" />
-      </exec>
-      
-      <exec program="CollabUpload.exe" if="${property::exists('collabUploadCredentials')}">
-        <arg line="${collabUploadCredentials}" />
-        <arg line="--site https://ankhsvn.open.collab.net" />
-        <arg line="--max-uploads 30" />
-        <arg line="--keep 28.0:00" />
-        <!--arg line="- -result resulting.uri" /-->
-        
-        <arg line="--folder 708" />
-        
-        <arg value="--name" />
-          <arg value="AnkhSVN-${artifactLabel}-Symbols.zip" />
-        <arg value="--description" />
-          <arg value="Build ${artifactLabel} MSI" />
-        <arg value="release/AnkhSvn-${ankhVersion}-Symbols.zip" />
-      </exec>
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://ankhsvn.open.collab.net" />
+          <arg line="--max-uploads 30" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 708" />
+          
+          <arg value="--name" />
+            <arg value="AnkhSVN-${artifactLabel}-Symbols.zip" />
+          <arg value="--description" />
+            <arg value="Build ${artifactLabel} MSI" />
+          <arg value="release/AnkhSvn-${ankhVersion}-Symbols.zip" />
+        </exec>
+      </if>
     </if>
 
     <if test="${property::exists('artifactBase')}">    
