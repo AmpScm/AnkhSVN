@@ -70,20 +70,56 @@
       </zip>
       
       <property name="artifactLabel" value="${ankhVersion}" />
-    </if>
-    
-    <exec program="${sevenZipExe}">
-      <arg line="a -y" />
-      <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
-      <arg value="release" />
-    </exec>
       
-    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${artifactLabel}.7z" />
-    <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${artifactLabel}.7z"  />
-    <echo  file="D:\artifacts\${CCNetProject}\_last.txt" message="${CCNetProject}-${artifactLabel}.7z" />
-  </target>
+      <if test="${property::exists('collabUploadCredentials') and property::exists('collabUploadExe')}">
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://ankhsvn.open.collab.net" />
+          <arg line="--max-uploads 30" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 562" />
+          
+          <arg value="--name" />
+            <arg value="AnkhSVN-${artifactLabel}-Daily.msi" />
+          <arg value="--description" />
+            <arg value="Build ${artifactLabel} MSI" />
+          <arg value="release/AnkhSvn-${ankhVersion}.msi" />
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://ankhsvn.open.collab.net" />
+          <arg line="--max-uploads 30" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 563" />
+          
+          <arg value="--name" />
+            <arg value="AnkhSVN-${artifactLabel}-Symbols.zip" />
+          <arg value="--description" />
+            <arg value="Build ${artifactLabel} MSI" />
+          <arg value="release/AnkhSvn-${ankhVersion}-Symbols.zip" />
+        </exec>
+      </if>
+    </if>
+
+    <if test="${property::exists('artifactBase')}">    
+      <exec program="${sevenZipExe}">
+        <arg line="a -y" />
+        <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
+        <arg value="release" />
+      </exec>
   
-  <mkdir dir="D:\artifacts\${CCNetProject}" />
+      <mkdir dir="D:\artifacts\${CCNetProject}" />      
+      <delete file="${artifactBase}\${CCNetProject}\${CCNetProject}-${artifactLabel}.7z" />
+      <move todir="${artifactBase}\${CCNetProject}" file="release\${CCNetProject}-${artifactLabel}.7z"  />
+      <echo  file="${artifactBase}\${CCNetProject}\_last.txt" message="${CCNetProject}-${artifactLabel}.7z" />
+    </if>
+  </target>
+    
   <target name="buildbot-build" depends="build"></target>
   <target name="buildbot-package" depends="build,package"></target>
 </project>
