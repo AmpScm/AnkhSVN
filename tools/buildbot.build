@@ -76,7 +76,7 @@
         <arg line="--site https://ankhsvn.open.collab.net" />
         <arg line="--max-uploads 30" />
         <arg line="--keep 28.0:00" />
-        <!--arg line="--result resulting.uri" /-->
+        <!--arg line="- -result resulting.uri" /-->
         
         <arg line="--folder 707" />
         
