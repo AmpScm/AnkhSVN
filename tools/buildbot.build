@@ -81,8 +81,6 @@
           
           <arg line="--folder 707" />
           
-          <arg value="--name" />
-            <arg value="AnkhSVN-${artifactLabel}-Daily.msi" />
           <arg value="--description" />
             <arg value="Build ${artifactLabel} MSI" />
           <arg value="release/AnkhSvn-${ankhVersion}.msi" />
@@ -97,10 +95,8 @@
           
           <arg line="--folder 708" />
           
-          <arg value="--name" />
-            <arg value="AnkhSVN-${artifactLabel}-Symbols.zip" />
           <arg value="--description" />
-            <arg value="Build ${artifactLabel} MSI" />
+            <arg value="Build ${artifactLabel} Symbols" />
           <arg value="release/AnkhSvn-${ankhVersion}-Symbols.zip" />
         </exec>
       </if>
