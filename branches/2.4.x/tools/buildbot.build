@@ -26,6 +26,7 @@
 /P:ForceAssemblyCopyright="Copyright (c) 2003-${datetime::get-year(datetime::now())} The AnkhSVN Project. This code and its source is licensed under the Apache 2.0 license. Check http://ankhsvn.net/ for details."
 /P:ForceAssemblyCompany="AnkhSVN Project - http://ankhsvn.net/"
 /P:ForceAssemblyProduct="AnkhSVN - Apache Subversion support for Visual Studio"
+/P:ForceAssemblyConfiguration="Release"
 /P:RegisterOutputPackage=false
 /P:DeployExtension=false
 /P:DistBuild=true
