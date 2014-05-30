@@ -56,6 +56,13 @@ namespace Ankh.VS.Services
             get { return _tempPath ?? (_tempPath = SvnTools.GetNormalizedFullPath(Path.GetTempPath())); }
         }
 
+        const uint VSDIFFOPT_DoNotShow                 = 0x00000001;   //Do not show the comparison window after creating it.
+        const uint VSDIFFOPT_DetectBinaryFiles         = 0x00000002;   //Display a dialog box if attempting to compare binary files (and return success).
+        const uint VSDIFFOPT_PromptForEncodingForLeft  = 0x00000004;   //Prompt the user for the encoding of the left file.
+        const uint VSDIFFOPT_PromptForEncodingForRight = 0x00000008;   //Prompt the user for the encoding of the right file.
+        const uint VSDIFFOPT_LeftFileIsTemporary       = 0x00000010;   //The left file is a temporary file explicitly created for diff.
+        const uint VSDIFFOPT_RightFileIsTemporary      = 0x00000020;   //The right file is a temporary file explicitly created for diff.
+
         delegate IVsWindowFrame OpenComparisonWindow2([In] string leftFileMoniker, [In] string rightFileMoniker, [In] string caption, [In] string Tooltip, [In] string leftLabel, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string rightLabel, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string inlineLabel, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string roles, [In] uint grfDiffOptions);
         OpenComparisonWindow2 _ocw2;
         public bool RunDiff(AnkhDiffArgs args)
@@ -71,14 +78,14 @@ namespace Ankh.VS.Services
             if (_ocw2 == null)
                 return false;
 
-            uint flags = 0;
+            uint flags = VSDIFFOPT_DetectBinaryFiles;
 
             if (TempPath != null)
             {
                 if (SvnItem.IsBelowRoot(args.BaseFile, TempPath))
-                    flags |= 0x00000010; // VSDIFFOPT_LeftFileIsTemporary
+                    flags |= VSDIFFOPT_LeftFileIsTemporary;
                 if (SvnItem.IsBelowRoot(args.MineFile, TempPath))
-                    flags |= 0x00000020; // VSDIFFOPT_RightFileIsTemporary
+                    flags |= VSDIFFOPT_RightFileIsTemporary;
             }
 
             IVsWindowFrame frame = _ocw2(args.BaseFile, args.MineFile, args.Caption ?? args.MineTitle, "", args.BaseTitle, args.MineTitle, args.Label ?? "", null, flags);
