@@ -139,11 +139,11 @@
           <Directory Name="2.X" Id="ANKHSVN_EXTENSION_VS14">
             <Component Id="C_Reg14" Guid="44B5A9BC-A2C2-434E-9B73-082DD3B95F6E">
               <Condition>VS14DEVENV</Condition>
-              <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS14.0-Info" Value="[ANKHSVN_EXTENSION_2013]" Type="string" KeyPath="yes" />
-              <CopyFile Id="Vsix_Mnf_14.0" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
-              <CopyFile Id="Vsix_Lic_14.0" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
-              <CopyFile Id="Vsix_Ico_14.0" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
-              <CopyFile Id="Vsix_Pvw_14.0" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
+              <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS14.0-Info" Value="[ANKHSVN_EXTENSION_VS14]" Type="string" KeyPath="yes" />
+              <CopyFile Id="Vsix_Mnf_14.0" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_VS14" />
+              <CopyFile Id="Vsix_Lic_14.0" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_VS14" />
+              <CopyFile Id="Vsix_Ico_14.0" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_VS14" />
+              <CopyFile Id="Vsix_Pvw_14.0" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_VS14" />
             </Component>
           </Directory>
         </Directory>
