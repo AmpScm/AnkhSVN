@@ -272,8 +272,7 @@ namespace Ankh.UI.IssueTracker
                 if (window != null)
                 {
                     IntPtr handle = window.Handle;
-                    if (handle != null
-                        && handle != IntPtr.Zero)
+                    if (handle != IntPtr.Zero)
                     {
                         result = Control.FromHandle(window.Handle);
                     }
