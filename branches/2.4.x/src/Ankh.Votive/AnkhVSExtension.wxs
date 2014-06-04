@@ -171,4 +171,83 @@
       </RegistrySearch>
     </Property>
   </Fragment>
+
+  <Fragment>
+    <CustomAction Id="AnkhVS14Setup" Property="VS14DEVENV" ExeCommand="/setup /NoSetupVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
+    <PropertyRef Id="VS14DEVENV" />
+
+    <DirectoryRef Id="APP_bin">
+      <Component Id="VS140_Tick" Guid="10088BAD-1DFA-4952-9C59-8CD850028F43">
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\VS-Setup" Name="14.0" Value="1" KeyPath="yes" Type="integer" />
+      </Component>
+    </DirectoryRef>
+
+    <ComponentGroup Id="Tick_VS140">
+      <ComponentRef Id="VS140_Tick"/>
+    </ComponentGroup>
+
+    <Property Id="VS140_TICKED" Secure="yes">
+      <RegistrySearch Id="VS140_TickSearch" Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\VS-Setup" Name="14.0" Type="raw" />
+    </Property>
+
+    <InstallExecuteSequence>
+      <Custom Action="AnkhVS14Setup" Before="InstallFinalize" Overridable="yes">VS14DEVENV And ((Not UPGRADINGPRODUCTCODE) Or REINSTALL Or (Not VS140_TICKED))</Custom>
+    </InstallExecuteSequence>
+  </Fragment>
+
+  <!-- Visual Studio 14.0 -->
+  <Fragment>
+    <Property Id="VS14DEVENV" Secure="yes">
+      <RegistrySearch Id="VS14DevEnvSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\14.0\Setup\VS" Name="EnvironmentPath" Type="raw" />
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS14_ITEMTEMPLATES_DIR" Secure="yes">
+      <RegistrySearch Id="VS11DevEnvForItemTemplatesSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\14.0\Setup\VS" Name="EnvironmentPath" Type="raw">
+        <DirectorySearch Id="VS14ItemTemplatesPathSearch" Path="ItemTemplates" Depth="1" />
+      </RegistrySearch>
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS14_PROJECTTEMPLATES_DIR" Secure="yes">
+      <RegistrySearch Id="VS14DevEnvForProjectTemplatesSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\14.0\Setup\VS" Name="EnvironmentPath" Type="raw">
+        <DirectorySearch Id="VS14ProjectTemplatesPathSearch" Path="ProjectTemplates" Depth="1" />
+      </RegistrySearch>
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS14_SCHEMAS_DIR" Secure="yes">
+      <RegistrySearch Id="VS14ProductPathSearch" Root="HKLM" Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="14.0" Type="raw">
+        <DirectorySearch Id="VS14XmlPathSearch" Path="Xml" Depth="1">
+          <DirectorySearch Id="VS14XmlSchemasPathSearch" Path="Schemas" Depth="1" />
+        </DirectorySearch>
+      </RegistrySearch>
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <CustomAction Id="VS14Setup" Property="VS14DEVENV" ExeCommand="/setup" Execute="deferred" Return="ignore" Impersonate="no" />
+    <PropertyRef Id="VS14DEVENV" />
+
+    <InstallExecuteSequence>
+      <Custom Action="VS14Setup" Before="InstallFinalize" Overridable="yes">VS14DEVENV</Custom>
+    </InstallExecuteSequence>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS14_ROOT_FOLDER" Secure="yes">
+      <RegistrySearch Id="SearchForVS14RootPath" Root="HKLM" Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="14.0" Type="raw" />
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS14_EXTENSIONS_DIR" Secure="yes">
+      <RegistrySearch Id="VS14DevEnvForExtensionsSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\14.0\Setup\VS" Name="EnvironmentDirectory" Type="raw">
+        <DirectorySearch Id="VS14ExtensionsPathSearch" Path="Extensions" Depth="1" />
+      </RegistrySearch>
+    </Property>
+  </Fragment>
 </Wix>
