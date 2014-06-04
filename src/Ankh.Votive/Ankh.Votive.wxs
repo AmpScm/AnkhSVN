@@ -125,6 +125,20 @@
           </Directory>
         </Directory>
       </Directory>
+      <Directory Name="Extensions" Id="VS14_EXTENSIONS_DIR">
+        <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_VS14">
+          <Directory Name="2.X" Id="ANKHSVN_EXTENSION_VS14">
+            <Component Id="C_Reg14" Guid="44B5A9BC-A2C2-434E-9B73-082DD3B95F6E">
+              <Condition>VS14DEVENV</Condition>
+              <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS14.0-Info" Value="[ANKHSVN_EXTENSION_2013]" Type="string" KeyPath="yes" />
+              <CopyFile Id="Vsix_Mnf_14.0" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
+              <CopyFile Id="Vsix_Lic_14.0" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
+              <CopyFile Id="Vsix_Ico_14.0" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
+              <CopyFile Id="Vsix_Pvw_14.0" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
     </Directory>
     <!-- Make sure the packages are set up in The VS Environment -->
     <CustomActionRef Id="AnkhVS2005Setup" />
@@ -132,12 +146,14 @@
     <CustomActionRef Id="AnkhVS2010Setup" />
     <CustomActionRef Id="AnkhVS2012Setup" />
     <CustomActionRef Id="AnkhVS12.0Setup" />
+    <CustomActionRef Id="AnkhVS14Setup" />
     <UI>
       <ProgressText Action="AnkhVS2005Setup" Template="[1]">Updating Visual Studio 2005 registration</ProgressText>
       <ProgressText Action="AnkhVS2008Setup" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
       <ProgressText Action="AnkhVS2010Setup" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
       <ProgressText Action="AnkhVS2012Setup" Template="[1]">Updating Visual Studio 2012 registration</ProgressText>
       <ProgressText Action="AnkhVS12.0Setup" Template="[1]">Updating Visual Studio 12.0 registration</ProgressText>
+      <ProgressText Action="AnkhVS14Setup" Template="[1]">Updating Visual Studio "14" registration</ProgressText>
     </UI>
 
     <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
@@ -185,11 +201,17 @@
         <!-- VS2012+ allows binding redirects in the registry, so no Extension* -->
         <ComponentRef Id="C_Reg2012" />
       </Feature>
-      <Feature Id="RegVS12" Title="Register in Microsoft Visual Studio 12.0" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 12.0" Level="1" AllowAdvertise="no">
+      <Feature Id="RegVS12" Title="Register in Microsoft Visual Studio 2013" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2013" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg12.0" />
         <ComponentGroupRef Id="PkgWpfReg12.0" />
         <!-- VS2012+ allows binding redirects in the registry, so no Extension* -->
         <ComponentRef Id="C_Reg12.0" />
+      </Feature>
+      <Feature Id="RegVS14" Title="Register in Microsoft Visual Studio 14" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 14" Level="1" AllowAdvertise="no">
+        <ComponentGroupRef Id="PkgReg14.0" />
+        <ComponentGroupRef Id="PkgWpfReg14.0" />
+        <!-- VS2012+ allows binding redirects in the registry, so no Extension* -->
+        <ComponentRef Id="C_Reg14" />
       </Feature>
     </Feature>
   </Product>
