@@ -112,15 +112,15 @@
         </Directory>
       </Directory>
       <Directory Name="Extensions" Id="VS12_EXTENSIONS_DIR">
-        <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_12.0">
-          <Directory Name="2.X" Id="ANKHSVN_EXTENSION_12.0">
-            <Component Id="C_Reg12.0" Guid="D98F2A8C-3C9F-4291-AB4C-0CE74232CE38">
+        <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_2013">
+          <Directory Name="2.X" Id="ANKHSVN_EXTENSION_2013">
+            <Component Id="C_Reg2013" Guid="D98F2A8C-3C9F-4291-AB4C-0CE74232CE38">
               <Condition>VS12DEVENV</Condition>
-              <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS12.0-Info" Value="[ANKHSVN_EXTENSION_12.0]" Type="string" KeyPath="yes" />
-              <CopyFile Id="Vsix_Mnf_12.0" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_12.0" />
-              <CopyFile Id="Vsix_Lic_12.0" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_12.0" />
-              <CopyFile Id="Vsix_Ico_12.0" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_12.0" />
-              <CopyFile Id="Vsix_Pvw_12.0" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_12.0" />
+              <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS12.0-Info" Value="[ANKHSVN_EXTENSION_2013]" Type="string" KeyPath="yes" />
+              <CopyFile Id="Vsix_Mnf_12.0" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
+              <CopyFile Id="Vsix_Lic_12.0" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
+              <CopyFile Id="Vsix_Ico_12.0" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
+              <CopyFile Id="Vsix_Pvw_12.0" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
             </Component>
           </Directory>
         </Directory>
@@ -145,14 +145,14 @@
     <CustomActionRef Id="AnkhVS2008Setup" />
     <CustomActionRef Id="AnkhVS2010Setup" />
     <CustomActionRef Id="AnkhVS2012Setup" />
-    <CustomActionRef Id="AnkhVS12.0Setup" />
+    <CustomActionRef Id="AnkhVS2013Setup" />
     <CustomActionRef Id="AnkhVS14Setup" />
     <UI>
       <ProgressText Action="AnkhVS2005Setup" Template="[1]">Updating Visual Studio 2005 registration</ProgressText>
       <ProgressText Action="AnkhVS2008Setup" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
       <ProgressText Action="AnkhVS2010Setup" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
       <ProgressText Action="AnkhVS2012Setup" Template="[1]">Updating Visual Studio 2012 registration</ProgressText>
-      <ProgressText Action="AnkhVS12.0Setup" Template="[1]">Updating Visual Studio 12.0 registration</ProgressText>
+      <ProgressText Action="AnkhVS2013Setup" Template="[1]">Updating Visual Studio 2013 registration</ProgressText>
       <ProgressText Action="AnkhVS14Setup" Template="[1]">Updating Visual Studio "14" registration</ProgressText>
     </UI>
 
@@ -205,7 +205,7 @@
         <ComponentGroupRef Id="PkgReg12.0" />
         <ComponentGroupRef Id="PkgWpfReg12.0" />
         <!-- VS2012+ allows binding redirects in the registry, so no Extension* -->
-        <ComponentRef Id="C_Reg12.0" />
+        <ComponentRef Id="C_Reg2013" />
       </Feature>
       <Feature Id="RegVS14" Title="Register in Microsoft Visual Studio 14" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 14" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg14.0" />
