@@ -36,6 +36,9 @@
     <PropertyRef Id="VS12DEVENV" />
     <PropertyRef Id="VS12_EXTENSIONS_DIR" />
 
+    <PropertyRef Id="VS14DEVENV" />
+    <PropertyRef Id="VS14_EXTENSIONS_DIR" />
+
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="APPLICATIONFOLDER" Name="AnkhSVN 2">
