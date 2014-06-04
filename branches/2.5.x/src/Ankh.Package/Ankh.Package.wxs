@@ -52,9 +52,13 @@
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Pkg-VS2012" Value="1" Type="integer" KeyPath="yes" />
         <?include $(sys.SOURCEFILEDIR)obj\$(var.Ankh.Package.TargetName)-2012.wxi ?>
       </Component>
-    <Component Id="CR_Pkg_12.0" Guid="F0C52390-5EB8-4690-8013-36A197125AF1">
+      <Component Id="CR_Pkg_12.0" Guid="F0C52390-5EB8-4690-8013-36A197125AF1">
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Pkg-VS12.0" Value="1" Type="integer" KeyPath="yes" />
         <?include $(sys.SOURCEFILEDIR)obj\$(var.Ankh.Package.TargetName)-12.0.wxi ?>
+      </Component>
+      <Component Id="CR_Pkg_14.0" Guid="228BC0D6-983B-413F-B281-318143F355E6">
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Pkg-VS14.0" Value="1" Type="integer" KeyPath="yes" />
+        <?include $(sys.SOURCEFILEDIR)obj\$(var.Ankh.Package.TargetName)-14.0.wxi ?>
       </Component>
     </DirectoryRef>
     <ComponentGroup Id="PkgReg2005">
@@ -81,6 +85,11 @@
       <ComponentGroupRef Id="Ankh.Package" />
       <ComponentRef Id="CR_Pkg_12.0"/>
       <ComponentGroupRef Id="Tick_VS120"/>
+    </ComponentGroup>
+    <ComponentGroup Id="PkgReg14.0">
+      <ComponentGroupRef Id="Ankh.Package" />
+      <ComponentRef Id="CR_Pkg_14.0"/>
+      <ComponentGroupRef Id="Tick_VS140"/>
     </ComponentGroup>
   </Fragment>
 </Wix>
