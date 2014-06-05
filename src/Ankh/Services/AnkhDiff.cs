@@ -943,6 +943,7 @@ namespace Ankh.Services
                         SvnFileVersionsArgs ea = new SvnFileVersionsArgs();
                         ea.Start = from;
                         ea.End = to;
+                        ea.AddExpectedError(SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE); // Github
 
                         e.Client.FileVersions(target, ea,
                             delegate(object sender2, SvnFileVersionEventArgs e2)
