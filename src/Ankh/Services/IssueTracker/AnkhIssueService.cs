@@ -148,7 +148,8 @@ namespace Ankh.Services.IssueTracker
             // potentially triggers 
             // Issue Tracker Connector Package initialization
             IssueRepository repository = CurrentIssueRepository;
-            if (repository != null)
+            Regex issueIdRegex = repository == null ? null : repository.IssueIdRegex;
+            if (issueIdRegex != null)
                 markers = PerformRepositoryRegex(repository.IssueIdRegex, text);
             else
                 markers = GetIssuesFromCommitSettings(text);
