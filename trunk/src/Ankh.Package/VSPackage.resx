@@ -119,6 +119,11 @@
   </resheader>
   <data name="100" xml:space="preserve">
     <value>AnkhSVN - Subversion Support for Visual Studio</value>
+    <comment>SCC GUI Name</comment>
+  </data>
+  <data name="101" xml:space="preserve">
+    <value>AnkhSVN - Experimental Git Support for Visual Studio</value>
+    <comment>SCC GUI Name</comment>
   </data>
   <data name="106" xml:space="preserve">
     <value>Source Control</value>

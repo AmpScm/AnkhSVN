@@ -74,6 +74,13 @@ namespace Ankh
         /// <summary>Language neutral SCC Provider title</summary>
         public const string SccProviderTitle = "AnkhSVN - Subversion Support for Visual Studio";
 
+        /// <summary>The SCC Provider guid (used as SCC active marker by VS)</summary>
+        public const string GitSccProviderId = "e2d67382-8a13-44e0-a613-5d7d99701727";
+        /// <summary>The GUID of the SCC Service</summary>
+        public const string GitSccServiceId = "ea9a5772-42f4-48c1-94a9-5e1765bdef51";
+        /// <summary>Language neutral SCC Provider title</summary>
+        public const string GitSccProviderTitle = "AnkhSVN - Experimental Git Support for Visual Studio";
+
         //**********************************************************************************
 
         // Increase this value when you want to have AnkhCommand.MigrateSettings called on first use
