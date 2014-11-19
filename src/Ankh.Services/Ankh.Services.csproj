@@ -78,6 +78,7 @@
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
     <Compile Include="RepositoryProvider\IAnkhRepositoryProviderService.cs" />
+    <Compile Include="Scc\IAnkhGitSccService.cs" />
     <Compile Include="Scc\ISccHelper.cs" />
     <Compile Include="Selection\SvnHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
