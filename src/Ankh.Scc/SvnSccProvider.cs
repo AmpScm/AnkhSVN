@@ -37,7 +37,7 @@ namespace Ankh.Scc
     [GlobalService(typeof(SvnSccProvider))]
     [GlobalService(typeof(IAnkhSccService))]
     [GlobalService(typeof(ITheAnkhSvnSccProvider), true)]
-    partial class SvnSccProvider : AnkhService, ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService, IVsSccEnlistmentPathTranslation
+    partial class SvnSccProvider : SccProviderBase, ITheAnkhSvnSccProvider, IVsSccControlNewSolution, IAnkhSccService, IVsSccEnlistmentPathTranslation
     {
         bool _active;
         IFileStatusCache _statusCache;
@@ -103,7 +103,7 @@ namespace Ankh.Scc
         /// <returns>
         /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
         /// </returns>
-        public int AnyItemsUnderSourceControl(out int pfResult)
+        public override bool AnyItemsUnderSourceControl()
         {
             // Set pfResult to false when the solution can change to an other scc provider
             bool oneManaged = _active && IsSolutionManaged;
@@ -113,14 +113,11 @@ namespace Ankh.Scc
                 foreach (SccProjectData data in _projectMap.Values)
                 {
                     if (data.IsManaged)
-                    {
-                        oneManaged = true;
-                        break;
-                    }
+                        return true;
                 }
             }
-            pfResult = oneManaged ? 1 : 0;
-            return VSErr.S_OK;
+
+            return false;
         }
 
         /// <summary>
@@ -129,7 +126,7 @@ namespace Ankh.Scc
         /// <returns>
         /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
         /// </returns>
-        public int SetActive()
+        public override int SetActive()
         {
             _active = true;
 
@@ -170,7 +167,7 @@ namespace Ankh.Scc
         /// <returns>
         /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
         /// </returns>
-        public int SetInactive()
+        public override int SetInactive()
         {
             if (_active)
             {

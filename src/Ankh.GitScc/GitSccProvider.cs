@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.GitScc
 {
-    [GuidAttribute(AnkhId.SccServiceId), ComVisible(true), CLSCompliant(false)]
+    [GuidAttribute(AnkhId.GitSccServiceId), ComVisible(true), CLSCompliant(false)]
     public interface ITheAnkhGitSccProvider : IVsSccProvider
     {
     }
@@ -15,28 +15,38 @@ namespace Ankh.GitScc
     [GlobalService(typeof(GitSccProvider))]
     [GlobalService(typeof(IAnkhGitSccService))]
     [GlobalService(typeof(ITheAnkhGitSccProvider), true)]
-    partial class GitSccProvider : AnkhService, ITheAnkhGitSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhGitSccService, IVsSccEnlistmentPathTranslation
+    partial class GitSccProvider : SccProviderBase, ITheAnkhGitSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhGitSccService, IVsSccEnlistmentPathTranslation
     {
+        bool _active;
         public GitSccProvider(IAnkhServiceProvider context)
             : base(context)
         {
 
         }
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+        }
+
+        public override bool AnyItemsUnderSourceControl()
+        {
+            return false;
+        }
+
+        public override int SetActive()
+        {
+            _active = true;
+            return VSErr.S_OK;
+        }
+
+        public override int SetInactive()
+        {
+            _active = false;
+            return VSErr.S_OK;
+        }
+
         #region STUB
-        public int AnyItemsUnderSourceControl(out int pfResult)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int SetActive()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int SetInactive()
-        {
-            throw new NotImplementedException();
-        }
 
         public int AddNewSolutionToSourceControl()
         {

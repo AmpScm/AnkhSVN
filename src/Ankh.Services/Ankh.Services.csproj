@@ -80,6 +80,7 @@
     <Compile Include="RepositoryProvider\IAnkhRepositoryProviderService.cs" />
     <Compile Include="Scc\IAnkhGitSccService.cs" />
     <Compile Include="Scc\ISccHelper.cs" />
+    <Compile Include="Scc\SccProviderBase.cs" />
     <Compile Include="Selection\SvnHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
     <Compile Include="VSAssemblies.cs" />
