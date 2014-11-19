@@ -165,7 +165,7 @@
       <ProgressText Action="AnkhVS2010Setup" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
       <ProgressText Action="AnkhVS2012Setup" Template="[1]">Updating Visual Studio 2012 registration</ProgressText>
       <ProgressText Action="AnkhVS2013Setup" Template="[1]">Updating Visual Studio 2013 registration</ProgressText>
-      <ProgressText Action="AnkhVS14Setup" Template="[1]">Updating Visual Studio "14" registration</ProgressText>
+      <ProgressText Action="AnkhVS14Setup" Template="[1]">Updating Visual Studio 2015 registration</ProgressText>
     </UI>
 
     <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
@@ -219,7 +219,7 @@
         <!-- VS2012+ allows binding redirects in the registry, so no Extension* -->
         <ComponentRef Id="C_Reg2013" />
       </Feature>
-      <Feature Id="RegVS14" Title="Register in Microsoft Visual Studio 14" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 14" Level="1" AllowAdvertise="no">
+      <Feature Id="RegVS14" Title="Register in Microsoft Visual Studio 2015" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2015" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg14.0" />
         <ComponentGroupRef Id="PkgWpfReg14.0" />
         <!-- VS2012+ allows binding redirects in the registry, so no Extension* -->
