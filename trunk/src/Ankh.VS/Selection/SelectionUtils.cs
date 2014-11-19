@@ -120,15 +120,20 @@ namespace Ankh.VS.Selection
                 {
                     string mkDocument;
 
-                    if (VSErr.Succeeded(project.GetMkDocument(id, out mkDocument)))
+                    try
                     {
-                        if (!IsValidPath(mkDocument))
-                            files = new string[0];
-                        else
-                            files = new string[] { mkDocument };
+                        if (VSErr.Succeeded(project.GetMkDocument(id, out mkDocument)))
+                        {
+                            if (!IsValidPath(mkDocument))
+                                files = new string[0];
+                            else
+                                files = new string[] { mkDocument };
 
-                        return true;
+                            return true;
+                        }
                     }
+                    catch
+                    { }
 
                     return ok; // No need to check our interface for projects
                 }
