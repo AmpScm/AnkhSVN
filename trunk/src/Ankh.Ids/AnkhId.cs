@@ -53,6 +53,8 @@ namespace Ankh
         public const string SvnOriginName = "SvnOrigin";
         public const string SccTranslateStream = SubversionSccName + "_SccTranslate";
 
+        public const string GitSccName = "GitScc";
+
         // Items for the VS 2010 Extension registration
         public const string ExtensionTitle = AnkhId.AssemblyProduct;
         public const string ExtensionAuthor = AnkhId.AssemblyCompany;
