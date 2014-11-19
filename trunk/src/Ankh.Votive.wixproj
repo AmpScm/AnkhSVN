@@ -68,6 +68,7 @@
     <Compile Include="Ankh.Ids\Ankh.Ids.wxs" />
     <Compile Include="Ankh.Package\Ankh.Package.wxs" />
     <Compile Include="Ankh.Scc\Ankh.Scc.wxs" />
+    <Compile Include="Ankh.GitScc\Ankh.GitScc.wxs" />
     <Compile Include="Ankh.Services\Ankh.Services.wxs" />
     <Compile Include="Ankh.UI\Ankh.UI.wxs" />
     <Compile Include="Ankh.VS.Interop\Ankh.VS.Interop.wxs" />
@@ -83,6 +84,7 @@
     <Folder Include="Ankh.Diff\" />
     <Folder Include="Ankh.ExtensionPoints\" />
     <Folder Include="Ankh.Ids\" />
+    <Folder Include="Ankh.GitScc\" />
     <Folder Include="Ankh.Scc\" />
     <Folder Include="Ankh.Services\" />
     <Folder Include="Ankh.UI\" />
