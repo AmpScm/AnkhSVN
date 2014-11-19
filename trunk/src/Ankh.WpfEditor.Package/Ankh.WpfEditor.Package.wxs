@@ -14,19 +14,19 @@
       </Component>
       <Component Id="CR_PkgWpf_2010" Guid="C953E5E1-A952-4E15-A4A7-A6ACBE713FE6">
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="PkgWpf-VS2010" Value="1" Type="integer" KeyPath="yes" />
-        <?include $(sys.SOURCEFILEDIR)obj\Ankh.WpfEditor.Package-2010.wxi ?>
+        <?include $(sys.SOURCEFILEDIR)obj\$(var.Ankh.WpfEditor.Package.TargetName)-2010.wxi ?>
       </Component>
       <Component Id="CR_PkgWpf_2012" Guid="2A099799-8671-46F8-9A17-D7330976387A">
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="PkgWpf-VS2012" Value="1" Type="integer" KeyPath="yes" />
-        <?include $(sys.SOURCEFILEDIR)obj\Ankh.WpfEditor.Package-2012.wxi ?>
+        <?include $(sys.SOURCEFILEDIR)obj\$(var.Ankh.WpfEditor.Package.TargetName)-2012.wxi ?>
       </Component>
       <Component Id="CR_PkgWpf_12.0" Guid="825659C1-E8B0-4026-AE62-634E8A264883">
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="PkgWpf-VS12.0" Value="1" Type="integer" KeyPath="yes" />
-        <?include $(sys.SOURCEFILEDIR)obj\Ankh.WpfEditor.Package-12.0.wxi ?>
+        <?include $(sys.SOURCEFILEDIR)obj\$(var.Ankh.WpfEditor.Package.TargetName)-12.0.wxi ?>
       </Component>
       <Component Id="CR_PkgWpf_14.0" Guid="3C886FAF-B579-47FC-8DE5-5A9C9354DC33">
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="PkgWpf-VS14.0" Value="1" Type="integer" KeyPath="yes" />
-        <?include $(sys.SOURCEFILEDIR)obj\Ankh.WpfEditor.Package-14.0.wxi ?>
+        <?include $(sys.SOURCEFILEDIR)obj\$(var.Ankh.WpfEditor.Package.TargetName)-14.0.wxi ?>
       </Component>
     </DirectoryRef>
     <ComponentGroup Id="PkgWpfReg2010">
