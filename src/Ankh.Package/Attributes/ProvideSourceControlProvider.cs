@@ -32,6 +32,7 @@ namespace Ankh.VSPackage.Attributes
         readonly string _regName;
         readonly string _uiName;
         readonly Type _serviceType;
+        bool _setDefault;
 
         /// <summary>
         /// </summary>
@@ -76,6 +77,15 @@ namespace Ankh.VSPackage.Attributes
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public bool SetDefault
+        {
+            get { return _setDefault; }
+            set { _setDefault = value;  }
+        }
+
+        /// <summary>
         /// Get the guid of the provider's service
         /// </summary>
         public Guid SccProviderService
@@ -98,8 +108,8 @@ namespace Ankh.VSPackage.Attributes
             // and aditionally the packages implementing this provider
             using (Key sccProviders = context.CreateKey("SourceControlProviders"))
             {
-                // BH: Set ourselves as current default SCC Provider
-                sccProviders.SetValue("", RegGuid.ToString("B"));
+                if (SetDefault)
+                    sccProviders.SetValue("", RegGuid.ToString("B"));
 
                 using (Key sccProviderKey = sccProviders.CreateSubkey(RegGuid.ToString("B")))
                 {
