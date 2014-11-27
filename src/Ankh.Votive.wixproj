@@ -105,6 +105,12 @@
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
+    <ProjectReference Include="Ankh.GitScc\Ankh.GitScc.csproj">
+      <Name>Ankh.GitScc</Name>
+      <Project>{1d429fcf-3eab-4ba6-9982-d33f74a65efe}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+    </ProjectReference>
     <ProjectReference Include="Ankh.Ids\Ankh.Ids.csproj">
       <Name>Ankh.Ids</Name>
       <Project>{61d343cf-77ba-4ef2-96f5-e0d4efd04844}</Project>
