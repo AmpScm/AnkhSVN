@@ -6,7 +6,7 @@
       <ComponentGroupRef Id="Ankh.Services" />
       <ComponentRef Id="C_Ankh.GitScc.dll" />
     </ComponentGroup>
-    <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Scc.TargetDir)">
+    <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.GitScc.TargetDir)">
       <Component Id="C_Ankh.GitScc.dll" Guid="E184FCB5-6832-4F84-938C-D033D6121F66">
         <File Id="CF_Ankh.GitScc.dll" Name="Ankh.GitScc.dll" Checksum="yes" KeyPath="yes" />
       </Component>
