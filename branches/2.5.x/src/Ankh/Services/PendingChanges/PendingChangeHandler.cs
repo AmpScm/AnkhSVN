@@ -363,7 +363,11 @@ namespace Ankh.Services.PendingChanges
                     return false;
 
                 state.LogMessage = args.CommitMessage;
-                state.IssueText = null;
+                // BA: It is IssueRepository's responsibility to reset IssueText value to 
+                // 1) null : if IssueRepository populated log message with the issue numbers,
+                // 2) other: if the default AnkhSVN handling is desired (i.e. BugTraq settings).
+                // if the value is set to null, it is probably good idea to set SkipIssueVerify to true
+                state.IssueText = args.IssueText;
 
                 if (args.SkipIssueVerify)
                     state.SkipIssueVerify = true;
