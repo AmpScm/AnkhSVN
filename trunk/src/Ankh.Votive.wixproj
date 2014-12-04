@@ -41,7 +41,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <Cultures>en-US</Cultures>
-    <DefineConstants>SharpSvn_NoXml=yes;SharGit_NoXml=yes;SharpGit_NoSvnLicenses=yes</DefineConstants>
+    <DefineConstants>SharpSvn_NoXml=yes;SharpGit_NoXml=yes;SharpGit_NoSvnLicenses=yes</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
     <OutputPath>Ankh.Votive\bin\$(Configuration)\</OutputPath>
