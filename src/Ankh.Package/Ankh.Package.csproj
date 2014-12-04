@@ -82,6 +82,10 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0" Condition="'$(UseVsSdkVersion)' &gt;= '14.0'">
       <Visible>false</Visible>
     </Reference>
+    <Reference Include="SharpGit">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpGit\SharpGit.dll</HintPath>
+    </Reference>
     <Reference Include="SharpSvn">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>

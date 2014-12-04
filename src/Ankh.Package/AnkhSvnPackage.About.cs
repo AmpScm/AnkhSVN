@@ -25,6 +25,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
 using Ankh.Configuration;
 using Ankh.UI;
+using SharpGit;
 
 namespace Ankh.VSPackage
 {
@@ -127,15 +128,36 @@ namespace Ankh.VSPackage
                 UIVersion.ToString(),
                 PackageVersion.ToString(),
                 SvnClient.Version,
-                SvnClient.SharpSvnVersion);
+                SvnClient.SharpSvnVersion,
+                GitClient.Version,
+                GitClient.SharpGitVersion);
 
             sb.AppendLine();
             sb.AppendLine();
-            sb.Append(Resources.AboutLinkedTo);
+            sb.AppendFormat(Resources.AboutLinkedTo, "SharpSvn");
             foreach (SharpSvn.Implementation.SvnLibrary lib in SvnClient.SvnLibraries)
             {
-                if (!lib.DynamicallyLinked && !lib.Optional)
+                if (!lib.Optional)
                 {
+                    sb.AppendFormat("{0} {1}", lib.Name, lib.VersionString);
+                    sb.Append(", ");
+                }
+            }
+
+            sb.Length -= 2;
+            sb.AppendLine();
+
+            bool has = false;
+            foreach (SharpSvn.Implementation.SvnLibrary lib in SvnClient.SvnLibraries)
+            {
+                if (lib.Optional)
+                {
+                    if (!has)
+                    {
+                        has = true;
+                        sb.AppendFormat(Resources.AboutOptionallyLinkedTo, "SharpSvn");
+                    }
+
                     sb.AppendFormat("{0} {1}", lib.Name, lib.VersionString);
                     sb.Append(", ");
                 }
@@ -144,18 +166,12 @@ namespace Ankh.VSPackage
             sb.Length -= 2;
 
             sb.AppendLine();
-
-            bool has = false;
-            foreach (SharpSvn.Implementation.SvnLibrary lib in SvnClient.SvnLibraries)
+            sb.AppendLine();
+            sb.AppendFormat(Resources.AboutLinkedTo, "SharpGit");
+            foreach (SharpGit.Implementation.GitLibrary lib in GitClient.GitLibraries)
             {
-                if (lib.DynamicallyLinked && !lib.Optional)
+                if (!lib.Optional)
                 {
-                    if (!has)
-                    {
-                        has = true;
-                        sb.Append(Resources.AboutDynamicallyLinkedTo);
-                    }
-
                     sb.AppendFormat("{0} {1}", lib.Name, lib.VersionString);
                     sb.Append(", ");
                 }
@@ -165,14 +181,14 @@ namespace Ankh.VSPackage
             sb.AppendLine();
 
             has = false;
-            foreach (SharpSvn.Implementation.SvnLibrary lib in SvnClient.SvnLibraries)
+            foreach (SharpGit.Implementation.GitLibrary lib in GitClient.GitLibraries)
             {
                 if (lib.Optional)
                 {
                     if (!has)
                     {
                         has = true;
-                        sb.Append(Resources.AboutOptionallyLinkedTo);
+                        sb.AppendFormat(Resources.AboutOptionallyLinkedTo, "SharpGit");
                     }
 
                     sb.AppendFormat("{0} {1}", lib.Name, lib.VersionString);
