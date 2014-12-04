@@ -49,6 +49,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
     </Reference>
+    <Reference Include="SharpGit">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpGit\SharpGit.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -214,6 +218,12 @@
   <ItemGroup>
     <DependencyDownload Include="SSvn-1.8010.3368.58.zip">
       <Url>https://sharpsvn.open.collab.net/files/documents/180/9662/</Url>
+      <TargetDir>..\autolib</TargetDir>
+      <Version>1</Version>
+      <Visible>false</Visible>
+    </DependencyDownload>
+    <DependencyDownload Include="SGit-0.2102.1023.105.zip">
+      <Url>https://sharpsvn.open.collab.net/files/documents/180/9753/</Url>
       <TargetDir>..\autolib</TargetDir>
       <Version>1</Version>
       <Visible>false</Visible>
