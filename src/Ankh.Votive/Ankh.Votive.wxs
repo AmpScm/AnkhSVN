@@ -195,6 +195,7 @@
       <ComponentRef Id="C_VSIXMANIFEST10" />
       <ComponentRef Id="C_VSIXICO" />
       <ComponentRef Id="C_VSIXPREVIEW" />
+      <ComponentGroupRef Id="SharpGit_LICENSES" />
       <ComponentGroupRef Id="SharpSvn_LICENSES" />
       <MergeRef Id="CRT" />
       <MergeRef Id="CRT_Policy" />
