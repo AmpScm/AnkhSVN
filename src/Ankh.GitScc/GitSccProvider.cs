@@ -15,7 +15,7 @@ namespace Ankh.GitScc
     [GlobalService(typeof(GitSccProvider))]
     [GlobalService(typeof(IAnkhGitSccService))]
     [GlobalService(typeof(ITheAnkhGitSccProvider), true)]
-    partial class GitSccProvider : SccProviderBase, ITheAnkhGitSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhGitSccService, IVsSccEnlistmentPathTranslation
+    partial class GitSccProvider : SccProviderBase, ITheAnkhGitSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhGitSccService
     {
         bool _active;
         public GitSccProvider(IAnkhServiceProvider context)
@@ -60,14 +60,14 @@ namespace Ankh.GitScc
 
         public bool IsActive
         {
-            get { throw new NotImplementedException(); }
+            get { return _active; }
         }
 
         public bool IsSolutionDirty
         {
             get
             {
-                throw new NotImplementedException();
+                return false;
             }
             set
             {
@@ -146,16 +146,6 @@ namespace Ankh.GitScc
         }
 
         public void ProjectLoadFailed(string pszProjectMk)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int TranslateEnlistmentPathToProjectPath(string lpszEnlistmentPath, out string pbstrProjectPath)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
         {
             throw new NotImplementedException();
         }
