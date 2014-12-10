@@ -263,8 +263,8 @@
     <GroupRef id="guidSHLMainMenu:IDG_VS_WNDO_OTRWNDWS1">
       <ButtonRef id="Cmd_ShowPendingChanges" priority="0x800" />
       <Button id="Cmd_ShowSubversionInfo" name="ShowSubversionInfo" priority="0x801"
-                text="Sub&amp;version Info"
-                toolTip="Show the Subversion Info Window." defaultInvisible="true">
+                text="Source Control in&amp;fo"
+                toolTip="Show the Source Control Info Window." defaultInvisible="true">
       </Button>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_TOOLSB_NEWWINDOWS">
