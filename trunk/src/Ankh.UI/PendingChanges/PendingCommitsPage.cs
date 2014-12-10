@@ -31,7 +31,7 @@ using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges
 {
-    partial class PendingCommitsPage : PendingChangesPage, ILastChangeInfo
+    partial class PendingCommitsPage : PendingChangesPage
     {
         public PendingCommitsPage()
         {
@@ -70,7 +70,7 @@ namespace Ankh.UI.PendingChanges
                 pendingCommits.SetColumnWidths(widths);
             }
 
-            Context.GetService<IServiceContainer>().AddService(typeof(ILastChangeInfo), this);
+            Context.GetService<AnkhServiceEvents>().LastChanged += OnLastChanged;
 
             VSCommandHandler.Install(Context, this, new CommandID(VSConstants.VSStd2K, 1635 /* cmdidExploreFolderInWindows */), OnOpenFolder, OnUpdateOpenFolder);
 
@@ -455,14 +455,14 @@ namespace Ankh.UI.PendingChanges
 
         #region ILastChangeInfo Members
 
-        void ILastChangeInfo.SetLastChange(string caption, string value)
+        void OnLastChanged(object sender, LastChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(caption))
+            if (string.IsNullOrEmpty(e.Caption))
                 lastRevBox.Enabled = lastRevBox.Visible = lastRevLabel.Enabled = lastRevLabel.Visible = false;
             else
             {
-                lastRevLabel.Text = caption ?? "";
-                lastRevBox.Text = value ?? "";
+                lastRevLabel.Text = e.Caption ?? "";
+                lastRevBox.Text = e.Value ?? "";
 
                 lastRevBox.Enabled = lastRevBox.Visible = lastRevLabel.Enabled = lastRevLabel.Visible = true;
             }
