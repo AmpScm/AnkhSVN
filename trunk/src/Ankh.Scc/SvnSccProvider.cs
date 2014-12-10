@@ -73,13 +73,9 @@ namespace Ankh.Scc
                 };
         }
 
-        public void RegisterAsPrimarySccProvider()
+        protected override Guid ProviderGuid
         {
-            IVsRegisterScciProvider rscp = GetService<IVsRegisterScciProvider>();
-            if (rscp != null)
-            {
-                Marshal.ThrowExceptionForHR(rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid));
-            }
+            get { return AnkhId.SccProviderGuid; }
         }
 
         /// <summary>

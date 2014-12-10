@@ -28,5 +28,17 @@ namespace Ankh.Scc
         public abstract int SetActive();
 
         public abstract int SetInactive();
+
+
+        protected abstract Guid ProviderGuid {get;}
+
+        public void RegisterAsPrimarySccProvider()
+        {
+            IVsRegisterScciProvider rscp = GetService<IVsRegisterScciProvider>();
+            if (rscp == null)
+                return;
+
+            VSErr.ThrowOnFailure(rscp.RegisterSourceControlProvider(ProviderGuid));
+        }
     }
 }
