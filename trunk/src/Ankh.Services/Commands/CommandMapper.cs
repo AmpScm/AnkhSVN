@@ -55,7 +55,17 @@ namespace Ankh.Commands
 
             if (_map.TryGetValue(command, out item))
             {
-                if (!item.AlwaysAvailable && !States.SccProviderActive)
+                bool skip;
+                if ((item.Availability & CommandAvailability.AlwaysFlag) != 0)
+                    skip = false;
+                else if (((item.Availability & CommandAvailability.SvnActive) != 0) && States.SccProviderActive)
+                    skip = false;
+                else if (((item.Availability & CommandAvailability.GitActive) != 0) && States.GitSccProviderActive)
+                    skip = false;
+                else
+                    skip = true;
+
+                if (skip)
                     e.Enabled = false;
                 else
                     try
@@ -220,7 +230,7 @@ namespace Ankh.Commands
 
                     ICommandHandler instance = null;
 
-                    foreach (SvnCommandAttribute cmdAttr in type.GetCustomAttributes(typeof(CommandAttribute), false))
+                    foreach (CommandAttribute cmdAttr in type.GetCustomAttributes(typeof(CommandAttribute), false))
                     {
                         if (cmdAttr.Context != _commandContext || !cmdAttr.Applies())
                             continue;
@@ -251,7 +261,7 @@ namespace Ankh.Commands
                             Debug.Assert(item.ICommand == null || item.ICommand == instance, string.Format("No previous ICommand registered on the CommandMapItem for {0}", cmdAttr.Command));
 
                             item.ICommand = instance; // hooks all events via interface
-                            item.AlwaysAvailable = cmdAttr.AlwaysAvailable;
+                            item.Availability = cmdAttr.Availability;
                             item.HiddenWhenDisabled = cmdAttr.HideWhenDisabled;
                             item.HiddenWhenUnavailable = cmdAttr.HiddenWhenUnavailable;
                             item.CommandTarget = cmdAttr.CommandTarget;

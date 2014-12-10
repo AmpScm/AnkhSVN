@@ -21,22 +21,22 @@ using System.Text;
 namespace Ankh.Commands
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-    public sealed class SvnCommandAttribute : CommandAttribute
+    public sealed class GitCommandAttribute : CommandAttribute
     {
         /// <summary>
         /// Defines the class or function as a handler of the specified <see cref="AnkhCommand"/>
         /// </summary>
         /// <param name="command">The command.</param>
-        public SvnCommandAttribute(AnkhCommand command)
+        public GitCommandAttribute(AnkhCommand command)
             : base(command)
         {
-            Availability = CommandAvailability.SvnActive;
+            Availability = CommandAvailability.GitActive;
         }
 
-        public SvnCommandAttribute(AnkhCommand command, AnkhCommandContext context)
+        public GitCommandAttribute(AnkhCommand command, AnkhCommandContext context)
             : base(command, context)
         {
-            Availability = CommandAvailability.SvnActive;
+            Availability = CommandAvailability.GitActive;
         }
     }
 }

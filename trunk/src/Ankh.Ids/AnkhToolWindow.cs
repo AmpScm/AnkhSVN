@@ -28,6 +28,7 @@ namespace Ankh
         WorkingCopyExplorer,
         PendingChanges,
         Log,
-        SvnInfo
+        SvnInfo,
+        GitPendingChanges
     }
 }
