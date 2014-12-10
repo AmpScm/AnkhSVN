@@ -129,7 +129,8 @@ namespace Ankh
         public const string AnnotateContext = "61ade608-f2f9-4983-ae28-623de0dca5c6";
         public const string DynamicEditorId = "923f6990-98c1-4dd5-983e-25088c02975d";
 
-        public const string EnvironmentSettingsPageGuid = "f362b52e-e8f8-43de-a02d-5072a2a96e6a";
+        public const string SvnSettingsPageGuid = "f362b52e-e8f8-43de-a02d-5072a2a96e6a";
+        public const string GitSettingsPageGuid = "8eaf99ad-1496-4c6d-b1ba-45934c4975b0";
         public const string UserToolsSettingsPageGuid = "ae1a4db8-09c3-438d-93bd-0fe37412ce34";
         public const string IssueTrackerSettingsPageGuid = "363b3e68-ee94-403d-88ba-681a7cad247a";
 
