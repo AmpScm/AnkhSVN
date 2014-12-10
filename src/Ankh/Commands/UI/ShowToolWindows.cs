@@ -23,22 +23,12 @@ namespace Ankh.Commands.UI
     /// <summary>
     /// Command implementation of the show toolwindow commands
     /// </summary>
-    [SvnCommand(AnkhCommand.ShowPendingChanges)]
+    [SccCommand(AnkhCommand.ShowPendingChanges)]
     [SvnCommand(AnkhCommand.ShowWorkingCopyExplorer)]
-    [SvnCommand(AnkhCommand.ShowSubversionInfo)]
+    [SccCommand(AnkhCommand.ShowSubversionInfo)]
     [SvnCommand(AnkhCommand.ShowRepositoryExplorer, AlwaysAvailable=true)]
     class ShowToolWindows : CommandBase
     {
-        public override void OnUpdate(CommandUpdateEventArgs e)
-        {
-            switch (e.Command)
-            {
-                case AnkhCommand.ShowPendingChanges:
-                    if (!e.State.SccProviderActive)
-                        e.Visible = e.Enabled = false;
-                    break;
-            }
-        }
         public override void OnExecute(CommandEventArgs e)
         {
             IAnkhPackage package = e.Context.GetService<IAnkhPackage>();
@@ -47,7 +37,7 @@ namespace Ankh.Commands.UI
             switch (e.Command)
             {
                 case AnkhCommand.ShowPendingChanges:
-                    toolWindow = AnkhToolWindow.PendingChanges;
+                    toolWindow = e.State.GitSccProviderActive ? AnkhToolWindow.GitPendingChanges : AnkhToolWindow.PendingChanges;
                     break;
                 case AnkhCommand.ShowWorkingCopyExplorer:
                     toolWindow = AnkhToolWindow.WorkingCopyExplorer;

@@ -20,6 +20,18 @@ using System.Text;
 
 namespace Ankh.Commands
 {
+    [Flags]
+    public enum CommandAvailability
+    {
+        None,
+        SvnActive       = 0x01,
+        GitActive       = 0x02,
+
+        AlwaysFlag      = 0x800,
+        Always          = 0xFFFF
+    }
+
+
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class CommandAttribute : AnkhInstanceConditionalAttribute
     {
@@ -99,7 +111,7 @@ namespace Ankh.Commands
             set { _showWhenUnavailable = !value; }
         }
 
-        bool _alwaysAvailable;
+        CommandAvailability _availability;
 
         /// <summary>
         /// Gets or sets a boolean indicating whether this command might be enabled if AnkhSVN is not the current SCC provider
@@ -107,8 +119,23 @@ namespace Ankh.Commands
         /// <remarks>If set to false the command is disabled (and when <see cref="HideWhenDisabled"/> also hidden)</remarks>
         public bool AlwaysAvailable
         {
-            get { return _alwaysAvailable; }
-            set { _alwaysAvailable = value; }
+            get { return (_availability == CommandAvailability.Always); }
+            set
+            {
+                if (value)
+                    _availability = CommandAvailability.Always;
+                else if ((_availability & CommandAvailability.AlwaysFlag) != 0)
+                    throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public CommandAvailability Availability
+        {
+            get { return _availability; }
+            protected set { _availability = value; }
         }
 
         string _argumentDefinition;

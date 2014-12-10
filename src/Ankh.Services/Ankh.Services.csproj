@@ -68,6 +68,8 @@
     <Compile Include="Commands\AnkhAction.cs" />
     <Compile Include="Commands\CommandTarget.cs" />
     <Compile Include="Commands\CommandAttribute.cs" />
+    <Compile Include="Commands\SccCommandAttribute.cs" />
+    <Compile Include="Commands\GitCommandAttribute.cs" />
     <Compile Include="ContextServices\GuidUtils.cs" />
     <Compile Include="EnumHelpers.cs" />
     <Compile Include="GlobalServiceAttribute.cs" />

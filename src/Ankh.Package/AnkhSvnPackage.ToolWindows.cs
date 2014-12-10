@@ -45,11 +45,14 @@ namespace Ankh.VSPackage
     // user settings are persisted, etc.
     [ProvideToolWindow(typeof(WorkingCopyExplorerToolWindow), Style = VsDockStyle.MDI, Transient = true)]
     [ProvideToolWindow(typeof(RepositoryExplorerToolWindow), Style = VsDockStyle.MDI, Transient = true)]
-    [ProvideToolWindow(typeof(PendingChangesToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false, Window = ToolWindowGuids80.Outputwindow)]
+    [ProvideToolWindow(typeof(SvnPendingChangesToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false, Window = ToolWindowGuids80.Outputwindow)]
+    [ProvideToolWindow(typeof(GitPendingChangesToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false, Window = ToolWindowGuids80.Outputwindow)]
     [ProvideToolWindow(typeof(LogToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = true)]
     [ProvideToolWindow(typeof(SvnInfoToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Right, Transient = false, Window = ToolWindowGuids80.PropertiesWindow)]
-    [ProvideToolWindowVisibility(typeof(PendingChangesToolWindow), AnkhId.SccProviderId)]
+    [ProvideToolWindowVisibility(typeof(SvnPendingChangesToolWindow), AnkhId.SccProviderId)]
+    [ProvideToolWindowVisibility(typeof(GitPendingChangesToolWindow), AnkhId.GitSccProviderId)]
     [ProvideToolWindowVisibility(typeof(SvnInfoToolWindow), AnkhId.SccProviderId)]
+    [ProvideToolWindowVisibility(typeof(SvnInfoToolWindow), AnkhId.GitSccProviderId)]
     public partial class AnkhSvnPackage
     {
         public void ShowToolWindow(AnkhToolWindow window)
@@ -66,11 +69,13 @@ namespace Ankh.VSPackage
                 case AnkhToolWindow.WorkingCopyExplorer:
                     return typeof(WorkingCopyExplorerToolWindow);
                 case AnkhToolWindow.PendingChanges:
-                    return typeof(PendingChangesToolWindow);
+                    return typeof(SvnPendingChangesToolWindow);
                 case AnkhToolWindow.Log:
                     return typeof(LogToolWindow);
                 case AnkhToolWindow.SvnInfo:
                     return typeof(SvnInfoToolWindow);
+                case AnkhToolWindow.GitPendingChanges:
+                    return typeof(GitPendingChangesToolWindow);
                 default:
                     throw new ArgumentOutOfRangeException("toolWindow");
             }
@@ -622,15 +627,33 @@ namespace Ankh.VSPackage
     /// <summary>
     /// Wrapper for the Commit dialog in the Ankh assembly
     /// </summary>
-    [Guid(AnkhId.PendingChangesToolWindowId)]
-    class PendingChangesToolWindow : AnkhToolWindowPane
+    [Guid(AnkhId.SvnPendingChangesToolWindowId)]
+    class SvnPendingChangesToolWindow : AnkhToolWindowPane
     {
-        public PendingChangesToolWindow()
+        public SvnPendingChangesToolWindow()
         {
             Caption = Resources.PendingChangesToolWindowTitle;
             Control = new Ankh.UI.PendingChanges.PendingChangesToolControl();
 
             AnkhToolWindow = AnkhToolWindow.PendingChanges;
+
+            ToolBarId = AnkhToolBar.PendingChanges;
+            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+        }
+    }
+
+    /// <summary>
+    /// Wrapper for the Commit dialog in the Ankh assembly
+    /// </summary>
+    [Guid(AnkhId.GitPendingChangesToolWindowId)]
+    class GitPendingChangesToolWindow : AnkhToolWindowPane
+    {
+        public GitPendingChangesToolWindow()
+        {
+            Caption = Resources.PendingChangesToolWindowTitle;
+            Control = new Ankh.UI.PendingChanges.PendingChangesToolControl();
+
+            AnkhToolWindow = AnkhToolWindow.GitPendingChanges;
 
             ToolBarId = AnkhToolBar.PendingChanges;
             ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
