@@ -187,10 +187,13 @@
     <value>Settings for edditing .patch files</value>
   </data>
   <data name="108" xml:space="preserve">
-    <value>Subversion User Tools</value>
+    <value>AnkhSVN User Tools</value>
   </data>
   <data name="111" xml:space="preserve">
     <value>Subversion - AnkhSVN</value>
     <comment>Output Pane title</comment>
+  </data>
+  <data name="109" xml:space="preserve">
+    <value>Git Environment</value>
   </data>
 </root>
