@@ -208,10 +208,10 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            ILastChangeInfo ci = e.GetService<ILastChangeInfo>();
+            IAnkhServiceEvents ci = e.GetService<IAnkhServiceEvents>();
 
             if (ci != null)
-                ci.SetLastChange(null, null);
+                ci.OnLastChanged(new LastChangedEventArgs(null, null));
 
             SvnRevision rev;
             bool allowUnversionedObstructions = false;
@@ -404,7 +404,7 @@ namespace Ankh.Commands
 
                 if (ci != null && updateResult != null && IsSolutionCommand(e.Command))
                 {
-                    ci.SetLastChange("Updated to:", updateResult.Revision.ToString());
+                    ci.OnLastChanged(new LastChangedEventArgs(CommandStrings.UpdatedToTitle, updateResult.Revision.ToString()));
                 }
             }
         }

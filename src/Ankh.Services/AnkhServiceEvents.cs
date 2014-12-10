@@ -20,6 +20,27 @@ using System.Text;
 
 namespace Ankh
 {
+    public class LastChangedEventArgs : EventArgs
+    {
+        readonly string _caption;
+        readonly string _value;
+
+        public LastChangedEventArgs(string caption, string value)
+        {
+            _caption = caption;
+            _value = value;
+        }
+
+        public string Caption
+        {
+            get { return _caption; }
+        }
+
+        public string Value
+        {
+            get { return _value; }
+        }
+    }
     public interface IAnkhServiceEvents
     {
         /// <summary>
@@ -81,6 +102,12 @@ namespace Ankh
         /// </summary>
         /// <param name="e"></param>
         void OnThemeChanged(EventArgs e);
+
+        /// <summary>
+        /// Raises the <see cref="E:LastChanged"/> event.
+        /// </summary>
+        /// <param name="e"></param>
+        void OnLastChanged(LastChangedEventArgs e);
     }
 
     /// <summary>
@@ -146,6 +173,11 @@ namespace Ankh
         /// Raised when the Visual Studio or Windows theme changes
         /// </summary>
         public event EventHandler ThemeChanged;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public event EventHandler<LastChangedEventArgs> LastChanged;
 
         /// <summary>
         /// Raises the <see cref="E:RuntimeLoaded"/> event.
@@ -241,6 +273,12 @@ namespace Ankh
         {
             if (ThemeChanged != null)
                 ThemeChanged(this, e);
+        }
+
+        protected void OnLastChanged(LastChangedEventArgs e)
+        {
+            if (LastChanged != null)
+                LastChanged(this, e);
         }
 
         #region IAnkhServiceEvents Members
@@ -363,6 +401,23 @@ namespace Ankh
             try
             {
                 OnThemeChanged(e);
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
+
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
+                else
+                    throw;
+            }
+        }
+
+        void IAnkhServiceEvents.OnLastChanged(LastChangedEventArgs e)
+        {
+            try
+            {
+                OnLastChanged(e);
             }
             catch (Exception ex)
             {
