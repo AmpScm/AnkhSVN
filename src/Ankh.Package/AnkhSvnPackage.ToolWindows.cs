@@ -48,11 +48,11 @@ namespace Ankh.VSPackage
     [ProvideToolWindow(typeof(SvnPendingChangesToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false, Window = ToolWindowGuids80.Outputwindow)]
     [ProvideToolWindow(typeof(GitPendingChangesToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false, Window = ToolWindowGuids80.Outputwindow)]
     [ProvideToolWindow(typeof(LogToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = true)]
-    [ProvideToolWindow(typeof(SvnInfoToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Right, Transient = false, Window = ToolWindowGuids80.PropertiesWindow)]
+    [ProvideToolWindow(typeof(SccInfoToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Right, Transient = false, Window = ToolWindowGuids80.PropertiesWindow)]
     [ProvideToolWindowVisibility(typeof(SvnPendingChangesToolWindow), AnkhId.SccProviderId)]
     [ProvideToolWindowVisibility(typeof(GitPendingChangesToolWindow), AnkhId.GitSccProviderId)]
-    [ProvideToolWindowVisibility(typeof(SvnInfoToolWindow), AnkhId.SccProviderId)]
-    [ProvideToolWindowVisibility(typeof(SvnInfoToolWindow), AnkhId.GitSccProviderId)]
+    [ProvideToolWindowVisibility(typeof(SccInfoToolWindow), AnkhId.SccProviderId)]
+    [ProvideToolWindowVisibility(typeof(SccInfoToolWindow), AnkhId.GitSccProviderId)]
     public partial class AnkhSvnPackage
     {
         public void ShowToolWindow(AnkhToolWindow window)
@@ -73,7 +73,7 @@ namespace Ankh.VSPackage
                 case AnkhToolWindow.Log:
                     return typeof(LogToolWindow);
                 case AnkhToolWindow.SvnInfo:
-                    return typeof(SvnInfoToolWindow);
+                    return typeof(SccInfoToolWindow);
                 case AnkhToolWindow.GitPendingChanges:
                     return typeof(GitPendingChangesToolWindow);
                 default:
@@ -675,12 +675,12 @@ namespace Ankh.VSPackage
         }
     }
 
-    [Guid(AnkhId.SvnInfoToolWindowId)]
-    class SvnInfoToolWindow : AnkhToolWindowPane
+    [Guid(AnkhId.SccInfoToolWindowId)]
+    class SccInfoToolWindow : AnkhToolWindowPane
     {
-        public SvnInfoToolWindow()
+        public SccInfoToolWindow()
         {
-            Caption = Resources.SubversionInfoToolWindowTitle;
+            Caption = Resources.SccInfoToolWindowTitle;
             Control = new SvnInfoGridControl();
 
             AnkhToolWindow = AnkhToolWindow.SvnInfo;

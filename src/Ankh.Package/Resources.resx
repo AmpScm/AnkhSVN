@@ -156,8 +156,8 @@
   <data name="RepositoryExplorerToolWindowTitle" xml:space="preserve">
     <value>Repository Explorer</value>
   </data>
-  <data name="SubversionInfoToolWindowTitle" xml:space="preserve">
-    <value>Subversion Info</value>
+  <data name="SccInfoToolWindowTitle" xml:space="preserve">
+    <value>Source Control Info</value>
   </data>
   <data name="WorkingCopyExplorerToolWindowTitle" xml:space="preserve">
     <value>Working Copy Explorer</value>

@@ -172,11 +172,11 @@ namespace Ankh.VSPackage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subversion Info.
+        ///   Looks up a localized string similar to Source Control Info.
         /// </summary>
-        internal static string SubversionInfoToolWindowTitle {
+        internal static string SccInfoToolWindowTitle {
             get {
-                return ResourceManager.GetString("SubversionInfoToolWindowTitle", resourceCulture);
+                return ResourceManager.GetString("SccInfoToolWindowTitle", resourceCulture);
             }
         }
         
