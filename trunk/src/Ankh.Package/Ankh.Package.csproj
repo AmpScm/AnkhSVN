@@ -101,6 +101,9 @@
     <Compile Include="Attributes\ProvideAnkhExtensionRedirectAttribute.cs" />
     <Compile Include="Attributes\ProvideSourceControlCommand.cs" />
     <Compile Include="Attributes\ProvideThemeInformation.cs" />
+    <Compile Include="OptionPages\GitSettingsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -181,7 +184,7 @@
     <Compile Include="AnkhEditorFactories.cs" />
     <Compile Include="Attributes\ProvideOutputWindow.cs" />
     <Compile Include="Attributes\ProvideProjectTypeSettings.cs" />
-    <Compile Include="OptionPages\EnvironmentSettingsPage.cs">
+    <Compile Include="OptionPages\SvnSettingsPage.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="OptionPages\IssueTrackerPage.cs" />

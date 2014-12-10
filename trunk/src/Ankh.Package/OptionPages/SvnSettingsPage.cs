@@ -25,8 +25,8 @@ using Ankh.UI.OptionsPages;
 
 namespace Ankh.VSPackage
 {
-    [Guid(AnkhId.EnvironmentSettingsPageGuid)]
-    class EnvironmentSettingsPage : DialogPage
+    [Guid(AnkhId.SvnSettingsPageGuid)]
+    class SvnSettingsPage : DialogPage
     {
         EnvironmentSettingsControl _control;
         protected override System.Windows.Forms.IWin32Window Window
