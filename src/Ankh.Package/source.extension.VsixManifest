@@ -30,9 +30,14 @@
         <Edition>Premium</Edition>
         <Edition>Ultimate</Edition>
       </VisualStudio>
+      <VisualStudio Version="14.0">
+        <Edition>IntegratedShell</Edition>
+        <Edition>Pro</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Ultimate</Edition>
+      </VisualStudio>
     </SupportedProducts>
     <SupportedFrameworkRuntimeEdition MinVersion="2.0" MaxVersion="4.5" />
-    <AllUsers>true</AllUsers>
   </Identifier>
   <References />
   <Content>
