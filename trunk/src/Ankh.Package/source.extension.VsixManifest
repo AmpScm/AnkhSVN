@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Vsix Version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
   <Identifier Id="AnkhSVN.AnkhSVN.Package">
-    <Name>AnkhSVN</Name>
-    <Author>AnkhSVN Core Team</Author>
-    <Version>2.4</Version>
+    <Name>AnkhSVN.Package</Name>
+    <Author>AnkhSVN</Author>
+    <Version>2.6</Version>
     <Description xml:space="preserve">AnkhSVN - Subversion Support for Visual Studio</Description>
     <Locale>1033</Locale>
     <MoreInfoUrl>http://ankhsvn.net/</MoreInfoUrl>
@@ -24,7 +24,7 @@
         <Edition>Premium</Edition>
         <Edition>Ultimate</Edition>
       </VisualStudio>
-    <VisualStudio Version="12.0">
+      <VisualStudio Version="12.0">
         <Edition>IntegratedShell</Edition>
         <Edition>Pro</Edition>
         <Edition>Premium</Edition>
