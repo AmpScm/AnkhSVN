@@ -34,7 +34,6 @@ namespace Ankh.Scc
     [GlobalService(typeof(ITheAnkhSvnSccProvider), true)]
     partial class SvnSccProvider : SccProviderBase, ITheAnkhSvnSccProvider, IVsSccControlNewSolution, IAnkhSccService, IVsSccEnlistmentPathTranslation
     {
-        bool _active;
         IFileStatusCache _statusCache;
         IAnkhOpenDocumentTracker _documentTracker;
 
@@ -96,16 +95,17 @@ namespace Ankh.Scc
         /// </returns>
         public override bool AnyItemsUnderSourceControl()
         {
-            // Set pfResult to false when the solution can change to an other scc provider
-            bool oneManaged = _active && IsSolutionManaged;
+            if (!IsActive)
+                return false;
 
-            if (_active && !oneManaged)
+            // Return false when the solution can change to an other scc provider
+            if (IsSolutionManaged)
+                return true;
+            
+            foreach (SccProjectData data in _projectMap.Values)
             {
-                foreach (SccProjectData data in _projectMap.Values)
-                {
-                    if (data.IsManaged)
-                        return true;
-                }
+                if (data.IsManaged)
+                    return true;
             }
 
             return false;
@@ -117,52 +117,26 @@ namespace Ankh.Scc
         /// <returns>
         /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
         /// </returns>
-        public override int SetActive()
+        protected override void SetActive(bool active)
         {
-            _active = true;
+            base.SetActive(active);
 
-            // Send activate before scheduling glyphs to make sure the project data is
-            // loaded
-            GetService<IAnkhServiceEvents>().OnSccProviderActivated(EventArgs.Empty);
-
-            // Delayed flush all glyphs of all projects when a user enables us.
-
-            List<SvnProject> allProjects = new List<SvnProject>(GetAllProjects());
-            allProjects.Add(SvnProject.Solution);
-            Monitor.ScheduleGlyphOnlyUpdate(allProjects);
-
-            RegisterForSccCleanup();
-
-            IAnkhConfigurationService cfg = GetService<IAnkhConfigurationService>();
-            
-            if (cfg != null && !cfg.Instance.DontHookSolutionExplorerRefresh)
+            if (active)
             {
-                IAnkhGlobalCommandHook cmdHook = GetService<IAnkhGlobalCommandHook>();
+                // Send activate before scheduling glyphs to make sure the project data is
+                // loaded
+                GetService<IAnkhServiceEvents>().OnSccProviderActivated(EventArgs.Empty);
 
-                if (cmdHook != null)
-                    cmdHook.HookCommand(new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.SLNREFRESH),
-                                        OnSlnRefresh);
+                // Delayed flush all glyphs of all projects when a user enables us.
+
+                List<SvnProject> allProjects = new List<SvnProject>(GetAllProjects());
+                allProjects.Add(SvnProject.Solution);
+                Monitor.ScheduleGlyphOnlyUpdate(allProjects);
+
+                RegisterForSccCleanup();
             }
-
-            return VSErr.S_OK;
-        }
-
-        private void OnSlnRefresh(object sender, EventArgs e)
-        {
-            CommandService.PostExecCommand(AnkhCommand.Refresh);
-        }
-
-        /// <summary>
-        /// Called by environment to mark a particular source control package as inactive.
-        /// </summary>
-        /// <returns>
-        /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
-        /// </returns>
-        public override int SetInactive()
-        {
-            if (_active)
+            else
             {
-                _active = false;
                 // If VS asked us for custom glyphs, we can release the handle now
                 if (_glyphList != null)
                 {
@@ -183,17 +157,14 @@ namespace Ankh.Scc
                 _fileMap.Clear();
                 _unreloadable.Clear();
                 _sccExcluded.Clear();
+
+                GetService<IAnkhServiceEvents>().OnSccProviderDeactivated(EventArgs.Empty);
             }
+        }
 
-            GetService<IAnkhServiceEvents>().OnSccProviderDeactivated(EventArgs.Empty);
-
-            IAnkhGlobalCommandHook cmdHook = GetService<IAnkhGlobalCommandHook>();
-
-            if (cmdHook != null)
-                cmdHook.UnhookCommand(new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.SLNREFRESH),
-                                      OnSlnRefresh);
-
-            return VSErr.S_OK;
+        public override void OnSolutionRefreshCommand(EventArgs e)
+        {
+            CommandService.PostExecCommand(AnkhCommand.Refresh);
         }
 
         /// <summary>
@@ -253,14 +224,6 @@ namespace Ankh.Scc
             return VSErr.S_OK;
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the Ankh Scc service is active
-        /// </summary>
-        /// <value><c>true</c> if this instance is active; otherwise, <c>false</c>.</value>
-        public override bool IsActive
-        {
-            get { return _active; }
-        }
 
         #region // Obsolete Methods
         /// <summary>

@@ -23,6 +23,9 @@ using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
 
 using Ankh.Commands;
+using Ankh.Configuration;
+using Ankh.VS;
+using System.ComponentModel.Design;
 
 namespace Ankh.Scc
 {
@@ -181,7 +184,28 @@ namespace Ankh.Scc
                     Marshal.ThrowExceptionForHR(tracker.UnadviseTrackProjectDocumentsEvents(_projectCookie));
                     _hookedProjects = false;
                 }
+
+                IAnkhConfigurationService cfg = GetService<IAnkhConfigurationService>();
+
+                if (cfg != null && !cfg.Instance.DontHookSolutionExplorerRefresh)
+                {
+                    IAnkhGlobalCommandHook cmdHook = GetService<IAnkhGlobalCommandHook>();
+
+                    if (cmdHook != null)
+                    {
+                        CommandID slnRefresh = new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.SLNREFRESH);
+                        if (enableProjects)
+                            cmdHook.HookCommand(slnRefresh, OnSolutionRefreshCommand);
+                        else
+                            cmdHook.UnhookCommand(slnRefresh, OnSolutionRefreshCommand);
+                    }
+                }
             }
+        }
+
+        private void OnSolutionRefreshCommand(object sender, EventArgs e)
+        {
+            SccProvider.OnSolutionRefreshCommand(e);
         }
 
         IFileStatusCache StatusCache

@@ -201,7 +201,7 @@ namespace Ankh.Scc
             if (rgpszFullPaths == null || rgsiGlyphs == null)
                 return VSErr.E_POINTER; // Documented as impossible
 
-            if (!_active)
+            if (!IsActive)
             {
                 for (int i = 0; i < cFiles; i++)
                 {
