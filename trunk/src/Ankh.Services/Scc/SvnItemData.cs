@@ -107,7 +107,7 @@ namespace Ankh.Scc
                 if (mapper != null)
                 {
                     StringBuilder sb = new StringBuilder();
-                    foreach (SvnProject p in mapper.GetAllProjectsContaining(FullPath))
+                    foreach (SccProject p in mapper.GetAllProjectsContaining(FullPath))
                     {
                         ISvnProjectInfo info = mapper.GetProjectInfo(p);
 

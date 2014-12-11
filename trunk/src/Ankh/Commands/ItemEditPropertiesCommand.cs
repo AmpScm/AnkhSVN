@@ -74,7 +74,7 @@ namespace Ankh.Commands
                 case AnkhCommand.ProjectEditProperties:
                     IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
                     cache = e.GetService<IFileStatusCache>();
-                    foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
+                    foreach (SccProject project in e.Selection.GetSelectedProjects(false))
                     {
                         ISvnProjectInfo info = pfm.GetProjectInfo(project);
                         if (info == null || string.IsNullOrEmpty(info.ProjectDirectory))
@@ -129,7 +129,7 @@ namespace Ankh.Commands
                     }
                     break;
                 case AnkhCommand.ProjectEditProperties: // use project folder
-                    foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
+                    foreach (SccProject p in e.Selection.GetSelectedProjects(false))
                     {
                         IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
                         if (pfm != null)

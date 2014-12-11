@@ -28,7 +28,7 @@ namespace Ankh.Scc.ProjectMap
     /// Container of a coupling between a single project(1) and a file(ReferenceCount)
     /// </summary>
     [DebuggerDisplay("{Filename}, Project={Project}")]
-    sealed class SccProjectFileReference
+    public sealed class SccProjectFileReference
     {
         readonly IAnkhServiceProvider _context;
         readonly SccProjectFile _file;
@@ -109,7 +109,7 @@ namespace Ankh.Scc.ProjectMap
         }
 
         /// <summary>
-        /// Gets the item id of the file within the project or <see cref="VSConstants.VSITEMID_NIL"/> if no id is assigned
+        /// Gets the item id of the file within the project or <see cref="VSItemId.Nil"/> if no id is assigned
         /// </summary>
         internal uint ProjectItemId
         {
@@ -122,16 +122,16 @@ namespace Ankh.Scc.ProjectMap
                 if (_project.TryGetProjectFileId(Filename, out id))
                     return _id = id;
                 else
-                    return _id = VSConstants.VSITEMID_NIL;
+                    return _id = VSItemId.Nil;
             }
         }
 
-        internal bool TryGetIcon(out ProjectIconReference icon)
+        public bool TryGetIcon(out ProjectIconReference icon)
         {
             uint id = ProjectItemId;
             icon = null;
 
-            if (id == 0 || id == VSConstants.VSITEMID_NIL)
+            if (id == 0 || id == VSItemId.Nil)
                 return false;
 
             try
@@ -183,7 +183,7 @@ namespace Ankh.Scc.ProjectMap
             return 0; 
         }
 
-        internal IList<string> GetSubFiles()
+        public IList<string> GetSubFiles()
         {
             if (_subFiles != null)
                 return _subFiles;

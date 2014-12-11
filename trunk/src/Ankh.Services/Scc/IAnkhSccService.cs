@@ -51,7 +51,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">A reference to the project or null for the solution</param>
         /// <param name="managed"></param>
-        void SetProjectManaged(SvnProject project, bool managed);    
+        void SetProjectManaged(SccProject project, bool managed);    
 
         /// <summary>
         /// Gets a boolean indicating whether the specified project (or the solution) is 
@@ -59,7 +59,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">A reference to the project or null for the solution</param>
         /// <returns><c>true</c> if the solution is managed by the scc provider, otherwise <c>false</c></returns>
-        bool IsProjectManaged(SvnProject project);
+        bool IsProjectManaged(SccProject project);
 
         /// <summary>
         /// Gets a value indicating whether this instance is solution managed.
@@ -107,7 +107,7 @@ namespace Ankh.Scc
         /// Ensures the check out reference for the specified project
         /// </summary>
         /// <param name="project">The project.</param>
-        void EnsureCheckOutReference(SvnProject project);
+        void EnsureCheckOutReference(SccProject project);
 
         /// <summary>
         /// Ensure that all project state is loaded

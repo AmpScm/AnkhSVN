@@ -54,13 +54,13 @@ namespace Ankh.Selection
         /// Gets the projects owning selected files
         /// </summary>
         /// <returns></returns>
-        IEnumerable<SvnProject> GetOwnerProjects();
+        IEnumerable<SccProject> GetOwnerProjects();
 
         /// <summary>
         /// Gets a list of currently selected projects
         /// </summary>
         /// <returns></returns>
-        IEnumerable<SvnProject> GetSelectedProjects(bool recursive);
+        IEnumerable<SccProject> GetSelectedProjects(bool recursive);
 
         /// <summary>
         /// Gets a list of currently selected hierarchies (non-recursive)

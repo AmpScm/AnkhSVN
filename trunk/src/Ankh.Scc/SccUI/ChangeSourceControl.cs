@@ -103,9 +103,9 @@ namespace Ankh.Scc.SccUI
             // TODO: Optimize to one time init and then just refresh
             if (SvnItem.IsValidPath(SolutionSettings.SolutionFilename))
             {
-                bindingGrid.Rows.Add(new ChangeSourceControlRow(Context, SvnProject.Solution));
+                bindingGrid.Rows.Add(new ChangeSourceControlRow(Context, SccProject.Solution));
             }
-            foreach (SvnProject project in ProjectMapper.GetAllProjects())
+            foreach (SccProject project in ProjectMapper.GetAllProjects())
             {
                 if (project.IsSolution)
                     continue;
@@ -153,7 +153,7 @@ namespace Ankh.Scc.SccUI
             IAnkhSccService scc = Context.GetService<IAnkhSccService>();
 
             bool isSolution = false;
-            foreach (SvnProject project in SelectedProjects)
+            foreach (SccProject project in SelectedProjects)
             {
                 if (project.IsSolution)
                     isSolution = true;
@@ -207,7 +207,7 @@ namespace Ankh.Scc.SccUI
 
             IAnkhSccService scc = Context.GetService<IAnkhSccService>();
 
-            foreach (SvnProject project in SelectedProjects)
+            foreach (SccProject project in SelectedProjects)
             {
                 scc.SetProjectManaged(project, true);
             }
@@ -221,7 +221,7 @@ namespace Ankh.Scc.SccUI
 
             IAnkhSccService scc = Context.GetService<IAnkhSccService>();
 
-            foreach (SvnProject project in SelectedProjects)
+            foreach (SccProject project in SelectedProjects)
             {
                 scc.SetProjectManaged(project, false);
             }
@@ -247,14 +247,14 @@ namespace Ankh.Scc.SccUI
             get { return _solutionSettings ?? (_solutionSettings = Context.GetService<IAnkhSolutionSettings>()); }
         }
 
-        IEnumerable<SvnProject> SelectedProjects
+        IEnumerable<SccProject> SelectedProjects
         {
             get
             {
-                List<SvnProject> projects = new List<SvnProject>();
+                List<SccProject> projects = new List<SccProject>();
                 foreach (ChangeSourceControlRow row in bindingGrid.SelectedRows)
                 {
-                    SvnProject project = row.Project;
+                    SccProject project = row.Project;
 
                     if (projects.Contains(project))
                         continue;
@@ -297,7 +297,7 @@ namespace Ankh.Scc.SccUI
             bool first = true;
             Uri projectUri = null;
 
-            foreach (SvnProject p in SelectedProjects)
+            foreach (SccProject p in SelectedProjects)
             {
                 ISvnProjectInfo info;
                 if (p.IsSolution ||

@@ -29,14 +29,14 @@ namespace Ankh.Scc.SccUI
     sealed class ChangeSourceControlRow : DataGridViewRow
     {
         readonly IAnkhServiceProvider _context;
-        readonly SvnProject _project;
+        readonly SccProject _project;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangeSourceControlRow"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="project">The project.</param>
-        public ChangeSourceControlRow(IAnkhServiceProvider context, SvnProject project)
+        public ChangeSourceControlRow(IAnkhServiceProvider context, SccProject project)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -84,7 +84,7 @@ namespace Ankh.Scc.SccUI
         /// Gets the project.
         /// </summary>
         /// <value>The project.</value>
-        public SvnProject Project
+        public SccProject Project
         {
             get { return _project; }
         }

@@ -60,7 +60,7 @@ namespace Ankh.Commands
                     item = e.GetService<IFileStatusCache>()[root];
                     break;
                 case AnkhCommand.ProjectBranch:
-                    SvnProject p = EnumTools.GetSingle(e.Selection.GetSelectedProjects(false));
+                    SccProject p = EnumTools.GetSingle(e.Selection.GetSelectedProjects(false));
                     if(p == null)
                         break;
 

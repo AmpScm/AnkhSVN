@@ -47,7 +47,7 @@ namespace Ankh.Scc
             _managedSolution = asPrimarySccProvider;
         }
 
-        public bool IsProjectManaged(SvnProject project)
+        public bool IsProjectManaged(SccProject project)
         {
             if (!IsActive)
                 return false;
@@ -79,7 +79,7 @@ namespace Ankh.Scc
             return false;
         }
 
-        public void SetProjectManaged(SvnProject project, bool managed)
+        public void SetProjectManaged(SccProject project, bool managed)
         {
             if (!IsActive)
                 return; // Perhaps allow clearing management settings?
@@ -90,7 +90,7 @@ namespace Ankh.Scc
                 SetProjectManagedRaw(project.RawHandle, managed);
         }
 
-        public void EnsureCheckOutReference(SvnProject project)
+        public void EnsureCheckOutReference(SccProject project)
         {
             // NOOP for today
         }
@@ -410,7 +410,7 @@ namespace Ankh.Scc
         public override void OnProjectLoaded(IVsSccProject2 project)
         {
             if (!_projectMap.ContainsKey(project))
-                _projectMap.Add(project, new SccProjectData(Context, project));
+                _projectMap.Add(project, new SccProjectData(this, project));
         }
 
         public override void OnProjectRenamed(IVsSccProject2 project)
@@ -438,7 +438,7 @@ namespace Ankh.Scc
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
-                _projectMap.Add(project, data = new SccProjectData(Context, project));
+                _projectMap.Add(project, data = new SccProjectData(this, project));
 
             if (data.IsStoredInSolution)
             {

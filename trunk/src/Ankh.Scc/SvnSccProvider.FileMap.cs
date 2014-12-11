@@ -33,7 +33,7 @@ namespace Ankh.Scc
     /// </summary>
     [GlobalService(typeof(IProjectFileMapper))]
     [GlobalService(typeof(IAnkhProjectLayoutService))]
-    partial class SvnSccProvider : IProjectFileMapper, IAnkhProjectLayoutService
+    partial class SvnSccProvider : IProjectFileMapper, IAnkhProjectLayoutService, ISccProjectFileContainer
     {
         // ********************************************************
         // This file contains two very important features of the Scc provider:
@@ -236,13 +236,13 @@ namespace Ankh.Scc
 
 
         #region ProjectFile
-        internal SccProjectFile GetFile(string path)
+        public override SccProjectFile GetFile(string path)
         {
             SccProjectFile projectFile;
 
             if (!_fileMap.TryGetValue(path, out projectFile))
             {
-                _fileMap.Add(path, projectFile = new SccProjectFile(Context, path));
+                _fileMap.Add(path, projectFile = new SccProjectFile(this, path));
 
                 // Force an initial status into the SvnItem
                 StatusCache.SetSolutionContained(path, true, _sccExcluded.Contains(path));
@@ -251,9 +251,16 @@ namespace Ankh.Scc
             return projectFile;
         }
 
-        internal void RemoveFile(SccProjectFile file)
+        public override SccProject CreateProject(SccProjectData sccProjectData)
+        {
+            return new SccSvnProject(sccProjectData);
+        }
+
+        void ISccProjectFileContainer.RemoveFile(SccProjectFile file)
         {
             Debug.Assert(_fileMap[file.FullPath] == file);
+
+            StatusCache.SetSolutionContained(file.FullPath, false, false);
 
             _fileMap.Remove(file.FullPath);
             PendingChanges.Refresh(file.FullPath);
@@ -262,7 +269,7 @@ namespace Ankh.Scc
 
         #region IProjectFileMapper Members
 
-        public IEnumerable<Ankh.Selection.SvnProject> GetAllProjectsContaining(string path)
+        public IEnumerable<Ankh.Selection.SccProject> GetAllProjectsContaining(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
@@ -279,10 +286,10 @@ namespace Ankh.Scc
             }
 
             if (string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
-                yield return SvnProject.Solution;
+                yield return SccProject.Solution;
         }
 
-        public IEnumerable<SvnProject> GetAllProjectsContaining(IEnumerable<string> paths)
+        public IEnumerable<SccProject> GetAllProjectsContaining(IEnumerable<string> paths)
         {
             if (paths == null)
                 throw new ArgumentNullException("paths");
@@ -306,11 +313,11 @@ namespace Ankh.Scc
                     }
                 }
 
-                if (!projects.Contains(SvnProject.Solution)
+                if (!projects.Contains(SccProject.Solution)
                     && string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
                 {
-                    projects.Add(SvnProject.Solution, SvnProject.Solution);
-                    yield return SvnProject.Solution;
+                    projects.Add(SccProject.Solution, SccProject.Solution);
+                    yield return SccProject.Solution;
                 }
             }
         }
@@ -319,7 +326,7 @@ namespace Ankh.Scc
         /// Gets all projects.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Ankh.Selection.SvnProject> GetAllProjects()
+        public IEnumerable<Ankh.Selection.SccProject> GetAllProjects()
         {
             foreach (SccProjectData pd in _projectMap.Values)
                 yield return pd.SvnProject;
@@ -344,7 +351,7 @@ namespace Ankh.Scc
             return false;
         }
 
-        public IEnumerable<string> GetAllFilesOf(Ankh.Selection.SvnProject project)
+        public IEnumerable<string> GetAllFilesOf(Ankh.Selection.SccProject project)
         {
             return GetAllFilesOf(project, false);
         }
@@ -354,7 +361,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        public IEnumerable<string> GetAllFilesOf(Ankh.Selection.SvnProject project, bool exceptExcluded)
+        public IEnumerable<string> GetAllFilesOf(Ankh.Selection.SccProject project, bool exceptExcluded)
         {
             if (project == null)
                 throw new ArgumentNullException("project");
@@ -389,18 +396,18 @@ namespace Ankh.Scc
             }
         }
 
-        public IEnumerable<string> GetAllFilesOf(ICollection<SvnProject> projects)
+        public IEnumerable<string> GetAllFilesOf(ICollection<SccProject> projects)
         {
             return GetAllFilesOf(projects, false);
         }
 
-        public IEnumerable<string> GetAllFilesOf(ICollection<SvnProject> projects, bool exceptExcluded)
+        public IEnumerable<string> GetAllFilesOf(ICollection<SccProject> projects, bool exceptExcluded)
         {
             SortedList<string, string> files = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
             Hashtable handled = new Hashtable();
-            foreach (SvnProject p in projects)
+            foreach (SccProject p in projects)
             {
-                SvnProject project = ResolveRawProject(p);
+                SccProject project = ResolveRawProject(p);
 
                 IVsSccProject2 scc = project.RawHandle;
                 SccProjectData data;
@@ -469,7 +476,7 @@ namespace Ankh.Scc
             return files.ToArray();
         }
 
-        public SvnProject ResolveRawProject(SvnProject project)
+        public SccProject ResolveRawProject(SccProject project)
         {
             if (project == null)
                 throw new ArgumentNullException("project");
@@ -515,7 +522,7 @@ namespace Ankh.Scc
             return null;
         }
 
-        public ISvnProjectInfo GetProjectInfo(SvnProject project)
+        public ISvnProjectInfo GetProjectInfo(SccProject project)
         {
             if (project == null)
                 return null;
@@ -556,7 +563,7 @@ namespace Ankh.Scc
 
         #endregion
 
-        public IEnumerable<SvnItem> GetUpdateRoots(SvnProject project)
+        public IEnumerable<SvnItem> GetUpdateRoots(SccProject project)
         {
             if (project != null)
                 return GetSingleProjectRoots(project);
@@ -624,7 +631,7 @@ namespace Ankh.Scc
             return roots.Values;
         }
 
-        private IEnumerable<SvnItem> GetSingleProjectRoots(SvnProject project)
+        private IEnumerable<SvnItem> GetSingleProjectRoots(SccProject project)
         {
             SccProjectData pd;
             if (project.RawHandle == null || !_projectMap.TryGetValue(project.RawHandle, out pd))

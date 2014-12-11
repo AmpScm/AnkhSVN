@@ -163,7 +163,7 @@ namespace Ankh.Scc
         string GetProjects(RefreshContext context)
         {
             string name = null;
-            foreach (SvnProject project in context.ProjectFileMapper.GetAllProjectsContaining(FullPath))
+            foreach (SccProject project in context.ProjectFileMapper.GetAllProjectsContaining(FullPath))
             {
                 ISvnProjectInfo info = context.ProjectFileMapper.GetProjectInfo(project);
 

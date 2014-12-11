@@ -166,19 +166,19 @@ namespace Ankh.Scc
         /// <summary>
         /// Gets the SvnItem of the document file and all subdocument files (SccSpecial files)
         /// </summary>
-        /// <param name="document">The document.</param>
+        /// <param name="documentName">The document.</param>
         /// <returns></returns>
-        internal IEnumerable<SvnItem> GetAllDocumentItems(string document)
+        public override IEnumerable<string> GetAllDocumentFiles(string documentName)
         {
-            if (string.IsNullOrEmpty(document))
+            if (string.IsNullOrEmpty(documentName))
                 throw new ArgumentNullException("document");
 
-            SvnItem item = StatusCache[document];
+            SvnItem item = StatusCache[documentName];
 
             if (item == null)
                 yield break;
 
-            yield return item;
+            yield return item.FullPath;
 
             SccProjectFile pf;
             if (_fileMap.TryGetValue(item.FullPath, out pf))
@@ -199,7 +199,7 @@ namespace Ankh.Scc
 
                         item = StatusCache[path];
                         if (item != null)
-                            yield return item;
+                            yield return item.FullPath;
 
                         subFiles.Add(item.FullPath);
                     }
@@ -330,12 +330,12 @@ namespace Ankh.Scc
                     // to make it easier to lock them too
                     foreach (string lockFile in new List<string>(mustLockFiles))
                     {
-                        foreach (SvnItem item in GetAllDocumentItems(lockFile))
+                        foreach (string file in GetAllDocumentFiles(lockFile))
                         {
-                            if (!mustLockFiles.Contains(item.FullPath))
+                            if (!mustLockFiles.Contains(file))
                             {
-                                mustLockFiles.Add(item.FullPath);
-                                mustLockItems.Add(item);
+                                mustLockFiles.Add(file);
+                                mustLockItems.Add(StatusCache[file]);
                             }
                         }
                     }

@@ -60,10 +60,10 @@ namespace Ankh.VS.Selection
         CachedEnumerable<string> _filenamesRecursive;
         CachedEnumerable<SvnItem> _svnItems;
         CachedEnumerable<SvnItem> _svnItemsRecursive;
-        CachedEnumerable<SvnProject> _selectedProjects;
-        CachedEnumerable<SvnProject> _selectedProjectsRecursive;
+        CachedEnumerable<SccProject> _selectedProjects;
+        CachedEnumerable<SccProject> _selectedProjectsRecursive;
         CachedEnumerable<SvnHierarchy> _selectedHierarchies;
-        CachedEnumerable<SvnProject> _ownerProjects;
+        CachedEnumerable<SccProject> _ownerProjects;
         Dictionary<Type, IEnumerable> _selectedItemsMap;
         readonly Hashtable _hashCache = new Hashtable();
         IVsHierarchy _miscFiles;
@@ -689,12 +689,12 @@ namespace Ankh.VS.Selection
 
         #region ISelectionContext Members: Get*Projects()
 
-        public IEnumerable<SvnProject> GetOwnerProjects()
+        public IEnumerable<SccProject> GetOwnerProjects()
         {
-            return _ownerProjects ?? (_ownerProjects = new CachedEnumerable<SvnProject>(InternalGetOwnerProjects(), Disposer));
+            return _ownerProjects ?? (_ownerProjects = new CachedEnumerable<SccProject>(InternalGetOwnerProjects(), Disposer));
         }
 
-        protected IEnumerable<SvnProject> InternalGetOwnerProjects()
+        protected IEnumerable<SccProject> InternalGetOwnerProjects()
         {
             Hashtable ht = new Hashtable();
             bool searchedProjectMapper = false;
@@ -709,7 +709,7 @@ namespace Ankh.VS.Selection
 
                 if (si.SccProject != null)
                 {
-                    yield return new SvnProject(null, si.SccProject);
+                    yield return new SccProject(null, si.SccProject);
                     continue;
                 }
                 else if (si.Hierarchy is IVsSccVirtualFolders)
@@ -730,7 +730,7 @@ namespace Ankh.VS.Selection
                 if (projectMapper != null)
                     foreach (string file in files)
                     {
-                        foreach (SvnProject project in projectMapper.GetAllProjectsContaining(file))
+                        foreach (SccProject project in projectMapper.GetAllProjectsContaining(file))
                         {
                             if (project.RawHandle != null)
                             {
@@ -750,17 +750,17 @@ namespace Ankh.VS.Selection
             }
         }
 
-        protected IEnumerable<SvnProject> GetSelectedProjects()
+        protected IEnumerable<SccProject> GetSelectedProjects()
         {
-            return _selectedProjects ?? (_selectedProjects = new CachedEnumerable<SvnProject>(InternalGetSelectedProjects(false), Disposer));
+            return _selectedProjects ?? (_selectedProjects = new CachedEnumerable<SccProject>(InternalGetSelectedProjects(false), Disposer));
         }
 
-        protected IEnumerable<SvnProject> GetSelectedProjectsRecursive()
+        protected IEnumerable<SccProject> GetSelectedProjectsRecursive()
         {
-            return _selectedProjectsRecursive ?? (_selectedProjectsRecursive = new CachedEnumerable<SvnProject>(InternalGetSelectedProjects(true), Disposer));
+            return _selectedProjectsRecursive ?? (_selectedProjectsRecursive = new CachedEnumerable<SccProject>(InternalGetSelectedProjects(true), Disposer));
         }
 
-        public IEnumerable<SvnProject> GetSelectedProjects(bool recursive)
+        public IEnumerable<SccProject> GetSelectedProjects(bool recursive)
         {
             return recursive ? GetSelectedProjectsRecursive() : GetSelectedProjects();
         }
@@ -770,14 +770,14 @@ namespace Ankh.VS.Selection
             return _selectedHierarchies ?? (_selectedHierarchies = new CachedEnumerable<SvnHierarchy>(InternalGetSelectedHierarchies(false), Disposer));
         }
 
-        protected IEnumerable<SvnProject> InternalGetSelectedProjects(bool recursive)
+        protected IEnumerable<SccProject> InternalGetSelectedProjects(bool recursive)
         {
             foreach (SelectionItem item in GetSelectedItems(recursive))
             {
                 if (item.Id == VSConstants.VSITEMID_ROOT)
                 {
                     if (!item.IsSolution && item.SccProject != null)
-                        yield return new SvnProject(null, item.SccProject);
+                        yield return new SccProject(null, item.SccProject);
                 }
             }
         }

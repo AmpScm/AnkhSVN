@@ -77,7 +77,7 @@ namespace Ankh.Commands
             readonly HybridCollection<string> folders = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             readonly IProjectFileMapper _mapper;
 
-            public ProjectListFilter(IAnkhServiceProvider context, IEnumerable<SvnProject> projects)
+            public ProjectListFilter(IAnkhServiceProvider context, IEnumerable<SccProject> projects)
             {
                 if (context == null)
                     throw new ArgumentNullException("context");
@@ -85,11 +85,11 @@ namespace Ankh.Commands
                     throw new ArgumentNullException("projects");
 
                 _mapper = context.GetService<IProjectFileMapper>();
-                List<SvnProject> projectList = new List<SvnProject>(projects);
+                List<SccProject> projectList = new List<SccProject>(projects);
 
                 files.AddRange(_mapper.GetAllFilesOf(projectList));
 
-                foreach (SvnProject p in projectList)
+                foreach (SccProject p in projectList)
                 {
                     ISvnProjectInfo pi = _mapper.GetProjectInfo(p);
 

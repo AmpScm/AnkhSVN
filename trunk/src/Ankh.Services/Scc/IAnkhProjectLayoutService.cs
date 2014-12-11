@@ -28,6 +28,6 @@ namespace Ankh
         /// </summary>
         /// <param name="project">The project specified or <c>null</c> to use all projects</param>
         /// <returns></returns>
-        IEnumerable<SvnItem> GetUpdateRoots(SvnProject project);
+        IEnumerable<SvnItem> GetUpdateRoots(SccProject project);
     }    
 }

@@ -50,12 +50,12 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 yield break;
             }
 
-            public IEnumerable<SvnProject> GetOwnerProjects()
+            public IEnumerable<SccProject> GetOwnerProjects()
             {
                 yield break;
             }
 
-            public IEnumerable<SvnProject> GetOwnerProjects(bool recursive)
+            public IEnumerable<SccProject> GetOwnerProjects(bool recursive)
             {
                 yield break;
             }
@@ -65,7 +65,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 get { return null; }
             }
 
-            public IEnumerable<SvnProject> GetSelectedProjects(bool recursive)
+            public IEnumerable<SccProject> GetSelectedProjects(bool recursive)
             {
                 yield break;
             }

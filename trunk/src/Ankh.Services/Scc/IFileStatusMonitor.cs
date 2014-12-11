@@ -54,7 +54,7 @@ namespace Ankh.Scc
         /// Schedules a glyph only update for the specified project
         /// </summary>
         /// <param name="projects">The projects.</param>
-        void ScheduleGlyphOnlyUpdate(IEnumerable<SvnProject> projects);
+        void ScheduleGlyphOnlyUpdate(IEnumerable<SccProject> projects);
 
         /// <summary>
         /// Adds the specified path to the paths to monitor for pending changes

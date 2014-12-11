@@ -85,12 +85,25 @@
     <Compile Include="Configuration\AnkhConfig.cs" />
     <Compile Include="RepositoryProvider\IAnkhRepositoryProviderService.cs" />
     <Compile Include="Scc\IAnkhGitSccService.cs" />
+    <Compile Include="Scc\IAnkhProjectDocumentTracker.cs" />
     <Compile Include="Scc\ISccHelper.cs" />
+    <Compile Include="Scc\ProjectMap\SccDocumentData.cs" />
+    <Compile Include="Scc\ProjectMap\SccProjectData.cs" />
+    <Compile Include="Scc\ProjectMap\SccProjectData.Hierarchy.cs">
+      <DependentUpon>SccProjectData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scc\ProjectMap\SccProjectData.ProjectRefresh.cs">
+      <DependentUpon>SccProjectData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scc\ProjectMap\SccProjectFile.cs" />
+    <Compile Include="Scc\ProjectMap\SccProjectFileCollection.cs" />
+    <Compile Include="Scc\ProjectMap\SccProjectFileReference.cs" />
     <Compile Include="Scc\SccProviderBase.cs" />
     <Compile Include="Selection\SvnHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
     <Compile Include="VSAssemblies.cs" />
     <Compile Include="VSErr.cs" />
+    <Compile Include="VSItemId.cs" />
     <Compile Include="VS\IAnkhGlobalCommandHook.cs" />
     <Compile Include="VS\TextMarker.cs" />
     <Compile Include="VS\ILinqInterfaceDelegateService.cs" />
@@ -182,7 +195,7 @@
       <DependentUpon>SvnItem.cs</DependentUpon>
     </Compile>
     <Compile Include="Selection\ISelectionContext.cs" />
-    <Compile Include="Selection\SvnProject.cs" />
+    <Compile Include="Selection\SccProject.cs" />
     <Compile Include="Configuration\IAnkhConfigurationService.cs" />
     <Compile Include="UI\IAnkhUIHost.cs" />
     <Compile Include="UI\VSContainerForm.cs">

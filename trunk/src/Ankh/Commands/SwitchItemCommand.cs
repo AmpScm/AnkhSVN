@@ -54,7 +54,7 @@ namespace Ankh.Commands
                     break;
 
                 case AnkhCommand.SwitchProject:
-                    SvnProject oneProject = EnumTools.GetSingle(e.Selection.GetSelectedProjects(false));
+                    SccProject oneProject = EnumTools.GetSingle(e.Selection.GetSelectedProjects(false));
 
                     if (oneProject == null)
                     {
@@ -101,7 +101,7 @@ namespace Ankh.Commands
                 IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
                 path = null;
 
-                foreach (SvnProject item in e.Selection.GetSelectedProjects(true))
+                foreach (SccProject item in e.Selection.GetSelectedProjects(true))
                 {
                     ISvnProjectInfo pi = mapper.GetProjectInfo(item);
 

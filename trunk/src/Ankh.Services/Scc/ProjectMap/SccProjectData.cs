@@ -47,7 +47,7 @@ namespace Ankh.Scc.ProjectMap
     }
 
     [DebuggerDisplay("Project={ProjectName}, Flags={_projectFlags}")]
-    sealed partial class SccProjectData : IDisposable
+    public sealed partial class SccProjectData : IDisposable
     {
         readonly IAnkhServiceProvider _context;
         readonly IVsSccProject2 _sccProject;
@@ -60,8 +60,8 @@ namespace Ankh.Scc.ProjectMap
         bool _loaded;
         string _projectFile;
         bool _checkedProjectFile;
-        SvnSccProvider _scc;
-        SvnProject _svnProjectInstance;
+        readonly SccProviderBase _scc;
+        SccProject _svnProjectInstance;
         string _projectLocation;
         string _projectName;
         string _projectDirectory;
@@ -69,7 +69,8 @@ namespace Ankh.Scc.ProjectMap
         Guid? _projectTypeGuid;
         bool _unloading;
 
-        public SccProjectData(IAnkhServiceProvider context, IVsSccProject2 project)
+        [CLSCompliant(false)]
+        public SccProjectData(SccProviderBase context, IVsSccProject2 project)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -77,6 +78,7 @@ namespace Ankh.Scc.ProjectMap
                 throw new ArgumentNullException("project");
 
             _context = context;
+            _scc = context;
 
             // Project references to speed up marshalling
             _sccProject = project;
@@ -101,16 +103,19 @@ namespace Ankh.Scc.ProjectMap
             return _context.GetService<T>(serviceType);
         }
 
+        [CLSCompliant(false)]
         public IVsSccProject2 SccProject
         {
             get { return _sccProject; }
         }
 
+        [CLSCompliant(false)]
         public IVsProject VsProject
         {
             get { return _vsProject; }
         }
 
+        [CLSCompliant(false)]
         public IVsHierarchy ProjectHierarchy
         {
             get { return _hierarchy; }
@@ -121,7 +126,7 @@ namespace Ankh.Scc.ProjectMap
             get { return _isManaged; }
 
             // Called by IVsSccManager.RegisterSccProject() when we were preregistered
-            internal set { _isManaged = value; }
+            set { _isManaged = value; }
         }
 
         public string ProjectName
@@ -133,7 +138,7 @@ namespace Ankh.Scc.ProjectMap
                     _projectName = "";
                     object name;
 
-                    if (VSErr.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_Name, out name)))
+                    if (VSErr.Succeeded(_hierarchy.GetProperty(VSItemId.Root, (int)__VSHPROPID.VSHPROPID_Name, out name)))
                     {
                         _projectName = name as string;
                     }
@@ -173,7 +178,7 @@ namespace Ankh.Scc.ProjectMap
                 if (!_projectTypeGuid.HasValue)
                 {
                     Guid value;
-                    if (VSErr.Succeeded(_hierarchy.GetGuidProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_TypeGuid, out value)))
+                    if (VSErr.Succeeded(_hierarchy.GetGuidProperty(VSItemId.Root, (int)__VSHPROPID.VSHPROPID_TypeGuid, out value)))
                         _projectTypeGuid = value;
                 }
 
@@ -194,7 +199,7 @@ namespace Ankh.Scc.ProjectMap
                     _projectDirectory = "";
                     object name;
 
-                    if (VSErr.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ProjectDir, out name)))
+                    if (VSErr.Succeeded(_hierarchy.GetProperty(VSItemId.Root, (int)__VSHPROPID.VSHPROPID_ProjectDir, out name)))
                     {
                         string dir = name as string;
 
@@ -240,7 +245,7 @@ namespace Ankh.Scc.ProjectMap
                     _checkedProjectFile = true;
                     string name;
 
-                    if (VSErr.Succeeded(_vsProject.GetMkDocument(VSConstants.VSITEMID_ROOT, out name)))
+                    if (VSErr.Succeeded(_vsProject.GetMkDocument(VSItemId.Root, out name)))
                     {
                         _projectLocation = name;
                         if (SvnItem.IsValidPath(name, true))
@@ -351,16 +356,16 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        public SvnProject SvnProject
+        public SccProject SvnProject
         {
             get
             {
                 if (_svnProjectInstance == null)
                 {
                     if ((_projectFlags & SccProjectFlags.ForceSccGlyphChange) == SccProjectFlags.ForceSccGlyphChange)
-                        _svnProjectInstance = new SccSvnProject(this);
+                        _svnProjectInstance = _scc.CreateProject(this);
                     else
-                        _svnProjectInstance = new SvnProject(ProjectFile, SccProject);
+                        _svnProjectInstance = new SccProject(ProjectFile, SccProject);
                 }
 
                 return _svnProjectInstance;
@@ -378,7 +383,7 @@ namespace Ankh.Scc.ProjectMap
         /// <param name="project">The project.</param>
         /// <param name="oldName">The old name.</param>
         /// <param name="newName">The new name.</param>
-        internal void CheckProjectRename(IVsSccProject2 project, string oldName, string newName)
+        public void CheckProjectRename(IVsSccProject2 project, string oldName, string newName)
         {
             if (_checkedProjectFile && oldName == ProjectFile)
             {
@@ -397,8 +402,7 @@ namespace Ankh.Scc.ProjectMap
         public bool IsRegistered
         {
             get { return _isRegistered; }
-
-            internal set { _isRegistered = value; }
+            set { _isRegistered = value; }
         }
 
         public bool IsStoredInSolution
@@ -416,7 +420,7 @@ namespace Ankh.Scc.ProjectMap
             get { return (_projectFlags & SccProjectFlags.SolutionInfrastructure) != SccProjectFlags.None; }
         }
 
-        internal void SetManaged(bool managed)
+        public void SetManaged(bool managed)
         {
             if (managed == IsManaged)
                 return;
@@ -440,7 +444,7 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        internal void OnClose()
+        public void OnClose()
         {
             Hook(false);
             while (_files.Count > 0)
@@ -455,7 +459,7 @@ namespace Ankh.Scc.ProjectMap
         }
 
         bool _disposed;
-        internal void Dispose()
+        public void Dispose()
         {
             _disposed = true;
             Hook(false);
@@ -472,13 +476,13 @@ namespace Ankh.Scc.ProjectMap
         }
 
         bool _opened;
-        internal void OnOpened()
+        public void OnOpened()
         {
             _opened = true;
         }
 
         bool _inLoad;
-        internal void Load()
+        public void Load()
         {
             if (_loaded || !_opened)
                 return;
@@ -498,7 +502,7 @@ namespace Ankh.Scc.ProjectMap
                 if (walker != null)
                 {
                     Dictionary<string, uint> ids = new Dictionary<string, uint>(StringComparer.OrdinalIgnoreCase);
-                    foreach (string file in walker.GetSccFiles(ProjectHierarchy, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendantsInHierarchy, ids))
+                    foreach (string file in walker.GetSccFiles(ProjectHierarchy, VSItemId.Root, ProjectWalkDepth.AllDescendantsInHierarchy, ids))
                     {
                         AddPath(file, ids); // GetSccFiles returns normalized paths
                     }
@@ -518,7 +522,7 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        internal void Reload()
+        public void Reload()
         {
             _projectName = null;
             _uniqueName = null;
@@ -526,7 +530,7 @@ namespace Ankh.Scc.ProjectMap
             Load();
         }
 
-        internal bool TrackProjectChanges()
+        public bool TrackProjectChanges()
         {
             return _loaded && !_inLoad;
         }
@@ -539,13 +543,13 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        internal void AddPath(string path)
+        public void AddPath(string path)
         {
             bool alreadyLoaded = _loaded && !_inLoad;
 
             if (alreadyLoaded && WebLikeFileHandling)
             {
-                uint fid = VSConstants.VSITEMID_NIL;
+                uint fid = VSItemId.Nil;
 
                 if (TryGetProjectFileId(path, out fid))
                 {
@@ -601,7 +605,7 @@ namespace Ankh.Scc.ProjectMap
                 ISccProjectWalker walker = GetService<ISccProjectWalker>();
 
                 if (walker != null)
-                    walker.SetPrecreatedFilterItem(null, VSConstants.VSITEMID_NIL);
+                    walker.SetPrecreatedFilterItem(null, VSItemId.Nil);
 
                 ClearIdCache();
 
@@ -622,7 +626,7 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        internal void RemovePath(string path)
+        public void RemovePath(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
@@ -651,9 +655,9 @@ namespace Ankh.Scc.ProjectMap
 
         #region Helper code
 
-        SvnSccProvider Scc
+        SccProviderBase Scc
         {
-            get { return _scc ?? (_scc = GetService<SvnSccProvider>()); }
+            get { return _scc; }
         }
 
         SccEnlistChoice? _sccEnlistChoice;
@@ -783,7 +787,7 @@ namespace Ankh.Scc.ProjectMap
 
                 _fetchedImgList = true;
                 object value;
-                if (VSErr.Succeeded(ProjectHierarchy.GetProperty(VSConstants.VSITEMID_ROOT,
+                if (VSErr.Succeeded(ProjectHierarchy.GetProperty(VSItemId.Root,
                     (int)__VSHPROPID.VSHPROPID_IconImgList, out value)))
                 {
                     _projectImgList = (IntPtr)(int)value; // Marshalled by VS as 32 bit integer
@@ -799,6 +803,7 @@ namespace Ankh.Scc.ProjectMap
         /// <param name="path">The path.</param>
         /// <param name="itemId">The item id.</param>
         /// <returns></returns>
+        [CLSCompliant(false)]
         public bool TryGetProjectFileId(string path, out uint itemId)
         {
             int found;
@@ -816,7 +821,7 @@ namespace Ankh.Scc.ProjectMap
                 }
             }
 
-            itemId = VSConstants.VSITEMID_NIL;
+            itemId = VSItemId.Nil;
             return false;
         }
 
@@ -855,7 +860,7 @@ namespace Ankh.Scc.ProjectMap
                 foreach (SccProjectFileReference r in _files)
                 {
                     uint id = r.ProjectItemId;
-                    if (id == VSConstants.VSITEMID_NIL)
+                    if (id == VSItemId.Nil)
                         continue;
 
                     string name = r.ProjectFile.FullPath;

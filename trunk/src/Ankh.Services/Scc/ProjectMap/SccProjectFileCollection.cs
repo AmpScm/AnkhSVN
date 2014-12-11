@@ -21,7 +21,7 @@ using System.Collections.ObjectModel;
 
 namespace Ankh.Scc.ProjectMap
 {
-    sealed class SccProjectFileCollection : KeyedCollection<string, SccProjectFileReference>
+    public sealed class SccProjectFileCollection : KeyedCollection<string, SccProjectFileReference>
     {
         public SccProjectFileCollection()
             : base(StringComparer.OrdinalIgnoreCase, 0)
