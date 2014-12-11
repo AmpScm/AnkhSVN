@@ -132,7 +132,7 @@ namespace Ankh.UI.VSSelectionControls
                     {
                         try
                         {
-                            h.OnItemAdded(VSConstants.VSITEMID_ROOT, VSConstants.VSITEMID_ROOT, id);
+                            h.OnItemAdded(VSItemId.Root, VSItemId.Root, id);
                         }
                         catch { }
                     }
@@ -230,7 +230,7 @@ namespace Ankh.UI.VSSelectionControls
             internal override string GetCanonicalName(uint itemid)
             {
                 T lv;
-                if (!_ids.TryGetValue(itemid, out lv) && itemid != VSConstants.VSITEMID_ROOT)
+                if (!_ids.TryGetValue(itemid, out lv) && itemid != VSItemId.Root)
                 {
                     return null;
                 }
@@ -244,7 +244,7 @@ namespace Ankh.UI.VSSelectionControls
             internal override int GetProperty(uint itemid, int propid, out object pvar)
             {
                 T lv;
-                if (!_ids.TryGetValue(itemid, out lv) && itemid != VSConstants.VSITEMID_ROOT)
+                if (!_ids.TryGetValue(itemid, out lv) && itemid != VSItemId.Root)
                 {
                     pvar = null;
                     return VSErr.E_FAIL;
@@ -256,10 +256,10 @@ namespace Ankh.UI.VSSelectionControls
                     case __VSHPROPID.VSHPROPID_FirstChild:
                     case __VSHPROPID.VSHPROPID_NextSibling:
                     case __VSHPROPID.VSHPROPID_NextVisibleSibling:
-                        pvar = VSConstants.VSITEMID_NIL;
+                        pvar = VSItemId.Nil;
                         break;
                     case __VSHPROPID.VSHPROPID_Root:
-                        pvar = VSConstants.VSITEMID_ROOT;
+                        pvar = VSItemId.Root;
                         break;
                     case __VSHPROPID.VSHPROPID_TypeGuid:
                         pvar = typeof(SelectionItemMap).GUID;
@@ -299,7 +299,7 @@ namespace Ankh.UI.VSSelectionControls
                         pvar = null;
                         break;
                     case __VSHPROPID.VSHPROPID_ParentHierarchyItemid:
-                        pvar = VSConstants.VSITEMID_NIL;
+                        pvar = VSItemId.Nil;
                         break;
                     default:
                         pvar = null;
@@ -576,7 +576,7 @@ namespace Ankh.UI.VSSelectionControls
                     id = _data.GetId(_data.Selection[0]);
                 else
                 {
-                    id = VSConstants.VSITEMID_SELECTION; // Look at selection instead of this item
+                    id = VSItemId.Selection; // Look at selection instead of this item
                     ms = this; // We implement IVsMultiItemSelect
                 }
 
@@ -587,7 +587,7 @@ namespace Ankh.UI.VSSelectionControls
                 catch { } // Ignore listener exceptions :(
             }
             else
-                Tracker.OnSelectChangeEx(_hierHandle, VSConstants.VSITEMID_NIL, null, _selHandle);
+                Tracker.OnSelectChangeEx(_hierHandle, VSItemId.Nil, null, _selHandle);
         }
 
         internal void EnsureSelection()
@@ -683,7 +683,7 @@ namespace Ankh.UI.VSSelectionControls
             int IVsHierarchy.GetNestedHierarchy(uint itemid, ref Guid iidHierarchyNested, out IntPtr ppHierarchyNested, out uint pitemidNested)
             {
                 ppHierarchyNested = IntPtr.Zero;
-                pitemidNested = VSConstants.VSITEMID_NIL;
+                pitemidNested = VSItemId.Nil;
                 return VSErr.E_FAIL;
             }
 

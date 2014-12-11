@@ -258,7 +258,7 @@ namespace Ankh.Commands
 
             if (sol != null)
             {
-                sol.CloseSolutionElement(VSConstants.VSITEMID_ROOT, null, 0); // Closes the current solution
+                sol.CloseSolutionElement(VSItemId.Root, null, 0); // Closes the current solution
             }
 
             IAnkhSccService scc = e.GetService<IAnkhSccService>();

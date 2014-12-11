@@ -411,7 +411,7 @@ namespace Ankh.VS.Selection
             public int GetCurrentSelection(out IntPtr ppHier, out uint pitemid, out IVsMultiItemSelect ppMIS, out IntPtr ppSC)
             {
                 ppHier = IntPtr.Zero;
-                pitemid = VSConstants.VSITEMID_NIL;
+                pitemid = VSItemId.Nil;
                 ppMIS = null;
                 ppSC = IntPtr.Zero;
 
