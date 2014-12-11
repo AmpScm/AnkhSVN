@@ -29,11 +29,6 @@ using Ankh.VS;
 
 namespace Ankh.Scc
 {
-    [GuidAttribute(AnkhId.SccServiceId), ComVisible(true), CLSCompliant(false)]
-    public interface ITheAnkhSvnSccProvider : IVsSccProvider
-    {
-    }
-
     [GlobalService(typeof(SvnSccProvider))]
     [GlobalService(typeof(IAnkhSccService))]
     [GlobalService(typeof(ITheAnkhSvnSccProvider), true)]
@@ -262,7 +257,7 @@ namespace Ankh.Scc
         /// Gets a value indicating whether the Ankh Scc service is active
         /// </summary>
         /// <value><c>true</c> if this instance is active; otherwise, <c>false</c>.</value>
-        public bool IsActive
+        public override bool IsActive
         {
             get { return _active; }
         }

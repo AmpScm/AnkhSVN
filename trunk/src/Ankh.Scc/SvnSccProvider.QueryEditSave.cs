@@ -206,36 +206,6 @@ namespace Ankh.Scc
             }
         }
 
-        string _tempPath;
-        string TempPathWithSeparator
-        {
-            get
-            {
-                if (_tempPath == null)
-                {
-                    string p = System.IO.Path.GetTempPath();
-
-                    if (p.Length > 0 && p[p.Length - 1] != Path.DirectorySeparatorChar)
-                        p += Path.DirectorySeparatorChar;
-
-                    _tempPath = p;
-                }
-                return _tempPath;
-            }
-        }
-
-        internal bool IsSafeSccPath(string file)
-        {
-            if (string.IsNullOrEmpty(file))
-                return false;
-            else if (!SvnItem.IsValidPath(file))
-                return false;
-            else if (file.StartsWith(TempPathWithSeparator, StringComparison.OrdinalIgnoreCase))
-                return false;
-
-            return true;
-        }
-
         /// <summary>
         /// Called by projects and editors before modifying a file
         /// The function allows the source control systems to take the necessary actions (checkout, flip attributes)

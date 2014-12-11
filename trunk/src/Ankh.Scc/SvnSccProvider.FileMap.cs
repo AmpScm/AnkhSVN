@@ -62,7 +62,7 @@ namespace Ankh.Scc
         /// <param name="filename">The filename.</param>
         /// <param name="fileOrigin">The file origin.</param>
         /// <param name="flags">The flags.</param>
-        internal void OnProjectFileAdded(IVsSccProject2 project, string filename, string fileOrigin, VSADDFILEFLAGS flags)
+        public override void OnProjectFileAdded(IVsSccProject2 project, string filename, string fileOrigin, VSADDFILEFLAGS flags)
         {
             // First update the filemap
             SccProjectData data;
@@ -78,7 +78,7 @@ namespace Ankh.Scc
         /// <param name="project">The project.</param>
         /// <param name="filename">The filename.</param>
         /// <param name="flags">The flags.</param>
-        internal void OnProjectFileRemoved(IVsSccProject2 project, string filename, VSREMOVEFILEFLAGS flags)
+        public override void OnProjectFileRemoved(IVsSccProject2 project, string filename, VSREMOVEFILEFLAGS flags)
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
@@ -93,7 +93,7 @@ namespace Ankh.Scc
         /// <param name="project">The project.</param>
         /// <param name="directoryname">The directoryname.</param>
         /// <param name="origin">The origin or null.</param>
-        internal void OnProjectDirectoryAdded(IVsSccProject2 project, string directoryname, string origin)
+        public override void OnProjectDirectoryAdded(IVsSccProject2 project, string directoryname, string origin)
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
@@ -124,7 +124,7 @@ namespace Ankh.Scc
         /// <param name="project">The SCC project.</param>
         /// <param name="directoryname">The directoryname.</param>
         /// <param name="flags">The flags.</param>
-        internal void OnProjectDirectoryRemoved(IVsSccProject2 project, string directoryname, VSREMOVEDIRECTORYFLAGS flags)
+        public override void OnProjectDirectoryRemoved(IVsSccProject2 project, string directoryname, VSREMOVEDIRECTORYFLAGS flags)
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
@@ -142,7 +142,7 @@ namespace Ankh.Scc
         /// <param name="oldName">The old name.</param>
         /// <param name="newName">The new name.</param>
         /// <param name="flags">The flags.</param>
-        internal void OnProjectRenamedFile(IVsSccProject2 project, string oldName, string newName, VSRENAMEFILEFLAGS flags)
+        public override void OnProjectRenamedFile(IVsSccProject2 project, string oldName, string newName, VSRENAMEFILEFLAGS flags)
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
@@ -154,7 +154,7 @@ namespace Ankh.Scc
             data.AddPath(newName);
         }
 
-        internal void OnSolutionRenamedFile(string oldName, string newName)
+        public override void OnSolutionRenamedFile(string oldName, string newName)
         {
             // The solution file is renamed
 
@@ -194,7 +194,7 @@ namespace Ankh.Scc
         /// <param name="oldName">The old name.</param>
         /// <param name="newName">The new name.</param>
         /// <param name="flags">The flags.</param>
-        internal void OnProjectDirectoryRenamed(IVsSccProject2 project, string oldName, string newName, VSRENAMEDIRECTORYFLAGS flags)
+        public override void OnProjectDirectoryRenamed(IVsSccProject2 project, string oldName, string newName, VSRENAMEDIRECTORYFLAGS flags)
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
