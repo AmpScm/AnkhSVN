@@ -196,7 +196,7 @@ namespace Ankh.Scc
         /// <param name="rgsiGlyphs">The rgsi glyphs.</param>
         /// <param name="rgdwSccStatus">The RGDW SCC status.</param>
         /// <returns></returns>
-        public int GetSccGlyph(int cFiles, string[] rgpszFullPaths, VsStateIcon[] rgsiGlyphs, uint[] rgdwSccStatus)
+        public override int GetSccGlyph(int cFiles, string[] rgpszFullPaths, VsStateIcon[] rgsiGlyphs, uint[] rgdwSccStatus)
         {
             if (rgpszFullPaths == null || rgsiGlyphs == null)
                 return VSErr.E_POINTER; // Documented as impossible

@@ -22,29 +22,33 @@ using System.Diagnostics;
 
 namespace Ankh.Scc.ProjectMap
 {
+    public interface ISccProjectFileContainer : IAnkhServiceProvider
+    {
+        void RemoveFile(SccProjectFile sccProjectFile);
+    }
     /// <summary>
     /// A file contained one or more times in one or more Scc projects
     /// </summary>
     [DebuggerDisplay("{FullPath}, Projects={ProjectCount}, References={TotalReferenceCount}")]
-    sealed class SccProjectFile
+    public sealed class SccProjectFile
     {
-        readonly IAnkhServiceProvider _context;
+        readonly ISccProjectFileContainer _container;
         readonly string _filename;
         SccProjectFileReference _firstReference;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SccProjectFile"/> class.
         /// </summary>
-        /// <param name="context">The context.</param>
+        /// <param name="container">The context.</param>
         /// <param name="filename">The filename.</param>
-        public SccProjectFile(IAnkhServiceProvider context, string filename)
+        public SccProjectFile(ISccProjectFileContainer container, string filename)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
+            if (container == null)
+                throw new ArgumentNullException("container");
             else if (string.IsNullOrEmpty(filename))
                 throw new ArgumentNullException("filename");
 
-            _context = context;
+            _container = container;
             _filename = filename;
         }
 
@@ -148,8 +152,7 @@ namespace Ankh.Scc.ProjectMap
 
                 if (_firstReference == null)
                 {
-                    _context.GetService<IFileStatusCache>().SetSolutionContained(this.FullPath, false, false);
-                    _context.GetService<SvnSccProvider>().RemoveFile(this);
+                    _container.RemoveFile(this);
                 }
                 return;
             }

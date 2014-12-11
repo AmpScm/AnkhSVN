@@ -375,13 +375,11 @@ namespace Ankh.Scc
         }
 
 
-        internal const __VSRDTATTRIB RDTA_DocumentInitialized = (__VSRDTATTRIB)0x00100000; // VS2013+
-        internal const __VSRDTATTRIB RDTA_HierarchyInitialized = (__VSRDTATTRIB)0x00200000; // VS2013+
         const uint HandledRDTAttributes = (uint)(__VSRDTATTRIB.RDTA_DocDataReloaded
                                                  | __VSRDTATTRIB.RDTA_DocDataIsDirty
                                                  | __VSRDTATTRIB.RDTA_DocDataIsNotDirty
-                                                 | /*__VSRDTATTRIB3.*/RDTA_DocumentInitialized
-                                                 | /*__VSRDTATTRIB3.*/RDTA_HierarchyInitialized);
+                                                 | SccDocumentData.RDTA_DocumentInitialized
+                                                 | SccDocumentData.RDTA_HierarchyInitialized);
 
         const uint TrackedRDTAttributes = HandledRDTAttributes
                                           | (uint)(__VSRDTATTRIB.RDTA_ItemID
@@ -404,7 +402,7 @@ namespace Ankh.Scc
 
                 if (!wasInitialized
                     && GetDocumentFlags_cb != null
-                    && (attribs & (RDTA_DocumentInitialized | RDTA_HierarchyInitialized)) != 0)
+                    && (attribs & (SccDocumentData.RDTA_DocumentInitialized | SccDocumentData.RDTA_HierarchyInitialized)) != 0)
                 {
                     uint newFlags = GetDocumentFlags_cb(data.Cookie);
                     data.SetFlags((_VSRDTFLAGS)newFlags);
@@ -432,7 +430,7 @@ namespace Ankh.Scc
 
                 if (!wasInitialized
                     && GetDocumentFlags_cb != null
-                    && (attribs & (RDTA_DocumentInitialized | RDTA_HierarchyInitialized)) != 0)
+                    && (attribs & (SccDocumentData.RDTA_DocumentInitialized | SccDocumentData.RDTA_HierarchyInitialized)) != 0)
                 {
                     uint newFlags = GetDocumentFlags_cb(data.Cookie);
                     data.SetFlags((_VSRDTFLAGS)newFlags);
@@ -674,7 +672,7 @@ namespace Ankh.Scc
             }
         }
 
-        internal void DoDispose(SccDocumentData data)
+        public void DoDispose(SccDocumentData data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");

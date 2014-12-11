@@ -56,7 +56,7 @@ namespace Ankh.UI.MergeWizard.Commands
                 case AnkhCommand.ProjectMerge:
                     statusCache = e.GetService<IFileStatusCache>();
                     IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
-                    foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
+                    foreach (SccProject project in e.Selection.GetSelectedProjects(false))
                     {
                         ISvnProjectInfo projInfo = pfm.GetProjectInfo(project);
                         if (projInfo == null || string.IsNullOrEmpty(projInfo.ProjectDirectory))
@@ -113,7 +113,7 @@ namespace Ankh.UI.MergeWizard.Commands
                     }
                     break;
                 case AnkhCommand.ProjectMerge:
-                    foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
+                    foreach (SccProject p in e.Selection.GetSelectedProjects(false))
                     {
                         IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
 

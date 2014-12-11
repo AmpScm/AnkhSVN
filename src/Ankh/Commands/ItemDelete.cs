@@ -105,9 +105,9 @@ namespace Ankh.Commands
 
                 IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
 
-                List<SvnProject> projects = new List<SvnProject>(pfm.GetAllProjectsContaining(item.FullPath));
+                List<SccProject> projects = new List<SccProject>(pfm.GetAllProjectsContaining(item.FullPath));
 
-                foreach (SvnProject p in projects)
+                foreach (SccProject p in projects)
                 {
                     IVsProject2 p2 = p.RawHandle as IVsProject2;
 

@@ -90,14 +90,14 @@ namespace Ankh.Commands
 
             int n = 0;
             bool foundOne = false;
-            foreach (IEnumerable<SvnProject> projects in
-                new IEnumerable<SvnProject>[] 
+            foreach (IEnumerable<SccProject> projects in
+                new IEnumerable<SccProject>[] 
                 { 
                     e.Selection.GetSelectedProjects(true),
                     e.Selection.GetSelectedProjects(false) 
                 })
             {
-                foreach (SvnProject p in projects)
+                foreach (SccProject p in projects)
                 {
                     foundOne = true;
 
@@ -127,10 +127,10 @@ namespace Ankh.Commands
             e.Enabled = false;
         }
 
-        private static IEnumerable<SvnProject> GetSelection(ISelectionContext iSelectionContext)
+        private static IEnumerable<SccProject> GetSelection(ISelectionContext iSelectionContext)
         {
             bool foundOne = false;
-            foreach (SvnProject pr in iSelectionContext.GetSelectedProjects(true))
+            foreach (SccProject pr in iSelectionContext.GetSelectedProjects(true))
             {
                 yield return pr;
                 foundOne = true;
@@ -139,7 +139,7 @@ namespace Ankh.Commands
             if (foundOne)
                 yield break;
 
-            foreach (SvnProject pr in iSelectionContext.GetOwnerProjects())
+            foreach (SccProject pr in iSelectionContext.GetOwnerProjects())
             {
                 yield return pr;
             }
@@ -447,14 +447,14 @@ namespace Ankh.Commands
             if (mapper == null)
                 return;
 
-            List<SvnProject> projectsToBeManaged = new List<SvnProject>();
+            List<SccProject> projectsToBeManaged = new List<SccProject>();
             SvnItem slnItem = cache[e.Selection.SolutionFilename];
             Uri solutionReposRoot = null;
             if (slnItem.WorkingCopy != null)
             {
                 solutionReposRoot = slnItem.WorkingCopy.RepositoryRoot;
 
-                foreach (SvnProject project in GetSelection(e.Selection))
+                foreach (SccProject project in GetSelection(e.Selection))
                 {
                     ISvnProjectInfo projInfo = mapper.GetProjectInfo(project);
 
@@ -525,7 +525,7 @@ namespace Ankh.Commands
             if (!AskSetManagedSelectionProjects(e, mapper, scc, projectsToBeManaged))
                 return;
 
-            foreach (SvnProject project in projectsToBeManaged)
+            foreach (SccProject project in projectsToBeManaged)
             {
                 if (!scc.IsProjectManaged(project))
                 {
@@ -544,7 +544,7 @@ namespace Ankh.Commands
         /// <param name="scc"></param>
         /// <param name="succeededProjects"></param>
         /// <returns></returns>
-        static bool AskSetManagedSelectionProjects(CommandEventArgs e, IProjectFileMapper mapper, IAnkhSccService scc, IEnumerable<SvnProject> succeededProjects)
+        static bool AskSetManagedSelectionProjects(CommandEventArgs e, IProjectFileMapper mapper, IAnkhSccService scc, IEnumerable<SccProject> succeededProjects)
         {
             if (e.DontPrompt || e.IsInAutomation)
                 return true;
@@ -552,7 +552,7 @@ namespace Ankh.Commands
             AnkhMessageBox mb = new AnkhMessageBox(e.Context);
             StringBuilder sb = new StringBuilder();
             bool foundOne = false;
-            foreach (SvnProject project in succeededProjects)
+            foreach (SccProject project in succeededProjects)
             {
                 ISvnProjectInfo info;
                 if (!scc.IsProjectManaged(project) && null != (info = mapper.GetProjectInfo(project)))
@@ -587,7 +587,7 @@ namespace Ankh.Commands
         /// <param name="shouldMarkAsManaged"></param>
         /// <param name="storeReference"></param>
         /// <returns></returns>
-        static bool CheckoutWorkingCopyForProject(CommandEventArgs e, SvnProject project, ISvnProjectInfo projectInfo, Uri solutionReposRoot, out bool shouldMarkAsManaged, out bool storeReference)
+        static bool CheckoutWorkingCopyForProject(CommandEventArgs e, SccProject project, ISvnProjectInfo projectInfo, Uri solutionReposRoot, out bool shouldMarkAsManaged, out bool storeReference)
         {
             shouldMarkAsManaged = false;
             storeReference = false;

@@ -74,9 +74,9 @@ namespace Ankh.Commands
             }
         }
 
-        static IEnumerable<SvnProject> GetSelectedProjects(BaseCommandEventArgs e)
+        static IEnumerable<SccProject> GetSelectedProjects(BaseCommandEventArgs e)
         {
-            foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
+            foreach (SccProject p in e.Selection.GetSelectedProjects(false))
             {
                 yield return p;
             }
@@ -145,7 +145,7 @@ namespace Ankh.Commands
                 IFileStatusCache fsc = null;
 
                 Uri rootUrl = null;
-                foreach (SvnProject p in GetSelectedProjects(e))
+                foreach (SccProject p in GetSelectedProjects(e))
                 {
                     if (pfm == null)
                         pfm = e.GetService<IProjectFileMapper>();
@@ -274,7 +274,7 @@ namespace Ankh.Commands
 
                 SvnItem si = null;
                 SvnOrigin origin = null;
-                foreach (SvnProject p in GetSelectedProjects(e))
+                foreach (SccProject p in GetSelectedProjects(e))
                 {
                     ISvnProjectInfo pi = mapper.GetProjectInfo(p);
                     if (pi == null || pi.ProjectDirectory == null)
@@ -470,7 +470,7 @@ namespace Ankh.Commands
                     yield return item;
                 }
             else
-                foreach (SvnProject project in GetSelectedProjects(e))
+                foreach (SccProject project in GetSelectedProjects(e))
                 {
                     foreach (SvnItem item in pls.GetUpdateRoots(project))
                     {

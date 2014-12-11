@@ -312,7 +312,7 @@ namespace Ankh.Scc
 
             if (project != null)
             {
-                ISvnProjectInfo info = mapper.GetProjectInfo(new SvnProject(null, project));
+                ISvnProjectInfo info = mapper.GetProjectInfo(new SccProject(null, project));
 
                 if (info != null && !string.IsNullOrEmpty(info.ProjectFile))
                     monitor.ScheduleSvnStatus(info.ProjectFile);

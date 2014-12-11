@@ -32,7 +32,7 @@ namespace Ankh.Scc.ProjectMap
     ///
     /// </summary>
     [DebuggerDisplay("Name={Name}, Dirty={IsDirty}")]
-    sealed class SccDocumentData : AnkhService, IVsFileChangeEvents, IDisposable
+    public sealed class SccDocumentData : AnkhService, IVsFileChangeEvents, IDisposable
     {
         readonly string _name;
         bool _isFileDocument;
@@ -47,7 +47,7 @@ namespace Ankh.Scc.ProjectMap
         DateTime? _saving;
         _VSRDTFLAGS _flags;
 
-        internal SccDocumentData(IAnkhServiceProvider context, string name)
+        public SccDocumentData(IAnkhServiceProvider context, string name)
             : base(context)
         {
             if (string.IsNullOrEmpty(name))
@@ -63,7 +63,7 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        internal void SetFlags(_VSRDTFLAGS flags)
+        public void SetFlags(_VSRDTFLAGS flags)
         {
             _flags = flags;
             bool isVirtual = ((flags & (_VSRDTFLAGS.RDT_VirtualDocument | _VSRDTFLAGS.RDT_ProjSlnDocument)) == _VSRDTFLAGS.RDT_VirtualDocument);
@@ -103,10 +103,11 @@ namespace Ankh.Scc.ProjectMap
             get { return _isDirty; }
         }
 
+        [CLSCompliant(false)]
         public uint Cookie
         {
             get { return _cookie; }
-            internal set
+            set
             {
                 if (_cookie != 0 && value != 0)
                     throw new InvalidOperationException();
@@ -129,7 +130,7 @@ namespace Ankh.Scc.ProjectMap
 
                 return _rawDocument ?? FetchDocument();
             }
-            internal set { _rawDocument = value; _fetchedRaw = _fetchedRaw || (value != null); }
+            set { _rawDocument = value; _fetchedRaw = _fetchedRaw || (value != null); }
         }
 
         private object FetchDocument()
@@ -153,7 +154,7 @@ namespace Ankh.Scc.ProjectMap
             {
                 if (hier != null)
                     Hierarchy = hier;
-                if ((id != 0) && id != VSConstants.VSITEMID_NIL)
+                if ((id != 0) && id != VSItemId.Nil)
                     ItemId = id;
 
                 if (data != IntPtr.Zero)
@@ -167,14 +168,16 @@ namespace Ankh.Scc.ProjectMap
         }
 
         IVsHierarchy _hierarchy;
-        internal IVsHierarchy Hierarchy
+        [CLSCompliant(false)]
+        public IVsHierarchy Hierarchy
         {
             get { return _hierarchy; }
             set { _hierarchy = value; }
         }
 
-        uint _itemId = VSConstants.VSITEMID_NIL;
-        internal uint ItemId
+        uint _itemId = VSItemId.Nil;
+        [CLSCompliant(false)]
+        public uint ItemId
         {
             get { return _itemId; }
             set { _itemId = value; }
@@ -183,13 +186,13 @@ namespace Ankh.Scc.ProjectMap
         /// <summary>
         /// Called when initialized from existing state; instead of document creation
         /// </summary>
-        internal void OnCookieLoad(TryDocumentDirtyPoller poller)
+        public void OnCookieLoad(TryDocumentDirtyPoller poller)
         {
             _initialUpdateCompleted = true;
             _isDirty = PollDirty(poller);
         }
 
-        internal void OnSaved()
+        public void OnSaved()
         {
             SetDirty(false);
 
@@ -200,7 +203,7 @@ namespace Ankh.Scc.ProjectMap
             statusMonitor.ScheduleSvnStatus(FullPath);
         }
 
-        internal void OnClosed()
+        public void OnClosed()
         {
             SetDirty(false); // Mark as undirty
             Dispose();
@@ -210,13 +213,18 @@ namespace Ankh.Scc.ProjectMap
         const _VSRDTFLAGS RDT_PendingInitialization = (_VSRDTFLAGS)0x00040000;
         const _VSRDTFLAGS RDT_PendingHierarchyInitialization = (_VSRDTFLAGS)0x00080000;
 
-        internal void OnAttributeChange(__VSRDTATTRIB attributes, TryDocumentDirtyPoller poller)
+        [CLSCompliant(false)]
+        public const __VSRDTATTRIB RDTA_DocumentInitialized = (__VSRDTATTRIB)0x00100000; // VS2013+
+        [CLSCompliant(false)]
+        public const __VSRDTATTRIB RDTA_HierarchyInitialized = (__VSRDTATTRIB)0x00200000; // VS2013+
+
+        public void OnAttributeChange(__VSRDTATTRIB attributes, TryDocumentDirtyPoller poller)
         {
-            if (0 != (attributes & OpenDocumentTracker.RDTA_DocumentInitialized))
+            if (0 != (attributes & RDTA_DocumentInitialized))
             {
                 _flags = (_VSRDTFLAGS)((int)_flags & ~(int)RDT_PendingInitialization);
             }
-            if (0 != (attributes & OpenDocumentTracker.RDTA_HierarchyInitialized))
+            if (0 != (attributes & RDTA_HierarchyInitialized))
             {
                 _flags = (_VSRDTFLAGS)((int)_flags & ~(int)RDT_PendingHierarchyInitialization);
             }
@@ -260,7 +268,7 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        internal void SetDirty(bool dirty)
+        public void SetDirty(bool dirty)
         {
             if (dirty == _isDirty)
                 return;
@@ -284,7 +292,7 @@ namespace Ankh.Scc.ProjectMap
             UpdateGlyph(true);
         }
 
-        internal void CheckDirty(TryDocumentDirtyPoller poller)
+        public void CheckDirty(TryDocumentDirtyPoller poller)
         {
             if (IsDirty)
                 return;
@@ -311,7 +319,7 @@ namespace Ankh.Scc.ProjectMap
         public void Dispose()
         {
             _disposed = true;
-            OpenDocumentTracker tracker = GetService<OpenDocumentTracker>(typeof(IAnkhOpenDocumentTracker));
+            IAnkhOpenDocumentTracker tracker = GetService<IAnkhOpenDocumentTracker>(typeof(IAnkhOpenDocumentTracker));
 
             if (tracker != null)
                 tracker.DoDispose(this);
@@ -319,7 +327,7 @@ namespace Ankh.Scc.ProjectMap
             HookFileChanges(false);
         }
 
-        internal void CopyState(SccDocumentData data)
+        public void CopyState(SccDocumentData data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");
@@ -386,7 +394,7 @@ namespace Ankh.Scc.ProjectMap
                 // This route works for some project types and at least the solution
                 bool assumeOk = (_rawDocument is IVsSolution);
 
-                if (SafeSucceeded(vsPersistHierarchyItem2.ReloadItem, VSConstants.VSITEMID_ROOT, (uint)0))
+                if (SafeSucceeded(vsPersistHierarchyItem2.ReloadItem, VSItemId.Root, (uint)0))
                 {
                     if (assumeOk || _disposed || reloadCookie != _reloadTick)
                         return true;
@@ -431,7 +439,7 @@ namespace Ankh.Scc.ProjectMap
                 if (!_isPropertyDesigner.HasValue)
                 {
                     _isPropertyDesigner = false;
-                    if (ItemId == VSConstants.VSITEMID_ROOT
+                    if (ItemId == VSItemId.Root
                         && (_flags & _VSRDTFLAGS.RDT_VirtualDocument) != 0)
                     {
                         IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
@@ -463,7 +471,7 @@ namespace Ankh.Scc.ProjectMap
             return SafeSucceeded(pdd2.SetDocDataReadOnly, readOnly ? 1 : 0);
         }
 
-        internal delegate bool TryDocumentDirtyPoller(SccDocumentData data, out bool dirty);
+        public delegate bool TryDocumentDirtyPoller(SccDocumentData data, out bool dirty);
 
         /// <summary>
         /// Determines whether this instance is dirty
@@ -579,7 +587,8 @@ namespace Ankh.Scc.ProjectMap
             return false;
         }
 
-        internal bool SaveDocument(IVsRunningDocumentTable rdt)
+        [CLSCompliant(false)]
+        public bool SaveDocument(IVsRunningDocumentTable rdt)
         {
             if (!IsDocumentInitialized || (_flags & _VSRDTFLAGS.RDT_DontSave) != 0)
                 return true;
@@ -620,7 +629,7 @@ namespace Ankh.Scc.ProjectMap
                 if (fileChange == null)
                     fileChange = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
 
-                List<SvnItem> items = new List<SvnItem>(GetService<SvnSccProvider>(typeof(ITheAnkhSvnSccProvider)).GetAllDocumentItems(_name));
+                List<string> items = new List<string>(GetService<IAnkhProjectDocumentTracker>().GetAllDocumentFiles(_name));
 
                 uint[] cookies = new uint[items.Count];
                 _fileChangeCookies = cookies;
@@ -628,7 +637,7 @@ namespace Ankh.Scc.ProjectMap
                 for (int i = 0; i < items.Count; i++)
                 {
                     uint ck;
-                    if (VSErr.Succeeded(fileChange.AdviseFileChange(items[i].FullPath, (uint)(_VSFILECHANGEFLAGS.VSFILECHG_Size | _VSFILECHANGEFLAGS.VSFILECHG_Time), this, out ck)))
+                    if (VSErr.Succeeded(fileChange.AdviseFileChange(items[i], (uint)(_VSFILECHANGEFLAGS.VSFILECHG_Size | _VSFILECHANGEFLAGS.VSFILECHG_Time), this, out ck)))
                         cookies[i] = ck;
                 }
             }
@@ -639,6 +648,7 @@ namespace Ankh.Scc.ProjectMap
             return VSErr.S_OK;
         }
 
+        [CLSCompliant(false)]
         public int FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
         {
             if (rgpszFile == null || cChanges == 0)
@@ -668,7 +678,7 @@ namespace Ankh.Scc.ProjectMap
         }
         #endregion
 
-        internal bool IsDocumentInitialized
+        public bool IsDocumentInitialized
         {
             get
             {
@@ -677,7 +687,7 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        internal bool NeedsNoDirtyCheck
+        public bool NeedsNoDirtyCheck
         {
             get
             {

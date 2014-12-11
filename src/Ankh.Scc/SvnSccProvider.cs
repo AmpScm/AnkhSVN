@@ -129,8 +129,8 @@ namespace Ankh.Scc
 
                 // Delayed flush all glyphs of all projects when a user enables us.
 
-                List<SvnProject> allProjects = new List<SvnProject>(GetAllProjects());
-                allProjects.Add(SvnProject.Solution);
+                List<SccProject> allProjects = new List<SccProject>(GetAllProjects());
+                allProjects.Add(SccProject.Solution);
                 Monitor.ScheduleGlyphOnlyUpdate(allProjects);
 
                 RegisterForSccCleanup();
@@ -196,7 +196,7 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(pscp2Project, out data))
             {
                 // This method is called before the OpenProject calls
-                _projectMap.Add(pscp2Project, data = new SccProjectData(Context, pscp2Project));
+                _projectMap.Add(pscp2Project, data = new SccProjectData(this, pscp2Project));
             }
 
             data.IsManaged = (pszProvider == AnkhId.SubversionSccName);

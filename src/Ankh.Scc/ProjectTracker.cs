@@ -29,10 +29,6 @@ using System.ComponentModel.Design;
 
 namespace Ankh.Scc
 {
-    interface IAnkhProjectDocumentTracker
-    {
-    }
-
     //[CLSCompliant(false)]
     [GlobalService(typeof(IAnkhProjectDocumentTracker))]
     partial class ProjectTracker : AnkhService, IAnkhProjectDocumentTracker, IVsTrackProjectDocumentsEvents2, IVsTrackProjectDocumentsEvents3
@@ -279,6 +275,11 @@ namespace Ankh.Scc
                 return;
 
             Context.GetService<IAnkhCommandService>().PostTickCommand(ref _registeredSccCleanup, AnkhCommand.SccFinishTasks);
+        }
+
+        public IEnumerable<string> GetAllDocumentFiles(string documentName)
+        {
+            return _sccProvider.GetAllDocumentFiles(documentName);
         }
     }
 }

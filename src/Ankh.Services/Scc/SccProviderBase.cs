@@ -223,5 +223,13 @@ namespace Ankh.Scc
         {
             
         }
+
+        public abstract Selection.SccProject CreateProject(ProjectMap.SccProjectData sccProjectData);
+
+        public abstract ProjectMap.SccProjectFile GetFile(string path);
+
+        public abstract int GetSccGlyph(int p, string[] namesArray, VsStateIcon[] newGlyphs, uint[] sccState);
+
+        public abstract IEnumerable<string> GetAllDocumentFiles(string documentName);
     }
 }

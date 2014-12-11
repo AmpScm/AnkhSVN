@@ -124,5 +124,7 @@ namespace Ankh.Scc
         /// Provide API to avoid dirty scheduling
         /// </summary>
         bool NoDirtyCheck(SvnItem item);
+
+        void DoDispose(ProjectMap.SccDocumentData sccDocumentData);
     }
 }

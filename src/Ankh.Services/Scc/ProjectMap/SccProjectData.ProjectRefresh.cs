@@ -75,23 +75,23 @@ namespace Ankh.Scc.ProjectMap
 
                 if (itemDir == null)
                 {
-                    parentId = VSConstants.VSITEMID_NIL;
+                    parentId = VSItemId.Nil;
                     return false;
                 }
                 else if (string.Equals(itemDir, ProjectDirectory, StringComparison.OrdinalIgnoreCase))
-                    parentId = VSConstants.VSITEMID_ROOT;
+                    parentId = VSItemId.Root;
                 else
                 {
-                    parentId = GetId(itemDir, VSConstants.VSITEMID_ROOT);
+                    parentId = GetId(itemDir, VSItemId.Root);
 
-                    if (parentId == VSConstants.VSITEMID_NIL)
+                    if (parentId == VSItemId.Nil)
                     {
                         if (!AddItem(item.Parent, out parentId))
                             return false;
 
                         parentId = GetId(itemDir, parentId);
 
-                        if (parentId == VSConstants.VSITEMID_NIL)
+                        if (parentId == VSItemId.Nil)
                             return false;
                     }
                 }
@@ -122,7 +122,7 @@ namespace Ankh.Scc.ProjectMap
                 if (_map.TryGetValue(itemPath, out id))
                     return id;
                 else
-                    return VSConstants.VSITEMID_NIL;
+                    return VSItemId.Nil;
             }
 
             public void RemoveItem(SvnItem item, uint id)
@@ -174,7 +174,7 @@ namespace Ankh.Scc.ProjectMap
                     if (hierarchy != null
                         && VSErr.Succeeded(hierarchy.ParseCanonicalName(item.FullPath, out id)))
                     {
-                        bFound = (id != VSConstants.VSITEMID_NIL) && (id != VSConstants.VSITEMID_ROOT);
+                        bFound = (id != VSItemId.Nil) && (id != VSItemId.Root);
 
                         // Perform an extra validation step to avoid issue #700
                         string foundName;

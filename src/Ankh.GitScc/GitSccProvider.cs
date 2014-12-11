@@ -101,12 +101,12 @@ namespace Ankh.GitScc
             //throw new NotImplementedException();
         }
 
-        public void SetProjectManaged(Selection.SvnProject project, bool managed)
+        public void SetProjectManaged(Selection.SccProject project, bool managed)
         {
             //throw new NotImplementedException();
         }
 
-        public bool IsProjectManaged(Selection.SvnProject project)
+        public bool IsProjectManaged(Selection.SccProject project)
         {
             //throw new NotImplementedException();
             return false;
@@ -138,7 +138,7 @@ namespace Ankh.GitScc
             //throw new NotImplementedException();
         }
 
-        public void EnsureCheckOutReference(Selection.SvnProject project)
+        public void EnsureCheckOutReference(Selection.SccProject project)
         {
             //throw new NotImplementedException();
         }
@@ -169,5 +169,25 @@ namespace Ankh.GitScc
             //throw new NotImplementedException();
         }
         #endregion
+
+        public override Selection.SccProject CreateProject(Scc.ProjectMap.SccProjectData sccProjectData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Scc.ProjectMap.SccProjectFile GetFile(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int GetSccGlyph(int p, string[] namesArray, VsStateIcon[] newGlyphs, uint[] sccState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<string> GetAllDocumentFiles(string documentName)
+        {
+            yield return documentName;
+        }
     }
 }

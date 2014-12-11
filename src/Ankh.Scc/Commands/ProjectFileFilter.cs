@@ -30,7 +30,7 @@ namespace Ankh.Scc.Commands
         public void OnUpdate(CommandUpdateEventArgs e)
         {
             if (e.State.SccProviderActive)
-                foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
+                foreach (SccProject p in e.Selection.GetSelectedProjects(false))
                 {
                     ISvnProjectInfo pi = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
 

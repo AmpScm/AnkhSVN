@@ -28,47 +28,47 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        IEnumerable<SvnProject> GetAllProjectsContaining(string path);
+        IEnumerable<SccProject> GetAllProjectsContaining(string path);
         /// <summary>
         /// Gets an IEnumerable over all projects containing one or more of the specified <paramref name="paths"/>
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        IEnumerable<SvnProject> GetAllProjectsContaining(IEnumerable<string> paths);
+        IEnumerable<SccProject> GetAllProjectsContaining(IEnumerable<string> paths);
 
         /// <summary>
         /// Gets all projects.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<SvnProject> GetAllProjects();
+        IEnumerable<SccProject> GetAllProjects();
 
         /// <summary>
         /// Gets a list of all files contained within <paramref name="project"/>
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        IEnumerable<string> GetAllFilesOf(SvnProject project);
+        IEnumerable<string> GetAllFilesOf(SccProject project);
 
         /// <summary>
         /// Gets a list of all files contained within <paramref name="project"/>
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        IEnumerable<string> GetAllFilesOf(SvnProject project, bool exceptExcluded);
+        IEnumerable<string> GetAllFilesOf(SccProject project, bool exceptExcluded);
 
         /// <summary>
         /// Gets a list of all files contained within the list of <paramref name="projects"/>
         /// </summary>
         /// <param name="projects"></param>
         /// <returns></returns>
-        IEnumerable<string> GetAllFilesOf(ICollection<SvnProject> projects);
+        IEnumerable<string> GetAllFilesOf(ICollection<SccProject> projects);
 
         /// <summary>
         /// Gets a list of all files contained within the list of <paramref name="projects"/>
         /// </summary>
         /// <param name="projects"></param>
         /// <returns></returns>
-        IEnumerable<string> GetAllFilesOf(ICollection<SvnProject> projects, bool exceptExcluded);
+        IEnumerable<string> GetAllFilesOf(ICollection<SccProject> projects, bool exceptExcluded);
 
         /// <summary>
         /// Gets all files of all projects.
@@ -114,7 +114,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The project.</param>
         /// <returns></returns>
-        ISvnProjectInfo GetProjectInfo(SvnProject project);
+        ISvnProjectInfo GetProjectInfo(SccProject project);
 
         /// <summary>
         /// Gets the icon of the file in the first project containing the file

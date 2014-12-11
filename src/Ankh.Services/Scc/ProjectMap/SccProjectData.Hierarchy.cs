@@ -49,6 +49,7 @@ namespace Ankh.Scc.ProjectMap
             return VSErr.S_OK;
         }
 
+        [CLSCompliant(false)]
         public int OnInvalidateItems(uint itemidParent)
         {
             // Should be set the project dirty.. 
@@ -78,13 +79,14 @@ namespace Ankh.Scc.ProjectMap
             if (walker == null)
                 return;
 
-            if (itemid != VSConstants.VSITEMID_NIL)
+            if (itemid != VSItemId.Nil)
                 walker.SetPrecreatedFilterItem(ProjectHierarchy, itemid);
             else
-                walker.SetPrecreatedFilterItem(null, VSConstants.VSITEMID_NIL);
+                walker.SetPrecreatedFilterItem(null, VSItemId.Nil);
 
         }
 
+        [CLSCompliant(false)]
         public int OnItemAdded(uint itemidParent, uint itemidSiblingPrev, uint itemidAdded)
         {
             string r;
@@ -108,7 +110,7 @@ namespace Ankh.Scc.ProjectMap
                     }
                     else
                     {
-                        SetPreCreatedItem(VSConstants.VSITEMID_NIL);
+                        SetPreCreatedItem(VSItemId.Nil);
 
                         SetDirty();
                     }
@@ -118,9 +120,10 @@ namespace Ankh.Scc.ProjectMap
             return VSErr.S_OK;
         }
 
+        [CLSCompliant(false)]
         public int OnItemDeleted(uint itemid)
         {
-            SetPreCreatedItem(VSConstants.VSITEMID_NIL);
+            SetPreCreatedItem(VSItemId.Nil);
 
             object var;
             if (VSErr.Succeeded(ProjectHierarchy.GetProperty(itemid, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
@@ -134,15 +137,17 @@ namespace Ankh.Scc.ProjectMap
             return VSErr.S_OK;
         }
 
+        [CLSCompliant(false)]
         public int OnItemsAppended(uint itemidParent)
         {
             SetDirty();
             return VSErr.S_OK;
         }
 
+        [CLSCompliant(false)]
         public int OnPropertyChanged(uint itemid, int propid, uint flags)
         {
-            if (itemid == VSConstants.VSITEMID_ROOT)
+            if (itemid == VSItemId.Root)
             {
                 _uniqueName = null;
                 _projectDirectory = null;

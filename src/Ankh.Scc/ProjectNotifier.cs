@@ -36,7 +36,7 @@ namespace Ankh.Scc
         readonly object _lock = new object();
         bool _posted;
         bool _onIdle;
-        List<SvnProject> _dirtyProjects;
+        List<SccProject> _dirtyProjects;
         HybridCollection<string> _maybeAdd;
         uint _cookie;
 
@@ -148,7 +148,7 @@ namespace Ankh.Scc
         /// Schedules a glyph refresh of all specified projects
         /// </summary>
         /// <param name="projects"></param>
-        public void ScheduleGlyphOnlyUpdate(IEnumerable<SvnProject> projects)
+        public void ScheduleGlyphOnlyUpdate(IEnumerable<SccProject> projects)
         {
             if (projects == null)
                 throw new ArgumentNullException("projects");
@@ -156,9 +156,9 @@ namespace Ankh.Scc
             lock (_lock)
             {
                 if (_dirtyProjects == null)
-                    _dirtyProjects = new List<SvnProject>();
+                    _dirtyProjects = new List<SccProject>();
 
-                foreach (SvnProject project in projects)
+                foreach (SccProject project in projects)
                 {
                     if (!_dirtyProjects.Contains(project))
                         _dirtyProjects.Add(project);
@@ -214,7 +214,7 @@ namespace Ankh.Scc
 
         internal void HandleEvent(AnkhCommand command)
         {
-            List<SvnProject> dirtyProjects;
+            List<SccProject> dirtyProjects;
             HybridCollection<string> dirtyCheck;
             HybridCollection<string> maybeAdd;
 
@@ -244,7 +244,7 @@ namespace Ankh.Scc
 
             if (dirtyProjects != null)
             {
-                foreach (SvnProject project in dirtyProjects)
+                foreach (SccProject project in dirtyProjects)
                 {
                     if (project.IsSolution)
                         provider.UpdateSolutionGlyph();

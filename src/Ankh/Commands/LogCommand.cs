@@ -44,7 +44,7 @@ namespace Ankh.Commands
             switch (e.Command)
             {
                 case AnkhCommand.ProjectHistory:
-                    SvnProject p = EnumTools.GetFirst(e.Selection.GetSelectedProjects(false));
+                    SccProject p = EnumTools.GetFirst(e.Selection.GetSelectedProjects(false));
                     if (p == null)
                         break;
 
@@ -165,7 +165,7 @@ namespace Ankh.Commands
                     break;
                 case AnkhCommand.ProjectHistory:
                     IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
-                    foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
+                    foreach (SccProject p in e.Selection.GetSelectedProjects(false))
                     {
                         ISvnProjectInfo info = mapper.GetProjectInfo(p);
 

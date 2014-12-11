@@ -20,22 +20,22 @@ using Microsoft.VisualStudio.Shell.Interop;
 namespace Ankh.Selection
 {
     /// <summary>
-    /// An <see cref="SvnProject"/> instance is a black box reference to a project
+    /// An <see cref="SccProject"/> instance is a black box reference to a project
     /// </summary>
     /// <remarks>
-    /// <para>Normally you only use <see cref="SvnProject"/> instances to pass between the <see cref="ISelectionContext"/>, 
+    /// <para>Normally you only use <see cref="SccProject"/> instances to pass between the <see cref="ISelectionContext"/>, 
     /// <see cref="ISccHierarchyWalker"/> and <see cref="IProjectFileMapper"/> services</para>
     /// <para>The SvnProject contains a <see cref="path"/> and a <see cref="rawhandle"/> which can both be null but not both at the same time</para>
     /// <para>FullPath = null in case of a solution only-project (E.g. website project)</para>
     /// <para>RawHandle = null when retrieved from the selectionprovider when the file is not in a project (E.g. solution folder)</para>
     /// </remarks>
-    public class SvnProject : IEquatable<SvnProject>
+    public class SccProject : IEquatable<SccProject>
     {
         readonly string _fullPath;
         readonly IVsSccProject2 _rawHandle;
 
-        static readonly SvnProject _solution = new SvnProject();
-        public static SvnProject Solution
+        static readonly SccProject _solution = new SccProject();
+        public static SccProject Solution
         {
             get { return _solution; }
         }
@@ -46,7 +46,7 @@ namespace Ankh.Selection
         /// <param name="fullPath">The full path.</param>
         /// <param name="rawHandle">The raw handle.</param>
         [CLSCompliant(false)]
-        public SvnProject(string fullPath, IVsSccProject2 rawHandle)
+        public SccProject(string fullPath, IVsSccProject2 rawHandle)
         {
             if (string.IsNullOrEmpty(fullPath) && rawHandle == null)
                 throw new ArgumentNullException("fullPath");
@@ -62,7 +62,7 @@ namespace Ankh.Selection
             _rawHandle = rawHandle;
         }
 
-        private SvnProject()
+        private SccProject()
         { }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Ankh.Selection
         /// </exception>
         public override bool Equals(object obj)
         {
-            return Equals(obj as SvnProject);
+            return Equals(obj as SccProject);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Ankh.Selection
         /// </summary>
         /// <param name="obj">The obj.</param>
         /// <returns></returns>
-        public bool Equals(SvnProject obj)
+        public bool Equals(SccProject obj)
         {
             if (obj == null)
                 return false;
