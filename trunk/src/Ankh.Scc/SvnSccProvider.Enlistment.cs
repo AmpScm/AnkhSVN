@@ -248,7 +248,7 @@ namespace Ankh.Scc
                 IVsSolution2 sln = GetService<IVsSolution2>(typeof(SVsSolution));
 
                 if (sln != null
-                    && VSErr.Succeeded(pHierarchy.GetCanonicalName(VSConstants.VSITEMID_ROOT, out projectLocation)))
+                    && VSErr.Succeeded(pHierarchy.GetCanonicalName(VSItemId.Root, out projectLocation)))
                     return !string.IsNullOrEmpty(projectLocation);
 
                 projectLocation = null;
@@ -474,7 +474,7 @@ namespace Ankh.Scc
                 for (uint i = 0; i < iFetched; i++)
                 {
                     string name;
-                    if (VSErr.Succeeded(hiers[i].GetCanonicalName(Microsoft.VisualStudio.VSConstants.VSITEMID_ROOT, out name)))
+                    if (VSErr.Succeeded(hiers[i].GetCanonicalName(VSItemId.Root, out name)))
                     {
                         string slnName;
                         if (!_trueNameMap.TryGetValue(name, out slnName))

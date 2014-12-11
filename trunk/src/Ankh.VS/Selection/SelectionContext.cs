@@ -79,7 +79,7 @@ namespace Ankh.VS.Selection
         public SelectionContext(IAnkhServiceProvider context)
             : base(context)
         {
-            _filterItem = VSConstants.VSITEMID_NIL;
+            _filterItem = VSItemId.Nil;
         }
 
         protected override void OnInitialize()
@@ -147,13 +147,13 @@ namespace Ankh.VS.Selection
                 _currentContainer = pSCNew;
             }
 
-            if (_filterItem != VSConstants.VSITEMID_NIL)
+            if (_filterItem != VSItemId.Nil)
             {
                 if (_filterItem != current.id || _filterHierarchy != current.hierarchy)
                 {
                     // Clear the filter if the selection change is not to exactly the filtered item
                     _filterHierarchy = null;
-                    _filterItem = VSConstants.VSITEMID_NIL;
+                    _filterItem = VSItemId.Nil;
                 }
             }
 
@@ -306,7 +306,7 @@ namespace Ankh.VS.Selection
             {
                 if (!_isSingleNodeSelection.HasValue)
                 {
-                    if (current.id == VSConstants.VSITEMID_SELECTION
+                    if (current.id == VSItemId.Selection
                         && current.selection != null)
                     {
                         uint nItems;
@@ -325,8 +325,8 @@ namespace Ankh.VS.Selection
                     {
                         switch (current.id)
                         {
-                            case VSConstants.VSITEMID_SELECTION:
-                            case VSConstants.VSITEMID_NIL:
+                            case VSItemId.Selection:
+                            case VSItemId.Nil:
                                 _isSingleNodeSelection = false;
                                 break;
                             default:
@@ -365,7 +365,7 @@ namespace Ankh.VS.Selection
         {
             HierarchySelection sel = current; // Cache the selection to make sure we don't use an id for another hierarchy
 
-            if (sel.id == VSConstants.VSITEMID_SELECTION)
+            if (sel.id == VSItemId.Selection)
             {
                 uint nItems;
                 int withinSingleHierarchy;
@@ -391,14 +391,14 @@ namespace Ankh.VS.Selection
                         yield return new SelectionItem(hier, items[i].itemid);
                     else
                     {
-                        if (items[i].itemid == VSConstants.VSITEMID_ROOT && MightBeSolutionExplorerSelection)
-                            yield return new SelectionItem((IVsHierarchy)Solution, VSConstants.VSITEMID_ROOT,
+                        if (items[i].itemid == VSItemId.Root && MightBeSolutionExplorerSelection)
+                            yield return new SelectionItem((IVsHierarchy)Solution, VSItemId.Root,
                                 SelectionUtils.GetSolutionAsSccProject(Context));
                         // else skip
                     }
                 }
             }
-            else if (sel.id != VSConstants.VSITEMID_NIL && (sel.hierarchy != null))
+            else if (sel.id != VSItemId.Nil && (sel.hierarchy != null))
             {
                 if (sel.id == _filterItem && sel.hierarchy == _filterHierarchy)
                     yield break;
@@ -409,7 +409,7 @@ namespace Ankh.VS.Selection
             {
                 // No selection, no hierarchy.... -> no selection!
             }
-            else if (sel.id == VSConstants.VSITEMID_ROOT)
+            else if (sel.id == VSItemId.Root)
             {
                 // This is the case in the solution explorer when only the solution is selected
 
@@ -420,7 +420,7 @@ namespace Ankh.VS.Selection
                     IVsHierarchy hier = (IVsHierarchy)Solution;
 
                     if (hier != null)
-                        yield return new SelectionItem(hier, VSConstants.VSITEMID_ROOT,
+                        yield return new SelectionItem(hier, VSItemId.Root,
                             SelectionUtils.GetSolutionAsSccProject(Context));
                 }
             }
@@ -450,7 +450,7 @@ namespace Ankh.VS.Selection
 
         internal static uint GetItemIdFromObject(object pvar)
         {
-            if (pvar == null) return VSConstants.VSITEMID_NIL;
+            if (pvar == null) return VSItemId.Nil;
             if (pvar is int) return (uint)(int)pvar;
             if (pvar is uint) return (uint)pvar;
             if (pvar is short) return (uint)(short)pvar;
@@ -459,7 +459,7 @@ namespace Ankh.VS.Selection
             if (pvar is sbyte) return (uint)(sbyte)pvar;
             if (pvar is long) return (uint)(long)pvar;
             if (pvar is ulong) return (uint)(ulong)pvar;
-            return VSConstants.VSITEMID_NIL;
+            return VSItemId.Nil;
         }
 
         static Guid hierarchyId = typeof(IVsHierarchy).GUID;
@@ -495,7 +495,7 @@ namespace Ankh.VS.Selection
                     hr = VSErr.E_FAIL;
 
                 hierPtr = IntPtr.Zero;
-                subId = VSConstants.VSITEMID_NIL;
+                subId = VSItemId.Nil;
             }
 
             if (VSErr.Succeeded(hr) && hierPtr != IntPtr.Zero)
@@ -534,7 +534,7 @@ namespace Ankh.VS.Selection
             }
 
             uint childId = GetItemIdFromObject(value);
-            while (childId != VSConstants.VSITEMID_NIL)
+            while (childId != VSItemId.Nil)
             {
                 SelectionItem i = new SelectionItem(si.Hierarchy, childId);
 
@@ -774,7 +774,7 @@ namespace Ankh.VS.Selection
         {
             foreach (SelectionItem item in GetSelectedItems(recursive))
             {
-                if (item.Id == VSConstants.VSITEMID_ROOT)
+                if (item.Id == VSItemId.Root)
                 {
                     if (!item.IsSolution && item.SccProject != null)
                         yield return new SccProject(null, item.SccProject);
@@ -786,7 +786,7 @@ namespace Ankh.VS.Selection
         {
             foreach (SelectionItem item in GetSelectedItems(recursive))
             {
-                if (item.Id == VSConstants.VSITEMID_ROOT)
+                if (item.Id == VSItemId.Root)
                 {
                     if (!item.IsSolution && item.Hierarchy != null)
                         yield return new SvnHierarchy(item.Hierarchy);
@@ -907,7 +907,7 @@ namespace Ankh.VS.Selection
 
         void ISccProjectWalker.SetPrecreatedFilterItem(IVsHierarchy hierarchy, uint id)
         {
-            if (id != VSConstants.VSITEMID_NIL || _filterItem != VSConstants.VSITEMID_NIL)
+            if (id != VSItemId.Nil || _filterItem != VSItemId.Nil)
                 ClearCache(); // Make sure we use the filter directly
 
             _filterHierarchy = hierarchy;

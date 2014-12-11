@@ -360,7 +360,7 @@ namespace Ankh.VS.Selection
 
             public int GetSccFiles(uint itemid, Microsoft.VisualStudio.OLE.Interop.CALPOLESTR[] pCaStringsOut, Microsoft.VisualStudio.OLE.Interop.CADWORD[] pCaFlagsOut)
             {
-                if (itemid == VSConstants.VSITEMID_ROOT)
+                if (itemid == VSItemId.Root)
                 {
                     string solutionFilename = SelectionUtils.GetSolutionFileName(_context);
 
@@ -397,7 +397,7 @@ namespace Ankh.VS.Selection
 
                 // Set the solution's glyph directly in the hierarchy
                 IVsHierarchy solHier = (IVsHierarchy)_context.GetService(typeof(SVsSolution));
-                return solHier.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_StateIconIndex, (int)rgsiGlyphs[0]);
+                return solHier.SetProperty(VSItemId.Root, (int)__VSHPROPID.VSHPROPID_StateIconIndex, (int)rgsiGlyphs[0]);
             }
 
             public int SetSccLocation(string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszSccProvider)

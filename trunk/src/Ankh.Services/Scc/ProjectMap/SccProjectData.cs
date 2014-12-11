@@ -383,6 +383,7 @@ namespace Ankh.Scc.ProjectMap
         /// <param name="project">The project.</param>
         /// <param name="oldName">The old name.</param>
         /// <param name="newName">The new name.</param>
+        [CLSCompliant(false)]
         public void CheckProjectRename(IVsSccProject2 project, string oldName, string newName)
         {
             if (_checkedProjectFile && oldName == ProjectFile)

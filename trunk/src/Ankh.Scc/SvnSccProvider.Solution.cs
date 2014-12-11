@@ -55,7 +55,7 @@ namespace Ankh.Scc
         /// Adds the specified item or items to the specified project directly from source control.
         /// </summary>
         /// <param name="pProject">[in] <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsProject"></see> interface for the project to add the items to.T:Microsoft.VisualStudio.Shell.Interop.IVsProject is an old interface that is not used directly. Instead, query the <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsProject3"></see> interface for the <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsProject"></see> interface and pass that in.</param>
-        /// <param name="itemidLoc">[in] A value indicating where in the project hierarchy to add the items. This is a unique identifier for a project or folder item or one of the following values: <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_NIL"></see>, <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_ROOT"></see>, or <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_SELECTION"></see>.</param>
+        /// <param name="itemidLoc">[in] A value indicating where in the project hierarchy to add the items. This is a unique identifier for a project or folder item or one of the following values: <see cref="F:Microsoft.VisualStudio.VSItemId.Nil"></see>, <see cref="F:Microsoft.VisualStudio.VSItemId.Root"></see>, or <see cref="F:Microsoft.VisualStudio.VSItemId.Selection"></see>.</param>
         /// <param name="cFilesToAdd">[in] Number of files specified in rgpszFilesToAdd array.</param>
         /// <param name="rgpszFilesToAdd">[in] Array of files names to add to the project from source control.</param>
         /// <param name="hwndDlgOwner">[in] Handle to the parent of the dialog box that will be used.</param>

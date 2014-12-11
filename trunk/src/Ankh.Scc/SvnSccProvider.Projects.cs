@@ -264,7 +264,7 @@ namespace Ankh.Scc
                     return;
                 }
 
-                if (VSErr.Succeeded(rdt.RenameDocument(path, trueSln, hier, VSConstants.VSITEMID_ROOT)))
+                if (VSErr.Succeeded(rdt.RenameDocument(path, trueSln, hier, VSItemId.Root)))
                 {
                     int hr;
 

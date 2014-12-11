@@ -63,6 +63,7 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
+        [CLSCompliant(false)]
         public void SetFlags(_VSRDTFLAGS flags)
         {
             _flags = flags;
@@ -218,6 +219,7 @@ namespace Ankh.Scc.ProjectMap
         [CLSCompliant(false)]
         public const __VSRDTATTRIB RDTA_HierarchyInitialized = (__VSRDTATTRIB)0x00200000; // VS2013+
 
+        [CLSCompliant(false)]
         public void OnAttributeChange(__VSRDTATTRIB attributes, TryDocumentDirtyPoller poller)
         {
             if (0 != (attributes & RDTA_DocumentInitialized))

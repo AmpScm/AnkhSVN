@@ -250,7 +250,7 @@ namespace Ankh.Scc
                     flags = GetDocumentFlags_cb(cookie);
 
                     hier = null;
-                    itemId = VSConstants.VSITEMID_NIL;
+                    itemId = VSItemId.Nil;
                     document = null;
                     return true;
                 }
@@ -278,7 +278,7 @@ namespace Ankh.Scc
             else
             {
                 hier = null;
-                itemId = VSConstants.VSITEMID_NIL;
+                itemId = VSItemId.Nil;
                 document = null;
                 return false;
             }
@@ -288,7 +288,7 @@ namespace Ankh.Scc
         /// Called before a document is locked in the Running Document Table (RDT) for the first time.
         /// </summary>
         /// <param name="pHier">[in] The <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsHierarchy"></see> object that owns the document about to be locked.</param>
-        /// <param name="itemid">[in] The item ID in the hierarchy. This is a unique identifier or it can be one of the following values: <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_NIL"></see>, <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_ROOT"></see>, or <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_SELECTION"></see>.</param>
+        /// <param name="itemid">[in] The item ID in the hierarchy. This is a unique identifier or it can be one of the following values: <see cref="F:Microsoft.VisualStudio.VSItemId.Nil"></see>, <see cref="F:Microsoft.VisualStudio.VSItemId.Root"></see>, or <see cref="F:Microsoft.VisualStudio.VSItemId.Selection"></see>.</param>
         /// <param name="pszMkDocument">[in] The path to the document about to be locked.</param>
         /// <returns>
         /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
