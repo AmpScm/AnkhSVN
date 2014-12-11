@@ -38,7 +38,7 @@ namespace Ankh.Scc
         bool _hookedProjects;
         uint _projectCookie;
         uint _documentCookie;
-        SvnSccProvider _sccProvider;
+        SccProviderBase _sccProvider;
         bool _collectHints;
         bool _solutionLoaded;
         readonly HybridCollection<string> _fileHints = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -57,11 +57,17 @@ namespace Ankh.Scc
 
             AnkhServiceEvents ev = GetService<AnkhServiceEvents>();
 
-            ev.SccProviderActivated += OnSccProviderActivated;
+            ev.SccProviderActivated += OnSvnSccProviderActivated;
             ev.SccProviderDeactivated += OnSccProviderDeactivated;
+            ev.GitSccProviderActivated += OnGitSccProviderActivated;
+            ev.GitSccProviderDeactivated += OnSccProviderDeactivated;
 
-            if (SccProvider.IsActive)
-                OnSccProviderActivated(this, EventArgs.Empty);
+            IAnkhCommandStates states = GetService<IAnkhCommandStates>();
+
+            if (states != null && states.SccProviderActive)
+                OnSvnSccProviderActivated(this, EventArgs.Empty);
+            else if (states != null && states.GitSccProviderActive)
+                OnGitSccProviderActivated(this, EventArgs.Empty);
         }
 
         private void OnSccProviderDeactivated(object sender, EventArgs e)
@@ -69,8 +75,16 @@ namespace Ankh.Scc
             Hook(true, false);
         }
 
-        private void OnSccProviderActivated(object sender, EventArgs e)
+        private void OnSvnSccProviderActivated(object sender, EventArgs e)
         {
+            _sccProvider = GetService<SvnSccProvider>();
+            Hook(true, true);
+            LoadInitial();
+        }
+
+        private void OnGitSccProviderActivated(object sender, EventArgs e)
+        {
+            _sccProvider = GetService<ITheAnkhGitSccProvider>() as SccProviderBase;
             Hook(true, true);
             LoadInitial();
         }
@@ -90,10 +104,10 @@ namespace Ankh.Scc
             }
         }
 
-        SvnSccProvider SccProvider
+        SccProviderBase SccProvider
         {
             [DebuggerStepThrough]
-            get { return _sccProvider ?? (_sccProvider = GetService<SvnSccProvider>()); }
+            get { return _sccProvider; }
         }
 
         private void LoadInitial()

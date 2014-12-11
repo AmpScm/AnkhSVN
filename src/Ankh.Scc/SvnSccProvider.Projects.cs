@@ -165,7 +165,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Called by ProjectDocumentTracker when a solution is opened 
         /// </summary>
-        internal void OnSolutionOpened(bool onLoad)
+        public override void OnSolutionOpened(bool onLoad)
         {
             _solutionFile = null;
 
@@ -223,7 +223,7 @@ namespace Ankh.Scc
             UpdateSolutionGlyph();
         }
 
-        public void VerifySolutionNaming()
+        public override void VerifySolutionNaming()
         {
             IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
 
@@ -363,7 +363,7 @@ namespace Ankh.Scc
         /// Called by ProjectDocumentTracker just before a solution is closed
         /// </summary>
         /// <remarks>At this time the closing can not be canceled.</remarks>
-        internal void OnStartedSolutionClose()
+        public override void OnStartedSolutionClose()
         {
             foreach (SccProjectData pd in _projectMap.Values)
             {
@@ -381,7 +381,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Called by ProjectDocumentTracker when a solution is closed
         /// </summary>
-        internal void OnSolutionClosed()
+        public override void OnSolutionClosed()
         {
             Debug.Assert(_projectMap.Count == 0);
             Debug.Assert(_fileMap.Count == 0);
@@ -407,13 +407,13 @@ namespace Ankh.Scc
         /// Called by ProjectDocumentTracker when a scc-capable project is loaded
         /// </summary>
         /// <param name="project"></param>
-        internal void OnProjectLoaded(IVsSccProject2 project)
+        public override void OnProjectLoaded(IVsSccProject2 project)
         {
             if (!_projectMap.ContainsKey(project))
                 _projectMap.Add(project, new SccProjectData(Context, project));
         }
 
-        internal void OnProjectRenamed(IVsSccProject2 project)
+        public override void OnProjectRenamed(IVsSccProject2 project)
         {
             if (string.IsNullOrEmpty(SolutionFilename))
                 return;
@@ -434,7 +434,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The loaded project</param>
         /// <param name="added">The project was added after opening</param>
-        internal void OnProjectOpened(IVsSccProject2 project, bool added)
+        public override void OnProjectOpened(IVsSccProject2 project, bool added)
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(project, out data))
@@ -485,20 +485,13 @@ namespace Ankh.Scc
             }
         }
 
-        internal bool TrackProjectChanges(IVsSccProject2 project)
-        {
-            bool trackCopies;
-
-            return TrackProjectChanges(project, out trackCopies);
-        }
-
         IVsSolutionBuildManager2 _buildManager;
         IVsSolutionBuildManager2 BuildManager
         {
             get { return _buildManager ?? (_buildManager = GetService<IVsSolutionBuildManager2>(typeof(SVsSolutionBuildManager))); }
         }
 
-        internal bool TrackProjectChanges(IVsSccProject2 project, out bool trackCopies)
+        public override bool TrackProjectChanges(IVsSccProject2 project, out bool trackCopies)
         {
             // We can be called with a null project
             SccProjectData data;
@@ -533,7 +526,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="removed">if set to <c>true</c> the project is being removed or unloaded from the solution.</param>
-        internal void OnProjectClosed(IVsSccProject2 project, bool removed)
+        public override void OnProjectClosed(IVsSccProject2 project, bool removed)
         {
             SccProjectData data;
             if (_projectMap.TryGetValue(project, out data))
@@ -549,7 +542,7 @@ namespace Ankh.Scc
             }
         }
 
-        internal void OnProjectBeforeUnload(IVsSccProject2 project, IVsHierarchy pStubHierarchy)
+        public override void OnProjectBeforeUnload(IVsSccProject2 project, IVsHierarchy pStubHierarchy)
         {
             SccProjectData data;
             if (_projectMap.TryGetValue(project, out data))
@@ -600,7 +593,7 @@ namespace Ankh.Scc
         /// And when renaming a C# project (VS11 Beta) we sometimes even get a delete before a rename.
         /// </summary>
         /// <param name="path"></param>
-        internal void AddDelayedDelete(string path)
+        public override void AddDelayedDelete(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");

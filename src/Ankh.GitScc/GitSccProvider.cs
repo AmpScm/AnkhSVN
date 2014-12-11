@@ -8,11 +8,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.GitScc
 {
-    [GuidAttribute(AnkhId.GitSccServiceId), ComVisible(true), CLSCompliant(false)]
-    public interface ITheAnkhGitSccProvider : IVsSccProvider
-    {
-    }
-
     [GlobalService(typeof(GitSccProvider))]
     [GlobalService(typeof(IAnkhGitSccService))]
     [GlobalService(typeof(ITheAnkhGitSccProvider), true)]
@@ -68,6 +63,11 @@ namespace Ankh.GitScc
             return VSErr.S_OK;
         }
 
+        public override bool IsActive
+        {
+            get { return _active; }
+        }
+
         #region STUB
 
         public int AddNewSolutionToSourceControl()
@@ -79,11 +79,6 @@ namespace Ankh.GitScc
         {
             pbstrActionName = Resources.AddToGitCommandName;
             return VSErr.S_OK;
-        }
-
-        public bool IsActive
-        {
-            get { return _active; }
         }
 
         public bool IsSolutionDirty
