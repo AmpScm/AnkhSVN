@@ -13,7 +13,6 @@ namespace Ankh.GitScc
     [GlobalService(typeof(ITheAnkhGitSccProvider), true)]
     partial class GitSccProvider : SccProviderBase, ITheAnkhGitSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhGitSccService
     {
-        bool _active;
         public GitSccProvider(IAnkhServiceProvider context)
             : base(context)
         {
@@ -51,21 +50,20 @@ namespace Ankh.GitScc
             return false;
         }
 
-        public override int SetActive()
+        protected override void SetActive(bool active)
         {
-            _active = true;
-            return VSErr.S_OK;
-        }
+            base.SetActive(active);
 
-        public override int SetInactive()
-        {
-            _active = false;
-            return VSErr.S_OK;
-        }
-
-        public override bool IsActive
-        {
-            get { return _active; }
+            if (active)
+            {
+                // Send activate before scheduling glyphs to make sure the project data is
+                // loaded
+                GetService<IAnkhServiceEvents>().OnGitSccProviderActivated(EventArgs.Empty);
+            }
+            else
+            {
+                GetService<IAnkhServiceEvents>().OnGitSccProviderDeactivated(EventArgs.Empty);
+            }
         }
 
         #region STUB

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using Ankh.Configuration;
+using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Scc
@@ -20,6 +23,8 @@ namespace Ankh.Scc
     [CLSCompliant(false)]
     public abstract class SccProviderBase : AnkhService, IVsSccProvider
     {
+        bool _active;
+
         protected SccProviderBase(IAnkhServiceProvider context)
             : base(context)
         {
@@ -38,10 +43,38 @@ namespace Ankh.Scc
 
         public abstract bool AnyItemsUnderSourceControl();
 
-        public abstract int SetActive();
+        protected virtual void SetActive(bool active)
+        {
+            _active = active;
+        }
 
-        public abstract int SetInactive();
+        int IVsSccProvider.SetActive()
+        {
+            try
+            {
+                SetActive(true);
+            }
+            catch(Exception e)
+            {
+                return VSErr.GetHRForException(e);
+            }
 
+            return VSErr.S_OK;
+        }
+
+        int IVsSccProvider.SetInactive()
+        {
+            try
+            {
+                SetActive(false);
+            }
+            catch (Exception e)
+            {
+                return VSErr.GetHRForException(e);
+            }
+
+            return VSErr.S_OK;
+        }
 
         protected abstract Guid ProviderGuid {get;}
 
@@ -87,7 +120,10 @@ namespace Ankh.Scc
 
         public virtual void OnSolutionOpened(bool onLoad) { }
 
-        public abstract bool IsActive { get; }
+        public bool IsActive
+        {
+            get { return _active; }
+        }
 
         public virtual void VerifySolutionNaming() { }
 
@@ -181,6 +217,11 @@ namespace Ankh.Scc
         public virtual void Translate_SolutionRenamed(string oldRawName, string newRawName)
         {
 
+        }
+
+        public virtual void OnSolutionRefreshCommand(EventArgs e)
+        {
+            
         }
     }
 }
