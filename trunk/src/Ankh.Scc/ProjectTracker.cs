@@ -37,7 +37,7 @@ namespace Ankh.Scc
         bool _hookedProjects;
         uint _projectCookie;
         uint _documentCookie;
-        SccProviderBase _sccProvider;
+        SccProvider _sccProvider;
         bool _collectHints;
         bool _solutionLoaded;
         readonly HybridCollection<string> _fileHints = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -83,7 +83,7 @@ namespace Ankh.Scc
 
         private void OnGitSccProviderActivated(object sender, EventArgs e)
         {
-            _sccProvider = GetService<ITheAnkhGitSccProvider>() as SccProviderBase;
+            _sccProvider = GetService<ITheAnkhGitSccProvider>() as SccProvider;
             Hook(true, true);
             LoadInitial();
         }
@@ -103,7 +103,7 @@ namespace Ankh.Scc
             }
         }
 
-        SccProviderBase SccProvider
+        SccProvider SccProvider
         {
             [DebuggerStepThrough]
             get { return _sccProvider; }

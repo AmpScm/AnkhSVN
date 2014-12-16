@@ -11,7 +11,7 @@ namespace Ankh.GitScc
     [GlobalService(typeof(GitSccProvider))]
     [GlobalService(typeof(IAnkhGitSccService))]
     [GlobalService(typeof(ITheAnkhGitSccProvider), true)]
-    partial class GitSccProvider : SccProviderBase, ITheAnkhGitSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhGitSccService
+    partial class GitSccProvider : SccProvider, ITheAnkhGitSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhGitSccService
     {
         public GitSccProvider(IAnkhServiceProvider context)
             : base(context)

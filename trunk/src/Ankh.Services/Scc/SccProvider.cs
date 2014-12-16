@@ -21,11 +21,11 @@ namespace Ankh.Scc
     }
 
     [CLSCompliant(false)]
-    public abstract class SccProviderBase : AnkhService, IVsSccProvider
+    public abstract class SccProvider : AnkhService, IVsSccProvider
     {
         bool _active;
 
-        protected SccProviderBase(IAnkhServiceProvider context)
+        protected SccProvider(IAnkhServiceProvider context)
             : base(context)
         {
 

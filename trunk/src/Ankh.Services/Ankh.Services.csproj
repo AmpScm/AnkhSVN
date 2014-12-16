@@ -98,7 +98,7 @@
     <Compile Include="Scc\ProjectMap\SccProjectFile.cs" />
     <Compile Include="Scc\ProjectMap\SccProjectFileCollection.cs" />
     <Compile Include="Scc\ProjectMap\SccProjectFileReference.cs" />
-    <Compile Include="Scc\SccProviderBase.cs" />
+    <Compile Include="Scc\SccProvider.cs" />
     <Compile Include="Selection\SvnHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
     <Compile Include="VSAssemblies.cs" />
