@@ -138,11 +138,7 @@ namespace Ankh.Scc
             else
             {
                 // If VS asked us for custom glyphs, we can release the handle now
-                if (_glyphList != null)
-                {
-                    _glyphList.Dispose();
-                    _glyphList = null;
-                }
+                DisposeGlyphList();
 
                 // Remove all glyphs currently set
                 foreach (SccProjectData pd in new List<SccProjectData>(_projectMap.Values))
@@ -168,19 +164,6 @@ namespace Ankh.Scc
         }
 
         /// <summary>
-        /// This function determines whether the source control package is installed. 
-        /// Source control packages should always return S_OK and pbInstalled = nonzero..
-        /// </summary>
-        /// <param name="pbInstalled">The pb installed.</param>
-        /// <returns></returns>
-        public int IsInstalled(out int pbInstalled)
-        {
-            pbInstalled = 1; // We are always installed as we have no external dependencies
-
-            return VSErr.S_OK;
-        }
-
-        /// <summary>
         /// This method is called by projects that are under source control 
         /// when they are first opened to register project settings.
         /// </summary>
@@ -190,7 +173,7 @@ namespace Ankh.Scc
         /// <param name="pszSccLocalPath">The PSZ SCC local path.</param>
         /// <param name="pszProvider">The PSZ provider.</param>
         /// <returns></returns>
-        public int RegisterSccProject(IVsSccProject2 pscp2Project, string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszProvider)
+        public override int RegisterSccProject(IVsSccProject2 pscp2Project, string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszProvider)
         {
             SccProjectData data;
             if (!_projectMap.TryGetValue(pscp2Project, out data))
@@ -213,7 +196,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="pscp2Project">The PSCP2 project.</param>
         /// <returns></returns>
-        public int UnregisterSccProject(IVsSccProject2 pscp2Project)
+        public override int UnregisterSccProject(IVsSccProject2 pscp2Project)
         {
             SccProjectData data;
             if (_projectMap.TryGetValue(pscp2Project, out data))
@@ -223,31 +206,5 @@ namespace Ankh.Scc
 
             return VSErr.S_OK;
         }
-
-
-        #region // Obsolete Methods
-        /// <summary>
-        /// Obsolete: returns E_NOTIMPL.
-        /// </summary>
-        /// <param name="pbstrDirectory">The PBSTR directory.</param>
-        /// <param name="pfOK">The pf OK.</param>
-        /// <returns></returns>
-        public int BrowseForProject(out string pbstrDirectory, out int pfOK)
-        {
-            pbstrDirectory = null;
-            pfOK = 0;
-
-            return VSErr.E_NOTIMPL;
-        }
-
-        /// <summary>
-        /// Obsolete: returns E_NOTIMPL.
-        /// </summary>
-        /// <returns></returns>
-        public int CancelAfterBrowseForProject()
-        {
-            return VSErr.E_NOTIMPL;
-        }
-        #endregion
     }
 }
