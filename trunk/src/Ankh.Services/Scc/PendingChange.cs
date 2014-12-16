@@ -300,6 +300,7 @@ namespace Ankh.Scc
             IFileIconMapper _iconMapper;
             IAnkhSolutionSettings _solutionSettings;
 
+            [CLSCompliant(false)]
             public IProjectFileMapper ProjectFileMapper
             {
                 [DebuggerStepThrough]

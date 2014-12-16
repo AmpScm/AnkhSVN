@@ -26,7 +26,7 @@ using System.Diagnostics;
 
 namespace Ankh.Scc
 {
-    partial class SvnSccProvider : IVsSccManagerTooltip
+    partial class SvnSccProvider
     {
         public override AnkhGlyph GetPathGlyph(string path)
         {
@@ -121,12 +121,10 @@ namespace Ankh.Scc
         /// <returns>
         /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
-        public int GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode, out string pbstrTooltipText)
+        protected override string GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode)
         {
-            pbstrTooltipText = null;
-
-            if (Walker == null || StatusCache == null || phierHierarchy == null)
-                return VSErr.S_OK;
+            if (Walker == null || StatusCache == null)
+                return null;
 
             HybridCollection<string> files = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -180,11 +178,9 @@ namespace Ankh.Scc
             }
 
             if (sb.Length > 0)
-                pbstrTooltipText = sb.ToString().Trim(); // We added newlines
+                return sb.ToString().Trim(); // We added newlines
 
-            return VSErr.S_OK;
+            return null;
         }
-
-
     }
 }

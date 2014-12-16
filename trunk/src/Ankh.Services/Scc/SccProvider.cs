@@ -44,7 +44,7 @@ namespace Ankh.Scc
     }
 
     [CLSCompliant(false)]
-    public abstract partial class SccProvider : AnkhService, IVsSccProvider, IVsSccManager2, ICOMVsSccManager3
+    public abstract partial class SccProvider : AnkhService, IVsSccProvider, IVsSccManager2, ICOMVsSccManager3, IVsSccManagerTooltip
     {
         bool _active;
 
@@ -341,6 +341,32 @@ namespace Ankh.Scc
         public bool IsBSLSupported()
         {
             return true;
+        }
+
+        int IVsSccManagerTooltip.GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode, out string pbstrTooltipText)
+        {
+            if (phierHierarchy == null)
+            {
+                pbstrTooltipText = null;
+                return VSErr.E_INVALIDARG;
+            }
+
+            try
+            {
+                pbstrTooltipText = GetGlyphTipText(phierHierarchy, itemidNode);
+
+                return VSErr.S_OK;
+            }
+            catch (Exception e)
+            {
+                pbstrTooltipText = null;
+                return VSErr.GetHRForException(e);
+            }
+        }
+
+        protected virtual string GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode)
+        {
+            return null;
         }
     }
 }
