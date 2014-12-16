@@ -117,7 +117,7 @@ namespace Ankh.GitScc
             get { return false; }
         }
 
-        public AnkhGlyph GetPathGlyph(string path)
+        public override AnkhGlyph GetPathGlyph(string path)
         {
             return AnkhGlyph.Added;
         }
@@ -176,11 +176,6 @@ namespace Ankh.GitScc
         }
 
         public override Scc.ProjectMap.SccProjectFile GetFile(string path)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override int GetSccGlyph(int p, string[] namesArray, VsStateIcon[] newGlyphs, uint[] sccState)
         {
             throw new NotImplementedException();
         }

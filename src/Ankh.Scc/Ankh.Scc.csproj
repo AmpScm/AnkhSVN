@@ -101,9 +101,6 @@
     <Compile Include="SvnSccProvider.Glyphs.cs">
       <DependentUpon>SvnSccProvider.cs</DependentUpon>
     </Compile>
-    <Compile Include="SvnSccProvider.IVsSccManager3.cs">
-      <DependentUpon>SvnSccProvider.cs</DependentUpon>
-    </Compile>
     <Compile Include="SvnSccProvider.Projects.cs">
       <DependentUpon>SvnSccProvider.cs</DependentUpon>
     </Compile>

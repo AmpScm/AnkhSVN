@@ -167,7 +167,7 @@ namespace Ankh.Scc
         /// </summary>
         public override void OnSolutionOpened(bool onLoad)
         {
-            _solutionFile = null;
+            ClearSolutionInfo();
 
             if (!IsActive)
             {
@@ -290,75 +290,6 @@ namespace Ankh.Scc
             }
         }
 
-        string _solutionFile;
-        string _solutionDirectory;
-        string _rawSolutionDirectory;
-        public string SolutionFilename
-        {
-            get
-            {
-                if (_solutionFile == null)
-                    LoadSolutionInfo();
-
-                return _solutionFile.Length > 0 ? _solutionFile : null;
-            }
-        }
-
-        public string SolutionDirectory
-        {
-            get
-            {
-                if (_solutionFile == null)
-                    LoadSolutionInfo();
-
-                return _solutionDirectory;
-            }
-        }
-
-        public string RawSolutionDirectory
-        {
-            get
-            {
-                if (_solutionFile == null)
-                    LoadSolutionInfo();
-
-                return _rawSolutionDirectory;
-            }
-        }
-
-        void LoadSolutionInfo()
-        {
-            string dir, path, user;
-
-            _rawSolutionDirectory = null;
-            _solutionDirectory = null;
-            _solutionFile = "";
-
-            IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
-
-            if (sol == null ||
-                !VSErr.Succeeded(sol.GetSolutionInfo(out dir, out path, out user)))
-            {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(dir) || string.IsNullOrEmpty(path))
-            {
-                // Cache negative result; will be returned as null
-            }
-            else
-            {
-                if (SvnItem.IsValidPath(dir))
-                {
-                    _rawSolutionDirectory = dir;
-                    _solutionDirectory = SvnTools.GetTruePath(dir, true) ?? SvnTools.GetNormalizedFullPath(dir);
-                }
-
-                if (SvnItem.IsValidPath(path))
-                    _solutionFile = SvnTools.GetTruePath(path, true) ?? SvnTools.GetNormalizedFullPath(path);
-            }
-        }
-
         /// <summary>
         /// Called by ProjectDocumentTracker just before a solution is closed
         /// </summary>
@@ -386,7 +317,7 @@ namespace Ankh.Scc
             Debug.Assert(_projectMap.Count == 0);
             Debug.Assert(_fileMap.Count == 0);
 
-            _solutionFile = null;
+            ClearSolutionInfo();
             _projectMap.Clear();
             _fileMap.Clear();
             _unreloadable.Clear();

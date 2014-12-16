@@ -99,6 +99,12 @@
     <Compile Include="Scc\ProjectMap\SccProjectFileCollection.cs" />
     <Compile Include="Scc\ProjectMap\SccProjectFileReference.cs" />
     <Compile Include="Scc\SccProvider.cs" />
+    <Compile Include="Scc\SccProvider.Glyphs.cs">
+      <DependentUpon>SccProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scc\SccProvider.SolutionInfo.cs">
+      <DependentUpon>SccProvider.cs</DependentUpon>
+    </Compile>
     <Compile Include="Selection\SvnHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
     <Compile Include="VSAssemblies.cs" />

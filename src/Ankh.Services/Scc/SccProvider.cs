@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using Ankh.Configuration;
@@ -20,8 +21,30 @@ namespace Ankh.Scc
     {
     }
 
+    // From Microsoft.VisualStudio.Shell.Interop.11.0
     [CLSCompliant(false)]
-    public abstract class SccProvider : AnkhService, IVsSccProvider
+    [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("224209ED-E56C-4C8D-A7FF-31CF4686798D")]
+    public interface ICOMVsSccManager3 : IVsSccManager2
+    {
+        [PreserveSig]
+        new int RegisterSccProject([In, MarshalAs(UnmanagedType.Interface)] IVsSccProject2 pscp2Project, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string pszSccProjectName, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string pszSccAuxPath, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string pszSccLocalPath, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPWStr)] string pszProvider);
+        [PreserveSig]
+        new int UnregisterSccProject([In, MarshalAs(UnmanagedType.Interface)] IVsSccProject2 pscp2Project);
+        [PreserveSig]
+        new int GetSccGlyph([In] int cFiles, [In, ComAliasName("OLE.LPCOLESTR"), MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr, SizeParamIndex = 0)] string[] rgpszFullPaths, [Out, ComAliasName("VsShell.VsStateIcon"), MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 0)] VsStateIcon[] rgsiGlyphs, [Out, ComAliasName("OLE.DWORD"), MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 0)] uint[] rgdwSccStatus);
+        [PreserveSig]
+        new int GetSccGlyphFromStatus([In, ComAliasName("OLE.DWORD")] uint dwSccStatus, [Out, ComAliasName("VsShell.VsStateIcon"), MarshalAs(UnmanagedType.LPArray)] VsStateIcon[] psiGlyph);
+        [PreserveSig]
+        new int IsInstalled([ComAliasName("OLE.BOOL")] out int pbInstalled);
+        [PreserveSig]
+        new int BrowseForProject([MarshalAs(UnmanagedType.BStr)] out string pbstrDirectory, [ComAliasName("OLE.BOOL")] out int pfOK);
+        [PreserveSig]
+        new int CancelAfterBrowseForProject();
+        bool IsBSLSupported();
+    }
+
+    [CLSCompliant(false)]
+    public abstract partial class SccProvider : AnkhService, IVsSccProvider, IVsSccManager2, ICOMVsSccManager3
     {
         bool _active;
 
@@ -29,6 +52,19 @@ namespace Ankh.Scc
             : base(context)
         {
 
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                    DisposeGlyphList();
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
         }
 
         int IVsSccProvider.AnyItemsUnderSourceControl(out int pfResult)
@@ -228,8 +264,77 @@ namespace Ankh.Scc
 
         public abstract ProjectMap.SccProjectFile GetFile(string path);
 
-        public abstract int GetSccGlyph(int p, string[] namesArray, VsStateIcon[] newGlyphs, uint[] sccState);
-
         public abstract IEnumerable<string> GetAllDocumentFiles(string documentName);
+
+        /// <summary>
+        /// Obsolete: returns E_NOTIMPL.
+        /// </summary>
+        /// <param name="pbstrDirectory">The PBSTR directory.</param>
+        /// <param name="pfOK">The pf OK.</param>
+        /// <returns></returns>
+        int IVsSccManager2.BrowseForProject(out string pbstrDirectory, out int pfOK)
+        {
+            pbstrDirectory = null;
+            pfOK = 0;
+
+            return VSErr.E_NOTIMPL;
+        }
+
+        /// <summary>
+        /// Obsolete: returns E_NOTIMPL.
+        /// </summary>
+        /// <returns></returns>
+        int IVsSccManager2.CancelAfterBrowseForProject()
+        {
+            return VSErr.E_NOTIMPL;
+        }
+
+        int ICOMVsSccManager3.BrowseForProject(out string pbstrDirectory, out int pfOK)
+        {
+            pbstrDirectory = null;
+            pfOK = 0;
+
+            return VSErr.E_NOTIMPL;
+        }
+
+        /// <summary>
+        /// Obsolete: returns E_NOTIMPL.
+        /// </summary>
+        /// <returns></returns>
+        int ICOMVsSccManager3.CancelAfterBrowseForProject()
+        {
+            return VSErr.E_NOTIMPL;
+        }
+
+        protected virtual bool IsInstalled
+        {
+            get { return true; }
+        }
+        int IVsSccManager2.IsInstalled(out int pbInstalled)
+        {
+            pbInstalled = IsInstalled ? 1 : 0;
+            return VSErr.S_OK;
+        }
+
+        int ICOMVsSccManager3.IsInstalled(out int pbInstalled)
+        {
+            pbInstalled = IsInstalled ? 1 : 0;
+            return VSErr.S_OK;
+        }
+
+        public virtual int RegisterSccProject(IVsSccProject2 pscp2Project, string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszProvider)
+        {
+            return VSErr.S_OK;
+        }
+
+        public virtual int UnregisterSccProject(IVsSccProject2 pscp2Project)
+        {
+            return VSErr.S_OK;
+        }
+
+        public bool IsBSLSupported()
+        {
+            return true;
+        }
     }
 }
