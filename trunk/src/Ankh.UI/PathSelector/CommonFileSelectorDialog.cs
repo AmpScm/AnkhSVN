@@ -165,10 +165,11 @@ namespace Ankh.UI.PathSelector
             Reload();
         }
 
+        bool _loading;
         private void Reload()
         {
             Dictionary<PendingChange, PendingCommitItem> chk = null;
-
+            _loading = true;
             if (pendingList.Items.Count > 0)
             {
                 chk = new Dictionary<PendingChange, PendingCommitItem>();
@@ -182,6 +183,8 @@ namespace Ankh.UI.PathSelector
 
             pendingList.ClearItems();
 
+            pendingList.BeginUpdate();
+            List<PendingCommitItem> newItems = new List<PendingCommitItem>();
             foreach (PendingChange pc in _changeEnumerator)
             {
                 PendingCommitItem pi;
@@ -191,10 +194,15 @@ namespace Ankh.UI.PathSelector
                     pi.RefreshText(Context);
                 }
                 else
-                    pendingList.Items.Add(new PendingCommitItem(pendingList, pc));
+                    newItems.Add(new PendingCommitItem(pendingList, pc));
             }
+            pendingList.Items.AddRange(newItems.ToArray());
+
+            _loading = false;
+            pendingList.EndUpdate();
 
             EnsureSelection();
+            UpdateCheckedItems();
         }
 
         void EnsureSelection()
@@ -359,6 +367,13 @@ namespace Ankh.UI.PathSelector
         }
 
         private void pendingList_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            if (_loading)
+                return;
+            UpdateCheckedItems();
+        }
+
+        void UpdateCheckedItems()
         {
             if (pendingList.HasCheckedItems)
             {
