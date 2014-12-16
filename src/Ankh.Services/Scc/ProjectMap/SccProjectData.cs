@@ -60,7 +60,7 @@ namespace Ankh.Scc.ProjectMap
         bool _loaded;
         string _projectFile;
         bool _checkedProjectFile;
-        readonly SccProviderBase _scc;
+        readonly SccProvider _scc;
         SccProject _svnProjectInstance;
         string _projectLocation;
         string _projectName;
@@ -70,7 +70,7 @@ namespace Ankh.Scc.ProjectMap
         bool _unloading;
 
         [CLSCompliant(false)]
-        public SccProjectData(SccProviderBase context, IVsSccProject2 project)
+        public SccProjectData(SccProvider context, IVsSccProject2 project)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -656,7 +656,7 @@ namespace Ankh.Scc.ProjectMap
 
         #region Helper code
 
-        SccProviderBase Scc
+        SccProvider Scc
         {
             get { return _scc; }
         }
