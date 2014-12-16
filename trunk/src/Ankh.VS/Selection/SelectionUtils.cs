@@ -124,7 +124,7 @@ namespace Ankh.VS.Selection
                     {
                         if (VSErr.Succeeded(project.GetMkDocument(id, out mkDocument)))
                         {
-                            if (!IsValidPath(mkDocument))
+                            if (!IsValidPath(mkDocument, true))
                                 files = new string[0];
                             else
                                 files = new string[] { mkDocument };

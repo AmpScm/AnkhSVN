@@ -157,8 +157,8 @@ namespace Ankh.Scc
         public override void OnSolutionRenamedFile(string oldName, string newName)
         {
             // The solution file is renamed
-
-            ClearSolutionInfo(); // Get new data after this rename
+            base.OnSolutionRenamedFile(oldName, newName);
+            
             Monitor.ScheduleGlyphUpdate(SolutionFilename);
         }
 

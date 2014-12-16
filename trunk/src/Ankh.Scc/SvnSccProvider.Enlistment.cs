@@ -16,13 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
 
@@ -131,29 +128,6 @@ namespace Ankh.Scc
             return trueName;
         }
 
-        static string MakeRelative(string relativeFrom, string path)
-        {
-            return PackageUtilities.MakeRelative(relativeFrom, path);
-        }
-
-        string MakeRelativeNoCase(string relativeFrom, string path)
-        {
-            string rp = MakeRelative(relativeFrom.ToUpperInvariant(), path.ToUpperInvariant());
-
-            if (string.IsNullOrEmpty(rp) || IsSafeSccPath(rp))
-                return path;
-
-            int back = rp.LastIndexOf("..\\", StringComparison.Ordinal);
-            if (back >= 0)
-            {
-                int rest = rp.Length - back - 3;
-
-                return rp.Substring(0, back + 3) + path.Substring(path.Length - rest, rest);
-            }
-            else
-                return path.Substring(path.Length - rp.Length, rp.Length);
-        }
-
         public override void Translate_SolutionRenamed(string oldName, string newName)
         {
             string oldDir = Path.GetDirectoryName(oldName);
@@ -176,7 +150,7 @@ namespace Ankh.Scc
                     continue;
                 }
 
-                string newRel = MakeRelativeNoCase(newName, kv.Key);
+                string newRel = SvnItem.MakeRelativeNoCase(newName, kv.Key);
 
                 if (IsSafeSccPath(newRel))
                     continue; // Not relative from .sln after
@@ -692,7 +666,7 @@ namespace Ankh.Scc
                         if (IsSafeSccPath(p) && SvnItem.IsBelowRoot(p, rootDir))
                         {
                             relative = true;
-                            path = MakeRelativeNoCase(solutionDir, p);
+                            path = SvnItem.MakeRelativeNoCase(solutionDir, p);
 
                             if (p.EndsWith("\\") && !path.EndsWith("\\"))
                                 path += '\\';

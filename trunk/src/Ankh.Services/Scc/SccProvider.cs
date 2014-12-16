@@ -154,7 +154,10 @@ namespace Ankh.Scc
             return true;
         }
 
-        public virtual void OnSolutionOpened(bool onLoad) { }
+        public virtual void OnSolutionOpened(bool onLoad)
+        {
+            ClearSolutionInfo();
+        }
 
         public bool IsActive
         {
@@ -165,7 +168,10 @@ namespace Ankh.Scc
 
         public virtual void OnStartedSolutionClose() { }
 
-        public virtual void OnSolutionClosed() { }
+        public virtual void OnSolutionClosed()
+        {
+            ClearSolutionInfo();
+        }
 
         public bool TrackProjectChanges(IVsSccProject2 project)
         {
@@ -242,7 +248,7 @@ namespace Ankh.Scc
 
         public virtual void OnSolutionRenamedFile(string oldName, string newName)
         {
-
+            ClearSolutionInfo();
         }
 
         public virtual void AddDelayedDelete(string path)

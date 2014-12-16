@@ -8,11 +8,10 @@ using Ankh.Commands;
 using EnvDTESourceControl = EnvDTE.SourceControl;
 using EnvDTESourceControl2 = EnvDTE80.SourceControl2;
 using System.IO;
-using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Scc
 {
-    partial class SvnSccProvider : EnvDTESourceControl2, EnvDTESourceControl
+    partial class SvnSccProvider
     {
         readonly HybridCollection<string> _sccExcluded = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -33,7 +32,7 @@ namespace Ankh.Scc
                     foreach (string path in _sccExcluded)
                     {
                         if (baseDir != null)
-                            bw.Write(PackageUtilities.MakeRelative(baseDir, path));
+                            bw.Write(SvnItem.MakeRelative(baseDir, path));
                         else
                             bw.Write(path);
                     }
@@ -68,9 +67,7 @@ namespace Ankh.Scc
             }
         }
 
-
-
-        public bool IsSccExcluded(string path)
+        public override bool IsSccExcluded(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
@@ -78,30 +75,11 @@ namespace Ankh.Scc
             return _sccExcluded.Contains(path);
         }
 
-        public bool CheckOutItem(string ItemName)
-        {
-            return CheckOutItem2(ItemName, EnvDTE80.vsSourceControlCheckOutOptions.vsSourceControlCheckOutOptionLocalVersion);
-        }
-
-        public bool CheckOutItem2(string ItemName, EnvDTE80.vsSourceControlCheckOutOptions Flags)
-        {
-            if (string.IsNullOrEmpty(ItemName))
-                return false;
-
-            object[] items = new string[] { ItemName };
-            return CheckOutItems2(ref items, Flags);
-        }
-
-        public bool CheckOutItems(ref object[] ItemNames)
-        {
-            return CheckOutItems2(ref ItemNames, EnvDTE80.vsSourceControlCheckOutOptions.vsSourceControlCheckOutOptionLocalVersion);
-        }
-
-        public bool CheckOutItems2(ref object[] ItemNames, EnvDTE80.vsSourceControlCheckOutOptions Flags)
+        protected override bool CheckOutItems(string[] itemNames, EnvDTE80.vsSourceControlCheckOutOptions flags)
         {
             HybridCollection<string> mustLockItems = null;
 
-            foreach (string item in ItemNames)
+            foreach (string item in itemNames)
             {
                 if (!IsSafeSccPath(item))
                     continue;
@@ -134,19 +112,10 @@ namespace Ankh.Scc
             return true;
         }
 
-        public void ExcludeItem(string ProjectFile, string ItemName)
-        {
-            if (string.IsNullOrEmpty(ItemName))
-                return;
-
-            object[] items = new string[] { ItemName };
-            ExcludeItems(ProjectFile, ref items);
-        }
-
-        public void ExcludeItems(string ProjectFile, ref object[] ItemNames)
+        protected override void ExcludeItems(string projectFile, string[] itemNames)
         {
             List<string> changed = null;
-            foreach (string item in ItemNames)
+            foreach (string item in itemNames)
             {
                 if (!IsSafeSccPath(item))
                     continue;
@@ -169,19 +138,10 @@ namespace Ankh.Scc
                 PendingChanges.Refresh(changed);
         }
 
-        public void UndoExcludeItem(string ProjectFile, string ItemName)
-        {
-            if (string.IsNullOrEmpty(ItemName))
-                return;
-
-            object[] items = new string[] { ItemName };
-            UndoExcludeItems(ProjectFile, ref items);
-        }
-
-        public void UndoExcludeItems(string ProjectFile, ref object[] ItemNames)
+        protected override void UndoExcludeItems(string projectFile, string[] itemNames)
         {
             List<string> changed = null;
-            foreach (string item in ItemNames)
+            foreach (string item in itemNames)
             {
                 if (!IsSafeSccPath(item))
                     continue;
@@ -294,7 +254,7 @@ namespace Ankh.Scc
             }
         }
 
-        public EnvDTE80.SourceControlBindings GetBindings(string ItemPath)
+        public override EnvDTE80.SourceControlBindings GetBindings(string ItemPath)
         {
             if (!IsSafeSccPath(ItemPath))
                 return null;
@@ -302,7 +262,7 @@ namespace Ankh.Scc
             return new AnkhSccSourceControlBinding(this, SvnTools.GetNormalizedFullPath(ItemPath));
         }
 
-        public bool IsItemCheckedOut(string ItemName)
+        public override bool IsItemCheckedOut(string ItemName)
         {
             if (!IsSafeSccPath(ItemName))
                 return false;
@@ -315,31 +275,9 @@ namespace Ankh.Scc
             return item.IsVersioned || (item.InSolution && item.IsVersionable && !item.IsSccExcluded);
         }
 
-        public bool IsItemUnderSCC(string ItemName)
+        public override bool IsItemUnderSCC(string ItemName)
         {
             return true;
-        }                
-
-        #region DTE properties
-        EnvDTE.DTE EnvDTESourceControl.DTE
-        {
-            get { return GetService<EnvDTE.DTE>(typeof(SDTE)); }
         }
-
-        EnvDTE.DTE EnvDTESourceControl2.DTE
-        {
-            get { return GetService<EnvDTE.DTE>(typeof(SDTE)); }
-        }
-
-        EnvDTE.DTE EnvDTESourceControl.Parent
-        {
-            get { return GetService<EnvDTE.DTE>(typeof(SDTE)); }
-        }
-
-        EnvDTE.DTE EnvDTESourceControl2.Parent
-        {
-            get { return GetService<EnvDTE.DTE>(typeof(SDTE)); }
-        }
-        #endregion
     }
 }

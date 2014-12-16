@@ -25,8 +25,6 @@ using Ankh.Selection;
 using Ankh.UI;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Scc.SccUI
 {
@@ -336,7 +334,7 @@ namespace Ankh.Scc.SccUI
                         if (VSErr.Succeeded(ps.GetMkDocument(VSItemId.Root, out doc)))
                         {
                             if (SvnItem.IsValidPath(doc))
-                                pLoc = PackageUtilities.MakeRelative(SolutionSettings.SolutionFilename, doc);
+                                pLoc = SvnItem.MakeRelative(SolutionSettings.SolutionFilename, doc);
                             else
                                 pLoc = doc;
                         }
@@ -381,7 +379,7 @@ namespace Ankh.Scc.SccUI
             slnProjectLocation.Text = SolutionSettings.SolutionFilename;
             slnBindPath.Text = SolutionSettings.ProjectRoot;
 
-            string slRelativePath = Path.GetDirectoryName(PackageUtilities.MakeRelative(SolutionSettings.ProjectRoot, SolutionSettings.SolutionFilename));
+            string slRelativePath = Path.GetDirectoryName(SvnItem.MakeRelative(SolutionSettings.ProjectRoot, SolutionSettings.SolutionFilename));
 
             slnRelativePath.Text = string.IsNullOrEmpty(slRelativePath) ? "." : slRelativePath;
 
