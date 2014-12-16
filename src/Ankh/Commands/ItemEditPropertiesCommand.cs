@@ -76,7 +76,7 @@ namespace Ankh.Commands
                     cache = e.GetService<IFileStatusCache>();
                     foreach (SccProject project in e.Selection.GetSelectedProjects(false))
                     {
-                        ISvnProjectInfo info = pfm.GetProjectInfo(project);
+                        ISccProjectInfo info = pfm.GetProjectInfo(project);
                         if (info == null || string.IsNullOrEmpty(info.ProjectDirectory))
                         {
                             e.Enabled = false;
@@ -134,7 +134,7 @@ namespace Ankh.Commands
                         IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
                         if (pfm != null)
                         {
-                            ISvnProjectInfo info = pfm.GetProjectInfo(p);
+                            ISccProjectInfo info = pfm.GetProjectInfo(p);
                             if (info != null && info.ProjectDirectory != null)
                             {
                                 firstVersioned = cache[info.ProjectDirectory];

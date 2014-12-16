@@ -93,7 +93,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         public void TestOnUpdateProjDirNull()
         {
             var projMapper = new Mock<IProjectFileMapper>();
-            var projInfo = new Mock<ISvnProjectInfo>();
+            var projInfo = new Mock<ISccProjectInfo>();
             projInfo.SetupGet(x => x.ProjectDirectory).Returns((string)null);
             projMapper.Setup(x => x.GetProjectInfo(It.IsAny<SccProject>())).Returns(projInfo.Object);
             sp.AddService(typeof(IProjectFileMapper), projMapper.Object);
@@ -110,7 +110,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         public void TestOnUpdateProjInfoNull()
         {
             var projMapper = new Mock<IProjectFileMapper>();
-            projMapper.Setup(x => x.GetProjectInfo(It.IsAny<SccProject>())).Returns((ISvnProjectInfo)null);
+            projMapper.Setup(x => x.GetProjectInfo(It.IsAny<SccProject>())).Returns((ISccProjectInfo)null);
             sp.AddService(typeof(IProjectFileMapper), projMapper.Object);
 
             // sln settings unavailable

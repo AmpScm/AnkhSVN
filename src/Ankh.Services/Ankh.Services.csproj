@@ -161,7 +161,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Scc\IPendingChangesManager.cs" />
-    <Compile Include="Scc\IProjectInfo.cs" />
+    <Compile Include="Scc\ISccProjectInfo.cs" />
     <Compile Include="Scc\HybridCollection.cs" />
     <Compile Include="Scc\PendingChangeStatus.cs" />
     <Compile Include="Scc\ProjectIconReference.cs" />

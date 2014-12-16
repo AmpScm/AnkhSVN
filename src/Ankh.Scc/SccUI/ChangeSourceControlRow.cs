@@ -123,7 +123,7 @@ namespace Ankh.Scc.SccUI
         /// </summary>
         public void Refresh()
         {
-            ISvnProjectInfo projectInfo;
+            ISccProjectInfo projectInfo;
             if (_project.IsSolution)
             {
                 SvnItem rootItem = SolutionSettings.ProjectRootSvnItem;
@@ -171,7 +171,7 @@ namespace Ankh.Scc.SccUI
             }
         }
 
-        private string GetStatus(SvnItem dirItem, ISvnProjectInfo projectInfo, string file)
+        private string GetStatus(SvnItem dirItem, ISccProjectInfo projectInfo, string file)
         {
             if (dirItem == null || !dirItem.Exists || !dirItem.IsVersioned)
                 return "<not found>";

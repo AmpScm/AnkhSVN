@@ -108,7 +108,7 @@ namespace Ankh.Scc.SccUI
                 if (project.IsSolution)
                     continue;
 
-                ISvnProjectInfo projectInfo = ProjectMapper.GetProjectInfo(project);
+                ISccProjectInfo projectInfo = ProjectMapper.GetProjectInfo(project);
 
                 if (projectInfo == null || string.IsNullOrEmpty(projectInfo.ProjectDirectory))
                     continue;
@@ -163,7 +163,7 @@ namespace Ankh.Scc.SccUI
                     SvnItem item = null;
                     if (!project.IsSolution)
                     {
-                        ISvnProjectInfo projectInfo = ProjectMapper.GetProjectInfo(project);
+                        ISccProjectInfo projectInfo = ProjectMapper.GetProjectInfo(project);
 
                         if (projectInfo == null || string.IsNullOrEmpty(projectInfo.ProjectDirectory))
                             continue;
@@ -297,7 +297,7 @@ namespace Ankh.Scc.SccUI
 
             foreach (SccProject p in SelectedProjects)
             {
-                ISvnProjectInfo info;
+                ISccProjectInfo info;
                 if (p.IsSolution ||
                     null == (info = ProjectMapper.GetProjectInfo(p)) ||
                     string.IsNullOrEmpty(info.ProjectDirectory))

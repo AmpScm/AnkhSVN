@@ -48,7 +48,7 @@ namespace Ankh.Commands
                     if (p == null)
                         break;
 
-                    ISvnProjectInfo pi = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
+                    ISccProjectInfo pi = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
 
                     if (pi == null || string.IsNullOrEmpty(pi.ProjectDirectory))
                         break; // No project location
@@ -167,7 +167,7 @@ namespace Ankh.Commands
                     IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
                     foreach (SccProject p in e.Selection.GetSelectedProjects(false))
                     {
-                        ISvnProjectInfo info = mapper.GetProjectInfo(p);
+                        ISccProjectInfo info = mapper.GetProjectInfo(p);
 
                         if (info != null)
                             selected.Add(new SvnOrigin(cache[info.ProjectDirectory]));
