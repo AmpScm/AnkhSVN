@@ -97,13 +97,6 @@ namespace Ankh.Scc
         void SerializeSccExcludeData(Stream store, bool writeData);
 
         /// <summary>
-        /// Gets a boolean indicating whether to ignores the enumeration side effects flag on this project
-        /// </summary>
-        /// <param name="sccProject">The SCC project.</param>
-        /// <returns></returns>
-        bool IgnoreEnumerationSideEffects(Microsoft.VisualStudio.Shell.Interop.IVsSccProject2 sccProject);
-
-        /// <summary>
         /// Ensures the check out reference for the specified project
         /// </summary>
         /// <param name="project">The project.</param>

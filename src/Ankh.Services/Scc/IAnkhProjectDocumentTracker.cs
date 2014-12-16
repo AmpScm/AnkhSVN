@@ -5,6 +5,6 @@ namespace Ankh.Scc
 {
     public interface IAnkhProjectDocumentTracker
     {
-        IEnumerable<string> GetAllDocumentFiles(string documentName);
+        //IEnumerable<string> GetAllDocumentFiles(string documentName);
     }
 }

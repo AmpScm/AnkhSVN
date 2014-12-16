@@ -660,7 +660,7 @@ namespace Ankh.Scc
             }
         }
 
-        bool IAnkhSccService.IgnoreEnumerationSideEffects(Microsoft.VisualStudio.Shell.Interop.IVsSccProject2 sccProject)
+        bool IProjectFileMapper.IgnoreEnumerationSideEffects(Microsoft.VisualStudio.Shell.Interop.IVsSccProject2 sccProject)
         {
             SccProjectData projectData;
             if (_projectMap.TryGetValue(sccProject, out projectData))

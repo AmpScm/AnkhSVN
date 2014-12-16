@@ -631,7 +631,7 @@ namespace Ankh.Scc.ProjectMap
                 if (fileChange == null)
                     fileChange = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
 
-                List<string> items = new List<string>(GetService<IAnkhProjectDocumentTracker>().GetAllDocumentFiles(_name));
+                List<string> items = new List<string>(GetService<IProjectFileMapper>().GetAllDocumentFiles(_name));
 
                 uint[] cookies = new uint[items.Count];
                 _fileChangeCookies = cookies;
