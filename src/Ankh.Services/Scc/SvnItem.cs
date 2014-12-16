@@ -25,6 +25,7 @@ using SharpSvn;
 using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.Selection;
+using System.Text;
 
 namespace Ankh
 {
@@ -871,7 +872,7 @@ namespace Ankh
                         switch (cd.ConflictType)
                         {
                             case SvnConflictType.Content:
-                                SetState(SvnItemState.ContentConflicted,  SvnItemState.None);
+                                SetState(SvnItemState.ContentConflicted, SvnItemState.None);
                                 break;
                             case SvnConflictType.Property:
                                 SetState(SvnItemState.PropertiesConflicted, SvnItemState.None);
@@ -1528,5 +1529,60 @@ namespace Ankh
 
             return cache.GetDirectory(FullPath);
         }
+
+        /// <summary>
+        /// Returns a path for the second file that's relative to the path of the first.
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static string MakeRelative(string root, string filename)
+        {
+            if (string.IsNullOrEmpty(root) || string.IsNullOrEmpty(filename))
+                return filename;
+
+            string[] rootComponents = root.Split(Path.DirectorySeparatorChar);
+            string[] filecomponents = filename.Split(Path.DirectorySeparatorChar);
+
+            int num = 1;
+            while (num < rootComponents.Length && num < filecomponents.Length && !(rootComponents[num] != filecomponents[num]))
+            {
+                num++;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i = num; i < rootComponents.Length - 1; i++)
+            {
+                sb.Append("..");
+                sb.Append(Path.DirectorySeparatorChar);
+            }
+            for (int j = num; j < filecomponents.Length; j++)
+            {
+                sb.Append(filecomponents[j]);
+                if (j < filecomponents.Length - 1)
+                {
+                    sb.Append(Path.DirectorySeparatorChar);
+                }
+            }
+            return sb.ToString();
+        }
+
+        public static string MakeRelativeNoCase(string relativeFrom, string path)
+        {
+            string rp = MakeRelative(relativeFrom.ToUpperInvariant(), path.ToUpperInvariant());
+
+            if (string.IsNullOrEmpty(rp) || IsValidPath(rp))
+                return path;
+
+            int back = rp.LastIndexOf("..\\", StringComparison.Ordinal);
+            if (back >= 0)
+            {
+                int rest = rp.Length - back - 3;
+
+                return rp.Substring(0, back + 3) + path.Substring(path.Length - rest, rest);
+            }
+            else
+                return path.Substring(path.Length - rp.Length, rp.Length);
+        }
+
     }
 }

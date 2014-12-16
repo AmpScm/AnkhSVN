@@ -167,7 +167,7 @@ namespace Ankh.Scc
         /// </summary>
         public override void OnSolutionOpened(bool onLoad)
         {
-            ClearSolutionInfo();
+            base.OnSolutionOpened(onLoad);
 
             if (!IsActive)
             {
@@ -317,21 +317,27 @@ namespace Ankh.Scc
             Debug.Assert(_projectMap.Count == 0);
             Debug.Assert(_fileMap.Count == 0);
 
-            ClearSolutionInfo();
-            _projectMap.Clear();
-            _fileMap.Clear();
-            _unreloadable.Clear();
-            StatusCache.ClearCache();
+            try
+            {
+                _projectMap.Clear();
+                _fileMap.Clear();
+                _unreloadable.Clear();
+                StatusCache.ClearCache();
 
-            // Clear status for reopening solution
-            _managedSolution = false;
-            _isDirty = false;
-            _sccExcluded.Clear();
-            Translate_ClearState();
+                // Clear status for reopening solution
+                _managedSolution = false;
+                _isDirty = false;
+                _sccExcluded.Clear();
+                Translate_ClearState();
 
-            IPendingChangesManager mgr = GetService<IPendingChangesManager>();
-            if (mgr != null)
-                mgr.Clear();
+                IPendingChangesManager mgr = GetService<IPendingChangesManager>();
+                if (mgr != null)
+                    mgr.Clear();
+            }
+            finally
+            {
+                base.OnSolutionClosed();
+            }
         }
 
         /// <summary>

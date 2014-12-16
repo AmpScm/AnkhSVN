@@ -135,7 +135,7 @@ namespace Ankh.Scc.SccUI
                     SafeRepositoryPath(rootItem),
                     GetStatus(rootItem, null, SolutionSettings.SolutionFilename),
                     (rootItem != null)
-                        ? EmptyToDot(PackageUtilities.MakeRelative(rootItem.FullPath, SvnTools.GetNormalizedDirectoryName(SolutionSettings.SolutionFilename)))
+                        ? EmptyToDot(SvnItem.MakeRelative(rootItem.FullPath, SvnTools.GetNormalizedDirectoryName(SolutionSettings.SolutionFilename)))
                         : "",
                     (rootItem != null)
                         ? rootItem.FullPath
@@ -152,7 +152,7 @@ namespace Ankh.Scc.SccUI
                     SafeRepositoryRoot(dirItem),
                     SafeRepositoryPath(dirItem),
                     GetStatus(dirItem, projectInfo, projectInfo.ProjectFile),
-                    EmptyToDot(PackageUtilities.MakeRelative(projectInfo.SccBaseDirectory, projectInfo.ProjectDirectory)),
+                    EmptyToDot(SvnItem.MakeRelative(projectInfo.SccBaseDirectory, projectInfo.ProjectDirectory)),
                     projectInfo.SccBaseDirectory
                     );
             }
