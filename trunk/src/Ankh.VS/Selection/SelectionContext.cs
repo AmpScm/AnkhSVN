@@ -594,16 +594,16 @@ namespace Ankh.VS.Selection
             return true;
         }
 
-        IAnkhSccService _sccService;
-        IAnkhSccService SccService
+        IProjectFileMapper _projectMap;
+        IProjectFileMapper ProjectMap
         {
             [DebuggerStepThrough]
-            get { return _sccService ?? (_sccService = GetService<IAnkhSccService>()); }
+            get { return _projectMap ?? (_projectMap = GetService<IProjectFileMapper>()); }
         }
 
         private bool IgnoreSideEffects(IVsSccProject2 sccProject)
         {
-            if (sccProject != null && SccService.IgnoreEnumerationSideEffects(sccProject))
+            if (sccProject != null && ProjectMap.IgnoreEnumerationSideEffects(sccProject))
                 return true;
 
             return false;

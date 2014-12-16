@@ -21,6 +21,7 @@ using Ankh.Selection;
 
 namespace Ankh.Scc
 {
+    [CLSCompliant(false)]
     public interface IProjectFileMapper
     {
         /// <summary>
@@ -122,5 +123,14 @@ namespace Ankh.Scc
         /// <param name="path"></param>
         /// <returns></returns>
         ProjectIconReference GetPathIconHandle(string path);
+
+        /// <summary>
+        /// Gets a boolean indicating whether to ignores the enumeration side effects flag on this project
+        /// </summary>
+        /// <param name="sccProject">The SCC project.</param>
+        /// <returns></returns>
+        bool IgnoreEnumerationSideEffects(Microsoft.VisualStudio.Shell.Interop.IVsSccProject2 sccProject);
+
+        IEnumerable<string> GetAllDocumentFiles(string documentName);
     }
 }
