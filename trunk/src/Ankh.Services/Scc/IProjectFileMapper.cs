@@ -114,7 +114,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The project.</param>
         /// <returns></returns>
-        ISvnProjectInfo GetProjectInfo(SccProject project);
+        ISccProjectInfo GetProjectInfo(SccProject project);
 
         /// <summary>
         /// Gets the icon of the file in the first project containing the file

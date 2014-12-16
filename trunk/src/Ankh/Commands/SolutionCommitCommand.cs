@@ -91,7 +91,7 @@ namespace Ankh.Commands
 
                 foreach (SccProject p in projectList)
                 {
-                    ISvnProjectInfo pi = _mapper.GetProjectInfo(p);
+                    ISccProjectInfo pi = _mapper.GetProjectInfo(p);
 
                     if (pi == null)
                         continue; // Ignore solution and non scc projects

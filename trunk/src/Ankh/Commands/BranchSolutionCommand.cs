@@ -64,7 +64,7 @@ namespace Ankh.Commands
                     if(p == null)
                         break;
 
-                    ISvnProjectInfo info = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
+                    ISccProjectInfo info = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
 
                     if (info == null || info.ProjectDirectory == null)
                         break;

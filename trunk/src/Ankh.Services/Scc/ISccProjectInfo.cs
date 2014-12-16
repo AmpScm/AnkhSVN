@@ -23,7 +23,7 @@ namespace Ankh.Scc
     /// <summary>
     /// 
     /// </summary>
-    public interface ISvnProjectInfo
+    public interface ISccProjectInfo
     {
         /// <summary>
         /// Gets the name of the project.

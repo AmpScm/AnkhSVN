@@ -58,7 +58,7 @@ namespace Ankh.UI.MergeWizard.Commands
                     IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
                     foreach (SccProject project in e.Selection.GetSelectedProjects(false))
                     {
-                        ISvnProjectInfo projInfo = pfm.GetProjectInfo(project);
+                        ISccProjectInfo projInfo = pfm.GetProjectInfo(project);
                         if (projInfo == null || string.IsNullOrEmpty(projInfo.ProjectDirectory))
                         {
                             e.Enabled = false;
@@ -117,7 +117,7 @@ namespace Ankh.UI.MergeWizard.Commands
                     {
                         IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
 
-                        ISvnProjectInfo info = pfm.GetProjectInfo(p);
+                        ISccProjectInfo info = pfm.GetProjectInfo(p);
                         if (info != null && info.ProjectDirectory != null)
                         {
                             svnItems.Add(cache[info.ProjectDirectory]);

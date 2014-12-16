@@ -522,7 +522,7 @@ namespace Ankh.Scc
             return null;
         }
 
-        public ISvnProjectInfo GetProjectInfo(SccProject project)
+        public ISccProjectInfo GetProjectInfo(SccProject project)
         {
             if (project == null)
                 return null;
@@ -677,7 +677,7 @@ namespace Ankh.Scc
         /// Wrapper class providing a public api to the data contained within <see cref="SccProjectData"/>
         /// </summary>
         /// <remarks>Showing the raw properties of SccProjectData has side-effects. We wrap the class to hide this problem</remarks>
-        sealed class WrapProjectInfo : ISvnProjectInfo
+        sealed class WrapProjectInfo : ISccProjectInfo
         {
             readonly SccProjectData _data;
 

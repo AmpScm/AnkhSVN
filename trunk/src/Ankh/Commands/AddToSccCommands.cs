@@ -101,7 +101,7 @@ namespace Ankh.Commands
                 {
                     foundOne = true;
 
-                    ISvnProjectInfo pi = pfm.GetProjectInfo(p);
+                    ISccProjectInfo pi = pfm.GetProjectInfo(p);
 
                     if (pi == null || !pi.IsSccBindable)
                         continue; // Not an SCC project
@@ -456,7 +456,7 @@ namespace Ankh.Commands
 
                 foreach (SccProject project in GetSelection(e.Selection))
                 {
-                    ISvnProjectInfo projInfo = mapper.GetProjectInfo(project);
+                    ISccProjectInfo projInfo = mapper.GetProjectInfo(project);
 
                     if (projInfo == null || projInfo.ProjectDirectory == null
                         || !projInfo.IsSccBindable)
@@ -554,7 +554,7 @@ namespace Ankh.Commands
             bool foundOne = false;
             foreach (SccProject project in succeededProjects)
             {
-                ISvnProjectInfo info;
+                ISccProjectInfo info;
                 if (!scc.IsProjectManaged(project) && null != (info = mapper.GetProjectInfo(project)))
                 {
                     if (sb.Length > 0)
@@ -587,7 +587,7 @@ namespace Ankh.Commands
         /// <param name="shouldMarkAsManaged"></param>
         /// <param name="storeReference"></param>
         /// <returns></returns>
-        static bool CheckoutWorkingCopyForProject(CommandEventArgs e, SccProject project, ISvnProjectInfo projectInfo, Uri solutionReposRoot, out bool shouldMarkAsManaged, out bool storeReference)
+        static bool CheckoutWorkingCopyForProject(CommandEventArgs e, SccProject project, ISccProjectInfo projectInfo, Uri solutionReposRoot, out bool shouldMarkAsManaged, out bool storeReference)
         {
             shouldMarkAsManaged = false;
             storeReference = false;

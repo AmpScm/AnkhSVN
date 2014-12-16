@@ -150,7 +150,7 @@ namespace Ankh.Commands
                     if (pfm == null)
                         pfm = e.GetService<IProjectFileMapper>();
 
-                    ISvnProjectInfo pi = pfm.GetProjectInfo(p);
+                    ISccProjectInfo pi = pfm.GetProjectInfo(p);
 
                     if (pi == null || pi.ProjectDirectory == null)
                         continue;
@@ -276,7 +276,7 @@ namespace Ankh.Commands
                 SvnOrigin origin = null;
                 foreach (SccProject p in GetSelectedProjects(e))
                 {
-                    ISvnProjectInfo pi = mapper.GetProjectInfo(p);
+                    ISccProjectInfo pi = mapper.GetProjectInfo(p);
                     if (pi == null || pi.ProjectDirectory == null)
                         continue;
 

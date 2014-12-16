@@ -32,7 +32,7 @@ namespace Ankh.Scc.Commands
             if (e.State.SccProviderActive)
                 foreach (SccProject p in e.Selection.GetSelectedProjects(false))
                 {
-                    ISvnProjectInfo pi = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
+                    ISccProjectInfo pi = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
 
                     if (p == null || pi == null || string.IsNullOrEmpty(pi.ProjectFile))
                     {
