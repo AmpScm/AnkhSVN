@@ -45,12 +45,12 @@ namespace Ankh.Scc
         bool IsBSLSupported();
     }
 
-    [CLSCompliant(false)]
-    public abstract partial class SccProvider : AnkhService, IVsSccProvider, IVsSccManager2, ICOMVsSccManager3, IVsSccManagerTooltip
+    public abstract partial class SccProvider : AnkhService, IVsSccProvider, IVsSccManager2, ICOMVsSccManager3, IVsSccManagerTooltip, IAnkhSccProviderEvents
     {
         bool _active;
         readonly SccProjectMap _projectMap;
 
+        [CLSCompliant(false)]
         protected SccProvider(IAnkhServiceProvider context, SccProjectMap projectMap)
             : base(context)
         {
@@ -60,6 +60,7 @@ namespace Ankh.Scc
             _projectMap = projectMap;
         }
 
+        [CLSCompliant(false)]
         public SccProjectMap ProjectMap
         {
             [DebuggerStepThrough]
@@ -183,7 +184,7 @@ namespace Ankh.Scc
             return true;
         }
 
-        public virtual void OnSolutionOpened(bool onLoad)
+        protected virtual void OnSolutionOpened(bool onLoad)
         {
             ClearSolutionInfo();
         }
@@ -195,104 +196,164 @@ namespace Ankh.Scc
 
         public virtual void VerifySolutionNaming() { }
 
-        public virtual void OnStartedSolutionClose() { }
+        protected virtual void OnStartedSolutionClose() { }
 
-        public virtual void OnSolutionClosed()
+        protected virtual void OnSolutionClosed()
         {
             ClearSolutionInfo();
         }
 
-        public bool TrackProjectChanges(IVsSccProject2 project)
-        {
-            bool trackCopies;
-
-            return TrackProjectChanges(project, out trackCopies);
-        }
-
-        public virtual bool TrackProjectChanges(IVsSccProject2 project, out bool trackCopies)
-        {
-            trackCopies = false;
-            return false;
-        }
-
-        public virtual void OnProjectLoaded(IVsSccProject2 project)
+        void IAnkhSccProviderEvents.OnProjectLoaded(IVsSccProject2 project)
         {
             SccProjectData data;
 
             ProjectMap.EnsureSccProject(project, out data);
+
+            OnProjectLoaded(data);
         }
 
-        public virtual void OnProjectOpened(IVsSccProject2 project, bool added)
+        protected virtual void OnProjectLoaded(SccProjectData project)
         {
 
         }
 
-        public virtual void OnProjectFileAdded(IVsSccProject2 project)
+
+        protected virtual void OnProjectOpened(SccProjectData project, bool added)
         {
 
         }
 
-        public virtual void OnProjectClosed(IVsSccProject2 project, bool removed)
+        protected virtual void OnProjectFileAdded(SccProjectData project)
         {
 
         }
 
-        public virtual void OnProjectDirectoryAdded(IVsSccProject2 project, string directory, string origin)
+        void IAnkhSccProviderEvents.OnProjectClosed(IVsSccProject2 project, bool removed)
+        {
+            SccProjectData data;
+            ProjectMap.EnsureSccProject(project, out data);
+            OnProjectClosed(data, removed);
+        }
+
+        protected virtual void OnProjectClosed(SccProjectData data, bool removed)
+        {
+            data.OnClose();
+            ProjectMap.RemoveProject(data.SccProject);
+        }
+
+        void IAnkhSccProviderEvents.OnProjectDirectoryAdded(IVsSccProject2 project, string directory, string origin)
+        {
+            SccProjectData data;
+            if (!ProjectMap.TryGetSccProject(project, out data))
+                return; // Not managed by us
+
+            // Add a directory like a folder but with an ending '\'
+            string dir = directory.TrimEnd('\\') + '\\';
+            data.AddPath(dir);
+
+            OnProjectDirectoryAdded(data, directory, origin);
+        }
+
+        protected virtual void OnProjectDirectoryAdded(SccProjectData data, string directory, string origin)
+        {
+            
+        }
+
+        void IAnkhSccProviderEvents.OnProjectBeforeUnload(IVsSccProject2 project, IVsHierarchy stub)
+        {
+            SccProjectData data;
+            if (ProjectMap.TryGetSccProject(project, out data))
+            {
+                data.Unloading = true;
+
+                OnProjectBeforeUnload(data);
+            }
+        }
+
+        protected virtual void OnProjectBeforeUnload(SccProjectData data)
+        {
+            
+        }
+
+        void IAnkhSccProviderEvents.OnProjectRenamed(IVsSccProject2 project)
+        {
+            SccProjectData data;
+            ProjectMap.EnsureSccProject(project, out data);
+            OnProjectRenamed(data);
+        }
+
+        protected virtual void OnProjectRenamed(SccProjectData data)
+        {
+            data.Reload(); // Reload project name, etc.
+        }
+
+        void IAnkhSccProviderEvents.OnProjectFileAdded(IVsSccProject2 project, string filename)
+        {
+            SccProjectData data;
+
+            ProjectMap.EnsureSccProject(project, out data);
+            OnProjectFileAdded(data, filename);
+        }
+
+        protected virtual void OnProjectFileAdded(SccProjectData data, string filename)
+        {
+            data.AddPath(filename);
+        }
+
+        void IAnkhSccProviderEvents.OnProjectFileRemoved(IVsSccProject2 project, string oldName)
+        {
+            SccProjectData data;
+
+            ProjectMap.EnsureSccProject(project, out data);
+            OnProjectFileRemoved(data, oldName);
+        }
+
+        protected virtual void OnProjectFileRemoved(SccProjectData data, string oldName)
+        {
+            data.RemovePath(oldName);
+        }
+
+        protected virtual void OnProjectDirectoryRemoved(SccProjectData data, string directoryname)
+        {
+            // a directory can be added like a folder but with an ending '\'
+            string dir = directoryname.TrimEnd('\\') + '\\';
+            data.RemovePath(dir);
+        }
+
+        protected virtual void OnProjectFileRenamed(SccProjectData project, string oldName, string newName)
+        {
+            project.CheckProjectRename(oldName, newName); // Just to be sure (should be handled by other event)
+
+            project.RemovePath(oldName);
+            project.AddPath(newName);
+        }
+
+        protected virtual void OnProjectDirectoryRenamed(SccProjectData project, string oldName, string newName)
         {
 
         }
 
-        public virtual void OnProjectBeforeUnload(IVsSccProject2 project, IVsHierarchy stub)
-        {
-
-        }
-
-        public virtual void OnProjectRenamed(IVsSccProject2 project)
-        {
-
-        }
-
-        public virtual void OnProjectFileAdded(IVsSccProject2 project, string filename, string fileOrigin, VSADDFILEFLAGS flags)
-        {
-
-        }
-
-        public virtual void OnProjectFileRemoved(IVsSccProject2 project, string filename, VSREMOVEFILEFLAGS flags)
-        {
-
-        }
-
-        public virtual void OnProjectDirectoryRemoved(IVsSccProject2 project, string filename, VSREMOVEDIRECTORYFLAGS flags)
-        {
-
-        }
-
-        public virtual void OnProjectRenamedFile(IVsSccProject2 sccProject, string oldName, string newName, VSRENAMEFILEFLAGS flags)
-        {
-
-        }
-
-        public virtual void OnProjectDirectoryRenamed(IVsSccProject2 sccProject, string oldName, string newName, VSRENAMEDIRECTORYFLAGS flags)
-        {
-
-        }
-
-        public virtual void OnSolutionRenamedFile(string oldName, string newName)
+        protected virtual void OnSolutionRenamedFile(string oldName, string newName)
         {
             ClearSolutionInfo();
         }
 
-        public virtual void AddDelayedDelete(string path)
+        protected virtual void AddDelayedDelete(string path)
         {
 
         }
 
-        public virtual void Translate_SolutionRenamed(string oldRawName, string newRawName)
+        void IAnkhSccProviderEvents.AddDelayedDelete(string path)
+        {
+            AddDelayedDelete(path);
+        }
+
+        protected virtual void Translate_SolutionRenamed(string oldRawName, string newRawName)
         {
 
         }
 
-        public virtual void OnSolutionRefreshCommand(EventArgs e)
+        protected virtual void OnSolutionRefreshCommand(EventArgs e)
         {
             
         }
@@ -355,14 +416,49 @@ namespace Ankh.Scc
             return VSErr.S_OK;
         }
 
-        public virtual int RegisterSccProject(IVsSccProject2 pscp2Project, string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszProvider)
+        [CLSCompliant(false)] // Implements 2 interfaces
+        public int RegisterSccProject(IVsSccProject2 pscp2Project, string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszProvider)
         {
-            return VSErr.S_OK;
+            try
+            {
+                SccProjectData data;
+                ProjectMap.EnsureSccProject(pscp2Project, out data);
+
+                OnRegisterSccProject(data, pszProvider);
+                return VSErr.S_OK;
+            }
+            catch(Exception e)
+            {
+                return VSErr.GetHRForException(e);
+            }
         }
 
-        public virtual int UnregisterSccProject(IVsSccProject2 pscp2Project)
+        protected virtual void OnRegisterSccProject(SccProjectData data, string pszProvider)
         {
-            return VSErr.S_OK;
+            data.IsRegistered = true;
+        }
+
+        [CLSCompliant(false)] // Implements 2 interfaces
+        public int UnregisterSccProject(IVsSccProject2 pscp2Project)
+        {
+            try
+            {
+                SccProjectData data;
+                ProjectMap.EnsureSccProject(pscp2Project, out data);
+
+                OnUnregisterSccProject(data);
+                return VSErr.S_OK;
+            }
+            catch (Exception e)
+            {
+                return VSErr.GetHRForException(e);
+            }
+        }
+
+        protected virtual void OnUnregisterSccProject(SccProjectData data)
+        {
+            data.IsRegistered = false;
+            data.IsManaged = false;
         }
 
         public bool IsBSLSupported()
@@ -394,6 +490,109 @@ namespace Ankh.Scc
         protected virtual string GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode)
         {
             return null;
+        }
+
+        bool IAnkhSccProviderEvents.TrackProjectChanges(IVsSccProject2 sccProject, out bool trackCopies)
+        {
+            SccProjectData data;
+            if (ProjectMap.TryGetSccProject(sccProject, out data))
+            {
+                return TrackProjectChanges(data, out trackCopies);
+            }
+            else
+            {
+                trackCopies = false;
+                return false;
+            }
+        }
+
+        protected virtual bool TrackProjectChanges(SccProjectData data, out bool trackCopies)
+        {
+            trackCopies = true;
+            return data.TrackProjectChanges();
+        }
+
+        bool IAnkhSccProviderEvents.TrackProjectChanges(IVsSccProject2 sccProject)
+        {
+            bool trackCopies;
+
+            SccProjectData data;
+            if (ProjectMap.TryGetSccProject(sccProject, out data))
+            {
+                return TrackProjectChanges(data, out trackCopies);
+            }
+            else
+            {
+                trackCopies = false;
+                return false;
+            }
+        }
+
+        void IAnkhSccProviderEvents.VerifySolutionNaming()
+        {
+            OnVerifySolutionNaming();
+        }
+
+        protected virtual void OnVerifySolutionNaming()
+        {
+        }
+
+        void IAnkhSccProviderEvents.OnSolutionRefreshCommand(EventArgs e)
+        {
+            OnSolutionRefreshCommand(e);
+        }
+
+        void IAnkhSccProviderEvents.OnSolutionOpened(bool onLoad)
+        {
+            OnSolutionOpened(onLoad);
+        }
+
+        void IAnkhSccProviderEvents.OnSolutionClosed()
+        {
+            OnSolutionClosed();
+        }
+
+        void IAnkhSccProviderEvents.OnStartedSolutionClose()
+        {
+            OnStartedSolutionClose();
+        }
+
+        void IAnkhSccProviderEvents.Translate_SolutionRenamed(string p1, string p2)
+        {
+            Translate_SolutionRenamed(p1, p2);
+        }
+
+        void IAnkhSccProviderEvents.OnSolutionRenamedFile(string oldName, string newName)
+        {
+            OnSolutionRenamedFile(oldName, newName);
+        }
+
+        void IAnkhSccProviderEvents.OnProjectOpened(IVsSccProject2 sccProject, bool added)
+        {
+            SccProjectData data;
+            ProjectMap.EnsureSccProject(sccProject, out data);
+            OnProjectOpened(data, added);
+        }
+
+        void IAnkhSccProviderEvents.OnProjectDirectoryRenamed(IVsSccProject2 sccProject, string oldName, string newName, VSRENAMEDIRECTORYFLAGS vSRENAMEDIRECTORYFLAGS)
+        {
+            SccProjectData data;
+            ProjectMap.EnsureSccProject(sccProject, out data);
+            OnProjectDirectoryRenamed(data, oldName, newName);
+        }
+
+        void IAnkhSccProviderEvents.OnProjectDirectoryRemoved(IVsSccProject2 sccProject, string dir, VSREMOVEDIRECTORYFLAGS vSREMOVEDIRECTORYFLAGS)
+        {
+            SccProjectData data;
+            ProjectMap.EnsureSccProject(sccProject, out data);
+            OnProjectDirectoryRemoved(data, dir);
+        }
+
+        void IAnkhSccProviderEvents.OnProjectFileRenamed(IVsSccProject2 sccProject, string oldName, string newName, VSRENAMEFILEFLAGS vSRENAMEFILEFLAGS)
+        {
+            SccProjectData data;
+            ProjectMap.EnsureSccProject(sccProject, out data);
+            OnProjectFileRenamed(data, oldName, newName);
         }
     }
 }

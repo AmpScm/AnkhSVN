@@ -144,7 +144,7 @@ namespace Ankh.Scc
             }
         }
 
-        public override void OnSolutionRefreshCommand(EventArgs e)
+        protected override void OnSolutionRefreshCommand(EventArgs e)
         {
             CommandService.PostExecCommand(AnkhCommand.Refresh);
         }
@@ -153,41 +153,15 @@ namespace Ankh.Scc
         /// This method is called by projects that are under source control 
         /// when they are first opened to register project settings.
         /// </summary>
-        /// <param name="pscp2Project">The PSCP2 project.</param>
-        /// <param name="pszSccProjectName">Name of the PSZ SCC project.</param>
-        /// <param name="pszSccAuxPath">The PSZ SCC aux path.</param>
-        /// <param name="pszSccLocalPath">The PSZ SCC local path.</param>
-        /// <param name="pszProvider">The PSZ provider.</param>
-        /// <returns></returns>
-        public override int RegisterSccProject(IVsSccProject2 pscp2Project, string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszProvider)
-        {
-            SccProjectData data;
 
-            ProjectMap.EnsureSccProject(pscp2Project, out data);
+        protected override void OnRegisterSccProject(SccProjectData data, string pszProvider)
+        {
+            base.OnRegisterSccProject(data, pszProvider);
 
             data.IsManaged = (pszProvider == AnkhId.SubversionSccName);
-            data.IsRegistered = true;
 
             _syncMap = true;
             RegisterForSccCleanup();
-
-            return VSErr.S_OK;
-        }
-
-        /// <summary>
-        /// Called by projects registered with the source control portion of the environment before they are closed.
-        /// </summary>
-        /// <param name="pscp2Project">The PSCP2 project.</param>
-        /// <returns></returns>
-        public override int UnregisterSccProject(IVsSccProject2 pscp2Project)
-        {
-            SccProjectData data;
-            if (ProjectMap.TryGetSccProject(pscp2Project, out data))
-            {
-                data.IsRegistered = false;
-            }
-
-            return VSErr.S_OK;
         }
 
         internal void AddedToSolution(string path)

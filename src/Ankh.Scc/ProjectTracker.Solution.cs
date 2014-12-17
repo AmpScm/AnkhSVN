@@ -37,7 +37,7 @@ namespace Ankh.Scc
         public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
         {
             _solutionLoaded = true;
-            SccProvider.OnSolutionOpened(true);
+            SccEvents.OnSolutionOpened(true);
 
             GetService<IAnkhServiceEvents>().OnSolutionOpened(EventArgs.Empty);
 
@@ -45,7 +45,7 @@ namespace Ankh.Scc
                 return VSErr.S_OK;
             try
             {
-                SccProvider.VerifySolutionNaming();
+                SccEvents.VerifySolutionNaming();
 
                 IAnkhSolutionSettings ss = GetService<IAnkhSolutionSettings>();
 
@@ -101,7 +101,7 @@ namespace Ankh.Scc
         {
             _solutionLoaded = false;
             if (SccProvider.IsActive)
-                SccProvider.OnStartedSolutionClose();
+                SccEvents.OnStartedSolutionClose();
 
             return VSErr.S_OK;
         }
@@ -110,7 +110,7 @@ namespace Ankh.Scc
         {
             if (SccProvider.IsActive)
             {
-                SccProvider.OnSolutionClosed();
+                SccEvents.OnSolutionClosed();
             }
 
             GetService<IAnkhServiceEvents>().OnSolutionClosed(EventArgs.Empty);
@@ -127,7 +127,7 @@ namespace Ankh.Scc
 
             if (project != null)
             {
-                SccProvider.OnProjectLoaded(project);
+                SccEvents.OnProjectLoaded(project);
             }
             
             return VSErr.S_OK;
@@ -142,7 +142,7 @@ namespace Ankh.Scc
 
             if (project != null)
             {
-                SccProvider.OnProjectOpened(project, fAdded != 0);
+                SccEvents.OnProjectOpened(project, fAdded != 0);
             }
             //else
             //{
@@ -161,7 +161,7 @@ namespace Ankh.Scc
 
             if (project != null)
             {
-                SccProvider.OnProjectClosed(project, fRemoved != 0);
+                SccEvents.OnProjectClosed(project, fRemoved != 0);
             }
 
             return VSErr.S_OK;
@@ -176,7 +176,7 @@ namespace Ankh.Scc
 
             if (project != null)
             {
-                SccProvider.OnProjectBeforeUnload(project, pStubHierarchy);
+                SccEvents.OnProjectBeforeUnload(project, pStubHierarchy);
             }
 
             return VSErr.S_OK;
@@ -246,7 +246,7 @@ namespace Ankh.Scc
 
             if (project != null)
             {
-                SccProvider.OnProjectOpened(project, fAdded != 0);
+                SccEvents.OnProjectOpened(project, fAdded != 0);
             }
 
             return VSErr.S_OK;
@@ -267,7 +267,7 @@ namespace Ankh.Scc
             if (project != null)
             {
                 // SccProvider forwards this to the SccStore
-                SccProvider.OnProjectRenamed(project);
+                SccEvents.OnProjectRenamed(project);
             }
 
             return VSErr.S_OK;

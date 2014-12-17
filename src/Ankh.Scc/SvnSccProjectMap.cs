@@ -21,7 +21,7 @@ namespace Ankh.Scc
 
         protected override Selection.SccProject CreateProject(ProjectMap.SccProjectData sccProjectData)
         {
-            return new SvnSccProject(sccProjectData);
+            return new SccSvnProject(sccProjectData);
         }
 
         protected override void AddedToSolution(string path)

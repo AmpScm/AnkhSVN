@@ -39,6 +39,7 @@ namespace Ankh.Scc
             get { return _statusImages ?? (_statusImages = GetService<IStatusImageMapper>()); }
         }
 
+        [CLSCompliant(false)]
         protected uint GlyphToStatus(AnkhGlyph glyph)
         {
             SccStatus status;
@@ -93,6 +94,7 @@ namespace Ankh.Scc
         /// <param name="dwSccStatus">The dw SCC status.</param>
         /// <param name="psiGlyph">The psi glyph.</param>
         /// <returns></returns>
+        [CLSCompliant(false)]
         public int GetSccGlyphFromStatus(uint dwSccStatus, VsStateIcon[] psiGlyph)
         {
             // This method is called when some user (e.g. like classview) wants to combine icons
@@ -111,6 +113,7 @@ namespace Ankh.Scc
         /// <param name="rgsiGlyphs">The rgsi glyphs.</param>
         /// <param name="rgdwSccStatus">The RGDW SCC status.</param>
         /// <returns></returns>
+        [CLSCompliant(false)] // Implements 2 interfaces
         public int GetSccGlyph(int cFiles, string[] rgpszFullPaths, VsStateIcon[] rgsiGlyphs, uint[] rgdwSccStatus)
         {
             try

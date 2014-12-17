@@ -128,7 +128,7 @@ namespace Ankh.Scc
             return trueName;
         }
 
-        public override void Translate_SolutionRenamed(string oldName, string newName)
+        protected override void Translate_SolutionRenamed(string oldName, string newName)
         {
             string oldDir = Path.GetDirectoryName(oldName);
             string newDir = Path.GetDirectoryName(newName);
