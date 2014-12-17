@@ -73,7 +73,7 @@ namespace AnkhSvn_UnitTestProject.Services
         [Test]
         public void TestExistingFileType()
         {
-            var statusCache = new Mock<ISvnFileStatusCache>();
+            var statusCache = new Mock<ISvnStatusCache>();
 
             string tempFile = Path.GetTempFileName();
             string exeTempFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + ".exe");

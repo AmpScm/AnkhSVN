@@ -113,7 +113,7 @@ namespace Ankh.UI.Commands
                     dlg.SelectedUri = ut.Uri;
                 else
                 {
-                    SvnItem file = GetService<ISvnFileStatusCache>()[((SvnPathTarget)from.Target).FullPath];
+                    SvnItem file = GetService<ISvnStatusCache>()[((SvnPathTarget)from.Target).FullPath];
 
                     if (file.Uri == null)
                         dlg.SelectedUri = from.RepositoryRoot;

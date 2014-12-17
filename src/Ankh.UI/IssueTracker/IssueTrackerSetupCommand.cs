@@ -45,7 +45,7 @@ namespace Ankh.UI.IssueTracker
         public void OnExecute(CommandEventArgs e)
         {
             SvnItem firstVersioned = null;
-            ISvnFileStatusCache cache = e.GetService<ISvnFileStatusCache>();
+            ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
             IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
             if (solutionSettings != null)
             {
@@ -160,7 +160,7 @@ namespace Ankh.UI.IssueTracker
                     if (string.IsNullOrEmpty(root))
                         return null;
 
-                    item = e.GetService<ISvnFileStatusCache>()[root];
+                    item = e.GetService<ISvnStatusCache>()[root];
                     break;
             }
 
