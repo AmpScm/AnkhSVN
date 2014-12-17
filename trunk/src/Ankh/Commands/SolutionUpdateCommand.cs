@@ -457,7 +457,7 @@ namespace Ankh.Commands
         private static IEnumerable<SvnItem> GetAllUpdateRoots(CommandEventArgs e)
         {
             // Duplicate handling is handled above this method!
-            IAnkhProjectLayoutService pls = e.GetService<IAnkhProjectLayoutService>();
+            ISvnSolutionLayout pls = e.GetService<ISvnSolutionLayout>();
             if (IsSolutionCommand(e.Command))
                 foreach (SvnItem item in pls.GetUpdateRoots(null))
                 {
