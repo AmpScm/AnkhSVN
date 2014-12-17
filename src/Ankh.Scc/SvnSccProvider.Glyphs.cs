@@ -54,7 +54,7 @@ namespace Ankh.Scc
             // as those are collapsed by default
 
             SccProjectFile file;
-            if (!lookForChildren || !ProjectMap.TryGetValue(item.FullPath, out file))
+            if (!lookForChildren || !ProjectMap.TryGetFile(item.FullPath, out file))
                 return glyph;
 
             SccProjectFileReference rf = file.FirstReference;
@@ -137,7 +137,7 @@ namespace Ankh.Scc
                 files.Add(file);
 
                 SccProjectFile spf;
-                if (ProjectMap.TryGetValue(file, out spf))
+                if (ProjectMap.TryGetFile(file, out spf))
                 {
                     foreach (string subfile in spf.FirstReference.GetSubFiles())
                     {

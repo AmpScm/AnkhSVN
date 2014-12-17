@@ -363,7 +363,7 @@ namespace Ankh.Scc.ProjectMap
                 if (_svnProjectInstance == null)
                 {
                     if ((_projectFlags & SccProjectFlags.ForceSccGlyphChange) == SccProjectFlags.ForceSccGlyphChange)
-                        _svnProjectInstance = _scc.CreateProject(this);
+                        _svnProjectInstance = Scc.CreateProject(this);
                     else
                         _svnProjectInstance = new SccProject(ProjectFile, SccProject);
                 }
