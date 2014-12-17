@@ -23,6 +23,7 @@ using SharpSvn;
 using System.Windows.Forms;
 using Ankh.Scc.ProjectMap;
 using System.Diagnostics;
+using Ankh.Selection;
 
 namespace Ankh.Scc
 {
@@ -115,13 +116,13 @@ namespace Ankh.Scc
         /// <summary>
         /// Provides ToolTip text based on the source control data for a specific node in the project's hierarchy Solution Explorer.
         /// </summary>
-        /// <param name="phierHierarchy">[in] Owner hierarchy of node (null if it is a solution).</param>
+        /// <param name="hierarchy">[in] Owner hierarchy of node (null if it is a solution).</param>
         /// <param name="itemidNode">[in] The ID of the node for which the ToolTip is requested.</param>
         /// <param name="pbstrTooltipText">[out] ToolTip text.</param>
         /// <returns>
         /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
-        protected override string GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode)
+        protected override string GetGlyphTipText(SccHierarchy hierarchy, uint itemidNode)
         {
             if (Walker == null || StatusCache == null)
                 return null;
@@ -129,7 +130,7 @@ namespace Ankh.Scc
             HybridCollection<string> files = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
             int n = 0;
-            foreach (string file in Walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.Empty, null))
+            foreach (string file in Walker.GetSccFiles(hierarchy.Hierarchy, itemidNode, ProjectWalkDepth.Empty, null))
             {
                 if (files.Contains(file) || !SvnItem.IsValidPath(file))
                     continue;

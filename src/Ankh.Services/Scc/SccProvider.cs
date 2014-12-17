@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Ankh.Configuration;
 using Ankh.Scc.ProjectMap;
+using Ankh.Selection;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
 
@@ -465,7 +466,7 @@ namespace Ankh.Scc
 
             try
             {
-                pbstrTooltipText = GetGlyphTipText(phierHierarchy, itemidNode);
+                pbstrTooltipText = GetGlyphTipText(new SccHierarchy(phierHierarchy), itemidNode);
 
                 return VSErr.S_OK;
             }
@@ -477,7 +478,7 @@ namespace Ankh.Scc
         }
 
         [CLSCompliant(false)]
-        protected virtual string GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode)
+        protected virtual string GetGlyphTipText(SccHierarchy phierHierarchy, uint itemidNode)
         {
             return null;
         }

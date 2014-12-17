@@ -189,7 +189,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
             #endregion
 
 
-            public IEnumerable<VSHierarchy> GetSelectedHierarchies()
+            public IEnumerable<SccHierarchy> GetSelectedHierarchies()
             {
                 yield break;
             }
@@ -197,7 +197,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
 
             public Microsoft.VisualStudio.TextManager.Interop.IVsTextView ActiveDocumentFrameTextView
             {
-                get { throw new NotImplementedException(); }
+                get { return null; }
             }
         }
     }
