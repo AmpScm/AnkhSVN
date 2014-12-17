@@ -5,10 +5,10 @@ using Ankh.Selection;
 
 namespace Ankh.Scc.ProjectMap
 {
-	sealed class SccSvnProject : SccProject
+	sealed class SvnSccProject : SccProject
 	{
 		readonly SccProjectData _projectData;
-		public SccSvnProject(SccProjectData projectData)
+		public SvnSccProject(SccProjectData projectData)
 			: base(projectData.ProjectFile, projectData.SccProject)
 		{
 			_projectData = projectData;
