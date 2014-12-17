@@ -35,7 +35,7 @@ namespace Ankh.Scc.StatusCache.Commands
             if (_commandService == null)
                 _commandService = e.GetService<IAnkhCommandService>();
             if (_fileCache == null)
-                _fileCache = e.GetService<FileStatusCache>(typeof(IFileStatusCache));
+                _fileCache = e.GetService<FileStatusCache>(typeof(ISvnStatusCache));
 
             _commandService.TockCommand(e.Command);
 

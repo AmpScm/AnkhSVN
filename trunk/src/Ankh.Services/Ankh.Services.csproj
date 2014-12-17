@@ -207,7 +207,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scc\AnkhGlyph.cs" />
     <Compile Include="Scc\AnkhStatus.cs" />
-    <Compile Include="Scc\IFileStatusCache.cs" />
+    <Compile Include="Scc\ISvnStatusCache.cs" />
     <Compile Include="Scc\IFileStatusMonitor.cs" />
     <Compile Include="Scc\IAnkhOpenDocumentTracker.cs" />
     <Compile Include="Scc\ISccHierarchyWalker.cs" />

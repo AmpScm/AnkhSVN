@@ -34,13 +34,13 @@ namespace Ankh.Scc
     {
         SvnClient _svnClient;
         SvnWorkingCopyClient _wcClient;
-        readonly IFileStatusCache _statusCache;
+        readonly ISvnStatusCache _statusCache;
         bool _disposed;
 
         public SvnSccContext(IAnkhServiceProvider context)
             : base(context)
         {
-            _statusCache = GetService<IFileStatusCache>();
+            _statusCache = GetService<ISvnStatusCache>();
         }
 
         protected override void Dispose(bool disposing)
@@ -68,7 +68,7 @@ namespace Ankh.Scc
             get { return _wcClient ?? (_wcClient = GetService<ISvnClientPool>().GetWcClient()); }
         }
 
-        IFileStatusCache StatusCache
+        ISvnStatusCache StatusCache
         {
             get { return _statusCache; }
         }

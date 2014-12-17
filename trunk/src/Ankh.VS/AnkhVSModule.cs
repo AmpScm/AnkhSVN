@@ -55,7 +55,7 @@ namespace Ankh.VS
         /// </summary>
         public override void OnInitialize()
         {
-            EnsureService<IFileStatusCache>();
+            EnsureService<ISvnFileStatusCache>();
             EnsureService<IStatusImageMapper>();
         }
     }

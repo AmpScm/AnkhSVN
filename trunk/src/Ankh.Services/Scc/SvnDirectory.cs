@@ -77,7 +77,7 @@ namespace Ankh.Scc
                 else
                 {
                     // Get the item from the status cache
-                    IFileStatusCache cache = _context.GetService<IFileStatusCache>();
+                    ISvnStatusCache cache = _context.GetService<ISvnStatusCache>();
 
                     if (cache == null)
                         return null;

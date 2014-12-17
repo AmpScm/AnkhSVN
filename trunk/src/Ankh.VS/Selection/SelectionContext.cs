@@ -40,7 +40,7 @@ namespace Ankh.VS.Selection
     [GlobalService(typeof(ISccProjectWalker))]
     partial class SelectionContext : AnkhService, IVsSelectionEvents, ISelectionContext, ISelectionContextEx, ISccProjectWalker
     {
-        IFileStatusCache _cache;
+        ISvnStatusCache _cache;
         bool _disposed;
         uint _cookie;
 
@@ -84,7 +84,7 @@ namespace Ankh.VS.Selection
 
         protected override void OnInitialize()
         {
-            _cache = GetService<IFileStatusCache>();
+            _cache = GetService<ISvnStatusCache>();
 
             IVsMonitorSelection monitor = GetService<IVsMonitorSelection>();
 

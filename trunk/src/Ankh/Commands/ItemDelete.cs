@@ -97,7 +97,7 @@ namespace Ankh.Commands
                     // TODO: Notify the working copy explorer here!
                     // (Maybe via one of these methods below)
 
-                    e.GetService<IFileStatusCache>().MarkDirtyRecursive(item.FullPath);
+                    e.GetService<ISvnFileStatusCache>().MarkDirtyRecursive(item.FullPath);
                     e.GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(item.FullPath);
                 }
 

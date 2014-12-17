@@ -207,9 +207,9 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        IFileStatusCache FileStatusCache
+        ISvnFileStatusCache FileStatusCache
         {
-            get { return Context.GetService<IFileStatusCache>(); }
+            get { return Context.GetService<ISvnFileStatusCache>(); }
         }
 
         protected override void OnFrameShow(Ankh.Scc.UI.FrameEventArgs e)
@@ -255,10 +255,10 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.fileList.SetDirectory(item);
         }
 
-        IFileStatusCache _cache;
-        protected internal IFileStatusCache StatusCache
+        ISvnFileStatusCache _cache;
+        protected internal ISvnFileStatusCache StatusCache
         {
-            get { return _cache ?? (_cache = Context.GetService<IFileStatusCache>()); }
+            get { return _cache ?? (_cache = Context.GetService<ISvnFileStatusCache>()); }
         }
 
         public void AddRoot(string path)
@@ -295,7 +295,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             folderTree.BrowsePath(path);
 
-            if (context.GetService<IFileStatusCache>()[path].IsFile)
+            if (context.GetService<ISvnFileStatusCache>()[path].IsFile)
             {
                 fileList.SelectPath(path);
             }

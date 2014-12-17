@@ -56,7 +56,7 @@ namespace Ankh
     [DebuggerDisplay("Path={FullPath}")]
     public sealed partial class SvnItem : ISvnItemUpdate, ISvnWcReference, IEquatable<SvnItem>
     {
-        readonly IFileStatusCache _context;
+        readonly ISvnStatusCache _context;
         readonly string _fullPath;
 
         enum XBool : sbyte
@@ -79,7 +79,7 @@ namespace Ankh
         DateTime _modified;
         bool _sccExcluded;
 
-        public SvnItem(IFileStatusCache context, string fullPath, AnkhStatus status)
+        public SvnItem(ISvnStatusCache context, string fullPath, AnkhStatus status)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -97,7 +97,7 @@ namespace Ankh
             _enqueued = false;
         }
 
-        public SvnItem(IFileStatusCache context, string fullPath, NoSccStatus status, SvnNodeKind nodeKind)
+        public SvnItem(ISvnStatusCache context, string fullPath, NoSccStatus status, SvnNodeKind nodeKind)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -124,7 +124,7 @@ namespace Ankh
             }
         }
 
-        IFileStatusCache StatusCache
+        ISvnStatusCache StatusCache
         {
             [DebuggerStepThrough]
             get { return _context; }
@@ -639,7 +639,7 @@ namespace Ankh
         void RefreshStatus()
         {
             _statusDirty = XBool.None;
-            IFileStatusCache statusCache = StatusCache;
+            ISvnStatusCache statusCache = StatusCache;
 
             try
             {
@@ -1102,7 +1102,7 @@ namespace Ankh
                 if (string.IsNullOrEmpty(parentDir))
                     return null; // We are the root folder!
 
-                IFileStatusCache cache = StatusCache;
+                ISvnStatusCache cache = StatusCache;
 
                 if (cache != null)
                     return cache.GetAlreadyNormalizedItem(parentDir);
@@ -1120,7 +1120,7 @@ namespace Ankh
                 if (string.IsNullOrEmpty(parentDir))
                     return null;
 
-                IFileStatusCache cache = StatusCache;
+                ISvnStatusCache cache = StatusCache;
 
                 if (cache == null)
                     return null;
@@ -1525,7 +1525,7 @@ namespace Ankh
             if (!IsDirectory)
                 return null;
 
-            IFileStatusCache cache = StatusCache;
+            ISvnStatusCache cache = StatusCache;
 
             if (cache == null)
                 return null;

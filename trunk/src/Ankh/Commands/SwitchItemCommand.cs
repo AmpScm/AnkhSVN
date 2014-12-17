@@ -71,7 +71,7 @@ namespace Ankh.Commands
                         return;
                     }
 
-                    SvnItem projectItem = e.GetService<IFileStatusCache>()[pi.ProjectDirectory];
+                    SvnItem projectItem = e.GetService<ISvnFileStatusCache>()[pi.ProjectDirectory];
 
                     if (projectItem == null || !projectItem.IsVersioned || projectItem.IsNewAddition)
                         e.Enabled = false;
@@ -129,7 +129,7 @@ namespace Ankh.Commands
                 path = theItem.FullPath;
             }
 
-            IFileStatusCache statusCache = e.GetService<IFileStatusCache>();
+            ISvnFileStatusCache statusCache = e.GetService<ISvnFileStatusCache>();
 
             SvnItem pathItem = statusCache[path];
             Uri uri = pathItem.Uri;
@@ -153,7 +153,7 @@ namespace Ankh.Commands
                     dlg.Context = e.Context;
 
                     dlg.LocalPath = path;
-                    dlg.RepositoryRoot = e.GetService<IFileStatusCache>()[path].WorkingCopy.RepositoryRoot;
+                    dlg.RepositoryRoot = e.GetService<ISvnFileStatusCache>()[path].WorkingCopy.RepositoryRoot;
                     dlg.SwitchToUri = uri;
                     dlg.Revision = SvnRevision.Head;
 

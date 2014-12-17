@@ -29,7 +29,7 @@ namespace Ankh.Scc
         readonly PendingChangeCollection _pendingChanges = new PendingChangeCollection();
         readonly HybridCollection<string> _extraFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
         IFileIconMapper _iconMap;
-        IFileStatusCache _cache;
+        ISvnStatusCache _cache;
         IProjectFileMapper _mapper;
         IAnkhOpenDocumentTracker _tracker;
 
@@ -38,9 +38,9 @@ namespace Ankh.Scc
             get { return _iconMap ?? (_iconMap = GetService<IFileIconMapper>()); }
         }
 
-        protected IFileStatusCache Cache
+        protected ISvnStatusCache Cache
         {
-            get { return _cache ?? (_cache = GetService<IFileStatusCache>()); }
+            get { return _cache ?? (_cache = GetService<ISvnStatusCache>()); }
         }
 
         protected IProjectFileMapper Mapper
@@ -73,7 +73,7 @@ namespace Ankh.Scc
                 bool wasClean = (_pendingChanges.Count == 0);
                 Dictionary<string, PendingChange> mapped = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
 
-                IFileStatusCache cache = Cache;
+                ISvnStatusCache cache = Cache;
 
                 foreach (string file in Mapper.GetAllFilesOfAllProjects())
                 {

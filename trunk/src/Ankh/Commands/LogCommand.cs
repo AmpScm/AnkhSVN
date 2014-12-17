@@ -53,7 +53,7 @@ namespace Ankh.Commands
                     if (pi == null || string.IsNullOrEmpty(pi.ProjectDirectory))
                         break; // No project location
 
-                    if (e.GetService<IFileStatusCache>()[pi.ProjectDirectory].HasCopyableHistory)
+                    if (e.GetService<ISvnFileStatusCache>()[pi.ProjectDirectory].HasCopyableHistory)
                         return; // Ok, we have history!                                           
 
                     break; // No history
@@ -64,7 +64,7 @@ namespace Ankh.Commands
                     if (ss == null || string.IsNullOrEmpty(ss.ProjectRoot))
                         break;
 
-                    if (e.GetService<IFileStatusCache>()[ss.ProjectRoot].HasCopyableHistory)
+                    if (e.GetService<ISvnFileStatusCache>()[ss.ProjectRoot].HasCopyableHistory)
                         return; // Ok, we have history!
 
                     break; // No history
@@ -134,7 +134,7 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             List<SvnOrigin> selected = new List<SvnOrigin>();
-            IFileStatusCache cache = e.GetService<IFileStatusCache>();
+            ISvnFileStatusCache cache = e.GetService<ISvnFileStatusCache>();
 
             switch (e.Command)
             {

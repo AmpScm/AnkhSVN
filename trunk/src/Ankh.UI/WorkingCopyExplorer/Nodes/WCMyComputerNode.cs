@@ -39,7 +39,7 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
 
         public override IEnumerable<WCTreeNode> GetChildren()
         {
-            IFileStatusCache cache = Context.GetService<IFileStatusCache>();
+            ISvnFileStatusCache cache = Context.GetService<ISvnFileStatusCache>();
 
             foreach (string s in Environment.GetLogicalDrives())
             {

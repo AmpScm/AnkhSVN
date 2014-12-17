@@ -34,7 +34,7 @@ namespace Ankh.Scc
     [GlobalService(typeof(ITheAnkhSvnSccProvider), true)]
     partial class SvnSccProvider : SccProvider, ITheAnkhSvnSccProvider, IAnkhSccService, IVsSccEnlistmentPathTranslation
     {
-        IFileStatusCache _statusCache;
+        ISvnStatusCache _statusCache;
         IAnkhOpenDocumentTracker _documentTracker;
 
         public SvnSccProvider(IAnkhServiceProvider context)
@@ -76,9 +76,9 @@ namespace Ankh.Scc
         /// Gets the status cache.
         /// </summary>
         /// <value>The status cache.</value>
-        IFileStatusCache StatusCache
+        ISvnStatusCache StatusCache
         {
-            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
+            get { return _statusCache ?? (_statusCache = GetService<ISvnStatusCache>()); }
         }
 
         IAnkhOpenDocumentTracker DocumentTracker

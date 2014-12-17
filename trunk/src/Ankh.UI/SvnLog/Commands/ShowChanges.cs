@@ -64,7 +64,7 @@ namespace Ankh.UI.SvnLog.Commands
 
             if (pt != null)
             {
-                if (e.GetService<IFileStatusCache>()[pt.FullPath].IsDirectory)
+                if (e.GetService<ISvnFileStatusCache>()[pt.FullPath].IsDirectory)
                 {
                     // We can't diff directories at this time
                     e.Enabled = false;

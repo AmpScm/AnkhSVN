@@ -391,7 +391,7 @@ namespace Ankh.UI.PendingChanges
 
         public override void RefreshList()
         {
-            Context.GetService<IFileStatusCache>().ClearCache();
+            Context.GetService<ISvnStatusCache>().ClearCache();
 
             IAnkhOpenDocumentTracker dt = Context.GetService<IAnkhOpenDocumentTracker>();
 

@@ -57,7 +57,7 @@ namespace UnitTestProject.MenuItemTests
             // Create the package
             package = new AnkhSvnPackage();
 
-            var statusCache = new Mock<IFileStatusCache>();
+            var statusCache = new Mock<ISvnFileStatusCache>();
             var regEditors = new Mock<SVsRegisterEditors>().As<IVsRegisterEditors>();
 
             var vsShell = new Mock<SVsShell>().As<IVsShell>();
@@ -79,7 +79,7 @@ namespace UnitTestProject.MenuItemTests
             ServiceProviderHelper.AddService(typeof(SVsTextManager), vsTextMgr.Object);
             ServiceProviderHelper.AddService(typeof(SVsShell), vsShell.Object);
             ServiceProviderHelper.AddService(typeof(SVsRegisterEditors), regEditors.Object);
-            ServiceProviderHelper.AddService(typeof(IFileStatusCache), statusCache.Object);
+            ServiceProviderHelper.AddService(typeof(ISvnFileStatusCache), statusCache.Object);
 
             var uiService = new Mock<IUIService>();
             uiService.Setup(x => x.ShowDialog(It.IsAny<Form>())).Returns(DialogResult.OK);

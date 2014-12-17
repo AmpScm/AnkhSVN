@@ -107,10 +107,10 @@ namespace Ankh.Scc.SccUI
             get { return _scc ?? (_scc = _context.GetService<IAnkhSccService>()); }
         }
 
-        IFileStatusCache _cache;
-        IFileStatusCache Cache
+        ISvnStatusCache _cache;
+        ISvnStatusCache Cache
         {
-            get { return _cache ?? (_cache = _context.GetService<IFileStatusCache>()); }
+            get { return _cache ?? (_cache = _context.GetService<ISvnStatusCache>()); }
         }
 
         string SafeToString(object value)

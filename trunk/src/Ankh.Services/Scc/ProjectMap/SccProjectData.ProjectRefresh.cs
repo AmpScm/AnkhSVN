@@ -26,7 +26,7 @@ namespace Ankh.Scc.ProjectMap
     {
         sealed class RefreshState
         {
-            readonly IFileStatusCache _cache;
+            readonly ISvnStatusCache _cache;
             readonly IVsHierarchy _hier;
             readonly IVsProject2 _project;
             readonly ISccProjectWalker _walker;
@@ -37,7 +37,7 @@ namespace Ankh.Scc.ProjectMap
             public RefreshState(IAnkhServiceProvider context, IVsHierarchy hier, IVsProject project, string projectDir)
             {
                 _hier = hier;
-                _cache = context.GetService<IFileStatusCache>();
+                _cache = context.GetService<ISvnStatusCache>();
                 _walker = context.GetService<ISccProjectWalker>();
                 _project = project as IVsProject2;
                 _projectDir = projectDir;
@@ -45,7 +45,7 @@ namespace Ankh.Scc.ProjectMap
                     _projectDirItem = Cache[projectDir];
             }
 
-            public IFileStatusCache Cache
+            public ISvnStatusCache Cache
             {
                 [DebuggerStepThrough]
                 get { return _cache; }

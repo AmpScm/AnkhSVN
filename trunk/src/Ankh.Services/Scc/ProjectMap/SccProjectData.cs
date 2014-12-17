@@ -277,7 +277,7 @@ namespace Ankh.Scc.ProjectMap
             // TODO: Insert project local settings check
 
             IAnkhSolutionSettings settings = GetService<IAnkhSolutionSettings>();
-            IFileStatusCache cache = GetService<IFileStatusCache>();
+            ISvnStatusCache cache = GetService<ISvnStatusCache>();
 
             SvnItem solutionRoot = settings.ProjectRootSvnItem;
 

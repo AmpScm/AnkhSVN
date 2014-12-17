@@ -233,10 +233,10 @@ namespace Ankh.Scc.SccUI
             get { return _projectMapper ?? (_projectMapper = Context.GetService<IProjectFileMapper>()); }
         }
 
-        IFileStatusCache _fileCache;
-        IFileStatusCache StatusCache
+        ISvnStatusCache _fileCache;
+        ISvnStatusCache StatusCache
         {
-            get { return _fileCache ?? (_fileCache = Context.GetService<IFileStatusCache>()); }
+            get { return _fileCache ?? (_fileCache = Context.GetService<ISvnStatusCache>()); }
         }
 
         IAnkhSolutionSettings _solutionSettings;

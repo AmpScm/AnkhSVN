@@ -40,10 +40,10 @@ namespace Ankh.Services
         {
         }
 
-        IFileStatusCache _statusCache;
-        IFileStatusCache Cache
+        ISvnFileStatusCache _statusCache;
+        ISvnFileStatusCache Cache
         {
-            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
+            get { return _statusCache ?? (_statusCache = GetService<ISvnFileStatusCache>()); }
         }
 
         /// <summary>
@@ -438,7 +438,7 @@ namespace Ankh.Services
 
             public int DirectoryChanged(string pszDirectory)
             {
-                IFileStatusCache fsc = GetService<IFileStatusCache>();
+                ISvnFileStatusCache fsc = GetService<ISvnFileStatusCache>();
 
                 if (fsc != null)
                 {
