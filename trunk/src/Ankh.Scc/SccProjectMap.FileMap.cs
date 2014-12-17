@@ -4,15 +4,9 @@ using Ankh.Scc.ProjectMap;
 
 namespace Ankh.Scc
 {
-    partial class SccFileMap : AnkhService
+    partial class SccProjectMap : AnkhService
     {
         readonly Dictionary<string, SccProjectFile> _fileMap = new Dictionary<string, SccProjectFile>(StringComparer.OrdinalIgnoreCase);
-
-        public SccFileMap(IAnkhServiceProvider context)
-            : base(context)
-        {
-
-        }
 
         public bool TryGetValue(string fileName, out SccProjectFile file)
         {
@@ -22,11 +16,6 @@ namespace Ankh.Scc
         public bool ContainsFile(string path)
         {
             return _fileMap.ContainsKey(path);
-        }
-
-        public void Clear()
-        {
-            _fileMap.Clear();
         }
 
         public void AddFile(string path, SccProjectFile sccProjectFile)

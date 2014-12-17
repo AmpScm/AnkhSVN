@@ -41,7 +41,6 @@ namespace Ankh.Scc
             : base(context)
         {
             _projectMap = new SccProjectMap(this);
-            _fileMap = new SccFileMap(this);
         }
 
         protected override void OnInitialize()
@@ -104,7 +103,7 @@ namespace Ankh.Scc
             if (IsSolutionManaged)
                 return true;
             
-            foreach (SccProjectData data in _projectMap.AllSccProjects)
+            foreach (SccProjectData data in ProjectMap.AllSccProjects)
             {
                 if (data.IsManaged)
                     return true;
@@ -143,7 +142,7 @@ namespace Ankh.Scc
                 DisposeGlyphList();
 
                 // Remove all glyphs currently set
-                foreach (SccProjectData pd in new List<SccProjectData>(_projectMap.AllSccProjects))
+                foreach (SccProjectData pd in new List<SccProjectData>(ProjectMap.AllSccProjects))
                 {
                     pd.NotifyGlyphsChanged();
                     pd.Dispose();
@@ -151,8 +150,7 @@ namespace Ankh.Scc
 
                 ClearSolutionGlyph();
 
-                _projectMap.Clear();
-                _fileMap.Clear();
+                ProjectMap.Clear();
                 _unreloadable.Clear();
                 _sccExcluded.Clear();
 
@@ -178,10 +176,10 @@ namespace Ankh.Scc
         public override int RegisterSccProject(IVsSccProject2 pscp2Project, string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszProvider)
         {
             SccProjectData data;
-            if (!_projectMap.TryGetSccProject(pscp2Project, out data))
+            if (!ProjectMap.TryGetSccProject(pscp2Project, out data))
             {
                 // This method is called before the OpenProject calls
-                _projectMap.AddProject(pscp2Project, data = new SccProjectData(this, pscp2Project));
+                ProjectMap.AddProject(pscp2Project, data = new SccProjectData(this, pscp2Project));
             }
 
             data.IsManaged = (pszProvider == AnkhId.SubversionSccName);
@@ -201,7 +199,7 @@ namespace Ankh.Scc
         public override int UnregisterSccProject(IVsSccProject2 pscp2Project)
         {
             SccProjectData data;
-            if (_projectMap.TryGetSccProject(pscp2Project, out data))
+            if (ProjectMap.TryGetSccProject(pscp2Project, out data))
             {
                 data.IsRegistered = false;
             }

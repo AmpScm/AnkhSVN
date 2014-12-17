@@ -28,6 +28,7 @@ namespace Ankh.Scc
         public void Clear()
         {
             _projectMap.Clear();
+            _fileMap.Clear();
         }
 
         public bool ContainsProject(IVsSccProject2 project)
