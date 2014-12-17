@@ -103,6 +103,12 @@ namespace Ankh.Scc
             }
         }
 
+        IAnkhSccProviderEvents SccEvents
+        {
+            [DebuggerStepThrough]
+            get { return _sccProvider; }
+        }
+
         SccProvider SccProvider
         {
             [DebuggerStepThrough]
@@ -139,12 +145,12 @@ namespace Ankh.Scc
                     IVsSccProject2 p2 = hiers[i] as IVsSccProject2;
 
                     if (p2 != null)
-                        SccProvider.OnProjectOpened(p2, false);
+                        SccEvents.OnProjectOpened(p2, false);
                 }
             }
 
             _solutionLoaded = true;
-            SccProvider.OnSolutionOpened(false);
+            SccEvents.OnSolutionOpened(false);
         }
 
         public void Hook(bool enableSolution, bool enableProjects)
@@ -201,7 +207,7 @@ namespace Ankh.Scc
 
         private void OnSolutionRefreshCommand(object sender, EventArgs e)
         {
-            SccProvider.OnSolutionRefreshCommand(e);
+            SccEvents.OnSolutionRefreshCommand(e);
         }
 
         IFileStatusCache StatusCache

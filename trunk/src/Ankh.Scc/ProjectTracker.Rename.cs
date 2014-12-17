@@ -94,7 +94,7 @@ namespace Ankh.Scc
                 {
                     IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                    bool track = SccProvider.TrackProjectChanges(sccProject);
+                    bool track = SccEvents.TrackProjectChanges(sccProject);
 
                     for (; iFile < iLastFileThisProject; iFile++)
                     {
@@ -110,7 +110,7 @@ namespace Ankh.Scc
                         if (oldName == newName)
                             continue;
 
-                        SccProvider.OnProjectRenamedFile(sccProject, oldName, newName, rgFlags[iFile]);
+                        SccEvents.OnProjectFileRenamed(sccProject, oldName, newName, rgFlags[iFile]);
                     }
                 }
                 else
@@ -125,9 +125,9 @@ namespace Ankh.Scc
                         string newName = SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]);
 
                         if (oldName != newName)
-                            SccProvider.OnSolutionRenamedFile(oldName, newName);
+                            SccEvents.OnSolutionRenamedFile(oldName, newName);
 
-                        SccProvider.Translate_SolutionRenamed(rgszMkOldNames[iFile], rgszMkNewNames[iFile]);
+                        SccEvents.Translate_SolutionRenamed(rgszMkOldNames[iFile], rgszMkNewNames[iFile]);
                     }
                 }
             }
@@ -284,14 +284,14 @@ namespace Ankh.Scc
 
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                bool track = SccProvider.TrackProjectChanges(sccProject);
+                bool track = SccEvents.TrackProjectChanges(sccProject);
 
                 for (; iDirectory < iLastDirectoryThisProject; iDirectory++)
                 {
                     if (sccProject == null || !track)
                         continue; // Not handled by our provider
 
-                    SccProvider.OnProjectDirectoryRenamed(sccProject,
+                    SccEvents.OnProjectDirectoryRenamed(sccProject,
                         SvnTools.GetNormalizedFullPath(rgszMkOldNames[iDirectory]),
                         SvnTools.GetNormalizedFullPath(rgszMkNewNames[iDirectory]), rgFlags[iDirectory]);
                 }

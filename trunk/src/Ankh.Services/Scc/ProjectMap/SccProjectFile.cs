@@ -37,6 +37,7 @@ namespace Ankh.Scc.ProjectMap
         /// </summary>
         /// <param name="map">The context.</param>
         /// <param name="filename">The filename.</param>
+        [CLSCompliant(false)]
         public SccProjectFile(SccProjectMap map, string filename)
         {
             if (map == null)

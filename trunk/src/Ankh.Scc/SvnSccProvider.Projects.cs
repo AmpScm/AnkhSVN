@@ -164,7 +164,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Called by ProjectDocumentTracker when a solution is opened 
         /// </summary>
-        public override void OnSolutionOpened(bool onLoad)
+        protected override void OnSolutionOpened(bool onLoad)
         {
             base.OnSolutionOpened(onLoad);
 
@@ -222,7 +222,7 @@ namespace Ankh.Scc
             UpdateSolutionGlyph();
         }
 
-        public override void VerifySolutionNaming()
+        protected override void OnVerifySolutionNaming()
         {
             IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
 
@@ -293,7 +293,7 @@ namespace Ankh.Scc
         /// Called by ProjectDocumentTracker just before a solution is closed
         /// </summary>
         /// <remarks>At this time the closing can not be canceled.</remarks>
-        public override void OnStartedSolutionClose()
+        protected override void OnStartedSolutionClose()
         {
             foreach (SccProjectData pd in ProjectMap.AllSccProjects)
             {
@@ -311,7 +311,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Called by ProjectDocumentTracker when a solution is closed
         /// </summary>
-        public override void OnSolutionClosed()
+        protected override void OnSolutionClosed()
         {
             Debug.Assert(ProjectMap.ProjectCount == 0);
             Debug.Assert(ProjectMap.UniqueFileCount == 0);
@@ -342,26 +342,22 @@ namespace Ankh.Scc
         /// <summary>
         /// Called by ProjectDocumentTracker when a scc-capable project is loaded
         /// </summary>
-        /// <param name="project"></param>
-        public override void OnProjectLoaded(IVsSccProject2 project)
+        /// <param name="data"></param>
+        protected override void OnProjectLoaded(SccProjectData data)
         {
-            base.OnProjectLoaded(project);
+            base.OnProjectLoaded(data);
         }
 
-        public override void OnProjectRenamed(IVsSccProject2 project)
+        protected override void OnProjectRenamed(SccProjectData data)
         {
             if (string.IsNullOrEmpty(SolutionFilename))
-                return;
-
-            SccProjectData data;
-            if (!ProjectMap.TryGetSccProject(project, out data))
                 return;
 
             // Mark the sln file edited, so it shows up in Pending Changes/Commit
             if (!string.IsNullOrEmpty(SolutionFilename))
                 DocumentTracker.CheckDirty(SolutionFilename);
 
-            data.Reload(); // Reload project name, etc.
+            base.OnProjectRenamed(data);
         }
 
         /// <summary>
@@ -369,12 +365,8 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The loaded project</param>
         /// <param name="added">The project was added after opening</param>
-        public override void OnProjectOpened(IVsSccProject2 project, bool added)
+        protected override void OnProjectOpened(SccProjectData data, bool added)
         {
-            SccProjectData data;
-
-            ProjectMap.EnsureSccProject(project, out data);
-
             if (data.IsStoredInSolution)
             {
                 if (IsSolutionManaged)
@@ -426,34 +418,25 @@ namespace Ankh.Scc
             get { return _buildManager ?? (_buildManager = GetService<IVsSolutionBuildManager2>(typeof(SVsSolutionBuildManager))); }
         }
 
-        public override bool TrackProjectChanges(IVsSccProject2 project, out bool trackCopies)
+        protected override bool TrackProjectChanges(SccProjectData data, out bool trackCopies)
         {
             // We can be called with a null project
-            SccProjectData data;
+            trackCopies = true;
 
-            if (project != null && ProjectMap.TryGetSccProject(project, out data))
+            if (data.WebLikeFileHandling)
             {
-                trackCopies = true;
-
-                if (data.WebLikeFileHandling)
+                int busy;
+                if (BuildManager != null &&
+                    VSErr.Succeeded(BuildManager.QueryBuildManagerBusy(out busy)) &&
+                    busy != 0)
                 {
-                    int busy;
-                    if (BuildManager != null &&
-                        VSErr.Succeeded(BuildManager.QueryBuildManagerBusy(out busy)) &&
-                        busy != 0)
-                    {
-                        trackCopies = false;
-                    }
+                    trackCopies = false;
                 }
-                else if (_syncMap)
-                    data.Load();
-
-
-                return data.TrackProjectChanges(); // Allows temporary disabling changes
             }
+            else if (_syncMap)
+                data.Load();
 
-            trackCopies = false;
-            return false;
+            return data.TrackProjectChanges(); // Allows temporary disabling changes
         }
 
         /// <summary>
@@ -461,14 +444,9 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="removed">if set to <c>true</c> the project is being removed or unloaded from the solution.</param>
-        public override void OnProjectClosed(IVsSccProject2 project, bool removed)
+        protected override void OnProjectClosed(SccProjectData data, bool removed)
         {
-            SccProjectData data;
-            if (ProjectMap.TryGetSccProject(project, out data))
-            {
-                data.OnClose();
-                ProjectMap.RemoveProject(project);
-            }
+            base.OnProjectClosed(data, removed);
 
             if (removed)
             {
@@ -477,14 +455,9 @@ namespace Ankh.Scc
             }
         }
 
-        public override void OnProjectBeforeUnload(IVsSccProject2 project, IVsHierarchy pStubHierarchy)
+        protected override void OnProjectBeforeUnload(SccProjectData data)
         {
-            SccProjectData data;
-            if (ProjectMap.TryGetSccProject(project, out data))
-            {
-                data.Unloading = true;
-                Monitor.ScheduleMonitor(data.GetAllFiles()); // Keep track of changes in files of unloaded project
-            }
+            Monitor.ScheduleMonitor(data.GetAllFiles()); // Keep track of changes in files of unloaded project
         }
 
         bool _registeredSccCleanup;
@@ -528,7 +501,7 @@ namespace Ankh.Scc
         /// And when renaming a C# project (VS11 Beta) we sometimes even get a delete before a rename.
         /// </summary>
         /// <param name="path"></param>
-        public override void AddDelayedDelete(string path)
+        protected override void AddDelayedDelete(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");

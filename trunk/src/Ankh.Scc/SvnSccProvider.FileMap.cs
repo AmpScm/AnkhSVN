@@ -57,18 +57,13 @@ namespace Ankh.Scc
         /// <summary>
         /// Called when a file is added to a project
         /// </summary>
-        /// <param name="project">The project.</param>
+        /// <param name="data">The project.</param>
         /// <param name="filename">The filename.</param>
         /// <param name="fileOrigin">The file origin.</param>
         /// <param name="flags">The flags.</param>
-        public override void OnProjectFileAdded(IVsSccProject2 project, string filename, string fileOrigin, VSADDFILEFLAGS flags)
+        protected override void OnProjectFileAdded(SccProjectData data, string filename)
         {
-            // First update the filemap
-            SccProjectData data;
-            if (!ProjectMap.TryGetSccProject(project, out data))
-                return; // Not managed by us
-
-            data.AddPath(filename);
+            base.OnProjectFileAdded(data, filename);
         }
 
         /// <summary>
@@ -77,13 +72,9 @@ namespace Ankh.Scc
         /// <param name="project">The project.</param>
         /// <param name="filename">The filename.</param>
         /// <param name="flags">The flags.</param>
-        public override void OnProjectFileRemoved(IVsSccProject2 project, string filename, VSREMOVEFILEFLAGS flags)
+        protected override void OnProjectFileRemoved(SccProjectData data, string filename)
         {
-            SccProjectData data;
-            if (!ProjectMap.TryGetSccProject(project, out data))
-                return; // Not managed by us
-
-            data.RemovePath(filename);
+            base.OnProjectFileRemoved(data, filename);
         }
 
         /// <summary>
@@ -92,20 +83,14 @@ namespace Ankh.Scc
         /// <param name="project">The project.</param>
         /// <param name="directoryname">The directoryname.</param>
         /// <param name="origin">The origin or null.</param>
-        public override void OnProjectDirectoryAdded(IVsSccProject2 project, string directoryname, string origin)
+        protected override void OnProjectDirectoryAdded(SccProjectData project, string directoryname, string origin)
         {
-            SccProjectData data;
-            if (!ProjectMap.TryGetSccProject(project, out data))
-                return; // Not managed by us
-
-            // Add a directory like a folder but with an ending '\'
-            string dir = directoryname.TrimEnd('\\') + '\\';
-            data.AddPath(dir);
+            base.OnProjectDirectoryAdded(project, directoryname, origin);
 
             if (!IsActive)
                 return;
 
-            if (!data.WebLikeFileHandling)
+            if (!project.WebLikeFileHandling)
             {
                 // Do nothing
             }
@@ -113,7 +98,7 @@ namespace Ankh.Scc
             {
                 // Websites don't contain a real file mapping; reload to load new files
                 // and directories recursively
-                data.Reload();
+                project.Reload();
             }
         }
 
@@ -123,15 +108,9 @@ namespace Ankh.Scc
         /// <param name="project">The SCC project.</param>
         /// <param name="directoryname">The directoryname.</param>
         /// <param name="flags">The flags.</param>
-        public override void OnProjectDirectoryRemoved(IVsSccProject2 project, string directoryname, VSREMOVEDIRECTORYFLAGS flags)
+        protected override void OnProjectDirectoryRemoved(SccProjectData data, string directoryname)
         {
-            SccProjectData data;
-            if (!ProjectMap.TryGetSccProject(project, out data))
-                return; // Not managed by us
-
-            // a directory can be added like a folder but with an ending '\'
-            string dir = directoryname.TrimEnd('\\') + '\\';
-            data.RemovePath(dir);
+            base.OnProjectDirectoryRemoved(data, directoryname);
         }
 
         /// <summary>
@@ -141,49 +120,18 @@ namespace Ankh.Scc
         /// <param name="oldName">The old name.</param>
         /// <param name="newName">The new name.</param>
         /// <param name="flags">The flags.</param>
-        public override void OnProjectRenamedFile(IVsSccProject2 project, string oldName, string newName, VSRENAMEFILEFLAGS flags)
+        protected override void OnProjectFileRenamed(SccProjectData data, string oldName, string newName)
         {
-            SccProjectData data;
-            if (!ProjectMap.TryGetSccProject(project, out data))
-                return; // Not managed by us
-            else
-                data.CheckProjectRename(project, oldName, newName); // Just to be sure (should be handled by other event)
-
-            data.RemovePath(oldName);
-            data.AddPath(newName);
+            base.OnProjectFileRenamed(data, oldName, newName);
+            
         }
 
-        public override void OnSolutionRenamedFile(string oldName, string newName)
+        protected override void OnSolutionRenamedFile(string oldName, string newName)
         {
             // The solution file is renamed
             base.OnSolutionRenamedFile(oldName, newName);
 
             Monitor.ScheduleGlyphUpdate(SolutionFilename);
-        }
-
-        /// <summary>
-        /// Called just before a directory in a project is renamed
-        /// </summary>
-        /// <param name="project">The SCC project.</param>
-        /// <param name="oldName">The old name.</param>
-        /// <param name="newName">The new name.</param>
-        /// <param name="flags">The flags.</param>
-        /// <param name="ok">if set to <c>true</c> [ok].</param>
-        internal void OnBeforeProjectDirectoryRename(IVsSccProject2 project, string oldName, string newName, VSQUERYRENAMEDIRECTORYFLAGS flags, out bool ok)
-        {
-            ok = true;
-
-            if (!ProjectMap.ContainsProject(project))
-                return; // Not managed by us            
-
-            if (!IsActive)
-                return;
-
-            // TODO: Is the file managed in Subversion: Verify renaming of more than casing
-            if (oldName != newName && string.Equals(oldName, newName, StringComparison.OrdinalIgnoreCase))
-            {
-                ok = false; // For now just disallow casing only changes
-            }
         }
 
         /// <summary>
@@ -193,19 +141,9 @@ namespace Ankh.Scc
         /// <param name="oldName">The old name.</param>
         /// <param name="newName">The new name.</param>
         /// <param name="flags">The flags.</param>
-        public override void OnProjectDirectoryRenamed(IVsSccProject2 project, string oldName, string newName, VSRENAMEDIRECTORYFLAGS flags)
+        protected override void OnProjectDirectoryRenamed(SccProjectData data, string oldName, string newName)
         {
-            SccProjectData data;
-            if (!ProjectMap.TryGetSccProject(project, out data))
-                return; // Not managed by us
-
-            if (!IsActive)
-                return;
-
-            Debug.Assert(!Directory.Exists(oldName));
-            Debug.Assert(Directory.Exists(newName));
-            GC.KeepAlive(newName);
-            GC.KeepAlive(oldName);
+            base.OnProjectDirectoryRenamed(data, oldName, newName);
         }
 
         IFileStatusMonitor _monitor;

@@ -52,7 +52,7 @@ namespace Ankh.Scc
                 int iLastFileThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cFiles;
 
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
-                bool track = SccProvider.TrackProjectChanges(sccProject);
+                bool track = SccEvents.TrackProjectChanges(sccProject);
 
                 for (; iFile < iLastFileThisProject; iFile++)
                 {
@@ -66,10 +66,10 @@ namespace Ankh.Scc
 
                     file = SvnTools.GetNormalizedFullPath(file);
 
-                    SccProvider.OnProjectFileRemoved(sccProject, file, rgFlags[iFile]);
+                    SccEvents.OnProjectFileRemoved(sccProject, file);
 
                     if (SccProvider.IsActive && track)
-                        SccProvider.AddDelayedDelete(file);
+                        SccEvents.AddDelayedDelete(file);
                 }
             }
             return VSErr.S_OK;
@@ -104,7 +104,7 @@ namespace Ankh.Scc
                 int iLastDirectoryThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cDirectories;
 
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
-                bool track = SccProvider.TrackProjectChanges(sccProject);
+                bool track = SccEvents.TrackProjectChanges(sccProject);
 
                 for (; iDirectory < iLastDirectoryThisProject; iDirectory++)
                 {
@@ -118,10 +118,10 @@ namespace Ankh.Scc
 
                     dir = SvnTools.GetNormalizedFullPath(dir);
 
-                    SccProvider.OnProjectDirectoryRemoved(sccProject, dir, rgFlags[iDirectory]);
+                    SccEvents.OnProjectDirectoryRemoved(sccProject, dir, rgFlags[iDirectory]);
 
                     if (SccProvider.IsActive && track)
-                        SccProvider.AddDelayedDelete(dir);
+                        SccEvents.AddDelayedDelete(dir);
                 }
             }
 

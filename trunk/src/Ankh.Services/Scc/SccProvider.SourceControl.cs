@@ -48,6 +48,7 @@ namespace Ankh.Scc
             }
         }
 
+        [CLSCompliant(false)]
         protected virtual bool CheckOutItems(string[] itemNames, CheckoutOptions flags)
         {
             return true;
@@ -111,6 +112,7 @@ namespace Ankh.Scc
 
         }
 
+        [CLSCompliant(false)]
         public virtual EnvDTE80.SourceControlBindings GetBindings(string ItemPath)
         {
             return null;
@@ -131,6 +133,7 @@ namespace Ankh.Scc
             return false;
         }
 
+        [CLSCompliant(false)]
         public EnvDTE.DTE Parent
         {
             get { return GetService<EnvDTE.DTE>(typeof(SDTE)); }

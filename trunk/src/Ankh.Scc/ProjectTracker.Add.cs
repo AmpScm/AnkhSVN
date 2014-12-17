@@ -144,7 +144,7 @@ namespace Ankh.Scc
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
                 bool trackCopies;
-                bool track = SccProvider.TrackProjectChanges(sccProject, out trackCopies);
+                bool track = SccEvents.TrackProjectChanges(sccProject, out trackCopies);
 
                 for (; iFile < iLastFileThisProject; iFile++)
                 {
@@ -166,7 +166,7 @@ namespace Ankh.Scc
                     }
 
                     // We do this before the copies to make sure a failed copy doesn't break the project
-                    SccProvider.OnProjectFileAdded(sccProject, newName, origin, rgFlags[iFile]);
+                    SccEvents.OnProjectFileAdded(sccProject, newName);
 
                     if (sccActive && trackCopies &&
                         !string.IsNullOrEmpty(origin) &&
@@ -458,7 +458,7 @@ namespace Ankh.Scc
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
                 bool trackCopies;
-                bool track = SccProvider.TrackProjectChanges(sccProject, out trackCopies);
+                bool track = SccEvents.TrackProjectChanges(sccProject, out trackCopies);
 
                 for (; iDir < iLastDirectoryThisProject; iDir++)
                 {
@@ -480,7 +480,7 @@ namespace Ankh.Scc
                     }
 
                     if (sccProject != null)
-                        SccProvider.OnProjectDirectoryAdded(sccProject, dir, origin);
+                        SccEvents.OnProjectDirectoryAdded(sccProject, dir, origin);
 
                     if (sccActive && trackCopies &&
                         !string.IsNullOrEmpty(origin) &&
