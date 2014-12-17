@@ -90,7 +90,7 @@ namespace Ankh.Commands
             }
             else
             {
-                selection.Add(e.GetService<ISvnFileStatusCache>()[argumentFile]);
+                selection.Add(e.GetService<ISvnStatusCache>()[argumentFile]);
             }
 
             ICollection<string> paths = SvnItem.GetPaths(selection);

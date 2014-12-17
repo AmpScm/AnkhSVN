@@ -240,7 +240,7 @@ namespace Ankh.Commands
             finally
             {
                 // Ignore doesn't bubble
-                context.GetService<ISvnFileStatusCache>().MarkDirtyRecursive(path);
+                context.GetService<ISvnStatusCache>().MarkDirtyRecursive(path);
             }
         }
 

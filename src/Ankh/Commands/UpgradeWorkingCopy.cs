@@ -106,14 +106,14 @@ namespace Ankh.Commands
             set { _site = value; }
         }
 
-        ISvnFileStatusCache _cache;
+        ISvnStatusCache _cache;
 
-        ISvnFileStatusCache StatusCache
+        ISvnStatusCache StatusCache
         {
             get
             {
                 if (_cache == null && _site != null)
-                    _cache = (ISvnFileStatusCache)Site.GetService(typeof(ISvnFileStatusCache));
+                    _cache = (ISvnStatusCache)Site.GetService(typeof(ISvnStatusCache));
                 
                 return _cache;
             }

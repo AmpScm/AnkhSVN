@@ -48,7 +48,7 @@ namespace Ankh.Commands.RepositoryExplorer
             string copyTo;
             bool copyBelow = false;
             bool suggestExport = false;
-            ISvnFileStatusCache cache = e.GetService<ISvnFileStatusCache>();
+            ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
 
             if (item.NodeKind == SharpSvn.SvnNodeKind.Directory)
             {
