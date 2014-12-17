@@ -15,12 +15,12 @@ namespace Ankh.Scc
 
         }
 
-        internal bool TryGetValue(IVsSccProject2 project, out SccProjectData data)
+        internal bool TryGetSccProject(IVsSccProject2 project, out SccProjectData data)
         {
             return _projectMap.TryGetValue(project, out data);
         }
 
-        public IEnumerable<SccProjectData> Values
+        public IEnumerable<SccProjectData> AllSccProjects
         {
             get { return _projectMap.Values; }
         }
@@ -35,19 +35,19 @@ namespace Ankh.Scc
             return _projectMap.ContainsKey(project);
         }
 
-        public void Add(IVsSccProject2 sccProject, SccProjectData sccProjectData)
+        public void AddProject(IVsSccProject2 sccProject, SccProjectData sccProjectData)
         {
             _projectMap.Add(sccProject, sccProjectData);
         }
 
-        public int Count
+        public int ProjectCount
         {
             get { return _projectMap.Count; }
         }
 
-        public void Remove(IVsSccProject2 project)
+        public bool RemoveProject(IVsSccProject2 project)
         {
-            _projectMap.Remove(project);
+            return _projectMap.Remove(project);
         }
     }
 }

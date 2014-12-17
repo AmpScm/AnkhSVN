@@ -130,7 +130,7 @@ namespace Ankh.Scc
                         changed = new List<string>();
                     changed.Add(path);
 
-                    StatusCache.SetSolutionContained(path, _fileMap.ContainsKey(path), _sccExcluded.Contains(path));
+                    StatusCache.SetSolutionContained(path, _fileMap.ContainsFile(path), _sccExcluded.Contains(path));
                 }
             }
 
