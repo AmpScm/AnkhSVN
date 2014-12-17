@@ -115,6 +115,11 @@ namespace Ankh.Scc
             get { return _sccProvider; }
         }
 
+        SccProjectMap ProjectMap
+        {
+            get { return _sccProvider.ProjectMap; }
+        }
+
         private void LoadInitial()
         {
             IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));

@@ -724,7 +724,7 @@ namespace Ankh.VS.Selection
                 if (projectMapper == null && !searchedProjectMapper)
                 {
                     searchedProjectMapper = true;
-                    projectMapper = Context.GetService<IProjectFileMapper>();
+                    projectMapper = GetService<IProjectFileMapper>();
                 }
 
                 if (projectMapper != null)

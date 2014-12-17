@@ -11,7 +11,7 @@ namespace Ankh.Scc
     /// </summary>
     [GlobalService(typeof(IProjectFileMapper))]
     [GlobalService(typeof(IAnkhProjectLayoutService))]
-    partial class SvnSccProvider : IProjectFileMapper, IAnkhProjectLayoutService
+    partial class SvnSccProvider : IAnkhProjectLayoutService
     {
         // ********************************************************
         // This file contains two very important features of the Scc provider:
@@ -156,103 +156,6 @@ namespace Ankh.Scc
             PendingChanges.Refresh(fullPath);
         }
 
-        #region IProjectFileMapper Members
-
-        public IEnumerable<Ankh.Selection.SccProject> GetAllProjectsContaining(string path)
-        {
-            return ProjectMap.GetAllProjectsContaining(path);
-        }
-
-        public IEnumerable<SccProject> GetAllProjectsContaining(IEnumerable<string> paths)
-        {
-            return ProjectMap.GetAllProjectsContaining(paths);
-        }
-
-        /// <summary>
-        /// Gets all projects.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<Ankh.Selection.SccProject> GetAllProjects()
-        {
-            return ProjectMap.GetAllProjects();
-        }
-
-        /// <summary>
-        /// Gets a boolean indicating whether one or more projects (or the solution) contains path
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public bool ContainsPath(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
-
-            if (ProjectMap.ContainsFile(path))
-                return true;
-
-            if (string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
-                return true;
-
-            return false;
-        }
-
-        public IEnumerable<string> GetAllFilesOf(Ankh.Selection.SccProject project)
-        {
-            return GetAllFilesOf(project, false);
-        }
-
-        /// <summary>
-        /// Gets a list of all files contained within <paramref name="project"/>
-        /// </summary>
-        /// <param name="project"></param>
-        /// <returns></returns>
-        public IEnumerable<string> GetAllFilesOf(Ankh.Selection.SccProject project, bool exceptExcluded)
-        {
-            return ProjectMap.GetAllFilesOf(project, exceptExcluded);
-        }
-
-        public IEnumerable<string> GetAllFilesOf(ICollection<SccProject> projects)
-        {
-            return GetAllFilesOf(projects, false);
-        }
-
-        public IEnumerable<string> GetAllFilesOf(ICollection<SccProject> projects, bool exceptExcluded)
-        {
-            return ProjectMap.GetAllFilesOf(projects, exceptExcluded);
-        }
-
-        public ICollection<string> GetAllFilesOfAllProjects()
-        {
-            return GetAllFilesOfAllProjects(false);
-        }
-
-        public ICollection<string> GetAllFilesOfAllProjects(bool exceptExcluded)
-        {
-            return ProjectMap.GetAllFilesOfAllProjects(exceptExcluded);
-        }
-
-        public ProjectIconReference GetPathIconHandle(string path)
-        {
-            return ProjectMap.GetPathIconHandle(path);
-        }
-
-        public ISccProjectInfo GetProjectInfo(SccProject project)
-        {
-            return ProjectMap.GetProjectInfo(project);
-        }
-
-        /// <summary>
-        /// Gets a boolean indicating whether the specified path is of a project or the solution
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public bool IsProjectFileOrSolution(string path)
-        {
-            return ProjectMap.IsProjectFileOrSolution(path);
-        }
-
-        #endregion
-
         public IEnumerable<SvnItem> GetUpdateRoots(SccProject project)
         {
             if (project != null)
@@ -349,11 +252,5 @@ namespace Ankh.Scc
                 yield return projectFileItem;
             }
         }
-
-        bool IProjectFileMapper.IgnoreEnumerationSideEffects(Microsoft.VisualStudio.Shell.Interop.IVsSccProject2 sccProject)
-        {
-            return ProjectMap.IgnoreEnumerationSideEffects(sccProject);
-        }
-
     }
 }
