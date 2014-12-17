@@ -233,12 +233,7 @@ namespace Ankh.Scc
                 pd.Dispose();
             }
 
-#if !DEBUG
-            // Skip file by file cleanup of the project<-> file mapping
-            // Should proably always be enabled around the release of AnkhSVN 2.0
-            _projectMap.Clear();
-            _fileMap.Clear();
-#endif
+            ProjectMap.Clear();
         }
 
         /// <summary>
