@@ -69,7 +69,7 @@ namespace Ankh.Commands
 
                     break; // No history
                 case AnkhCommand.DocumentHistory:
-                    SvnItem docitem = e.Selection.ActiveDocumentItem;
+                    SvnItem docitem = e.Selection.ActiveDocumentSvnItem;
                     if (docitem != null && docitem.HasCopyableHistory)
                         return;
                     break; // No history
@@ -176,7 +176,7 @@ namespace Ankh.Commands
                     PerformLog(e.Context, selected, null, null);
                     break;
                 case AnkhCommand.DocumentHistory:
-                    SvnItem docItem = e.Selection.ActiveDocumentItem;
+                    SvnItem docItem = e.Selection.ActiveDocumentSvnItem;
                     Debug.Assert(docItem != null);
 
                     PerformLog(e.Context, new SvnOrigin[] { new SvnOrigin(docItem) }, null, null);

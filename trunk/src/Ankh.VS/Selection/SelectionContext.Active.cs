@@ -185,14 +185,27 @@ namespace Ankh.VS.Selection
             }
         }
 
-        public SvnItem ActiveDocumentItem
+        public SvnItem ActiveDocumentSvnItem
         {
             get
             {
                 string p = ActiveDocumentFilename;
 
                 if (p != null)
-                    return _cache[p];
+                    return SvnCache[p];
+                else
+                    return null;
+            }
+        }
+
+        public GitItem ActiveDocumentGitItem
+        {
+            get
+            {
+                string p = ActiveDocumentFilename;
+
+                if (p != null)
+                    return GitCache[p];
                 else
                     return null;
             }

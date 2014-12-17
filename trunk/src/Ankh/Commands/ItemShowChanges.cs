@@ -43,7 +43,7 @@ namespace Ankh.Commands
         {
             if (e.Command == AnkhCommand.DocumentShowChanges)
             {
-                SvnItem sel = e.Selection.ActiveDocumentItem;
+                SvnItem sel = e.Selection.ActiveDocumentSvnItem;
 
                 if (sel == null || sel.IsDirectory ||!sel.IsLocalDiffAvailable)
                     e.Enabled = false;
@@ -94,7 +94,7 @@ namespace Ankh.Commands
 
             if (e.Command == AnkhCommand.DocumentShowChanges)
             {
-                SvnItem item = e.Selection.ActiveDocumentItem;
+                SvnItem item = e.Selection.ActiveDocumentSvnItem;
 
                 if(item == null)
                     return;

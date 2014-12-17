@@ -40,7 +40,8 @@ namespace Ankh.VS.Selection
     [GlobalService(typeof(ISccProjectWalker))]
     partial class SelectionContext : AnkhService, IVsSelectionEvents, ISelectionContext, ISelectionContextEx, ISccProjectWalker
     {
-        ISvnStatusCache _cache;
+        ISvnStatusCache _svnCache;
+        IGitStatusCache _gitCache;
         bool _disposed;
         uint _cookie;
 
@@ -60,6 +61,8 @@ namespace Ankh.VS.Selection
         CachedEnumerable<string> _filenamesRecursive;
         CachedEnumerable<SvnItem> _svnItems;
         CachedEnumerable<SvnItem> _svnItemsRecursive;
+        CachedEnumerable<GitItem> _gitItems;
+        CachedEnumerable<GitItem> _gitItemsRecursive;
         CachedEnumerable<SccProject> _selectedProjects;
         CachedEnumerable<SccProject> _selectedProjectsRecursive;
         CachedEnumerable<SccHierarchy> _selectedHierarchies;
@@ -84,12 +87,20 @@ namespace Ankh.VS.Selection
 
         protected override void OnInitialize()
         {
-            _cache = GetService<ISvnStatusCache>();
-
             IVsMonitorSelection monitor = GetService<IVsMonitorSelection>();
 
             if (monitor != null)
                 Marshal.ThrowExceptionForHR(monitor.AdviseSelectionEvents(this, out _cookie));
+        }
+
+        protected ISvnStatusCache SvnCache
+        {
+            get { return _svnCache ?? (_svnCache = GetService<ISvnStatusCache>()); }
+        }
+
+        protected IGitStatusCache GitCache
+        {
+            get { return _gitCache ?? (_gitCache = GetService<IGitStatusCache>()); }
         }
 
         protected override void Dispose(bool disposing)
@@ -170,6 +181,8 @@ namespace Ankh.VS.Selection
             _filenamesRecursive = null;
             _svnItems = null;
             _svnItemsRecursive = null;
+            _gitItems = null;
+            _gitItemsRecursive = null;
             _selectedProjects = null;
             _selectedProjectsRecursive = null;
             _selectedHierarchies = null;
@@ -676,12 +689,38 @@ namespace Ankh.VS.Selection
 
         IEnumerable<SvnItem> InternalGetSelectedSvnItems(bool recursive)
         {
-            if (_cache == null)
+            if (SvnCache == null)
                 yield break;
 
             foreach (string file in GetSelectedFiles(recursive))
             {
-                yield return _cache[file];
+                yield return SvnCache[file];
+            }
+        }
+
+        protected IEnumerable<GitItem> GetSelectedGitItems()
+        {
+            return _gitItems ?? (_gitItems = new CachedEnumerable<GitItem>(InternalGetSelectedGitItems(false), Disposer));
+        }
+
+        protected IEnumerable<GitItem> GetSelectedGitItemsRecursive()
+        {
+            return _gitItemsRecursive ?? (_gitItemsRecursive = new CachedEnumerable<GitItem>(InternalGetSelectedGitItems(true), Disposer));
+        }
+
+        public IEnumerable<GitItem> GetSelectedGitItems(bool recursive)
+        {
+            return recursive ? GetSelectedGitItemsRecursive() : GetSelectedGitItems();
+        }
+
+        IEnumerable<GitItem> InternalGetSelectedGitItems(bool recursive)
+        {
+            if (GitCache == null)
+                yield break;
+
+            foreach (string file in GetSelectedFiles(recursive))
+            {
+                yield return GitCache[file];
             }
         }
 
