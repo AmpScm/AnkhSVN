@@ -86,9 +86,11 @@
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
     <Compile Include="RepositoryProvider\IAnkhRepositoryProviderService.cs" />
+    <Compile Include="Scc\GitItem.cs" />
     <Compile Include="Scc\IAnkhGitSccService.cs" />
     <Compile Include="Scc\IAnkhProjectDocumentTracker.cs" />
     <Compile Include="Scc\IAnkhSccProviderEvents.cs" />
+    <Compile Include="Scc\IGitStatusCache.cs" />
     <Compile Include="Scc\ISccHelper.cs" />
     <Compile Include="Scc\ProjectMap\SccDocumentData.cs" />
     <Compile Include="Scc\ProjectMap\SccProjectData.cs" />
