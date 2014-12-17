@@ -55,7 +55,7 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         {
             get
             {
-                IAnkhProjectLayoutService pls = Context.GetService<IAnkhProjectLayoutService>();
+                ISvnSolutionLayout pls = Context.GetService<ISvnSolutionLayout>();
                 foreach (SvnItem item in pls.GetUpdateRoots(null))
                     yield return item;
             }

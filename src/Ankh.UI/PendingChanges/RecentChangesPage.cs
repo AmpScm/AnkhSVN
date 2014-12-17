@@ -173,7 +173,7 @@ namespace Ankh.UI.PendingChanges
 
         void DoRefresh(bool showProgressDialog)
         {
-            IAnkhProjectLayoutService pls = Context.GetService<IAnkhProjectLayoutService>();
+            ISvnSolutionLayout pls = Context.GetService<ISvnSolutionLayout>();
             List<SvnStatusEventArgs> resultList = new List<SvnStatusEventArgs>();
             List<string> roots = new List<string>(SvnItem.GetPaths(pls.GetUpdateRoots(null)));
             Dictionary<string, string> found = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);

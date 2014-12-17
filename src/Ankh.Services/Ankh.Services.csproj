@@ -139,7 +139,7 @@
     <Compile Include="IAnkhServiceImplementation.cs" />
     <Compile Include="IssueTracker\IAnkhIssueService.cs" />
     <Compile Include="IssueTracker\IIssueTrackerSettings.cs" />
-    <Compile Include="Scc\IAnkhProjectLayoutService.cs" />
+    <Compile Include="Scc\ISvnSolutionLayout.cs" />
     <Compile Include="Scc\IAnkhTextEditingTracker.cs" />
     <Compile Include="Scc\ISccSettingsStore.cs" />
     <Compile Include="Scc\SccFileSystemNode.cs" />

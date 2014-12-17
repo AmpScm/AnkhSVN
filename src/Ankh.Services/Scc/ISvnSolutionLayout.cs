@@ -21,7 +21,7 @@ using Ankh.Selection;
 
 namespace Ankh
 {
-    public interface IAnkhProjectLayoutService
+    public interface ISvnSolutionLayout
     {
         /// <summary>
         /// Gets all update roots of the current open solution
