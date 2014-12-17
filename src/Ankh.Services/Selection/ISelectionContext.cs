@@ -67,7 +67,7 @@ namespace Ankh.Selection
         /// </summary>
         /// <param name="recursive"></param>
         /// <returns></returns>
-        IEnumerable<SvnHierarchy> GetSelectedHierarchies();
+        IEnumerable<SccHierarchy> GetSelectedHierarchies();
 
         /// <summary>
         /// Gets the item selection if it is available in the specified type

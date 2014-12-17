@@ -125,7 +125,7 @@
       <DependentUpon>SccProvider.cs</DependentUpon>
     </Compile>
     <Compile Include="Scc\Git\GitItemsEventArgs.cs" />
-    <Compile Include="Selection\SvnHierarchy.cs" />
+    <Compile Include="Selection\SccHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
     <Compile Include="VSAssemblies.cs" />
     <Compile Include="VSErr.cs" />
