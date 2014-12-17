@@ -86,11 +86,13 @@
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
     <Compile Include="RepositoryProvider\IAnkhRepositoryProviderService.cs" />
-    <Compile Include="Scc\GitItem.cs" />
+    <Compile Include="Scc\Git\GitDirectory.cs" />
+    <Compile Include="Scc\Git\GitItem.cs" />
+    <Compile Include="Scc\Git\GitItem.State.cs" />
     <Compile Include="Scc\IAnkhGitSccService.cs" />
     <Compile Include="Scc\IAnkhProjectDocumentTracker.cs" />
     <Compile Include="Scc\IAnkhSccProviderEvents.cs" />
-    <Compile Include="Scc\IGitStatusCache.cs" />
+    <Compile Include="Scc\Git\IGitStatusCache.cs" />
     <Compile Include="Scc\ISccHelper.cs" />
     <Compile Include="Scc\ProjectMap\SccDocumentData.cs" />
     <Compile Include="Scc\ProjectMap\SccProjectData.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="Scc\SccProvider.SourceControl.cs">
       <DependentUpon>SccProvider.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scc\Git\GitItemsEventArgs.cs" />
     <Compile Include="Selection\SvnHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
     <Compile Include="VSAssemblies.cs" />
@@ -130,7 +133,7 @@
     <Compile Include="VS\IAnkhGlobalCommandHook.cs" />
     <Compile Include="VS\TextMarker.cs" />
     <Compile Include="VS\ILinqInterfaceDelegateService.cs" />
-    <Compile Include="Scc\SvnItemAnnotation.cs" />
+    <Compile Include="Scc\Svn\SvnItemAnnotation.cs" />
     <Compile Include="UI\AnkhToolWindowControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -141,15 +144,15 @@
     <Compile Include="IAnkhServiceImplementation.cs" />
     <Compile Include="IssueTracker\IAnkhIssueService.cs" />
     <Compile Include="IssueTracker\IIssueTrackerSettings.cs" />
-    <Compile Include="Scc\ISvnSolutionLayout.cs" />
+    <Compile Include="Scc\Svn\ISvnSolutionLayout.cs" />
     <Compile Include="Scc\IAnkhTextEditingTracker.cs" />
     <Compile Include="Scc\ISccSettingsStore.cs" />
     <Compile Include="Scc\SccFileSystemNode.cs" />
-    <Compile Include="Scc\SvnItemData.ChangeList.cs" />
+    <Compile Include="Scc\Svn\SvnItemData.ChangeList.cs" />
     <Compile Include="Scc\UI\IAnkhRevisionResolver.cs" />
     <Compile Include="UI\AnkhPropertyGridItem.cs" />
     <Compile Include="Scc\UI\IAnnotateSection.cs" />
-    <Compile Include="Scc\SvnOrigin.cs" />
+    <Compile Include="Scc\Svn\SvnOrigin.cs" />
     <Compile Include="UI\IAnkhHasVsTextView.cs" />
     <Compile Include="UI\IAnkhLegacyKeyMessageSuppressFilter.cs" />
     <Compile Include="UI\IContextControl.cs" />
@@ -163,9 +166,9 @@
     <Compile Include="IAnkhScheduler.cs" />
     <Compile Include="Scc\UI\IAnkhToolWindowControl.cs" />
     <Compile Include="Scc\UI\IConflictHandler.cs" />
-    <Compile Include="Scc\ISvnLogChangedPathItem.cs" />
-    <Compile Include="Scc\ISvnLogItem.cs" />
-    <Compile Include="Scc\ISvnRepositoryItem.cs" />
+    <Compile Include="Scc\Svn\ISvnLogChangedPathItem.cs" />
+    <Compile Include="Scc\Svn\ISvnLogItem.cs" />
+    <Compile Include="Scc\Svn\ISvnRepositoryItem.cs" />
     <Compile Include="Scc\PendingChangeKind.cs" />
     <Compile Include="Scc\PendingChangeText.Designer.cs">
       <DependentUpon>PendingChangeText.resx</DependentUpon>
@@ -177,11 +180,11 @@
     <Compile Include="Scc\HybridCollection.cs" />
     <Compile Include="Scc\PendingChangeStatus.cs" />
     <Compile Include="Scc\ProjectIconReference.cs" />
-    <Compile Include="Scc\SvnDirectory.cs" />
-    <Compile Include="Scc\SvnItemsEventArgs.cs" />
-    <Compile Include="Scc\SvnItemData.cs" />
-    <Compile Include="Scc\SvnItemState.cs" />
-    <Compile Include="Scc\SvnWorkingCopy.cs" />
+    <Compile Include="Scc\Svn\SvnDirectory.cs" />
+    <Compile Include="Scc\Svn\SvnItemsEventArgs.cs" />
+    <Compile Include="Scc\Svn\SvnItemData.cs" />
+    <Compile Include="Scc\Svn\SvnItemState.cs" />
+    <Compile Include="Scc\Svn\SvnWorkingCopy.cs" />
     <Compile Include="Scc\UI\IAnkhDiffHandler.cs" />
     <Compile Include="Scc\UI\ILogControl.cs" />
     <Compile Include="UI\AnkhMessageBox.cs" />
@@ -207,14 +210,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scc\AnkhGlyph.cs" />
     <Compile Include="Scc\AnkhStatus.cs" />
-    <Compile Include="Scc\ISvnStatusCache.cs" />
+    <Compile Include="Scc\Svn\ISvnStatusCache.cs" />
     <Compile Include="Scc\IFileStatusMonitor.cs" />
     <Compile Include="Scc\IAnkhOpenDocumentTracker.cs" />
     <Compile Include="Scc\ISccHierarchyWalker.cs" />
     <Compile Include="Scc\IProjectFileMapper.cs" />
     <Compile Include="Scc\IStatusImageMapper.cs" />
-    <Compile Include="Scc\SvnItem.cs" />
-    <Compile Include="Scc\SvnItem.State.cs">
+    <Compile Include="Scc\Svn\SvnItem.cs" />
+    <Compile Include="Scc\Svn\SvnItem.State.cs">
       <DependentUpon>SvnItem.cs</DependentUpon>
     </Compile>
     <Compile Include="Selection\ISelectionContext.cs" />

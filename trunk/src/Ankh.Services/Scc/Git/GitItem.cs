@@ -1,12 +1,28 @@
 ﻿using System;
 using System.Diagnostics;
 using Ankh.Scc;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
     public interface IGitItemUpdate
     {
         //void RefreshTo(EventArgs e);
+        bool IsItemTicked();
+
+        void TickItem();
+
+        bool IsStatusClean();
+
+        bool ShouldRefresh();
+
+        void RefreshTo(NoSccStatus noSccStatus, SvnNodeKind svnNodeKind);
+
+        bool ShouldClean();
+
+        void RefreshTo(GitItem newItem);
+
+        void RefreshTo(AnkhStatus status);
     }
 }
 
@@ -30,9 +46,33 @@ namespace Ankh
             RefreshTo(null);
         }
 
-        void RefreshTo(EventArgs e)
+        public GitItem(IGitStatusCache context, string fullPath, AnkhStatus status)
+        {
+            _context = context;
+            _fullPath = fullPath;
+
+            RefreshTo(status);
+        }
+
+        public GitItem(IGitStatusCache context, string fullPath, NoSccStatus status, SvnNodeKind nodeKind)
+        {
+            _context = context;
+            _fullPath = fullPath;
+
+            RefreshTo(status, nodeKind);
+        }
+
+        private void RefreshTo(NoSccStatus status, SvnNodeKind nodeKind)
         {
             _cookie = NextCookie();
+            throw new NotImplementedException();
+        }
+
+
+        private void RefreshTo(AnkhStatus status)
+        {
+            _cookie = NextCookie();
+            throw new NotImplementedException();
         }
 
         IGitStatusCache GitCache
@@ -140,6 +180,89 @@ namespace Ankh
                 return n;
             else
                 return NextCookie(); // 1 in 4 billion times
+        }
+
+        bool IGitItemUpdate.IsItemTicked()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        void IGitItemUpdate.TickItem()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool IsStatusClean()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsDirectory
+        {
+            get { return false; }
+        }
+
+        public bool IsVersioned
+        {
+            get { return false; }
+        }
+
+        public bool Exists
+        {
+            get { return false; }
+        }
+
+
+        bool IGitItemUpdate.IsStatusClean()
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IGitItemUpdate.ShouldRefresh()
+        {
+            throw new NotImplementedException();
+        }
+
+        
+
+
+        void IGitItemUpdate.RefreshTo(NoSccStatus noSccStatus, SvnNodeKind svnNodeKind)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        bool IGitItemUpdate.ShouldClean()
+        {
+            throw new NotImplementedException();
+        }
+
+        void IGitItemUpdate.RefreshTo(GitItem newItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        void IGitItemUpdate.RefreshTo(AnkhStatus status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MarkDirty()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsBelowPath(string path)
+        {
+            throw new NotImplementedException();
         }
     }
 }
