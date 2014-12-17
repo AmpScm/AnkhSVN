@@ -76,13 +76,6 @@ namespace Ankh.UI.PathSelector
             UpdateLayout();
 
             LoadItems(_items);
-
-            UpdateOkButton();
-        }
-
-        private void UpdateOkButton()
-        {
-            okButton.Enabled = pendingList.HasCheckedItems;
         }
 
         class ItemLister : AnkhService, IEnumerable<PendingChange>
@@ -381,8 +374,11 @@ namespace Ankh.UI.PathSelector
 
                 if (parent != null && parent.IsVersioned)
                     revisionPickerEnd.SvnOrigin = revisionPickerStart.SvnOrigin = new SvnOrigin(parent);
+
+                okButton.Enabled = true;
             }
-            UpdateOkButton();
+            else
+                okButton.Enabled = false;
         }
 
         private void suppressLabel_Click(object sender, EventArgs e)
