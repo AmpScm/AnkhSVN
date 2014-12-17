@@ -105,7 +105,7 @@ namespace Ankh.Commands
                     break;
                 case AnkhCommand.DocumentAnnotate:
                     //TryObtainBlock(e);
-                    targets.Add(new SvnOrigin(e.GetService<ISvnFileStatusCache>()[e.Selection.ActiveDocumentFilename]));
+                    targets.Add(new SvnOrigin(e.GetService<ISvnStatusCache>()[e.Selection.ActiveDocumentFilename]));
                     endRev = SvnRevision.Working;
                     break;
             }
