@@ -9,7 +9,6 @@ namespace Ankh.Scc
     /// <summary>
     /// 
     /// </summary>
-    [GlobalService(typeof(IProjectFileMapper))]
     [GlobalService(typeof(ISvnSolutionLayout))]
     partial class SvnSccProvider : ISvnSolutionLayout
     {

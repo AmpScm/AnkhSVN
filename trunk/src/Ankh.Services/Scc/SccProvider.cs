@@ -429,9 +429,13 @@ namespace Ankh.Scc
             try
             {
                 SccProjectData data;
-                ProjectMap.EnsureSccProject(pscp2Project, out data);
 
-                OnUnregisterSccProject(data);
+                // Don't use Ensure here, as this function is commonly called *after*
+                // the project is closed (during disposing)
+
+                if (ProjectMap.TryGetSccProject(pscp2Project, out data))
+                    OnUnregisterSccProject(data);
+
                 return VSErr.S_OK;
             }
             catch (Exception e)
