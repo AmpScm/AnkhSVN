@@ -152,7 +152,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 get { return null; }
             }
 
-            public Ankh.SvnItem ActiveDocumentItem
+            public Ankh.SvnItem ActiveDocumentSvnItem
             {
                 get { return null; }
             }
@@ -196,6 +196,17 @@ namespace AnkhSvn_UnitTestProject.Mocks
 
 
             public Microsoft.VisualStudio.TextManager.Interop.IVsTextView ActiveDocumentFrameTextView
+            {
+                get { return null; }
+            }
+
+
+            public IEnumerable<Ankh.GitItem> GetSelectedGitItems(bool recursive)
+            {
+                yield break;
+            }
+
+            public Ankh.GitItem ActiveDocumentGitItem
             {
                 get { return null; }
             }

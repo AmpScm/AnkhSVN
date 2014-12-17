@@ -56,7 +56,7 @@ namespace Ankh.Commands
                     }
                     break;
                 case AnkhCommand.DocumentAnnotate:
-                    if (e.Selection.ActiveDocumentItem != null && e.Selection.ActiveDocumentItem.HasCopyableHistory)
+                    if (e.Selection.ActiveDocumentSvnItem != null && e.Selection.ActiveDocumentSvnItem.HasCopyableHistory)
                         return;
                     break;
                 case AnkhCommand.LogAnnotateRevision:
