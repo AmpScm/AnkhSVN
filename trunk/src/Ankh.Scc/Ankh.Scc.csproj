@@ -124,7 +124,7 @@
     <Compile Include="Native\ICOMPropertyBag.cs" />
     <Compile Include="Native\SolutionExplorerDataItem.cs" />
     <Compile Include="ProjectMap\SccSvnOrigin.cs" />
-    <Compile Include="ProjectMap\SccSvnProject.cs" />
+    <Compile Include="ProjectMap\SvnSccProject.cs" />
     <Compile Include="SettingsMap\SccTranslatePathInfo.cs" />
     <Compile Include="SccUI\Commands\MakeNonSccFileWritableCommand.cs" />
     <Compile Include="SccUI\SccEditReadOnlyFileDialog.cs">
