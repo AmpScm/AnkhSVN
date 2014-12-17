@@ -22,33 +22,29 @@ using System.Diagnostics;
 
 namespace Ankh.Scc.ProjectMap
 {
-    public interface ISccProjectFileContainer : IAnkhServiceProvider
-    {
-        void RemoveFile(SccProjectFile sccProjectFile);
-    }
     /// <summary>
     /// A file contained one or more times in one or more Scc projects
     /// </summary>
     [DebuggerDisplay("{FullPath}, Projects={ProjectCount}, References={TotalReferenceCount}")]
     public sealed class SccProjectFile
     {
-        readonly ISccProjectFileContainer _container;
+        readonly SccProjectMap _map;
         readonly string _filename;
         SccProjectFileReference _firstReference;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SccProjectFile"/> class.
         /// </summary>
-        /// <param name="container">The context.</param>
+        /// <param name="map">The context.</param>
         /// <param name="filename">The filename.</param>
-        public SccProjectFile(ISccProjectFileContainer container, string filename)
+        public SccProjectFile(SccProjectMap map, string filename)
         {
-            if (container == null)
+            if (map == null)
                 throw new ArgumentNullException("container");
             else if (string.IsNullOrEmpty(filename))
                 throw new ArgumentNullException("filename");
 
-            _container = container;
+            _map = map;
             _filename = filename;
         }
 
@@ -152,7 +148,7 @@ namespace Ankh.Scc.ProjectMap
 
                 if (_firstReference == null)
                 {
-                    _container.RemoveFile(this);
+                    _map.RemoveFile(this);
                 }
                 return;
             }

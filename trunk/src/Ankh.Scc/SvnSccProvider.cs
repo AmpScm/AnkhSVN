@@ -38,9 +38,8 @@ namespace Ankh.Scc
         IAnkhOpenDocumentTracker _documentTracker;
 
         public SvnSccProvider(IAnkhServiceProvider context)
-            : base(context)
+            : base(context, new SvnSccProjectMap(context))
         {
-            _projectMap = new SccProjectMap(this);
         }
 
         protected override void OnInitialize()
@@ -138,19 +137,6 @@ namespace Ankh.Scc
             }
             else
             {
-                // If VS asked us for custom glyphs, we can release the handle now
-                DisposeGlyphList();
-
-                // Remove all glyphs currently set
-                foreach (SccProjectData pd in new List<SccProjectData>(ProjectMap.AllSccProjects))
-                {
-                    pd.NotifyGlyphsChanged();
-                    pd.Dispose();
-                }
-
-                ClearSolutionGlyph();
-
-                ProjectMap.Clear();
                 _unreloadable.Clear();
                 _sccExcluded.Clear();
 
@@ -176,11 +162,8 @@ namespace Ankh.Scc
         public override int RegisterSccProject(IVsSccProject2 pscp2Project, string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszProvider)
         {
             SccProjectData data;
-            if (!ProjectMap.TryGetSccProject(pscp2Project, out data))
-            {
-                // This method is called before the OpenProject calls
-                ProjectMap.AddProject(pscp2Project, data = new SccProjectData(this, pscp2Project));
-            }
+
+            ProjectMap.EnsureSccProject(pscp2Project, out data);
 
             data.IsManaged = (pszProvider == AnkhId.SubversionSccName);
             data.IsRegistered = true;
@@ -205,6 +188,12 @@ namespace Ankh.Scc
             }
 
             return VSErr.S_OK;
+        }
+
+        internal void AddedToSolution(string path)
+        {
+            // Force an initial status into the SvnItem
+            StatusCache.SetSolutionContained(path, true, _sccExcluded.Contains(path));
         }
     }
 }

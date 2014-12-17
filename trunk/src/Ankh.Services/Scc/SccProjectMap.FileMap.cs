@@ -30,7 +30,14 @@ namespace Ankh.Scc
 
         public bool RemoveFile(string fileName)
         {
-            return _fileMap.Remove(fileName);
+            if (_fileMap.Remove(fileName))
+            {
+                OnRemovedFile(fileName);
+
+                return true;
+            }
+
+            return false;
         }
 
         public IEnumerable<string> AllFiles

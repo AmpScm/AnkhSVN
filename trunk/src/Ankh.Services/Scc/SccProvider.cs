@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using Ankh.Configuration;
+using Ankh.Scc.ProjectMap;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
 
@@ -47,11 +49,21 @@ namespace Ankh.Scc
     public abstract partial class SccProvider : AnkhService, IVsSccProvider, IVsSccManager2, ICOMVsSccManager3, IVsSccManagerTooltip
     {
         bool _active;
+        readonly SccProjectMap _projectMap;
 
-        protected SccProvider(IAnkhServiceProvider context)
+        protected SccProvider(IAnkhServiceProvider context, SccProjectMap projectMap)
             : base(context)
         {
+            if (projectMap == null)
+                throw new ArgumentNullException("projectMap");
 
+            _projectMap = projectMap;
+        }
+
+        public SccProjectMap ProjectMap
+        {
+            [DebuggerStepThrough]
+            get { return _projectMap; }
         }
 
         protected override void Dispose(bool disposing)
@@ -82,6 +94,23 @@ namespace Ankh.Scc
         protected virtual void SetActive(bool active)
         {
             _active = active;
+
+            if (!active)
+            {
+                // If VS asked us for custom glyphs, we can release the handle now
+                DisposeGlyphList();
+
+                // Remove all glyphs currently set
+                foreach (SccProjectData pd in new List<SccProjectData>(ProjectMap.AllSccProjects))
+                {
+                    pd.NotifyGlyphsChanged();
+                    pd.Dispose();
+                }
+
+                ClearSolutionGlyph();
+
+                ProjectMap.Clear();
+            }
         }
 
         int IVsSccProvider.SetActive()
@@ -188,7 +217,9 @@ namespace Ankh.Scc
 
         public virtual void OnProjectLoaded(IVsSccProject2 project)
         {
+            SccProjectData data;
 
+            ProjectMap.EnsureSccProject(project, out data);
         }
 
         public virtual void OnProjectOpened(IVsSccProject2 project, bool added)
@@ -265,10 +296,6 @@ namespace Ankh.Scc
         {
             
         }
-
-        public abstract Selection.SccProject CreateProject(ProjectMap.SccProjectData sccProjectData);
-
-        public abstract ProjectMap.SccProjectFile GetFile(string path);
 
         public abstract IEnumerable<string> GetAllDocumentFiles(string documentName);
 
