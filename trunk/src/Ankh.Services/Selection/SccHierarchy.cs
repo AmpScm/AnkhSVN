@@ -5,12 +5,12 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Selection
 {
-    public class SvnHierarchy : IEquatable<SvnHierarchy>
+    public class SccHierarchy : IEquatable<SccHierarchy>
     {
         readonly IVsHierarchy _hierarchy;
 
         [CLSCompliant(false)]
-        public SvnHierarchy(IVsHierarchy hierarchy)
+        public SccHierarchy(IVsHierarchy hierarchy)
         {
             if (hierarchy == null)
                 throw new ArgumentNullException("hierarchy");
@@ -50,7 +50,7 @@ namespace Ankh.Selection
             get { return _hierarchy; }
         }
 
-        public bool Equals(SvnHierarchy other)
+        public bool Equals(SccHierarchy other)
         {
             if (other == null)
                 return false;

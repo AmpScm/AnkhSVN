@@ -189,7 +189,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
             #endregion
 
 
-            public IEnumerable<SvnHierarchy> GetSelectedHierarchies()
+            public IEnumerable<VSHierarchy> GetSelectedHierarchies()
             {
                 yield break;
             }
