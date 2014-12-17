@@ -45,7 +45,7 @@ namespace Ankh.Scc.Commands
                         break; // Project file is directory
                     }
 
-                    SvnItem item = e.GetService<IFileStatusCache>()[pi.ProjectFile];
+                    SvnItem item = e.GetService<ISvnStatusCache>()[pi.ProjectFile];
 
                     if (item != null && item.IsDirectory)
                         break; // Project file is not file

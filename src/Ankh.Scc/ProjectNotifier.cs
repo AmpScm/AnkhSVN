@@ -82,11 +82,11 @@ namespace Ankh.Scc
             get { return _commandService ?? (_commandService = GetService<IAnkhCommandService>()); }
         }
 
-        IFileStatusCache _statusCache;
-        IFileStatusCache Cache
+        ISvnStatusCache _statusCache;
+        ISvnStatusCache Cache
         {
             [DebuggerStepThrough]
-            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
+            get { return _statusCache ?? (_statusCache = GetService<ISvnStatusCache>()); }
         }
 
         IProjectFileMapper _mapper;

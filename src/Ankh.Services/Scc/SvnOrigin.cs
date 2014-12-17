@@ -121,7 +121,7 @@ namespace Ankh.Scc
 
             if (pt != null)
             {
-                SvnItem item = context.GetService<IFileStatusCache>()[pt.FullPath];
+                SvnItem item = context.GetService<ISvnStatusCache>()[pt.FullPath];
 
                 if (item == null || !item.IsVersioned)
                     throw new InvalidOperationException("Can only create a SvnOrigin from versioned items");

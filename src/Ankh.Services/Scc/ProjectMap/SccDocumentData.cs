@@ -280,7 +280,7 @@ namespace Ankh.Scc.ProjectMap
             if (!_isFileDocument)
                 return;
 
-            SvnItem item = GetService<IFileStatusCache>()[FullPath];
+            SvnItem item = GetService<ISvnStatusCache>()[FullPath];
 
             if (item == null)
                 return;

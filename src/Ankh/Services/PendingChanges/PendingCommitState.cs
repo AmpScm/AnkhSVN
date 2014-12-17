@@ -120,10 +120,10 @@ namespace Ankh.Services.PendingChanges
             get { return _mb ?? (_mb = new AnkhMessageBox(this)); }
         }
 
-        IFileStatusCache _cache;
-        public IFileStatusCache Cache
+        ISvnFileStatusCache _cache;
+        public ISvnFileStatusCache Cache
         {
-            get { return _cache ?? (_cache = GetService<IFileStatusCache>()); }
+            get { return _cache ?? (_cache = GetService<ISvnFileStatusCache>()); }
         }
 
         #region IDisposable Members

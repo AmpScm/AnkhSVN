@@ -17,11 +17,11 @@ namespace Ankh.Scc
     /// </summary>
     public class SvnItemAnnotation
     {
-        readonly IFileStatusCache _context;
+        readonly ISvnStatusCache _context;
         readonly string _fullPath;
         IDictionary<string, string> _justStored;
 
-        public SvnItemAnnotation(IFileStatusCache context, string fullPath)
+        public SvnItemAnnotation(ISvnStatusCache context, string fullPath)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -35,7 +35,7 @@ namespace Ankh.Scc
         const string ElemNode = "node";
         const string AttrName = "name";
 
-        SvnItemAnnotation(IFileStatusCache context, string fullPath, XmlReader from)
+        SvnItemAnnotation(ISvnStatusCache context, string fullPath, XmlReader from)
             : this (context, fullPath)
         {
             if (!from.MoveToFirstAttribute())
@@ -64,7 +64,7 @@ namespace Ankh.Scc
             from.MoveToElement();
         }
 
-        public void Write(IFileStatusCache context, XmlWriter to, string wcRoot)
+        public void Write(ISvnStatusCache context, XmlWriter to, string wcRoot)
         {
             to.WriteStartElement(ElemNode);
             to.WriteAttributeString(AttrName, new Uri(wcRoot).MakeRelativeUri(new Uri(wcRoot)).ToString());
@@ -79,7 +79,7 @@ namespace Ankh.Scc
             to.WriteEndElement();
         }
 
-        public static SvnItemAnnotation Load(IFileStatusCache context, XmlReader from, string wcRoot)
+        public static SvnItemAnnotation Load(ISvnStatusCache context, XmlReader from, string wcRoot)
         {
             if (from.Name != ElemNode)
                 return null;

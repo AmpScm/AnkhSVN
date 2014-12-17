@@ -142,7 +142,7 @@ namespace Ankh.Commands
             else
             {
                 IProjectFileMapper pfm = null;
-                IFileStatusCache fsc = null;
+                ISvnStatusCache fsc = null;
 
                 Uri rootUrl = null;
                 foreach (SccProject p in GetSelectedProjects(e))
@@ -156,7 +156,7 @@ namespace Ankh.Commands
                         continue;
 
                     if (fsc == null)
-                        fsc = e.GetService<IFileStatusCache>();
+                        fsc = e.GetService<ISvnStatusCache>();
 
                     SvnItem rootItem = fsc[pi.ProjectDirectory];
 
@@ -219,7 +219,7 @@ namespace Ankh.Commands
             bool setDepthInfinity = true;
 
             IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
-            IFileStatusCache cache = e.GetService<IFileStatusCache>();
+            ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
             IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
             Uri reposRoot = null;
 

@@ -46,7 +46,7 @@ namespace Ankh.UI.PendingChanges.Conflicts
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            IFileStatusCache cache = context.GetService<IFileStatusCache>();
+            ISvnFileStatusCache cache = context.GetService<ISvnFileStatusCache>();
 
             ImageIndex = PendingChange.IconIndex;
             SvnItem item = cache[FullPath];

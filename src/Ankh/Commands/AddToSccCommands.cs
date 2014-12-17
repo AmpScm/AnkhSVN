@@ -49,7 +49,7 @@ namespace Ankh.Commands
             }
 
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
-            IFileStatusCache cache = e.GetService<IFileStatusCache>();
+            ISvnFileStatusCache cache = e.GetService<ISvnFileStatusCache>();
             if (scc == null || cache == null)
             {
                 e.Enabled = false;
@@ -147,7 +147,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IFileStatusCache cache = e.GetService<IFileStatusCache>();
+            ISvnFileStatusCache cache = e.GetService<ISvnFileStatusCache>();
 
             if (cache == null || e.Selection.SolutionFilename == null)
                 return;
@@ -438,7 +438,7 @@ namespace Ankh.Commands
 
         static void SetProjectsManaged(CommandEventArgs e)
         {
-            IFileStatusCache cache = e.GetService<IFileStatusCache>();
+            ISvnFileStatusCache cache = e.GetService<ISvnFileStatusCache>();
             IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
             IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();

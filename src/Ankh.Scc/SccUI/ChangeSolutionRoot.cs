@@ -40,7 +40,7 @@ namespace Ankh.Scc.SccUI
             base.OnLoad(e);
 
             IAnkhSolutionSettings settings = Context.GetService<IAnkhSolutionSettings>();
-            IFileStatusCache cache = Context.GetService<IFileStatusCache>();
+            ISvnStatusCache cache = Context.GetService<ISvnStatusCache>();
 
             SvnItem slnDirItem = cache[settings.SolutionFilename].Parent;
             SvnWorkingCopy wc = slnDirItem.WorkingCopy;

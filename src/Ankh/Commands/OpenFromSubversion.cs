@@ -162,7 +162,7 @@ namespace Ankh.Commands
             using (ProjectAddInfoDialog pai = new ProjectAddInfoDialog())
             {
                 IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
-                IFileStatusCache cache = e.GetService<IFileStatusCache>();
+                ISvnFileStatusCache cache = e.GetService<ISvnFileStatusCache>();
                 SvnItem rootItem;
 
                 pai.EnableSlnConnection = false;

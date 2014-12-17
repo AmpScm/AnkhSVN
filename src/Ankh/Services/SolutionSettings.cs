@@ -120,15 +120,15 @@ namespace Ankh.Settings
         }
 
         ISelectionContext _selectionContext;
-        IFileStatusCache _statusCache;
+        ISvnFileStatusCache _statusCache;
         ISelectionContext SelectionContext
         {
             get { return _selectionContext ?? (_selectionContext = GetService<ISelectionContext>()); }
         }
 
-        IFileStatusCache StatusCache
+        ISvnFileStatusCache StatusCache
         {
-            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
+            get { return _statusCache ?? (_statusCache = GetService<ISvnFileStatusCache>()); }
         }
 
 
@@ -484,7 +484,7 @@ namespace Ankh.Settings
 
                 client.SetProperty(SolutionFilename, AnkhSccPropertyNames.ProjectRoot, solUri.MakeRelativeUri(resUri).ToString(), ps);
 
-                GetService<IFileStatusCache>().MarkDirty(SolutionFilename);
+                GetService<ISvnFileStatusCache>().MarkDirty(SolutionFilename);
                 // The getter will reload the settings for us
             }
 

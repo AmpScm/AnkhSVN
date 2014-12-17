@@ -52,7 +52,7 @@ namespace Ankh.Scc
         public override void OnInitialize()
         {
             EnsureService<IStatusImageMapper>();
-            EnsureService<IFileStatusCache>();
+            EnsureService<ISvnStatusCache>();
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Ankh.UI.RepositoryExplorer.Commands
                 info = null;
                 if (SvnItem.IsValidPath(arg, true))
                 {
-                    SvnItem item = e.GetService<IFileStatusCache>()[arg];
+                    SvnItem item = e.GetService<ISvnFileStatusCache>()[arg];
 
                     if (item.IsVersioned)
                     {

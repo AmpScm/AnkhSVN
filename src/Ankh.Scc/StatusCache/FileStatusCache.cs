@@ -27,9 +27,9 @@ namespace Ankh.Scc.StatusCache
     /// <summary>
     /// Maintains path->SvnItem mappings.
     /// </summary>
-    [GlobalService(typeof(IFileStatusCache), AllowPreRegistered = true)]
+    [GlobalService(typeof(ISvnStatusCache), AllowPreRegistered = true)]
     [GlobalService(typeof(ISvnItemChange), AllowPreRegistered = true)]
-    sealed partial class FileStatusCache : AnkhService, Ankh.Scc.IFileStatusCache, ISvnItemChange
+    sealed partial class FileStatusCache : AnkhService, Ankh.Scc.ISvnStatusCache, ISvnItemChange
     {
         readonly object _lock = new object();
         readonly SvnClient _client;
@@ -72,7 +72,7 @@ namespace Ankh.Scc.StatusCache
             get { return _commandService ?? (_commandService = Context.GetService<IAnkhCommandService>()); }
         }
 
-        void Ankh.Scc.IFileStatusCache.RefreshItem(SvnItem item, SvnNodeKind nodeKind)
+        void Ankh.Scc.ISvnStatusCache.RefreshItem(SvnItem item, SvnNodeKind nodeKind)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
@@ -103,7 +103,7 @@ namespace Ankh.Scc.StatusCache
             Debug.Assert(updateItem.IsStatusClean(), "The item requesting to be updated is updated");
         }
 
-        void Ankh.Scc.IFileStatusCache.RefreshWCRoot(SvnItem svnItem)
+        void Ankh.Scc.ISvnStatusCache.RefreshWCRoot(SvnItem svnItem)
         {
             if (svnItem == null)
                 throw new ArgumentNullException("svnItem");
@@ -602,7 +602,7 @@ namespace Ankh.Scc.StatusCache
         /// Marks the specified file dirty
         /// </summary>
         /// <param name="file"></param>
-        void Ankh.Scc.IFileStatusCache.MarkDirty(string path)
+        void Ankh.Scc.ISvnStatusCache.MarkDirty(string path)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
@@ -620,7 +620,7 @@ namespace Ankh.Scc.StatusCache
             }
         }
 
-        void Ankh.Scc.IFileStatusCache.MarkDirtyRecursive(string path)
+        void Ankh.Scc.ISvnStatusCache.MarkDirtyRecursive(string path)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
@@ -685,7 +685,7 @@ namespace Ankh.Scc.StatusCache
         /// Marks the specified file dirty
         /// </summary>
         /// <param name="file"></param>
-        void Ankh.Scc.IFileStatusCache.MarkDirty(IEnumerable<string> paths)
+        void Ankh.Scc.ISvnStatusCache.MarkDirty(IEnumerable<string> paths)
         {
             if (paths == null)
                 throw new ArgumentNullException("paths");
@@ -754,7 +754,7 @@ namespace Ankh.Scc.StatusCache
             }
         }
 
-        void IFileStatusCache.SetSolutionContained(string path, bool inSolution, bool sccExcluded)
+        void ISvnStatusCache.SetSolutionContained(string path, bool inSolution, bool sccExcluded)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");

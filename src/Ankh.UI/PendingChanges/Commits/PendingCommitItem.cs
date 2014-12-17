@@ -50,7 +50,7 @@ namespace Ankh.UI.PendingChanges.Commits
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            IFileStatusCache cache = context.GetService<IFileStatusCache>();
+            ISvnFileStatusCache cache = context.GetService<ISvnFileStatusCache>();
 
             int idx = PendingChange.IconIndex;
             if (idx >= 0)

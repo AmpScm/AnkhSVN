@@ -308,7 +308,7 @@ namespace Ankh.UI.PendingChanges
             syncView.Items.Clear();
             if (resultList != null && resultList.Count > 0)
             {
-                IFileStatusCache fs = Context.GetService<IFileStatusCache>();
+                ISvnStatusCache fs = Context.GetService<ISvnStatusCache>();
                 List<SynchronizeListItem> items = new List<SynchronizeListItem>(resultList.Count);
                 foreach (SvnStatusEventArgs s in resultList)
                 {

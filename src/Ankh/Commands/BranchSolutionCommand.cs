@@ -57,7 +57,7 @@ namespace Ankh.Commands
                     if (string.IsNullOrEmpty(root))
                         return null;
 
-                    item = e.GetService<IFileStatusCache>()[root];
+                    item = e.GetService<ISvnFileStatusCache>()[root];
                     break;
                 case AnkhCommand.ProjectBranch:
                     SccProject p = EnumTools.GetSingle(e.Selection.GetSelectedProjects(false));
@@ -69,7 +69,7 @@ namespace Ankh.Commands
                     if (info == null || info.ProjectDirectory == null)
                         break;
 
-                    item = e.GetService<IFileStatusCache>()[info.ProjectDirectory];
+                    item = e.GetService<ISvnFileStatusCache>()[info.ProjectDirectory];
                     break;
             }
 
