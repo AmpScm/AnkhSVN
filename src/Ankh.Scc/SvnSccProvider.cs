@@ -40,6 +40,7 @@ namespace Ankh.Scc
         public SvnSccProvider(IAnkhServiceProvider context)
             : base(context)
         {
+            _projectMap = new SccProjectMap(this);
         }
 
         protected override void OnInitialize()

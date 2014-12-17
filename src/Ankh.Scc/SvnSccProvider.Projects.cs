@@ -31,7 +31,7 @@ namespace Ankh.Scc
 {
     partial class SvnSccProvider
     {
-        readonly Dictionary<IVsSccProject2, SccProjectData> _projectMap = new Dictionary<IVsSccProject2, SccProjectData>();
+        readonly SccProjectMap _projectMap;
         bool _managedSolution;
         HybridCollection<string> _delayedDelete;
         bool _isDirty;
@@ -346,7 +346,7 @@ namespace Ankh.Scc
         /// <param name="project"></param>
         public override void OnProjectLoaded(IVsSccProject2 project)
         {
-            if (!_projectMap.ContainsKey(project))
+            if (!_projectMap.ContainsProject(project))
                 _projectMap.Add(project, new SccProjectData(this, project));
         }
 
