@@ -174,7 +174,7 @@ namespace Ankh.Scc
         {
             ok = true;
 
-            if (!_projectMap.ContainsKey(project))
+            if (!_projectMap.ContainsProject(project))
                 return; // Not managed by us            
 
             if (!IsActive)
