@@ -187,6 +187,9 @@
     <Compile Include="ProjectTracker.Batching.cs">
       <DependentUpon>ProjectTracker.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProjectTracker.Map.cs">
+      <DependentUpon>ProjectTracker.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProjectTracker.Remove.cs">
       <DependentUpon>ProjectTracker.cs</DependentUpon>
     </Compile>
