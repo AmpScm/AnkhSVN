@@ -27,7 +27,7 @@ using Ankh.Scc;
 using Ankh.Selection;
 using System.Text;
 
-namespace Ankh
+namespace Ankh.Scc
 {
     public interface ISvnItemUpdate
     {
@@ -46,7 +46,10 @@ namespace Ankh
         void SetDirty(SvnItemState dirty);
         bool TryGetState(SvnItemState get, out SvnItemState value);
     }
+}
 
+namespace Ankh
+{
     /// <summary>
     /// Represents a version controlled path on disk, caching its status
     /// </summary>
