@@ -199,7 +199,7 @@ namespace Ankh.Scc
         {
             IVsSccProject2 sccProject = pHierarchy as IVsSccProject2;
 
-            if (sccProject != null && _projectMap.TryGetSccProject(sccProject, out data))
+            if (sccProject != null && ProjectMap.TryGetSccProject(sccProject, out data))
             {
                 // data valid
             }

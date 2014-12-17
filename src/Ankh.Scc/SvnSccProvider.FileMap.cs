@@ -40,7 +40,6 @@ namespace Ankh.Scc
         //  - The tracking of changes in the File <-> Project mapping (Many <-> Many)
         //  - The persistance of history on project add/remove/rename actions
         //
-        readonly SccFileMap _fileMap;
         IAnkhSolutionSettings _solutionSettings;
         IPendingChangesManager _pendingChanges;
         bool _syncMap;
@@ -66,7 +65,7 @@ namespace Ankh.Scc
         {
             // First update the filemap
             SccProjectData data;
-            if (!_projectMap.TryGetSccProject(project, out data))
+            if (!ProjectMap.TryGetSccProject(project, out data))
                 return; // Not managed by us
 
             data.AddPath(filename);
@@ -81,7 +80,7 @@ namespace Ankh.Scc
         public override void OnProjectFileRemoved(IVsSccProject2 project, string filename, VSREMOVEFILEFLAGS flags)
         {
             SccProjectData data;
-            if (!_projectMap.TryGetSccProject(project, out data))
+            if (!ProjectMap.TryGetSccProject(project, out data))
                 return; // Not managed by us
 
             data.RemovePath(filename);
@@ -96,7 +95,7 @@ namespace Ankh.Scc
         public override void OnProjectDirectoryAdded(IVsSccProject2 project, string directoryname, string origin)
         {
             SccProjectData data;
-            if (!_projectMap.TryGetSccProject(project, out data))
+            if (!ProjectMap.TryGetSccProject(project, out data))
                 return; // Not managed by us
 
             // Add a directory like a folder but with an ending '\'
@@ -127,7 +126,7 @@ namespace Ankh.Scc
         public override void OnProjectDirectoryRemoved(IVsSccProject2 project, string directoryname, VSREMOVEDIRECTORYFLAGS flags)
         {
             SccProjectData data;
-            if (!_projectMap.TryGetSccProject(project, out data))
+            if (!ProjectMap.TryGetSccProject(project, out data))
                 return; // Not managed by us
 
             // a directory can be added like a folder but with an ending '\'
@@ -145,7 +144,7 @@ namespace Ankh.Scc
         public override void OnProjectRenamedFile(IVsSccProject2 project, string oldName, string newName, VSRENAMEFILEFLAGS flags)
         {
             SccProjectData data;
-            if (!_projectMap.TryGetSccProject(project, out data))
+            if (!ProjectMap.TryGetSccProject(project, out data))
                 return; // Not managed by us
             else
                 data.CheckProjectRename(project, oldName, newName); // Just to be sure (should be handled by other event)
@@ -174,7 +173,7 @@ namespace Ankh.Scc
         {
             ok = true;
 
-            if (!_projectMap.ContainsProject(project))
+            if (!ProjectMap.ContainsProject(project))
                 return; // Not managed by us            
 
             if (!IsActive)
@@ -197,7 +196,7 @@ namespace Ankh.Scc
         public override void OnProjectDirectoryRenamed(IVsSccProject2 project, string oldName, string newName, VSRENAMEDIRECTORYFLAGS flags)
         {
             SccProjectData data;
-            if (!_projectMap.TryGetSccProject(project, out data))
+            if (!ProjectMap.TryGetSccProject(project, out data))
                 return; // Not managed by us
 
             if (!IsActive)
@@ -240,9 +239,9 @@ namespace Ankh.Scc
         {
             SccProjectFile projectFile;
 
-            if (!_fileMap.TryGetValue(path, out projectFile))
+            if (!ProjectMap.TryGetValue(path, out projectFile))
             {
-                _fileMap.AddFile(path, projectFile = new SccProjectFile(this, path));
+                ProjectMap.AddFile(path, projectFile = new SccProjectFile(this, path));
 
                 // Force an initial status into the SvnItem
                 StatusCache.SetSolutionContained(path, true, _sccExcluded.Contains(path));
@@ -261,13 +260,13 @@ namespace Ankh.Scc
 #if DEBUG
             {
                 SccProjectFile f;
-                Debug.Assert(_fileMap.TryGetValue(file.FullPath, out f) && (f == file));
+                Debug.Assert(ProjectMap.TryGetValue(file.FullPath, out f) && (f == file));
             }
 #endif
 
             StatusCache.SetSolutionContained(file.FullPath, false, false);
 
-            _fileMap.RemoveFile(file.FullPath);
+            ProjectMap.RemoveFile(file.FullPath);
             PendingChanges.Refresh(file.FullPath);
         }
         #endregion
@@ -282,7 +281,7 @@ namespace Ankh.Scc
             path = SvnTools.GetNormalizedFullPath(path);
 
             SccProjectFile file;
-            if (_fileMap.TryGetValue(path, out file))
+            if (ProjectMap.TryGetValue(path, out file))
             {
                 foreach (SccProjectData pd in file.GetOwnerProjects())
                 {
@@ -305,7 +304,7 @@ namespace Ankh.Scc
                 string nPath = SvnTools.GetNormalizedFullPath(path);
 
                 SccProjectFile file;
-                if (_fileMap.TryGetValue(nPath, out file))
+                if (ProjectMap.TryGetValue(nPath, out file))
                 {
                     foreach (SccProjectData pd in file.GetOwnerProjects())
                     {
@@ -333,7 +332,7 @@ namespace Ankh.Scc
         /// <returns></returns>
         public IEnumerable<Ankh.Selection.SccProject> GetAllProjects()
         {
-            foreach (SccProjectData pd in _projectMap.AllSccProjects)
+            foreach (SccProjectData pd in ProjectMap.AllSccProjects)
                 yield return pd.SvnProject;
         }
 
@@ -347,7 +346,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            if (_fileMap.ContainsFile(path))
+            if (ProjectMap.ContainsFile(path))
                 return true;
 
             if (string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
@@ -386,7 +385,7 @@ namespace Ankh.Scc
             IVsSccProject2 scc = project.RawHandle;
             SccProjectData data;
 
-            if (scc == null || !_projectMap.TryGetSccProject(scc, out data))
+            if (scc == null || !ProjectMap.TryGetSccProject(scc, out data))
                 yield break;
 
             foreach (string file in data.GetAllFiles())
@@ -417,7 +416,7 @@ namespace Ankh.Scc
                 IVsSccProject2 scc = project.RawHandle;
                 SccProjectData data;
 
-                if (scc == null || !_projectMap.TryGetSccProject(scc, out data))
+                if (scc == null || !ProjectMap.TryGetSccProject(scc, out data))
                 {
                     if (p.IsSolution && SolutionFilename != null && !files.ContainsKey(SolutionFilename))
                     {
@@ -462,12 +461,12 @@ namespace Ankh.Scc
 
         public ICollection<string> GetAllFilesOfAllProjects(bool exceptExcluded)
         {
-            List<string> files = new List<string>(_fileMap.UniqueFileCount + 1);
+            List<string> files = new List<string>(ProjectMap.UniqueFileCount + 1);
 
-            if (SolutionFilename != null && !_fileMap.ContainsFile(SolutionFilename))
+            if (SolutionFilename != null && !ProjectMap.ContainsFile(SolutionFilename))
                 files.Add(SolutionFilename);
 
-            foreach (string file in _fileMap.AllFiles)
+            foreach (string file in ProjectMap.AllFiles)
             {
                 if (file[file.Length - 1] == '\\') // Don't return paths
                     continue;
@@ -490,7 +489,7 @@ namespace Ankh.Scc
             {
                 SccProjectFile file;
 
-                if (_fileMap.TryGetValue(project.FullPath, out file))
+                if (ProjectMap.TryGetValue(project.FullPath, out file))
                 {
                     foreach (SccProjectData p in file.GetOwnerProjects())
                     {
@@ -506,7 +505,7 @@ namespace Ankh.Scc
         {
             SccProjectFile file;
 
-            if (!_fileMap.TryGetValue(path, out file))
+            if (!ProjectMap.TryGetValue(path, out file))
             {
                 if (string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
                 {
@@ -538,7 +537,7 @@ namespace Ankh.Scc
                 return null;
 
             SccProjectData pd;
-            if (_projectMap.TryGetSccProject(project.RawHandle, out pd))
+            if (ProjectMap.TryGetSccProject(project.RawHandle, out pd))
             {
                 return new WrapProjectInfo(pd);
             }
@@ -560,7 +559,7 @@ namespace Ankh.Scc
                 return true; // A solution file can be part of a project
 
             SccProjectFile file;
-            if (!_fileMap.TryGetValue(path, out file))
+            if (!ProjectMap.TryGetValue(path, out file))
                 return false;
 
             return file.IsProjectFile;
@@ -589,7 +588,7 @@ namespace Ankh.Scc
                 }
             }
 
-            List<SccProjectData> projects = new List<SccProjectData>(_projectMap.AllSccProjects);
+            List<SccProjectData> projects = new List<SccProjectData>(ProjectMap.AllSccProjects);
 
             foreach (SccProjectData pb in projects)
             {
@@ -639,7 +638,7 @@ namespace Ankh.Scc
         private IEnumerable<SvnItem> GetSingleProjectRoots(SccProject project)
         {
             SccProjectData pd;
-            if (project.RawHandle == null || !_projectMap.TryGetSccProject(project.RawHandle, out pd))
+            if (project.RawHandle == null || !ProjectMap.TryGetSccProject(project.RawHandle, out pd))
                 yield break;
 
             SvnItem projectRootItem = null;
@@ -668,7 +667,7 @@ namespace Ankh.Scc
         bool IProjectFileMapper.IgnoreEnumerationSideEffects(Microsoft.VisualStudio.Shell.Interop.IVsSccProject2 sccProject)
         {
             SccProjectData projectData;
-            if (_projectMap.TryGetSccProject(sccProject, out projectData))
+            if (ProjectMap.TryGetSccProject(sccProject, out projectData))
             {
                 // We have to know its contents to provide SCC info
                 // TODO: BH: Maybe only enable while reloading?

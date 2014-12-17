@@ -94,8 +94,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnkhSccModule.cs" />
-    <Compile Include="SccFileMap.cs" />
     <Compile Include="SccProjectMap.cs" />
+    <Compile Include="SccProjectMap.FileMap.cs">
+      <DependentUpon>SccProjectMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="SvnSccProvider.cs" />
     <Compile Include="SvnSccProvider.Enlistment.cs">
       <DependentUpon>SvnSccProvider.cs</DependentUpon>

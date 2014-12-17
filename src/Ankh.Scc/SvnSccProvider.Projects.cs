@@ -36,6 +36,12 @@ namespace Ankh.Scc
         HybridCollection<string> _delayedDelete;
         bool _isDirty;
 
+        protected SccProjectMap ProjectMap
+        {
+            [DebuggerStepThrough]
+            get { return _projectMap; }
+        } 
+
         public bool IsSolutionManaged
         {
             get { return _managedSolution; }
@@ -73,7 +79,7 @@ namespace Ankh.Scc
 
             SccProjectData data;
 
-            if (_projectMap.TryGetSccProject(sccProject, out data))
+            if (ProjectMap.TryGetSccProject(sccProject, out data))
                 return data.IsManaged;
 
             return false;
@@ -109,7 +115,7 @@ namespace Ankh.Scc
                     _managedSolution = managed;
                     IsSolutionDirty = true;
 
-                    foreach (SccProjectData p in _projectMap.AllSccProjects)
+                    foreach (SccProjectData p in ProjectMap.AllSccProjects)
                     {
                         if (p.IsStoredInSolution)
                         {
@@ -135,7 +141,7 @@ namespace Ankh.Scc
 
             SccProjectData data;
 
-            if (!_projectMap.TryGetSccProject(sccProject, out data))
+            if (!ProjectMap.TryGetSccProject(sccProject, out data))
                 return;
 
             if (managed == data.IsManaged)
@@ -146,7 +152,7 @@ namespace Ankh.Scc
 
         internal SccProjectData GetSccProject(Guid projectId)
         {
-            foreach (SccProjectData pd in _projectMap.AllSccProjects)
+            foreach (SccProjectData pd in ProjectMap.AllSccProjects)
             {
                 if (pd.ProjectGuid == projectId)
                     return pd;
@@ -197,7 +203,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
-            foreach (SccProjectData data in _projectMap.AllSccProjects)
+            foreach (SccProjectData data in ProjectMap.AllSccProjects)
             {
                 if (data.IsSolutionInfrastructure)
                 {
@@ -296,7 +302,7 @@ namespace Ankh.Scc
         /// <remarks>At this time the closing can not be canceled.</remarks>
         public override void OnStartedSolutionClose()
         {
-            foreach (SccProjectData pd in _projectMap.AllSccProjects)
+            foreach (SccProjectData pd in ProjectMap.AllSccProjects)
             {
                 pd.Dispose();
             }
@@ -314,13 +320,13 @@ namespace Ankh.Scc
         /// </summary>
         public override void OnSolutionClosed()
         {
-            Debug.Assert(_projectMap.ProjectCount == 0);
-            Debug.Assert(_fileMap.UniqueFileCount == 0);
+            Debug.Assert(ProjectMap.ProjectCount == 0);
+            Debug.Assert(ProjectMap.UniqueFileCount == 0);
 
             try
             {
-                _projectMap.Clear();
-                _fileMap.Clear();
+                ProjectMap.Clear();
+                ProjectMap.Clear();
                 _unreloadable.Clear();
                 StatusCache.ClearCache();
 
@@ -346,8 +352,8 @@ namespace Ankh.Scc
         /// <param name="project"></param>
         public override void OnProjectLoaded(IVsSccProject2 project)
         {
-            if (!_projectMap.ContainsProject(project))
-                _projectMap.AddProject(project, new SccProjectData(this, project));
+            if (!ProjectMap.ContainsProject(project))
+                ProjectMap.AddProject(project, new SccProjectData(this, project));
         }
 
         public override void OnProjectRenamed(IVsSccProject2 project)
@@ -356,7 +362,7 @@ namespace Ankh.Scc
                 return;
 
             SccProjectData data;
-            if (!_projectMap.TryGetSccProject(project, out data))
+            if (!ProjectMap.TryGetSccProject(project, out data))
                 return;
 
             // Mark the sln file edited, so it shows up in Pending Changes/Commit
@@ -374,8 +380,8 @@ namespace Ankh.Scc
         public override void OnProjectOpened(IVsSccProject2 project, bool added)
         {
             SccProjectData data;
-            if (!_projectMap.TryGetSccProject(project, out data))
-                _projectMap.AddProject(project, data = new SccProjectData(this, project));
+            if (!ProjectMap.TryGetSccProject(project, out data))
+                ProjectMap.AddProject(project, data = new SccProjectData(this, project));
 
             if (data.IsStoredInSolution)
             {
@@ -416,7 +422,7 @@ namespace Ankh.Scc
                 throw new ArgumentNullException("project");
 
             SccProjectData data;
-            if (_projectMap.TryGetSccProject(project, out data))
+            if (ProjectMap.TryGetSccProject(project, out data))
             {
                 data.Reload();
             }
@@ -433,7 +439,7 @@ namespace Ankh.Scc
             // We can be called with a null project
             SccProjectData data;
 
-            if (project != null && _projectMap.TryGetSccProject(project, out data))
+            if (project != null && ProjectMap.TryGetSccProject(project, out data))
             {
                 trackCopies = true;
 
@@ -466,10 +472,10 @@ namespace Ankh.Scc
         public override void OnProjectClosed(IVsSccProject2 project, bool removed)
         {
             SccProjectData data;
-            if (_projectMap.TryGetSccProject(project, out data))
+            if (ProjectMap.TryGetSccProject(project, out data))
             {
                 data.OnClose();
-                _projectMap.RemoveProject(project);
+                ProjectMap.RemoveProject(project);
             }
 
             if (removed)
@@ -482,7 +488,7 @@ namespace Ankh.Scc
         public override void OnProjectBeforeUnload(IVsSccProject2 project, IVsHierarchy pStubHierarchy)
         {
             SccProjectData data;
-            if (_projectMap.TryGetSccProject(project, out data))
+            if (ProjectMap.TryGetSccProject(project, out data))
             {
                 data.Unloading = true;
                 Monitor.ScheduleMonitor(data.GetAllFiles()); // Keep track of changes in files of unloaded project
@@ -518,7 +524,7 @@ namespace Ankh.Scc
             {
                 _syncMap = false;
 
-                foreach (SccProjectData pd in _projectMap.AllSccProjects)
+                foreach (SccProjectData pd in ProjectMap.AllSccProjects)
                     pd.Load();
             }
         }
@@ -553,7 +559,7 @@ namespace Ankh.Scc
                 delegate
                 {
                     bool sorted = false;
-                    foreach (SccProjectData project in _projectMap.AllSccProjects)
+                    foreach (SccProjectData project in ProjectMap.AllSccProjects)
                     {
                         if (project.WebLikeFileHandling && !string.IsNullOrEmpty(project.ProjectDirectory))
                         {
