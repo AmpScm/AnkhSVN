@@ -32,7 +32,7 @@ namespace Ankh.Scc
     [GlobalService(typeof(SvnSccProvider))]
     [GlobalService(typeof(IAnkhSccService))]
     [GlobalService(typeof(ITheAnkhSvnSccProvider), true)]
-    partial class SvnSccProvider : SccProvider, ITheAnkhSvnSccProvider, IVsSccControlNewSolution, IAnkhSccService, IVsSccEnlistmentPathTranslation
+    partial class SvnSccProvider : SccProvider, ITheAnkhSvnSccProvider, IAnkhSccService, IVsSccEnlistmentPathTranslation
     {
         IFileStatusCache _statusCache;
         IAnkhOpenDocumentTracker _documentTracker;
@@ -138,7 +138,6 @@ namespace Ankh.Scc
             else
             {
                 _unreloadable.Clear();
-                _sccExcluded.Clear();
 
                 GetService<IAnkhServiceEvents>().OnSccProviderDeactivated(EventArgs.Empty);
             }
@@ -167,7 +166,7 @@ namespace Ankh.Scc
         internal void AddedToSolution(string path)
         {
             // Force an initial status into the SvnItem
-            StatusCache.SetSolutionContained(path, true, _sccExcluded.Contains(path));
+            StatusCache.SetSolutionContained(path, true, ProjectMap.IsSccExcluded(path));
         }
     }
 }

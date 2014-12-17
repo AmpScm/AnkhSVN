@@ -23,7 +23,7 @@ using Ankh.Commands;
 
 namespace Ankh.Scc
 {
-    partial class SvnSccProvider : IVsSccControlNewSolution, IVsSccOpenFromSourceControl
+    partial class SvnSccProvider : IVsSccOpenFromSourceControl
 	{
         /// <summary>
         /// Adds the current solution to source control.
@@ -41,14 +41,12 @@ namespace Ankh.Scc
         /// <summary>
         /// Retrieves the text to be displayed with the "Add to Source Control" check box in the New Projects dialog box.
         /// </summary>
-        /// <param name="pbstrActionName">[out] Returns the text to be used for the "Add to Source Control" check box.</param>
         /// <returns>
-        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
+        /// Returns the text to be used for the "Add to Source Control" check box.
         /// </returns>
-        public int GetDisplayStringForAction(out string pbstrActionName)
+        protected override string GetDisplayStringForAddNewSolutionToSourceControl()
         {
-            pbstrActionName = Resources.AddToSubversionCommandName;
-            return VSErr.S_OK;
+            return Resources.AddToSubversionCommandName;
         }
 
         /// <summary>
