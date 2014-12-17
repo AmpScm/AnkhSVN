@@ -8,7 +8,7 @@ namespace Ankh.Scc
     {
         readonly Dictionary<string, SccProjectFile> _fileMap = new Dictionary<string, SccProjectFile>(StringComparer.OrdinalIgnoreCase);
 
-        public bool TryGetValue(string fileName, out SccProjectFile file)
+        public bool TryGetFile(string fileName, out SccProjectFile file)
         {
             return _fileMap.TryGetValue(fileName, out file);
         }
@@ -28,9 +28,9 @@ namespace Ankh.Scc
             get { return _fileMap.Count; }
         }
 
-        public void RemoveFile(string fileName)
+        public bool RemoveFile(string fileName)
         {
-            _fileMap.Remove(fileName);
+            return _fileMap.Remove(fileName);
         }
 
         public IEnumerable<string> AllFiles

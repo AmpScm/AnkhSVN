@@ -239,7 +239,7 @@ namespace Ankh.Scc
         {
             SccProjectFile projectFile;
 
-            if (!ProjectMap.TryGetValue(path, out projectFile))
+            if (!ProjectMap.TryGetFile(path, out projectFile))
             {
                 ProjectMap.AddFile(path, projectFile = new SccProjectFile(this, path));
 
@@ -260,7 +260,7 @@ namespace Ankh.Scc
 #if DEBUG
             {
                 SccProjectFile f;
-                Debug.Assert(ProjectMap.TryGetValue(file.FullPath, out f) && (f == file));
+                Debug.Assert(ProjectMap.TryGetFile(file.FullPath, out f) && (f == file));
             }
 #endif
 
@@ -281,7 +281,7 @@ namespace Ankh.Scc
             path = SvnTools.GetNormalizedFullPath(path);
 
             SccProjectFile file;
-            if (ProjectMap.TryGetValue(path, out file))
+            if (ProjectMap.TryGetFile(path, out file))
             {
                 foreach (SccProjectData pd in file.GetOwnerProjects())
                 {
@@ -304,7 +304,7 @@ namespace Ankh.Scc
                 string nPath = SvnTools.GetNormalizedFullPath(path);
 
                 SccProjectFile file;
-                if (ProjectMap.TryGetValue(nPath, out file))
+                if (ProjectMap.TryGetFile(nPath, out file))
                 {
                     foreach (SccProjectData pd in file.GetOwnerProjects())
                     {
@@ -489,7 +489,7 @@ namespace Ankh.Scc
             {
                 SccProjectFile file;
 
-                if (ProjectMap.TryGetValue(project.FullPath, out file))
+                if (ProjectMap.TryGetFile(project.FullPath, out file))
                 {
                     foreach (SccProjectData p in file.GetOwnerProjects())
                     {
@@ -505,7 +505,7 @@ namespace Ankh.Scc
         {
             SccProjectFile file;
 
-            if (!ProjectMap.TryGetValue(path, out file))
+            if (!ProjectMap.TryGetFile(path, out file))
             {
                 if (string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
                 {
@@ -559,7 +559,7 @@ namespace Ankh.Scc
                 return true; // A solution file can be part of a project
 
             SccProjectFile file;
-            if (!ProjectMap.TryGetValue(path, out file))
+            if (!ProjectMap.TryGetFile(path, out file))
                 return false;
 
             return file.IsProjectFile;

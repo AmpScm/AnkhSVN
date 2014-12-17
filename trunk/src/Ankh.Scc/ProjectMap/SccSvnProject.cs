@@ -16,6 +16,7 @@ namespace Ankh.Scc.ProjectMap
 
 		public override void NotifyGlyphChanged()
 		{
+            // NOT: base.NotifyGlyphChanged();
 			_projectData.NotifyGlyphsChanged();
 		}
 	}

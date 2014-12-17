@@ -181,7 +181,7 @@ namespace Ankh.Scc
             yield return item.FullPath;
 
             SccProjectFile pf;
-            if (ProjectMap.TryGetValue(item.FullPath, out pf))
+            if (ProjectMap.TryGetFile(item.FullPath, out pf))
             {
                 HybridCollection<string> subFiles = null;
 
