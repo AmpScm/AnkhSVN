@@ -13,8 +13,6 @@ namespace Ankh.Scc
 
         bool TrackProjectChanges(IVsSccProject2 sccProject);
 
-        void VerifySolutionNaming();
-
         void OnSolutionRefreshCommand(EventArgs e);
 
 

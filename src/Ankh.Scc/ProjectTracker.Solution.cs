@@ -25,6 +25,8 @@ using Ankh.Configuration;
 using Ankh.Scc.SccUI;
 using Ankh.Selection;
 using Ankh.VS;
+using System.Runtime.InteropServices;
+using SharpSvn;
 
 
 
@@ -45,7 +47,7 @@ namespace Ankh.Scc
                 return VSErr.S_OK;
             try
             {
-                SccEvents.VerifySolutionNaming();
+                VerifySolutionNaming();
 
                 IAnkhSolutionSettings ss = GetService<IAnkhSolutionSettings>();
 
@@ -95,6 +97,73 @@ namespace Ankh.Scc
             }
 
             return VSErr.S_OK;
+        }
+
+        private void VerifySolutionNaming()
+        {
+            IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
+
+            string dir, path, user;
+
+            if (sol == null
+                || !VSErr.Succeeded(sol.GetSolutionInfo(out dir, out path, out user))
+                || string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            string trueSln = SvnTools.GetTruePath(path, true) ?? SvnTools.GetNormalizedFullPath(path);
+
+            if (trueSln == path)
+                return; // Nothing to do for us
+
+            IVsRunningDocumentTable rdt = GetService<IVsRunningDocumentTable>(typeof(SVsRunningDocumentTable));
+
+            if (rdt == null)
+                return;
+
+            Guid IID_hier = typeof(IVsHierarchy).GUID;
+            IntPtr hier = IntPtr.Zero;
+            IntPtr unk = Marshal.GetIUnknownForObject(sol);
+            IntPtr ppunkDocData = IntPtr.Zero;
+            try
+            {
+                IVsHierarchy slnHier;
+                uint pitemid;
+                uint pdwCookie;
+
+                if (!VSErr.Succeeded(rdt.FindAndLockDocument((uint)_VSRDTFLAGS.RDT_EditLock, path, out slnHier, out pitemid, out ppunkDocData, out pdwCookie)))
+                    return;
+                if (!VSErr.Succeeded(Marshal.QueryInterface(unk, ref IID_hier, out hier)))
+                {
+                    hier = IntPtr.Zero;
+                    return;
+                }
+
+                if (VSErr.Succeeded(rdt.RenameDocument(path, trueSln, hier, VSItemId.Root)))
+                {
+                    int hr;
+
+                    hr = rdt.SaveDocuments((uint)(__VSRDTSAVEOPTIONS.RDTSAVEOPT_ForceSave | __VSRDTSAVEOPTIONS.RDTSAVEOPT_SaveNoChildren),
+                                           slnHier, pitemid, pdwCookie);
+
+                    hr = sol.SaveSolutionElement((uint)(__VSSLNSAVEOPTIONS.SLNSAVEOPT_ForceSave), (IVsHierarchy)sol, pdwCookie);
+
+                    //GC.KeepAlive(hr);
+                }
+                if (ppunkDocData != IntPtr.Zero)
+                {
+                    object doc = Marshal.GetObjectForIUnknown(ppunkDocData);
+                }
+            }
+            finally
+            {
+                System.Runtime.InteropServices.Marshal.Release(unk);
+                if (hier != IntPtr.Zero)
+                    System.Runtime.InteropServices.Marshal.Release(hier);
+                if (ppunkDocData != IntPtr.Zero)
+                    Marshal.Release(hier);
+            }
         }
 
         public int OnBeforeCloseSolution(object pUnkReserved)

@@ -128,9 +128,9 @@ namespace Ankh.Scc
             return true;
         }
 
-        public virtual bool IsSccExcluded(string path)
+        public bool IsSccExcluded(string path)
         {
-            return false;
+            return ProjectMap.IsSccExcluded(path);
         }
 
         [CLSCompliant(false)]

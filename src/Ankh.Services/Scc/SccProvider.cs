@@ -45,7 +45,7 @@ namespace Ankh.Scc
         bool IsBSLSupported();
     }
 
-    public abstract partial class SccProvider : AnkhService, IVsSccProvider, IVsSccManager2, ICOMVsSccManager3, IVsSccManagerTooltip, IAnkhSccProviderEvents
+    public abstract partial class SccProvider : AnkhService, IVsSccProvider, IVsSccManager2, ICOMVsSccManager3, IVsSccManagerTooltip, IAnkhSccProviderEvents, IVsSccControlNewSolution
     {
         bool _active;
         readonly SccProjectMap _projectMap;
@@ -156,21 +156,8 @@ namespace Ankh.Scc
         string _tempPath;
         public string TempPathWithSeparator
         {
-            get
-            {
-                if (_tempPath == null)
-                {
-                    string p = System.IO.Path.GetTempPath();
-
-                    if (p.Length > 0 && p[p.Length - 1] != Path.DirectorySeparatorChar)
-                        p += Path.DirectorySeparatorChar;
-
-                    _tempPath = p;
-                }
-                return _tempPath;
-            }
+            get { return _tempPath ?? (_tempPath = ProjectMap.TempPathWithSeparator); }
         }
-
 
         public bool IsSafeSccPath(string file)
         {
@@ -193,8 +180,6 @@ namespace Ankh.Scc
         {
             get { return _active; }
         }
-
-        public virtual void VerifySolutionNaming() { }
 
         protected virtual void OnStartedSolutionClose() { }
 
@@ -487,6 +472,7 @@ namespace Ankh.Scc
             }
         }
 
+        [CLSCompliant(false)]
         protected virtual string GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode)
         {
             return null;
@@ -526,15 +512,6 @@ namespace Ankh.Scc
                 trackCopies = false;
                 return false;
             }
-        }
-
-        void IAnkhSccProviderEvents.VerifySolutionNaming()
-        {
-            OnVerifySolutionNaming();
-        }
-
-        protected virtual void OnVerifySolutionNaming()
-        {
         }
 
         void IAnkhSccProviderEvents.OnSolutionRefreshCommand(EventArgs e)
@@ -593,6 +570,43 @@ namespace Ankh.Scc
             SccProjectData data;
             ProjectMap.EnsureSccProject(sccProject, out data);
             OnProjectFileRenamed(data, oldName, newName);
+        }
+
+        int IVsSccControlNewSolution.AddNewSolutionToSourceControl()
+        {
+            try
+            {
+                OnAddNewSolutionToSourceControl(EventArgs.Empty);
+                return VSErr.S_OK;
+            }
+            catch(Exception e)
+            {
+                return VSErr.GetHRForException(e);
+            }
+        }
+
+        protected virtual void OnAddNewSolutionToSourceControl(EventArgs eventArgs)
+        {
+            throw new NotImplementedException();
+        }
+
+        int IVsSccControlNewSolution.GetDisplayStringForAction(out string pbstrActionName)
+        {
+            try
+            {
+                pbstrActionName = GetDisplayStringForAddNewSolutionToSourceControl();
+                return VSErr.S_OK;
+            }
+            catch (Exception e)
+            {
+                pbstrActionName = null;
+                return VSErr.GetHRForException(e);
+            }
+        }
+
+        protected virtual string GetDisplayStringForAddNewSolutionToSourceControl()
+        {
+            throw new NotImplementedException();
         }
     }
 }

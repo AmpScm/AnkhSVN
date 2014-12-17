@@ -103,6 +103,11 @@
     <Compile Include="Scc\ProjectMap\SccProjectFileReference.cs" />
     <Compile Include="Scc\SccProjectMap.cs" />
     <Compile Include="Scc\SccProjectMap.FileMap.cs">
+    </Compile>
+    <Compile Include="Scc\SccProjectMap.SccExcluded.cs">
+      <DependentUpon>SccProjectMap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scc\SccProjectMap.SolutionInfo.cs">
       <DependentUpon>SccProjectMap.cs</DependentUpon>
     </Compile>
     <Compile Include="Scc\SccProvider.cs" />

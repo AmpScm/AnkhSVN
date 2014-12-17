@@ -149,7 +149,7 @@ namespace Ankh.Scc.ProjectMap
 
                 if (_firstReference == null)
                 {
-                    _map.RemoveFile(this);
+                    _map.RemoveFile(this.FullPath);
                 }
                 return;
             }

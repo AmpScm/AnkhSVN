@@ -11,7 +11,7 @@ namespace Ankh.GitScc
     [GlobalService(typeof(GitSccProvider))]
     [GlobalService(typeof(IAnkhGitSccService))]
     [GlobalService(typeof(ITheAnkhGitSccProvider), true)]
-    partial class GitSccProvider : SccProvider, ITheAnkhGitSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhGitSccService
+    partial class GitSccProvider : SccProvider, ITheAnkhGitSccProvider, IVsSccProvider, IAnkhGitSccService
     {
         public GitSccProvider(IAnkhServiceProvider context)
             : base(context, new GitSccProjectMap(context))
@@ -68,15 +68,22 @@ namespace Ankh.GitScc
 
         #region STUB
 
-        public int AddNewSolutionToSourceControl()
+        protected override void OnAddNewSolutionToSourceControl(EventArgs eventArgs)
         {
+            base.OnAddNewSolutionToSourceControl(eventArgs);
+
             throw new NotImplementedException();
         }
 
-        public int GetDisplayStringForAction(out string pbstrActionName)
+                /// <summary>
+        /// Retrieves the text to be displayed with the "Add to Source Control" check box in the New Projects dialog box.
+        /// </summary>
+        /// <returns>
+        /// Returns the text to be used for the "Add to Source Control" check box.
+        /// </returns>
+        protected override string GetDisplayStringForAddNewSolutionToSourceControl()
         {
-            pbstrActionName = Resources.AddToGitCommandName;
-            return VSErr.S_OK;
+            return Resources.AddToGitCommandName;
         }
 
         public bool IsSolutionDirty
