@@ -33,7 +33,7 @@ namespace Ankh.Scc
     /// </summary>
     [GlobalService(typeof(IProjectFileMapper))]
     [GlobalService(typeof(IAnkhProjectLayoutService))]
-    partial class SvnSccProvider : IProjectFileMapper, IAnkhProjectLayoutService, ISccProjectFileContainer
+    partial class SvnSccProvider : IProjectFileMapper, IAnkhProjectLayoutService
     {
         // ********************************************************
         // This file contains two very important features of the Scc provider:
@@ -234,42 +234,11 @@ namespace Ankh.Scc
         }
 
 
-        #region ProjectFile
-        public override SccProjectFile GetFile(string path)
+        internal void RemovedFromSolution(string fullPath)
         {
-            SccProjectFile projectFile;
-
-            if (!ProjectMap.TryGetFile(path, out projectFile))
-            {
-                ProjectMap.AddFile(path, projectFile = new SccProjectFile(this, path));
-
-                // Force an initial status into the SvnItem
-                StatusCache.SetSolutionContained(path, true, _sccExcluded.Contains(path));
-            }
-
-            return projectFile;
+            StatusCache.SetSolutionContained(fullPath, false, false);
+            PendingChanges.Refresh(fullPath);
         }
-
-        public override SccProject CreateProject(SccProjectData sccProjectData)
-        {
-            return new SccSvnProject(sccProjectData);
-        }
-
-        void ISccProjectFileContainer.RemoveFile(SccProjectFile file)
-        {
-#if DEBUG
-            {
-                SccProjectFile f;
-                Debug.Assert(ProjectMap.TryGetFile(file.FullPath, out f) && (f == file));
-            }
-#endif
-
-            StatusCache.SetSolutionContained(file.FullPath, false, false);
-
-            ProjectMap.RemoveFile(file.FullPath);
-            PendingChanges.Refresh(file.FullPath);
-        }
-        #endregion
 
         #region IProjectFileMapper Members
 

@@ -14,7 +14,7 @@ namespace Ankh.GitScc
     partial class GitSccProvider : SccProvider, ITheAnkhGitSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhGitSccService
     {
         public GitSccProvider(IAnkhServiceProvider context)
-            : base(context)
+            : base(context, new GitSccProjectMap(context))
         {
 
         }
@@ -169,16 +169,6 @@ namespace Ankh.GitScc
             //throw new NotImplementedException();
         }
         #endregion
-
-        public override Selection.SccProject CreateProject(Scc.ProjectMap.SccProjectData sccProjectData)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Scc.ProjectMap.SccProjectFile GetFile(string path)
-        {
-            throw new NotImplementedException();
-        }
 
         public override IEnumerable<string> GetAllDocumentFiles(string documentName)
         {

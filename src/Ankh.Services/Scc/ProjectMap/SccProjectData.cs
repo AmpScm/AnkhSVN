@@ -60,7 +60,7 @@ namespace Ankh.Scc.ProjectMap
         bool _loaded;
         string _projectFile;
         bool _checkedProjectFile;
-        readonly SccProvider _scc;
+        readonly SccProjectMap _map;
         SccProject _svnProjectInstance;
         string _projectLocation;
         string _projectName;
@@ -70,7 +70,7 @@ namespace Ankh.Scc.ProjectMap
         bool _unloading;
 
         [CLSCompliant(false)]
-        public SccProjectData(SccProvider context, IVsSccProject2 project)
+        public SccProjectData(SccProjectMap context, IVsSccProject2 project)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -78,7 +78,7 @@ namespace Ankh.Scc.ProjectMap
                 throw new ArgumentNullException("project");
 
             _context = context;
-            _scc = context;
+            _map = context;
 
             // Project references to speed up marshalling
             _sccProject = project;
@@ -363,7 +363,7 @@ namespace Ankh.Scc.ProjectMap
                 if (_svnProjectInstance == null)
                 {
                     if ((_projectFlags & SccProjectFlags.ForceSccGlyphChange) == SccProjectFlags.ForceSccGlyphChange)
-                        _svnProjectInstance = Scc.CreateProject(this);
+                        _svnProjectInstance = Map.CreateProject(this);
                     else
                         _svnProjectInstance = new SccProject(ProjectFile, SccProject);
                 }
@@ -589,7 +589,7 @@ namespace Ankh.Scc.ProjectMap
                 reference.AddReference();
             else
             {
-                reference = new SccProjectFileReference(_context, this, Scc.GetFile(path));
+                reference = new SccProjectFileReference(_context, this, Map.GetFile(path));
                 _files.Add(reference);
 
                 if (alreadyLoaded)
@@ -656,9 +656,9 @@ namespace Ankh.Scc.ProjectMap
 
         #region Helper code
 
-        SccProvider Scc
+        SccProjectMap Map
         {
-            get { return _scc; }
+            get { return _map; }
         }
 
         SccEnlistChoice? _sccEnlistChoice;
@@ -878,7 +878,7 @@ namespace Ankh.Scc.ProjectMap
             VsStateIcon[] newGlyphs = new VsStateIcon[idsArray.Length];
             uint[] sccState = new uint[idsArray.Length];
 
-            if (0 == Scc.GetSccGlyph(idsArray.Length, namesArray, newGlyphs, sccState))
+            if (0 == Map.GetSccGlyph(namesArray, newGlyphs, sccState))
                 SccProject.SccGlyphChanged(idsArray.Length, idsArray, newGlyphs, sccState);
         }
     }

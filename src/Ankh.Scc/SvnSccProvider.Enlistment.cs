@@ -205,7 +205,7 @@ namespace Ankh.Scc
             }
             else if (sccProject != null)
             {
-                data = new SccProjectData(this, sccProject);
+                data = new SccProjectData(ProjectMap, sccProject);
             }
             else
                 data = null;

@@ -31,16 +31,9 @@ namespace Ankh.Scc
 {
     partial class SvnSccProvider
     {
-        readonly SccProjectMap _projectMap;
         bool _managedSolution;
         HybridCollection<string> _delayedDelete;
         bool _isDirty;
-
-        protected SccProjectMap ProjectMap
-        {
-            [DebuggerStepThrough]
-            get { return _projectMap; }
-        } 
 
         public bool IsSolutionManaged
         {
@@ -352,8 +345,7 @@ namespace Ankh.Scc
         /// <param name="project"></param>
         public override void OnProjectLoaded(IVsSccProject2 project)
         {
-            if (!ProjectMap.ContainsProject(project))
-                ProjectMap.AddProject(project, new SccProjectData(this, project));
+            base.OnProjectLoaded(project);
         }
 
         public override void OnProjectRenamed(IVsSccProject2 project)
@@ -380,8 +372,8 @@ namespace Ankh.Scc
         public override void OnProjectOpened(IVsSccProject2 project, bool added)
         {
             SccProjectData data;
-            if (!ProjectMap.TryGetSccProject(project, out data))
-                ProjectMap.AddProject(project, data = new SccProjectData(this, project));
+
+            ProjectMap.EnsureSccProject(project, out data);
 
             if (data.IsStoredInSolution)
             {
