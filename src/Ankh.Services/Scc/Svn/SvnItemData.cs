@@ -24,7 +24,7 @@ using SharpSvn;
 
 namespace Ankh.Scc
 {
-    [DebuggerDisplay("File={FullPath}, Status={Status}")]
+    [DebuggerDisplay("File={FullPath}, Change={Change}")]
     public partial class SvnItemData : AnkhPropertyGridItem
     {
         readonly IAnkhServiceProvider _context;
@@ -137,7 +137,7 @@ namespace Ankh.Scc
         {
             get
             {
-                AnkhStatus status = _item.Status;
+                SvnStatusData status = _item.Status;
                 PendingChangeKind kind = PendingChange.CombineStatus(status.LocalNodeStatus, status.LocalTextStatus, status.LocalPropertyStatus, SvnItem.IsTreeConflicted, SvnItem);
 
                 if (kind == PendingChangeKind.None)

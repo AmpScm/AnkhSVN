@@ -31,7 +31,7 @@ namespace Ankh.Scc
 {
     public interface ISvnItemUpdate
     {
-        void RefreshTo(AnkhStatus status);
+        void RefreshTo(SvnStatusData status);
         void RefreshTo(NoSccStatus status, SvnNodeKind nodeKind);
         void RefreshTo(SvnItem lead);
         void TickItem();
@@ -66,7 +66,7 @@ namespace Ankh
             False = 1
         }
 
-        AnkhStatus _status;
+        SvnStatusData _status;
         bool _enqueued;
 
         static readonly Queue<SvnItem> _stateChanged = new Queue<SvnItem>();
@@ -79,7 +79,7 @@ namespace Ankh
         DateTime _modified;
         bool _sccExcluded;
 
-        public SvnItem(ISvnStatusCache context, string fullPath, AnkhStatus status)
+        public SvnItem(ISvnStatusCache context, string fullPath, SvnStatusData status)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -148,14 +148,14 @@ namespace Ankh
             {
                 case NoSccStatus.NotExisting:
                     SetState(set, SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.IsDiskFile | SvnItemState.IsDiskFolder | SvnItemState.Versionable | unset);
-                    _status = AnkhStatus.NotExisting;
+                    _status = SvnStatusData.NotExisting;
                     break;
                 case NoSccStatus.NotVersionable:
                     unset |= SvnItemState.Versionable;
                     goto case NoSccStatus.NotVersioned; // fall through
                 case NoSccStatus.NotVersioned:
                     SetState(SvnItemState.Exists | set, SvnItemState.None | unset);
-                    _status = AnkhStatus.NotVersioned;
+                    _status = SvnStatusData.NotVersioned;
                     break;
                 case NoSccStatus.Unknown:
                 default:
@@ -174,7 +174,7 @@ namespace Ankh
             RefreshTo(status, nodeKind);
         }
 
-        void RefreshTo(AnkhStatus status)
+        void RefreshTo(SvnStatusData status)
         {
             if (status == null)
                 throw new ArgumentNullException("status");
@@ -405,7 +405,7 @@ namespace Ankh
                 SetState(SvnItemState.None, SvnItemState.HasLockToken);
         }
 
-        static bool MightBeNestedWorkingCopy(AnkhStatus status)
+        static bool MightBeNestedWorkingCopy(SvnStatusData status)
         {
             switch (status.LocalNodeStatus)
             {
@@ -430,7 +430,7 @@ namespace Ankh
                 cs.PostTickCommand(ref _scheduled, AnkhCommand.TickRefreshSvnItems);
         }
 
-        void ISvnItemUpdate.RefreshTo(AnkhStatus status)
+        void ISvnItemUpdate.RefreshTo(SvnStatusData status)
         {
             _ticked = false;
             RefreshTo(status);
@@ -496,7 +496,7 @@ namespace Ankh
 
         public bool ShouldClean()
         {
-            return _ticked || (_statusDirty == XBool.False && _status == AnkhStatus.NotExisting);
+            return _ticked || (_statusDirty == XBool.False && _status == SvnStatusData.NotExisting);
         }
 
         /// <summary>
@@ -565,7 +565,7 @@ namespace Ankh
         /// <summary>
         /// Gets the SVN status of the item; retrieves a placeholder if the status is unknown
         /// </summary>
-        public AnkhStatus Status
+        public SvnStatusData Status
         {
             get
             {
@@ -598,7 +598,7 @@ namespace Ankh
         /// <summary>
         /// Gets a boolean indicating whether the item (on disk) is a file
         /// </summary>
-        /// <remarks>Use <see cref="Status"/>.<see cref="AnkhStatus.SvnNodeKind"/> to retrieve the svn type</remarks>
+        /// <remarks>Use <see cref="Status"/>.<see cref="SvnStatusData.SvnNodeKind"/> to retrieve the svn type</remarks>
         public bool IsFile
         {
             get { return GetState(SvnItemState.IsDiskFile) == SvnItemState.IsDiskFile; }
@@ -607,7 +607,7 @@ namespace Ankh
         /// <summary>
         /// Gets a boolean indicating whether the item (on disk) is a directory
         /// </summary>
-        /// <remarks>Use <see cref="Status"/>.<see cref="AnkhStatus.SvnNodeKind"/> to retrieve the svn type</remarks>
+        /// <remarks>Use <see cref="Status"/>.<see cref="SvnStatusData.SvnNodeKind"/> to retrieve the svn type</remarks>
         public bool IsDirectory
         {
             get { return GetState(SvnItemState.IsDiskFolder) == SvnItemState.IsDiskFolder; }
@@ -1510,7 +1510,7 @@ namespace Ankh
         {
             get
             {
-                AnkhStatus status = Status;
+                SvnStatusData status = Status;
 
                 return status.Uri;
             }

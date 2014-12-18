@@ -20,7 +20,7 @@ using System.Text;
 using SharpSvn;
 using System.Diagnostics;
 
-namespace Ankh
+namespace Ankh.Scc
 {
     public enum NoSccStatus
     {
@@ -31,7 +31,7 @@ namespace Ankh
     }
 
     [DebuggerDisplay("Content={LocalContentStatus}, Property={LocalPropertyStatus}, Uri={Uri}")]
-    public sealed class AnkhStatus
+    public sealed class SvnStatusData
     {
         readonly bool _conflicted;
         readonly SvnNodeKind _nodeKind;
@@ -51,7 +51,7 @@ namespace Ankh
         readonly bool _movedHere;
         readonly bool _movedAway;
 
-        public AnkhStatus(SvnStatusEventArgs status)
+        public SvnStatusData(SvnStatusEventArgs status)
         {
             if (status == null)
                 throw new ArgumentNullException("status");
@@ -83,7 +83,7 @@ namespace Ankh
         /// Create non-locked, non-copied item with status specified
         /// </summary>
         /// <param name="allStatuses"></param>
-        private AnkhStatus(SvnStatus allStatuses)
+        private SvnStatusData(SvnStatus allStatuses)
         {
             _localNodeStatus = allStatuses;
             _localTextStatus = SvnStatus.None;
@@ -93,12 +93,12 @@ namespace Ankh
         }
 
         #region Static instances
-        readonly static AnkhStatus _unversioned = new AnkhStatus(SvnStatus.NotVersioned);
-        readonly static AnkhStatus _none = new AnkhStatus(SvnStatus.None);
+        readonly static SvnStatusData _unversioned = new SvnStatusData(SvnStatus.NotVersioned);
+        readonly static SvnStatusData _none = new SvnStatusData(SvnStatus.None);
         /// <summary>
         /// Default status for nodes which do exist but are not managed
         /// </summary>
-        internal static AnkhStatus NotVersioned
+        internal static SvnStatusData NotVersioned
         {
             get { return _unversioned; }
         }
@@ -106,7 +106,7 @@ namespace Ankh
         /// <summary>
         /// Default status for nodes which don't exist and are not managed
         /// </summary>
-        internal static AnkhStatus NotExisting
+        internal static SvnStatusData NotExisting
         {
             get { return _none; }
         }
