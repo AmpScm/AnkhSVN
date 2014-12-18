@@ -149,7 +149,7 @@ namespace Ankh.Scc.StatusCache
             }
         }
 
-        SvnItem CreateItem(string fullPath, AnkhStatus status)
+        SvnItem CreateItem(string fullPath, SvnStatusData status)
         {
             return new SvnItem(this, fullPath, status);
         }
@@ -533,7 +533,7 @@ namespace Ankh.Scc.StatusCache
             }
         }
 
-        static bool NewFullPathOk(SvnItem item, string fullPath, AnkhStatus status)
+        static bool NewFullPathOk(SvnItem item, string fullPath, SvnStatusData status)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
@@ -572,7 +572,7 @@ namespace Ankh.Scc.StatusCache
         {
             // Note: There is a lock(_lock) around this in our caller
 
-            AnkhStatus status = new AnkhStatus(e);
+            SvnStatusData status = new SvnStatusData(e);
             string path = e.FullPath; // Fully normalized
 
             SvnItem item;

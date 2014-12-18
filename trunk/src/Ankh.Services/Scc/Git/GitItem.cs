@@ -22,7 +22,7 @@ namespace Ankh.Scc
 
         void RefreshTo(GitItem newItem);
 
-        void RefreshTo(AnkhStatus status);
+        void RefreshTo(SvnStatusData status);
     }
 }
 
@@ -46,7 +46,7 @@ namespace Ankh
             RefreshTo(null);
         }
 
-        public GitItem(IGitStatusCache context, string fullPath, AnkhStatus status)
+        public GitItem(IGitStatusCache context, string fullPath, SvnStatusData status)
         {
             _context = context;
             _fullPath = fullPath;
@@ -69,7 +69,7 @@ namespace Ankh
         }
 
 
-        private void RefreshTo(AnkhStatus status)
+        private void RefreshTo(SvnStatusData status)
         {
             _cookie = NextCookie();
             throw new NotImplementedException();
@@ -250,7 +250,7 @@ namespace Ankh
         }
 
 
-        void IGitItemUpdate.RefreshTo(AnkhStatus status)
+        void IGitItemUpdate.RefreshTo(SvnStatusData status)
         {
             throw new NotImplementedException();
         }

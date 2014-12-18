@@ -61,7 +61,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             bool exists = SvnItem.Exists;
             string name = string.IsNullOrEmpty(SvnItem.Name) ? SvnItem.FullPath : SvnItem.Name;
 
-            AnkhStatus status = SvnItem.Status;
+            SvnStatusData status = SvnItem.Status;
             PendingChangeKind kind = PendingChange.CombineStatus(status.LocalNodeStatus, status.LocalTextStatus, status.LocalPropertyStatus, SvnItem.IsTreeConflicted, SvnItem);
 
             if (_chg == null || _chg.State != kind)
