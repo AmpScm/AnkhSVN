@@ -151,7 +151,7 @@ namespace Ankh.GitScc.StatusCache
             }
         }
 #endif
-        GitItem CreateItem(string fullPath, SvnStatusData status)
+        GitItem CreateItem(string fullPath, GitStatusData status)
         {
             return new GitItem(this, fullPath, status);
         }
@@ -502,7 +502,7 @@ namespace Ankh.GitScc.StatusCache
             }
         }
 
-        static bool NewFullPathOk(GitItem item, string fullPath, SvnStatusData status)
+        static bool NewFullPathOk(GitItem item, string fullPath, GitStatusData status)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
@@ -542,7 +542,7 @@ namespace Ankh.GitScc.StatusCache
         {
             // Note: There is a lock(_lock) around this in our caller
 
-            SvnStatusData status = new SvnStatusData(null);
+            GitStatusData status = new GitStatusData(e);
             string path = e.FullPath; // Fully normalized
 
             GitItem item;

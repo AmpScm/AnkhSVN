@@ -89,6 +89,7 @@
     <Compile Include="Scc\Git\GitDirectory.cs" />
     <Compile Include="Scc\Git\GitItem.cs" />
     <Compile Include="Scc\Git\GitItem.State.cs" />
+    <Compile Include="Scc\Git\GitStatusData.cs" />
     <Compile Include="Scc\IAnkhGitSccService.cs" />
     <Compile Include="Scc\IAnkhProjectDocumentTracker.cs" />
     <Compile Include="Scc\IAnkhSccProviderEvents.cs" />
@@ -125,6 +126,7 @@
       <DependentUpon>SccProvider.cs</DependentUpon>
     </Compile>
     <Compile Include="Scc\Git\GitItemsEventArgs.cs" />
+    <Compile Include="Scc\NoSccStatus.cs" />
     <Compile Include="Selection\SccHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
     <Compile Include="VSAssemblies.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Ankh.Scc;
 using SharpSvn;
@@ -22,7 +23,7 @@ namespace Ankh.Scc
 
         void RefreshTo(GitItem newItem);
 
-        void RefreshTo(SvnStatusData status);
+        void RefreshTo(GitStatusData status);
     }
 }
 
@@ -36,17 +37,34 @@ namespace Ankh
     {
         readonly IGitStatusCache _context;
         readonly string _fullPath;
+
+        enum XBool : sbyte
+        {
+            None = 0, // The three fastest values to check for most CPU's
+            True = -1,
+            False = 1
+        }
+
+        GitStatusData _status;
+        bool _enqueued;
+
+        static readonly Queue<GitItem> _stateChanged = new Queue<GitItem>();
+        static bool _scheduled;
+
+        ISvnWcReference _workingCopy;
+        XBool _statusDirty; // updating, dirty, dirty 
+        bool _ticked;
         int _cookie;
+        DateTime _modified;
+        bool _sccExcluded;
 
         public GitItem(IGitStatusCache context, string fullPath)
         {
             _context = context;
             _fullPath = fullPath;
-
-            RefreshTo(null);
         }
 
-        public GitItem(IGitStatusCache context, string fullPath, SvnStatusData status)
+        public GitItem(IGitStatusCache context, string fullPath, GitStatusData status)
         {
             _context = context;
             _fullPath = fullPath;
@@ -69,7 +87,7 @@ namespace Ankh
         }
 
 
-        private void RefreshTo(SvnStatusData status)
+        private void RefreshTo(GitStatusData status)
         {
             _cookie = NextCookie();
             throw new NotImplementedException();
@@ -226,8 +244,6 @@ namespace Ankh
         }
 
         
-
-
         void IGitItemUpdate.RefreshTo(NoSccStatus noSccStatus, SvnNodeKind svnNodeKind)
         {
             throw new NotImplementedException();
@@ -239,18 +255,31 @@ namespace Ankh
             throw new NotImplementedException();
         }
 
-        void IGitItemUpdate.RefreshTo(GitItem newItem)
+        void IGitItemUpdate.RefreshTo(GitItem lead)
         {
-            throw new NotImplementedException();
+            if (lead == null)
+                throw new ArgumentNullException("lead");
+            else if (lead._status == null)
+                throw new InvalidOperationException("Lead status = null");
+
+            _status = lead._status;
+            _statusDirty = lead._statusDirty;
+
+            //SvnItemState current = lead._currentState;
+            //SvnItemState valid = lead._validState;
+
+            //SetState(current & valid, (~current) & valid);
+            _ticked = false;
+            _modified = lead._modified;
+            _cookie = NextCookie(); // Status 100% the same, but changed... Cookies are free ;)
+        }
+
+        void IGitItemUpdate.RefreshTo(GitStatusData newData)
+        {
+            RefreshTo(newData);
         }
 
         public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        void IGitItemUpdate.RefreshTo(SvnStatusData status)
         {
             throw new NotImplementedException();
         }
