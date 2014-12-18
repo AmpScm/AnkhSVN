@@ -22,14 +22,6 @@ using System.Diagnostics;
 
 namespace Ankh.Scc
 {
-    public enum NoSccStatus
-    {
-        Unknown,
-        NotVersioned,
-        NotVersionable,
-        NotExisting
-    }
-
     [DebuggerDisplay("Content={LocalContentStatus}, Property={LocalPropertyStatus}, Uri={Uri}")]
     public sealed class SvnStatusData
     {
