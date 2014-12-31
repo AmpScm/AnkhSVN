@@ -317,16 +317,18 @@ namespace Ankh.VSPackage
             catch (EndOfStreamException ex)
             {
                 // Ignore: Old version? Broken Solution File? (Common error)
-                return Marshal.GetHRForException(ex);
+                return VSErr.S_OK;;
             }
             catch (Exception ex)
             {
+#if DEBUG
                 IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
 
                 if (handler != null)
                     handler.OnError(ex);
+#endif
 
-                return Marshal.GetHRForException(ex);
+                return VSErr.S_OK;
             }
             finally
             {
