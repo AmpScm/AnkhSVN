@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ankh.Scc.Engine;
 
 namespace Ankh.Scc
 {
-    public interface IGitStatusCache : IAnkhServiceProvider
+    public interface IGitStatusCache : ISccStatusCache<GitItem>
     {
-        /// <summary>
-        /// Gets the <see cref="Ankh.GitItem"/> with the specified path.
-        /// </summary>
-        /// <value></value>
-        GitItem this[string path] { get; }
-
         /// <summary>
         /// Marks the specified path dirty
         /// </summary>
@@ -31,16 +26,6 @@ namespace Ankh.Scc
 
         void MarkDirtyRecursive(string path);
 
-        IList<GitItem> GetCachedBelow(string path);
-        IList<GitItem> GetCachedBelow(IEnumerable<string> paths);
-
-
-        /// <summary>
-        /// Like this[], but without the normalization step
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        GitItem GetAlreadyNormalizedItem(string path);
 
         /// <summary>
         /// Updates the in-solution and Scc excluded state
@@ -49,5 +34,7 @@ namespace Ankh.Scc
         /// <param name="inSolution"></param>
         /// <param name="sccExcluded"></param>
         void SetSolutionContained(string path, bool inSolution, bool sccExcluded);
+
+        void RefreshItem(GitItem gitItem, SharpSvn.SvnNodeKind svnNodeKind);
     }
 }

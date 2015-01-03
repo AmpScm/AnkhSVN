@@ -322,7 +322,7 @@ namespace Ankh
                 {
                     string propVal;
 
-                    if (client.TryGetProperty(_fullPath, SvnPropertyNames.SvnNeedsLock, out propVal))
+                    if (client.TryGetProperty(FullPath, SvnPropertyNames.SvnNeedsLock, out propVal))
                     {
                         mustLock = propVal != null; // Value should be equal to SvnPropertyNames.SvnBooleanValue
                     }
