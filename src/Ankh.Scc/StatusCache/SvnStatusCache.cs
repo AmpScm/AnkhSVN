@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Ankh.Commands;
+using Ankh.Scc.Engine;
 using SharpSvn;
 
 namespace Ankh.Scc.StatusCache
@@ -29,7 +30,7 @@ namespace Ankh.Scc.StatusCache
     /// </summary>
     [GlobalService(typeof(ISvnStatusCache), AllowPreRegistered = true)]
     [GlobalService(typeof(ISvnItemChange), AllowPreRegistered = true)]
-    sealed partial class FileStatusCache : AnkhService, Ankh.Scc.ISvnStatusCache, ISvnItemChange
+    sealed partial class SvnStatusCache : AnkhService, Ankh.Scc.ISvnStatusCache, ISvnItemChange
     {
         readonly object _lock = new object();
         readonly SvnClient _client;
@@ -38,7 +39,7 @@ namespace Ankh.Scc.StatusCache
         IAnkhCommandService _commandService;
         bool _enableUpgrade;
 
-        public FileStatusCache(IAnkhServiceProvider context)
+        public SvnStatusCache(IAnkhServiceProvider context)
             : base(context)
         {
             if (context == null)
@@ -602,7 +603,7 @@ namespace Ankh.Scc.StatusCache
         /// Marks the specified file dirty
         /// </summary>
         /// <param name="file"></param>
-        void Ankh.Scc.ISvnStatusCache.MarkDirty(string path)
+        void ISccStatusCache.MarkDirty(string path)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
@@ -620,7 +621,7 @@ namespace Ankh.Scc.StatusCache
             }
         }
 
-        void Ankh.Scc.ISvnStatusCache.MarkDirtyRecursive(string path)
+        void ISccStatusCache.MarkDirtyRecursive(string path)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
@@ -685,7 +686,7 @@ namespace Ankh.Scc.StatusCache
         /// Marks the specified file dirty
         /// </summary>
         /// <param name="file"></param>
-        void Ankh.Scc.ISvnStatusCache.MarkDirty(IEnumerable<string> paths)
+        void ISccStatusCache.MarkDirty(IEnumerable<string> paths)
         {
             if (paths == null)
                 throw new ArgumentNullException("paths");

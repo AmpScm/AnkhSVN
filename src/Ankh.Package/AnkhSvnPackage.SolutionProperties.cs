@@ -314,7 +314,7 @@ namespace Ankh.VSPackage
                 }
                 return VSErr.S_OK; // Our data is in subversion properties
             }
-            catch (EndOfStreamException ex)
+            catch (EndOfStreamException)
             {
                 // Ignore: Old version? Broken Solution File? (Common error)
                 return VSErr.S_OK;;
