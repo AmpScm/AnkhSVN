@@ -92,6 +92,7 @@
     <Compile Include="AnkhGitSccModule.cs" />
     <Compile Include="GitSccProjectMap.cs" />
     <Compile Include="GitSccProvider.cs" />
+    <Compile Include="GitSccProvider.Glyphs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -77,7 +77,8 @@ namespace Ankh
             _context = context;
             _fullPath = fullPath;
 
-            RefreshTo(status, nodeKind);
+            if (status != NoSccStatus.Unknown)
+                RefreshTo(status, nodeKind);
         }
 
         private void RefreshTo(NoSccStatus status, SvnNodeKind nodeKind)
