@@ -124,11 +124,6 @@ namespace Ankh.GitScc
             get { return false; }
         }
 
-        public override AnkhGlyph GetPathGlyph(string path)
-        {
-            return AnkhGlyph.Added;
-        }
-
         public void SerializeSccTranslateData(System.IO.Stream store, bool writeData)
         {
             //throw new NotImplementedException();
