@@ -1,12 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ankh.Scc.Engine
 {
-    public interface ISccStatusCache<T> : IAnkhServiceProvider
+    public interface ISccStatusCache : IAnkhServiceProvider
+    {
+        /// <summary>
+        /// Marks the specified path dirty
+        /// </summary>
+        /// <param name="path">A file of directory</param>
+        /// <remarks>If the file is in the cache</remarks>
+        void MarkDirty(string path);
+
+        /// <summary>
+        /// Marks the specified paths dirty
+        /// </summary>
+        /// <param name="paths">The paths.</param>
+        void MarkDirty(IEnumerable<string> paths);
+
+        void MarkDirtyRecursive(string path);
+
+
+        /// <summary>
+        /// Clears the whole statuscache; called when closing the solution
+        /// </summary>
+        void ClearCache();
+    }
+
+    public interface ISccStatusCache<T> : ISccStatusCache
         where T : SccItem<T>
     {
         T this[string path] { get; }

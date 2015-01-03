@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.IO;
 using Ankh.Commands;
 using Ankh.Scc;
+using Ankh.Scc.Engine;
 using Ankh.Scc.Git;
 using SharpGit;
 using SharpSvn;
@@ -573,7 +574,7 @@ namespace Ankh.GitScc.StatusCache
         /// Marks the specified file dirty
         /// </summary>
         /// <param name="file"></param>
-        void Ankh.Scc.IGitStatusCache.MarkDirty(string path)
+        void ISccStatusCache.MarkDirty(string path)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
@@ -591,7 +592,7 @@ namespace Ankh.GitScc.StatusCache
             }
         }
 
-        void Ankh.Scc.IGitStatusCache.MarkDirtyRecursive(string path)
+        void ISccStatusCache.MarkDirtyRecursive(string path)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
@@ -656,7 +657,7 @@ namespace Ankh.GitScc.StatusCache
         /// Marks the specified file dirty
         /// </summary>
         /// <param name="file"></param>
-        void Ankh.Scc.IGitStatusCache.MarkDirty(IEnumerable<string> paths)
+        void ISccStatusCache.MarkDirty(IEnumerable<string> paths)
         {
             if (paths == null)
                 throw new ArgumentNullException("paths");

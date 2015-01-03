@@ -15,24 +15,6 @@ namespace Ankh.Scc
     public interface ISvnStatusCache : ISccStatusCache<SvnItem>
     {
         /// <summary>
-        /// Marks the specified path dirty
-        /// </summary>
-        /// <param name="path">A file of directory</param>
-        /// <remarks>If the file is in the cache</remarks>
-        void MarkDirty(string path);
-
-        /// <summary>
-        /// Marks the specified paths dirty
-        /// </summary>
-        /// <param name="paths">The paths.</param>
-        void MarkDirty(IEnumerable<string> paths);
-
-        /// <summary>
-        /// Clears the whole statuscache; called when closing the solution
-        /// </summary>
-        void ClearCache();
-
-        /// <summary>
         /// Called from <see cref="SvnItem.Refresh()"/>
         /// </summary>
         /// <param name="item">The item.</param>
@@ -52,7 +34,6 @@ namespace Ankh.Scc
         /// <returns></returns>
         SvnDirectory GetDirectory(string path);
 
-        void MarkDirtyRecursive(string path);
 
         bool EnableUpgradeCommand { get; }
 

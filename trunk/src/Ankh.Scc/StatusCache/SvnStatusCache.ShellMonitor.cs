@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.Scc.StatusCache
 {
-    partial class FileStatusCache
+    partial class SvnStatusCache
     {
         NotifyWindow _notifyWindow;
         uint _notifyCookie;
@@ -203,8 +203,8 @@ namespace Ankh.Scc.StatusCache
 
         sealed class NotifyWindow : NativeWindow, IDisposable
         {
-            readonly FileStatusCache _cache;
-            public NotifyWindow(FileStatusCache cache)
+            readonly SvnStatusCache _cache;
+            public NotifyWindow(SvnStatusCache cache)
             {
                 _cache = cache;
                 CreateParams cp = new CreateParams();

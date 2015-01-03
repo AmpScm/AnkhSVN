@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Ankh.Commands;
+using Ankh.Scc;
 using Ankh.Scc.Git;
 
 namespace Ankh
@@ -40,7 +41,7 @@ namespace Ankh
                 Debug.Assert((~_validState & MaskRefreshTo) == 0, "RefreshMe() set all attributes it should");
             }
 
-            /*if (0 != (unavailable & MaskGetAttributes))
+            if (0 != (unavailable & MaskGetAttributes))
             {
                 UpdateAttributeInfo();
 
@@ -67,7 +68,7 @@ namespace Ankh
                 Debug.Assert((~_validState & MaskDocumentInfo) == 0, "UpdateDocumentInfo() set all attributes it should");
             }
 
-            if (0 != (unavailable & MaskVersionable))
+            /*if (0 != (unavailable & MaskVersionable))
             {
                 UpdateVersionable();
 
@@ -189,17 +190,108 @@ namespace Ankh
             return TryGetState(get, out value);
         }
 
+        #region Attribute Info
+        const GitItemState MaskGetAttributes = GitItemState.Exists | GitItemState.ReadOnly | GitItemState.IsDiskFile | GitItemState.IsDiskFolder;
+
+        void UpdateAttributeInfo()
+        {
+            // One call of the kernel's GetFileAttributesW() gives us most info we need
+
+            uint value = NativeMethods.GetFileAttributes(FullPath);
+
+            if (value == NativeMethods.INVALID_FILE_ATTRIBUTES)
+            {
+                // File does not exist / no rights, etc.
+
+                SetState(GitItemState.None,
+                    GitItemState.Exists | GitItemState.ReadOnly | GitItemState.Versionable | GitItemState.IsDiskFolder | GitItemState.IsDiskFile);
+
+                return;
+            }
+
+            GitItemState set = GitItemState.Exists;
+            GitItemState unset = GitItemState.None;
+
+            if ((value & NativeMethods.FILE_ATTRIBUTE_READONLY) != 0)
+                set |= GitItemState.ReadOnly;
+            else
+                unset = GitItemState.ReadOnly;
+
+            if ((value & NativeMethods.FILE_ATTRIBUTE_DIRECTORY) != 0)
+            {
+                unset |= GitItemState.IsDiskFile | GitItemState.ReadOnly;
+                set = GitItemState.IsDiskFolder | (set & ~GitItemState.ReadOnly); // Don't set readonly
+            }
+            else
+            {
+                set |= GitItemState.IsDiskFile;
+                unset |= GitItemState.IsDiskFolder;
+            }
+
+            SetState(set, unset);
+        }
+        #endregion
+
+        #region DocumentInfo
+
+        const GitItemState MaskDocumentInfo = GitItemState.DocumentDirty;
+
+        void UpdateDocumentInfo()
+        {
+            IAnkhOpenDocumentTracker dt = _context.GetService<IAnkhOpenDocumentTracker>();
+
+            if (dt == null)
+            {
+                // We /must/ make the state not dirty
+                SetState(GitItemState.None, GitItemState.DocumentDirty);
+                return;
+            }
+
+            if (dt.IsDocumentDirty(FullPath, true))
+                SetState(GitItemState.DocumentDirty, GitItemState.None);
+            else
+                SetState(GitItemState.None, GitItemState.DocumentDirty);
+        }
+
+        #endregion
+
+        #region Solution Info
+        const GitItemState MaskUpdateSolution = GitItemState.InSolution;
+        void UpdateSolutionInfo()
+        {
+            IProjectFileMapper pfm = _context.GetService<IProjectFileMapper>();
+            bool inSolution = false;
+
+            if (pfm != null)
+            {
+                inSolution = pfm.ContainsPath(FullPath);
+                _sccExcluded = pfm.IsSccExcluded(FullPath);
+            }
+
+            if (inSolution)
+                SetState(GitItemState.InSolution, GitItemState.None);
+            else
+                SetState(GitItemState.None, GitItemState.InSolution);
+        }
+
+        void IGitItemStateUpdate.SetSolutionContained(bool inSolution, bool sccExcluded)
+        {
+            if (inSolution)
+                SetState(GitItemState.InSolution, GitItemState.None);
+            else
+                SetState(GitItemState.None, GitItemState.InSolution);
+
+            _sccExcluded = sccExcluded;
+        }
+
+        #endregion
+
         IList<GitItem> IGitItemStateUpdate.GetUpdateQueueAndClearScheduled()
         {
             throw new NotImplementedException();
         }
 
         void IGitItemStateUpdate.SetDocumentDirty(bool value)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IGitItemStateUpdate.SetSolutionContained(bool inSolution, bool sccExcluded)
         {
             throw new NotImplementedException();
         }
