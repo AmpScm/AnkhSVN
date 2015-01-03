@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Ankh.Scc.Engine;
+using Ankh.Scc.Git;
 
 namespace Ankh.Scc
 {
@@ -14,13 +16,12 @@ namespace Ankh.Scc
         bool ScheduleForCleanup { get; }
     }
 
-    public sealed class GitDirectory : KeyedCollection<string, GitItem>, IGitDirectoryUpdate
+    public sealed class GitDirectory : SccDirectory<GitItem>, IGitDirectoryUpdate
     {
         readonly IAnkhServiceProvider _context;
-        readonly string _fullPath;
 
         public GitDirectory(IAnkhServiceProvider context, string fullPath)
-            : base(StringComparer.OrdinalIgnoreCase)
+            : base(fullPath)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -28,12 +29,6 @@ namespace Ankh.Scc
                 throw new ArgumentNullException("fullPath");
 
             _context = context;
-            _fullPath = fullPath;
-        }
-
-        protected override string GetKeyForItem(GitItem item)
-        {
-            return item.FullPath;
         }
 
         /// <summary>
@@ -45,8 +40,8 @@ namespace Ankh.Scc
             [DebuggerStepThrough]
             get
             {
-                if (Contains(_fullPath))
-                    return this[_fullPath]; // 99.9% case
+                if (Contains(FullPath))
+                    return this[FullPath]; // 99.9% case
                 else
                 {
                     // Get the item from the status cache
@@ -55,32 +50,16 @@ namespace Ankh.Scc
                     if (cache == null)
                         return null;
 
-                    GitItem item = cache[_fullPath];
+                    GitItem item = cache[FullPath];
 
                     if (item != null)
                     {
-                        if (!Contains(_fullPath))
+                        if (!Contains(FullPath))
                             Add(item); // In most cases the file is added by the cache
                     }
 
                     return item;
                 }
-            }
-        }
-
-        /// <summary>
-        /// Gets the full path of the directory
-        /// </summary>
-        /// <value>The full path.</value>
-        public string FullPath
-        {
-            [DebuggerStepThrough]
-            get
-            {
-                if (Contains(_fullPath))
-                    return this[_fullPath].FullPath;
-                else
-                    return _fullPath;
             }
         }
 

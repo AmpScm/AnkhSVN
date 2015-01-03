@@ -108,7 +108,7 @@ namespace Ankh.Scc.StatusCache
             if (svnItem == null)
                 throw new ArgumentNullException("svnItem");
 
-            Debug.Assert(svnItem.NodeKind == SvnNodeKind.Directory);
+            Debug.Assert(svnItem.IsDirectory);
 
             // We retrieve nesting information by walking the entry data of the parent directory
             lock (_lock)

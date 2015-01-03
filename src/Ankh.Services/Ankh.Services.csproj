@@ -86,9 +86,12 @@
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
     <Compile Include="RepositoryProvider\IAnkhRepositoryProviderService.cs" />
+    <Compile Include="Scc\Engine\ISccStatusCache.cs" />
+    <Compile Include="Scc\Engine\SccDirectory.cs" />
     <Compile Include="Scc\Git\GitDirectory.cs" />
     <Compile Include="Scc\Git\GitItem.cs" />
     <Compile Include="Scc\Git\GitItem.State.cs" />
+    <Compile Include="Scc\Git\GitItemState.cs" />
     <Compile Include="Scc\Git\GitStatusData.cs" />
     <Compile Include="Scc\IAnkhGitSccService.cs" />
     <Compile Include="Scc\IAnkhProjectDocumentTracker.cs" />
@@ -106,6 +109,7 @@
     <Compile Include="Scc\ProjectMap\SccProjectFile.cs" />
     <Compile Include="Scc\ProjectMap\SccProjectFileCollection.cs" />
     <Compile Include="Scc\ProjectMap\SccProjectFileReference.cs" />
+    <Compile Include="Scc\Engine\SccItem.cs" />
     <Compile Include="Scc\SccProjectMap.cs" />
     <Compile Include="Scc\SccProjectMap.FileMap.cs">
     </Compile>
@@ -253,6 +257,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.Services.snk" />
+    <Compile Include="Scc\Engine\SccItem.LongPath.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ankh.Services.wxs" />

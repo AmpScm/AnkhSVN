@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Ankh.Scc;
+using Ankh.Scc.Git;
 using SharpSvn;
 
-namespace Ankh.Scc
+namespace Ankh.Scc.Git
 {
     public interface IGitItemUpdate
     {
@@ -24,6 +25,12 @@ namespace Ankh.Scc
         void RefreshTo(GitItem newItem);
 
         void RefreshTo(GitStatusData status);
+
+        void SetState(GitItemState set, GitItemState unset);
+
+        void SetDirty(GitItemState dirty);
+
+        bool TryGetState(GitItemState get, out GitItemState value);
     }
 }
 
@@ -33,16 +40,14 @@ namespace Ankh
     /// Represents a version controlled path on disk, caching its status
     /// </summary>
     [DebuggerDisplay("Path={FullPath}")]
-    public sealed partial class GitItem : IGitItemUpdate, IEquatable<GitItem>
+    public sealed partial class GitItem : Ankh.Scc.Engine.SccItem<GitItem>, IGitItemUpdate
     {
         readonly IGitStatusCache _context;
-        readonly string _fullPath;
 
-        enum XBool : sbyte
+        IGitStatusCache StatusCache
         {
-            None = 0, // The three fastest values to check for most CPU's
-            True = -1,
-            False = 1
+            [DebuggerStepThrough]
+            get { return _context; }
         }
 
         GitStatusData _status;
@@ -51,31 +56,24 @@ namespace Ankh
         static readonly Queue<GitItem> _stateChanged = new Queue<GitItem>();
         static bool _scheduled;
 
-        ISvnWcReference _workingCopy;
         XBool _statusDirty; // updating, dirty, dirty 
         bool _ticked;
         int _cookie;
         DateTime _modified;
         bool _sccExcluded;
 
-        public GitItem(IGitStatusCache context, string fullPath)
-        {
-            _context = context;
-            _fullPath = fullPath;
-        }
-
         public GitItem(IGitStatusCache context, string fullPath, GitStatusData status)
+            : base(fullPath)
         {
             _context = context;
-            _fullPath = fullPath;
 
             RefreshTo(status);
         }
 
         public GitItem(IGitStatusCache context, string fullPath, NoSccStatus status, SvnNodeKind nodeKind)
+            : base(fullPath)
         {
             _context = context;
-            _fullPath = fullPath;
 
             if (status != NoSccStatus.Unknown)
                 RefreshTo(status, nodeKind);
@@ -100,11 +98,7 @@ namespace Ankh
             get { return _context; }
         }
 
-        public string FullPath
-        {
-            [DebuggerStepThrough]
-            get { return _fullPath; }
-        }
+        #region Comparison
         /// <summary>
         /// Implements the operator ==.
         /// </summary>
@@ -135,44 +129,16 @@ namespace Ankh
             return !(one == other);
         }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.</param>
-        /// <returns>
-        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
-        /// </returns>
-        /// <exception cref="T:System.NullReferenceException">
-        /// The <paramref name="obj"/> parameter is null.
-        /// </exception>
         public override bool Equals(object obj)
         {
-            return Equals(obj as GitItem);
+            return base.Equals(obj);
         }
 
-        /// <summary>
-        /// Equalses the specified obj.
-        /// </summary>
-        /// <param name="obj">The obj.</param>
-        /// <returns></returns>
-        public bool Equals(GitItem obj)
-        {
-            if ((object)obj == null)
-                return false;
-
-            return StringComparer.OrdinalIgnoreCase.Equals(obj.FullPath, FullPath);
-        }
-
-        /// <summary>
-        /// Serves as a hash function for a particular type.
-        /// </summary>
-        /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
-        /// </returns>
         public override int GetHashCode()
         {
-            return StringComparer.OrdinalIgnoreCase.GetHashCode(FullPath);
+            return base.GetHashCode();
         }
+        #endregion
 
         /// <summary>
         /// Gets a value which is incremented everytime the status was changed.
@@ -182,23 +148,6 @@ namespace Ankh
         public int ChangeCookie
         {
             get { return _cookie; }
-        }
-
-        static int _globalCookieBox = 0;
-
-        /// <summary>
-        /// Gets a new unique cookie
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>Threadsafe provider of cookie values</remarks>
-        static int NextCookie()
-        {
-            int n = System.Threading.Interlocked.Increment(ref _globalCookieBox); // Wraps on Int32.MaxValue
-
-            if (n != 0)
-                return n;
-            else
-                return NextCookie(); // 1 in 4 billion times
         }
 
         bool IGitItemUpdate.IsItemTicked()
@@ -218,21 +167,21 @@ namespace Ankh
             throw new NotImplementedException();
         }
 
-        public bool IsDirectory
+        void RefreshStatus()
         {
-            get { return false; }
-        }
+            _statusDirty = XBool.None;
+            IGitStatusCache statusCache = StatusCache;
 
-        public bool IsVersioned
-        {
-            get { return false; }
+            try
+            {
+                statusCache.RefreshItem(this, IsFile ? SvnNodeKind.File : SvnNodeKind.Directory); // We can check this less expensive than the statuscache!
+            }
+            finally
+            {
+                Debug.Assert(_statusDirty == XBool.False, "No longer dirty after refresh", string.Format("Path = {0}", FullPath));
+                _statusDirty = XBool.False;
+            }
         }
-
-        public bool Exists
-        {
-            get { return false; }
-        }
-
 
         bool IGitItemUpdate.IsStatusClean()
         {
@@ -266,10 +215,10 @@ namespace Ankh
             _status = lead._status;
             _statusDirty = lead._statusDirty;
 
-            //SvnItemState current = lead._currentState;
-            //SvnItemState valid = lead._validState;
+            GitItemState current = lead._currentState;
+            GitItemState valid = lead._validState;
 
-            //SetState(current & valid, (~current) & valid);
+            SetState(current & valid, (~current) & valid);
             _ticked = false;
             _modified = lead._modified;
             _cookie = NextCookie(); // Status 100% the same, but changed... Cookies are free ;)
@@ -290,9 +239,68 @@ namespace Ankh
             throw new NotImplementedException();
         }
 
-        public bool IsBelowPath(string path)
+        public bool IsBelowPath(string root)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(root))
+                throw new ArgumentNullException("root");
+
+            return SvnItem.IsBelowRoot(FullPath, root);
+        }
+
+        bool TryGetState(GitItemState mask, out GitItemState result)
+        {
+            if ((mask & _validState) != mask)
+            {
+                result = GitItemState.None;
+                return false;
+            }
+
+            result = _currentState & mask;
+            return true;
+        }
+
+        public override SvnNodeKind NodeKind
+        {
+            get { return IsFile ? SvnNodeKind.File : (IsDirectory ? SvnNodeKind.Directory : SvnNodeKind.None); }
+        }
+
+        /// <summary>
+        /// Is this item versioned?
+        /// </summary>
+        public override bool IsVersioned
+        {
+            get { return 0 != GetState(GitItemState.Versioned); }
+        }
+
+        /// <summary>
+        /// Is this resource modified; implies the item is versioned
+        /// </summary>
+        public override bool IsModified
+        {
+            get
+            {
+                return GetState(GitItemState.SvnDirty) != 0;
+            }
+        }
+
+        public override bool IsVersionable
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override bool Exists
+        {
+            get { return true; }
+        }
+
+        public override bool IsDirectory
+        {
+            get { return true; }
+        }
+
+        public override bool IsFile
+        {
+            get { return true; }
         }
     }
 }

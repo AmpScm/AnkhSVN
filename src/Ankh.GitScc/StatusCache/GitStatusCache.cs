@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.IO;
 using Ankh.Commands;
 using Ankh.Scc;
+using Ankh.Scc.Git;
 using SharpGit;
 using SharpSvn;
 
@@ -796,6 +797,11 @@ namespace Ankh.GitScc.StatusCache
 
             if (GitItemsChanged != null)
                 GitItemsChanged(this, e);
+        }
+
+        public void RefreshItem(GitItem gitItem, SvnNodeKind svnNodeKind)
+        {
+            throw new NotImplementedException();
         }
     }
 }

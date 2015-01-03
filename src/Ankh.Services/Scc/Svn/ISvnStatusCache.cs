@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Ankh.Scc.Engine;
 using SharpSvn;
 
 namespace Ankh.Scc
@@ -11,14 +12,8 @@ namespace Ankh.Scc
     /// 
     /// </summary>
     /// <remarks>The default implementation of this service is thread safe</remarks>
-    public interface ISvnStatusCache : IAnkhServiceProvider
+    public interface ISvnStatusCache : ISccStatusCache<SvnItem>
     {
-        /// <summary>
-        /// Gets the <see cref="Ankh.SvnItem"/> with the specified path.
-        /// </summary>
-        /// <value></value>
-        SvnItem this[string path] { get; }
-
         /// <summary>
         /// Marks the specified path dirty
         /// </summary>
@@ -59,9 +54,6 @@ namespace Ankh.Scc
 
         void MarkDirtyRecursive(string path);
 
-        IList<SvnItem> GetCachedBelow(string path);
-        IList<SvnItem> GetCachedBelow(IEnumerable<string> paths);
-
         bool EnableUpgradeCommand { get; }
 
         /// <summary>
@@ -71,13 +63,6 @@ namespace Ankh.Scc
         /// <param name="inSolution"></param>
         /// <param name="sccExcluded"></param>
         void SetSolutionContained(string path, bool inSolution, bool sccExcluded);
-
-        /// <summary>
-        /// Like this[], but without the normalization step
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        SvnItem GetAlreadyNormalizedItem(string path);
 
         void ResetUpgradeWarning();
     }

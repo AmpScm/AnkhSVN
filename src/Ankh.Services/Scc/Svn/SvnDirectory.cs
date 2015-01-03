@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Ankh.Scc.Engine;
 
 namespace Ankh.Scc
 {
@@ -40,28 +41,20 @@ namespace Ankh.Scc
     /// 
     /// <para>Note: This tells us that all subdirectories are contained in the parent and in their own <see cref="SvnDirectory"/></para>
     /// </remarks>
-    public sealed class SvnDirectory : KeyedCollection<string, SvnItem>, ISvnDirectoryUpdate
+    public sealed class SvnDirectory : SccDirectory<SvnItem>, ISvnDirectoryUpdate
     {
         readonly IAnkhServiceProvider _context;
-        readonly string _fullPath;
         bool _needsUpgrade;
 
         public SvnDirectory(IAnkhServiceProvider context, string fullPath)
-            : base(StringComparer.OrdinalIgnoreCase)
+            : base(fullPath)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            else if (string.IsNullOrEmpty(fullPath))
-                throw new ArgumentNullException("fullPath");
 
             _context = context;
-            _fullPath = fullPath;
         }
 
-        protected override string GetKeyForItem(SvnItem item)
-        {
-            return item.FullPath;
-        }
 
         /// <summary>
         /// Gets the directory item
@@ -72,8 +65,8 @@ namespace Ankh.Scc
             [DebuggerStepThrough]
             get 
             {
-                if (Contains(_fullPath))
-                    return this[_fullPath]; // 99.9% case
+                if (Contains(FullPath))
+                    return this[FullPath]; // 99.9% case
                 else
                 {
                     // Get the item from the status cache
@@ -82,32 +75,16 @@ namespace Ankh.Scc
                     if (cache == null)
                         return null;
 
-                    SvnItem item = cache[_fullPath];
+                    SvnItem item = cache[FullPath];
 
                     if (item != null)
                     {
-                        if(!Contains(_fullPath))
+                        if(!Contains(FullPath))
                             Add(item); // In most cases the file is added by the cache
                     }
 
                     return item;
                 }
-            }
-        }
-
-        /// <summary>
-        /// Gets the full path of the directory
-        /// </summary>
-        /// <value>The full path.</value>
-        public string FullPath
-        {
-            [DebuggerStepThrough]
-            get 
-            {
-                if (Contains(_fullPath))
-                    return this[_fullPath].FullPath;
-                else
-                    return _fullPath;
             }
         }
 

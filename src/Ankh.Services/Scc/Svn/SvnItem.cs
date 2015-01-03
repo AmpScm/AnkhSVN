@@ -54,17 +54,9 @@ namespace Ankh
     /// Represents a version controlled path on disk, caching its status
     /// </summary>
     [DebuggerDisplay("Path={FullPath}")]
-    public sealed partial class SvnItem : ISvnItemUpdate, ISvnWcReference, IEquatable<SvnItem>
+    public sealed partial class SvnItem : Ankh.Scc.Engine.SccItem<SvnItem>, ISvnItemUpdate, ISvnWcReference, IEquatable<SvnItem>
     {
         readonly ISvnStatusCache _context;
-        readonly string _fullPath;
-
-        enum XBool : sbyte
-        {
-            None = 0, // The three fastest values to check for most CPU's
-            True = -1,
-            False = 1
-        }
 
         SvnStatusData _status;
         bool _enqueued;
@@ -80,16 +72,14 @@ namespace Ankh
         bool _sccExcluded;
 
         public SvnItem(ISvnStatusCache context, string fullPath, SvnStatusData status)
+            : base(fullPath)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            else if (string.IsNullOrEmpty(fullPath))
-                throw new ArgumentNullException("fullPath");
             else if (status == null)
                 throw new ArgumentNullException("status");
 
             _context = context;
-            _fullPath = fullPath;
             _status = status;
 
             _enqueued = true;
@@ -98,14 +88,12 @@ namespace Ankh
         }
 
         public SvnItem(ISvnStatusCache context, string fullPath, NoSccStatus status, SvnNodeKind nodeKind)
+            : base(fullPath)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            else if (string.IsNullOrEmpty(fullPath))
-                throw new ArgumentNullException("fullPath");
 
             _context = context;
-            _fullPath = fullPath;
             _enqueued = true;
             RefreshTo(status, nodeKind);
             _enqueued = false;
@@ -544,25 +532,6 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Gets the full normalized path of the item
-        /// </summary>
-        public string FullPath
-        {
-            [DebuggerStepThrough]
-            get { return _fullPath; }
-        }
-
-        string _name;
-        /// <summary>
-        /// Gets the filename (including extension) of the item
-        /// </summary>
-        public string Name
-        {
-            [DebuggerStepThrough]
-            get { return _name ?? (_name = Path.GetFileName(FullPath)); }
-        }
-
-        /// <summary>
         /// Gets the SVN status of the item; retrieves a placeholder if the status is unknown
         /// </summary>
         public SvnStatusData Status
@@ -578,7 +547,7 @@ namespace Ankh
         /// <summary>
         /// Gets the node kind of the file in subversion
         /// </summary>
-        public SvnNodeKind NodeKind
+        public override SvnNodeKind NodeKind
         {
             get { return Status.NodeKind; }
         }
@@ -599,7 +568,7 @@ namespace Ankh
         /// Gets a boolean indicating whether the item (on disk) is a file
         /// </summary>
         /// <remarks>Use <see cref="Status"/>.<see cref="SvnStatusData.SvnNodeKind"/> to retrieve the svn type</remarks>
-        public bool IsFile
+        public override bool IsFile
         {
             get { return GetState(SvnItemState.IsDiskFile) == SvnItemState.IsDiskFile; }
         }
@@ -608,7 +577,7 @@ namespace Ankh
         /// Gets a boolean indicating whether the item (on disk) is a directory
         /// </summary>
         /// <remarks>Use <see cref="Status"/>.<see cref="SvnStatusData.SvnNodeKind"/> to retrieve the svn type</remarks>
-        public bool IsDirectory
+        public override bool IsDirectory
         {
             get { return GetState(SvnItemState.IsDiskFolder) == SvnItemState.IsDiskFolder; }
         }
@@ -655,7 +624,7 @@ namespace Ankh
         /// <summary>
         /// Is this item versioned?
         /// </summary>
-        public bool IsVersioned
+        public override bool IsVersioned
         {
             get { return 0 != GetState(SvnItemState.Versioned); }
         }
@@ -663,7 +632,7 @@ namespace Ankh
         /// <summary>
         /// Is this resource modified; implies the item is versioned
         /// </summary>
-        public bool IsModified
+        public override bool IsModified
         {
             get
             {
@@ -713,7 +682,7 @@ namespace Ankh
         /// <summary>
         /// Whether the item is potentially versionable.
         /// </summary>
-        public bool IsVersionable
+        public override bool IsVersionable
         {
             get { return GetState(SvnItemState.Versionable) != 0; }
         }
@@ -740,7 +709,7 @@ namespace Ankh
         /// <summary>
         /// Gets a boolean indicating whether the <see cref="SvnItem"/> exists on disk
         /// </summary>
-        public bool Exists
+        public override bool Exists
         {
             get { return GetState(SvnItemState.Exists) != 0; }
         }
@@ -1163,182 +1132,6 @@ namespace Ankh
             get { return IsAdded || IsReplaced || Status.IsCopied; }
         }
 
-        public bool IsMissing
-        {
-            get { return IsVersioned && !Exists; }
-        }
-
-        /// <summary>
-        /// Long path safe version of File.Exists(path) || Directory.Exists(path)
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static bool PathExists(string path)
-        {
-            return NativeMethods.GetFileAttributes(path) != NativeMethods.INVALID_FILE_ATTRIBUTES;
-        }
-
-        /// <summary>
-        /// Long path safe version of File.Delete(path)
-        /// </summary>
-        /// <param name="path"></param>
-        public static bool DeleteFile(string path)
-        {
-            return NativeMethods.DeleteFile(path);
-        }
-
-        /// <summary>
-        /// Long path safe version of Directory.Delete(path)
-        /// </summary>
-        /// <param name="fullPath"></param>
-        public static bool DeleteDirectory(string fullPath)
-        {
-            return NativeMethods.RemoveDirectory(fullPath);
-        }
-
-        public static bool DeleteDirectory(string fullPath, bool recursive)
-        {
-            if (recursive)
-            {
-                bool allOk = true;
-                foreach (SccFileSystemNode n in SccFileSystemNode.GetDirectoryNodes(fullPath))
-                {
-                    if (n.IsDirectory)
-                    {
-                        if (!DeleteDirectory(n.FullPath, true))
-                            allOk = false;
-                    }
-                    else if (!DeleteFile(n.FullPath))
-                        allOk = false;
-                }
-                if (!allOk)
-                    return false;
-            }
-
-            return DeleteDirectory(fullPath);
-        }
-
-        public static bool DeleteNode(string fullPath)
-        {
-            uint type = NativeMethods.GetFileAttributes(fullPath);
-
-            if (type == NativeMethods.INVALID_FILE_ATTRIBUTES)
-                return true;
-            else if ((type & NativeMethods.FILE_ATTRIBUTE_DIRECTORY) != 0)
-                return DeleteDirectory(fullPath, true);
-            else
-                return DeleteFile(fullPath);
-        }
-
-        internal static string MakeLongPath(string fullPath)
-        {
-            // Windows doesn't normalize long paths via this trick, so we should
-            fullPath = SvnTools.GetNormalizedFullPath(fullPath);
-
-            // Documented method of allowing paths over 160 characters (APR+SharpSvn use this too!)
-            if (!fullPath.StartsWith("\\\\"))
-                return "\\\\?\\" + fullPath;
-            else
-                return "\\\\?\\UNC" + fullPath.Substring(1);
-        }
-
-        static class NativeMethods
-        {
-            /// <summary>
-            /// Gets the fileattributes of the specified file without going through the .Net normalization rules
-            /// </summary>
-            /// <param name="filename"></param>
-            /// <returns></returns>
-            public static uint GetFileAttributes(string filename)
-            {
-                // This method assumes filename is an absolute and/or rooted path
-                if (string.IsNullOrEmpty(filename))
-                    throw new ArgumentNullException("filename");
-
-                if (filename.Length < 240)
-                    return GetFileAttributesW(filename);
-                else
-                    return GetFileAttributesW(MakeLongPath(filename)); // Documented method of allowing paths over 160 characters (APR+SharpSvn use this too!)
-            }
-
-            public static bool DeleteFile(string filename)
-            {
-                if (string.IsNullOrEmpty(filename))
-                    throw new ArgumentNullException("filename");
-
-                if (filename.Length >= 240)
-                    filename = MakeLongPath(filename);
-
-                SetFileAttributesW(filename, FILE_ATTRIBUTE_NORMAL);
-                return DeleteFileW(filename);
-            }
-
-            public static bool RemoveDirectory(string pathname)
-            {
-                // This method assumes filename is an absolute and/or rooted path
-                if (string.IsNullOrEmpty(pathname))
-                    throw new ArgumentNullException("pathname");
-
-                if (pathname.Length >= 240)
-                    pathname = MakeLongPath(pathname);
-
-                return RemoveDirectoryW(MakeLongPath(pathname));
-            }
-
-            [DllImport("kernel32.dll", ExactSpelling = true)]
-            [return: MarshalAs(UnmanagedType.Bool)]
-            extern static bool DeleteFileW([MarshalAs(UnmanagedType.LPWStr)]string lpFilename);
-
-            [DllImport("kernel32.dll", ExactSpelling = true)]
-            [return: MarshalAs(UnmanagedType.Bool)]
-            extern static bool RemoveDirectoryW([MarshalAs(UnmanagedType.LPWStr)]string lpFilename);
-
-            [DllImport("kernel32.dll", ExactSpelling = true)]
-            extern static uint GetFileAttributesW([MarshalAs(UnmanagedType.LPWStr)]string filename);
-
-            [DllImport("kernel32.dll", ExactSpelling = true)]
-            extern static bool SetFileAttributesW([MarshalAs(UnmanagedType.LPWStr)]string filename, [MarshalAs(UnmanagedType.U4)] uint fileAttributes);
-
-            public const uint INVALID_FILE_ATTRIBUTES = 0xFFFFFFFF;
-            public const uint FILE_ATTRIBUTE_DIRECTORY = 0x10;
-            public const uint FILE_ATTRIBUTE_READONLY = 0x1;
-            const uint FILE_ATTRIBUTE_NORMAL = 0x80;
-        }
-
-        static int _globalCookieBox = 0;
-
-        /// <summary>
-        /// Gets a new unique cookie
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>Threadsafe provider of cookie values</remarks>
-        static int NextCookie()
-        {
-            int n = System.Threading.Interlocked.Increment(ref _globalCookieBox); // Wraps on Int32.MaxValue
-
-            if (n != 0)
-                return n;
-            else
-                return NextCookie(); // 1 in 4 billion times
-        }
-
-        public static bool IsValidPath(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
-
-            int lc = path.LastIndexOf(':');
-            if (lc > 1)
-                return false;
-            else if (lc == 1 && path.IndexOf('\\') == 2)
-                return true;
-            else if (lc < 0 && path.StartsWith(@"\\", StringComparison.Ordinal))
-                return true;
-
-            // TODO: Add more checks. This code is called from the OpenDocumentTracker, Filestatus cache and selection provider
-
-            return false;
-        }
 
         public static bool IsValidPath(string path, bool extraChecks)
         {
@@ -1434,6 +1227,7 @@ namespace Ankh
             return IsBelowPath(item.FullPath);
         }
 
+        #region Comparison
         /// <summary>
         /// Implements the operator ==.
         /// </summary>
@@ -1464,44 +1258,16 @@ namespace Ankh
             return !(one == other);
         }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.</param>
-        /// <returns>
-        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
-        /// </returns>
-        /// <exception cref="T:System.NullReferenceException">
-        /// The <paramref name="obj"/> parameter is null.
-        /// </exception>
         public override bool Equals(object obj)
         {
-            return Equals(obj as SvnItem);
+            return base.Equals(obj);
         }
 
-        /// <summary>
-        /// Equalses the specified obj.
-        /// </summary>
-        /// <param name="obj">The obj.</param>
-        /// <returns></returns>
-        public bool Equals(SvnItem obj)
-        {
-            if ((object)obj == null)
-                return false;
-
-            return StringComparer.OrdinalIgnoreCase.Equals(obj.FullPath, FullPath);
-        }
-
-        /// <summary>
-        /// Serves as a hash function for a particular type.
-        /// </summary>
-        /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
-        /// </returns>
         public override int GetHashCode()
         {
-            return StringComparer.OrdinalIgnoreCase.GetHashCode(FullPath);
+            return base.GetHashCode();
         }
+        #endregion
 
         /// <summary>
         /// Gets the Uri of the node
