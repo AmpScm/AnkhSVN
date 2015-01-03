@@ -226,8 +226,11 @@ namespace Ankh
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (Disposed != null)
-                Disposed(this, EventArgs.Empty);
+            if (disposing)
+            {
+                if (Disposed != null)
+                    Disposed(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>
@@ -364,14 +367,14 @@ namespace Ankh
         /// <summary>
         /// Releases the hook.
         /// </summary>
-        /// <typeparam name="S"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="container">The container.</param>
         /// <param name="cookie">The cookie.</param>
         [CLSCompliant(false)]
-        protected static void ReleaseHook<S>(object container, uint cookie)
-            where S : class
+        protected static void ReleaseHook<T>(object container, uint cookie)
+            where T : class
         {
-            ReleaseHook(container, typeof(S), cookie);
+            ReleaseHook(container, typeof(T), cookie);
         }
 
         /// <summary>
