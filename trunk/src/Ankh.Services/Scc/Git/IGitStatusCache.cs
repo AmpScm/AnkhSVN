@@ -15,5 +15,7 @@ namespace Ankh.Scc
         void SetSolutionContained(string path, bool inSolution, bool sccExcluded);
 
         void RefreshItem(GitItem gitItem, SharpSvn.SvnNodeKind svnNodeKind);
+
+        void RefreshWCRoot(GitItem gitItem);
     }
 }

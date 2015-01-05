@@ -57,9 +57,16 @@ namespace Ankh.Scc.Git
         DocumentDirty = 0x00000200,
 
         /// <summary>
+        /// 
+        /// </summary>
+        IsWCRoot = 0x00000400,
+
+        /// <summary>
         /// Somehow modified in subversion
         /// </summary>
         SvnDirty = 0x00000800,
+
+        IsAdministrativeArea = 0x00001000,
         #endregion
 
 

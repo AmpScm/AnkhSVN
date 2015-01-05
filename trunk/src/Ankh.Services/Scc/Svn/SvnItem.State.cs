@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using Ankh.Scc;
+using Ankh.Scc.Svn;
 using SharpSvn;
 
 namespace Ankh

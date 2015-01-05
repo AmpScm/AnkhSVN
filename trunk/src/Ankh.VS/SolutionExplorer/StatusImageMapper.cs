@@ -134,5 +134,33 @@ namespace Ankh.VS.SolutionExplorer
                     return AnkhGlyph.None;
             }
         }
+
+
+        public AnkhGlyph GetStatusImageForGitItem(GitItem item)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            if (item.IsConflicted)
+                return AnkhGlyph.InConflict;
+            else if (!item.IsVersioned)
+            {
+                if (!item.Exists)
+                    return AnkhGlyph.FileMissing;
+                else if (item.IsIgnored)
+                    return AnkhGlyph.Ignored;
+                else if (item.IsVersionable)
+                {
+                    if (item.InSolution)
+                        return item.IsSccExcluded ? AnkhGlyph.Ignored : AnkhGlyph.ShouldBeAdded;
+                    else
+                        return AnkhGlyph.None;
+                }
+                else
+                    return AnkhGlyph.None;
+            }
+
+            return AnkhGlyph.ShouldBeAdded;
+        }
     }
 }

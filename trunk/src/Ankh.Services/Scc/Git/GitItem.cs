@@ -66,8 +66,11 @@ namespace Ankh
             : base(fullPath)
         {
             _context = context;
+            _status = status;
 
+            _enqueued = true;
             RefreshTo(status);
+            _enqueued = false;
         }
 
         public GitItem(IGitStatusCache context, string fullPath, NoSccStatus status, SvnNodeKind nodeKind)
@@ -75,21 +78,69 @@ namespace Ankh
         {
             _context = context;
 
-            if (status != NoSccStatus.Unknown)
-                RefreshTo(status, nodeKind);
+            RefreshTo(status, nodeKind);
         }
 
         private void RefreshTo(NoSccStatus status, SvnNodeKind nodeKind)
         {
             _cookie = NextCookie();
-            throw new NotImplementedException();
+            _statusDirty = XBool.False;
+
+            GitItemState set = GitItemState.None;
+            GitItemState unset = GitItemState.Modified | GitItemState.Added
+                | GitItemState.Deleted | GitItemState.Conflicted | GitItemState.Ignored | GitItemState.Versioned | GitItemState.IsWCRoot | GitItemState.GitDirty | GitItemState.Ignored;
+
+            switch (status)
+            {
+                case NoSccStatus.NotExisting:
+                    SetState(set, GitItemState.Exists | GitItemState.ReadOnly | GitItemState.IsDiskFile | GitItemState.IsDiskFolder | GitItemState.Versionable | unset);
+                    _status = GitStatusData.NotExisting;
+                    break;
+                case NoSccStatus.NotVersionable:
+                    unset |= GitItemState.Versionable;
+                    goto case NoSccStatus.NotVersioned; // fall through
+                case NoSccStatus.NotVersioned:
+                    SetState(GitItemState.Exists | set, GitItemState.None | unset);
+                    _status = GitStatusData.NotVersioned;
+                    break;
+                case NoSccStatus.Unknown:
+                default:
+                    SetDirty(set | unset);
+                    _statusDirty = XBool.True;
+                    break;
+            }
+
+            //InitializeFromKind(nodeKind);
         }
 
 
         private void RefreshTo(GitStatusData status)
         {
             _cookie = NextCookie();
-            throw new NotImplementedException();
+            _statusDirty = XBool.False;
+            _status = status;
+
+            GitItemState set = GitItemState.None;
+            GitItemState unset = GitItemState.None;
+
+            if (status.IsConflicted)
+                set |= GitItemState.Conflicted;
+            else
+                unset |= GitItemState.Conflicted;
+
+            if (status.IndexStatus == SharpGit.GitStatus.Normal
+                && status.WorkingStatus == SharpGit.GitStatus.Normal)
+            {
+                // We don't know if the node is a file or directory yet
+                set |= GitItemState.Versioned | GitItemState.Versionable | GitItemState.Exists;
+                unset |= GitItemState.Added | GitItemState.Deleted | GitItemState.Modified | GitItemState.Ignored | GitItemState.GitDirty;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            SetState(set, unset);
         }
 
         IGitStatusCache GitCache
@@ -152,19 +203,19 @@ namespace Ankh
 
         bool IGitItemUpdate.IsItemTicked()
         {
-            throw new NotImplementedException();
+            return _ticked;
         }
 
 
         void IGitItemUpdate.TickItem()
         {
-            throw new NotImplementedException();
+            _ticked = true; // Will be updated soon
         }
 
 
         public bool IsStatusClean()
         {
-            throw new NotImplementedException();
+            return _statusDirty == XBool.False;
         }
 
         void RefreshStatus()
@@ -185,24 +236,24 @@ namespace Ankh
 
         bool IGitItemUpdate.IsStatusClean()
         {
-            throw new NotImplementedException();
+            return _statusDirty == XBool.False;
         }
 
         bool IGitItemUpdate.ShouldRefresh()
         {
-            throw new NotImplementedException();
+            return _ticked || _statusDirty != XBool.False;
         }
 
         
-        void IGitItemUpdate.RefreshTo(NoSccStatus noSccStatus, SvnNodeKind svnNodeKind)
+        void IGitItemUpdate.RefreshTo(NoSccStatus status, SvnNodeKind nodeKind)
         {
-            throw new NotImplementedException();
+            RefreshTo(status, nodeKind);
         }
 
 
         bool IGitItemUpdate.ShouldClean()
         {
-            throw new NotImplementedException();
+            return _ticked || (_statusDirty == XBool.False && _status == GitStatusData.NotExisting);
         }
 
         void IGitItemUpdate.RefreshTo(GitItem lead)
@@ -236,7 +287,15 @@ namespace Ankh
 
         public void MarkDirty()
         {
-            throw new NotImplementedException();
+            Debug.Assert(_statusDirty != XBool.None, "MarkDirty called while updating status");
+
+            _statusDirty = XBool.True;
+
+            _validState = GitItemState.None;
+            _cookie = NextCookie();
+            //_workingCopy = null;
+            _modified = new DateTime();
+            //_conflicts = null;
         }
 
         public bool IsBelowPath(string root)
@@ -285,22 +344,120 @@ namespace Ankh
 
         public override bool IsVersionable
         {
-            get { throw new NotImplementedException(); }
+            get { return GetState(GitItemState.Versionable) != 0; }
         }
 
+        /// <summary>
+        /// Gets a boolean indicating whether the <see cref="SvnItem"/> exists on disk
+        /// </summary>
         public override bool Exists
         {
-            get { return true; }
+            get { return GetState(GitItemState.Exists) != 0; }
         }
 
+        /// <summary>
+        /// Gets a boolean indicating whether the item (on disk) is a directory
+        /// </summary>
+        /// <remarks>Use <see cref="Status"/>.<see cref="SvnStatusData.SvnNodeKind"/> to retrieve the svn type</remarks>
         public override bool IsDirectory
         {
-            get { return true; }
+            get { return GetState(GitItemState.IsDiskFolder) == GitItemState.IsDiskFolder; }
         }
 
+        /// <summary>
+        /// Gets a boolean indicating whether the item (on disk) is a file
+        /// </summary>
+        /// <remarks>Use <see cref="Status"/>.<see cref="SvnStatusData.SvnNodeKind"/> to retrieve the svn type</remarks>
         public override bool IsFile
         {
-            get { return true; }
+            get { return GetState(GitItemState.IsDiskFile) == GitItemState.IsDiskFile; }
+        }
+
+        public override GitItem Parent
+        { 
+            get
+            {
+                string parentDir = Directory;
+
+                if (string.IsNullOrEmpty(parentDir))
+                    return null; // We are the root folder!
+
+                IGitStatusCache cache = StatusCache;
+
+                if (cache != null)
+                    return cache.GetAlreadyNormalizedItem(parentDir);
+                else
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets a boolean indicating whether the <see cref="SvnItem"/> is in conflict state
+        /// </summary>
+        public bool IsConflicted
+        {
+            get { return 0 != GetState(GitItemState.Conflicted); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="SvnItem"/> is in one of the projects in the solution
+        /// </summary>
+        /// <value><c>true</c> if the file is in one of the projects of the solution; otherwise, <c>false</c>.</value>
+        public override bool InSolution
+        {
+            get { return GetState(GitItemState.InSolution) != 0; }
+        }
+
+        /// <summary>
+        /// Gets a boolean indicating whether the <see cref="ScnItem"/> is explicitly Scc Excluded
+        /// </summary>
+        public override bool IsSccExcluded
+        {
+            get { return InSolution && _sccExcluded; }
+        }
+
+        public override bool IsIgnored
+        {
+            get
+            {
+                GitItemState state;
+
+                if (TryGetState(GitItemState.Versioned, out state) && state != 0)
+                    return false;
+                else if (TryGetState(GitItemState.Versionable, out state) && state == 0)
+                    return false;
+                else if (GetState(GitItemState.Ignored) != 0)
+                    return true;
+                else if (IsVersioned)
+                    return false;
+                else if (!Exists)
+                    return false;
+
+                GitItem parent = Parent;
+                if (parent != null)
+                    return parent.IsIgnored;
+                else
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this file is dirty in an open editor
+        /// </summary>
+        public override bool IsDocumentDirty
+        {
+            get { return GetState(GitItemState.DocumentDirty) != 0; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this node is a nested working copy.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is nested working copy; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsWCRoot
+        {
+            get { return GetState(GitItemState.IsWCRoot) != 0; }
         }
     }
 }

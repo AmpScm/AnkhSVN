@@ -36,6 +36,26 @@ namespace Ankh.Scc.Engine
             get { return _fullPath; }
         }
 
+        /// <summary>
+        /// Gets the directory.
+        /// </summary>
+        /// <value>The directory.</value>
+        public string Directory
+        {
+            [DebuggerStepThrough]
+            get { return SvnTools.GetNormalizedDirectoryName(FullPath); }
+        }
+
+        /// <summary>
+        /// Gets the name of the file without its extension.
+        /// </summary>
+        /// <value>The name without extension.</value>
+        /// <remarks>By definition directories do not have an extension</remarks>
+        public string NameWithoutExtension
+        {
+            get { return IsDirectory ? Name : Path.GetFileNameWithoutExtension(Name); }
+        }
+
         string _name;
         /// <summary>
         /// Gets the filename (including extension) of the item
@@ -81,6 +101,26 @@ namespace Ankh.Scc.Engine
         /// Whether the item is potentially versionable.
         /// </summary>
         public abstract bool IsVersionable
+        {
+            get;
+        }
+
+        public abstract bool IsSccExcluded
+        {
+            get;
+        }
+
+        public abstract bool IsIgnored
+        {
+            get;
+        }
+
+        public abstract bool IsDocumentDirty
+        {
+            get;
+        }
+
+        public abstract bool InSolution
         {
             get;
         }
@@ -154,6 +194,11 @@ namespace Ankh.Scc.Engine
         public override int GetHashCode()
         {
             return StringComparer.OrdinalIgnoreCase.GetHashCode(FullPath);
+        }
+
+        public abstract T Parent
+        {
+            get;
         }
     }
 }
