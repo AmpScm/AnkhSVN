@@ -25,6 +25,7 @@ using Ankh.Scc.Engine;
 using Ankh.Scc.Git;
 using SharpGit;
 using SharpSvn;
+using GitRepository = SharpGit.Plumbing.GitRepository;
 
 namespace Ankh.GitScc.StatusCache
 {
@@ -285,6 +286,12 @@ namespace Ankh.GitScc.StatusCache
             }
 
             GitStatusArgs args = new GitStatusArgs();
+            args.IncludeUnversioned = true;
+            args.IncludeUnversionedRecursive = true;
+            args.IncludeIgnored = true;
+            args.IncludeIgnoredRecursive = true;
+            args.IncludeSubmodules = true;
+            args.IncludeConflicts = true;
             //args.Depth = GitDepth.Children;
             //args.RetrieveAllEntries = true;
             //args.RetrieveIgnoredEntries = true;
@@ -314,12 +321,21 @@ namespace Ankh.GitScc.StatusCache
                 bool ok;
                 bool statSelf = false;
                 bool noWcAtAll = false;
+                string[] root;
 
                 // Don't retry file open/read operations on failure. These would only delay the result 
                 // (default number of delays = 100)
                 //using (new SharpGit.Implementation.GitFsOperationRetryOverride(0))
+                try
                 {
+                    _root = null;
                     ok = _client.Status(walkPath, args, RefreshCallback);
+                }
+                catch
+                { ok = false; }
+                finally
+                {
+                    root = _root;
                 }
 
                 if (!ok)
@@ -331,6 +347,28 @@ namespace Ankh.GitScc.StatusCache
 
                 if (!statSelf)
                 {
+                    if (ok && (root != null))
+                    {
+                        // Git doesn't provide status for the root
+
+                        string what = root[0];
+                        int s = 0;
+                        int n;
+                        int l = what.LastIndexOf('\\');
+                        while(0 <= (n = root[1].IndexOf('/', s)))
+                        {
+                            s = n + 1;
+                            l = what.LastIndexOf('\\', l - 1);
+                        }
+
+                        what = GitTools.GetNormalizedFullPath(what.Substring(0, l+1));
+
+                        if (walkItem.FullPath == what)
+                        {
+                            ((IGitItemUpdate)walkItem).RefreshTo(GitStatusData.Root);
+                        }
+                        
+                    }
                     if (((IGitItemUpdate)walkItem).ShouldRefresh())
                         statSelf = true;
                     else if (walkingDirectory && !walkItem.IsVersioned)
@@ -531,6 +569,7 @@ namespace Ankh.GitScc.StatusCache
             return false;
         }
 
+        string[] _root;
         /// <summary>
         /// Called from RefreshPath's call to <see cref="GitClient::Status"/>
         /// </summary>
@@ -546,6 +585,9 @@ namespace Ankh.GitScc.StatusCache
 
             GitStatusData status = new GitStatusData(e);
             string path = e.FullPath; // Fully normalized
+
+            if (_root == null)
+                _root = new string[] { e.FullPath, e.RelativePath };
 
             GitItem item;
             if (!_map.TryGetValue(path, out item) || !NewFullPathOk(item, path, status))
@@ -677,7 +719,6 @@ namespace Ankh.GitScc.StatusCache
             }
         }
 
-
         public GitItem this[string path]
         {
             get
@@ -712,6 +753,69 @@ namespace Ankh.GitScc.StatusCache
 
                 return item;
             }
+        }
+
+        void IGitStatusCache.RefreshWCRoot(GitItem gitItem)
+        {
+            if (gitItem == null)
+                throw new ArgumentNullException("svnItem");
+
+            Debug.Assert(gitItem.IsDirectory);
+
+            // We retrieve nesting information by walking the entry data of the parent directory
+            lock (_lock)
+            {
+                string root;
+
+                try
+                {
+                    root = GetWorkingCopyRoot(gitItem.FullPath);
+                }
+                catch { root = null; }
+
+                if (root == null)
+                {
+                    ((IGitItemUpdate)gitItem).SetState(GitItemState.None, GitItemState.IsWCRoot);
+                    return;
+                }
+
+                // Set all nodes between this node and the root to not-a-wcroot
+                IGitItemUpdate oi;
+                while (root.Length < gitItem.FullPath.Length)
+                {
+                    oi = gitItem;
+
+                    oi.SetState(GitItemState.None, GitItemState.IsWCRoot);
+                    gitItem = gitItem.Parent;
+
+                    if (gitItem == null)
+                        return;
+                }
+
+                oi = gitItem;
+
+                if (gitItem.FullPath == root)
+                    oi.SetState(GitItemState.IsWCRoot, GitItemState.None);
+                else
+                    oi.SetState(GitItemState.None, GitItemState.IsWCRoot);
+            }
+        }
+
+        private string GetWorkingCopyRoot(string path)
+        {
+            using (GitRepository repos = new GitRepository())
+            {
+                try
+                {
+                    if (repos.Locate(path))
+                    {
+                        return repos.WorkingCopyDirectory;
+                    }
+                }
+                catch (GitException) { }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -800,9 +904,35 @@ namespace Ankh.GitScc.StatusCache
                 GitItemsChanged(this, e);
         }
 
-        public void RefreshItem(GitItem gitItem, SvnNodeKind svnNodeKind)
+        public void RefreshItem(GitItem item, SvnNodeKind nodeKind)
         {
-            throw new NotImplementedException();
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            RefreshPath(item.FullPath, nodeKind);
+
+            IGitItemUpdate updateItem = (IGitItemUpdate)item;
+
+            if (!updateItem.IsStatusClean())
+            {
+                // Ok, the status update did not refresh the item requesting to be refreshed
+                // That means the item is not here or RefreshPath would have added it
+
+                GitItem other;
+                if (_map.TryGetValue(item.FullPath, out other) && other != item)
+                {
+                    updateItem.RefreshTo(other); // This item is no longer current; but we have the status anyway
+                }
+                else
+                {
+                    Debug.Assert(false, "RefreshPath did not deliver up to date information",
+                        "The RefreshPath public api promises delivering up to date data, but none was received");
+
+                    updateItem.RefreshTo(item.Exists ? NoSccStatus.NotVersioned : NoSccStatus.NotExisting, SvnNodeKind.Unknown);
+                }
+            }
+
+            Debug.Assert(updateItem.IsStatusClean(), "The item requesting to be updated is updated");
         }
     }
 }

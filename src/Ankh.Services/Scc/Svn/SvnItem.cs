@@ -24,6 +24,7 @@ using SharpSvn;
 
 using Ankh.Commands;
 using Ankh.Scc;
+using Ankh.Scc.Svn;
 using Ankh.Selection;
 using System.Text;
 
@@ -881,7 +882,7 @@ namespace Ankh
         /// Gets a value indicating whether the <see cref="SvnItem"/> is in one of the projects in the solution
         /// </summary>
         /// <value><c>true</c> if the file is in one of the projects of the solution; otherwise, <c>false</c>.</value>
-        public bool InSolution
+        public override bool InSolution
         {
             get { return GetState(SvnItemState.InSolution) != 0; }
         }
@@ -889,7 +890,7 @@ namespace Ankh
         /// <summary>
         /// Gets a boolean indicating whether the <see cref="ScnItem"/> is explicitly Scc Excluded
         /// </summary>
-        public bool IsSccExcluded
+        public override bool IsSccExcluded
         {
             get { return InSolution && _sccExcluded; }
         }
@@ -897,7 +898,7 @@ namespace Ankh
         /// <summary>
         /// Gets a value indicating whether this file is dirty in an open editor
         /// </summary>
-        public bool IsDocumentDirty
+        public override bool IsDocumentDirty
         {
             get { return GetState(SvnItemState.DocumentDirty) != 0; }
         }
@@ -916,7 +917,7 @@ namespace Ankh
         /// <summary>
         /// Gets a boolean indicating whether the <see cref="SvnItem"/> is explicitly ignored
         /// </summary>
-        public bool IsIgnored
+        public override bool IsIgnored
         {
             get
             {
@@ -1029,15 +1030,6 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Gets the directory.
-        /// </summary>
-        /// <value>The directory.</value>
-        public string Directory
-        {
-            get { return SvnTools.GetNormalizedDirectoryName(FullPath); }
-        }
-
-        /// <summary>
         /// Gets the extension of the item
         /// </summary>
         /// <value>The extension.</value>
@@ -1048,21 +1040,11 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Gets the name of the file without its extension.
-        /// </summary>
-        /// <value>The name without extension.</value>
-        /// <remarks>By definition directories do not have an extension</remarks>
-        public string NameWithoutExtension
-        {
-            get { return IsDirectory ? Name : Path.GetFileNameWithoutExtension(Name); }
-        }
-
-        /// <summary>
         /// Gets the <see cref="SvnItem"/> of this instances parent (the directory it is in)
         /// </summary>
         /// <value>The parent directory or <c>null</c> if this instance is the root directory 
         /// or the cache can not be contacted</value>
-        public SvnItem Parent
+        public override SvnItem Parent
         {
             get
             {

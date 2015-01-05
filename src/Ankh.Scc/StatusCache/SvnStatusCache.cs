@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.IO;
 using Ankh.Commands;
 using Ankh.Scc.Engine;
+using Ankh.Scc.Svn;
 using SharpSvn;
 
 namespace Ankh.Scc.StatusCache

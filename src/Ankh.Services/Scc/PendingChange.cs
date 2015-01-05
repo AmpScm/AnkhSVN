@@ -254,6 +254,25 @@ namespace Ankh.Scc
             return create;
         }
 
+        public static bool IsPending(GitItem item)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            bool create = false;
+            if (item.IsConflicted)
+                create = true; // Tree conflict (unversioned) or other conflict
+            else if (item.IsModified)
+                create = true; // Must commit
+            else if (item.InSolution && !item.IsVersioned && !item.IsIgnored && item.IsVersionable && !item.IsSccExcluded)
+                create = true; // To be added
+            else if (item.IsVersioned && item.IsDocumentDirty)
+                create = true;
+
+            return create;
+        }
+
+
         /// <summary>
         /// Determines if a change list name is one of the "Ignore On Commit" change lists
         /// </summary>

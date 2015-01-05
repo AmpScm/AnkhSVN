@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.Scc.Git;
+using SharpGit;
 
 namespace Ankh
 {
@@ -93,7 +94,7 @@ namespace Ankh
                 unavailable = flagsToGet & ~_validState;
 
                 Debug.Assert((~_validState & MaskTextFile) == 0, "UpdateTextFile() set all attributes it should");
-            }
+            }*/
 
             if (0 != (unavailable & MaskWCRoot))
             {
@@ -113,7 +114,7 @@ namespace Ankh
                 Debug.Assert((~_validState & MaskIsAdministrativeArea) == 0, "UpdateIsAdministrativeArea() set all attributes it should");
             }
 
-            if (unavailable != 0)
+            /*if (unavailable != 0)
             {
                 Trace.WriteLine(string.Format("Don't know how to retrieve {0:X} state; clearing dirty flag", (int)unavailable));
 
@@ -284,6 +285,31 @@ namespace Ankh
             _sccExcluded = sccExcluded;
         }
 
+        #endregion
+
+        #region Nested Info
+        const GitItemState MaskWCRoot = GitItemState.IsWCRoot;
+        void UpdateWCRoot()
+        {
+            if (IsDirectory && IsVersioned)
+            {
+                StatusCache.RefreshWCRoot(this);
+                return;
+            }
+
+            SetState(GitItemState.None, GitItemState.IsWCRoot);
+        }
+        #endregion
+
+        #region Administrative Area
+        const GitItemState MaskIsAdministrativeArea = GitItemState.IsAdministrativeArea;
+        void UpdateAdministrativeArea()
+        {
+            if (string.Equals(Name, GitClient.AdministrativeDirectoryName, StringComparison.OrdinalIgnoreCase))
+                SetState(GitItemState.IsAdministrativeArea, GitItemState.None);
+            else
+                SetState(GitItemState.None, GitItemState.IsAdministrativeArea);
+        }
         #endregion
 
         IList<GitItem> IGitItemStateUpdate.GetUpdateQueueAndClearScheduled()
