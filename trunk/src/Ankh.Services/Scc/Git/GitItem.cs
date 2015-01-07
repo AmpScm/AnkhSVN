@@ -128,7 +128,12 @@ namespace Ankh
             else
                 unset |= GitItemState.Conflicted;
 
-            if (status.IndexStatus == SharpGit.GitStatus.Normal
+            if (status.IsIgnored)
+            {
+                set |= GitItemState.Versionable | GitItemState.Exists;
+                unset |= GitItemState.Added | GitItemState.Deleted | GitItemState.Modified | GitItemState.Ignored | GitItemState.GitDirty | GitItemState.Versioned;
+            }
+            else if (status.IndexStatus == SharpGit.GitStatus.Normal
                 && status.WorkingStatus == SharpGit.GitStatus.Normal)
             {
                 // We don't know if the node is a file or directory yet
@@ -138,6 +143,19 @@ namespace Ankh
             else
             {
                 throw new NotImplementedException();
+            }
+
+            switch(status.NodeKind)
+            {
+                case SvnNodeKind.File:
+                    set |= GitItemState.IsDiskFile;
+                    unset |= GitItemState.IsDiskFolder;
+                    break;
+
+                case SvnNodeKind.Directory:
+                    set |= GitItemState.IsDiskFolder;
+                    unset |= GitItemState.IsDiskFile;
+                    break;
             }
 
             SetState(set, unset);
