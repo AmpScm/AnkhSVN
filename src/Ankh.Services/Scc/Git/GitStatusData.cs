@@ -15,6 +15,7 @@ namespace Ankh.Scc
         readonly GitStatus _workStatus;
         readonly bool _ignored;
         readonly bool _versionInfo;
+        readonly SvnNodeKind _kind;
 
         public GitStatusData(GitStatusEventArgs status)
         {
@@ -26,6 +27,7 @@ namespace Ankh.Scc
             _ignored = status.Ignored;
             _conflicted = status.Conflicted;
             _versionInfo = true;
+            _kind = (SvnNodeKind)(int)status.NodeKind;
         }
 
         GitStatusData(NoSccStatus noSccStatus)
@@ -34,13 +36,12 @@ namespace Ankh.Scc
             //this.noSccStatus = noSccStatus;
             _indexStatus = GitStatus.Normal;
             _workStatus = GitStatus.Normal;
-            _versionInfo = (noSccStatus == (NoSccStatus)999);
+            _kind = SvnNodeKind.Unknown;
         }
 
         #region Static instances
         readonly static GitStatusData _notVersioned = new GitStatusData(NoSccStatus.NotVersioned);
         readonly static GitStatusData _none = new GitStatusData(NoSccStatus.NotExisting);
-        readonly static GitStatusData _root = new GitStatusData((NoSccStatus)999);
         /// <summary>
         /// Default status for nodes which do exist but are not managed
         /// </summary>
@@ -57,10 +58,6 @@ namespace Ankh.Scc
             get { return _none; }
         }
 
-        public static GitStatusData Root
-        {
-            get { return _root;  }
-        }
         #endregion
 
         public GitStatus IndexStatus
@@ -74,6 +71,11 @@ namespace Ankh.Scc
         public GitStatus WorkingStatus
         {
             get { return _workStatus; }
+        }
+
+        public SvnNodeKind NodeKind
+        {
+            get { return _kind; }
         }
 
 /*        public GitStatus CombinedStatus

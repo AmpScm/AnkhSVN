@@ -287,15 +287,12 @@ namespace Ankh.GitScc.StatusCache
 
             GitStatusArgs args = new GitStatusArgs();
             args.IncludeUnversioned = true;
-            args.IncludeUnversionedRecursive = true;
+            args.IncludeUnmodified = true;
             args.IncludeIgnored = true;
-            args.IncludeIgnoredRecursive = true;
+            //args.IncludeDirectories = true;
             args.IncludeSubmodules = true;
             args.IncludeConflicts = true;
-            //args.Depth = GitDepth.Children;
-            //args.RetrieveAllEntries = true;
-            //args.RetrieveIgnoredEntries = true;
-            //args.ThrowOnError = false;
+            args.GenerateVersionedDirs = true;
 
             lock (_lock)
             {
@@ -347,28 +344,6 @@ namespace Ankh.GitScc.StatusCache
 
                 if (!statSelf)
                 {
-                    if (ok && (root != null))
-                    {
-                        // Git doesn't provide status for the root
-
-                        string what = root[0];
-                        int s = 0;
-                        int n;
-                        int l = what.LastIndexOf('\\');
-                        while(0 <= (n = root[1].IndexOf('/', s)))
-                        {
-                            s = n + 1;
-                            l = what.LastIndexOf('\\', l - 1);
-                        }
-
-                        what = GitTools.GetNormalizedFullPath(what.Substring(0, l+1));
-
-                        if (walkItem.FullPath == what)
-                        {
-                            ((IGitItemUpdate)walkItem).RefreshTo(GitStatusData.Root);
-                        }
-                        
-                    }
                     if (((IGitItemUpdate)walkItem).ShouldRefresh())
                         statSelf = true;
                     else if (walkingDirectory && !walkItem.IsVersioned)
