@@ -161,25 +161,27 @@ namespace Ankh.VS.SolutionExplorer
                     return AnkhGlyph.None;
             }
 
-            switch (item.Status.WorkingStatus)
+            GitStatus status = item.Status.WorkingStatus;
+
+            if (status == GitStatus.Normal || status == GitStatus.None)
+                status = item.Status.IndexStatus;
+
+            switch (status)
             {
                 case GitStatus.Normal:
                     if (item.IsDocumentDirty)
                         return AnkhGlyph.FileDirty;
                     else
                         return AnkhGlyph.Normal;
-                case GitStatus.Modified:
                     return AnkhGlyph.Modified;
                 /*case GitStatus.Replaced:
                     return AnkhGlyph.CopiedOrMoved;*/
-                case GitStatus.Added:
+                case GitStatus.New:
                     return false ? AnkhGlyph.CopiedOrMoved : AnkhGlyph.Added;
 
-                /*case GitStatus.Missing:
-                    if (item.IsCasingConflicted)
-                        return AnkhGlyph.InConflict;
-                    else
-                        return AnkhGlyph.Deleted;*/
+                case GitStatus.Renamed:
+                    return AnkhGlyph.CopiedOrMoved;
+
                 case GitStatus.Deleted:
                     if (item.Exists && item.InSolution)
                         return item.IsSccExcluded ? AnkhGlyph.Ignored : AnkhGlyph.ShouldBeAdded;
@@ -189,9 +191,8 @@ namespace Ankh.VS.SolutionExplorer
                 case GitStatus.Obstructed:
                     return AnkhGlyph.InConflict;*/
 
-                case GitStatus.Ignored: // Should have been handled above
-                    return AnkhGlyph.Ignored;
-
+                case GitStatus.Unreadable:
+                    return AnkhGlyph.InConflict;
                 /*case GitStatus.External:
                 case GitStatus.Incomplete:
                     return AnkhGlyph.InConflict;

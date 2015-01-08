@@ -145,7 +145,7 @@ namespace Ankh
                 else
                     unset |= GitItemState.GitDirty | GitItemState.Modified;
             }
-            else if (status.IndexStatus == GitStatus.Added)
+            else if (status.IndexStatus == GitStatus.New || status.WorkingStatus == GitStatus.New)
             {
                 set |= GitItemState.Versioned | GitItemState.Versionable | GitItemState.Exists | GitItemState.Added;
                 unset |= GitItemState.Deleted | GitItemState.Modified | GitItemState.Ignored | GitItemState.GitDirty;
@@ -182,7 +182,6 @@ namespace Ankh
             {
                 case GitStatus.None:
                 case GitStatus.Normal:
-                case GitStatus.Modified:
                     return true;
             }
 
