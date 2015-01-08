@@ -60,6 +60,8 @@ namespace Ankh.VS.SolutionExplorer
 
                 ev.SccProviderActivated += OnSccProviderActivated;
                 ev.SccProviderDeactivated += OnSccProviderDeactivated;
+                ev.GitSccProviderActivated += OnSccProviderActivated;
+                ev.GitSccProviderDeactivated += OnSccProviderDeactivated;
                 ev.SolutionClosed += OnSolutionClosed;
                 ev.SolutionOpened += OnSolutionOpened;
             }
