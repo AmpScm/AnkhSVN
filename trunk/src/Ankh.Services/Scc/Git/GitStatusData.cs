@@ -14,8 +14,8 @@ namespace Ankh.Scc
         readonly GitStatus _indexStatus;
         readonly GitStatus _workStatus;
         readonly bool _ignored;
-        readonly bool _versionInfo;
         readonly SvnNodeKind _kind;
+        readonly bool _modified;
 
         public GitStatusData(GitStatusEventArgs status)
         {
@@ -24,10 +24,11 @@ namespace Ankh.Scc
 
             _conflicted = status.Conflicted;
             _indexStatus = status.IndexStatus;
+            _workStatus = status.WorkingDirectoryStatus;
             _ignored = status.Ignored;
             _conflicted = status.Conflicted;
-            _versionInfo = true;
             _kind = (SvnNodeKind)(int)status.NodeKind;
+            _modified = status.IndexModified || status.WorkingDirectoryModified;
         }
 
         GitStatusData(NoSccStatus noSccStatus)
@@ -73,6 +74,11 @@ namespace Ankh.Scc
             get { return _workStatus; }
         }
 
+        public bool Modified
+        {
+            get { return _modified; }
+        }
+
         public SvnNodeKind NodeKind
         {
             get { return _kind; }
@@ -93,11 +99,6 @@ namespace Ankh.Scc
         public bool IsIgnored
         {
             get { return _ignored; }
-        }
-
-        public bool HasVersionInfo
-        {
-            get { return _versionInfo; }
         }
 
     }
