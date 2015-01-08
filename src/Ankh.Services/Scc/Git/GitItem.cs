@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Ankh.Scc;
 using Ankh.Scc.Git;
-using SharpSvn;
+using SvnNodeKind=SharpSvn.SvnNodeKind;
+using SharpGit;
 
 namespace Ankh.Scc.Git
 {
@@ -133,12 +134,26 @@ namespace Ankh
                 set |= GitItemState.Versionable | GitItemState.Exists;
                 unset |= GitItemState.Added | GitItemState.Deleted | GitItemState.Modified | GitItemState.Ignored | GitItemState.GitDirty | GitItemState.Versioned;
             }
-            else if (status.IndexStatus == SharpGit.GitStatus.Normal
-                && status.WorkingStatus == SharpGit.GitStatus.Normal)
+            else if (MaxModified(status.IndexStatus) && MaxModified(status.WorkingStatus))
             {
                 // We don't know if the node is a file or directory yet
                 set |= GitItemState.Versioned | GitItemState.Versionable | GitItemState.Exists;
-                unset |= GitItemState.Added | GitItemState.Deleted | GitItemState.Modified | GitItemState.Ignored | GitItemState.GitDirty;
+                unset |= GitItemState.Added | GitItemState.Deleted | GitItemState.Ignored;
+
+                if (status.Modified)
+                    set |= GitItemState.GitDirty | GitItemState.Modified;
+                else
+                    unset |= GitItemState.GitDirty | GitItemState.Modified;
+            }
+            else if (status.IndexStatus == GitStatus.Added)
+            {
+                set |= GitItemState.Versioned | GitItemState.Versionable | GitItemState.Exists | GitItemState.Added;
+                unset |= GitItemState.Deleted | GitItemState.Modified | GitItemState.Ignored | GitItemState.GitDirty;
+            }
+            else if (status.IndexStatus == GitStatus.Deleted || status.WorkingStatus == GitStatus.Deleted)
+            {
+                set |= GitItemState.Versioned | GitItemState.Versionable | GitItemState.Exists | GitItemState.Deleted;
+                unset |= GitItemState.Deleted | GitItemState.Modified | GitItemState.Ignored | GitItemState.GitDirty;
             }
             else
             {
@@ -159,6 +174,40 @@ namespace Ankh
             }
 
             SetState(set, unset);
+        }
+
+        static bool MaxModified(GitStatus status)
+        {
+            switch(status)
+            {
+                case GitStatus.None:
+                case GitStatus.Normal:
+                case GitStatus.Modified:
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the SVN status of the item; retrieves a placeholder if the status is unknown
+        /// </summary>
+        public GitStatusData Status
+        {
+            get
+            {
+                EnsureClean();
+
+                return _status;
+            }
+        }
+
+        void EnsureClean()
+        {
+            Debug.Assert(_statusDirty != XBool.None, "Recursive refresh call");
+
+            if (_statusDirty == XBool.True)
+                this.RefreshStatus();
         }
 
         IGitStatusCache GitCache

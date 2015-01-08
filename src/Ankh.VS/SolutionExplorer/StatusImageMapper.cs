@@ -24,6 +24,7 @@ using SharpSvn;
 using System.IO;
 using System.Diagnostics;
 using System.Globalization;
+using SharpGit;
 
 namespace Ankh.VS.SolutionExplorer
 {
@@ -160,6 +161,45 @@ namespace Ankh.VS.SolutionExplorer
                     return AnkhGlyph.None;
             }
 
+            switch (item.Status.WorkingStatus)
+            {
+                case GitStatus.Normal:
+                    if (item.IsDocumentDirty)
+                        return AnkhGlyph.FileDirty;
+                    else
+                        return AnkhGlyph.Normal;
+                case GitStatus.Modified:
+                    return AnkhGlyph.Modified;
+                /*case GitStatus.Replaced:
+                    return AnkhGlyph.CopiedOrMoved;*/
+                case GitStatus.Added:
+                    return false ? AnkhGlyph.CopiedOrMoved : AnkhGlyph.Added;
+
+                /*case GitStatus.Missing:
+                    if (item.IsCasingConflicted)
+                        return AnkhGlyph.InConflict;
+                    else
+                        return AnkhGlyph.Deleted;*/
+                case GitStatus.Deleted:
+                    if (item.Exists && item.InSolution)
+                        return item.IsSccExcluded ? AnkhGlyph.Ignored : AnkhGlyph.ShouldBeAdded;
+                    return AnkhGlyph.Deleted;
+
+                /*case GitStatus.Conflicted: // Should have been handled above
+                case GitStatus.Obstructed:
+                    return AnkhGlyph.InConflict;*/
+
+                case GitStatus.Ignored: // Should have been handled above
+                    return AnkhGlyph.Ignored;
+
+                /*case GitStatus.External:
+                case GitStatus.Incomplete:
+                    return AnkhGlyph.InConflict;
+
+                case GitStatus.Zero:*/
+                default:
+                    return AnkhGlyph.None;
+            }
             return AnkhGlyph.ShouldBeAdded;
         }
     }
