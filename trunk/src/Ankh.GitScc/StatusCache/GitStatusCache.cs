@@ -629,26 +629,26 @@ namespace Ankh.GitScc.StatusCache
             }
         }
 
-        public IList<GitItem> GetCachedBelow(string path)
+        public IEnumerable<string> GetCachedBelow(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             lock (_lock)
             {
-                List<GitItem> items = new List<GitItem>();
+                List<string> items = new List<string>();
 
                 foreach (GitItem v in _map.Values)
                 {
                     if (v.IsBelowPath(path))
-                        items.Add(v);
+                        items.Add(v.FullPath);
                 }
 
                 return items;
             }
         }
 
-        public IList<GitItem> GetCachedBelow(IEnumerable<string> paths)
+        public IEnumerable<string> GetCachedBelow(IEnumerable<string> paths)
         {
             if (paths == null)
                 throw new ArgumentNullException("path");
@@ -666,7 +666,7 @@ namespace Ankh.GitScc.StatusCache
                     }
                 }
 
-                return new List<GitItem>(items.Values);
+                return new List<string>(items.Keys);
             }
         }
 

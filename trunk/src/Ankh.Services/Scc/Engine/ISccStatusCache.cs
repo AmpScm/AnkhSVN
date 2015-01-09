@@ -20,20 +20,19 @@ namespace Ankh.Scc.Engine
 
         void MarkDirtyRecursive(string path);
 
-
         /// <summary>
         /// Clears the whole statuscache; called when closing the solution
         /// </summary>
         void ClearCache();
+
+        IEnumerable<string> GetCachedBelow(string path);
+        IEnumerable<string> GetCachedBelow(IEnumerable<string> paths);
     }
 
     public interface ISccStatusCache<T> : ISccStatusCache
         where T : SccItem<T>
     {
         T this[string path] { get; }
-
-        IList<T> GetCachedBelow(string path);
-        IList<T> GetCachedBelow(IEnumerable<string> paths);
 
         /// <summary>
         /// Like this[], but without the normalization step

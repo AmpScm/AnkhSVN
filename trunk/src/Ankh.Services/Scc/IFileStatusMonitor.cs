@@ -96,5 +96,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="actions">The actions.</param>
         void HandleSvnResult(IDictionary<string, SvnClientAction> actions);
+
+        void SetDocumentDirty(string FullPath, bool dirty);
     }
 }

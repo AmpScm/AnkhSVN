@@ -642,26 +642,26 @@ namespace Ankh.Scc.StatusCache
             }
         }
 
-        public IList<SvnItem> GetCachedBelow(string path)
+        public IEnumerable<string> GetCachedBelow(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             lock (_lock)
             {
-                List<SvnItem> items = new List<SvnItem>();
+                List<string> items = new List<string>();
 
                 foreach (SvnItem v in _map.Values)
                 {
                     if (v.IsBelowPath(path))
-                        items.Add(v);
+                        items.Add(v.FullPath);
                 }
 
                 return items;
             }
         }
 
-        public IList<SvnItem> GetCachedBelow(IEnumerable<string> paths)
+        public IEnumerable<string> GetCachedBelow(IEnumerable<string> paths)
         {
             if (paths == null)
                 throw new ArgumentNullException("path");
@@ -679,7 +679,7 @@ namespace Ankh.Scc.StatusCache
                     }
                 }
 
-                return new List<SvnItem>(items.Values);
+                return new List<string>(items.Keys);
             }
         }
 

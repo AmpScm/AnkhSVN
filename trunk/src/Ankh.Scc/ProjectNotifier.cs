@@ -27,6 +27,7 @@ using SharpSvn;
 using Ankh.Commands;
 using Ankh.Selection;
 using Ankh.UI;
+using Ankh.Scc.Engine;
 
 namespace Ankh.Scc
 {
@@ -82,11 +83,17 @@ namespace Ankh.Scc
             get { return _commandService ?? (_commandService = GetService<IAnkhCommandService>()); }
         }
 
-        ISvnStatusCache _statusCache;
-        ISvnStatusCache Cache
+        ISccStatusCache _statusCache;
+        ISccStatusCache Cache
         {
             [DebuggerStepThrough]
             get { return _statusCache ?? (_statusCache = GetService<ISvnStatusCache>()); }
+        }
+
+        ISvnStatusCache _svnCache;
+        ISvnStatusCache SvnCache
+        {
+            get { return _svnCache ?? (_svnCache = GetService<ISvnStatusCache>()); }
         }
 
         IProjectFileMapper _mapper;
@@ -259,7 +266,7 @@ namespace Ankh.Scc
                 {
                     foreach (string file in maybeAdd)
                     {
-                        SvnItem item = Cache[file];
+                        SvnItem item = SvnCache[file];
                         // Only add
                         // * files
                         // * that are unversioned
@@ -353,13 +360,7 @@ namespace Ankh.Scc
             foreach (SvnClientAction action in actions.Values)
             {
                 if (action.Recursive)
-                {
-                    foreach (SvnItem item in Cache.GetCachedBelow(action.FullPath))
-                    {
-                        item.MarkDirty();
-                        ScheduleGlyphUpdate(item.FullPath);
-                    }
-                }
+                    ScheduleGlyphUpdate(Cache.GetCachedBelow(action.FullPath));
 
                 if (action.AddOrRemove)
                 {
@@ -468,7 +469,7 @@ namespace Ankh.Scc
                 ScheduleSvnStatus(modified.Keys);
                 foreach (KeyValuePair<string, DocumentLock> file in modified)
                 {
-                    SvnItem item = Cache[file.Key];
+                    SvnItem item = SvnCache[file.Key];
 
                     if (item.IsConflicted)
                     {
@@ -560,5 +561,21 @@ namespace Ankh.Scc
         }
 
         #endregion
+
+        public void SetDocumentDirty(string FullPath, bool dirty)
+        {
+            SvnItem item = SvnCache[FullPath];
+
+            if (item == null)
+                return;
+
+            ISvnItemStateUpdate sisu = item;
+            sisu.SetDocumentDirty(dirty);
+
+            if (item.IsModified)
+                return; // No need to update glyph!
+
+            ScheduleGlyphUpdate(FullPath);
+        }
     }
 }

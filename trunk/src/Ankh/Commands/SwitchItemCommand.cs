@@ -240,7 +240,7 @@ namespace Ankh.Commands
                     finally
                     {
                         statusCache.MarkDirtyRecursive(path);
-                        e.GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(SvnItem.GetPaths(statusCache.GetCachedBelow(path)));
+                        e.GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(statusCache.GetCachedBelow(path));
                     }
 
 
