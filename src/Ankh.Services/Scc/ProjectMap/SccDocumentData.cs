@@ -280,18 +280,15 @@ namespace Ankh.Scc.ProjectMap
             if (!_isFileDocument)
                 return;
 
-            SvnItem item = GetService<ISvnStatusCache>()[FullPath];
+            IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
 
-            if (item == null)
-                return;
+            if (monitor != null)
+                monitor.SetDocumentDirty(FullPath, dirty);
 
-            ISvnItemStateUpdate sisu = item;
-            sisu.SetDocumentDirty(dirty);
-
-            if (item.IsModified)
-                return; // No need to update glyph!
-
-            UpdateGlyph(true);
+            ISelectionContextEx selection = GetService<ISelectionContextEx>(typeof(ISelectionContext));
+            
+            if (selection != null)
+                selection.MaybeInstallDelayHandler();
         }
 
         public void CheckDirty(TryDocumentDirtyPoller poller)
@@ -303,19 +300,6 @@ namespace Ankh.Scc.ProjectMap
             {
                 SetDirty(true);
             }
-        }
-
-        void UpdateGlyph(bool checkFocus)
-        {
-            if (!_isFileDocument)
-                return;
-
-            GetService<ISelectionContextEx>(typeof(ISelectionContext)).MaybeInstallDelayHandler();
-
-            IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
-
-            if (monitor != null)
-                monitor.ScheduleGlyphUpdate(FullPath);
         }
 
         public void Dispose()
