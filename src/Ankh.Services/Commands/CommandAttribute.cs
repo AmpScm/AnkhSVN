@@ -100,17 +100,6 @@ namespace Ankh.Commands
             set { _showWhenDisabled = !value; }
         }
 
-        bool _showWhenUnavailable;
-        /// <summary>
-        /// Gets or sets a value indicating whether [hide when unavailable].
-        /// </summary>
-        /// <value><c>true</c> if [hide when disabled]; otherwise, <c>false</c>.</value>
-        public bool HiddenWhenUnavailable
-        {
-            get { return !_showWhenUnavailable; }
-            set { _showWhenUnavailable = !value; }
-        }
-
         CommandAvailability _availability;
 
         /// <summary>

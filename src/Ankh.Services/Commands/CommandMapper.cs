@@ -263,7 +263,6 @@ namespace Ankh.Commands
                             item.ICommand = instance; // hooks all events via interface
                             item.Availability = cmdAttr.Availability;
                             item.HiddenWhenDisabled = cmdAttr.HideWhenDisabled;
-                            item.HiddenWhenUnavailable = cmdAttr.HiddenWhenUnavailable;
                             item.CommandTarget = cmdAttr.CommandTarget;
                             item.ArgumentDefinition = cmdAttr.ArgumentDefinition ?? CalculateDefinition(cmdAttr.CommandTarget);
                         }
