@@ -230,7 +230,7 @@ namespace Ankh.Settings
 
         private bool LoadSolutionProperties(SettingsCache cache, SvnItem item)
         {
-            // Subversion -1.5 loads all properties in memory at once; loading them 
+            // Subversion loads all properties in memory at once; loading them 
             // all is always faster than loading a few
             // We must change this algorithm if Subversions implementation changes
 
