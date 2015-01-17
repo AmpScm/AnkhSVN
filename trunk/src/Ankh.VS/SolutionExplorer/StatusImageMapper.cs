@@ -173,7 +173,6 @@ namespace Ankh.VS.SolutionExplorer
                         return AnkhGlyph.FileDirty;
                     else
                         return AnkhGlyph.Normal;
-                    return AnkhGlyph.Modified;
                 /*case GitStatus.Replaced:
                     return AnkhGlyph.CopiedOrMoved;*/
                 case GitStatus.New:
@@ -201,7 +200,6 @@ namespace Ankh.VS.SolutionExplorer
                 default:
                     return AnkhGlyph.None;
             }
-            return AnkhGlyph.ShouldBeAdded;
         }
     }
 }
