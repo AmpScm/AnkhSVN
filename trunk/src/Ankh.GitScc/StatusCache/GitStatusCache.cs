@@ -909,5 +909,11 @@ namespace Ankh.GitScc.StatusCache
 
             Debug.Assert(updateItem.IsStatusClean(), "The item requesting to be updated is updated");
         }
+
+        SccItem ISccStatusCache.this[string path]
+        {
+            get { return this[path]; }
+        }
+
     }
 }

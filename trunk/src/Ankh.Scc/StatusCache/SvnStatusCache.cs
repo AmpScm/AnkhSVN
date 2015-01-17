@@ -834,5 +834,10 @@ namespace Ankh.Scc.StatusCache
         {
             get { return _enableUpgrade; }
         }
+
+        SccItem ISccStatusCache.this[string path]
+        {
+            get { return this[path]; }
+        }
     }
 }

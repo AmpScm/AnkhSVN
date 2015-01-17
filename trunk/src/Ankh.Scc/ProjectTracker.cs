@@ -215,9 +215,10 @@ namespace Ankh.Scc
             SccEvents.OnSolutionRefreshCommand(e);
         }
 
-        ISvnStatusCache StatusCache
+        ISvnStatusCache _svnCache;
+        ISvnStatusCache SvnCache
         {
-            get { return GetService<ISvnStatusCache>(); }
+            get { return _svnCache ?? (_svnCache = GetService<ISvnStatusCache>()); }
         }
 
         #region IVsTrackProjectDocumentsEvents2 Members
