@@ -255,9 +255,6 @@
       <xsl:if test="@textMenuCtrlUseMenu='true'">
         <xsl:text>|TEXTMENUCTRLUSEMENU</xsl:text>
       </xsl:if>
-      <xsl:if test="@textMenuUseButton='true'">
-        <xsl:text>|TEXTMENUUSEBUTTON</xsl:text>
-      </xsl:if>
       <xsl:if test="@textCascadeUseButton='true'">
         <xsl:text>|TEXTCASCADEUSEBUTTON</xsl:text>
       </xsl:if>

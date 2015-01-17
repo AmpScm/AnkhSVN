@@ -311,7 +311,7 @@
         <CommandFlag>TextCascadeUseBtn</CommandFlag>
       </xsl:if>
       <xsl:if test="@textMenuUseButton='true'">
-        <CommandFlag>|TEXTMENUUSEBUTTON</CommandFlag>
+        <CommandFlag>TextMenuUseButton</CommandFlag>
       </xsl:if>
       <xsl:if test="@textChanges='true'">
         <CommandFlag>TextChanges</CommandFlag>
@@ -322,9 +322,6 @@
       </xsl:if>
       <xsl:if test="@textMenuCtrlUseMenu='true'">
         <CommandFlag>TextMenuCtrlUseMenu</CommandFlag>
-      </xsl:if>
-      <xsl:if test="@textMenuUseButtton='true'">
-        <CommandFlag>TextMenuUseButton</CommandFlag>
       </xsl:if>
       <xsl:if test="@textOnly='true'">
         <CommandFlag>TextOnly</CommandFlag>
