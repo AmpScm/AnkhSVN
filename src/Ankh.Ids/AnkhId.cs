@@ -40,7 +40,7 @@ namespace Ankh
         public const string PlkCompany = "AnkhSVN Core Team";
         //**********************************************************************************
 
-        public const string AssemblyCopyright = "Copyright © AnkhSVN Team 2003-2012";
+        public const string AssemblyCopyright = "Copyright © AnkhSVN Team 2003-2015";
         public const string AssemblyProduct = "AnkhSVN - Subversion Support for Visual Studio";
         public const string AssemblyCompany = "AnkhSVN Team";
         //**********************************************************************************
