@@ -161,7 +161,7 @@ namespace Ankh.Scc
 
                     if (sccActive && _solutionLoaded)
                     {
-                        StatusCache.MarkDirty(newName);
+                        SvnCache.MarkDirty(newName);
                         TryFindOrigin(newName, out origin);
                     }
 
@@ -170,7 +170,7 @@ namespace Ankh.Scc
 
                     if (sccActive && trackCopies &&
                         !string.IsNullOrEmpty(origin) &&
-                        StatusCache[origin].HasCopyableHistory)
+                        SvnCache[origin].HasCopyableHistory)
                     {
                         if (copies == null)
                             copies = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -355,7 +355,7 @@ namespace Ankh.Scc
             else if (!maybeInfo.Exists)
             {
                 // Handles Delete followed by add. Triggered from Cut&Paste
-                SvnItem svnItem = StatusCache[maybeInfo.FullName];
+                SvnItem svnItem = SvnCache[maybeInfo.FullName];
 
                 if (svnItem.IsVersioned)
                 {
@@ -475,7 +475,7 @@ namespace Ankh.Scc
 
                     if (sccActive && _solutionLoaded)
                     {
-                        StatusCache.MarkDirty(dir);
+                        SvnCache.MarkDirty(dir);
                         TryFindOrigin(dir, out origin);
                     }
 
@@ -484,7 +484,7 @@ namespace Ankh.Scc
 
                     if (sccActive && trackCopies &&
                         !string.IsNullOrEmpty(origin) &&
-                        StatusCache[origin].HasCopyableHistory)
+                        SvnCache[origin].HasCopyableHistory)
                     {
                         using (SvnSccContext svn = new SvnSccContext(this))
                         {

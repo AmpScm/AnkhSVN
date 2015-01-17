@@ -74,11 +74,11 @@ namespace Ankh.Scc
             {
                 string s = rgszMkOldNames[i];
                 if (SvnItem.IsValidPath(s))
-                    StatusCache.MarkDirty(s);
+                    SvnCache.MarkDirty(s);
 
                 s = rgszMkNewNames[i];
                 if (SvnItem.IsValidPath(s))
-                    StatusCache.MarkDirty(s);
+                    SvnCache.MarkDirty(s);
             }
 
             if (!SccProvider.IsActive)
@@ -193,8 +193,8 @@ namespace Ankh.Scc
             if (_alreadyProcessed.Contains(newName))
                 return true;
 
-            SvnItem old = StatusCache[oldName];
-            SvnItem nw = StatusCache[newName];
+            SvnItem old = SvnCache[oldName];
+            SvnItem nw = SvnCache[newName];
 
             if (old.IsVersioned && !old.IsDeleteScheduled
                 && nw.IsVersionable
@@ -266,11 +266,11 @@ namespace Ankh.Scc
             {
                 string s = rgszMkOldNames[i];
                 if (!string.IsNullOrEmpty(s))
-                    StatusCache.MarkDirty(s);
+                    SvnCache.MarkDirty(s);
 
                 s = rgszMkNewNames[i];
                 if (!string.IsNullOrEmpty(s))
-                    StatusCache.MarkDirty(s);
+                    SvnCache.MarkDirty(s);
             }
 
             if (!SccProvider.IsActive)

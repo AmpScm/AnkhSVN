@@ -27,12 +27,14 @@ namespace Ankh.Scc.Engine
 
         IEnumerable<string> GetCachedBelow(string path);
         IEnumerable<string> GetCachedBelow(IEnumerable<string> paths);
+
+        SccItem this[string path] { get; }
     }
 
     public interface ISccStatusCache<T> : ISccStatusCache
         where T : SccItem<T>
     {
-        T this[string path] { get; }
+        new T this[string path] { get; }
 
         /// <summary>
         /// Like this[], but without the normalization step
