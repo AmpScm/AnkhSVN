@@ -347,6 +347,10 @@ namespace Ankh.Scc.StatusCache
                                 // We should avoid statting all parent directories again for .IsVersionable
                                 noWcAtAll = true;
                                 break;
+                            case SvnErrorCode.SVN_ERR_WC_CLEANUP_REQUIRED:
+                                if (updateDir != null)
+                                    updateDir.SetNeedsCleanup();
+                                break;
                         }
                     }
                     statSelf = true;

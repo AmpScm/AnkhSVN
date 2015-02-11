@@ -1335,5 +1335,23 @@ namespace Ankh
                 return path.Substring(path.Length - rp.Length, rp.Length);
         }
 
+
+        public bool NeedsCleanup
+        {
+            get
+            {
+                if (IsDirectory)
+                    return AsDirectory().NeedsCleanup;
+                else
+                {
+                    SvnDirectory dir = ParentDirectory;
+
+                    if (dir != null)
+                        return dir.NeedsCleanup;
+                    else
+                        return false;
+                }
+            }
+        }
     }
 }
