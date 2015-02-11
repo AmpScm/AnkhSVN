@@ -32,6 +32,7 @@ namespace Ankh.Scc
         bool ScheduleForCleanup { get; }
 
         void SetNeedsUpgrade();
+        void SetNeedsCleanup();
     }
     /// <summary>
     /// Collection of <see cref="SvnItem"/> instances of a specific directory
@@ -45,6 +46,7 @@ namespace Ankh.Scc
     {
         readonly IAnkhServiceProvider _context;
         bool _needsUpgrade;
+        bool _needsCleanup;
 
         public SvnDirectory(IAnkhServiceProvider context, string fullPath)
             : base(fullPath)
@@ -54,7 +56,6 @@ namespace Ankh.Scc
 
             _context = context;
         }
-
 
         /// <summary>
         /// Gets the directory item
@@ -102,6 +103,7 @@ namespace Ankh.Scc
         void ISvnDirectoryUpdate.TickAll()
         {
             _needsUpgrade = false;
+            _needsCleanup = false;
             foreach (ISvnItemUpdate item in this)
             {
                 item.TickItem();
@@ -134,6 +136,16 @@ namespace Ankh.Scc
         void ISvnDirectoryUpdate.SetNeedsUpgrade()
         {
             _needsUpgrade = true;
+        }
+
+        void ISvnDirectoryUpdate.SetNeedsCleanup()
+        {
+            _needsUpgrade = true;
+        }
+
+        public bool NeedsCleanup
+        {
+            get { return _needsCleanup; }
         }
     }
 }
