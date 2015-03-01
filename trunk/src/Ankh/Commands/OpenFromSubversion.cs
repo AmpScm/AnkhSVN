@@ -230,12 +230,12 @@ namespace Ankh.Commands
                                 }
                             break;
                         case ProjectAddMode.Copy:
-                            using (SvnWorkingCopyClient cl = e.GetService<ISvnClientPool>().GetWcClient())
+                            using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
                             {
                                 string tmpDir = localDir + "-Src-copyTmp";
                                 Directory.CreateDirectory(tmpDir);
                                 Directory.Move(Path.Combine(localDir, SvnClient.AdministrativeDirectoryName), Path.Combine(tmpDir, SvnClient.AdministrativeDirectoryName));
-                                SvnWorkingCopyCopyArgs ma = new SvnWorkingCopyCopyArgs();
+                                SvnCopyArgs ma = new SvnCopyArgs();
                                 ma.MetaDataOnly = true;
                                 cl.Copy(tmpDir, localDir, ma);
                                 SvnItem.DeleteDirectory(tmpDir, true);
