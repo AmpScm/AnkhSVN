@@ -147,6 +147,7 @@ namespace Ankh.UI
                 case SvnNotifyAction.CommitReplaced:
                 case SvnNotifyAction.CommitAddCopy:
                 case SvnNotifyAction.CommitReplacedWithCopy:
+                case SvnNotifyAction.CommitFinalizing:
                     actionText = actionText.Substring(6);
                     break;
                 case SvnNotifyAction.CommitSendData:
@@ -158,6 +159,7 @@ namespace Ankh.UI
                 case SvnNotifyAction.UpdateStarted:
                 case SvnNotifyAction.RecordMergeInfoStarted:
                 case SvnNotifyAction.FollowUrlRedirect:
+                case SvnNotifyAction.OperationRequiresTarget:
                     actionText = null;
                     break;
             }
