@@ -136,6 +136,8 @@ namespace Ankh.UI
                 case SvnNotifyAction.UpdateShadowedAdd:
                 case SvnNotifyAction.UpdateShadowedDelete:
                 case SvnNotifyAction.UpdateShadowedUpdate:
+                case SvnNotifyAction.UpdateExternalRemoved:
+                case SvnNotifyAction.UpdateBrokenLock:
                     actionText = actionText.Substring(6);
                     break;
                 case SvnNotifyAction.UpgradedDirectory:
