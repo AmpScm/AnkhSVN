@@ -349,11 +349,17 @@ namespace Ankh.WpfPackage.Services
             if (listView.Font != DialogFont)
                 listView.Font = DialogFont;
 
-            if (listView.BackColor != listView.Parent.BackColor)
-                listView.BackColor = listView.Parent.BackColor;
+            Color oldBack = listView.BackColor;
+            Color oldFore = listView.ForeColor;
+            Color newBack = listView.Parent.BackColor;
+            Color newFore = listView.Parent.ForeColor;
+            bool updateBack = false, updateFore = false;
 
-            if (listView.ForeColor != listView.Parent.ForeColor)
-                listView.ForeColor = listView.Parent.ForeColor;
+            if (oldBack != newBack)
+            {
+                listView.BackColor = newBack;
+                updateBack = true;
+            }
 
             if (oldFore != newFore)
             {
@@ -366,7 +372,7 @@ namespace Ankh.WpfPackage.Services
             // listview
             if ((updateBack || updateFore) && !listView.VirtualMode)
             {
-                foreach(ListViewItem lvi in listView.Items)
+                foreach (ListViewItem lvi in listView.Items)
                 {
                     if (updateFore && lvi.ForeColor == oldFore)
                         lvi.ForeColor = newFore;
