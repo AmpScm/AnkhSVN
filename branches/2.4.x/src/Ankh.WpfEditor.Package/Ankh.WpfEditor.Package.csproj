@@ -119,6 +119,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\SccHelper.cs" />
     <Compile Include="Services\ServiceMethodResolver.cs" />
+    <Compile Include="Services\ThemingService.GetTheme.cs">
+      <DependentUpon>ThemingService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\ThreadedWaitService.cs" />
     <Compile Include="Services\VS2012ThemingService.cs" />
     <Compile Include="Services\WpfEditorInfo.cs" />

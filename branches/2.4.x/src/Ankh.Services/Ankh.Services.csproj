@@ -81,6 +81,7 @@
     <Compile Include="Scc\ISccHelper.cs" />
     <Compile Include="Selection\SvnHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
+    <Compile Include="VSAssemblies.cs" />
     <Compile Include="VSErr.cs" />
     <Compile Include="VS\IAnkhGlobalCommandHook.cs" />
     <Compile Include="VS\IssueMarker.cs" />
