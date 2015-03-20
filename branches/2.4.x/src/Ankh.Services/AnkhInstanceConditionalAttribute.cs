@@ -9,7 +9,7 @@ namespace Ankh
         VS2008,
         VS2010,
         VS2012,
-        VSvNext
+        VS2013,
     }
 
     public abstract class AnkhInstanceConditionalAttribute : Attribute
