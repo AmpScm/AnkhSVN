@@ -25,6 +25,7 @@ using Microsoft.Win32;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using Ankh.Selection;
 using Ankh.Configuration;
+using Ankh.UI;
 
 namespace Ankh.VS.Selection
 {
@@ -398,39 +399,17 @@ namespace Ankh.VS.Selection
             }
 
             _themeLight = _themeDark = false;
-
             IAnkhConfigurationService config = GetService<IAnkhConfigurationService>();
+            Guid themeGuid;
 
-            if (config == null)
+            if (config == null
+                || !GetService<IWinFormsThemingService>().GetCurrentTheme(out themeGuid))
             {
                 _themed = false;
                 return;
             }
 
-            string currentTheme;
-            Guid themeGuid = Guid.Empty;
-
-            using (RegistryKey rk = config.OpenVSUserKey("General"))
-            {
-                if (rk != null)
-                    currentTheme = rk.GetValue("CurrentTheme") as string;
-                else
-                    currentTheme = null;
-            }
-
-            try
-            {
-                if (!string.IsNullOrEmpty(currentTheme))
-                    themeGuid = new Guid(currentTheme);
-                else
-                    currentTheme = null;
-            }
-            catch
-            {
-                currentTheme = null;
-            }
-
-            if (currentTheme == null)
+            if (themeGuid == Guid.Empty)
             {
                 // Before the first theme switch no theme is set, but the light theme
                 // is used anyway
