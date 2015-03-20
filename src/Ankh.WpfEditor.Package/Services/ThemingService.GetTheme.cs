@@ -66,7 +66,7 @@ namespace Ankh.WpfPackage.Services
 
             if (_currentThemeProperty != null)
             {
-                object currentTheme = _currentThemeProperty.GetValue(_themeService);
+                object currentTheme = _currentThemeProperty.GetValue(_themeService, null);
 
                 if (currentTheme != null)
                 {
@@ -75,7 +75,7 @@ namespace Ankh.WpfPackage.Services
 
                     if (_themeIdProperty != null)
                     {
-                        themeGuid = (Guid)_themeIdProperty.GetValue(currentTheme);
+                        themeGuid = (Guid)_themeIdProperty.GetValue(currentTheme, null);
                         return true;
                     }
                 }
