@@ -7,5 +7,6 @@ namespace Ankh.UI
     {
         void ThemeRecursive(Control control);
         bool TryGetIcon(string path, out IntPtr hIcon);
+        bool GetCurrentTheme(out Guid themeGuid);
     }
 }
