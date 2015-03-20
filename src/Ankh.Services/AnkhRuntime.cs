@@ -61,6 +61,11 @@ namespace Ankh
                 throw new ArgumentNullException("parentProvider");            
         }
 
+        public void PreLoad()
+        {
+            VSVersion.Ensure(this);
+        }
+
         void InitializeServices()
         {
             if (_servicesLoaded)
