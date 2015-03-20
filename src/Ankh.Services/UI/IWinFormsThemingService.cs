@@ -11,5 +11,6 @@ namespace Ankh.UI
         void VSThemeWindow(Control control);
 
         bool TryGetIcon(string path, out IntPtr hIcon);
+        bool GetCurrentTheme(out Guid themeGuid);
     }
 }

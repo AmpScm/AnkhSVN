@@ -62,9 +62,9 @@ namespace Ankh.WpfPackage.Services
     }
 
     [GlobalService(typeof(IWinFormsThemingService), MinVersion = VSInstance.VS2012)]
-    sealed class VS2012ThemingService : AnkhService, IWinFormsThemingService
+    sealed partial class ThemingService : AnkhService, IWinFormsThemingService
     {
-        public VS2012ThemingService(IAnkhServiceProvider context)
+        public ThemingService(IAnkhServiceProvider context)
             : base(context)
         {
 
@@ -95,7 +95,7 @@ namespace Ankh.WpfPackage.Services
 
         private GetThemedColorType FetchThemedColor()
         {
-            Type vsUIShell5 = Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+            Type vsUIShell5 = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5", false);
 
             if (vsUIShell5 == null)
                 throw new InvalidOperationException();
@@ -169,7 +169,7 @@ namespace Ankh.WpfPackage.Services
         {
             if (_twd == null)
             {
-                _twd = GetInterfaceDelegate<ThemeWindow>(Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), GetService(typeof(SVsUIShell)));
+                _twd = GetInterfaceDelegate<ThemeWindow>(VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5"), GetService(typeof(SVsUIShell)));
 
                 if (_twd == null)
                     _twd = delegate(IntPtr h) { return false; };
@@ -190,7 +190,7 @@ namespace Ankh.WpfPackage.Services
 
             if (_giff == null)
             {
-                Type type_SVsImageService = Type.GetType("Microsoft.VisualStudio.Shell.Interop.SVsImageService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false);
+                Type type_SVsImageService = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.SVsImageService", false);
 
                 if (type_SVsImageService == null)
                     return false;
@@ -200,12 +200,17 @@ namespace Ankh.WpfPackage.Services
                 if (service == null)
                     return false;
 
-                _giff = GetInterfaceDelegate<GetIconForFile>(Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsImageService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), service);
+                Type type_IVsImageService = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsImageService", false);
+
+                if (type_IVsImageService == null)
+                    return false;
+
+                _giff = GetInterfaceDelegate<GetIconForFile>(type_IVsImageService, service);
 
                 if (_giff == null)
                     return false;
 
-                _giffEx = GetInterfaceDelegate<GetIconForFileEx>(Type.GetType("Microsoft.VisualStudio.Shell.Interop.IVsImageService, Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), service);
+                _giffEx = GetInterfaceDelegate<GetIconForFileEx>(type_IVsImageService, service);
             }
 
             try
@@ -322,8 +327,15 @@ namespace Ankh.WpfPackage.Services
             if (textBox.Font != DialogFont)
                 textBox.Font = DialogFont;
 
-            if (textBox.ReadOnly && textBox.BackColor != textBox.Parent.BackColor)
-                textBox.BackColor = textBox.Parent.BackColor;
+            Color backColor;
+            if (!textBox.ReadOnly
+                || !ColorSvc.TryGetColor((__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_COMBOBOX_BACKGROUND, out backColor))
+            {
+                backColor = textBox.Parent.BackColor;
+            }
+
+            if (textBox.BackColor != backColor)
+                textBox.BackColor = backColor;
 
             if (textBox.ForeColor != textBox.Parent.ForeColor)
                 textBox.ForeColor = textBox.Parent.ForeColor;
@@ -334,21 +346,36 @@ namespace Ankh.WpfPackage.Services
 
         void ThemeOne(ListView listView)
         {
-            Color clrFill, clrText;
-
-            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_FILL, out clrFill))
-                clrFill = SystemColors.Control;
-            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_TEXT, out clrText))
-                clrText = SystemColors.WindowText;
-
             if (listView.Font != DialogFont)
                 listView.Font = DialogFont;
 
-            if (listView.BackColor != clrFill)
-                listView.BackColor = clrFill;
+            if (listView.BackColor != listView.Parent.BackColor)
+                listView.BackColor = listView.Parent.BackColor;
 
-            if (listView.ForeColor != clrText)
-                listView.ForeColor = clrText;
+            if (listView.ForeColor != listView.Parent.ForeColor)
+                listView.ForeColor = listView.Parent.ForeColor;
+
+            if (oldFore != newFore)
+            {
+                listView.ForeColor = newFore;
+                updateFore = true;
+            }
+
+            // In some cases we can iterate over third party components here,
+            // so make sure we don't fail because we try to iterate a virtual
+            // listview
+            if ((updateBack || updateFore) && !listView.VirtualMode)
+            {
+                foreach(ListViewItem lvi in listView.Items)
+                {
+                    if (updateFore && lvi.ForeColor == oldFore)
+                        lvi.ForeColor = newFore;
+
+                    if (updateBack && lvi.BackColor == oldBack)
+                        lvi.BackColor = newBack;
+                }
+            }
+
 
             if (listView.BorderStyle == BorderStyle.Fixed3D)
                 listView.BorderStyle = BorderStyle.FixedSingle;
@@ -458,11 +485,11 @@ namespace Ankh.WpfPackage.Services
                 clrTitle = SystemColors.WindowText;
             if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_BORDER, out clrBorder))
                 clrBorder = SystemColors.WindowFrame;
-            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_TEXT, out clrText))
+            if (!VSColors.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_TEXT, out clrText))
                 clrText = SystemColors.WindowText;
             if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_BACKGROUND, out clrBackground))
                 clrBackground = SystemColors.InactiveBorder;
-            if (!VSColors.TryGetColor(VSCOLOR_BRANDEDUI_FILL, out clrFill))
+            if (!VSColors.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out clrFill))
                 clrFill = SystemColors.Control;
             if (!VSColors.TryGetColor(VSCOLOR_GRAYTEXT, out clrGrayText))
                 clrGrayText = SystemColors.WindowText;
