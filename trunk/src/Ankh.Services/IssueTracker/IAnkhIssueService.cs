@@ -59,7 +59,8 @@ namespace Ankh
         /// <summary>
         /// Gets the issue references from the specified text
         /// </summary>
-        /// <param name="logmessage">text.</param>
+        /// <param name="text">text.</param>
+        /// <param name="issues"></param>
         /// <returns></returns>
         /// <remarks>Precondition: Current solution is associated with a repository.</remarks>
         bool TryGetIssues(string text, out IEnumerable<TextMarker> issues);
@@ -78,7 +79,7 @@ namespace Ankh
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="combined"></param>
+        /// <param name="text"></param>
         /// <param name="markers"></param>
         /// <returns></returns>
         bool TryGetRevisions(string text, out IEnumerable<TextMarker> markers);

@@ -43,6 +43,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Initializes a new instance of the <see cref="SvnWorkingCopy"/> class.
         /// </summary>
+        /// <param name="context"></param>
         /// <param name="rootItem">The root item.</param>
         SvnWorkingCopy(IAnkhServiceProvider context, SvnItem rootItem)
         {

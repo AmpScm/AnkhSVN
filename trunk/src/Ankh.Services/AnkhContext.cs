@@ -96,7 +96,7 @@ namespace Ankh
         /// </summary>
         /// <typeparam name="T">The type of service to get</typeparam>
         /// <returns>
-        /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
+        /// A service object of type <typeparamref name="T"/>.-or- null if there is no service object of type <typeparamref name="T"/>.
         /// </returns>
         [DebuggerStepThrough]
         public new T GetService<T>()

@@ -74,21 +74,22 @@ namespace Ankh.Scc
         /// Locks the specified documents for processing until the lock is disposed
         /// </summary>
         /// <param name="paths">The paths to lock. If a path ends with a '\' all files below that path will be locked</param>
+        /// <param name="lockType"></param>
         /// <returns></returns>
         DocumentLock LockDocuments(IEnumerable<string> paths, DocumentLockType lockType);
 
         /// <summary>
         /// Locks the specified documents for processing until the lock is disposed
         /// </summary>
-        /// <param name="paths">The paths to lock. If a path ends with a '\' all files below that path will be locked</param>
+        /// <param name="path">The paths to lock. If a path ends with a '\' all files below that path will be locked</param>
+        /// <param name="lockType"></param>
         /// <returns></returns>
         DocumentLock LockDocument(string path, DocumentLockType lockType);
 
         /// <summary>
         /// Marks the specified path dirty
         /// </summary>
-        /// <param name="ProjectFile">The project file.</param>
-        /// <param name="sure">if sure set to <c>true</c>.. <c>false</c> if the editory should be queried.</param>
+        /// <param name="path">The project file.</param>
         void ForceDirty(string path);
 
         /// <summary>
@@ -118,7 +119,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        bool NoReloadNecessary(string file);
+        bool NoReloadNecessary(string path);
 
         /// <summary>
         /// Provide API to avoid dirty scheduling

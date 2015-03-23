@@ -423,7 +423,6 @@ namespace Ankh.Commands
             return OLECMDTEXTF.OLECMDTEXTF_NONE;
         }
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="OLECMDTEXTF.SetText"]/*' />
         /// <devdoc>
         /// Accessing the text of this structure is very cumbersome.  Instead, you may
         /// use this method to access an integer pointer of the structure.

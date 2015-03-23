@@ -36,8 +36,8 @@ namespace Ankh.Scc.ProjectMap
         /// <summary>
         /// Gets the value associated with the specified key.
         /// </summary>
-        /// <param name="path">The path.</param>
-        /// <param name="item">The item.</param>
+        /// <param name="key">The path.</param>
+        /// <param name="value">The item.</param>
         /// <returns></returns>
         public bool TryGetValue(string key, out SccProjectFileReference value)
         {

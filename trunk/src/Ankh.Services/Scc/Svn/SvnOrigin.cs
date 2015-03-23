@@ -35,7 +35,6 @@ namespace Ankh.Scc
         /// <summary>
         /// Initializes a new instance of the <see cref="SvnOrigin"/> class using a SvnItem
         /// </summary>
-        /// <param name="context">The context.</param>
         /// <param name="svnItem">The SVN item.</param>
         public SvnOrigin(SvnItem svnItem)
         {

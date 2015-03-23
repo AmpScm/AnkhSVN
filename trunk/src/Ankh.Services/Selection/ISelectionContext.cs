@@ -73,7 +73,6 @@ namespace Ankh.Selection
         /// <summary>
         /// Gets a list of currently selected hierarchies (non-recursive)
         /// </summary>
-        /// <param name="recursive"></param>
         /// <returns></returns>
         IEnumerable<SccHierarchy> GetSelectedHierarchies();
 

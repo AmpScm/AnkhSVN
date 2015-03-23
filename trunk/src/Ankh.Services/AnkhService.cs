@@ -95,7 +95,7 @@ namespace Ankh
         /// </summary>
         /// <typeparam name="T">The type of service to get</typeparam>
         /// <returns>
-        /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
+        /// A service object of type <typeparamref name="T"/>.-or- null if there is no service object of type <typeparamref name="T"/>.
         /// </returns>
         [DebuggerStepThrough]
         T IAnkhServiceProvider.GetService<T>()
@@ -120,7 +120,7 @@ namespace Ankh
         /// </summary>
         /// <typeparam name="T">The type of service to get</typeparam>
         /// <returns>
-        /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
+        /// A service object of type <typeparamref name="T"/>.-or- null if there is no service object of type <typeparamref name="T"/>.
         /// </returns>
         [DebuggerStepThrough]
         protected T GetService<T>()
@@ -552,10 +552,6 @@ namespace Ankh
         /// <summary>
         /// Call <paramref name="func"/> with the specified arguments, returning false on exceptions
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="func"></param>
-        /// <param name="a1"></param>
-        /// <returns></returns>
         [DebuggerNonUserCode]
         public static bool SafeSucceeded<T1,T2>(HR_Func_O<T1, T2> func, T1 a1, out T2 a2)
         {

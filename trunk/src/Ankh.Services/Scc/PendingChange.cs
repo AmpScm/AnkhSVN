@@ -129,6 +129,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Refreshes the pending change. Returns true if the state was modified, otherwise false
         /// </summary>
+        /// <param name="context"></param>
         /// <param name="item"></param>
         /// <returns></returns>
         public bool Refresh(RefreshContext context, SvnItem item)
@@ -284,8 +285,8 @@ namespace Ankh.Scc
         /// <summary>
         /// Creates if pending.
         /// </summary>
+        /// <param name="context"></param>
         /// <param name="item">The item.</param>
-        /// <param name="isDirty">if set to <c>true</c> [is dirty].</param>
         /// <param name="pc">The pc.</param>
         /// <returns></returns>
         public static bool CreateIfPending(RefreshContext context, SvnItem item, out PendingChange pc)
@@ -394,6 +395,7 @@ namespace Ankh.Scc
         /// Combines the statuses to a single PendingChangeKind status for UI purposes
         /// </summary>
         /// <param name="nodeStatus">The content status.</param>
+        /// <param name="textStatus"></param>
         /// <param name="propertyStatus">The property status.</param>
         /// <param name="treeConflict">if set to <c>true</c> [tree conflict].</param>
         /// <param name="item">The item or null if no on disk representation is availavke</param>
