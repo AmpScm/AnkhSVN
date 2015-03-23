@@ -34,6 +34,7 @@ namespace Ankh
         readonly int _newStartIndex = -1;
         readonly int _oldStartIndex = -1;
 
+        /// <summary>Initializes for Reset</summary>
         public CollectionChangedEventArgs(CollectionChange action)
         {
             if (action != CollectionChange.Reset)
@@ -41,11 +42,13 @@ namespace Ankh
             _action = action;
         }
 
+        /// <summary>Initializes for Reset, Add or Remove</summary>
         public CollectionChangedEventArgs(CollectionChange action, object changedItem)
             : this(action, changedItem, -1)
         {
         }
 
+        /// <summary>Initializes for Reset, Add or Remove</summary>
         public CollectionChangedEventArgs(CollectionChange action, object changedItem, int index)
         {
             if (action != CollectionChange.Reset
@@ -70,12 +73,14 @@ namespace Ankh
             }
         }
 
+        /// <summary>Initializes for Replace</summary>
         public CollectionChangedEventArgs(CollectionChange action, object newItem, object oldItem)
             : this(action, newItem, oldItem, -1)
         {
 
         }
 
+        /// <summary>Initializes for Replace</summary>
         public CollectionChangedEventArgs(CollectionChange action, object newItem, object oldItem, int startingIndex)
         {
             if (action != CollectionChange.Replace)
@@ -98,12 +103,14 @@ namespace Ankh
             }
         }
 
+        /// <summary>Initializes for Replace</summary>
         public CollectionChangedEventArgs(CollectionChange action, IList newItems, IList oldItems)
             : this(action, newItems, oldItems, -1)
         {
 
         }
 
+        /// <summary>Initializes for Replace</summary>
         public CollectionChangedEventArgs(CollectionChange action, IList newItems, IList oldItems, int startingIndex)
         {
             if (action != CollectionChange.Replace)
@@ -118,6 +125,7 @@ namespace Ankh
             _oldStartIndex = _newStartIndex = startingIndex;
         }
 
+        /// <summary>Initializes for Move</summary>
         public CollectionChangedEventArgs(CollectionChange action, object changedItem, int index, int oldIndex)
         {
             if (action != CollectionChange.Move)
@@ -132,6 +140,7 @@ namespace Ankh
             _oldStartIndex = oldIndex;
         }
 
+        /// <summary>Initializes for Move</summary>
         public CollectionChangedEventArgs(CollectionChange action, IList changedItems, int index, int oldIndex)
         {
             if (action != CollectionChange.Move)
@@ -171,7 +180,7 @@ namespace Ankh
             get { return _oldStartIndex; }
         }
 
-        internal class SimpleMonitor : IDisposable
+        internal class CollectionMonitor : IDisposable
         {
             private int _busyCount;
             public bool Busy
@@ -190,7 +199,7 @@ namespace Ankh
             {
                 this._busyCount--;
             }
-            public SimpleMonitor()
+            public CollectionMonitor()
             {
             }
 
