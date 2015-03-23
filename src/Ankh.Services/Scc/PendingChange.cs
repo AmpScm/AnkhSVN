@@ -525,7 +525,7 @@ namespace Ankh.Scc
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PendingChangeCollection : KeyedCollection<string, PendingChange>
+    public sealed class PendingChangeCollection : KeyedCollectionWithNotify<string, PendingChange>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PendingChangeCollection"/> class.

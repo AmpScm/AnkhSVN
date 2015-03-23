@@ -64,11 +64,30 @@ namespace Ankh.Scc
             get { return _refreshContext ?? (_refreshContext = new PendingChange.RefreshContext(Context)); }
         }
 
+        private void PendingChangesChanged(object sender, CollectionChangedEventArgs<PendingChange> e)
+        {
+            switch (e.Action)
+            {
+                case CollectionChange.Add:
+                    OnAdded(new PendingChangeEventArgs(this, e.NewItems[0]));
+                    break;
+                case CollectionChange.Remove:
+                    // No need to check wasClean
+                    OnRemoved(new PendingChangeEventArgs(this, e.OldItems[0]));
+                    break;
+                case CollectionChange.Reset:
+                    OnInitialUpdate(new PendingChangeEventArgs(this, null));
+                    break;
+                case CollectionChange.Replace:
+                case CollectionChange.Move:
+                    throw new NotImplementedException();
+            }
+        }
+
         void InnerRefresh()
         {
-            PendingChangeEventArgs pceMe = new PendingChangeEventArgs(this, null);
-
             using (BatchStartedEventArgs br = BatchRefresh())
+            using (_pendingChanges.BatchUpdate())
             {
                 bool wasClean = (_pendingChanges.Count == 0);
                 Dictionary<string, PendingChange> mapped = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
@@ -117,14 +136,7 @@ namespace Ankh.Scc
                         continue;
 
                     _pendingChanges.RemoveAt(i--);
-                    if (!wasClean)
-                    {
-                        OnRemoved(new PendingChangeEventArgs(this, pc));
-                    }
                 }
-
-                if (wasClean && _pendingChanges.Count > 0)
-                    OnInitialUpdate(pceMe);
             }
         }
 
@@ -140,9 +152,6 @@ namespace Ankh.Scc
                     {
                         _pendingChanges.Remove(file);
                         _extraFiles.Remove(file);
-
-                        // No need to check wasClean
-                        OnRemoved(new PendingChangeEventArgs(this, pc));
                     }
                     else if (!wasClean)
                         OnChanged(new PendingChangeEventArgs(this, pc));
@@ -154,9 +163,6 @@ namespace Ankh.Scc
 
                 if (!_pendingChanges.Contains(pc))
                     _pendingChanges.Add(pc);
-
-                if (!wasClean)
-                    OnAdded(new PendingChangeEventArgs(this, pc));
             }
             
             return pc;
@@ -176,7 +182,6 @@ namespace Ankh.Scc
                 if (_pendingChanges.TryGetValue(file, out pc))
                 {
                     _pendingChanges.Remove(file);
-                    OnRemoved(new PendingChangeEventArgs(this, pc));
                 }
 
                 return;
@@ -195,9 +200,6 @@ namespace Ankh.Scc
                     {
                         _pendingChanges.Remove(file);
                         _extraFiles.Remove(file);
-
-                        // No need to check wasClean or external files; not possible in this case
-                        OnRemoved(new PendingChangeEventArgs(this, pc));
                     }
                     else
                         OnChanged(new PendingChangeEventArgs(this, pc));
@@ -206,8 +208,6 @@ namespace Ankh.Scc
             else if (PendingChange.CreateIfPending(RefreshContext, item, out pc))
             {
                 _pendingChanges.Add(pc);
-
-                OnAdded(new PendingChangeEventArgs(this, pc));
             }
         }
 
