@@ -26,7 +26,6 @@ namespace Ankh.Scc
 {
     partial class PendingChangeManager
     {
-        readonly PendingChangeCollection _pendingChanges = new PendingChangeCollection();
         readonly HybridCollection<string> _extraFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
         IFileIconMapper _iconMap;
         ISvnStatusCache _cache;
@@ -53,35 +52,10 @@ namespace Ankh.Scc
             get { return _tracker ?? (_tracker = GetService<IAnkhOpenDocumentTracker>()); }
         }
 
-        public IEnumerable<PendingChange> GetAll()
-        {
-            return new List<PendingChange>(_pendingChanges);
-        }
-
         PendingChange.RefreshContext _refreshContext;
         protected PendingChange.RefreshContext RefreshContext
         {
             get { return _refreshContext ?? (_refreshContext = new PendingChange.RefreshContext(Context)); }
-        }
-
-        private void PendingChangesChanged(object sender, CollectionChangedEventArgs<PendingChange> e)
-        {
-            switch (e.Action)
-            {
-                case CollectionChange.Add:
-                    OnAdded(new PendingChangeEventArgs(this, e.NewItems[0]));
-                    break;
-                case CollectionChange.Remove:
-                    // No need to check wasClean
-                    OnRemoved(new PendingChangeEventArgs(this, e.OldItems[0]));
-                    break;
-                case CollectionChange.Reset:
-                    OnInitialUpdate(new PendingChangeEventArgs(this, null));
-                    break;
-                case CollectionChange.Replace:
-                case CollectionChange.Move:
-                    throw new NotImplementedException();
-            }
         }
 
         void InnerRefresh()
@@ -295,7 +269,7 @@ namespace Ankh.Scc
         {
             Dictionary<string, string> usedNames = new Dictionary<string, string>();
 
-            foreach (PendingChange pc in GetAll()) // Get copy of list to make sure the list doesn't change on our back
+            foreach (PendingChange pc in new List<PendingChange>(_pendingChanges))
             {
                 string cl = pc.SvnItem.Status.ChangeList;
 

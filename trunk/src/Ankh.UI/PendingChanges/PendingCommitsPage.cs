@@ -118,12 +118,9 @@ namespace Ankh.UI.PendingChanges
             if (_manager == null)
                 return;
 
-            _manager.Added += new EventHandler<PendingChangeEventArgs>(OnPendingChangeAdded);
-            _manager.Removed += new EventHandler<PendingChangeEventArgs>(OnPendingChangeRemoved);
+            _manager.PendingChanges.CollectionChanged += OnPendingChangesChanged;
             _manager.Changed += new EventHandler<PendingChangeEventArgs>(OnPendingChangesChanged);
-            _manager.InitialUpdate += new EventHandler<PendingChangeEventArgs>(OnPendingChangesInitialUpdate);
             _manager.IsActiveChanged += new EventHandler<PendingChangeEventArgs>(OnPendingChangesActiveChanged);
-            _manager.ListFlushed += new EventHandler<PendingChangeEventArgs>(OnPendingChangesListFlushed);
             _manager.BatchUpdateStarted += new EventHandler<BatchStartedEventArgs>(OnBatchUpdateStarted);
 
             if (!_manager.IsActive)
@@ -139,6 +136,24 @@ namespace Ankh.UI.PendingChanges
             ev.SolutionClosed += new EventHandler(OnSolutionRefresh);
             ev.SolutionOpened += new EventHandler(OnSolutionRefresh);
             OnSolutionRefresh(this, EventArgs.Empty);
+        }
+
+        private void OnPendingChangesChanged(object sender, CollectionChangedEventArgs<PendingChange> e)
+        {
+            switch (e.Action)
+            {
+                case CollectionChange.Add:
+                    foreach(PendingChange pc in e.NewItems)
+                        OnPendingChangeAdded(this, new PendingChangeEventArgs(_manager, pc));
+                    break;
+                case CollectionChange.Remove:
+                    foreach(PendingChange pc in e.OldItems)
+                    OnPendingChangeRemoved(this, new PendingChangeEventArgs(_manager, pc));
+                    break;
+                case CollectionChange.Reset:
+                    OnPendingChangesListFlushed(this, new PendingChangeEventArgs(_manager, null));
+                    break;
+            }
         }
 
         int _inBatchUpdate;
@@ -278,11 +293,6 @@ namespace Ankh.UI.PendingChanges
             Enabled = e.Manager.IsActive;
         }
 
-        void OnPendingChangesInitialUpdate(object sender, PendingChangeEventArgs e)
-        {
-            PerformInitialUpdate(e.Manager);
-        }
-
         void PerformInitialUpdate(IPendingChangesManager manager)
         {
             if (manager == null)
@@ -294,7 +304,7 @@ namespace Ankh.UI.PendingChanges
             try
             {
                 List<ListViewItem> newItems = new List<ListViewItem>();
-                foreach (PendingChange pc in manager.GetAll())
+                foreach (PendingChange pc in new List<PendingChange>(manager.PendingChanges))
                 {
                     PendingCommitItem pi = new PendingCommitItem(pendingCommits, pc);
                     _listItems.Add(pc.FullPath, pi);

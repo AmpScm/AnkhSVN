@@ -136,10 +136,9 @@ namespace Ankh.Scc
         bool IsActive { get; set; }
 
         /// <summary>
-        /// Gets a list of all current pending changes
+        /// Gets a the actual list of all current pending changes
         /// </summary>
-        /// <returns></returns>
-        IEnumerable<PendingChange> GetAll();
+        ReadOnlyKeyedCollectionWithNotify<string, PendingChange> PendingChanges { get; }
 
         /// <summary>
         /// Gets a list of all current pending changes below a specific path
@@ -171,36 +170,15 @@ namespace Ankh.Scc
         PendingChange this[string fullPath] { get; }
 
         /// <summary>
-        /// Raised when a pending change item has been added
-        /// </summary>
-        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
-        event EventHandler<PendingChangeEventArgs> Added;
-        /// <summary>
-        /// Raised when a pending change item has been removed
-        /// </summary>
-        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
-        event EventHandler<PendingChangeEventArgs> Removed;
-        /// <summary>
         /// Raised when the properties of a pending change have changed
         /// </summary>
         /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
         event EventHandler<PendingChangeEventArgs> Changed;
-        /// <summary>
-        /// Raised when the complete pending change state has been flushed; All listeners should
-        /// use GetAll() to get a new initial state
-        /// </summary>
-        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
-        event EventHandler<PendingChangeEventArgs> ListFlushed;
 
         /// <summary>
         /// Raised around 'large' updates
         /// </summary>
         event EventHandler<BatchStartedEventArgs> BatchUpdateStarted;
-
-        /// <summary>
-        /// Occurs when [initial update].
-        /// </summary>
-        event EventHandler<PendingChangeEventArgs> InitialUpdate;
 
         /// <summary>
         /// Raised when the pending changes manager is activated or disabled
