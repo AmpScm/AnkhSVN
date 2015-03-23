@@ -33,7 +33,6 @@ namespace Ankh.Scc
         public PendingChangeManager(IAnkhServiceProvider context)
             : base(context)
         {
-
         }
 
         protected override void OnInitialize()
@@ -48,6 +47,7 @@ namespace Ankh.Scc
             events.SolutionClosed += new EventHandler(OnSolutionClosed);
 
             _solutionOpen = !string.IsNullOrEmpty(GetService<ISelectionContext>().SolutionFilename);
+            _pendingChanges.CollectionChanged += PendingChangesChanged;
         }
 
         void OnSolutionOpened(object sender, EventArgs e)
