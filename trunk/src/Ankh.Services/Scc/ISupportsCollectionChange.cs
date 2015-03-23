@@ -203,13 +203,16 @@ namespace Ankh
             {
             }
 
-            internal void CheckReentrancy(EventHandler<CollectionChangedEventArgs> collectionChange)
+            internal void CheckReentrancy<TEventArgs>(EventHandler<TEventArgs> collectionChange)
+                where TEventArgs : EventArgs
             {
                 if (Busy && collectionChange != null)
                     throw new InvalidOperationException();
             }
 
             internal void CheckReentrancy<T1, T2>(EventHandler<T1> handlers1, EventHandler<T2> handlers2)
+                where T1: EventArgs
+                where T2: EventArgs
             {
                 if (!Busy)
                     return;
