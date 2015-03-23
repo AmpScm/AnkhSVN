@@ -13,6 +13,11 @@ namespace Ankh
         IDisposable BatchUpdate();
     }
 
+    public interface ISupportsCollectionChanged<T> : ISupportsCollectionChanged where T : class
+    {
+        new event EventHandler<CollectionChangedEventArgs<T>> CollectionChanged;
+    }
+
     public enum CollectionChange
     {
         /// <summary>One or more items were added to the collection.</summary>
@@ -31,8 +36,8 @@ namespace Ankh
     public class CollectionChangedEventArgs : EventArgs
     {
         readonly CollectionChange _action;
-        readonly IList _newItems;
-        readonly IList _oldItems;
+        readonly object[] _newItems;
+        readonly object[] _oldItems;
         readonly int _newStartIndex = -1;
         readonly int _oldStartIndex = -1;
 
@@ -65,12 +70,12 @@ namespace Ankh
             _action = action;
             if (action == CollectionChange.Add)
             {
-                _newItems = new object[] { changedItem };
+                _newItems = MakeArray(changedItem);
                 _newStartIndex = index;
             }
             else if (action == CollectionChange.Remove)
             {
-                _oldItems = new object[] { changedItem };
+                _oldItems = MakeArray(changedItem);
                 _oldStartIndex = index;
             }
         }
@@ -93,27 +98,20 @@ namespace Ankh
                 throw new ArgumentNullException("newItem");
 
             _action = action;
-            if (action == CollectionChange.Add)
-            {
-                _newItems = new object[] { newItem };
-                _newStartIndex = startingIndex;
-            }
-            else if (action == CollectionChange.Remove)
-            {
-                _oldItems = new object[] { oldItem };
-                _oldStartIndex = startingIndex;
-            }
+            _newItems = MakeArray(newItem);
+            _oldItems = MakeArray(oldItem);
+            _oldStartIndex = _newStartIndex = startingIndex;
         }
 
         /// <summary>Initializes for Replace</summary>
-        public CollectionChangedEventArgs(CollectionChange action, IList newItems, IList oldItems)
+        public CollectionChangedEventArgs(CollectionChange action, object[] newItems, object[] oldItems)
             : this(action, newItems, oldItems, -1)
         {
 
         }
 
         /// <summary>Initializes for Replace</summary>
-        public CollectionChangedEventArgs(CollectionChange action, IList newItems, IList oldItems, int startingIndex)
+        public CollectionChangedEventArgs(CollectionChange action, object[] newItems, object[] oldItems, int startingIndex)
         {
             if (action != CollectionChange.Replace)
                 throw new ArgumentException();
@@ -122,8 +120,8 @@ namespace Ankh
             else if (oldItems == null)
                 throw new ArgumentNullException("oldItems");
             _action = action;
-            _newItems = ArrayList.ReadOnly(newItems);
-            _oldItems = ArrayList.ReadOnly(oldItems);
+            _newItems = newItems;
+            _oldItems = oldItems;
             _oldStartIndex = _newStartIndex = startingIndex;
         }
 
@@ -137,13 +135,13 @@ namespace Ankh
             else if (index < 0 || oldIndex < 0)
                 throw new ArgumentException();
             _action = action;
-            _oldItems = _newItems = new object[] { changedItem };
+            _oldItems = _newItems = MakeArray(changedItem);
             _newStartIndex = index;
             _oldStartIndex = oldIndex;
         }
 
         /// <summary>Initializes for Move</summary>
-        public CollectionChangedEventArgs(CollectionChange action, IList changedItems, int index, int oldIndex)
+        public CollectionChangedEventArgs(CollectionChange action, object[] changedItems, int index, int oldIndex)
         {
             if (action != CollectionChange.Move)
                 throw new ArgumentException();
@@ -152,7 +150,7 @@ namespace Ankh
             else if (index < 0 || oldIndex < 0)
                 throw new ArgumentException();
             _action = action;
-            _oldItems = _newItems = ArrayList.ReadOnly(changedItems);
+            _oldItems = _newItems = changedItems;
             _newStartIndex = index;
             _oldStartIndex = oldIndex;
         }
@@ -162,12 +160,12 @@ namespace Ankh
             get { return _action; }
         }
 
-        public IList NewItems
+        public object[] NewItems
         {
             get { return _newItems; }
         }
 
-        public IList OldItems
+        public object[] OldItems
         {
             get { return _oldItems; }
         }
@@ -211,6 +209,16 @@ namespace Ankh
                     throw new InvalidOperationException();
             }
 
+            internal void CheckReentrancy<T1, T2>(EventHandler<T1> handlers1, EventHandler<T2> handlers2)
+            {
+                if (!Busy)
+                    return;
+                if (handlers1 != null)
+                    throw new InvalidOperationException();
+                if (handlers2 != null)
+                    throw new InvalidOperationException();
+            }
+
             sealed class BatchUpdateDisposer : IDisposable
             {
                 readonly AnkhAction _action;
@@ -230,6 +238,84 @@ namespace Ankh
             {
                 return new BatchUpdateDisposer(doneHandler);
             }
+        }
+
+        internal virtual object[] MakeArray(object item)
+        {
+            return new object[] { item };
+        }
+    }
+
+    public class CollectionChangedEventArgs<T> : CollectionChangedEventArgs where T : class
+    {
+        public CollectionChangedEventArgs(CollectionChange action)
+            : base(action)
+        {
+        }
+
+        /// <summary>Initializes for Reset, Add or Remove</summary>
+        public CollectionChangedEventArgs(CollectionChange action, T changedItem)
+            :  base(action, changedItem, -1)
+        {
+        }
+
+        /// <summary>Initializes for Reset, Add or Remove</summary>
+        public CollectionChangedEventArgs(CollectionChange action, T changedItem, int index)
+            : base(action, changedItem, index)
+        {
+        }
+
+        /// <summary>Initializes for Replace</summary>
+        public CollectionChangedEventArgs(CollectionChange action, T newItem, T oldItem)
+            : base(action, newItem, oldItem)
+        {
+
+        }
+
+        /// <summary>Initializes for Replace</summary>
+        public CollectionChangedEventArgs(CollectionChange action, T newItem, T oldItem, int startingIndex)
+            : base(action, newItem, oldItem, startingIndex)
+        {
+        }
+
+        /// <summary>Initializes for Replace</summary>
+        public CollectionChangedEventArgs(CollectionChange action, T[] newItems, T[] oldItems)
+            : base(action, newItems, oldItems)
+        {
+
+        }
+
+        /// <summary>Initializes for Replace</summary>
+        public CollectionChangedEventArgs(CollectionChange action, T[] newItems, T[] oldItems, int startingIndex)
+            : base(action, newItems, oldItems, startingIndex)
+        {
+        }
+
+        /// <summary>Initializes for Move</summary>
+        public CollectionChangedEventArgs(CollectionChange action, T changedItem, int index, int oldIndex)
+            : base(action, changedItem, index, oldIndex)
+        {
+        }
+
+        /// <summary>Initializes for Move</summary>
+        public CollectionChangedEventArgs(CollectionChange action, T[] changedItems, int index, int oldIndex)
+            : base(action, changedItems, index, oldIndex)
+        {
+        }
+
+        internal sealed override object[] MakeArray(object item)
+        {
+            return new T[] { (T)item };
+        }
+
+        public new T[] NewItems
+        {
+            get { return (T[])base.NewItems; }
+        }
+
+        public new T[] OldItems
+        {
+            get { return (T[])base.OldItems; }
         }
     }
 }
