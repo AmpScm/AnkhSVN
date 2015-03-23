@@ -126,9 +126,10 @@ namespace Ankh.Commands
         static IEnumerable<PendingChange> GetChanges(BaseCommandEventArgs e)
         {
             IPendingChangesManager pcm = e.GetService<IPendingChangesManager>();
+            List<PendingChange> pendingChanges = new List<PendingChange>(pcm.PendingChanges);
             if (e.Command == AnkhCommand.SolutionCommit)
             {
-                foreach (PendingChange pc in pcm.GetAll())
+                foreach (PendingChange pc in pendingChanges)
                 {
                     yield return pc;
                 }
@@ -137,7 +138,7 @@ namespace Ankh.Commands
             {
                 ProjectListFilter plf = new ProjectListFilter(e.Context, e.Selection.GetSelectedProjects(false));
 
-                foreach (PendingChange pc in pcm.GetAll())
+                foreach (PendingChange pc in pendingChanges)
                 {
                     if (plf.ShowChange(pc))
                         yield return pc;

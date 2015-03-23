@@ -408,7 +408,7 @@ namespace Ankh.VSPackage
 
             using (BinaryWriter bw = new BinaryWriter(storageStream))
             {
-                List<PendingChange> changes = (pendingChanges != null) ? new List<PendingChange>(pendingChanges.GetAll()) : null;
+                List<PendingChange> changes = (pendingChanges != null) ? new List<PendingChange>(pendingChanges.PendingChanges) : null;
 
                 if (changes == null)
                     bw.Write((int)0);

@@ -28,11 +28,14 @@ namespace Ankh.Scc
     [GlobalService(typeof(IPendingChangesManager))]
     partial class PendingChangeManager : AnkhService, IPendingChangesManager
     {
+        readonly PendingChangeCollection _pendingChanges = new PendingChangeCollection();
+        readonly ReadOnlyKeyedCollectionWithNotify<string, PendingChange> _pendingChangesRo;
         bool _isActive;
         bool _solutionOpen;
         public PendingChangeManager(IAnkhServiceProvider context)
             : base(context)
         {
+            _pendingChangesRo = new ReadOnlyKeyedCollectionWithNotify<string, PendingChange>(_pendingChanges);
         }
 
         protected override void OnInitialize()
@@ -47,7 +50,6 @@ namespace Ankh.Scc
             events.SolutionClosed += new EventHandler(OnSolutionClosed);
 
             _solutionOpen = !string.IsNullOrEmpty(GetService<ISelectionContext>().SolutionFilename);
-            _pendingChanges.CollectionChanged += PendingChangesChanged;
         }
 
         void OnSolutionOpened(object sender, EventArgs e)
@@ -208,7 +210,6 @@ namespace Ankh.Scc
             }
 
             PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);
-            OnListFlushed(ee);
 
             lock (_toRefresh)
             {
@@ -222,7 +223,6 @@ namespace Ankh.Scc
         public void Clear()
         {
             PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);
-            OnListFlushed(ee);
 
             lock (_toRefresh)
             {
@@ -294,38 +294,6 @@ namespace Ankh.Scc
         }
 
         /// <summary>
-        /// Raised when a pending change item has been added
-        /// </summary>
-        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
-        public event EventHandler<PendingChangeEventArgs> Added;
-
-        /// <summary>
-        /// Raises the <see cref="E:Added"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="Ankh.Scc.PendingChangeEventArgs"/> instance containing the event data.</param>
-        void OnAdded(PendingChangeEventArgs e)
-        {
-            if (Added != null)
-                Added(this, e);
-        }
-
-        /// <summary>
-        /// Raised when a pending change item has been removed
-        /// </summary>
-        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
-        public event EventHandler<PendingChangeEventArgs> Removed;
-
-        /// <summary>
-        /// Raises the <see cref="E:Removed"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="Ankh.Scc.PendingChangeEventArgs"/> instance containing the event data.</param>
-        void OnRemoved(PendingChangeEventArgs e)
-        {
-            if (Removed != null)
-                Removed(this, e);
-        }
-
-        /// <summary>
         /// Raised when the properties of a pending change have changed
         /// </summary>
         /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
@@ -339,24 +307,6 @@ namespace Ankh.Scc
         {
             if (Changed != null)
                 Changed(this, e);
-        }
-
-        /// <summary>
-        /// Raised when the complete pending change state has been flushed; All listeners should
-        /// use GetAll() to get a new initial state
-        /// </summary>
-        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
-        public event EventHandler<PendingChangeEventArgs> ListFlushed;
-
-        /// <summary>
-        /// Raises the <see cref="E:ListFlushed"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="Ankh.Scc.PendingChangeEventArgs"/> instance containing the event data.</param>
-        void OnListFlushed(PendingChangeEventArgs e)
-        {
-            if (ListFlushed != null)
-                ListFlushed(this, e);
-
         }
 
         public event EventHandler<BatchStartedEventArgs> BatchUpdateStarted;
@@ -429,6 +379,11 @@ namespace Ankh.Scc
 
                 ScheduleRefreshPreLocked();
             }
+        }
+
+        ReadOnlyKeyedCollectionWithNotify<string, PendingChange> IPendingChangesManager.PendingChanges
+        {
+            get { return _pendingChangesRo; }
         }
     }
 }
