@@ -144,14 +144,15 @@ namespace Ankh.UI.PendingChanges
             {
                 case CollectionChange.Add:
                     foreach(PendingChange pc in e.NewItems)
-                        OnPendingChangeAdded(this, new PendingChangeEventArgs(_manager, pc));
+                        OnPendingChangeAdded(pc);
                     break;
                 case CollectionChange.Remove:
                     foreach(PendingChange pc in e.OldItems)
-                    OnPendingChangeRemoved(this, new PendingChangeEventArgs(_manager, pc));
+                        OnPendingChangeRemoved(pc);
                     break;
                 case CollectionChange.Reset:
-                    OnPendingChangesListFlushed(this, new PendingChangeEventArgs(_manager, null));
+                    OnPendingChangesListFlushed();
+                    PerformInitialUpdate(_manager);
                     break;
             }
         }
@@ -240,11 +241,11 @@ namespace Ankh.UI.PendingChanges
 
         readonly Dictionary<string, PendingCommitItem> _listItems = new Dictionary<string, PendingCommitItem>(StringComparer.OrdinalIgnoreCase);
 
-        void OnPendingChangeAdded(object sender, PendingChangeEventArgs e)
+        void OnPendingChangeAdded(PendingChange pc)
         {
             PendingCommitItem pci;
 
-            string path = e.Change.FullPath;
+            string path = pc.FullPath;
 
             if (_listItems.TryGetValue(path, out pci))
             {
@@ -253,7 +254,7 @@ namespace Ankh.UI.PendingChanges
                 pci.Remove();
             }
 
-            pci = new PendingCommitItem(pendingCommits, e.Change);
+            pci = new PendingCommitItem(pendingCommits, pc);
             _listItems.Add(path, pci);
             if (_inBatchUpdate > 0)
             {
@@ -267,11 +268,11 @@ namespace Ankh.UI.PendingChanges
             // TODO: Maybe add something like
             //pendingCommits.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
 
-            OnPendingChangeActivity(sender, e);
+            OnPendingChangeActivity(pc);
         }
 
         HybridCollection<string> _checkedItems;
-        void OnPendingChangesListFlushed(object sender, PendingChangeEventArgs e)
+        void OnPendingChangesListFlushed()
         {
             if (_listItems.Count > 0)
             {
@@ -353,14 +354,14 @@ namespace Ankh.UI.PendingChanges
 
                 pci.RefreshText(Context);
             }
-            OnPendingChangeActivity(sender, e);
+            OnPendingChangeActivity(e.Change);
         }
 
-        void OnPendingChangeRemoved(object sender, PendingChangeEventArgs e)
+        void OnPendingChangeRemoved(PendingChange pc)
         {
             PendingCommitItem pci;
 
-            string path = e.Change.FullPath;
+            string path = pc.FullPath;
 
             if (_listItems.TryGetValue(path, out pci))
             {
@@ -373,16 +374,16 @@ namespace Ankh.UI.PendingChanges
 
                 pendingCommits.RefreshGroupsAvailable();
             }
-            OnPendingChangeActivity(sender, e);
+            OnPendingChangeActivity(pc);
         }
 
-        void OnPendingChangeActivity(object sender, PendingChangeEventArgs args)
+        void OnPendingChangeActivity(PendingChange pc)
         {
             IAnkhSolutionSettings settings = null;
             if (true
-                && args.Change != null
+                && pc != null
                 && (settings = Context.GetService<IAnkhSolutionSettings>()) != null
-                && string.Equals(settings.ProjectRoot, args.Change.FullPath)
+                && string.Equals(settings.ProjectRoot, pc.FullPath)
                 // TODO add filter for property changes
                 )
             {

@@ -204,11 +204,6 @@ namespace Ankh.Scc
             if (clearStateCache && Cache != null)
                 Cache.ClearCache();
 
-            lock (_toRefresh)
-            {
-                _pendingChanges.Clear();
-            }
-
             PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);
 
             lock (_toRefresh)
