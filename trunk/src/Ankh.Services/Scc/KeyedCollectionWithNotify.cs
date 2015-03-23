@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using CollectionMonitor = Ankh.CollectionChangedEventArgs.CollectionMonitor;
 
 namespace Ankh
 {
     public abstract class KeyedCollectionWithNotify<TKey, TItem> : KeyedCollection<TKey, TItem>, ISupportsCollectionChanged, INotifyPropertyChanged
     {
-        CollectionChangedEventArgs.SimpleMonitor _monitor = new CollectionChangedEventArgs.SimpleMonitor();
+        readonly CollectionMonitor _monitor = new CollectionMonitor();
+
         protected KeyedCollectionWithNotify()
             : base()
         { }
