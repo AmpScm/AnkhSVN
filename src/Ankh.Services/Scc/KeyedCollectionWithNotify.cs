@@ -152,4 +152,30 @@ namespace Ankh
             throw new NotImplementedException();
         }
     }
+
+    public class ReadOnlyKeyedCollectionWithNotify<TKey, TItem> : ReadOnlyCollectionWithNotify<TItem> where TItem : class
+    {
+        readonly KeyedCollectionWithNotify<TKey, TItem> _collection;
+
+        public ReadOnlyKeyedCollectionWithNotify(KeyedCollectionWithNotify<TKey, TItem> collection)
+            : base(collection, collection, collection)
+        {
+            _collection = collection;
+        }
+
+        public bool Contains(TKey key)
+        {
+            return _collection.Contains(key);
+        }
+
+        public TItem this[TKey key]
+        {
+            get { return _collection[key]; }
+        }
+
+        public IEqualityComparer<TKey> Comparer
+        {
+            get { return _collection.Comparer; }
+        }
+    }
 }

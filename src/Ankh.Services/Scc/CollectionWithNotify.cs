@@ -163,4 +163,64 @@ namespace Ankh
                 RaiseCollectionChanged(new CollectionChangedEventArgs<T>(CollectionChange.Reset));
         }
     }
+
+    public class ReadOnlyCollectionWithNotify<T> : ReadOnlyCollection<T>, ISupportsCollectionChanged<T>, INotifyPropertyChanged where T : class
+    {
+        EventHandler<CollectionChangedEventArgs<T>> _typedCollectionChanged;
+        EventHandler<CollectionChangedEventArgs> _untypedCollectionChanged;
+
+        public ReadOnlyCollectionWithNotify(CollectionWithNotify<T> collection)
+            : this(collection, collection, collection)
+        {}
+
+        protected ReadOnlyCollectionWithNotify(Collection<T> collection, ISupportsCollectionChanged<T> collectionChanged, INotifyPropertyChanged propertyChanged)
+            : base(collection)
+        {
+            collectionChanged.CollectionChanged += HandleCollectionChanged;
+            propertyChanged.PropertyChanged += HandlePropertyChanged;
+        }
+
+        private void HandleCollectionChanged(object sender, CollectionChangedEventArgs<T> e)
+        {
+            OnCollectionChanged(e);
+        }
+
+        protected virtual void OnCollectionChanged(CollectionChangedEventArgs<T> e)
+        {
+            if (_typedCollectionChanged != null)
+                _typedCollectionChanged(this, e);
+            if (_untypedCollectionChanged != null)
+                _untypedCollectionChanged(this, e);
+        }
+
+        public event EventHandler<CollectionChangedEventArgs<T>> CollectionChanged
+        {
+            add { _typedCollectionChanged += value; }
+            remove { _typedCollectionChanged -= value; }
+        }
+
+        event EventHandler<CollectionChangedEventArgs> ISupportsCollectionChanged.CollectionChanged
+        {
+            add { _untypedCollectionChanged += value; }
+            remove { _untypedCollectionChanged -= value; }
+        }
+
+        IDisposable ISupportsCollectionChanged.BatchUpdate()
+        {
+            throw new NotSupportedException();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, e);
+        }
+
+        private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(e);
+        }
+    }
 }
