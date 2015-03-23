@@ -62,7 +62,10 @@ namespace Ankh
         protected void OnCollectionChanged(CollectionChangedEventArgs e)
         {
             if (CollectionChanged != null)
-                CollectionChanged(this, e);
+                using (_monitor.Enter())
+                {
+                    CollectionChanged(this, e);
+                }
         }
         
         public event PropertyChangedEventHandler PropertyChanged;
