@@ -37,7 +37,7 @@ namespace Ankh
             base.InsertItem(index, item);
             this.OnPropertyChanged("Count");
             this.OnPropertyChanged("Item[]");
-            this.OnCollectionChanged(new CollectionChangedEventArgs(CollectionChange.Add, item, index));
+            RaiseCollectionChanged(new CollectionChangedEventArgs(CollectionChange.Add, item, index));
         }
 
         protected override void RemoveItem(int index)
@@ -47,7 +47,7 @@ namespace Ankh
             base.RemoveItem(index);
             this.OnPropertyChanged("Count");
             this.OnPropertyChanged("Item[]");
-            this.OnCollectionChanged(new CollectionChangedEventArgs(CollectionChange.Remove, t, index));
+            RaiseCollectionChanged(new CollectionChangedEventArgs(CollectionChange.Remove, t, index));
         }
 
         protected override void SetItem(int index, T item)
@@ -56,7 +56,7 @@ namespace Ankh
             T t = base[index];
             base.SetItem(index, item);
             this.OnPropertyChanged("Item[]");
-            this.OnCollectionChanged(new CollectionChangedEventArgs(CollectionChange.Replace, t, item, index));
+            RaiseCollectionChanged(new CollectionChangedEventArgs(CollectionChange.Replace, t, item, index));
         }
 
         public void Move(int oldIndex, int newIndex)
@@ -71,7 +71,7 @@ namespace Ankh
             base.RemoveItem(oldIndex);
             base.InsertItem(newIndex, t);
             this.OnPropertyChanged("Item[]");
-            this.OnCollectionChanged(new CollectionChangedEventArgs(CollectionChange.Move, t, newIndex, oldIndex));
+            RaiseCollectionChanged(new CollectionChangedEventArgs(CollectionChange.Move, t, newIndex, oldIndex));
         }
 
         public event EventHandler<CollectionChangedEventArgs> CollectionChanged;
@@ -83,6 +83,25 @@ namespace Ankh
                 {
                     CollectionChanged(this, e);
                 }
+        }
+
+        int _updateMode;
+        CollectionChangedEventArgs _change;
+
+        void RaiseCollectionChanged(CollectionChangedEventArgs e)
+        {
+            if (_updateMode == 0)
+                OnCollectionChanged(e);
+            else if (_updateMode == 1)
+            {
+                if (_change == null)
+                    _change = e;
+                else
+                {
+                    _updateMode = -1;
+                    _change = null;
+                }
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -98,6 +117,28 @@ namespace Ankh
         void OnPropertyChanged(string propertyName)
         {
             OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
+
+        public IDisposable BatchUpdate()
+        {
+            return _monitor.BatchUpdate(DoneUpdate);
+        }
+
+        void DoneUpdate()
+        {
+            int oldMode = _updateMode;
+            _updateMode = 0;
+            if (oldMode == 1)
+            {
+                CollectionChangedEventArgs c = _change;
+                _change = null;
+
+                if (c != null)
+                    RaiseCollectionChanged(c);
+                /* else NOOP batch */
+            }
+            else
+                RaiseCollectionChanged(new CollectionChangedEventArgs(CollectionChange.Reset));
         }
     }
 }

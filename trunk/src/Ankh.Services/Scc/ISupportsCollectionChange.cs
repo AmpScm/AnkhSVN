@@ -9,6 +9,8 @@ namespace Ankh
     public interface ISupportsCollectionChanged
     {
         event EventHandler<CollectionChangedEventArgs> CollectionChanged;
+
+        IDisposable BatchUpdate();
     }
 
     public enum CollectionChange
@@ -180,7 +182,7 @@ namespace Ankh
             get { return _oldStartIndex; }
         }
 
-        internal class CollectionMonitor : IDisposable
+        internal sealed class CollectionMonitor : IDisposable
         {
             private int _busyCount;
             public bool Busy
@@ -207,6 +209,26 @@ namespace Ankh
             {
                 if (Busy && collectionChange != null)
                     throw new InvalidOperationException();
+            }
+
+            sealed class BatchUpdateDisposer : IDisposable
+            {
+                readonly AnkhAction _action;
+
+                public BatchUpdateDisposer(AnkhAction action)
+                {
+                    _action = action;
+                }
+
+                public void Dispose()
+                {
+                    _action();
+                }
+            }
+
+            public IDisposable BatchUpdate(AnkhAction doneHandler)
+            {
+                return new BatchUpdateDisposer(doneHandler);
             }
         }
     }
