@@ -69,6 +69,25 @@ namespace Ankh
                     CollectionChanged(this, e);
                 }
         }
+
+        int _updateMode;
+        CollectionChangedEventArgs _change;
+
+        void RaiseCollectionChanged(CollectionChangedEventArgs e)
+        {
+            if (_updateMode == 0)
+                OnCollectionChanged(e);
+            else if (_updateMode == 1)
+            {
+                if (_change == null)
+                    _change = e;
+                else
+                {
+                    _updateMode = -1;
+                    _change = null;
+                }
+            }
+        }
         
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -81,6 +100,28 @@ namespace Ankh
         void OnPropertyChanged(string propertyName)
         {
             OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
+
+        public IDisposable BatchUpdate()
+        {
+            return _monitor.BatchUpdate(DoneUpdate);
+        }
+
+        void DoneUpdate()
+        {
+            int oldMode = _updateMode;
+            _updateMode = 0;
+            if (oldMode == 1)
+            {
+                CollectionChangedEventArgs c = _change;
+                _change = null;
+
+                if (c != null)
+                    RaiseCollectionChanged(c);
+                /* else NOOP batch */
+            }
+            else
+                RaiseCollectionChanged(new CollectionChangedEventArgs(CollectionChange.Reset));
         }
     }
 }
