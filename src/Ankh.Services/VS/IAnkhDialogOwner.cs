@@ -61,6 +61,7 @@ namespace Ankh.VS
         /// <summary>
         /// Adds the command target.
         /// </summary>
+        /// <param name="container"></param>
         /// <param name="commandTarget">The command target.</param>
         void AddCommandTarget(VSContainerForm container, IOleCommandTarget commandTarget);
 

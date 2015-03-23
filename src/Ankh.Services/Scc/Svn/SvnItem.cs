@@ -428,7 +428,7 @@ namespace Ankh
         /// <summary>
         /// Copies all information from other.
         /// </summary>
-        /// <param name="other"></param>
+        /// <param name="lead"></param>
         /// <remarks>When this method is called the other item will eventually replace this item</remarks>
         void ISvnItemUpdate.RefreshTo(SvnItem lead)
         {

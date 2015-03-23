@@ -100,6 +100,7 @@ namespace Ankh.Scc.UI
         /// </summary>
         /// <param name="docked">if set to <c>true</c> [docked].</param>
         /// <param name="location">The location.</param>
+        /// <param name="show"></param>
         [CLSCompliant(false)]
         public FrameEventArgs(bool docked, Rectangle location, __FRAMESHOW show)
         {

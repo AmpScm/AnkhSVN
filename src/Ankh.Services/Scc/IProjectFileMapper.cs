@@ -33,7 +33,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Gets an IEnumerable over all projects containing one or more of the specified <paramref name="paths"/>
         /// </summary>
-        /// <param name="file"></param>
+        /// <param name="paths"></param>
         /// <returns></returns>
         IEnumerable<SccProject> GetAllProjectsContaining(IEnumerable<string> paths);
 
@@ -54,6 +54,7 @@ namespace Ankh.Scc
         /// Gets a list of all files contained within <paramref name="project"/>
         /// </summary>
         /// <param name="project"></param>
+        /// <param name="exceptExcluded"></param>
         /// <returns></returns>
         IEnumerable<string> GetAllFilesOf(SccProject project, bool exceptExcluded);
 
@@ -68,6 +69,7 @@ namespace Ankh.Scc
         /// Gets a list of all files contained within the list of <paramref name="projects"/>
         /// </summary>
         /// <param name="projects"></param>
+        /// <param name="exceptExcluded"></param>
         /// <returns></returns>
         IEnumerable<string> GetAllFilesOf(ICollection<SccProject> projects, bool exceptExcluded);
 

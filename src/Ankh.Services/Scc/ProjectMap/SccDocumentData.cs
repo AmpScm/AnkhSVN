@@ -120,7 +120,7 @@ namespace Ankh.Scc.ProjectMap
         bool _fetchedRaw;
 
         /// <summary>
-        /// Document instance which usually implements <see cref="IVsPersistDocData"/> and <see cref"IVsDocDataFileChangeControl"/>
+        /// Document instance which usually implements <see cref="IVsPersistDocData"/> and <see cref="IVsDocDataFileChangeControl"/>
         /// </summary>
         public object RawDocument
         {
@@ -328,7 +328,6 @@ namespace Ankh.Scc.ProjectMap
         /// Reloads the document and optionally clears the undo state
         /// </summary>
         /// <param name="clearUndo">if set to <c>true</c> [clear undo].</param>
-        /// <param name="ignoreNextChange">if set to <c>true</c> [ignore next change].</param>
         /// <returns><c>true</c> if the document is reloaded, otherwise false</returns>
         public bool Reload(bool clearUndo)
         {
@@ -462,7 +461,7 @@ namespace Ankh.Scc.ProjectMap
         /// <summary>
         /// Determines whether this instance is dirty
         /// </summary>
-        /// <param name="fallback">if set to <c>true</c> return the cached value if the document says ist not dirty, false to trust the document.</param>
+        /// <param name="tryPoll">if set to <c>true</c> return the cached value if the document says ist not dirty, false to trust the document.</param>
         /// <returns>
         /// 	<c>true</c> if this instance is dirty; otherwise, <c>false</c>.
         /// </returns>
