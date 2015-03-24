@@ -140,6 +140,9 @@ namespace Ankh.UI.PendingChanges
 
         private void OnPendingChangesChanged(object sender, CollectionChangedEventArgs<PendingChange> e)
         {
+            if (!IsHandleCreated)
+                return;
+
             switch (e.Action)
             {
                 case CollectionChange.Add:
