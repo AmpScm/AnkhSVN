@@ -124,12 +124,21 @@ namespace Ankh.VSPackage
         public int ProductDetails(out string pbstrProductDetails)
         {
             StringBuilder sb = new StringBuilder();
+
+            string svnVersion = SvnClient.VersionString;
+            if (svnVersion.EndsWith("-SharpSvn"))
+                svnVersion = svnVersion.Substring(0, svnVersion.Length - 9);
+
+            string gitVersion = GitClient.VersionString;
+            if (gitVersion.EndsWith("-SharpGit"))
+                gitVersion = gitVersion.Substring(0, gitVersion.Length - 9);
+
             sb.AppendFormat(Resources.AboutDetails,
                 UIVersion.ToString(),
                 PackageVersion.ToString(),
-                SvnClient.Version,
+                svnVersion,
                 SvnClient.SharpSvnVersion,
-                GitClient.Version,
+                gitVersion,
                 GitClient.SharpGitVersion);
 
             sb.AppendLine();
