@@ -29,17 +29,6 @@ using Ankh.UI;
 
 namespace Ankh.Scc
 {
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown), ComImport]
-    [Guid("55272A00-42CB-11CE-8135-00AA004BB851")]
-    interface IMyPropertyBag
-    {
-        [PreserveSig, MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        int Read(string pszPropName, out object pVar, IErrorLog pErrorLog, uint VARTYPE, object pUnkObj);
-
-        [PreserveSig, MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        int Write(string pszPropName, ref object pVar);
-    }
-
     partial class SvnSccProvider
     {
         bool _translateDataLoaded;
