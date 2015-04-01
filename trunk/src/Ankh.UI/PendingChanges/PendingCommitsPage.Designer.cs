@@ -46,7 +46,7 @@ namespace Ankh.UI.PendingChanges
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PendingCommitsPage));
-            this.splitContainer = new Ankh.UI.VSSelectionControls.SmartSplitContainer();
+            this.splitContainer = new Ankh.UI.VSSelectionControls.SmartSplitContainer(this.components);
             this.borderPanel = new System.Windows.Forms.Panel();
             this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.issueLabel = new System.Windows.Forms.Label();
