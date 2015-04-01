@@ -61,9 +61,7 @@ namespace Ankh.Scc
         void InnerRefresh()
         {
             using (BatchStartedEventArgs br = BatchRefresh())
-            using (_pendingChanges.BatchUpdate())
             {
-                bool wasClean = (_pendingChanges.Count == 0);
                 Dictionary<string, PendingChange> mapped = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
 
                 ISvnStatusCache cache = Cache;
@@ -78,7 +76,7 @@ namespace Ankh.Scc
                     if (item == null)
                         continue;
 
-                    PendingChange pc = UpdatePendingChange(wasClean, item);
+                    PendingChange pc = UpdatePendingChange(item);
 
                     if (pc != null)
                         mapped[pc.FullPath] = pc;
@@ -95,7 +93,7 @@ namespace Ankh.Scc
                         continue;
                     }
 
-                    PendingChange pc = UpdatePendingChange(wasClean, item);
+                    PendingChange pc = UpdatePendingChange(item);
 
                     if (pc != null)
                         mapped[pc.FullPath] = pc;
@@ -114,20 +112,21 @@ namespace Ankh.Scc
             }
         }
 
-        private PendingChange UpdatePendingChange(bool wasClean, SvnItem item)
+        private PendingChange UpdatePendingChange(SvnItem item)
         {
             PendingChange pc;
             string file = item.FullPath;
             if (_pendingChanges.TryGetValue(file, out pc))
             {
-                if (pc.Refresh(RefreshContext, item) && !wasClean)
+                if (pc.Refresh(RefreshContext, item))
                 {
                     if (pc.IsClean)
                     {
                         _pendingChanges.Remove(file);
                         _extraFiles.Remove(file);
+                        pc = null;
                     }
-                    else if (!wasClean)
+                    else
                         OnChanged(new PendingChangeEventArgs(this, pc));
                 }
             }
@@ -153,10 +152,7 @@ namespace Ankh.Scc
 
             if (!inProject && !inExtra)
             {
-                if (_pendingChanges.TryGetValue(file, out pc))
-                {
-                    _pendingChanges.Remove(file);
-                }
+                _pendingChanges.Remove(file);
 
                 return;
             }
