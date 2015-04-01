@@ -155,6 +155,7 @@ namespace Ankh.Scc
         {
             BatchStartedEventArgs ba = new BatchStartedEventArgs(ThreadedWaitService);
             OnBatchUpdateStarted(ba);
+            ba.Disposers += _pendingChanges.BatchUpdate().Dispose;
             return ba;
         }
 
