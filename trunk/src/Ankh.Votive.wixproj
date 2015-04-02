@@ -72,8 +72,10 @@
     <Compile Include="Ankh.Services\Ankh.Services.wxs" />
     <Compile Include="Ankh.UI\Ankh.UI.wxs" />
     <Compile Include="Ankh.VS.Interop\Ankh.VS.Interop.wxs" />
+    <Compile Include="Ankh.VS.WpfServices\Ankh.VS.WpfServices.wxs" />
     <Compile Include="Ankh.VS\Ankh.VS.wxs" />
     <Compile Include="Ankh.WpfEditor.Package\Ankh.WpfEditor.Package.wxs" />
+    <Compile Include="Ankh.WpfUI\Ankh.WpfUI.wxs" />
     <Compile Include="Ankh\Ankh.wxs" />
     <Compile Include="Ankh.Votive\Ankh.Votive.wxs" />
     <Compile Include="Ankh.Votive\AnkhVSExtension.wxs" />
@@ -91,10 +93,14 @@
     <Folder Include="Ankh.Services\" />
     <Folder Include="Ankh.UI\" />
     <Folder Include="Ankh.VS.Interop\" />
+    <Folder Include="Ankh.VS.WpfServices\" />
     <Folder Include="Ankh.VS\" />
     <Folder Include="Ankh.WpfEditor.Package\" />
+    <Folder Include="Ankh.WpfUI\" />
     <Folder Include="Ankh\" />
     <Folder Include="autolib\" />
+    <Folder Include="autolib\SharpGit\" />
+    <Folder Include="autolib\SharpGit\Licenses\" />
     <Folder Include="autolib\SharpSvn\" />
     <Folder Include="autolib\SharpSvn\Licenses\" />
     <Folder Include="Ankh.Package" />
@@ -149,6 +155,12 @@
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
+    <ProjectReference Include="Ankh.VS.WpfServices\Ankh.VS.WpfServices.csproj">
+      <Name>Ankh.VS.WpfServices</Name>
+      <Project>{fb146856-23a8-4151-9467-19ae22fb166f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+    </ProjectReference>
     <ProjectReference Include="Ankh.VS\Ankh.VS.csproj">
       <Name>Ankh.VS</Name>
       <Project>{906e3f01-cd79-4f80-bca7-1105224328c4}</Project>
@@ -158,6 +170,12 @@
     <ProjectReference Include="Ankh.WpfEditor.Package\Ankh.WpfEditor.Package.csproj">
       <Name>Ankh.WpfEditor.Package</Name>
       <Project>{d3ffd86d-b2ac-4659-86dd-559e42844bd0}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+    </ProjectReference>
+    <ProjectReference Include="Ankh.WpfUI\Ankh.WpfUI.csproj">
+      <Name>Ankh.WpfUI</Name>
+      <Project>{8fc7114e-5a84-4221-8187-c3d1c370404e}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>

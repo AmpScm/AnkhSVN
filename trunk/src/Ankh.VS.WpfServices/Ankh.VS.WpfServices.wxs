@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <ComponentGroup Id="Ankh.VS.WpfServices">
+            <ComponentGroupRef Id="Ankh.Ids" />
+            <ComponentRef Id="C_Ankh.VS.WpfServices.dll" />
+        </ComponentGroup>
+        <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Services.TargetDir)">
+            <Component Id="C_Ankh.VS.WpfServices.dll" Guid="9183B15D-5C0B-4BAF-94A1-925837CC726E">
+                <File Id="CF_Ankh.VS.WpfServices.dll" Name="Ankh.Services.dll" Checksum="yes" KeyPath="yes" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+</Wix>
