@@ -78,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnkhWpfUIModule.cs" />
+    <Compile Include="Controls\PendingChangesUserControl.xaml.cs">
+      <DependentUpon>PendingChangesUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -92,6 +95,10 @@
       <Project>{d90a8e89-66b2-451e-8b31-3d86f0cd4afb}</Project>
       <Name>Ankh.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ankh.VS.WpfServices\Ankh.VS.WpfServices.csproj">
+      <Project>{fb146856-23a8-4151-9467-19ae22fb166f}</Project>
+      <Name>Ankh.VS.WpfServices</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ankh.WpfUI.wxs" />
@@ -99,6 +106,17 @@
   <ItemGroup>
     <None Include="Ankh.WpfUI.snk" />
   </ItemGroup>
+  <ItemGroup>
+    <Page Include="Controls\PendingChangesUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ListViewStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
