@@ -7,9 +7,9 @@
             <ComponentGroupRef Id="Ankh.VS.WpfServices" />
             <ComponentRef Id="C_Ankh.WpfUI.dll" />
         </ComponentGroup>
-        <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Services.TargetDir)">
+        <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.WpfUI.TargetDir)">
             <Component Id="C_Ankh.WpfUI.dll" Guid="92F558B1-9BC3-43B8-A045-E112AAB6E646">
-                <File Id="CF_Ankh.WpfUI.dll" Name="Ankh.Services.dll" Checksum="yes" KeyPath="yes" />
+                <File Id="CF_Ankh.WpfUI.dll" Name="Ankh.WpfUI.dll" Checksum="yes" KeyPath="yes" />
             </Component>
         </DirectoryRef>
     </Fragment>
