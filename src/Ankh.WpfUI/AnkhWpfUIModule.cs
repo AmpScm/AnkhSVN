@@ -14,7 +14,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System;
 using System.Reflection;
+using Ankh.VS.WpfServices;
 
 namespace Ankh.WpfUI
 {
@@ -36,7 +38,6 @@ namespace Ankh.WpfUI
 
         public override void OnInitialize()
         {
-            
         }
     }
 }
