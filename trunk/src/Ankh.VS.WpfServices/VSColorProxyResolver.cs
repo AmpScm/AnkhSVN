@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Ankh.VS.WpfServices
@@ -18,11 +13,6 @@ namespace Ankh.VS.WpfServices
             //    object v = p.GetValue(null);
             //    Add(p.GetValue(null), v);
             //}
-        }
-
-        protected override void OnGettingValue(object key, ref object value, out bool canCache)
-        {
-            base.OnGettingValue(key, ref value, out canCache);
         }
 
         sealed class VSColorProxyKey : IEquatable<VSColorProxyKey>
@@ -56,7 +46,11 @@ namespace Ankh.VS.WpfServices
 
         internal object MakeKey(Guid id, string name, VSColorType key)
         {
-            return new VSColorProxyKey(id, name, key);
+            VSColorProxyKey k = new VSColorProxyKey(id, name, key);
+
+            // Add + resolve value for k
+
+            return k;
         }
     }
 }
