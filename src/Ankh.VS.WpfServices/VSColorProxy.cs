@@ -117,5 +117,9 @@ namespace Ankh.VS.WpfServices
         }
         
         #endregion
+
+        public static void Ensure()
+        {
+        }
     }
 }

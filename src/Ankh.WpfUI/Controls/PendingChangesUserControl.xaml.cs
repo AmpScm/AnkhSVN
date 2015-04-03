@@ -24,5 +24,12 @@ namespace Ankh.WpfUI.Controls
         {
             InitializeComponent();
         }
+
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        public IAnkhServiceProvider Context { get; set; }
     }
 }
