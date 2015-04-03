@@ -22,7 +22,7 @@ using System.Diagnostics;
 
 namespace Ankh.Scc
 {
-    [DebuggerDisplay("Content={LocalContentStatus}, Property={LocalPropertyStatus}, Uri={Uri}")]
+    [DebuggerDisplay("Node={LocalNodeStatus} Content={LocalTextStatus}, Property={LocalPropertyStatus}, Uri={Uri}")]
     public sealed class SvnStatusData
     {
         readonly bool _conflicted;
