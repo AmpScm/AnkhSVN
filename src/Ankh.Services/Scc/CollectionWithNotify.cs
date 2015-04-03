@@ -168,16 +168,36 @@ namespace Ankh
     {
         EventHandler<CollectionChangedEventArgs<T>> _typedCollectionChanged;
         EventHandler<CollectionChangedEventArgs> _untypedCollectionChanged;
+        ISupportsCollectionChanged<T> _collectionChanged;
+        INotifyPropertyChanged _propertyChanged;
 
         public ReadOnlyCollectionWithNotify(CollectionWithNotify<T> collection)
             : this(collection, collection, collection)
         {}
 
-        protected ReadOnlyCollectionWithNotify(Collection<T> collection, ISupportsCollectionChanged<T> collectionChanged, INotifyPropertyChanged propertyChanged)
+        public ReadOnlyCollectionWithNotify(ReadOnlyCollectionWithNotify<T> collection)
+            : this(collection, collection, collection)
+        { }
+
+        protected ReadOnlyCollectionWithNotify(IList<T> collection, ISupportsCollectionChanged<T> collectionChanged, INotifyPropertyChanged propertyChanged)
             : base(collection)
         {
+            if (collectionChanged == null)
+                throw new ArgumentNullException("collectionChanged");
+            if (propertyChanged == null)
+                throw new ArgumentNullException("propertyChanged");
+
+            _collectionChanged = collectionChanged;
+            _propertyChanged = propertyChanged;
+
             collectionChanged.CollectionChanged += HandleCollectionChanged;
             propertyChanged.PropertyChanged += HandlePropertyChanged;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            _collectionChanged.CollectionChanged -= HandleCollectionChanged;
+            _propertyChanged.PropertyChanged -= HandlePropertyChanged;
         }
 
         private void HandleCollectionChanged(object sender, CollectionChangedEventArgs<T> e)
