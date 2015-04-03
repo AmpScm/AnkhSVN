@@ -62,7 +62,7 @@ namespace Ankh.Scc
         {
             using (BatchStartedEventArgs br = BatchRefresh())
             {
-                Dictionary<string, PendingChange> mapped = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
+                HybridCollection<string> mapped = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
                 ISvnStatusCache cache = Cache;
 
@@ -79,7 +79,7 @@ namespace Ankh.Scc
                     PendingChange pc = UpdatePendingChange(item);
 
                     if (pc != null)
-                        mapped[pc.FullPath] = pc;
+                        mapped.Add(pc.FullPath);
                 }
 
                 foreach (string file in new List<string>(_extraFiles))
@@ -96,7 +96,9 @@ namespace Ankh.Scc
                     PendingChange pc = UpdatePendingChange(item);
 
                     if (pc != null)
-                        mapped[pc.FullPath] = pc;
+                        mapped.Add(pc.FullPath);
+                    else
+                        _extraFiles.Remove(file);
                 }
 
                 for (int i = 0; i < _pendingChanges.Count; i++)
@@ -104,7 +106,7 @@ namespace Ankh.Scc
                     br.Tick();
                     PendingChange pc = _pendingChanges[i];
 
-                    if (mapped.ContainsKey(pc.FullPath))
+                    if (mapped.Contains(pc.FullPath))
                         continue;
 
                     _pendingChanges.RemoveAt(i--);
@@ -120,15 +122,13 @@ namespace Ankh.Scc
             {
                 if (pc.Refresh(RefreshContext, item))
                 {
-                    if (pc.IsClean)
-                    {
-                        _pendingChanges.Remove(file);
-                        _extraFiles.Remove(file);
-                        pc = null;
-                    }
-                    else
+                    if (!pc.IsClean)
                         OnChanged(new PendingChangeEventArgs(this, pc));
+                    else
+                        pc = null;
                 }
+                else if (pc.IsClean)
+                    pc = null;
             }
             else if (PendingChange.CreateIfPending(RefreshContext, item, out pc))
             {
