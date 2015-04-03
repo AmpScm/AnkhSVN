@@ -33,14 +33,48 @@ namespace Ankh.UI.PendingChanges
 {
     partial class PendingCommitsPage : PendingChangesPage
     {
+        PendingCommitsView pendingCommits;
         public PendingCommitsPage()
         {
             InitializeComponent();
+        }
 
+        bool _insertedPendingChanges;
+        void InsertPendingChanges()
+        {
+            if (_insertedPendingChanges)
+                return;
+            _insertedPendingChanges = true;
+            splitContainer.SuspendLayout();
+            splitContainer.Panel2.Controls.Clear();
+
+            if (true || !VSVersion.VS2010OrLater)
+            {
+                pendingCommits = new PendingCommitsView(this.components);
+                
+                splitContainer.Panel2.Controls.Add(pendingCommits);
+
+                pendingCommits.Dock = changeListDummy.Dock;
+                pendingCommits.Location = changeListDummy.Location;
+                pendingCommits.Size = changeListDummy.Size;
+            }
+            else
+            {
+                // Load WPF control
+            }
+
+            changeListDummy.Dispose();
+            changeListDummy = null;
+            this.splitContainer.ResumeLayout(true);
+            
             if (VSVersion.VS2012OrLater)
             {
                 pendingCommits.BorderStyle = BorderStyle.None;
                 borderPanel.BorderStyle = BorderStyle.None;
+            }
+            else
+            {
+
             }
         }
 
@@ -57,10 +91,21 @@ namespace Ankh.UI.PendingChanges
 
         protected override void OnLoad(EventArgs e)
         {
+            InsertPendingChanges();
+
             base.OnLoad(e);
 
             if (pendingCommits != null)
             {
+                pendingCommits.AllowColumnReorder = true;
+                pendingCommits.CheckBoxes = true;
+                pendingCommits.HideSelection = false;
+                pendingCommits.Name = "pendingCommits";
+                pendingCommits.ShowItemToolTips = true;
+                pendingCommits.ShowSelectAllCheckBox = true;
+                pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.Commits.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
+                pendingCommits.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pendingCommits_KeyUp);
+
                 pendingCommits.SelectionPublishServiceProvider = Context;
                 pendingCommits.Context = Context;
                 pendingCommits.OpenPendingChangeOnDoubleClick = true;
@@ -68,6 +113,8 @@ namespace Ankh.UI.PendingChanges
                 pendingCommits.ColumnWidthChanged += new ColumnWidthChangedEventHandler(pendingCommits_ColumnWidthChanged);
                 IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
                 pendingCommits.SetColumnWidths(widths);
+
+                logMessageEditor.PasteSource = this.pendingCommits;
             }
 
             Context.GetService<AnkhServiceEvents>().LastChanged += OnLastChanged;

@@ -52,10 +52,10 @@ namespace Ankh.UI.PendingChanges
             this.issueLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
-            this.pendingCommits = new Ankh.UI.PendingChanges.Commits.PendingCommitsView(this.components);
             this.issueNumberBox = new System.Windows.Forms.TextBox();
             this.lastRevLabel = new System.Windows.Forms.Label();
             this.lastRevBox = new System.Windows.Forms.TextBox();
+            this.changeListDummy = new System.Windows.Forms.Label();
             this.pathColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.projectColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.changeColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -79,7 +79,7 @@ namespace Ankh.UI.PendingChanges
             // 
             // splitContainer.Panel2
             // 
-            this.splitContainer.Panel2.Controls.Add(this.pendingCommits);
+            this.splitContainer.Panel2.Controls.Add(this.changeListDummy);
             // 
             // borderPanel
             // 
@@ -115,19 +115,6 @@ namespace Ankh.UI.PendingChanges
             resources.ApplyResources(this.logMessageEditor, "logMessageEditor");
             this.logMessageEditor.HideHorizontalScrollBar = true;
             this.logMessageEditor.Name = "logMessageEditor";
-            this.logMessageEditor.PasteSource = this.pendingCommits;
-            // 
-            // pendingCommits
-            // 
-            this.pendingCommits.AllowColumnReorder = true;
-            this.pendingCommits.CheckBoxes = true;
-            resources.ApplyResources(this.pendingCommits, "pendingCommits");
-            this.pendingCommits.HideSelection = false;
-            this.pendingCommits.Name = "pendingCommits";
-            this.pendingCommits.ShowItemToolTips = true;
-            this.pendingCommits.ShowSelectAllCheckBox = true;
-            this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.Commits.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
-            this.pendingCommits.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pendingCommits_KeyUp);
             // 
             // issueNumberBox
             // 
@@ -148,6 +135,11 @@ namespace Ankh.UI.PendingChanges
             resources.ApplyResources(this.lastRevBox, "lastRevBox");
             this.lastRevBox.Name = "lastRevBox";
             this.lastRevBox.ReadOnly = true;
+            // 
+            // changeListDummy
+            // 
+            resources.ApplyResources(this.changeListDummy, "changeListDummy");
+            this.changeListDummy.Name = "changeListDummy";
             // 
             // PendingCommitsPage
             // 
@@ -179,7 +171,7 @@ namespace Ankh.UI.PendingChanges
         private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor;
         private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer;
         private System.Windows.Forms.Panel borderPanel;
-        private Ankh.UI.PendingChanges.Commits.PendingCommitsView pendingCommits;
+        private System.Windows.Forms.Label changeListDummy;
         private System.Windows.Forms.Label lastRevLabel;
         private System.Windows.Forms.TextBox lastRevBox;
     }
