@@ -16,52 +16,6 @@ using Ankh.ExtensionPoints.UI;
 
 namespace Ankh.WpfPackage.Services
 {
-    enum EnvironmentColor
-    {
-    }
-
-    enum TreeViewColor
-    {
-        BackgroundColor,
-        BackgroundBrush,
-        BackgroundTextColor,
-        BackgroundTextBrush,
-        DragOverItemColor,
-        DragOverItemBrush,
-        DragOverItemTextColor,
-        DragOverItemTextBrush,
-        DragOverItemGlyphColor,
-        DragOverItemGlyphBrush,
-        DragOverItemGlyphMouseOverColor,
-        DragOverItemGlyphMouseOverBrush,
-        FocusVisualBorderColor,
-        FocusVisualBorderBrush,
-        GlyphColor,
-        GlyphBrush,
-        GlyphMouseOverColor,
-        GlyphMouseOverBrush,
-        HighlightedSpanColor,
-        HighlightedSpanBrush,
-        HighlightedSpanTextColor,
-        HighlightedSpanTextBrush,
-        SelectedItemActiveColor,
-        SelectedItemActiveBrush,
-        SelectedItemActiveTextColor,
-        SelectedItemActiveTextBrush,
-        SelectedItemActiveGlyphColor,
-        SelectedItemActiveGlyphBrush,
-        SelectedItemActiveGlyphMouseOverColor,
-        SelectedItemActiveGlyphMouseOverBrush,
-        SelectedItemInactiveColor,
-        SelectedItemInactiveBrush,
-        SelectedItemInactiveTextColor,
-        SelectedItemInactiveTextBrush,
-        SelectedItemInactiveGlyphColor,
-        SelectedItemInactiveGlyphBrush,
-        SelectedItemInactiveGlyphMouseOverColor,
-        SelectedItemInactiveGlyphMouseOverBrush,
-    }
-
     [GlobalService(typeof(IWinFormsThemingService), MinVersion = VSInstance.VS2012)]
     sealed partial class ThemingService : AnkhService, IWinFormsThemingService
     {
@@ -74,8 +28,6 @@ namespace Ankh.WpfPackage.Services
         protected override void OnInitialize()
         {
             base.OnInitialize();
-
-            GetService<AnkhServiceEvents>().ThemeChanged += OnThemeChanged;
         }
 
         // This class does a lot of trickery in order not to break on different VS11 pre-release versions.
@@ -126,57 +78,32 @@ namespace Ankh.WpfPackage.Services
             return System.Drawing.Color.FromArgb(colorComponents[3], colorComponents[0], colorComponents[1], colorComponents[2]);
         }
 
-        static Guid EnvironmentCategory = new Guid("624ed9c3-bdfd-41fa-96c3-7c824ea32e3d");
-
-        readonly Dictionary<EnvironmentColor, Tuple<Color?, Color?>> _colorMap = new Dictionary<EnvironmentColor, Tuple<Color?, Color?>>();
-        public void OnThemeChanged(object sender, EventArgs e)
-        {
-            _colorMap.Clear();
-        }
-
-        public Color GetColor(EnvironmentColor color, bool foreground)
-        {
-            Tuple<Color?, Color?> clr;
-            if (!_colorMap.TryGetValue(color, out clr)
-                || !((foreground ? clr.Item2 : clr.Item1).HasValue))
-            {
-                if (clr == null)
-                    clr = new Tuple<Color?, Color?>(null, null);
-
-                Color value = GetThemedColorValue(ref EnvironmentCategory, color.ToString(), foreground);
-                if (foreground)
-                    clr = new Tuple<Color?, Color?>(clr.Item1, value);
-                else
-                    clr = new Tuple<Color?, Color?>(value, clr.Item1);
-                _colorMap[color] = clr;
-                return value;
-            }
-
-            if (foreground)
-                return clr.Item2.Value;
-            else
-                return clr.Item1.Value;
-        }
-
-        public Color GetColor(EnvironmentColor color)
-        {
-            return GetColor(color, false);
-        }
-
-        delegate bool ThemeWindow(IntPtr handle);
+        delegate bool ThemeWindow(IntPtr hwnd);
         ThemeWindow _twd;
+        delegate void SetFixedThemeColors(IntPtr hwnd);
+        SetFixedThemeColors _sftc;
 
-        bool VSThemeWindow(IntPtr handle)
+        bool VSThemeWindow(IntPtr hwnd, bool forDialog)
         {
             if (_twd == null)
             {
-                _twd = GetInterfaceDelegate<ThemeWindow>(VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5"), GetService(typeof(SVsUIShell)));
+                object uiShell = GetService(typeof(SVsUIShell));
+                _twd = GetInterfaceDelegate<ThemeWindow>(VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5"), uiShell);
 
                 if (_twd == null)
                     _twd = delegate(IntPtr h) { return false; };
+
+                if (VSVersion.VS2013OrLater)
+                    _sftc = GetInterfaceDelegate<SetFixedThemeColors>(VSAssemblies.VSShellInterop12.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell6"), uiShell);
+
+                if (_sftc == null)
+                    _sftc = delegate(IntPtr h) {};
             }
 
-            return _twd(handle);
+            bool r = _twd(hwnd);
+            if (r && forDialog)
+                _sftc(hwnd);
+            return r;
         }
 
         delegate IVsUIObject GetIconForFile(string filename, __VSUIDATAFORMAT desiredFormat);
@@ -249,7 +176,7 @@ namespace Ankh.WpfPackage.Services
             return false;
         }
 
-        public void ThemeRecursive(System.Windows.Forms.Control control)
+        public void ThemeRecursive(System.Windows.Forms.Control control, bool forDialog)
         {
             bool recurse = true;
             bool autoTheme = true;
@@ -267,32 +194,44 @@ namespace Ankh.WpfPackage.Services
             IThemedControl themed = control as IThemedControl;
             if (themed != null)
             {
-                ApplyThemeEventArgs atea = new ApplyThemeEventArgs(this);
+                ApplyThemeEventArgs atea = new ApplyThemeEventArgs(this, forDialog);
 
                 themed.OnApplyTheme(atea);
 
                 recurse = !atea.NoRecurse;
                 autoTheme = !atea.DontTheme;
+                forDialog = atea.ForDialog;
             }
 
             if (autoTheme && control.IsHandleCreated)
             {
-                VSThemeWindow(control);
+                VSThemeWindow(control, forDialog);
             }
 
             if (recurse)
                 foreach (Control c in control.Controls)
                 {
-                    ThemeRecursive(c);
+                    ThemeRecursive(c, forDialog);
                 }
         }
 
-        bool MaybeTheme<T>(Action<T> how, Control control) where T : class
+        bool MaybeTheme<T>(Action<T> how, Control control, bool forDialog) where T : class
         {
             T value = control as T;
             if (value != null)
             {
                 how(value);
+                return true;
+            }
+            return false;
+        }
+
+        bool MaybeTheme<T>(Action<T, bool> how, Control control, bool forDialog) where T : class
+        {
+            T value = control as T;
+            if (value != null)
+            {
+                how(value, forDialog);
                 return true;
             }
             return false;
@@ -362,8 +301,10 @@ namespace Ankh.WpfPackage.Services
                 textBox.BorderStyle = BorderStyle.FixedSingle;
         }
 
-        void ThemeOne(ListView listView)
+        void ThemeOne(ListView listView, bool forDialog)
         {
+            VSThemeWindow(listView.Handle, forDialog);
+
             if (listView.Font != DialogFont)
                 listView.Font = DialogFont;
 
@@ -408,15 +349,15 @@ namespace Ankh.WpfPackage.Services
 
             if (header != IntPtr.Zero)
             {
-                VSThemeWindow(header);
+                VSThemeWindow(header, forDialog);
 
                 // TODO: Force colors?
             }
         }
 
-        void ThemeOne(TreeView treeView)
+        void ThemeOne(TreeView treeView, bool forDialog)
         {
-            VSThemeWindow(treeView.Handle);
+            VSThemeWindow(treeView.Handle, forDialog);
 
             if (treeView.Font != DialogFont)
                 treeView.Font = DialogFont;
@@ -660,23 +601,23 @@ namespace Ankh.WpfPackage.Services
             public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
         }
 
-        void VSThemeWindow(Control control)
+        void VSThemeWindow(Control control, bool forDialog)
         {
             bool ok =
-                MaybeTheme<ToolStrip>(ThemeOne, control)
-                || MaybeTheme<Label>(ThemeOne, control)
-                || MaybeTheme<TextBox>(ThemeOne, control)
-                || MaybeTheme<ListView>(ThemeOne, control)
-                || MaybeTheme<TreeView>(ThemeOne, control)
-                || MaybeTheme<Panel>(ThemeOne, control)
-                || MaybeTheme<UserControl>(ThemeOne, control)
-                || MaybeTheme<PropertyGrid>(ThemeOne, control)
-                || MaybeTheme<ComboBox>(ThemeOne, control)
-                || MaybeTheme<SplitContainer>(ThemeOne, control)
-                || MaybeTheme<IHasSplitterColor>(ThemeOne, control)
-                || MaybeTheme<Button>(ThemeOne, control)
-                || MaybeTheme<ContainerControl>(ThemeOne, control)
-                || MaybeTheme<ScrollableControl>(ThemeOne, control);
+                MaybeTheme<ToolStrip>(ThemeOne, control, forDialog)
+                || MaybeTheme<Label>(ThemeOne, control, forDialog)
+                || MaybeTheme<TextBox>(ThemeOne, control, forDialog)
+                || MaybeTheme<ListView>(ThemeOne, control, forDialog)
+                || MaybeTheme<TreeView>(ThemeOne, control, forDialog)
+                || MaybeTheme<Panel>(ThemeOne, control, forDialog)
+                || MaybeTheme<UserControl>(ThemeOne, control, forDialog)
+                || MaybeTheme<PropertyGrid>(ThemeOne, control, forDialog)
+                || MaybeTheme<ComboBox>(ThemeOne, control, forDialog)
+                || MaybeTheme<SplitContainer>(ThemeOne, control, forDialog)
+                || MaybeTheme<IHasSplitterColor>(ThemeOne, control, forDialog)
+                || MaybeTheme<Button>(ThemeOne, control, forDialog)
+                || MaybeTheme<ContainerControl>(ThemeOne, control, forDialog)
+                || MaybeTheme<ScrollableControl>(ThemeOne, control, forDialog);
         }
     }
 }

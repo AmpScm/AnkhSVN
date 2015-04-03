@@ -380,7 +380,7 @@ namespace Ankh.UI
                 {
                     if (!IsHandleCreated)
                         CreateHandle();
-                    themer.ThemeRecursive(this);
+                    themer.ThemeRecursive(this, true);
                 }
             }
         }
