@@ -28,7 +28,7 @@ namespace Ankh.Scc
     public partial class SvnItemData : AnkhPropertyGridItem
     {
         readonly IAnkhServiceProvider _context;
-        readonly SvnItem _item;
+        SvnItem _item;
         public SvnItemData(IAnkhServiceProvider context, SvnItem item)
         {
             if (context == null)
@@ -38,6 +38,17 @@ namespace Ankh.Scc
 
             _context = context;
             _item = item;
+        }
+
+        protected void ReplaceSvnItem(SvnItem newItem)
+        {
+            if (newItem == null)
+                throw new ArgumentNullException("newItem");
+#if DEBUG
+            Debug.Assert(newItem.FullPath == FullPath);
+#endif
+
+            _item = newItem;
         }
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

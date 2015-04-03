@@ -162,7 +162,9 @@
     <Compile Include="Scc\IAnkhTextEditingTracker.cs" />
     <Compile Include="Scc\ISccSettingsStore.cs" />
     <Compile Include="Scc\SccFileSystemNode.cs" />
-    <Compile Include="Scc\Svn\SvnItemData.ChangeList.cs" />
+    <Compile Include="Scc\Svn\SvnItemData.ChangeList.cs">
+      <DependentUpon>SvnItemData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scc\UI\IAnkhRevisionResolver.cs" />
     <Compile Include="UI\AnkhPropertyGridItem.cs" />
     <Compile Include="Scc\UI\IAnnotateSection.cs" />

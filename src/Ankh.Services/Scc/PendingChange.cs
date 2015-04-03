@@ -136,6 +136,9 @@ namespace Ankh.Scc
         {
             bool m = false;
 
+            if (!ReferenceEquals(item, SvnItem))
+                ReplaceSvnItem(item);
+
             RefreshValue(ref m, ref _iconIndex, GetIcon(context));
             RefreshValue(ref m, ref _projects, GetProjects(context));
             RefreshValue(ref m, ref _status, GetStatus(context, item));
