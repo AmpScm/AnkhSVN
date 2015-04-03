@@ -90,7 +90,7 @@ namespace Ankh.UI.PendingChanges
                             IWinFormsThemingService wts = Context.GetService<IWinFormsThemingService>();
 
                             if (wts != null)
-                                wts.ThemeRecursive(control);
+                                wts.ThemeRecursive(control, false);
                         }
                         return;
                     }

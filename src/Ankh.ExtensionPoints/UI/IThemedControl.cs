@@ -11,17 +11,24 @@ namespace Ankh.ExtensionPoints.UI
         readonly IServiceProvider _serviceProvider;
         bool _cancelRecurse;
         bool _dontTheme;
+        bool _forDialog;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="serviceProvider"></param>
-        public ApplyThemeEventArgs(IServiceProvider serviceProvider)
+        public ApplyThemeEventArgs(IServiceProvider serviceProvider, bool forDialog)
         {
             if (serviceProvider == null)
                 throw new ArgumentNullException("serviceProvider");
 
             _serviceProvider = serviceProvider;
+        }
+
+        public ApplyThemeEventArgs(IServiceProvider serviceProvider)
+            : this(serviceProvider, false)
+        {
+
         }
 
         /// <summary>
@@ -49,6 +56,12 @@ namespace Ankh.ExtensionPoints.UI
         {
             get { return _dontTheme; }
             set { _dontTheme = value;  }
+        }
+
+        public bool ForDialog
+        {
+            get { return _forDialog; }
+            set { _forDialog = value; }
         }
     }
 
