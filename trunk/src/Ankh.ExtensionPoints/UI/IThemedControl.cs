@@ -17,6 +17,7 @@ namespace Ankh.ExtensionPoints.UI
         /// 
         /// </summary>
         /// <param name="serviceProvider"></param>
+        /// <param name="forDialog"></param>
         public ApplyThemeEventArgs(IServiceProvider serviceProvider, bool forDialog)
         {
             if (serviceProvider == null)
@@ -25,6 +26,10 @@ namespace Ankh.ExtensionPoints.UI
             _serviceProvider = serviceProvider;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="serviceProvider"></param>
         public ApplyThemeEventArgs(IServiceProvider serviceProvider)
             : this(serviceProvider, false)
         {
@@ -58,6 +63,9 @@ namespace Ankh.ExtensionPoints.UI
             set { _dontTheme = value;  }
         }
 
+        /// <summary>
+        /// Gets or sets boolean whether themes should be applied for dialog (vs toolwindow) UI
+        /// </summary>
         public bool ForDialog
         {
             get { return _forDialog; }
