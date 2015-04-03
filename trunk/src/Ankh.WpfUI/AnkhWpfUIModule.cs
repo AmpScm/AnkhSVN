@@ -25,7 +25,7 @@ namespace Ankh.WpfUI
         public AnkhWpfUIModule(AnkhRuntime runtime)
             : base(runtime)
         {
-
+            Ankh.VS.WpfServices.VSColorProxy.Ensure();
         }
 
         public override void OnPreInitialize()

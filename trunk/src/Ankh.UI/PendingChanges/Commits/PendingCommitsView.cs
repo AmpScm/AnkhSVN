@@ -32,12 +32,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.UI.PendingChanges.Commits
 {
-    public interface IPendingChangeSource
-    {
-        bool HasPendingChanges { get; }
-        IEnumerable<PendingChange> PendingChanges { get; }
-    }
-
     class PendingCommitsView : ListViewWithSelection<PendingCommitItem>, IPendingChangeSource
     {
         public PendingCommitsView()

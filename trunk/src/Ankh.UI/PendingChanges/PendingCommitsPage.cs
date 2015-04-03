@@ -34,6 +34,8 @@ namespace Ankh.UI.PendingChanges
     partial class PendingCommitsPage : PendingChangesPage
     {
         PendingCommitsView pendingCommits;
+        IPendingChangeControl pendingChangeControl;
+
         public PendingCommitsPage()
         {
             InitializeComponent();
@@ -48,20 +50,30 @@ namespace Ankh.UI.PendingChanges
             splitContainer.SuspendLayout();
             splitContainer.Panel2.Controls.Clear();
 
-            if (true || !VSVersion.VS2010OrLater)
+            Control pendingCommitsControl;
+#if DEBUG
+            if (!VSVersion.VS2012OrLater) /// Enable for VS2010 when theme proxy supports this
+#else
+            if (true)
+#endif
             {
-                pendingCommits = new PendingCommitsView(this.components);
-                
-                splitContainer.Panel2.Controls.Add(pendingCommits);
-
-                pendingCommits.Dock = changeListDummy.Dock;
-                pendingCommits.Location = changeListDummy.Location;
-                pendingCommits.Size = changeListDummy.Size;
+                pendingCommitsControl = pendingCommits = new PendingCommitsView(this.components);
             }
             else
             {
                 // Load WPF control
+                IPendingChangeControlFactory factory = Context.GetService<IPendingChangeControlFactory>();
+
+                pendingChangeControl = factory.Create(Context, this.components);
+
+                pendingCommitsControl = pendingChangeControl.Control;
             }
+
+            splitContainer.Panel2.Controls.Add(pendingCommitsControl);
+
+            pendingCommitsControl.Dock = changeListDummy.Dock;
+            pendingCommitsControl.Location = changeListDummy.Location;
+            pendingCommitsControl.Size = changeListDummy.Size;
 
             changeListDummy.Dispose();
             changeListDummy = null;
@@ -69,7 +81,8 @@ namespace Ankh.UI.PendingChanges
             
             if (VSVersion.VS2012OrLater)
             {
-                pendingCommits.BorderStyle = BorderStyle.None;
+                if (pendingCommits != null)
+                    pendingCommits.BorderStyle = BorderStyle.None;
                 borderPanel.BorderStyle = BorderStyle.None;
             }
             else
@@ -153,29 +166,36 @@ namespace Ankh.UI.PendingChanges
             if (_manager != null || Context == null)
                 return;
 
-            if (pendingCommits.SmallImageList == null)
-            {
-                IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
-
-                pendingCommits.SmallImageList = mapper.ImageList;
-            }
-
             _manager = Context.GetService<IPendingChangesManager>();
 
             if (_manager == null)
                 return;
 
-            _manager.PendingChanges.CollectionChanged += OnPendingChangesChanged;
-            _manager.Changed += new EventHandler<PendingChangeEventArgs>(OnPendingChangesChanged);
-            _manager.IsActiveChanged += new EventHandler<PendingChangeEventArgs>(OnPendingChangesActiveChanged);
-            _manager.BatchUpdateStarted += new EventHandler<BatchStartedEventArgs>(OnBatchUpdateStarted);
+            if (pendingCommits != null)
+            {
+                if (pendingCommits.SmallImageList == null)
+                {
+                    IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
+
+                    pendingCommits.SmallImageList = mapper.ImageList;
+                }
+
+                _manager.PendingChanges.CollectionChanged += OnPendingChangesChanged;
+                _manager.Changed += new EventHandler<PendingChangeEventArgs>(OnPendingChangesChanged);
+                _manager.IsActiveChanged += new EventHandler<PendingChangeEventArgs>(OnPendingChangesActiveChanged);
+                _manager.BatchUpdateStarted += new EventHandler<BatchStartedEventArgs>(OnBatchUpdateStarted);
+            }
+            else if (pendingChangeControl != null)
+            {
+                pendingChangeControl.PendingChanges = _manager.PendingChanges;
+            }
 
             if (!_manager.IsActive)
             {
                 _manager.IsActive = true;
                 _manager.FullRefresh(false);
             }
-            else
+            else if (pendingCommits != null)
                 PerformInitialUpdate(_manager);
 
             AnkhServiceEvents ev = Context.GetService<AnkhServiceEvents>();
