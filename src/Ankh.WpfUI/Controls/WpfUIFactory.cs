@@ -9,14 +9,13 @@ using Ankh.UI;
 namespace Ankh.WpfUI.Controls
 {
     [GlobalService(typeof(IPendingChangeControlFactory))]
-    class WpfUIFactory : AnkhService, IPendingChangeControlFactory
+    class WpfUiFactory : AnkhService, IPendingChangeControlFactory
     {
-        public WpfUIFactory(IAnkhServiceProvider context)
+        public WpfUiFactory(IAnkhServiceProvider context)
             : base(context)
         {
 
         }
-
         public IPendingChangeControl Create(IAnkhServiceProvider context, IContainer container)
         {
             ElementHost host = new ElementHost();
