@@ -79,7 +79,7 @@ namespace Ankh.GenerateVSIXManifest
 
                 xw.WriteStartElement("SupportedFrameworkRuntimeEdition", vsix2010);
                 xw.WriteAttributeString("MinVersion", "2.0");
-                xw.WriteAttributeString("MaxVersion", "4.5");
+                xw.WriteAttributeString("MaxVersion", "4.6");
                 xw.WriteEndElement(); // /SupportedFrameworkRuntimeEdition
 
                 xw.WriteEndElement(); // /Identifier
