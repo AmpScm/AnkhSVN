@@ -18,32 +18,41 @@
                 <GridViewColumn Header="Path" Width="200">
                     <GridViewColumn.HeaderTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="0">
-                                <CheckBox x:Name="PathHeaderCheckbox" Margin="0" Padding="0"/>
-                                <TextBlock ><Run Text="dssdsfsdfdsfsdf"/></TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox x:Name="PathHeaderCheckbox"/>
+                                <TextBlock Text="Path" />
                             </StackPanel>
                         </DataTemplate>
                     </GridViewColumn.HeaderTemplate>
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
-                            <WrapPanel>
+                            <StackPanel Orientation="Horizontal">
                                 <CheckBox IsChecked="{Binding IsChecked}" />
-                                <TextBlock Text="{Binding FullPath}" />
-                            </WrapPanel>
+                                <TextBlock Text="{Binding Path}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn Header="Project" Width="80">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Project}"/>
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
                 </GridViewColumn>
                 <GridViewColumn DisplayMemberBinding="{Binding ChangeText}">
                     <GridViewColumn.HeaderTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox/>
-                                <TextBlock ><Run Text="dssdsfsdfdsfsdf"/></TextBlock>
-                            </StackPanel>
+                            <TextBlock Text="QQ" />
                         </DataTemplate>
                     </GridViewColumn.HeaderTemplate>
                 </GridViewColumn>
-                <GridViewColumn Header="QQ">
+                <GridViewColumn Header="FullPath" Width="300">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding FullPath}"/>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
                 </GridViewColumn>
             </GridView>
         </ListView.View>
