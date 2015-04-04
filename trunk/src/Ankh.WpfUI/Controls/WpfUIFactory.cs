@@ -56,12 +56,23 @@ namespace Ankh.WpfUI.Controls
 
             bool IPendingChangeSource.HasPendingChanges
             {
-                get { return false; }
+                get
+                {
+                    // TODO: Use *checked* items
+                    return _puc.PendingChangesList.SelectedItems.Count > 0;
+                }
             }
 
             IEnumerable<Scc.PendingChange> IPendingChangeSource.PendingChanges
             {
-                get { return new Scc.PendingChange[0]; }
+                get
+                {
+                    // TODO: Use *checked* items
+                    foreach (Scc.PendingChange pc in _puc.PendingChangesList.SelectedItems)
+                    {
+                        yield return pc;
+                    }
+                }
             }
 
             public void Dispose()
@@ -75,7 +86,6 @@ namespace Ankh.WpfUI.Controls
             }
 
             ReadOnlyKeyedCollectionWithNotify<string, Scc.PendingChange> _list;
-            ReadOnlyObservableWrapper<Scc.PendingChange> _observeWrapper;
 
             ReadOnlyKeyedCollectionWithNotify<string, Scc.PendingChange> IPendingChangeControl.PendingChanges
             {
@@ -85,11 +95,8 @@ namespace Ankh.WpfUI.Controls
                     if (_list == value)
                         return;
 
-                    if (_observeWrapper != null)
-                        _observeWrapper.Dispose();
                     _list = value;
-                    _observeWrapper = new ReadOnlyObservableWrapper<Scc.PendingChange>(value);
-                    _puc.PendingChangesList.ItemsSource = _observeWrapper;
+                    _puc.PendingChangesList.ItemsSource = new ReadOnlyObservableWrapper<Scc.PendingChange>(value);
                 }
             }
         }

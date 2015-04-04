@@ -10,18 +10,16 @@ namespace Ankh.WpfUI.Controls
 {
     sealed class ReadOnlyObservableWrapper<T> : ReadOnlyCollectionWithNotify<T>, INotifyCollectionChanged where T : class
     {
-        public new event NotifyCollectionChangedEventHandler CollectionChanged;
+        NotifyCollectionChangedEventHandler _collectionChanged;
 
         public ReadOnlyObservableWrapper(CollectionWithNotify<T> collection)
             : base(collection)
         {
-
         }
 
         public ReadOnlyObservableWrapper(ReadOnlyCollectionWithNotify<T> collection)
             : base(collection)
         {
-
         }
 
         protected override void OnCollectionChanged(CollectionChangedEventArgs<T> e)
@@ -40,20 +38,24 @@ namespace Ankh.WpfUI.Controls
                     OnNotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, e.OldItems[0], e.OldStartingIndex));
                     break;
                 case CollectionChange.Replace:
+                    OnNotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, e.NewItems, e.OldItems, e.NewStartingIndex));
+                    break;
                 case CollectionChange.Move:
-                    throw new NotImplementedException();
+                    OnNotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, e.NewItems/*==OldItems*/, e.NewStartingIndex, e.OldStartingIndex));
+                    break;
             }
         }
 
-        protected void OnNotifyCollectionChanged(NotifyCollectionChangedEventArgs e)
+        void OnNotifyCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (CollectionChanged != null)
-                CollectionChanged(this, e);
+            if (_collectionChanged != null)
+                _collectionChanged(this, e);
         }
 
-        public void Dispose()
+        public new event NotifyCollectionChangedEventHandler CollectionChanged
         {
-            base.Dispose(true);
+            add { _collectionChanged += value; HookChanges(); }
+            remove { _collectionChanged -= value; UnhookChanges(); }
         }
     }
 }
