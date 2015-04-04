@@ -20,6 +20,16 @@ namespace Ankh.WpfUI.Controls
             get { return _pc.FullPath; }
         }
 
+        public string Project
+        {
+            get { return _pc.Project; }
+        }
+
+        public string Path
+        {
+            get { return FullPath; }
+        }
+
         public bool IsChecked
         {
             get { return _isChecked; }
