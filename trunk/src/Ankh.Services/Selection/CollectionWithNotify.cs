@@ -11,7 +11,7 @@ namespace Ankh
     /// Our own implementation of ObservableCollection, compatible with .Net 2.0
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class CollectionWithNotify<T> : Collection<T>, ISupportsCollectionChanged<T>, INotifyPropertyChanged where T : class
+    public class CollectionWithNotify<T> : Collection<T>, ISupportsCollectionChanged<T> where T : class
     {
         readonly CollectionMonitor _monitor = new CollectionMonitor();
 
@@ -162,85 +162,10 @@ namespace Ankh
             else
                 RaiseCollectionChanged(new CollectionChangedEventArgs<T>(CollectionChange.Reset));
         }
-    }
 
-    public class ReadOnlyCollectionWithNotify<T> : ReadOnlyCollection<T>, ISupportsCollectionChanged<T>, INotifyPropertyChanged where T : class
-    {
-        EventHandler<CollectionChangedEventArgs<T>> _typedCollectionChanged;
-        EventHandler<CollectionChangedEventArgs> _untypedCollectionChanged;
-        ISupportsCollectionChanged<T> _collectionChanged;
-        INotifyPropertyChanged _propertyChanged;
-
-        public ReadOnlyCollectionWithNotify(CollectionWithNotify<T> collection)
-            : this(collection, collection, collection)
-        {}
-
-        public ReadOnlyCollectionWithNotify(ReadOnlyCollectionWithNotify<T> collection)
-            : this(collection, collection, collection)
-        { }
-
-        protected ReadOnlyCollectionWithNotify(IList<T> collection, ISupportsCollectionChanged<T> collectionChanged, INotifyPropertyChanged propertyChanged)
-            : base(collection)
+        IList<T> ISupportsCollectionChanged<T>.AsList()
         {
-            if (collectionChanged == null)
-                throw new ArgumentNullException("collectionChanged");
-            if (propertyChanged == null)
-                throw new ArgumentNullException("propertyChanged");
-
-            _collectionChanged = collectionChanged;
-            _propertyChanged = propertyChanged;
-
-            collectionChanged.CollectionChanged += HandleCollectionChanged;
-            propertyChanged.PropertyChanged += HandlePropertyChanged;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            _collectionChanged.CollectionChanged -= HandleCollectionChanged;
-            _propertyChanged.PropertyChanged -= HandlePropertyChanged;
-        }
-
-        private void HandleCollectionChanged(object sender, CollectionChangedEventArgs<T> e)
-        {
-            OnCollectionChanged(e);
-        }
-
-        protected virtual void OnCollectionChanged(CollectionChangedEventArgs<T> e)
-        {
-            if (_typedCollectionChanged != null)
-                _typedCollectionChanged(this, e);
-            if (_untypedCollectionChanged != null)
-                _untypedCollectionChanged(this, e);
-        }
-
-        public event EventHandler<CollectionChangedEventArgs<T>> CollectionChanged
-        {
-            add { _typedCollectionChanged += value; }
-            remove { _typedCollectionChanged -= value; }
-        }
-
-        event EventHandler<CollectionChangedEventArgs> ISupportsCollectionChanged.CollectionChanged
-        {
-            add { _untypedCollectionChanged += value; }
-            remove { _untypedCollectionChanged -= value; }
-        }
-
-        IDisposable ISupportsCollectionChanged.BatchUpdate()
-        {
-            throw new NotSupportedException();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, e);
-        }
-
-        private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            OnPropertyChanged(e);
+            return this;
         }
     }
 }
