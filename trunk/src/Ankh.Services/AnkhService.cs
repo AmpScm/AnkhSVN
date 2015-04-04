@@ -624,5 +624,10 @@ namespace Ankh
                 return false;
             }
         }
+
+        public static IAnkhServiceProvider StaticContext
+        {
+            get { return AnkhRuntime.StaticContext; }
+        }
     }
 }
