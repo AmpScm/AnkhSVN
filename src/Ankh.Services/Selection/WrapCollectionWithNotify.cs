@@ -11,14 +11,26 @@ namespace Ankh
         where TInner : class
         where TWrapped : class
     {
-        public WrapCollectionWithNotify(CollectionWithNotify<TInner> collection, WrapItem<TInner, TWrapped> wrapper)
+        readonly IAnkhServiceProvider _context;
+        public WrapCollectionWithNotify(IAnkhServiceProvider context, CollectionWithNotify<TInner> collection, WrapItem<TInner, TWrapped> wrapper)
             : base(new WrapInnerCollection(collection, wrapper))
         {
+            _context = context;
+
+            ((WrapInnerCollection)this.Items).ResetCollection();
         }
 
-        public WrapCollectionWithNotify(ReadOnlyCollectionWithNotify<TInner> collection, WrapItem<TInner, TWrapped> wrapper)
+        public WrapCollectionWithNotify(IAnkhServiceProvider context, ReadOnlyCollectionWithNotify<TInner> collection, WrapItem<TInner, TWrapped> wrapper)
             : base(new WrapInnerCollection(collection, wrapper))
         {
+            _context = context;
+
+            ((WrapInnerCollection)this.Items).ResetCollection();
+        }
+
+        protected IAnkhServiceProvider Context
+        {
+            get { return _context; }
         }
 
         protected void Dispose(bool disposing)
@@ -40,8 +52,6 @@ namespace Ankh
 
                 _sourceCollection = collection;
                 _wrapper = wrapper;
-
-                ResetCollection();
 
                 _sourceCollection.CollectionChanged += OnSourceCollectionChanged;
                 _sourceCollection.PropertyChanged += OnSourcePropertyChanged;
@@ -91,7 +101,7 @@ namespace Ankh
                 }
             }
 
-            protected virtual void ResetCollection()
+            protected internal virtual void ResetCollection()
             {
                 using (BatchUpdate())
                 {

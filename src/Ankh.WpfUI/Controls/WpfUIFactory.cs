@@ -25,16 +25,17 @@ namespace Ankh.WpfUI.Controls
             puc.Context = context;
             host.Child = puc;
 
-            return new PendingChangeControlWrapper(host, puc);
+            return new PendingChangeControlWrapper(this, host, puc);
         }
 
-        sealed class PendingChangeControlWrapper : IPendingChangeControl, IDisposable,  IPendingChangeSource
+        sealed class PendingChangeControlWrapper : AnkhService, IPendingChangeControl, IDisposable,  IPendingChangeSource
         {
             Control _control;
             PendingChangesUserControl _puc;
             PendingChangeWrapCollection _wc;
 
-            public PendingChangeControlWrapper(Control control, PendingChangesUserControl puc)
+            public PendingChangeControlWrapper(IAnkhServiceProvider context, Control control, PendingChangesUserControl puc)
+                : base(context)
             {
                 _puc = puc;
                 control.Disposed += OnControlDisposed;
@@ -51,9 +52,16 @@ namespace Ankh.WpfUI.Controls
                 Dispose(true);
             }
 
-            void Dispose(bool disposing)
+            protected override void Dispose(bool disposing)
             {
-                _control.Disposed -= OnControlDisposed;
+                try
+                {
+                    _control.Disposed -= OnControlDisposed;
+                }
+                finally
+                {
+                    base.Dispose(disposing);
+                }
             }
 
             public Control Control
@@ -112,7 +120,7 @@ namespace Ankh.WpfUI.Controls
                     _list = value;
                     if (value != null)
                     {
-                        _wc = new PendingChangeWrapCollection(value);
+                        _wc = new PendingChangeWrapCollection(this, value);
                         _puc.PendingChangesList.ItemsSource = new ReadOnlyObservableWrapper<PendingChangeItem>(_wc);
                     }
                     else
@@ -125,8 +133,8 @@ namespace Ankh.WpfUI.Controls
 
             class PendingChangeWrapCollection : KeyedWrapCollectionWithNotify<PendingChange, string, PendingChangeItem>
             {
-                public PendingChangeWrapCollection(ReadOnlyKeyedCollectionWithNotify<string, PendingChange> pendingChanges)
-                    : base(pendingChanges)
+                public PendingChangeWrapCollection(IAnkhServiceProvider context, ReadOnlyKeyedCollectionWithNotify<string, PendingChange> pendingChanges)
+                    : base(context, pendingChanges)
                 {
 
                 }
