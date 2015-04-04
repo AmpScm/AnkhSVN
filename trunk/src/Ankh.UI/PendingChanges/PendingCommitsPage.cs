@@ -78,7 +78,7 @@ namespace Ankh.UI.PendingChanges
             changeListDummy.Dispose();
             changeListDummy = null;
             this.splitContainer.ResumeLayout(true);
-            
+
             if (VSVersion.VS2012OrLater)
             {
                 if (pendingCommits != null)
@@ -163,6 +163,8 @@ namespace Ankh.UI.PendingChanges
         }
 
         IPendingChangesManager _manager;
+        PendingCommitItemCollection _listItems;
+        
         private void HookList()
         {
             if (_manager != null || Context == null)
@@ -182,7 +184,9 @@ namespace Ankh.UI.PendingChanges
                     pendingCommits.SmallImageList = mapper.ImageList;
                 }
 
-                _manager.PendingChanges.CollectionChanged += OnPendingChangesChanged;
+                _listItems = new PendingCommitItemCollection(Context, _manager.PendingChanges);
+                _listItems.CollectionChanged += OnPendingChangesChanged;
+
                 _manager.Changed += new EventHandler<PendingChangeEventArgs>(OnPendingChangesChanged);
                 _manager.IsActiveChanged += new EventHandler<PendingChangeEventArgs>(OnPendingChangesActiveChanged);
                 _manager.BatchUpdateStarted += new EventHandler<BatchStartedEventArgs>(OnBatchUpdateStarted);
@@ -207,7 +211,7 @@ namespace Ankh.UI.PendingChanges
             OnSolutionRefresh(this, EventArgs.Empty);
         }
 
-        private void OnPendingChangesChanged(object sender, CollectionChangedEventArgs<PendingChange> e)
+        private void OnPendingChangesChanged(object sender, CollectionChangedEventArgs<PendingCommitItem> e)
         {
             if (!IsHandleCreated)
                 return;
@@ -215,18 +219,28 @@ namespace Ankh.UI.PendingChanges
             switch (e.Action)
             {
                 case CollectionChange.Add:
-                    foreach(PendingChange pc in e.NewItems)
-                        OnPendingChangeAdded(pc);
+                    if (_toAdd != null)
+                        _toAdd.AddRange(e.NewItems);
+                    else
+                        pendingCommits.Items.AddRange(e.NewItems);
                     break;
                 case CollectionChange.Remove:
-                    foreach(PendingChange pc in e.OldItems)
-                        OnPendingChangeRemoved(pc);
+                    foreach (PendingCommitItem pci in e.OldItems)
+                        pendingCommits.Items.Remove(pci);
                     break;
                 case CollectionChange.Reset:
-                    OnPendingChangesListFlushed();
+                    _toAdd = null;
                     PerformInitialUpdate(_manager);
                     break;
             }
+
+            if (e.NewItems != null)
+                foreach (PendingCommitItem i in e.NewItems)
+                {
+                    OnPendingChangeActivity(i.PendingChange);
+                }
+
+            pendingCommits.RefreshGroupsAvailable();
         }
 
         int _inBatchUpdate;
@@ -236,6 +250,7 @@ namespace Ankh.UI.PendingChanges
             pendingCommits.BeginUpdate();
             _inBatchUpdate++;
             e.Disposers += OnBatchEnd;
+            _toAdd = new List<PendingCommitItem>();
         }
 
         void OnBatchEnd()
@@ -244,12 +259,13 @@ namespace Ankh.UI.PendingChanges
             {
                 if (--_inBatchUpdate == 0)
                 {
-                    if (_toAdd != null)
+                    if (_toAdd != null && _toAdd.Count > 0)
                     {
                         PendingCommitItem[] toAdd = _toAdd.ToArray();
                         _toAdd = null;
                         pendingCommits.Items.AddRange(toAdd);
                     }
+                    _toAdd = null;
                 }
             }
             finally
@@ -311,56 +327,7 @@ namespace Ankh.UI.PendingChanges
             set { splitContainer.Panel1Collapsed = !value; }
         }
 
-        readonly Dictionary<string, PendingCommitItem> _listItems = new Dictionary<string, PendingCommitItem>(StringComparer.OrdinalIgnoreCase);
-
-        void OnPendingChangeAdded(PendingChange pc)
-        {
-            PendingCommitItem pci;
-
-            string path = pc.FullPath;
-
-            if (_listItems.TryGetValue(path, out pci))
-            {
-                // Should never happend; will refresh checkbox, etc.
-                _listItems.Remove(path);
-                pci.Remove();
-            }
-
-            pci = new PendingCommitItem(pendingCommits, pc);
-            _listItems.Add(path, pci);
-            if (_inBatchUpdate > 0)
-            {
-                if (_toAdd == null)
-                    _toAdd = new List<PendingCommitItem>();
-                _toAdd.Add(pci);
-            }
-            else
-                pendingCommits.Items.Add(pci);
-
-            // TODO: Maybe add something like
-            //pendingCommits.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
-
-            OnPendingChangeActivity(pc);
-        }
-
-        HybridCollection<string> _checkedItems;
-        void OnPendingChangesListFlushed()
-        {
-            if (_listItems.Count > 0)
-            {
-                _checkedItems = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-                foreach (PendingCommitItem pci in _listItems.Values)
-                {
-                    if (pci.Checked && !_checkedItems.Contains(pci.FullPath))
-                        _checkedItems.Add(pci.FullPath);
-                }
-                _listItems.Clear();
-                pendingCommits.ClearItems();
-                _toAdd = null;
-            }
-        }
-
-        void OnPendingChangesActiveChanged(object sender, PendingChangeEventArgs e)
+         void OnPendingChangesActiveChanged(object sender, PendingChangeEventArgs e)
         {
             // Just ignore for now
             Enabled = e.Manager.IsActive;
@@ -372,29 +339,13 @@ namespace Ankh.UI.PendingChanges
                 throw new ArgumentNullException("manager");
 
             pendingCommits.BeginUpdate();
-            _listItems.Clear(); // Make sure we are clear
-            pendingCommits.ClearItems();
             try
             {
-                List<ListViewItem> newItems = new List<ListViewItem>();
-                foreach (PendingChange pc in new List<PendingChange>(manager.PendingChanges))
-                {
-                    PendingCommitItem pi = new PendingCommitItem(pendingCommits, pc);
-                    _listItems.Add(pc.FullPath, pi);
-
-                    /* Store the old checked state (checked or unchecked) in pi */
-                    if (_checkedItems != null)
-                        pi.Checked = _checkedItems.Contains(pc.FullPath);
-
-                    newItems.Add(pi);
-                }
-
-                if (newItems.Count > 0)
-                    pendingCommits.Items.AddRange(newItems.ToArray());
+                pendingCommits.ClearItems();
+                pendingCommits.Items.AddRange(_listItems.ToArray());
             }
             finally
             {
-                _checkedItems = null;
                 pendingCommits.EndUpdate();
             }
         }
@@ -405,13 +356,7 @@ namespace Ankh.UI.PendingChanges
 
             string path = e.Change.FullPath;
 
-            if (!_listItems.TryGetValue(path, out pci))
-            {
-                pci = new PendingCommitItem(pendingCommits, e.Change);
-                _listItems.Add(path, pci);
-                pendingCommits.Items.Add(pci);
-            }
-            else
+            if (_listItems.TryGetValue(path, out pci))
             {
                 if (PendingChange.IsIgnoreOnCommitChangeList(pci.PendingChange.ChangeList)
                     && pci.Checked)
@@ -427,26 +372,6 @@ namespace Ankh.UI.PendingChanges
                 pci.RefreshText(Context);
             }
             OnPendingChangeActivity(e.Change);
-        }
-
-        void OnPendingChangeRemoved(PendingChange pc)
-        {
-            PendingCommitItem pci;
-
-            string path = pc.FullPath;
-
-            if (_listItems.TryGetValue(path, out pci))
-            {
-                _listItems.Remove(path);
-                pci.Remove();
-
-                // Currently probably not necessary, but just to be sure
-                if (_toAdd != null)
-                    _toAdd.Remove(pci);
-
-                pendingCommits.RefreshGroupsAvailable();
-            }
-            OnPendingChangeActivity(pc);
         }
 
         void OnPendingChangeActivity(PendingChange pc)
@@ -512,10 +437,9 @@ namespace Ankh.UI.PendingChanges
             switch (e.Command)
             {
                 case AnkhCommand.PcLogEditorPasteFileList:
-                    foreach (PendingCommitItem pci in _listItems.Values)
+                    foreach (PendingChange pc in logMessageEditor.PasteSource.PendingChanges)
                     {
-                        if (pci.Checked)
-                            return;
+                        return;
                     }
                     e.Enabled = false;
                     return;
@@ -555,15 +479,7 @@ namespace Ankh.UI.PendingChanges
 
         public void DoCommit(bool keepLocks)
         {
-            List<PendingChange> changes = new List<PendingChange>();
-
-            foreach (PendingCommitItem pci in _listItems.Values)
-            {
-                if (pci.Checked)
-                {
-                    changes.Add(pci.PendingChange);
-                }
-            }
+            List<PendingChange> changes = new List<PendingChange>(logMessageEditor.PasteSource.PendingChanges);
 
             IPendingChangeHandler pch = Context.GetService<IPendingChangeHandler>();
 
@@ -572,7 +488,7 @@ namespace Ankh.UI.PendingChanges
             a.KeepLocks = keepLocks;
 
             if (issueNumberBox.Visible)
-                a.IssueText = issueNumberBox.Text; // The pc handler verifies if it should be used            
+                a.IssueText = issueNumberBox.Text; // The pc handler verifies if it should be used
 
             if (pch.Commit(changes, a))
             {
@@ -595,15 +511,7 @@ namespace Ankh.UI.PendingChanges
             a.RelativeToPath = ss.ProjectRoot;
             a.AddUnversionedFiles = true;
 
-            List<PendingChange> changes = new List<PendingChange>();
-
-            foreach (PendingCommitItem pci in _listItems.Values)
-            {
-                if (pci.Checked)
-                {
-                    changes.Add(pci.PendingChange);
-                }
-            }
+            List<PendingChange> changes = new List<PendingChange>(logMessageEditor.PasteSource.PendingChanges);
 
             if (Context.GetService<IPendingChangeHandler>().CreatePatch(changes, a))
             {
@@ -612,15 +520,9 @@ namespace Ankh.UI.PendingChanges
 
         internal bool CanCommit(bool keepingLocks)
         {
-            if (_listItems.Count == 0)
-                return false;
-
-            foreach (PendingCommitItem pci in _listItems.Values)
+            foreach (PendingChange pc in logMessageEditor.PasteSource.PendingChanges)
             {
-                if (!pci.Checked)
-                    continue;
-
-                if (!keepingLocks || pci.PendingChange.SvnItem.IsLocked)
+                if (!keepingLocks || pc.SvnItem.IsLocked)
                     return true;
             }
 
@@ -632,16 +534,12 @@ namespace Ankh.UI.PendingChanges
             if (!CanCommit(false))
                 return false;
 
-            foreach (PendingCommitItem pci in _listItems.Values)
+            foreach (PendingChange pc in logMessageEditor.PasteSource.PendingChanges)
             {
-                if (!pci.Checked)
-                    continue;
-                PendingChange pc = pci.PendingChange;
-
                 if (pc.SvnItem.IsModified)
                     return true;
                 else if (!pc.SvnItem.IsVersioned && pc.SvnItem.IsVersionable && pc.SvnItem.InSolution)
-                    return true; // Will be added                
+                    return true; // Will be added
             }
 
             return false;
@@ -649,12 +547,9 @@ namespace Ankh.UI.PendingChanges
 
         internal bool CanApplyToWorkingCopy()
         {
-            foreach (PendingCommitItem pci in _listItems.Values)
+            foreach (PendingChange pc in logMessageEditor.PasteSource.PendingChanges)
             {
-                if (!pci.Checked)
-                    continue;
-
-                if (pci.PendingChange.CanApply)
+                if (pc.CanApply)
                     return true;
             }
 
@@ -663,15 +558,7 @@ namespace Ankh.UI.PendingChanges
 
         internal void ApplyToWorkingCopy()
         {
-            List<PendingChange> changes = new List<PendingChange>();
-
-            foreach (PendingCommitItem pci in _listItems.Values)
-            {
-                if (!pci.Checked)
-                    continue;
-
-                changes.Add(pci.PendingChange);
-            }
+            List<PendingChange> changes = new List<PendingChange>(logMessageEditor.PasteSource.PendingChanges);
 
             PendingChangeApplyArgs args = new PendingChangeApplyArgs();
 
@@ -735,6 +622,11 @@ namespace Ankh.UI.PendingChanges
 
                 return null;
             }
+        }
+
+        internal PendingCommitsView PendingCommitsView
+        {
+            get { return pendingCommits; }
         }
     }
 }

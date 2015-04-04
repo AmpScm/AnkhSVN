@@ -9,20 +9,32 @@ namespace Ankh
         where TInner : class
         where TWrapped : class
     {
+        readonly IAnkhServiceProvider _context;
         WrapInnerCollection _inner;
 
-        public KeyedWrapCollectionWithNotify(KeyedCollectionWithNotify<TKey, TInner> collection)
+        public KeyedWrapCollectionWithNotify(IAnkhServiceProvider context, KeyedCollectionWithNotify<TKey, TInner> collection)
             : base(new WrapInnerCollection(collection))
         {
+            _context = context;
             _inner = (WrapInnerCollection)base.Items;
             _inner.Converter = this;
+
+            ((WrapInnerCollection)this.Items).ResetCollection();
         }
 
-        public KeyedWrapCollectionWithNotify(ReadOnlyKeyedCollectionWithNotify<TKey, TInner> collection)
+        public KeyedWrapCollectionWithNotify(IAnkhServiceProvider context, ReadOnlyKeyedCollectionWithNotify<TKey, TInner> collection)
             : base(new WrapInnerCollection(collection))
         {
+            _context = context;
             _inner = (WrapInnerCollection)base.Items;
             _inner.Converter = this;
+
+            ((WrapInnerCollection)this.Items).ResetCollection();
+        }
+
+        protected IAnkhServiceProvider Context
+        {
+            get { return _context; }
         }
 
         protected void Dispose(bool disposing)
@@ -41,8 +53,6 @@ namespace Ankh
                     throw new ArgumentNullException("collection");
 
                 _sourceCollection = collection;
-
-                ResetCollection();
 
                 _sourceCollection.CollectionChanged += OnSourceCollectionChanged;
                 _sourceCollection.PropertyChanged += OnSourcePropertyChanged;
@@ -92,7 +102,7 @@ namespace Ankh
                 }
             }
 
-            protected virtual void ResetCollection()
+            protected internal virtual void ResetCollection()
             {
                 using (BatchUpdate())
                 {
