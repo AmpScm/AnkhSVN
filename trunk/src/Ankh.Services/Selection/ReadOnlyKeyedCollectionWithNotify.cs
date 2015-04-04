@@ -48,5 +48,10 @@ namespace Ankh
         {
             throw new NotImplementedException();
         }
+
+        public bool TryGetValue(TKey key, out TItem value)
+        {
+            return _innerCollection.TryGetValue(key, out value);
+        }
     }
 }

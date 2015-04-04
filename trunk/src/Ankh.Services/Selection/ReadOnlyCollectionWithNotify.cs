@@ -98,5 +98,12 @@ namespace Ankh
         {
             OnPropertyChanged(e);
         }
+
+        public T[] ToArray()
+        {
+            T[] array = new T[Count];
+            CopyTo(array, 0);
+            return array;
+        }
     }
 }

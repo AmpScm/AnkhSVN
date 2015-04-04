@@ -12,6 +12,8 @@ namespace Ankh
     {
         IEqualityComparer<TKey> Comparer { get; }
         TKey GetKeyForItem(TItem item);
+
+        bool TryGetValue(TKey key, out TItem value);
     }
 
     [Flags]
@@ -200,6 +202,30 @@ namespace Ankh
         TKey ISupportsKeyedCollectionChanged<TKey, TItem>.GetKeyForItem(TItem item)
         {
             return GetKeyForItem(item);
+        }
+
+        public bool TryGetValue(TKey key, out TItem value)
+        {
+            if (Dictionary != null)
+                return Dictionary.TryGetValue(key, out value);
+
+            foreach (TItem item in this)
+            {
+                if (Comparer.Equals(key, GetKeyForItem(item)))
+                {
+                    value = item;
+                    return true;
+                }
+            }
+            value = null;
+            return false;
+        }
+
+        public TItem[] ToArray()
+        {
+            TItem[] array = new TItem[Count];
+            CopyTo(array, 0);
+            return array;
         }
     }
 }

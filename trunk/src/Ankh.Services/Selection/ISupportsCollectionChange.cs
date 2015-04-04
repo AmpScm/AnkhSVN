@@ -17,6 +17,8 @@ namespace Ankh
         where T : class
     {
         new event EventHandler<CollectionChangedEventArgs<T>> CollectionChanged;
+
+        T[] ToArray();
     }
 
     public enum CollectionChange
