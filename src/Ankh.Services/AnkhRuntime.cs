@@ -35,6 +35,7 @@ namespace Ankh
         readonly List<IAnkhServiceImplementation> _services = new List<IAnkhServiceImplementation>();
         bool _ensureServices;
         bool _servicesLoaded;
+        static AnkhRuntime _runtimeInstance;
 
         public AnkhRuntime(IServiceContainer parentContainer)
         {
@@ -52,6 +53,9 @@ namespace Ankh
                 _container.AddService(typeof(AnkhContext), _context = AnkhContext.Create(this));
 
             InitializeServices();
+
+            if (_runtimeInstance == null)
+                _runtimeInstance = this;
         }
 
         public AnkhRuntime(IServiceProvider parentProvider)
@@ -309,6 +313,11 @@ namespace Ankh
                     instance.OnPreInitialize();
                 }
             }
+        }
+
+        internal static IAnkhServiceProvider StaticContext
+        {
+            get { return _runtimeInstance; }
         }
     }
 }
