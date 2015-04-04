@@ -20,8 +20,8 @@ Now you are ready to check out AnkhSVN itself. Type the following:
 
   $ svn checkout http://ankhsvn.open.collab.net/svn/ankhsvn/trunk/ ankhsvn
 
-  * Open and build AnkhSvn.2012.sln, AnkhSvn.2010.sln, AnkhSvn.2008.sln or
-    AnkhSvn.2005.sln depending on your Visual Studio version.
+  * Open and build AnkhSvn.sln, AnkhSvn.2008.sln or AnkhSvn.2005.sln depending
+    on your Visual Studio version. (2010 and later share a single solution file)
 
 Or use AnkhSVN in your Visual Studio:
   * File->Open->Subversion Project
