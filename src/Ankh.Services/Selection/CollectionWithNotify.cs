@@ -178,5 +178,12 @@ namespace Ankh
             else
                 RaiseCollectionChanged(new CollectionChangedEventArgs<T>(CollectionChange.Reset));
         }
+
+        public T[] ToArray()
+        {
+            T[] array = new T[Count];
+            CopyTo(array, 0);
+            return array;
+        }
     }
 }
