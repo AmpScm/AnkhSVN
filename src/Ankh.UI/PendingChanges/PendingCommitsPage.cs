@@ -129,6 +129,8 @@ namespace Ankh.UI.PendingChanges
 
                 logMessageEditor.PasteSource = this.pendingCommits;
             }
+            else
+                logMessageEditor.PasteSource = this.pendingChangeControl.PendingChangeSource;
 
             Context.GetService<AnkhServiceEvents>().LastChanged += OnLastChanged;
 
