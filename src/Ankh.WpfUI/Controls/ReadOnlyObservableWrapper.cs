@@ -43,6 +43,8 @@ namespace Ankh.WpfUI.Controls
                 case CollectionChange.Move:
                     OnNotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, e.NewItems/*==OldItems*/, e.NewStartingIndex, e.OldStartingIndex));
                     break;
+                default:
+                    throw new InvalidOperationException();
             }
         }
 

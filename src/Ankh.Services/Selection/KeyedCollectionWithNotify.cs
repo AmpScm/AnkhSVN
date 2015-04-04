@@ -75,6 +75,21 @@ namespace Ankh
             RaiseCollectionChanged(new CollectionChangedEventArgs<TItem>(CollectionChange.Replace, t, item, index));
         }
 
+        public void Move(int oldIndex, int newIndex)
+        {
+            MoveItem(oldIndex, newIndex);
+        }
+
+        protected virtual void MoveItem(int oldIndex, int newIndex)
+        {
+            _monitor.CheckReentrancy(_collectionChangedUntyped, _collectionChangedTyped);
+            TItem t = base[oldIndex];
+            base.RemoveItem(oldIndex);
+            base.InsertItem(newIndex, t);
+            RaisePropertyChanged(RaisePropertyItems.Items);
+            RaiseCollectionChanged(new CollectionChangedEventArgs<TItem>(CollectionChange.Move, t, newIndex, oldIndex));
+        }
+
         EventHandler<CollectionChangedEventArgs> _collectionChangedUntyped;
         EventHandler<CollectionChangedEventArgs<TItem>> _collectionChangedTyped;
 
@@ -180,11 +195,6 @@ namespace Ankh
         IDisposable ISupportsCollectionChanged.BatchUpdate()
         {
             throw new NotImplementedException();
-        }
-
-        IList<TItem> ISupportsCollectionChanged<TItem>.AsList()
-        {
-            return this;
         }
 
         TKey ISupportsKeyedCollectionChanged<TKey, TItem>.GetKeyForItem(TItem item)

@@ -10,41 +10,41 @@ namespace Ankh
     public class ReadOnlyKeyedCollectionWithNotify<TKey, TItem> : ReadOnlyCollectionWithNotify<TItem>, ISupportsKeyedCollectionChanged<TKey, TItem>
         where TItem : class
     {
-        readonly KeyedCollectionWithNotify<TKey, TItem> _collection;
+        readonly KeyedCollectionWithNotify<TKey, TItem> _innerCollection;
 
         public ReadOnlyKeyedCollectionWithNotify(KeyedCollectionWithNotify<TKey, TItem> collection)
             : base(collection, collection)
         {
-            _collection = collection;
+            _innerCollection = collection;
         }
 
         public ReadOnlyKeyedCollectionWithNotify(ReadOnlyKeyedCollectionWithNotify<TKey, TItem> collection)
-            : base(collection._collection, collection._collection)
+            : base(collection._innerCollection, collection._innerCollection)
         {
-            _collection = collection._collection;
+            _innerCollection = collection._innerCollection;
         }
 
         public bool Contains(TKey key)
         {
-            return _collection.Contains(key);
+            return _innerCollection.Contains(key);
         }
 
         public TItem this[TKey key]
         {
-            get { return _collection[key]; }
+            get { return _innerCollection[key]; }
         }
 
         public IEqualityComparer<TKey> Comparer
         {
-            get { return _collection.Comparer; }
+            get { return _innerCollection.Comparer; }
         }
 
-        public virtual TKey GetKeyForItem(TItem item)
+        TKey ISupportsKeyedCollectionChanged<TKey, TItem>.GetKeyForItem(TItem item)
         {
-            return ((ISupportsKeyedCollectionChanged<TKey, TItem>)_collection).GetKeyForItem(item);
+            return ((ISupportsKeyedCollectionChanged<TKey, TItem>)_innerCollection).GetKeyForItem(item);
         }
 
-        public IDisposable BatchUpdate()
+        IDisposable ISupportsCollectionChanged.BatchUpdate()
         {
             throw new NotImplementedException();
         }

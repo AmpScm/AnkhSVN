@@ -28,8 +28,7 @@ namespace Ankh
 
         class WrapInnerCollection : CollectionWithNotify<TWrapped>
         {
-            readonly ISupportsCollectionChanged<TInner> _collection;
-            readonly IList<TInner> _sourceList;
+            readonly ISupportsCollectionChanged<TInner> _sourceCollection;
             readonly WrapItem<TInner, TWrapped> _wrapper;
 
             public WrapInnerCollection(ISupportsCollectionChanged<TInner> collection, WrapItem<TInner, TWrapped> wrapper)
@@ -39,20 +38,19 @@ namespace Ankh
                 if (wrapper == null)
                     throw new ArgumentNullException("wrapper");
 
-                _collection = collection;
-                _sourceList = collection.AsList();
+                _sourceCollection = collection;
                 _wrapper = wrapper;
 
                 ResetCollection();
 
-                _collection.CollectionChanged += OnSourceCollectionChanged;
-                _collection.PropertyChanged += OnSourcePropertyChanged;
+                _sourceCollection.CollectionChanged += OnSourceCollectionChanged;
+                _sourceCollection.PropertyChanged += OnSourcePropertyChanged;
             }
 
             internal void Dispose(bool disposing)
             {
-                _collection.CollectionChanged -= OnSourceCollectionChanged;
-                _collection.PropertyChanged -= OnSourcePropertyChanged;
+                _sourceCollection.CollectionChanged -= OnSourceCollectionChanged;
+                _sourceCollection.PropertyChanged -= OnSourcePropertyChanged;
             }
 
             private void OnSourcePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -83,7 +81,12 @@ namespace Ankh
                         }
                         break;
                     case CollectionChange.Replace:
+                        this[e.NewStartingIndex] = _wrapper(e.NewItems[0]);
+                        break;
                     case CollectionChange.Move:
+                        Move(e.OldStartingIndex, e.NewStartingIndex);
+                        break;
+                    default:
                         throw new NotImplementedException();
                 }
             }
@@ -93,7 +96,7 @@ namespace Ankh
                 using (BatchUpdate())
                 {
                     Clear();
-                    foreach (TInner key in _sourceList)
+                    foreach (TInner key in _sourceCollection)
                     {
                         Add(_wrapper(key));
                     }

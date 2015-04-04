@@ -13,11 +13,10 @@ namespace Ankh
         IDisposable BatchUpdate();
     }
 
-    public interface ISupportsCollectionChanged<T> : ISupportsCollectionChanged where T : class
+    public interface ISupportsCollectionChanged<T> : ISupportsCollectionChanged, IList<T>
+        where T : class
     {
         new event EventHandler<CollectionChangedEventArgs<T>> CollectionChanged;
-
-        IList<T> AsList();
     }
 
     public enum CollectionChange
@@ -251,7 +250,8 @@ namespace Ankh
         }
     }
 
-    public class CollectionChangedEventArgs<T> : CollectionChangedEventArgs where T : class
+    public class CollectionChangedEventArgs<T> : CollectionChangedEventArgs
+        where T : class
     {
         public CollectionChangedEventArgs(CollectionChange action)
             : base(action)
