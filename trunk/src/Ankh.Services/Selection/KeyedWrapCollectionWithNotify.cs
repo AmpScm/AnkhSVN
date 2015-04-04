@@ -5,7 +5,7 @@ using Ankh.Selection;
 
 namespace Ankh
 {
-    public abstract class KeyedWrapCollectionWithNotify<TInner, TKey, TWrapped> : ReadOnlyKeyedCollectionWithNotify<TKey,TWrapped>, ISupportsKeyedCollectionChanged<TKey, TWrapped>
+    public abstract class KeyedWrapCollectionWithNotify<TInner, TKey, TWrapped> : ReadOnlyKeyedCollectionWithNotify<TKey,TWrapped>, ISupportsKeyedCollectionChanged<TKey, TWrapped>, IDisposable
         where TInner : class
         where TWrapped : class
     {
@@ -137,7 +137,7 @@ namespace Ankh
 
         protected abstract TKey GetKeyForItem(TWrapped item);
 
-        protected abstract TWrapped GetWrapItem(object inner);
+        protected abstract TWrapped GetWrapItem(TInner inner);
 
         IDisposable ISupportsCollectionChanged.BatchUpdate()
         {
@@ -147,6 +147,11 @@ namespace Ankh
         TKey ISupportsKeyedCollectionChanged<TKey, TWrapped>.GetKeyForItem(TWrapped item)
         {
             return GetKeyForItem(item);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }
