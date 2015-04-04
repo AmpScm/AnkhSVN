@@ -32,8 +32,7 @@ namespace Ankh
 
         class WrapInnerCollection : KeyedCollectionWithNotify<TKey, TWrapped>
         {
-            readonly ISupportsKeyedCollectionChanged<TKey, TInner> _collection;
-            readonly IList<TInner> _sourceList;
+            readonly ISupportsKeyedCollectionChanged<TKey, TInner> _sourceCollection;
 
             public WrapInnerCollection(ISupportsKeyedCollectionChanged<TKey, TInner> collection)
                 : base(collection.Comparer)
@@ -41,19 +40,18 @@ namespace Ankh
                 if (collection == null)
                     throw new ArgumentNullException("collection");
 
-                _collection = collection;
-                _sourceList = collection.AsList();
+                _sourceCollection = collection;
 
                 ResetCollection();
 
-                _collection.CollectionChanged += OnSourceCollectionChanged;
-                _collection.PropertyChanged += OnSourcePropertyChanged;
+                _sourceCollection.CollectionChanged += OnSourceCollectionChanged;
+                _sourceCollection.PropertyChanged += OnSourcePropertyChanged;
             }
 
             protected virtual void Dispose(bool disposing)
             {
-                _collection.CollectionChanged -= OnSourceCollectionChanged;
-                _collection.PropertyChanged -= OnSourcePropertyChanged;
+                _sourceCollection.CollectionChanged -= OnSourceCollectionChanged;
+                _sourceCollection.PropertyChanged -= OnSourcePropertyChanged;
             }
 
             private void OnSourcePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -84,7 +82,12 @@ namespace Ankh
                         }
                         break;
                     case CollectionChange.Replace:
+                        this[e.NewStartingIndex] = this.Converter.GetWrapItem(e.NewItems[0]);
+                        break;
                     case CollectionChange.Move:
+                        Move(e.OldStartingIndex, e.NewStartingIndex);
+                        break;
+                    default:
                         throw new NotImplementedException();
                 }
             }
@@ -94,17 +97,25 @@ namespace Ankh
                 using (BatchUpdate())
                 {
                     Dictionary<TKey, TWrapped> map = new Dictionary<TKey,TWrapped>(Comparer);
-                    foreach(TWrapped existing in this)
+                    foreach(TWrapped existing in Items)
                         map[GetKeyForItem(existing)] = existing; // Double key -> overwrite
 
                     Clear();
-                    foreach (TInner inner in _sourceList)
+                    foreach (TInner inner in _sourceCollection)
                     {
-                        TKey key = _collection.GetKeyForItem(inner);
+                        TKey key = _sourceCollection.GetKeyForItem(inner);
                         TWrapped wrapped;
 
+                        // Do we have a wrapped item via the key?
                         if (!map.TryGetValue(key, out wrapped))
+                        {
                             wrapped = Converter.GetWrapItem(inner);
+
+                            // Do we have a wrapped item via the wrapper key?
+                            TWrapped wrapped2;
+                            if (map.TryGetValue(GetKeyForItem(wrapped), out wrapped2))
+                                wrapped = wrapped2;
+                        }
 
                         Add(wrapped);
                     }
@@ -124,7 +135,7 @@ namespace Ankh
             internal KeyedWrapCollectionWithNotify<TInner, TKey, TWrapped> Converter { get; set; }
         }
 
-        public override abstract TKey GetKeyForItem(TWrapped item);
+        protected abstract TKey GetKeyForItem(TWrapped item);
 
         protected abstract TWrapped GetWrapItem(object inner);
 

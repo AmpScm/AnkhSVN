@@ -20,11 +20,11 @@ namespace Ankh
         }
 
         public ReadOnlyCollectionWithNotify(ReadOnlyCollectionWithNotify<T> collection)
-            : this(collection._innerCollection.AsList(), collection._innerCollection)
+            : this(collection._innerCollection, collection._innerCollection)
         { }
 
         protected ReadOnlyCollectionWithNotify(IList<T> list, ISupportsCollectionChanged<T> collection)
-            : base((list != null) ? list : collection.AsList())
+            : base((list != null) ? list : collection)
         {
             if (collection == null)
                 throw new ArgumentNullException("collection");
@@ -97,11 +97,6 @@ namespace Ankh
         private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             OnPropertyChanged(e);
-        }
-
-        IList<T> ISupportsCollectionChanged<T>.AsList()
-        {
-            return this;
         }
     }
 }

@@ -178,10 +178,5 @@ namespace Ankh
             else
                 RaiseCollectionChanged(new CollectionChangedEventArgs<T>(CollectionChange.Reset));
         }
-
-        IList<T> ISupportsCollectionChanged<T>.AsList()
-        {
-            return this;
-        }
     }
 }
