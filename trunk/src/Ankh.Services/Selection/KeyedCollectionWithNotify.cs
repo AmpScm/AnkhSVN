@@ -14,6 +14,13 @@ namespace Ankh
         TKey GetKeyForItem(TItem item);
     }
 
+    [Flags]
+    enum RaisePropertyItems : byte
+    {
+        Count = 1,
+        Items = 2,
+    }
+
     public abstract class KeyedCollectionWithNotify<TKey, TItem> : KeyedCollection<TKey, TItem>, ISupportsKeyedCollectionChanged<TKey, TItem>, INotifyPropertyChanged
         where TItem : class
     {
@@ -37,8 +44,7 @@ namespace Ankh
             if (Count > 0)
             {
                 base.ClearItems();
-                OnPropertyChanged("Count");
-                OnPropertyChanged("Item[]");
+                RaisePropertyChanged(RaisePropertyItems.Count | RaisePropertyItems.Items);
                 RaiseCollectionChanged(new CollectionChangedEventArgs<TItem>(CollectionChange.Reset));
             }
         }
@@ -47,8 +53,7 @@ namespace Ankh
         {
             _monitor.CheckReentrancy(_collectionChangedTyped, _collectionChangedUntyped);
             base.InsertItem(index, item);
-            this.OnPropertyChanged("Count");
-            this.OnPropertyChanged("Item[]");
+            RaisePropertyChanged(RaisePropertyItems.Count | RaisePropertyItems.Items);
             RaiseCollectionChanged(new CollectionChangedEventArgs<TItem>(CollectionChange.Add, item, index));
         }
 
@@ -57,8 +62,7 @@ namespace Ankh
             _monitor.CheckReentrancy(_collectionChangedTyped, _collectionChangedUntyped);
             TItem t = base[index];
             base.RemoveItem(index);
-            this.OnPropertyChanged("Count");
-            this.OnPropertyChanged("Item[]");
+            RaisePropertyChanged(RaisePropertyItems.Count | RaisePropertyItems.Items);
             RaiseCollectionChanged(new CollectionChangedEventArgs<TItem>(CollectionChange.Remove, t, index));
         }
 
@@ -67,7 +71,7 @@ namespace Ankh
             _monitor.CheckReentrancy(_collectionChangedTyped, _collectionChangedUntyped);
             TItem t = base[index];
             base.SetItem(index, item);
-            this.OnPropertyChanged("Item[]");
+            RaisePropertyChanged(RaisePropertyItems.Items);
             RaiseCollectionChanged(new CollectionChangedEventArgs<TItem>(CollectionChange.Replace, t, item, index));
         }
 
@@ -99,6 +103,7 @@ namespace Ankh
         }
 
         sbyte _updateMode;
+        RaisePropertyItems _updateProps;
         CollectionChangedEventArgs<TItem> _change;
 
         void RaiseCollectionChanged(CollectionChangedEventArgs<TItem> e)
@@ -125,9 +130,19 @@ namespace Ankh
                 PropertyChanged(this, e);
         }
 
-        void OnPropertyChanged(string propertyName)
+        void RaisePropertyChanged(RaisePropertyItems which)
         {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            if (_updateMode == 0)
+            {
+                if ((which & RaisePropertyItems.Count) != 0)
+                    OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                if ((which & RaisePropertyItems.Items) != 0)
+                    OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+            }
+            else
+            {
+                _updateProps |= which;
+            }
         }
 
         public IDisposable BatchUpdate()
@@ -141,6 +156,14 @@ namespace Ankh
         {
             int oldMode = _updateMode;
             _updateMode = 0;
+
+            if (_updateProps != 0)
+            {
+                RaisePropertyItems props = _updateProps;
+                _updateProps = 0;
+                RaisePropertyChanged(props);
+            }
+
             if (oldMode == 1)
             {
                 CollectionChangedEventArgs<TItem> c = _change;
