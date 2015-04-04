@@ -22,6 +22,12 @@ namespace Ankh.WpfUI.Controls
         {
         }
 
+        internal ReadOnlyObservableWrapper(ISupportsCollectionChanged<T> collection)
+            : base(collection, collection)
+        {
+
+        }
+
         protected override void OnCollectionChanged(CollectionChangedEventArgs<T> e)
         {
             base.OnCollectionChanged(e);

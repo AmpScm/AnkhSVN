@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
+using Ankh.Scc;
 using Ankh.UI;
 
 namespace Ankh.WpfUI.Controls
@@ -31,6 +32,7 @@ namespace Ankh.WpfUI.Controls
         {
             Control _control;
             PendingChangesUserControl _puc;
+            PendingChangeWrapCollection _wc;
 
             public PendingChangeControlWrapper(Control control, PendingChangesUserControl puc)
             {
@@ -41,6 +43,11 @@ namespace Ankh.WpfUI.Controls
 
             private void OnControlDisposed(object sender, EventArgs e)
             {
+                if (_wc != null)
+                {
+                    _wc.Dispose();
+                    _wc = null;
+                }
                 Dispose(true);
             }
 
@@ -58,8 +65,12 @@ namespace Ankh.WpfUI.Controls
             {
                 get
                 {
-                    // TODO: Use *checked* items
-                    return _puc.PendingChangesList.SelectedItems.Count > 0;
+                    foreach (PendingChangeItem pci in _puc.PendingChangesList.Items)
+                    {
+                        if (pci.IsChecked)
+                            return true;
+                    }
+                    return false;
                 }
             }
 
@@ -67,10 +78,10 @@ namespace Ankh.WpfUI.Controls
             {
                 get
                 {
-                    // TODO: Use *checked* items
-                    foreach (Scc.PendingChange pc in _puc.PendingChangesList.SelectedItems)
+                    foreach (PendingChangeItem pci in _puc.PendingChangesList.Items)
                     {
-                        yield return pc;
+                        if (pci.IsChecked)
+                            yield return pci.PendingChange;
                     }
                 }
             }
@@ -95,8 +106,39 @@ namespace Ankh.WpfUI.Controls
                     if (_list == value)
                         return;
 
+                    if (_wc != null)
+                        _wc.Dispose();
+
                     _list = value;
-                    _puc.PendingChangesList.ItemsSource = new ReadOnlyObservableWrapper<Scc.PendingChange>(value);
+                    if (value != null)
+                    {
+                        _wc = new PendingChangeWrapCollection(value);
+                        _puc.PendingChangesList.ItemsSource = new ReadOnlyObservableWrapper<PendingChangeItem>(_wc);
+                    }
+                    else
+                    {
+                        _wc = null;
+                        _puc.PendingChangesList.ItemsSource = null;
+                    }
+                }
+            }
+
+            class PendingChangeWrapCollection : KeyedWrapCollectionWithNotify<PendingChange, string, PendingChangeItem>
+            {
+                public PendingChangeWrapCollection(ReadOnlyKeyedCollectionWithNotify<string, PendingChange> pendingChanges)
+                    : base(pendingChanges)
+                {
+
+                }
+
+                protected override string GetKeyForItem(PendingChangeItem item)
+                {
+                    return item.FullPath;
+                }
+
+                protected override PendingChangeItem GetWrapItem(PendingChange inner)
+                {
+                    return new PendingChangeItem(inner);
                 }
             }
         }
