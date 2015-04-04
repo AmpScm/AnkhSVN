@@ -31,5 +31,10 @@ namespace Ankh.WpfUI.Controls
         }
 
         public IAnkhServiceProvider Context { get; set; }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

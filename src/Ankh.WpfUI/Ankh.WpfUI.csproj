@@ -88,6 +88,7 @@
       <DependentUpon>PendingChangesUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ReadOnlyObservableWrapper.cs" />
+    <Compile Include="Controls\PendingChangeItem.cs" />
     <Compile Include="Controls\WpfUIFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

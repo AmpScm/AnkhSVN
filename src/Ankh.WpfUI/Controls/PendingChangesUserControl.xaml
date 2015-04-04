@@ -24,15 +24,16 @@
                             </StackPanel>
                         </DataTemplate>
                     </GridViewColumn.HeaderTemplate>
-                    <!--GridViewColumn.CellTemplate>
+                    <GridViewColumn.CellTemplate>
                         <DataTemplate>
-                        <TextBlock Foreground="DarkBlue" HorizontalAlignment="Center">
-                            <Binding Path="FullPath" />
-                        </TextBlock>
+                            <WrapPanel>
+                                <CheckBox IsChecked="{Binding IsChecked}" />
+                                <TextBlock Text="{Binding FullPath}" />
+                            </WrapPanel>
                         </DataTemplate>
-                    </-->
+                    </GridViewColumn.CellTemplate>
                 </GridViewColumn>
-                <GridViewColumn>
+                <GridViewColumn DisplayMemberBinding="{Binding ChangeText}">
                     <GridViewColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
