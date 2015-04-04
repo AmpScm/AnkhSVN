@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace Ankh
 {
-    public interface ISupportsCollectionChanged
+    public interface ISupportsCollectionChanged : INotifyPropertyChanged
     {
         event EventHandler<CollectionChangedEventArgs> CollectionChanged;
 
@@ -16,6 +16,8 @@ namespace Ankh
     public interface ISupportsCollectionChanged<T> : ISupportsCollectionChanged where T : class
     {
         new event EventHandler<CollectionChangedEventArgs<T>> CollectionChanged;
+
+        IList<T> AsList();
     }
 
     public enum CollectionChange

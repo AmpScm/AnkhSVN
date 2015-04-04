@@ -7,7 +7,14 @@ using CollectionMonitor = Ankh.CollectionChangedEventArgs.CollectionMonitor;
 
 namespace Ankh
 {
-    public abstract class KeyedCollectionWithNotify<TKey, TItem> : KeyedCollection<TKey, TItem>, ISupportsCollectionChanged<TItem>, INotifyPropertyChanged
+    interface ISupportsKeyedCollectionChanged<TKey, TItem> : ISupportsCollectionChanged<TItem>
+        where TItem : class
+    {
+        IEqualityComparer<TKey> Comparer { get; }
+        TKey GetKeyForItem(TItem item);
+    }
+
+    public abstract class KeyedCollectionWithNotify<TKey, TItem> : KeyedCollection<TKey, TItem>, ISupportsKeyedCollectionChanged<TKey, TItem>, INotifyPropertyChanged
         where TItem : class
     {
         readonly CollectionMonitor _monitor = new CollectionMonitor();
@@ -151,31 +158,15 @@ namespace Ankh
         {
             throw new NotImplementedException();
         }
-    }
 
-    public class ReadOnlyKeyedCollectionWithNotify<TKey, TItem> : ReadOnlyCollectionWithNotify<TItem> where TItem : class
-    {
-        readonly KeyedCollectionWithNotify<TKey, TItem> _collection;
-
-        public ReadOnlyKeyedCollectionWithNotify(KeyedCollectionWithNotify<TKey, TItem> collection)
-            : base(collection, collection, collection)
+        IList<TItem> ISupportsCollectionChanged<TItem>.AsList()
         {
-            _collection = collection;
+            return this;
         }
 
-        public bool Contains(TKey key)
+        TKey ISupportsKeyedCollectionChanged<TKey, TItem>.GetKeyForItem(TItem item)
         {
-            return _collection.Contains(key);
-        }
-
-        public TItem this[TKey key]
-        {
-            get { return _collection[key]; }
-        }
-
-        public IEqualityComparer<TKey> Comparer
-        {
-            get { return _collection.Comparer; }
+            return GetKeyForItem(item);
         }
     }
 }
