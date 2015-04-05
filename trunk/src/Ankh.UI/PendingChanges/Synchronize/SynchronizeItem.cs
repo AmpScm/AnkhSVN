@@ -62,7 +62,7 @@ namespace Ankh.UI.PendingChanges.Synchronize
         [DisplayName("Full Path")]
         public string FullPath
         {
-            get { return _listItem.SvnItem.FullPath; }
+            get { return SvnItem.FullPath; }
         }
 
         [DisplayName("File Name")]
