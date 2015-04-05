@@ -126,7 +126,7 @@ namespace Ankh.Commands
         static IEnumerable<PendingChange> GetChanges(BaseCommandEventArgs e)
         {
             IPendingChangesManager pcm = e.GetService<IPendingChangesManager>();
-            List<PendingChange> pendingChanges = new List<PendingChange>(pcm.PendingChanges);
+            PendingChange[] pendingChanges = pcm.PendingChanges.ToArray();
             if (e.Command == AnkhCommand.SolutionCommit)
             {
                 foreach (PendingChange pc in pendingChanges)

@@ -265,9 +265,9 @@ namespace Ankh.Scc
         {
             Dictionary<string, string> usedNames = new Dictionary<string, string>();
 
-            foreach (PendingChange pc in new List<PendingChange>(_pendingChanges))
+            foreach (PendingChange pc in _pendingChanges.ToArray())
             {
-                string cl = pc.SvnItem.Status.ChangeList;
+                string cl = pc.ChangeList;
 
                 if (!string.IsNullOrEmpty(cl) && !string.Equals(cl, IgnoreOnCommit))
                 {
