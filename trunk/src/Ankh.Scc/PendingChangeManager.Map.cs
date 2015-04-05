@@ -181,14 +181,6 @@ namespace Ankh.Scc
             }
         }
 
-        public event EventHandler<PendingChangeEventArgs> InitialUpdate;
-
-        private void OnInitialUpdate(PendingChangeEventArgs e)
-        {
-            if (InitialUpdate != null)
-                InitialUpdate(this, e);
-        }
-
         /// <summary>
         /// Tries to get a matching file from the specified text
         /// </summary>

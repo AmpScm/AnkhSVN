@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using CollectionMonitor = Ankh.CollectionChangedEventArgs.CollectionMonitor;
+using Ankh.Collections;
+using CollectionMonitor = Ankh.Collections.CollectionChangedEventArgs.CollectionMonitor;
 
 namespace Ankh
 {
@@ -11,21 +12,21 @@ namespace Ankh
     /// Our own implementation of ObservableCollection, compatible with .Net 2.0
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class CollectionWithNotify<T> : Collection<T>, ISupportsCollectionChanged<T> where T : class
+    public class NotifyCollection<T> : Collection<T>, INotifyCollection<T> where T : class
     {
         readonly CollectionMonitor _monitor = new CollectionMonitor();
 
-        public CollectionWithNotify()
+        public NotifyCollection()
             : base()
         { }
 
-        public CollectionWithNotify(IList<T> list)
+        public NotifyCollection(IList<T> list)
             : base(list)
         { }
 
         protected override void ClearItems()
         {
-            _monitor.CheckReentrancy(_collectionChangedTyped, _collectionChangedUntyped);
+            _monitor.CheckReentrancy(_collectionChanged, _collectionChangedUntyped);
             if (Count > 0)
             {
                 base.ClearItems();
@@ -36,7 +37,7 @@ namespace Ankh
 
         protected override void InsertItem(int index, T item)
         {
-            _monitor.CheckReentrancy(_collectionChangedTyped, _collectionChangedUntyped);
+            _monitor.CheckReentrancy(_collectionChanged, _collectionChangedUntyped);
             base.InsertItem(index, item);
             RaisePropertyChanged(RaisePropertyItems.Count | RaisePropertyItems.Items);
             RaiseCollectionChanged(new CollectionChangedEventArgs<T>(CollectionChange.Add, item, index));
@@ -44,7 +45,7 @@ namespace Ankh
 
         protected override void RemoveItem(int index)
         {
-            _monitor.CheckReentrancy(_collectionChangedTyped, _collectionChangedUntyped);
+            _monitor.CheckReentrancy(_collectionChanged, _collectionChangedUntyped);
             T t = base[index];
             base.RemoveItem(index);
             RaisePropertyChanged(RaisePropertyItems.Count | RaisePropertyItems.Items);
@@ -53,7 +54,7 @@ namespace Ankh
 
         protected override void SetItem(int index, T item)
         {
-            _monitor.CheckReentrancy(_collectionChangedTyped, _collectionChangedUntyped);
+            _monitor.CheckReentrancy(_collectionChanged, _collectionChangedUntyped);
             T t = base[index];
             base.SetItem(index, item);
             RaisePropertyChanged(RaisePropertyItems.Items);
@@ -67,7 +68,7 @@ namespace Ankh
 
         protected virtual void MoveItem(int oldIndex, int newIndex)
         {
-            _monitor.CheckReentrancy(_collectionChangedUntyped, _collectionChangedTyped);
+            _monitor.CheckReentrancy(_collectionChangedUntyped, _collectionChanged);
             T t = base[oldIndex];
             base.RemoveItem(oldIndex);
             base.InsertItem(newIndex, t);
@@ -76,15 +77,15 @@ namespace Ankh
         }
 
         EventHandler<CollectionChangedEventArgs> _collectionChangedUntyped;
-        EventHandler<CollectionChangedEventArgs<T>> _collectionChangedTyped;
+        EventHandler<CollectionChangedEventArgs<T>> _collectionChanged;
 
         public event EventHandler<CollectionChangedEventArgs<T>> CollectionChanged
         {
-            add { _collectionChangedTyped += value; }
-            remove { _collectionChangedTyped -= value; }
+            add { _collectionChanged += value; }
+            remove { _collectionChanged -= value; }
         }
 
-        event EventHandler<CollectionChangedEventArgs> ISupportsCollectionChanged.CollectionChanged
+        event EventHandler<CollectionChangedEventArgs> INotifyCollection.CollectionChanged
         {
             add { _collectionChangedUntyped += value; }
             remove { _collectionChangedUntyped -= value; }
@@ -92,11 +93,11 @@ namespace Ankh
 
         protected void OnCollectionChanged(CollectionChangedEventArgs<T> e)
         {
-            if (_collectionChangedTyped != null || _collectionChangedUntyped != null)
+            if (_collectionChanged != null || _collectionChangedUntyped != null)
                 using (_monitor.Enter())
                 {
-                    if (_collectionChangedTyped != null)
-                        _collectionChangedTyped(this, e);
+                    if (_collectionChanged != null)
+                        _collectionChanged(this, e);
                     if (_collectionChangedUntyped != null)
                         _collectionChangedUntyped(this, e);
                 }
@@ -150,8 +151,13 @@ namespace Ankh
         public IDisposable BatchUpdate()
         {
             Debug.Assert(_updateMode == 0);
-            _updateMode = 1;
-            return _monitor.BatchUpdate(DoneUpdate);
+            if (_updateMode == 0)
+            {
+                _updateMode = 1;
+                return _monitor.BatchUpdate(DoneUpdate);
+            }
+            else
+                return null;
         }
 
         void DoneUpdate()

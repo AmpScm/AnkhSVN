@@ -3,32 +3,41 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using CollectionMonitor = Ankh.CollectionChangedEventArgs.CollectionMonitor;
+using Ankh.Collections;
+using CollectionMonitor = Ankh.Collections.CollectionChangedEventArgs.CollectionMonitor;
 
 namespace Ankh
 {
-    public class ReadOnlyCollectionWithNotify<T> : ReadOnlyCollection<T>, ISupportsCollectionChanged<T> where T : class
+    public class ReadOnlyNotifyCollection<T> : ReadOnlyCollection<T>, INotifyCollection<T> where T : class
     {
         EventHandler<CollectionChangedEventArgs<T>> _typedCollectionChanged;
         EventHandler<CollectionChangedEventArgs> _untypedCollectionChanged;
         PropertyChangedEventHandler _propertyChanged;
-        readonly ISupportsCollectionChanged<T> _innerCollection;
+        readonly INotifyCollection<T> _innerCollection;
 
-        public ReadOnlyCollectionWithNotify(CollectionWithNotify<T> collection)
-            : this(collection, collection)
+        public ReadOnlyNotifyCollection(INotifyCollection<T> collection)
+            : base(Unwrap(collection))
         {
+            _innerCollection = (INotifyCollection<T>)base.Items;
         }
 
-        public ReadOnlyCollectionWithNotify(ReadOnlyCollectionWithNotify<T> collection)
-            : this(collection._innerCollection, collection._innerCollection)
-        { }
-
-        protected ReadOnlyCollectionWithNotify(IList<T> list, ISupportsCollectionChanged<T> collection)
-            : base((list != null) ? list : collection)
+        internal static INotifyCollection<T> Unwrap(INotifyCollection<T> collection)
         {
             if (collection == null)
                 throw new ArgumentNullException("collection");
-            _innerCollection = collection;
+
+#if !DEBUG && UNWRAP
+            ReadOnlyNotifyCollection<T> ro = collection as ReadOnlyNotifyCollection<T>;
+            if (ro != null)
+                return Unwrap(ro._innerCollection);
+            else
+#endif
+            return collection;
+        }
+
+        protected new INotifyCollection<T> Items
+        {
+            get { return _innerCollection; }
         }
 
         int _nHookChanges;
@@ -71,15 +80,15 @@ namespace Ankh
             remove { _typedCollectionChanged -= value; UnhookChanges(); }
         }
 
-        event EventHandler<CollectionChangedEventArgs> ISupportsCollectionChanged.CollectionChanged
+        event EventHandler<CollectionChangedEventArgs> INotifyCollection.CollectionChanged
         {
             add { _untypedCollectionChanged += value; HookChanges(); }
             remove { _untypedCollectionChanged -= value; UnhookChanges(); }
         }
 
-        IDisposable ISupportsCollectionChanged.BatchUpdate()
+        IDisposable INotifyCollection.BatchUpdate()
         {
-            throw new NotSupportedException();
+            return null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged

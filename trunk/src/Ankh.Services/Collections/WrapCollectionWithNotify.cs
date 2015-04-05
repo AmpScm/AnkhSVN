@@ -2,31 +2,37 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Ankh.Collections;
 
 namespace Ankh
 {
-    public delegate TWrapped WrapItem<TInner, TWrapped>(TInner item);
-
-    public class WrapCollectionWithNotify<TInner, TWrapped> : ReadOnlyCollectionWithNotify<TWrapped>, IDisposable
+    public class WrapNotifyCollection<TInner, TWrapped> : ReadOnlyNotifyCollection<TWrapped>, IWrapCollectionWithNotify<TInner, TWrapped>
         where TInner : class
         where TWrapped : class
     {
         readonly IAnkhServiceProvider _context;
-        public WrapCollectionWithNotify(IAnkhServiceProvider context, CollectionWithNotify<TInner> collection, WrapItem<TInner, TWrapped> wrapper)
-            : base(new WrapInnerCollection(collection, wrapper))
+        readonly WrapInnerCollection _inner;
+        readonly WrapItem<TInner, TWrapped> _wrapper;
+
+        public WrapNotifyCollection(INotifyCollection<TInner> collection, WrapItem<TInner, TWrapped> wrapper, IAnkhServiceProvider context)
+            : base(new WrapInnerCollection(collection))
         {
             _context = context;
+            _wrapper = wrapper;
 
-            ((WrapInnerCollection)this.Items).ResetCollection();
+            _inner = (WrapInnerCollection)this.Items;
+            _inner.Converter = this;
+
+            _inner.ResetCollection();
         }
 
-        public WrapCollectionWithNotify(IAnkhServiceProvider context, ReadOnlyCollectionWithNotify<TInner> collection, WrapItem<TInner, TWrapped> wrapper)
-            : base(new WrapInnerCollection(collection, wrapper))
-        {
-            _context = context;
+        public WrapNotifyCollection(INotifyCollection<TInner> collection, WrapItem<TInner, TWrapped> wrapper)
+            : this(collection, wrapper, (IAnkhServiceProvider)null)
+        { }
 
-            ((WrapInnerCollection)this.Items).ResetCollection();
-        }
+        protected WrapNotifyCollection(INotifyCollection<TInner> collection)
+            : this(collection, null, null)
+        { }
 
         protected IAnkhServiceProvider Context
         {
@@ -35,23 +41,16 @@ namespace Ankh
 
         protected void Dispose(bool disposing)
         {
-            ((WrapInnerCollection)this.Items).Dispose(disposing);
+            _inner.Dispose(disposing);
         }
 
-        class WrapInnerCollection : CollectionWithNotify<TWrapped>
+        class WrapInnerCollection : NotifyCollection<TWrapped>
         {
-            readonly ISupportsCollectionChanged<TInner> _sourceCollection;
-            readonly WrapItem<TInner, TWrapped> _wrapper;
+            readonly INotifyCollection<TInner> _sourceCollection;
 
-            public WrapInnerCollection(ISupportsCollectionChanged<TInner> collection, WrapItem<TInner, TWrapped> wrapper)
+            public WrapInnerCollection(INotifyCollection<TInner> collection)
             {
-                if (collection == null)
-                    throw new ArgumentNullException("collection");
-                if (wrapper == null)
-                    throw new ArgumentNullException("wrapper");
-
-                _sourceCollection = collection;
-                _wrapper = wrapper;
+                _sourceCollection = ReadOnlyNotifyCollection<TInner>.Unwrap(collection);
 
                 _sourceCollection.CollectionChanged += OnSourceCollectionChanged;
                 _sourceCollection.PropertyChanged += OnSourcePropertyChanged;
@@ -80,7 +79,7 @@ namespace Ankh
                         n = e.NewStartingIndex;
                         foreach (TInner key in e.NewItems)
                         {
-                            Insert(n++, _wrapper(key));
+                            Insert(n++, Converter.GetWrapItem(key));
                         }
                         break;
                     case CollectionChange.Remove:
@@ -91,7 +90,11 @@ namespace Ankh
                         }
                         break;
                     case CollectionChange.Replace:
-                        this[e.NewStartingIndex] = _wrapper(e.NewItems[0]);
+                        n = e.NewStartingIndex;
+                        foreach (TInner inner in e.NewItems)
+                        {
+                            this[n++] = Converter.GetWrapItem(inner);
+                        }
                         break;
                     case CollectionChange.Move:
                         Move(e.OldStartingIndex, e.NewStartingIndex);
@@ -108,15 +111,42 @@ namespace Ankh
                     Clear();
                     foreach (TInner key in _sourceCollection)
                     {
-                        Add(_wrapper(key));
+                        Add(Converter.GetWrapItem(key));
                     }
                 }
             }
+
+            public WrapNotifyCollection<TInner, TWrapped> Converter { get; set; }
+
+            public INotifyCollection<TInner> GetWrappedCollection()
+            {
+                return _sourceCollection;
+            }
+        }
+
+        public IDisposable BatchUpdate()
+        {
+            return _inner.BatchUpdate();
         }
 
         public void Dispose()
         {
             Dispose(true);
+        }
+
+        protected virtual TWrapped GetWrapItem(TInner inner)
+        {
+            return _wrapper(inner);
+        }
+
+        public INotifyCollection<TInner> GetWrappedCollection()
+        {
+            return _inner.GetWrappedCollection();
+        }
+
+        TWrapped IWrapCollectionWithNotify<TInner, TWrapped>.GetWrapItem(TInner inner)
+        {
+            return GetWrapItem(inner);
         }
     }
 }

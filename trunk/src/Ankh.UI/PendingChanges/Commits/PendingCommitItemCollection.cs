@@ -4,11 +4,11 @@ using Ankh.Scc;
 
 namespace Ankh.UI.PendingChanges.Commits
 {
-    class PendingCommitItemCollection : KeyedWrapCollectionWithNotify<PendingChange, string, PendingCommitItem>
+    class PendingCommitItemCollection : KeyedWrapNotifyCollection<string, PendingChange, PendingCommitItem>
     {
         PendingCommitsView _view;
-        public PendingCommitItemCollection(IAnkhServiceProvider context, ReadOnlyKeyedCollectionWithNotify<string, PendingChange> collection)
-            : base(context, collection)
+        public PendingCommitItemCollection(IAnkhServiceProvider context, ReadOnlyKeyedNotifyCollection<string, PendingChange> collection)
+            : base(collection, context)
         {
 
         }

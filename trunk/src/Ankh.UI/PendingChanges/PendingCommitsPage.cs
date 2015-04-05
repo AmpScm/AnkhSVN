@@ -28,6 +28,7 @@ using Ankh.Configuration;
 using Ankh.Scc;
 using Ankh.UI.PendingChanges.Commits;
 using Ankh.VS;
+using Ankh.Collections;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -188,7 +189,7 @@ namespace Ankh.UI.PendingChanges
                 _listItems.CollectionChanged += OnPendingChangesChanged;
 
                 _manager.Changed += new EventHandler<PendingChangeEventArgs>(OnPendingChangesChanged);
-                _manager.IsActiveChanged += new EventHandler<PendingChangeEventArgs>(OnPendingChangesActiveChanged);
+                _manager.IsActiveChanged += OnPendingChangesActiveChanged;
                 _manager.BatchUpdateStarted += new EventHandler<BatchStartedEventArgs>(OnBatchUpdateStarted);
             }
             else if (pendingChangeControl != null)
@@ -234,7 +235,7 @@ namespace Ankh.UI.PendingChanges
                     break;
             }
 
-            if (e.NewItems != null)
+            if (e.Action == CollectionChange.Add && e.NewItems != null)
                 foreach (PendingCommitItem i in e.NewItems)
                 {
                     OnPendingChangeActivity(i.PendingChange);
@@ -327,10 +328,10 @@ namespace Ankh.UI.PendingChanges
             set { splitContainer.Panel1Collapsed = !value; }
         }
 
-         void OnPendingChangesActiveChanged(object sender, PendingChangeEventArgs e)
+         void OnPendingChangesActiveChanged(object sender, EventArgs e)
         {
             // Just ignore for now
-            Enabled = e.Manager.IsActive;
+            Enabled = Manager.IsActive;
         }
 
         void PerformInitialUpdate(IPendingChangesManager manager)
@@ -374,16 +375,18 @@ namespace Ankh.UI.PendingChanges
             OnPendingChangeActivity(e.Change);
         }
 
+        IAnkhSolutionSettings _settings;
+        IAnkhSolutionSettings Settings
+        {
+            get { return _settings ?? (_settings = Context.GetService<IAnkhSolutionSettings>()); }
+        }
+
         void OnPendingChangeActivity(PendingChange pc)
         {
-            IAnkhSolutionSettings settings = null;
-            if (true
-                && pc != null
-                && (settings = Context.GetService<IAnkhSolutionSettings>()) != null
-                && string.Equals(settings.ProjectRoot, pc.FullPath)
-                // TODO add filter for property changes
-                )
+            IAnkhSolutionSettings settings = Settings;
+            if (settings != null && pc.FullPath == settings.ProjectRoot)
             {
+                // TODO add filter for property changes
                 IAnkhIssueService iService = Context.GetService<IAnkhIssueService>();
                 if (iService != null)
                 {

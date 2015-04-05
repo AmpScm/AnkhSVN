@@ -104,9 +104,9 @@ namespace Ankh.WpfUI.Controls
                 get { return this; }
             }
 
-            ReadOnlyKeyedCollectionWithNotify<string, Scc.PendingChange> _list;
+            ReadOnlyKeyedNotifyCollection<string, Scc.PendingChange> _list;
 
-            ReadOnlyKeyedCollectionWithNotify<string, Scc.PendingChange> IPendingChangeControl.PendingChanges
+            ReadOnlyKeyedNotifyCollection<string, Scc.PendingChange> IPendingChangeControl.PendingChanges
             {
                 get { return _list; }
                 set
@@ -131,10 +131,10 @@ namespace Ankh.WpfUI.Controls
                 }
             }
 
-            class PendingChangeWrapCollection : KeyedWrapCollectionWithNotify<PendingChange, string, PendingChangeItem>
+            class PendingChangeWrapCollection : KeyedWrapNotifyCollection<string, PendingChange, PendingChangeItem>
             {
-                public PendingChangeWrapCollection(IAnkhServiceProvider context, ReadOnlyKeyedCollectionWithNotify<string, PendingChange> pendingChanges)
-                    : base(context, pendingChanges)
+                public PendingChangeWrapCollection(IAnkhServiceProvider context, ReadOnlyKeyedNotifyCollection<string, PendingChange> pendingChanges)
+                    : base(pendingChanges, context)
                 {
 
                 }
