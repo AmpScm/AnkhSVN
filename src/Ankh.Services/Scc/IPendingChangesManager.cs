@@ -138,7 +138,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Gets a the actual list of all current pending changes
         /// </summary>
-        ReadOnlyKeyedCollectionWithNotify<string, PendingChange> PendingChanges { get; }
+        ReadOnlyKeyedNotifyCollection<string, PendingChange> PendingChanges { get; }
 
         /// <summary>
         /// Gets a list of all current pending changes below a specific path
@@ -183,7 +183,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Raised when the pending changes manager is activated or disabled
         /// </summary>
-        event EventHandler<PendingChangeEventArgs> IsActiveChanged;
+        event EventHandler IsActiveChanged;
 
         /// <summary>
         /// Clears all state; called on solution close

@@ -18,7 +18,7 @@ namespace Ankh.UI
 
         IPendingChangeSource PendingChangeSource { get; }
 
-        ReadOnlyKeyedCollectionWithNotify<string, PendingChange> PendingChanges
+        ReadOnlyKeyedNotifyCollection<string, PendingChange> PendingChanges
         {
             get;
             set;

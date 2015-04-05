@@ -528,7 +528,7 @@ namespace Ankh.Scc
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PendingChangeCollection : KeyedCollectionWithNotify<string, PendingChange>
+    public sealed class PendingChangeCollection : KeyedNotifyCollection<string, PendingChange>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PendingChangeCollection"/> class.
@@ -546,30 +546,6 @@ namespace Ankh.Scc
         protected override string GetKeyForItem(PendingChange item)
         {
             return item.FullPath;
-        }
-
-        /// <summary>
-        /// Gets the value associated with the specified key.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        public bool TryGetValue(string key, out PendingChange value)
-        {
-            if (Dictionary != null)
-                return Dictionary.TryGetValue(key, out value);
-
-            foreach (PendingChange p in this)
-            {
-                if (String.Equals(p.FullPath, key, StringComparison.OrdinalIgnoreCase))
-                {
-                    value = p;
-                    return true;
-                }
-            }
-
-            value = null;
-            return false;
         }
     }
 }

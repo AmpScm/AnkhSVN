@@ -29,13 +29,13 @@ namespace Ankh.Scc
     partial class PendingChangeManager : AnkhService, IPendingChangesManager
     {
         readonly PendingChangeCollection _pendingChanges = new PendingChangeCollection();
-        readonly ReadOnlyKeyedCollectionWithNotify<string, PendingChange> _pendingChangesRo;
+        readonly ReadOnlyKeyedNotifyCollection<string, PendingChange> _pendingChangesRo;
         bool _isActive;
         bool _solutionOpen;
         public PendingChangeManager(IAnkhServiceProvider context)
             : base(context)
         {
-            _pendingChangesRo = new ReadOnlyKeyedCollectionWithNotify<string, PendingChange>(_pendingChanges);
+            _pendingChangesRo = new ReadOnlyKeyedNotifyCollection<string, PendingChange>(_pendingChanges);
         }
 
         protected override void OnInitialize()
@@ -82,7 +82,7 @@ namespace Ankh.Scc
                             Change.SvnItemsChanged -= new EventHandler<SvnItemsEventArgs>(OnSvnItemsChanged);
                     }
 
-                    OnIsActiveChanged(new PendingChangeEventArgs(this, null));
+                    OnIsActiveChanged(EventArgs.Empty);
                 }
             }
         }
@@ -205,8 +205,6 @@ namespace Ankh.Scc
             if (clearStateCache && Cache != null)
                 Cache.ClearCache();
 
-            PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);
-
             lock (_toRefresh)
             {
                 _fullRefresh = true;
@@ -218,8 +216,6 @@ namespace Ankh.Scc
 
         public void Clear()
         {
-            PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);
-
             lock (_toRefresh)
             {
                 _toRefresh.Clear();
@@ -316,13 +312,13 @@ namespace Ankh.Scc
         /// <summary>
         /// Raised when the pending changes manager is activated or disabled
         /// </summary>
-        public event EventHandler<PendingChangeEventArgs> IsActiveChanged;
+        public event EventHandler IsActiveChanged;
 
         /// <summary>
         /// Raises the <see cref="E:IsActiveChanged"/> event.
         /// </summary>
         /// <param name="e">The <see cref="Ankh.Scc.PendingChangeEventArgs"/> instance containing the event data.</param>
-        private void OnIsActiveChanged(PendingChangeEventArgs e)
+        private void OnIsActiveChanged(EventArgs e)
         {
             if (IsActiveChanged != null)
                 IsActiveChanged(this, e);
@@ -377,7 +373,7 @@ namespace Ankh.Scc
             }
         }
 
-        ReadOnlyKeyedCollectionWithNotify<string, PendingChange> IPendingChangesManager.PendingChanges
+        ReadOnlyKeyedNotifyCollection<string, PendingChange> IPendingChangesManager.PendingChanges
         {
             get { return _pendingChangesRo; }
         }

@@ -47,32 +47,32 @@ namespace Ankh.UI.VSSelectionControls
 
             _values = values;
 
-            if(ListView.AllColumns.Count > 0)
+            if (ListView.AllColumns.Count > 0)
             {
                 IEnumerator<SmartColumn> cols = ListView.AllColumns.GetEnumerator();
                 System.Collections.IEnumerator vals = values.GetEnumerator();
 
-                while(cols.MoveNext() && vals.MoveNext())
+                while (cols.MoveNext() && vals.MoveNext())
                 {
                     int n = cols.Current.Index;
 
-                    if(n < 0)
+                    if (n < 0)
                         continue;
 
-                    while(n >= SubItems.Count)
+                    while (n >= SubItems.Count)
                         SubItems.Add("");
 
                     SubItems[n].Text = (string)vals.Current;
-                }                
+                }
             }
             else
             {
                 SubItems.Clear();
 
                 int n = 0;
-                foreach(string v in values)
+                foreach (string v in values)
                 {
-                    if(n < SubItems.Count)
+                    if (n < SubItems.Count)
                         SubItems[n++].Text = v;
                     else
                     {
@@ -87,10 +87,10 @@ namespace Ankh.UI.VSSelectionControls
 
         internal void UpdateGroup()
         {
-            if(ListView.GroupColumns.Count > 0)
+            if (ListView.GroupColumns.Count > 0)
                 ListView.UpdateGroup(this, _values);
             else
-                Group = null;            
+                Group = null;
         }
 
         public override void Remove()
@@ -98,7 +98,7 @@ namespace Ankh.UI.VSSelectionControls
             if (Group != null)
                 Group = null;
 
-            base.Remove();            
+            base.Remove();
         }
 
         public void SetValue(int column, string value)
@@ -122,13 +122,13 @@ namespace Ankh.UI.VSSelectionControls
             }
             else
             {
-                if(column >= ListView.Columns.Count)
+                if (column >= ListView.Columns.Count)
                     throw new ArgumentOutOfRangeException("column");
 
                 c = column;
             }
 
-            if(c >= 0)
+            if (c >= 0)
             {
                 while (c >= SubItems.Count)
                     SubItems.Add("");
@@ -170,7 +170,7 @@ namespace Ankh.UI.VSSelectionControls
 
                 column = lv.AllColumns[column].Index;
             }
-            else if(ListView != null && ListView.Columns.Count <= column)
+            else if (ListView != null && ListView.Columns.Count <= column)
                 throw new ArgumentOutOfRangeException("column");
 
             if (column < 0 || column > SubItems.Count)

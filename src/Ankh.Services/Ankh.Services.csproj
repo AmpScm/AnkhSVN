@@ -90,10 +90,11 @@
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
     <Compile Include="RepositoryProvider\IAnkhRepositoryProviderService.cs" />
-    <Compile Include="Selection\ReadOnlyKeyedCollectionWithNotify.cs" />
-    <Compile Include="Selection\KeyedWrapCollectionWithNotify.cs" />
-    <Compile Include="Selection\ReadOnlyCollectionWithNotify.cs" />
-    <Compile Include="Selection\CollectionWithNotify.cs" />
+    <Compile Include="Collections\IKeyedNotifyCollection.cs" />
+    <Compile Include="Collections\ReadOnlyKeyedNotifyCollection.cs" />
+    <Compile Include="Collections\KeyedWrapNotifyCollection.cs" />
+    <Compile Include="Collections\ReadOnlyNotifyCollection.cs" />
+    <Compile Include="Collections\NotifyCollection.cs" />
     <Compile Include="Scc\Engine\ISccStatusCache.cs" />
     <Compile Include="Scc\Engine\SccDirectory.cs" />
     <Compile Include="Scc\Git\GitDirectory.cs" />
@@ -101,13 +102,13 @@
     <Compile Include="Scc\Git\GitItem.State.cs" />
     <Compile Include="Scc\Git\GitItemState.cs" />
     <Compile Include="Scc\Git\GitStatusData.cs" />
-    <Compile Include="Selection\ISupportsCollectionChange.cs" />
+    <Compile Include="Collections\INotifyCollection.cs" />
     <Compile Include="Scc\IAnkhGitSccService.cs" />
     <Compile Include="Scc\IAnkhProjectDocumentTracker.cs" />
     <Compile Include="Scc\IAnkhSccProviderEvents.cs" />
     <Compile Include="Scc\Git\IGitStatusCache.cs" />
     <Compile Include="Scc\ISccHelper.cs" />
-    <Compile Include="Selection\KeyedCollectionWithNotify.cs" />
+    <Compile Include="Collections\KeyedNotifyCollection.cs" />
     <Compile Include="Scc\ProjectMap\SccDocumentData.cs" />
     <Compile Include="Scc\ProjectMap\SccProjectData.cs" />
     <Compile Include="Scc\ProjectMap\SccProjectData.Hierarchy.cs">
@@ -141,7 +142,8 @@
     </Compile>
     <Compile Include="Scc\Git\GitItemsEventArgs.cs" />
     <Compile Include="Scc\NoSccStatus.cs" />
-    <Compile Include="Selection\WrapCollectionWithNotify.cs" />
+    <Compile Include="Collections\IWrapNotifyCollection.cs" />
+    <Compile Include="Collections\WrapCollectionWithNotify.cs" />
     <Compile Include="Selection\SccHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
     <Compile Include="UI\IPendingChangeControl.cs" />

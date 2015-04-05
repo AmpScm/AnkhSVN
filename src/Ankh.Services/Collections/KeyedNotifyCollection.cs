@@ -3,40 +3,25 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using CollectionMonitor = Ankh.CollectionChangedEventArgs.CollectionMonitor;
+using Ankh.Collections;
+using CollectionMonitor = Ankh.Collections.CollectionChangedEventArgs.CollectionMonitor;
 
 namespace Ankh
 {
-    interface ISupportsKeyedCollectionChanged<TKey, TItem> : ISupportsCollectionChanged<TItem>
-        where TItem : class
-    {
-        IEqualityComparer<TKey> Comparer { get; }
-        TKey GetKeyForItem(TItem item);
-
-        bool TryGetValue(TKey key, out TItem value);
-    }
-
-    [Flags]
-    enum RaisePropertyItems : byte
-    {
-        Count = 1,
-        Items = 2,
-    }
-
-    public abstract class KeyedCollectionWithNotify<TKey, TItem> : KeyedCollection<TKey, TItem>, ISupportsKeyedCollectionChanged<TKey, TItem>, INotifyPropertyChanged
+    public abstract class KeyedNotifyCollection<TKey, TItem> : KeyedCollection<TKey, TItem>, IKeyedNotifyCollection<TKey, TItem>
         where TItem : class
     {
         readonly CollectionMonitor _monitor = new CollectionMonitor();
 
-        protected KeyedCollectionWithNotify()
+        protected KeyedNotifyCollection()
             : base()
         { }
 
-        protected KeyedCollectionWithNotify(IEqualityComparer<TKey> comparer)
+        protected KeyedNotifyCollection(IEqualityComparer<TKey> comparer)
             : base(comparer)
         { }
 
-        protected KeyedCollectionWithNotify(IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
+        protected KeyedNotifyCollection(IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
             : base(comparer, dictionaryCreationThreshold)
         { }
 
@@ -101,7 +86,7 @@ namespace Ankh
             remove { _collectionChangedTyped -= value; }
         }
 
-        event EventHandler<CollectionChangedEventArgs> ISupportsCollectionChanged.CollectionChanged
+        event EventHandler<CollectionChangedEventArgs> INotifyCollection.CollectionChanged
         {
             add { _collectionChangedUntyped += value; }
             remove { _collectionChangedUntyped -= value; }
@@ -138,7 +123,7 @@ namespace Ankh
                 }
             }
         }
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -165,8 +150,15 @@ namespace Ankh
         public IDisposable BatchUpdate()
         {
             Debug.Assert(_updateMode == 0);
-            _updateMode = 1;
-            return _monitor.BatchUpdate(DoneUpdate);
+            if (_updateMode == 0)
+            {
+                _updateMode = 1;
+                return _monitor.BatchUpdate(DoneUpdate);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         void DoneUpdate()
@@ -194,12 +186,12 @@ namespace Ankh
                 RaiseCollectionChanged(new CollectionChangedEventArgs<TItem>(CollectionChange.Reset));
         }
 
-        IDisposable ISupportsCollectionChanged.BatchUpdate()
+        internal TKey InvokeGetKeyForItem(TItem item)
         {
-            throw new NotImplementedException();
+            return GetKeyForItem(item);
         }
 
-        TKey ISupportsKeyedCollectionChanged<TKey, TItem>.GetKeyForItem(TItem item)
+        TKey IKeyedNotifyCollection<TKey, TItem>.GetKeyForItem(TItem item)
         {
             return GetKeyForItem(item);
         }

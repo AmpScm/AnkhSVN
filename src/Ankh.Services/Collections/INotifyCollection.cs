@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace Ankh
+namespace Ankh.Collections
 {
-    public interface ISupportsCollectionChanged : INotifyPropertyChanged
+    public interface INotifyCollection : INotifyPropertyChanged
     {
         event EventHandler<CollectionChangedEventArgs> CollectionChanged;
 
         IDisposable BatchUpdate();
     }
 
-    public interface ISupportsCollectionChanged<T> : ISupportsCollectionChanged, IList<T>
+    public interface INotifyCollection<T> : INotifyCollection, IList<T>
         where T : class
     {
         new event EventHandler<CollectionChangedEventArgs<T>> CollectionChanged;
@@ -33,6 +33,13 @@ namespace Ankh
         Move = 3 /* = NotifyCollectionChangedAction.Move */,
         /// <summary>The content of the collection changed dramatically.</summary>
         Reset = 4 /* = NotifyCollectionChangedAction.Reset */,
+    }
+
+    [Flags]
+    enum RaisePropertyItems : byte
+    {
+        Count = 1,
+        Items = 2,
     }
 
     /* Our own clone of NotifyCollectionChangedEventArgs */
@@ -214,8 +221,8 @@ namespace Ankh
             }
 
             internal void CheckReentrancy<T1, T2>(EventHandler<T1> handlers1, EventHandler<T2> handlers2)
-                where T1: EventArgs
-                where T2: EventArgs
+                where T1 : EventArgs
+                where T2 : EventArgs
             {
                 if (!Busy)
                     return;
@@ -262,7 +269,7 @@ namespace Ankh
 
         /// <summary>Initializes for Reset, Add or Remove</summary>
         public CollectionChangedEventArgs(CollectionChange action, T changedItem)
-            :  base(action, changedItem, -1)
+            : base(action, changedItem, -1)
         {
         }
 
@@ -326,3 +333,4 @@ namespace Ankh
         }
     }
 }
+
