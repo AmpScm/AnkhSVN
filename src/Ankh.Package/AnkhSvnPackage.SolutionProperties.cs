@@ -408,13 +408,13 @@ namespace Ankh.VSPackage
 
             using (BinaryWriter bw = new BinaryWriter(storageStream))
             {
-                List<PendingChange> changes = (pendingChanges != null) ? new List<PendingChange>(pendingChanges.PendingChanges) : null;
+                PendingChange[] changes = (pendingChanges != null) ? pendingChanges.PendingChanges.ToArray() : null;
 
                 if (changes == null)
                     bw.Write((int)0);
                 else
                 {
-                    bw.Write((int)changes.Count);
+                    bw.Write((int)changes.Length);
 
                     foreach (PendingChange pc in changes)
                     {
