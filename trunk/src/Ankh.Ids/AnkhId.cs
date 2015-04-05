@@ -143,9 +143,14 @@ namespace Ankh
         public static readonly Guid CommandSetGuid = new Guid(CommandSet);
 
         /// <summary>
-        /// The package is as a guid
+        /// The package id as a guid
         /// </summary>
         public static readonly Guid PackageGuid = new Guid(PackageId);
+
+        /// <summary>
+        /// The Wpf package id as a guid
+        /// </summary>
+        public static readonly Guid WpfPackageGuid = new Guid(WpfPackageId);
 
         /// <summary>
         /// The guid for the generated Bmp
