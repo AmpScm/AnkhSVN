@@ -55,12 +55,6 @@ namespace IntegrationTests
 
 		#endregion
 
-        [TestInitialize]
-        public void Initialize()
-        {
-            UIThreadInvoker.Initialize();
-        }
-
 		[TestMethod]
 		[HostType("VS IDE")]
 		public void CreateEmptySolution()
@@ -69,7 +63,7 @@ namespace IntegrationTests
 			{
 				TestUtils testUtils = new TestUtils();
 				testUtils.CloseCurrentSolution(__VSSLNSAVEOPTIONS.SLNSAVEOPT_NoSave);
-				testUtils.CreateEmptySolution(TestContext.TestDir, "CreateEmptySolution");
+				testUtils.CreateEmptySolution(TestContext.TestDir, "EmptySolution");
 			});
 		}
 

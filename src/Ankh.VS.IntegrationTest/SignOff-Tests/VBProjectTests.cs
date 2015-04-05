@@ -63,11 +63,8 @@ namespace IntegrationTests
 		// public static void MyClassCleanup() { }
 		//
 		// Use TestInitialize to run code before running each test 
-		[TestInitialize()]
-		public void Initialize() 
-        {
-            UIThreadInvoker.Initialize();
-        }
+		// [TestInitialize()]
+		// public void MyTestInitialize() { }
 		//
 		// Use TestCleanup to run code after each test has run
 		// [TestCleanup()]
@@ -75,15 +72,15 @@ namespace IntegrationTests
 		//
 		#endregion
 
+		[HostType("VS IDE")]
 		[TestMethod]
-        [HostType("VS IDE")]
 		public void VBWinformsApplication()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
 			{
 				//Solution and project creation parameters
-				string solutionName = "CreateVBWinformsApplication";
-				string projectName = "VBWindowsApp";
+				string solutionName = "VBWinApp";
+				string projectName = "VBWinApp";
 
 				//Template parameters
 				string language = "VisualBasic";

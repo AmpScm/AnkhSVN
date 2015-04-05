@@ -55,9 +55,6 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
 		[DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
 		internal static extern int DispatchMessage([In] ref Microsoft.VisualStudio.OLE.Interop.MSG msg);
 
-		[DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
-		internal static extern int MsgWaitForMultipleObjects(int nCount, int pHandles, bool fWaitAll, int dwMilliseconds, int dwWakeMask);
-
 		[DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
 		internal static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool attach);
 
