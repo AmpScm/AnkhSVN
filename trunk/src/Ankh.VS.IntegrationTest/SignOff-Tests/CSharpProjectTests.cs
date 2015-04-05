@@ -69,11 +69,6 @@ namespace IntegrationTests
 		// [TestCleanup()]
 		// public void MyTestCleanup() { }
 		//
-        [TestInitialize()]
-        public void Initialize()
-        {
-            UIThreadInvoker.Initialize();
-        }
 		#endregion
 
 		[TestMethod]
@@ -84,7 +79,7 @@ namespace IntegrationTests
 			{
 				TestUtils testUtils = new TestUtils();
 
-				testUtils.CreateEmptySolution(TestContext.TestDir, "CreateWinformsApplication");
+				testUtils.CreateEmptySolution(TestContext.TestDir, "CSWinApp");
 				Assert.AreEqual<int>(0, testUtils.ProjectCount());
 
 				//Create Winforms application project

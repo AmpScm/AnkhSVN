@@ -73,25 +73,19 @@ namespace IntegrationTests
 		//
 		#endregion
 
-        [TestInitialize()]
-        public void Initialize()
-        {
-            UIThreadInvoker.Initialize();
-        }
-
+		[HostType("VS IDE")]
 		[TestMethod]
-        [HostType("VS IDE")]
 		public void CPPWinformsApplication()
 		{
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
 			{
 				//Solution and project creation parameters
-				string solutionName = "CreateCPPWinformsApplication";
-				string projectName = "CPPWindowsApp";
+				string solutionName = "CPPWinApp";
+				string projectName = "CPPWinApp";
 
 				//Template parameters
 				string projectType = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
-				string projectTemplateName = "mc++winapp.vsz";
+				string projectTemplateName = Path.Combine("vcNet", "mc++appwiz.vsz");
 
 				string itemTemplateName = "newc++file.cpp";
 				string newFileName = "Test.cpp";

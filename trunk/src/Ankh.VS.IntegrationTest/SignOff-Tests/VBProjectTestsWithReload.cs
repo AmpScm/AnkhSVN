@@ -64,57 +64,19 @@ namespace IntegrationTests
 		// public static void MyClassCleanup() { }
 		//
 		// Use TestInitialize to run code before running each test 
-		[TestInitialize()]
-		public void Initialize() 
-        {
-            UIThreadInvoker.Initialize();
-        }
-		//
-		// Use TestCleanup to run code after each test has run
-		// [TestCleanup()]
-		// public void MyTestCleanup() { }
-		//
+        // [TestInitialize()]
+        // public void MyTestInitialize() { }
+        //
+        // Use TestCleanup to run code after each test has run
+        // [TestCleanup()]
+        // public void MyTestCleanup() { }
+        //
 		#endregion
 
-		[TestMethod]
-        [HostType("VS IDE")]
-		public void VBWinformsApplication()
+		[TestInitialize]
+		public void Initialize()
 		{
-			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
-			{
-				//Solution and project creation parameters
-				string solutionName = "CreateVBWinformsApplication";
-				string projectName = "VBWindowsApp";
-
-				//Template parameters
-				string language = "VisualBasic";
-				string projectTemplateName = "WindowsApplication.Zip";
-				string itemTemplateName = "CodeFile.zip";
-				string newFileName = "Test.vb";
-
-				DTE dte = (DTE)VsIdeTestHostContext.ServiceProvider.GetService(typeof(DTE));
-
-				TestUtils testUtils = new TestUtils();
-
-				testUtils.CreateEmptySolution(TestContext.TestDir, solutionName);
-				Assert.AreEqual<int>(0, testUtils.ProjectCount());
-
-				//Add new  Windows application project to existing solution
-				testUtils.CreateProjectFromTemplate(projectName, projectTemplateName, language, false);
-
-				//Verify that the new project has been added to the solution
-				Assert.AreEqual<int>(1, testUtils.ProjectCount());
-
-				//Get the project
-				Project project = dte.Solution.Item(1);
-				Assert.IsNotNull(project);
-				Assert.IsTrue(string.Compare(project.Name, projectName, StringComparison.InvariantCultureIgnoreCase) == 0);
-
-				//Verify Adding new code file to project
-				ProjectItem newCodeFileItem = testUtils.AddNewItemFromVsTemplate(project.ProjectItems, itemTemplateName, language, newFileName);
-				Assert.IsNotNull(newCodeFileItem, "Could not create new project item");
-
-			});
+			UIThreadInvoker.Initialize();
 		}
 
 		internal void ReloadProject(int n)
@@ -123,13 +85,14 @@ namespace IntegrationTests
 
 			Project proj = dte.Solution.Projects.Item(1);
 
-			string name = proj.UniqueName;
+			string uniqueName = proj.UniqueName;
+			string name = proj.Name;
 
 			IVsSolution solutionService = (IVsSolution)VsIdeTestHostContext.ServiceProvider.GetService(typeof(IVsSolution));
 
 			IVsHierarchy hier;
 
-			Marshal.ThrowExceptionForHR(solutionService.GetProjectOfUniqueName(name, out hier));
+			Marshal.ThrowExceptionForHR(solutionService.GetProjectOfUniqueName(uniqueName, out hier));
 
 			solutionService.CloseSolutionElement((uint)__VSSLNCLOSEOPTIONS.SLNCLOSEOPT_UnloadProject, hier, 0);
 
@@ -138,7 +101,7 @@ namespace IntegrationTests
 			solutionExplorer.Activate();
 			UIHierarchy uiHier = solutionExplorer.Object as UIHierarchy;
 
-			UIHierarchyItem item = uiHier.GetItem(Path.GetFileNameWithoutExtension(dte.Solution.FileName) + "\\" + proj.Name);
+			UIHierarchyItem item = uiHier.GetItem(Path.GetFileNameWithoutExtension(dte.Solution.FileName) + "\\" + name);
 			item.Select(vsUISelectionType.vsUISelectionTypeSelect);
 
 			dte.ExecuteCommand("Project.ReloadProject", "");
@@ -151,8 +114,8 @@ namespace IntegrationTests
 			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
 			{
 				//Solution and project creation parameters
-				string solutionName = "CreateVBWinformsApplication";
-				string projectName = "VBWindowsApp";
+				string solutionName = "VBWinApp";
+				string projectName = "VBWinApp";
 
 				//Template parameters
 				string language = "VisualBasic";

@@ -38,7 +38,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
 		/// <summary>
 		/// Object used for synchronization between thread calls.
 		/// </summary>
-		internal static readonly object Mutex = new object();
+		internal static volatile object Mutex = new object();
 
 		/// <summary>
 		/// The IVsUIShell. This cannot be queried on the working thread from the service provider. Must be done in the main thread.!!
@@ -73,7 +73,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
 		/// <summary>
 		/// The expected text to see on the dialog box. If set the thread will continue finding the dialog box with this text.
 		/// </summary>
-		private string expectedDialogBoxText = "";
+		private string expectedDialogBoxText = String.Empty;
 
 		/// <summary>
 		/// The number of the same  dialog boxes to wait for.
@@ -252,7 +252,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
 						if (windowClassName.ToString().Contains("#32770"))
 						{
 							IntPtr unmanagedMemoryLocation = IntPtr.Zero;
-							string dialogBoxText = "";
+							string dialogBoxText = String.Empty;
 							try
 							{
 								unmanagedMemoryLocation = Marshal.AllocHGlobal(10 * 1024);
