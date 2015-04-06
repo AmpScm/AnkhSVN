@@ -2,27 +2,27 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Ankh.Collections;
 using Ankh.Scc;
 
 namespace Ankh.UI
 {
-    public interface IPendingChangeSource
+    public interface IPendingChangeUI
     {
-        bool HasPendingChanges { get; }
-        IEnumerable<PendingChange> PendingChanges { get; }
+        bool HasCheckedItems { get; }
+        IEnumerable<PendingChange> CheckedItems { get; }
+
+        void OnChange(string fullPath);
+
+        IKeyedNotifyCollection<string, PendingChange> Items { get; set; }
     }
 
     public interface IPendingChangeControl
     {
         Control Control { get; }
 
-        IPendingChangeSource PendingChangeSource { get; }
+        IPendingChangeUI UI { get; }
 
-        ReadOnlyKeyedNotifyCollection<string, PendingChange> PendingChanges
-        {
-            get;
-            set;
-        }
     }
 
     public interface IPendingChangeControlFactory

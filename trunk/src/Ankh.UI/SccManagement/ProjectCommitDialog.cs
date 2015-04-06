@@ -35,7 +35,6 @@ namespace Ankh.UI.SccManagement
         public ProjectCommitDialog()
         {
             InitializeComponent();
-            logMessage.PasteSource = pendingList;
         }
 
         IEnumerable<PendingChange> _changeEnumerator;
