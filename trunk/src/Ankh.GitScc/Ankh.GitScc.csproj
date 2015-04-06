@@ -99,6 +99,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="StatusCache\Commands\FileStatusCleanup.cs" />
     <Compile Include="StatusCache\GitStatusCache.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -503,7 +503,7 @@ namespace Ankh.Scc.StatusCache
                     _cleanup.Add(directory);
 
                 if (!_postedCleanup)
-                    CommandService.SafePostTickCommand(ref _postedCleanup, AnkhCommand.FileCacheFinishTasks);
+                    CommandService.SafePostTickCommand(ref _postedCleanup, AnkhCommand.SvnCacheFinishTasks);
             }
         }
 
@@ -806,7 +806,7 @@ namespace Ankh.Scc.StatusCache
             if (_map.Count > 0)
                 update = GetFirst(_map.Values);
             else
-                update = this["c:\\windows"]; // Just give me a SvnItem instance to access the interface
+                update = this["C:\\"]; // Just give me a SvnItem instance to access the interface
 
             IList<SvnItem> updates = update.GetUpdateQueueAndClearScheduled();
 
