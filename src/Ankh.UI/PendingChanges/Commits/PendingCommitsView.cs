@@ -350,6 +350,7 @@ namespace Ankh.UI.PendingChanges.Commits
                 }
 
                 pci.RefreshText(Context);
+                RefreshGroupsAvailable();
             }
         }
 
@@ -416,7 +417,10 @@ namespace Ankh.UI.PendingChanges.Commits
             switch (e.Action)
             {
                 case CollectionChange.Add:
-                    Items.AddRange(e.NewItems);
+                    if (_toAdd != null)
+                        _toAdd.AddRange(e.NewItems);
+                    else
+                        Items.AddRange(e.NewItems);
                     break;
                 case CollectionChange.Remove:
                     foreach (PendingCommitItem pci in e.OldItems)
@@ -424,11 +428,48 @@ namespace Ankh.UI.PendingChanges.Commits
                     break;
                 case CollectionChange.Reset:
                     ClearItems();
+                    if (_toAdd != null)
+                        _toAdd.Clear();
                     Items.AddRange(_listItems.ToArray());
                     break;
             }
 
             this.RefreshGroupsAvailable();
+        }
+
+        List<PendingCommitItem> _toAdd;
+        int _inBatchUpdate;
+        void OnBatchEnd()
+        {
+            if (--_inBatchUpdate == 0)
+            {
+                try
+                {
+
+                    if (_toAdd != null && _toAdd.Count > 0)
+                    {
+                        PendingCommitItem[] toAdd = _toAdd.ToArray();
+                        _toAdd = null;
+                        Items.AddRange(toAdd);
+                    }
+                    _toAdd = null;
+                }
+                finally
+                {
+                    EndUpdate();
+                }
+            }
+        }
+
+
+        internal AnkhAction BeginBatch()
+        {
+            if(_inBatchUpdate++ == 0)
+            {
+                BeginUpdate();
+                _toAdd = new List<PendingCommitItem>();
+            }
+            return OnBatchEnd;
         }
     }
 }

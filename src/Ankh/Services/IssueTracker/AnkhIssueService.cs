@@ -25,7 +25,9 @@ using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Windows.Forms;
 using Microsoft.VisualStudio;
-using CultureInfo=System.Globalization.CultureInfo;
+using CultureInfo = System.Globalization.CultureInfo;
+using Ankh.Scc;
+using Ankh.Collections;
 
 namespace Ankh.Services.IssueTracker
 {
@@ -34,7 +36,7 @@ namespace Ankh.Services.IssueTracker
     {
         private const string REGEX_GROUPNAME_ID = "id";
 
-        private Dictionary<string, IssueRepositoryConnector> _nameConnectorMap;
+        readonly Dictionary<string, IssueRepositoryConnector> _nameConnectorMap = new Dictionary<string, IssueRepositoryConnector>();
         private IssueRepository _repository;
         IProjectCommitSettings _commitSettings;
 
@@ -57,13 +59,9 @@ namespace Ankh.Services.IssueTracker
         {
             get
             {
-                if (_nameConnectorMap != null)
-                {
-                    IssueRepositoryConnector[] result = new IssueRepositoryConnector[_nameConnectorMap.Count];
-                    _nameConnectorMap.Values.CopyTo(result, 0);
-                    return result;
-                }
-                return new IssueRepositoryConnector[] { };
+                IssueRepositoryConnector[] result = new IssueRepositoryConnector[_nameConnectorMap.Count];
+                _nameConnectorMap.Values.CopyTo(result, 0);
+                return result;
             }
         }
 
@@ -73,13 +71,7 @@ namespace Ankh.Services.IssueTracker
         /// <returns>true if the connector exists, false otherwise</returns>
         public bool TryGetConnector(string name, out IssueRepositoryConnector connector)
         {
-            connector = null;
-            if (_nameConnectorMap != null
-                && _nameConnectorMap.Count > 0)
-            {
-                return _nameConnectorMap.TryGetValue(name, out connector);
-            }
-            return false;
+            return _nameConnectorMap.TryGetValue(name, out connector);
         }
 
         /// <summary>
@@ -323,7 +315,7 @@ namespace Ankh.Services.IssueTracker
         {
             if (re == null)
                 yield break;
-            
+
             foreach (Match m in re.Matches(text))
             {
                 if (!m.Success)
@@ -378,7 +370,6 @@ namespace Ankh.Services.IssueTracker
         protected override void OnPreInitialize()
         {
             base.OnPreInitialize();
-            _nameConnectorMap = new Dictionary<string, IssueRepositoryConnector>();
             _repository = null;
             ReadConnectorRegistry();
         }
@@ -392,6 +383,58 @@ namespace Ankh.Services.IssueTracker
                 // register solution event handlers
                 events.SolutionOpened += new EventHandler(OnSolutionOpened);
                 events.SolutionClosed += new EventHandler(OnSolutionClosed);
+            }
+
+            if (Manager != null)
+            {
+                Manager.PendingChanges.CollectionChanged += OnPendingChangesCollectionChanged;
+                Manager.Changed += OnPendingChangeChanged;
+            }
+        }
+
+        IPendingChangesManager _mgr;
+        IPendingChangesManager Manager
+        {
+            get { return _mgr ?? (_mgr = GetService<IPendingChangesManager>()); }
+        }
+
+        IAnkhSolutionSettings _solutionSettings;
+        IAnkhSolutionSettings SolutionSettings
+        {
+            get { return _solutionSettings ?? (_solutionSettings = GetService<IAnkhSolutionSettings>()); }
+        }
+
+        private void OnPendingChangeChanged(object sender, PendingChangeEventArgs e)
+        {
+            OnSvnItemChanged(e.Change.SvnItem);
+        }
+
+        void OnPendingChangesCollectionChanged(object sender, CollectionChangedEventArgs<PendingChange> e)
+        {
+            switch (e.Action)
+            {
+                case CollectionChange.Add:
+                case CollectionChange.Replace:
+                    foreach (PendingChange pc in e.NewItems)
+                    {
+                        OnSvnItemChanged(pc.SvnItem);
+                    }
+                    break;
+                case CollectionChange.Reset:
+                    foreach (PendingChange pc in Manager.PendingChanges)
+                    {
+                        OnSvnItemChanged(pc.SvnItem);
+                    }
+                    break;
+            }
+        }
+
+        private void OnSvnItemChanged(SvnItem svnItem)
+        {
+            IAnkhSolutionSettings slnSettings = SolutionSettings;
+            if (slnSettings != null && slnSettings.ProjectRoot == svnItem.FullPath)
+            {
+                MarkDirty();
             }
         }
 

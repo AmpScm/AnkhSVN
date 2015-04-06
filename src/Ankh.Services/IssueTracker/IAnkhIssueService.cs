@@ -52,11 +52,6 @@ namespace Ankh
         event EventHandler IssueRepositoryChanged;
 
         /// <summary>
-        /// Marks Issue Service as dirty which signals Issues page to refresh itself.
-        /// </summary>
-        void MarkDirty();
-
-        /// <summary>
         /// Gets the issue references from the specified text
         /// </summary>
         /// <param name="text">text.</param>
