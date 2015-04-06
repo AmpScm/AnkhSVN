@@ -16,18 +16,19 @@
 
 using System;
 using Ankh.Commands;
+using Ankh.Scc;
 
-namespace Ankh.Scc.StatusCache.Commands
+namespace Ankh.GitScc.StatusCache.Commands
 {
-    [SvnCommand(AnkhCommand.SvnCacheFinishTasks, AlwaysAvailable = true)]
-    [SvnCommand(AnkhCommand.TickRefreshSvnItems, AlwaysAvailable = true)]
+    [GitCommand(AnkhCommand.GitCacheFinishTasks, AlwaysAvailable = true)]
+    [GitCommand(AnkhCommand.TickRefreshGitItems, AlwaysAvailable = true)]
     public class FileStatusCleanup : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
         }
 
-        SvnStatusCache _fileCache;
+        GitStatusCache _fileCache;
         IAnkhCommandService _commandService;
 
         public void OnExecute(CommandEventArgs e)
@@ -35,11 +36,11 @@ namespace Ankh.Scc.StatusCache.Commands
             if (_commandService == null)
                 _commandService = e.GetService<IAnkhCommandService>();
             if (_fileCache == null)
-                _fileCache = e.GetService<SvnStatusCache>(typeof(ISvnStatusCache));
+                _fileCache = e.GetService<GitStatusCache>(typeof(IGitStatusCache));
 
             _commandService.TockCommand(e.Command);
 
-            if (e.Command == AnkhCommand.SvnCacheFinishTasks)
+            if (e.Command == AnkhCommand.GitCacheFinishTasks)
                 _fileCache.OnCleanup();
             else
                 _fileCache.BroadcastChanges();

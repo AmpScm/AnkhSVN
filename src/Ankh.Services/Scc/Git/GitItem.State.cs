@@ -175,7 +175,7 @@ namespace Ankh
             IAnkhCommandService cs = _context.GetService<IAnkhCommandService>();
 
             if (cs != null)
-                cs.PostTickCommand(ref _scheduled, AnkhCommand.TickRefreshSvnItems);
+                cs.PostTickCommand(ref _scheduled, AnkhCommand.TickRefreshGitItems);
         }
 
         void IGitItemUpdate.SetState(GitItemState set, GitItemState unset)

@@ -481,7 +481,7 @@ namespace Ankh.GitScc.StatusCache
                     _cleanup.Add(directory);
 
                 if (!_postedCleanup)
-                    CommandService.SafePostTickCommand(ref _postedCleanup, AnkhCommand.FileCacheFinishTasks);
+                    CommandService.SafePostTickCommand(ref _postedCleanup, AnkhCommand.GitCacheFinishTasks);
             }
         }
 
@@ -851,7 +851,7 @@ namespace Ankh.GitScc.StatusCache
             if (_map.Count > 0)
                 update = GetFirst(_map.Values);
             else
-                update = this["c:\\windows"]; // Just give me a GitItem instance to access the interface
+                update = this["C:\\"]; // Just give me a GitItem instance to access the interface
 
             IList<GitItem> updates = update.GetUpdateQueueAndClearScheduled();
 
