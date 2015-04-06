@@ -108,8 +108,10 @@ namespace Ankh.UI.PendingChanges
 
         private void pleaseConfigureLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (IssueService != null)
-                IssueService.ShowConnectHelp();
+            IAnkhHelpService help = Context.GetService<IAnkhHelpService>();
+            
+            if (help != null)
+                help.RunHelp(this);
         }
     }
 }
