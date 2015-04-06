@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ankh.Collections;
 using Ankh.Scc;
 
 namespace Ankh.UI.PendingChanges.Commits
@@ -7,7 +8,7 @@ namespace Ankh.UI.PendingChanges.Commits
     class PendingCommitItemCollection : KeyedWrapNotifyCollection<string, PendingChange, PendingCommitItem>
     {
         PendingCommitsView _view;
-        public PendingCommitItemCollection(IAnkhServiceProvider context, ReadOnlyKeyedNotifyCollection<string, PendingChange> collection)
+        public PendingCommitItemCollection(IAnkhServiceProvider context, IKeyedNotifyCollection<string, PendingChange> collection)
             : base(collection, context)
         {
 

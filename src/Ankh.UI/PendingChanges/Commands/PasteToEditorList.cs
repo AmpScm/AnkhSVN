@@ -33,9 +33,9 @@ namespace Ankh.UI.PendingChanges.Commands
         {
             LogMessageEditor lme = e.Selection.GetActiveControl<LogMessageEditor>();
 
-            if (lme == null || lme.ReadOnly || lme.PasteSource == null)
+            if (lme == null || lme.ReadOnly || lme.PendingChangeUI == null)
                 e.Enabled = e.Visible = false;
-            else if (e.Command == AnkhCommand.PcLogEditorPasteFileList && !lme.PasteSource.HasPendingChanges)
+            else if (e.Command == AnkhCommand.PcLogEditorPasteFileList && !lme.PendingChangeUI.HasCheckedItems)
                 e.Enabled = false;
         }
 
@@ -43,7 +43,7 @@ namespace Ankh.UI.PendingChanges.Commands
         {
             LogMessageEditor lme = e.Selection.GetActiveControl<LogMessageEditor>();
 
-            if (lme == null || lme.PasteSource == null)
+            if (lme == null || lme.PendingChangeUI == null)
                 return;
 
             switch (e.Command)
@@ -60,7 +60,7 @@ namespace Ankh.UI.PendingChanges.Commands
         void OnPasteList(CommandEventArgs e, LogMessageEditor lme)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (PendingChange pci in lme.PasteSource.PendingChanges)
+            foreach (PendingChange pci in lme.PendingChangeUI.CheckedItems)
             {
                 sb.AppendFormat("* {0}", pci.RelativePath);
                 sb.AppendLine();

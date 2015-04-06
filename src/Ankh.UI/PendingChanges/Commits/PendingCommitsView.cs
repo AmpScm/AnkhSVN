@@ -20,19 +20,18 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Windows.Forms;
-
+using Ankh.Collections;
 using Ankh.Commands;
 using Ankh.Configuration;
 using Ankh.Scc;
 using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
-
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.UI.PendingChanges.Commits
 {
-    class PendingCommitsView : ListViewWithSelection<PendingCommitItem>, IPendingChangeSource
+    class PendingCommitsView : ListViewWithSelection<PendingCommitItem>, IPendingChangeUI
     {
         public PendingCommitsView()
         {
@@ -167,12 +166,12 @@ namespace Ankh.UI.PendingChanges.Commits
             set { _openPCOnDoubleClick = value; }
         }
 
-        bool IPendingChangeSource.HasPendingChanges
+        bool IPendingChangeUI.HasCheckedItems
         {
             get { return CheckedIndices.Count > 0; }
         }
 
-        IEnumerable<PendingChange> IPendingChangeSource.PendingChanges
+        IEnumerable<PendingChange> IPendingChangeUI.CheckedItems
         {
             get
             {
@@ -332,6 +331,104 @@ namespace Ankh.UI.PendingChanges.Commits
             }
 
             base.OnThemeChange(sender, e);
+        }
+
+        public void OnChange(string fullPath)
+        {
+            PendingCommitItem pci;
+            if (_listItems != null && _listItems.TryGetValue(fullPath, out pci))
+            {
+                if (PendingChange.IsIgnoreOnCommitChangeList(pci.PendingChange.ChangeList)
+                    && pci.Checked)
+                {
+                    // Uncheck items that were moved to the ignore list
+                    if (!PendingChange.IsIgnoreOnCommitChangeList(pci.LastChangeList))
+                        pci.Checked = false; // Uncheck items that weren't on the ignore list before
+
+                    // Note: We don't check items that were previously ignored, as the user didn't
+                    // ask us to do that.
+                }
+
+                pci.RefreshText(Context);
+            }
+        }
+
+        protected override void OnResolveItem(ResolveItemEventArgs e)
+        {
+            base.OnResolveItem(e);
+
+            if (_listItems != null)
+            {
+                PendingChange pc = e.SelectionItem as PendingChange;
+
+                PendingCommitItem pci;
+                if (pc != null && this._listItems.TryGetValue(pc.FullPath, out pci))
+                {
+                    e.Item = pci;
+                }
+            }
+        }
+
+        PendingCommitItemCollection _listItems;
+        IKeyedNotifyCollection<string, PendingChange> _items;
+
+        Collections.IKeyedNotifyCollection<string, PendingChange> IPendingChangeUI.Items
+        {
+            get
+            {
+                return _items;
+            }
+            set
+            {
+                if (_listItems != null)
+                {
+                    ClearItems();
+                    _listItems.Dispose();
+                    _listItems = null;
+                }
+                _listItems = new PendingCommitItemCollection(Context, value);
+                _listItems.CollectionChanged += OnPendingChangesChanged;
+                _items = value;
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (_listItems != null)
+                    {
+                        _listItems.Dispose();
+                        _listItems = null;
+                    }
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
+
+        private void OnPendingChangesChanged(object sender, CollectionChangedEventArgs<PendingCommitItem> e)
+        {
+            switch (e.Action)
+            {
+                case CollectionChange.Add:
+                    Items.AddRange(e.NewItems);
+                    break;
+                case CollectionChange.Remove:
+                    foreach (PendingCommitItem pci in e.OldItems)
+                        Items.Remove(pci);
+                    break;
+                case CollectionChange.Reset:
+                    ClearItems();
+                    Items.AddRange(_listItems.ToArray());
+                    break;
+            }
+
+            this.RefreshGroupsAvailable();
         }
     }
 }

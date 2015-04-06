@@ -63,5 +63,10 @@ namespace Ankh.WpfUI.Controls
             add { _propChanged += value; }
             remove { _propChanged -= value; }
         }
+
+        internal void InvokePropertyChange(string propertyName)
+        {
+            RaisePropertyChange(propertyName);
+        }
     }
 }

@@ -47,13 +47,13 @@ namespace Ankh.UI.PendingChanges
             set { throw new InvalidOperationException(); }
         }
 
-        IPendingChangeSource _pasteSrc;
+        IPendingChangeUI _pasteSrc;
         /// <summary>
         /// Gets or sets the paste source.
         /// </summary>
         /// <value>The paste source.</value>
         [DefaultValue(null)]
-        public IPendingChangeSource PasteSource
+        public IPendingChangeUI PendingChangeUI
         {
             get { return _pasteSrc; }
             set { _pasteSrc = value; }

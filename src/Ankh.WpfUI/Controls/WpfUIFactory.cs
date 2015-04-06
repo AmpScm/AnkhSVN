@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
+using Ankh.Collections;
 using Ankh.Scc;
 using Ankh.UI;
 
@@ -28,7 +29,7 @@ namespace Ankh.WpfUI.Controls
             return new PendingChangeControlWrapper(this, host, puc);
         }
 
-        sealed class PendingChangeControlWrapper : AnkhService, IPendingChangeControl, IDisposable,  IPendingChangeSource
+        sealed class PendingChangeControlWrapper : AnkhService, IPendingChangeControl, IDisposable,  IPendingChangeUI
         {
             Control _control;
             PendingChangesUserControl _puc;
@@ -69,7 +70,7 @@ namespace Ankh.WpfUI.Controls
                 get { return _control; }
             }
 
-            bool IPendingChangeSource.HasPendingChanges
+            bool IPendingChangeUI.HasCheckedItems
             {
                 get
                 {
@@ -82,7 +83,7 @@ namespace Ankh.WpfUI.Controls
                 }
             }
 
-            IEnumerable<Scc.PendingChange> IPendingChangeSource.PendingChanges
+            public IEnumerable<Scc.PendingChange> CheckedItems
             {
                 get
                 {
@@ -99,14 +100,14 @@ namespace Ankh.WpfUI.Controls
                 Dispose(true);
             }
 
-            public IPendingChangeSource PendingChangeSource
+            public IPendingChangeUI UI
             {
                 get { return this; }
             }
 
-            ReadOnlyKeyedNotifyCollection<string, Scc.PendingChange> _list;
+            IKeyedNotifyCollection<string, Scc.PendingChange> _list;
 
-            ReadOnlyKeyedNotifyCollection<string, Scc.PendingChange> IPendingChangeControl.PendingChanges
+            public IKeyedNotifyCollection<string, Scc.PendingChange> Items
             {
                 get { return _list; }
                 set
@@ -133,7 +134,7 @@ namespace Ankh.WpfUI.Controls
 
             class PendingChangeWrapCollection : KeyedWrapNotifyCollection<string, PendingChange, PendingChangeItem>
             {
-                public PendingChangeWrapCollection(IAnkhServiceProvider context, ReadOnlyKeyedNotifyCollection<string, PendingChange> pendingChanges)
+                public PendingChangeWrapCollection(IAnkhServiceProvider context, IKeyedNotifyCollection<string, PendingChange> pendingChanges)
                     : base(pendingChanges, context)
                 {
 
@@ -148,6 +149,13 @@ namespace Ankh.WpfUI.Controls
                 {
                     return new PendingChangeItem(inner);
                 }
+            }
+
+            public void OnChange(string fullPath)
+            {
+                PendingChangeItem pci;
+                if (_wc != null && _wc.TryGetValue(fullPath, out pci))
+                    pci.InvokePropertyChange(null);
             }
         }
     }
