@@ -849,7 +849,7 @@ namespace Ankh.GitScc.StatusCache
         {
             IGitItemStateUpdate update;
             if (_map.Count > 0)
-                update = GetFirst(_map.Values);
+                update = EnumTools.GetFirst(_map.Values);
             else
                 update = this["C:\\"]; // Just give me a GitItem instance to access the interface
 
@@ -857,15 +857,6 @@ namespace Ankh.GitScc.StatusCache
 
             if (updates != null)
                 OnGitItemsChanged(new GitItemsEventArgs(updates));
-        }
-
-        static T GetFirst<T>(IEnumerable<T> valueCollection)
-            where T : class
-        {
-            foreach (T a in valueCollection)
-                return a;
-
-            return null;
         }
 
         public event EventHandler<GitItemsEventArgs> GitItemsChanged;

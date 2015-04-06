@@ -804,7 +804,7 @@ namespace Ankh.Scc.StatusCache
         {
             ISvnItemStateUpdate update;
             if (_map.Count > 0)
-                update = GetFirst(_map.Values);
+                update = EnumTools.GetFirst(_map.Values);
             else
                 update = this["C:\\"]; // Just give me a SvnItem instance to access the interface
 
@@ -812,15 +812,6 @@ namespace Ankh.Scc.StatusCache
 
             if (updates != null)
                 OnSvnItemsChanged(new SvnItemsEventArgs(updates));
-        }
-
-        static T GetFirst<T>(IEnumerable<T> valueCollection)
-            where T : class
-        {
-            foreach (T a in valueCollection)
-                return a;
-
-            return null;
         }
 
         public event EventHandler<SvnItemsEventArgs> SvnItemsChanged;
