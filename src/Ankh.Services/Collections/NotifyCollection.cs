@@ -16,6 +16,8 @@ namespace Ankh
         readonly CollectionMonitor _monitor = new CollectionMonitor();
         EventHandler<CollectionChangedEventArgs<T>> _collectionChanged;
         EventHandler<CollectionChangedEventArgs> _collectionChangedUntyped;
+        PropertyChangedEventHandler _propertyChanged;
+        EventHandler _disposed;
 
         public NotifyCollection()
             : base()
@@ -24,6 +26,25 @@ namespace Ankh
         public NotifyCollection(IList<T> list)
             : base(list)
         { }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    if (_disposed != null)
+                        _disposed(this, EventArgs.Empty);
+                }
+            }
+            finally
+            {
+                _collectionChanged = null;
+                _collectionChangedUntyped = null;
+                _propertyChanged = null;
+                _disposed = null;
+            }
+        }
 
         protected override void ClearItems()
         {
@@ -121,14 +142,16 @@ namespace Ankh
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add { _propertyChanged += value; }
+            remove { _propertyChanged -= value; }
+        }
 
         protected void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, e);
-            }
+            if (_propertyChanged != null)
+                _propertyChanged(this, e);
         }
 
         void RaisePropertyChanged(RaisePropertyItems which)
@@ -144,6 +167,12 @@ namespace Ankh
             {
                 _updateProps |= which;
             }
+        }
+
+        public event EventHandler Disposed
+        {
+            add { _disposed += value; }
+            remove { _disposed -= value; }
         }
 
         public IDisposable BatchUpdate()

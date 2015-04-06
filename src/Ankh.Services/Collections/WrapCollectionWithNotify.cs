@@ -13,6 +13,7 @@ namespace Ankh
         readonly IAnkhServiceProvider _context;
         readonly WrapInnerCollection _inner;
         readonly WrapItem<TInner, TWrapped> _wrapper;
+        bool _disposed;
 
         public WrapNotifyCollection(INotifyCollection<TInner> collection, WrapItem<TInner, TWrapped> wrapper, IAnkhServiceProvider context)
             : base(new WrapInnerCollection(collection))
@@ -39,9 +40,11 @@ namespace Ankh
             get { return _context; }
         }
 
-        protected void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
-            _inner.Dispose(disposing);
+            base.Dispose(disposing); // Unhooks our Disposing hook on inner
+            if (disposing)
+                _inner.Dispose();
         }
 
         class WrapInnerCollection : NotifyCollection<TWrapped>
@@ -56,12 +59,29 @@ namespace Ankh
                 _sourceCollection = collection;
                 _sourceCollection.CollectionChanged += OnSourceCollectionChanged;
                 _sourceCollection.PropertyChanged += OnSourcePropertyChanged;
+                _sourceCollection.Disposed += OnSourceCollectionDisposed;
             }
 
-            internal void Dispose(bool disposing)
+            private void OnSourceCollectionDisposed(object sender, EventArgs e)
             {
-                _sourceCollection.CollectionChanged -= OnSourceCollectionChanged;
-                _sourceCollection.PropertyChanged -= OnSourcePropertyChanged;
+                Dispose(true);
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                try
+                {
+                    if (disposing)
+                    {
+                        _sourceCollection.CollectionChanged -= OnSourceCollectionChanged;
+                        _sourceCollection.PropertyChanged -= OnSourcePropertyChanged;
+                        _sourceCollection.Disposed -= OnSourceCollectionDisposed;
+                    }
+                }
+                finally
+                {
+                    base.Dispose(disposing);
+                }
             }
 
             private void OnSourcePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -123,6 +143,11 @@ namespace Ankh
             public INotifyCollection<TInner> GetWrappedCollection()
             {
                 return _sourceCollection;
+            }
+
+            internal void Dispose()
+            {
+                Dispose(true);
             }
         }
 

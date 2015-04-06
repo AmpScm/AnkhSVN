@@ -9,6 +9,7 @@ namespace Ankh.Collections
     public interface INotifyCollection : INotifyPropertyChanged
     {
         event EventHandler<CollectionChangedEventArgs> CollectionChanged;
+        event EventHandler Disposed;
 
         IDisposable BatchUpdate();
     }
