@@ -60,8 +60,7 @@ namespace Ankh
                 if (collection == null)
                     throw new ArgumentNullException("collection");
 
-                _sourceCollection = ReadOnlyNotifyCollection<TInner>.Unwrap(collection);
-
+                _sourceCollection = collection;
                 _sourceCollection.CollectionChanged += OnSourceCollectionChanged;
                 _sourceCollection.PropertyChanged += OnSourcePropertyChanged;
             }
@@ -194,7 +193,7 @@ namespace Ankh
         {
             IKeyedNotifyCollection<TKey, TInner> _sourceCollection;
             public WrapInnerKeyedCollection(IKeyedNotifyCollection<TKey, TInner> collection)
-                : base(ReadOnlyKeyedNotifyCollection<TKey,TInner>.Unwrap(collection), collection.Comparer)
+                : base(collection, collection.Comparer)
             {
                 _sourceCollection = (IKeyedNotifyCollection<TKey, TInner>)base.SourceCollection;
             }
@@ -259,7 +258,7 @@ namespace Ankh
             return default(TKey);
         }
 
-        public IDisposable BatchUpdate()
+        public sealed override IDisposable BatchUpdate()
         {
             return _inner.BatchUpdate();
         }

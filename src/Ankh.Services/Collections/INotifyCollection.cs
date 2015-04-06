@@ -60,12 +60,6 @@ namespace Ankh.Collections
         }
 
         /// <summary>Initializes for Reset, Add or Remove</summary>
-        public CollectionChangedEventArgs(CollectionChange action, object changedItem)
-            : this(action, changedItem, -1)
-        {
-        }
-
-        /// <summary>Initializes for Reset, Add or Remove</summary>
         public CollectionChangedEventArgs(CollectionChange action, object changedItem, int index)
         {
             if (action != CollectionChange.Reset
@@ -91,13 +85,6 @@ namespace Ankh.Collections
         }
 
         /// <summary>Initializes for Replace</summary>
-        public CollectionChangedEventArgs(CollectionChange action, object newItem, object oldItem)
-            : this(action, newItem, oldItem, -1)
-        {
-
-        }
-
-        /// <summary>Initializes for Replace</summary>
         public CollectionChangedEventArgs(CollectionChange action, object newItem, object oldItem, int startingIndex)
         {
             if (action != CollectionChange.Replace)
@@ -111,13 +98,6 @@ namespace Ankh.Collections
             _newItems = MakeArray(newItem);
             _oldItems = MakeArray(oldItem);
             _oldStartIndex = _newStartIndex = startingIndex;
-        }
-
-        /// <summary>Initializes for Replace</summary>
-        public CollectionChangedEventArgs(CollectionChange action, object[] newItems, object[] oldItems)
-            : this(action, newItems, oldItems, -1)
-        {
-
         }
 
         /// <summary>Initializes for Replace</summary>
@@ -190,69 +170,6 @@ namespace Ankh.Collections
             get { return _oldStartIndex; }
         }
 
-        internal sealed class CollectionMonitor : IDisposable
-        {
-            private int _busyCount;
-            public bool Busy
-            {
-                get
-                {
-                    return this._busyCount > 0;
-                }
-            }
-            public IDisposable Enter()
-            {
-                this._busyCount++;
-                return this;
-            }
-            public void Dispose()
-            {
-                this._busyCount--;
-            }
-            public CollectionMonitor()
-            {
-            }
-
-            internal void CheckReentrancy<TEventArgs>(EventHandler<TEventArgs> collectionChange)
-                where TEventArgs : EventArgs
-            {
-                if (Busy && collectionChange != null)
-                    throw new InvalidOperationException();
-            }
-
-            internal void CheckReentrancy<T1, T2>(EventHandler<T1> handlers1, EventHandler<T2> handlers2)
-                where T1 : EventArgs
-                where T2 : EventArgs
-            {
-                if (!Busy)
-                    return;
-                if (handlers1 != null)
-                    throw new InvalidOperationException();
-                if (handlers2 != null)
-                    throw new InvalidOperationException();
-            }
-
-            sealed class BatchUpdateDisposer : IDisposable
-            {
-                readonly AnkhAction _action;
-
-                public BatchUpdateDisposer(AnkhAction action)
-                {
-                    _action = action;
-                }
-
-                public void Dispose()
-                {
-                    _action();
-                }
-            }
-
-            public IDisposable BatchUpdate(AnkhAction doneHandler)
-            {
-                return new BatchUpdateDisposer(doneHandler);
-            }
-        }
-
         internal virtual object[] MakeArray(object item)
         {
             return new object[] { item };
@@ -268,35 +185,15 @@ namespace Ankh.Collections
         }
 
         /// <summary>Initializes for Reset, Add or Remove</summary>
-        public CollectionChangedEventArgs(CollectionChange action, T changedItem)
-            : base(action, changedItem, -1)
-        {
-        }
-
-        /// <summary>Initializes for Reset, Add or Remove</summary>
         public CollectionChangedEventArgs(CollectionChange action, T changedItem, int index)
             : base(action, changedItem, index)
         {
         }
 
         /// <summary>Initializes for Replace</summary>
-        public CollectionChangedEventArgs(CollectionChange action, T newItem, T oldItem)
-            : base(action, newItem, oldItem)
-        {
-
-        }
-
-        /// <summary>Initializes for Replace</summary>
         public CollectionChangedEventArgs(CollectionChange action, T newItem, T oldItem, int startingIndex)
             : base(action, newItem, oldItem, startingIndex)
         {
-        }
-
-        /// <summary>Initializes for Replace</summary>
-        public CollectionChangedEventArgs(CollectionChange action, T[] newItems, T[] oldItems)
-            : base(action, newItems, oldItems)
-        {
-
         }
 
         /// <summary>Initializes for Replace</summary>
@@ -330,6 +227,60 @@ namespace Ankh.Collections
         public new T[] OldItems
         {
             get { return (T[])base.OldItems; }
+        }
+    }
+
+    internal sealed class CollectionMonitor : IDisposable
+    {
+        private int _busyCount;
+        public bool Busy
+        {
+            get { return _busyCount > 0; }
+        }
+        public IDisposable Enter()
+        {
+            this._busyCount++;
+            return this;
+        }
+        public void Dispose()
+        {
+            this._busyCount--;
+        }
+        internal void CheckReentrancy<TEventArgs>(Delegate handlers)
+            where TEventArgs : EventArgs
+        {
+            if (Busy && handlers != null)
+                throw new InvalidOperationException();
+        }
+
+        internal void CheckReentrancy(Delegate handlers1, Delegate handlers2)
+        {
+            if (!Busy)
+                return;
+            if (handlers1 != null)
+                throw new InvalidOperationException();
+            if (handlers2 != null)
+                throw new InvalidOperationException();
+        }
+
+        sealed class BatchUpdateDisposer : IDisposable
+        {
+            readonly AnkhAction _action;
+
+            public BatchUpdateDisposer(AnkhAction action)
+            {
+                _action = action;
+            }
+
+            public void Dispose()
+            {
+                _action();
+            }
+        }
+
+        public IDisposable BatchUpdate(AnkhAction doneHandler)
+        {
+            return new BatchUpdateDisposer(doneHandler);
         }
     }
 }

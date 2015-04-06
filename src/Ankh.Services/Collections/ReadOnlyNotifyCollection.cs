@@ -4,35 +4,20 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using Ankh.Collections;
-using CollectionMonitor = Ankh.Collections.CollectionChangedEventArgs.CollectionMonitor;
 
 namespace Ankh
 {
     public class ReadOnlyNotifyCollection<T> : ReadOnlyCollection<T>, INotifyCollection<T> where T : class
     {
-        EventHandler<CollectionChangedEventArgs<T>> _typedCollectionChanged;
-        EventHandler<CollectionChangedEventArgs> _untypedCollectionChanged;
+        EventHandler<CollectionChangedEventArgs<T>> _collectionChanged;
+        EventHandler<CollectionChangedEventArgs> _collectionChangedUntyped;
         PropertyChangedEventHandler _propertyChanged;
         readonly INotifyCollection<T> _innerCollection;
 
         public ReadOnlyNotifyCollection(INotifyCollection<T> collection)
-            : base(Unwrap(collection))
+            : base(collection)
         {
             _innerCollection = (INotifyCollection<T>)base.Items;
-        }
-
-        internal static INotifyCollection<T> Unwrap(INotifyCollection<T> collection)
-        {
-            if (collection == null)
-                throw new ArgumentNullException("collection");
-
-#if !DEBUG && UNWRAP
-            ReadOnlyNotifyCollection<T> ro = collection as ReadOnlyNotifyCollection<T>;
-            if (ro != null)
-                return Unwrap(ro._innerCollection);
-            else
-#endif
-            return collection;
         }
 
         protected new INotifyCollection<T> Items
@@ -68,25 +53,25 @@ namespace Ankh
 
         protected virtual void OnCollectionChanged(CollectionChangedEventArgs<T> e)
         {
-            if (_typedCollectionChanged != null)
-                _typedCollectionChanged(this, e);
-            if (_untypedCollectionChanged != null)
-                _untypedCollectionChanged(this, e);
+            if (_collectionChanged != null)
+                _collectionChanged(this, e);
+            if (_collectionChangedUntyped != null)
+                _collectionChangedUntyped(this, e);
         }
 
         public event EventHandler<CollectionChangedEventArgs<T>> CollectionChanged
         {
-            add { _typedCollectionChanged += value; HookChanges(); }
-            remove { _typedCollectionChanged -= value; UnhookChanges(); }
+            add { _collectionChanged += value; HookChanges(); }
+            remove { _collectionChanged -= value; UnhookChanges(); }
         }
 
         event EventHandler<CollectionChangedEventArgs> INotifyCollection.CollectionChanged
         {
-            add { _untypedCollectionChanged += value; HookChanges(); }
-            remove { _untypedCollectionChanged -= value; UnhookChanges(); }
+            add { _collectionChangedUntyped += value; HookChanges(); }
+            remove { _collectionChangedUntyped -= value; UnhookChanges(); }
         }
 
-        IDisposable INotifyCollection.BatchUpdate()
+        public virtual IDisposable BatchUpdate()
         {
             return null;
         }

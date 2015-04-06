@@ -50,8 +50,10 @@ namespace Ankh
 
             public WrapInnerCollection(INotifyCollection<TInner> collection)
             {
-                _sourceCollection = ReadOnlyNotifyCollection<TInner>.Unwrap(collection);
+                if (collection == null)
+                    throw new ArgumentNullException("collection");
 
+                _sourceCollection = collection;
                 _sourceCollection.CollectionChanged += OnSourceCollectionChanged;
                 _sourceCollection.PropertyChanged += OnSourcePropertyChanged;
             }
@@ -124,7 +126,7 @@ namespace Ankh
             }
         }
 
-        public IDisposable BatchUpdate()
+        public sealed override IDisposable BatchUpdate()
         {
             return _inner.BatchUpdate();
         }
