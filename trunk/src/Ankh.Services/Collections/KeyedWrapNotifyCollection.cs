@@ -45,9 +45,11 @@ namespace Ankh
             get { return _context; }
         }
 
-        protected void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
-            _inner.InvokeDispose();
+            base.Dispose(disposing); // Unhooks our Disposing hook on inner
+            if (disposing)
+                _inner.Dispose();
         }
 
         class WrapInnerCollection : KeyedNotifyCollection<TKey, TWrapped>
@@ -63,6 +65,12 @@ namespace Ankh
                 _sourceCollection = collection;
                 _sourceCollection.CollectionChanged += OnSourceCollectionChanged;
                 _sourceCollection.PropertyChanged += OnSourcePropertyChanged;
+                _sourceCollection.Disposed += OnSourceCollectionDisposed;
+            }
+
+            private void OnSourceCollectionDisposed(object sender, EventArgs e)
+            {
+                Dispose(true);
             }
 
             internal INotifyCollection<TInner> SourceCollection
@@ -70,10 +78,21 @@ namespace Ankh
                 get { return _sourceCollection;}
             }
 
-            protected virtual void Dispose(bool disposing)
+            protected override void Dispose(bool disposing)
             {
-                _sourceCollection.CollectionChanged -= OnSourceCollectionChanged;
-                _sourceCollection.PropertyChanged -= OnSourcePropertyChanged;
+                try
+                {
+                    if (disposing)
+                    {
+                        _sourceCollection.CollectionChanged -= OnSourceCollectionChanged;
+                        _sourceCollection.PropertyChanged -= OnSourcePropertyChanged;
+                        _sourceCollection.Disposed -= OnSourceCollectionDisposed;
+                    }
+                }
+                finally
+                {
+                    base.Dispose(disposing);
+                }
             }
 
             private void OnSourcePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -163,7 +182,7 @@ namespace Ankh
                 }
             }
 
-            internal void InvokeDispose()
+            public void Dispose()
             {
                 Dispose(true);
             }

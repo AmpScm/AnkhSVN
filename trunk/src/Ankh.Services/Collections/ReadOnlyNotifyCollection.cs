@@ -12,6 +12,7 @@ namespace Ankh
         EventHandler<CollectionChangedEventArgs<T>> _collectionChanged;
         EventHandler<CollectionChangedEventArgs> _collectionChangedUntyped;
         PropertyChangedEventHandler _propertyChanged;
+        EventHandler _disposed;
         readonly INotifyCollection<T> _innerCollection;
 
         public ReadOnlyNotifyCollection(INotifyCollection<T> collection)
@@ -25,6 +26,27 @@ namespace Ankh
             get { return _innerCollection; }
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing)
+                {
+                    InnerUnhookChanges();
+
+                    if (_disposed != null)
+                        _disposed(this, EventArgs.Empty);
+                }
+            }
+            finally
+            {
+                _collectionChanged = null;
+                _collectionChangedUntyped = null;
+                _propertyChanged = null;
+                _disposed = null;
+            }
+        }
+
         int _nHookChanges;
         protected void HookChanges()
         {
@@ -33,6 +55,7 @@ namespace Ankh
             {
                 _innerCollection.CollectionChanged += HandleCollectionChanged;
                 _innerCollection.PropertyChanged += HandlePropertyChanged;
+                _innerCollection.Disposed += HandleCollectionDisposed;
             }
         }
 
@@ -41,14 +64,26 @@ namespace Ankh
             _nHookChanges--;
             if (_nHookChanges == 0)
             {
-                _innerCollection.CollectionChanged -= HandleCollectionChanged;
-                _innerCollection.PropertyChanged -= HandlePropertyChanged;
+                InnerUnhookChanges();
             }
+        }
+
+        void InnerUnhookChanges()
+        {
+            _innerCollection.CollectionChanged -= HandleCollectionChanged;
+            _innerCollection.PropertyChanged -= HandlePropertyChanged;
+            _innerCollection.Disposed -= HandleCollectionDisposed;
+            _nHookChanges = 0;
         }
 
         private void HandleCollectionChanged(object sender, CollectionChangedEventArgs<T> e)
         {
             OnCollectionChanged(e);
+        }
+
+        private void HandleCollectionDisposed(object sender, EventArgs e)
+        {
+            Dispose(true);
         }
 
         protected virtual void OnCollectionChanged(CollectionChangedEventArgs<T> e)
@@ -69,6 +104,12 @@ namespace Ankh
         {
             add { _collectionChangedUntyped += value; HookChanges(); }
             remove { _collectionChangedUntyped -= value; UnhookChanges(); }
+        }
+
+        public event EventHandler Disposed
+        {
+            add { _disposed += value; HookChanges(); }
+            remove { _disposed -= value; UnhookChanges(); }
         }
 
         public virtual IDisposable BatchUpdate()
