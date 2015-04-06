@@ -25,8 +25,8 @@ using System.Windows.Forms;
 
 namespace Ankh.Services
 {
-    [GlobalService(typeof(IAnkhDialogHelpService))]
-    class AnkhHelpService : AnkhService, IAnkhDialogHelpService
+    [GlobalService(typeof(IAnkhHelpService))]
+    class AnkhHelpService : AnkhService, IAnkhHelpService
     {
         public AnkhHelpService(IAnkhServiceProvider context)
             : base(context)
@@ -48,6 +48,32 @@ namespace Ankh.Services
 
                 if (showHelpInBrowser)
                     Help.ShowHelp(form, ub.Uri.AbsoluteUri);
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
+
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
+                else
+                    throw;
+            }
+        }
+
+        public void RunHelp(IAnkhControlWithHelp control)
+        {
+            UriBuilder ub = new UriBuilder("http://svc.ankhsvn.net/svc/go/");
+            ub.Query = string.Format("t=ctrlHelp&v={0}&l={1}&dt={2}", GetService<IAnkhPackage>().UIVersion, CultureInfo.CurrentUICulture.LCID, Uri.EscapeUriString(control.DialogHelpTypeName));
+
+            try
+            {
+                bool showHelpInBrowser = true;
+                IVsHelpSystem help = GetService<IVsHelpSystem>(typeof(SVsHelpService));
+                if (help != null)
+                    showHelpInBrowser = !VSErr.Succeeded(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (uint)VHS_COMMAND.VHS_Default));
+
+                if (showHelpInBrowser)
+                    Help.ShowHelp(control.Control, ub.Uri.AbsoluteUri);
             }
             catch (Exception ex)
             {

@@ -69,11 +69,6 @@ namespace Ankh
         /// <summary>
         /// 
         /// </summary>
-        void ShowConnectHelp();
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="text"></param>
         /// <param name="markers"></param>
         /// <returns></returns>

@@ -22,7 +22,7 @@ using Ankh.Configuration;
 
 namespace Ankh.UI.PendingChanges
 {
-    partial class PendingChangesPage : UserControl
+    partial class PendingChangesPage : UserControl, IAnkhControlWithHelp
     {
         bool _registered;
         public PendingChangesPage()
@@ -138,5 +138,15 @@ namespace Ankh.UI.PendingChanges
         }
 
         internal bool _alreadyThemed;
+
+        public virtual string DialogHelpTypeName
+        {
+            get { return PageType.FullName; }
+        }
+
+        Control IAnkhControlWithHelp.Control
+        {
+            get { return this; }
+        }
     }
 }

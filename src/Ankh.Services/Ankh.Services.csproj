@@ -147,6 +147,7 @@
     <Compile Include="Selection\SccHierarchy.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
     <Compile Include="UI\IPendingChangeControl.cs" />
+    <Compile Include="UI\IAnkhHelpService.cs" />
     <Compile Include="VSAssemblies.cs" />
     <Compile Include="VSErr.cs" />
     <Compile Include="VSItemId.cs" />

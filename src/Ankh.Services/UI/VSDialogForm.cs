@@ -27,18 +27,6 @@ using Ankh.VS;
 namespace Ankh.UI
 {
     /// <summary>
-    /// 
-    /// </summary>
-    public interface IAnkhDialogHelpService
-    {
-        /// <summary>
-        /// Shows generic help for the specified form
-        /// </summary>
-        /// <param name="form">The form.</param>
-        void RunHelp(VSDialogForm form);
-    }
-
-    /// <summary>
     /// .Net form which when shown modal let's the VS command routing continue
     /// </summary>
     /// <remarks>If the IAnkhDialogOwner service is not available this form behaves like any other form</remarks>
@@ -175,7 +163,7 @@ namespace Ankh.UI
 
             if (!HelpButton && ControlBox && !_addedHelp)
             {
-                IAnkhDialogHelpService helpService = GetService<IAnkhDialogHelpService>();
+                IAnkhHelpService helpService = GetService<IAnkhHelpService>();
 
                 if (helpService != null)
                 {
@@ -266,7 +254,7 @@ namespace Ankh.UI
             {
                 e.Cancel = true; // Don't go in context help mode
 
-                IAnkhDialogHelpService helpService = GetService<IAnkhDialogHelpService>();
+                IAnkhHelpService helpService = GetService<IAnkhHelpService>();
 
                 helpService.RunHelp(this);
             }

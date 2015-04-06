@@ -471,38 +471,5 @@ namespace Ankh.Services.IssueTracker
                 }
             }
         }
-
-        #region IAnkhIssueService Members
-
-
-        public void ShowConnectHelp()
-        {
-            // Shamelessly copied from the AnkhHelService
-
-            UriBuilder ub = new UriBuilder("http://svc.ankhsvn.net/svc/go/");
-            ub.Query = string.Format("t=ctrlHelp&v={0}&l={1}&dt={2}", GetService<IAnkhPackage>().UIVersion, CultureInfo.CurrentUICulture.LCID, Uri.EscapeUriString("Ankh.UI.PendingChanges.PendingIssuesPage"));
-
-            try
-            {
-                bool showHelpInBrowser = true;
-                IVsHelpSystem help = GetService<IVsHelpSystem>(typeof(SVsHelpService));
-                if (help != null)
-                    showHelpInBrowser = !VSErr.Succeeded(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (uint)VHS_COMMAND.VHS_Default));
-
-                if (showHelpInBrowser)
-                    Help.ShowHelp(null, ub.Uri.AbsoluteUri);
-            }
-            catch (Exception ex)
-            {
-                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
-
-                if (eh != null && eh.IsEnabled(ex))
-                    eh.OnError(ex);
-                else
-                    throw;
-            }
-        }
-
-        #endregion
     }
 }
