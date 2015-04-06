@@ -13,7 +13,6 @@ namespace Ankh
         readonly IAnkhServiceProvider _context;
         readonly WrapInnerCollection _inner;
         readonly WrapItem<TInner, TWrapped> _wrapper;
-        bool _disposed;
 
         public WrapNotifyCollection(INotifyCollection<TInner> collection, WrapItem<TInner, TWrapped> wrapper, IAnkhServiceProvider context)
             : base(new WrapInnerCollection(collection))
