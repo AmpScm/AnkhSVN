@@ -25,29 +25,17 @@ namespace Ankh.Scc
     /// </summary>
     public class PendingChangeEventArgs : EventArgs
     {
-        readonly IPendingChangesManager _context;
         readonly PendingChange _change;
         /// <summary>
         /// Initializes a new instance of the <see cref="PendingChangeEventArgs"/> class.
         /// </summary>
-        /// <param name="service">The service.</param>
         /// <param name="change">The change.</param>
-        public PendingChangeEventArgs(IPendingChangesManager service, PendingChange change)
+        public PendingChangeEventArgs(PendingChange change)
         {
-            if (service == null)
-                throw new ArgumentNullException("service");
+            if (change == null)
+                throw new ArgumentNullException("change");
 
-            _change = change; // change can be null
-            _context = service;
-        }
-
-        /// <summary>
-        /// Gets the manager.
-        /// </summary>
-        /// <value>The manager.</value>
-        public IPendingChangesManager Manager
-        {
-            get { return _context; }
+            _change = change;
         }
 
         /// <summary>

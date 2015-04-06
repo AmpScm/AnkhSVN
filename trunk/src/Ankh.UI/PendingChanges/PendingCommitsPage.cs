@@ -212,44 +212,10 @@ namespace Ankh.UI.PendingChanges
             OnSolutionRefresh(this, EventArgs.Empty);
         }
 
-        private void OnPendingChangesChanged(object sender, CollectionChangedEventArgs<PendingCommitItem> e)
-        {
-            if (e.Action == CollectionChange.Add && e.NewItems != null)
-                foreach (PendingCommitItem i in e.NewItems)
-                {
-                    OnPendingChangeActivity(i.PendingChange);
-                }
-        }
-
-        int _inBatchUpdate;
-        List<PendingCommitItem> _toAdd;
         void OnBatchUpdateStarted(object sender, BatchStartedEventArgs e)
         {
-            pendingCommits.BeginUpdate();
-            _inBatchUpdate++;
-            e.Disposers += OnBatchEnd;
-            _toAdd = new List<PendingCommitItem>();
-        }
-
-        void OnBatchEnd()
-        {
-            try
-            {
-                if (--_inBatchUpdate == 0)
-                {
-                    if (_toAdd != null && _toAdd.Count > 0)
-                    {
-                        PendingCommitItem[] toAdd = _toAdd.ToArray();
-                        _toAdd = null;
-                        pendingCommits.Items.AddRange(toAdd);
-                    }
-                    _toAdd = null;
-                }
-            }
-            finally
-            {
-                pendingCommits.EndUpdate();
-            }
+            if (this.pendingCommits != null)
+                e.Disposers += this.pendingCommits.BeginBatch();
         }
 
         void OnSolutionRefresh(object sender, EventArgs e)
@@ -316,28 +282,12 @@ namespace Ankh.UI.PendingChanges
             PendingChange pc = e.Change;
 
             UI.OnChange(pc.FullPath);
-
-            OnPendingChangeActivity(pc);
         }
 
         IAnkhSolutionSettings _settings;
         IAnkhSolutionSettings Settings
         {
             get { return _settings ?? (_settings = Context.GetService<IAnkhSolutionSettings>()); }
-        }
-
-        void OnPendingChangeActivity(PendingChange pc)
-        {
-            IAnkhSolutionSettings settings = Settings;
-            if (settings != null && pc.FullPath == settings.ProjectRoot)
-            {
-                // TODO add filter for property changes
-                IAnkhIssueService iService = Context.GetService<IAnkhIssueService>();
-                if (iService != null)
-                {
-                    iService.MarkDirty();
-                }
-            }
         }
 
         public override bool CanRefreshList
