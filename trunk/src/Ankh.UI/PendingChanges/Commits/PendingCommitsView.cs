@@ -390,6 +390,10 @@ namespace Ankh.UI.PendingChanges.Commits
                 _listItems = new PendingCommitItemCollection(Context, value);
                 _listItems.CollectionChanged += OnPendingChangesChanged;
                 _items = value;
+                ClearItems();
+                Items.AddRange(_listItems.ToArray());
+                if (IsHandleCreated)
+                    RefreshGroups();
             }
         }
 
@@ -431,6 +435,8 @@ namespace Ankh.UI.PendingChanges.Commits
                     if (_toAdd != null)
                         _toAdd.Clear();
                     Items.AddRange(_listItems.ToArray());
+                    if (IsHandleCreated)
+                        RefreshGroups();
                     break;
             }
 
