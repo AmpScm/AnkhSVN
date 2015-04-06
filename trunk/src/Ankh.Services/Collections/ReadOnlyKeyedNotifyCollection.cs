@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using Ankh.Collections;
-using CollectionMonitor = Ankh.Collections.CollectionChangedEventArgs.CollectionMonitor;
 
 namespace Ankh
 {
@@ -14,23 +13,9 @@ namespace Ankh
         readonly IKeyedNotifyCollection<TKey, TItem> _innerCollection;
 
         public ReadOnlyKeyedNotifyCollection(IKeyedNotifyCollection<TKey, TItem> collection)
-            : base(Unwrap(collection))
+            : base(collection)
         {
             _innerCollection = (IKeyedNotifyCollection<TKey, TItem>)base.Items;
-        }
-
-        internal static IKeyedNotifyCollection<TKey, TItem> Unwrap(IKeyedNotifyCollection<TKey, TItem> collection)
-        {
-            if (collection == null)
-                throw new ArgumentNullException("collection");
-
-#if !DEBUG && UNWRAP
-            ReadOnlyKeyedNotifyCollection<TKey, TItem> ro = collection as ReadOnlyKeyedNotifyCollection<TKey, TItem>;
-            if (ro != null)
-                return Unwrap(ro._innerCollection);
-            else
-#endif
-            return collection;
         }
 
         protected new IKeyedNotifyCollection<TKey, TItem> Items

@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using Ankh.Collections;
-using CollectionMonitor = Ankh.Collections.CollectionChangedEventArgs.CollectionMonitor;
 
 namespace Ankh
 {
@@ -15,6 +14,8 @@ namespace Ankh
     public class NotifyCollection<T> : Collection<T>, INotifyCollection<T> where T : class
     {
         readonly CollectionMonitor _monitor = new CollectionMonitor();
+        EventHandler<CollectionChangedEventArgs<T>> _collectionChanged;
+        EventHandler<CollectionChangedEventArgs> _collectionChangedUntyped;
 
         public NotifyCollection()
             : base()
@@ -68,16 +69,13 @@ namespace Ankh
 
         protected virtual void MoveItem(int oldIndex, int newIndex)
         {
-            _monitor.CheckReentrancy(_collectionChangedUntyped, _collectionChanged);
+            _monitor.CheckReentrancy(_collectionChanged, _collectionChangedUntyped);
             T t = base[oldIndex];
             base.RemoveItem(oldIndex);
             base.InsertItem(newIndex, t);
             RaisePropertyChanged(RaisePropertyItems.Items);
             RaiseCollectionChanged(new CollectionChangedEventArgs<T>(CollectionChange.Move, t, newIndex, oldIndex));
         }
-
-        EventHandler<CollectionChangedEventArgs> _collectionChangedUntyped;
-        EventHandler<CollectionChangedEventArgs<T>> _collectionChanged;
 
         public event EventHandler<CollectionChangedEventArgs<T>> CollectionChanged
         {
