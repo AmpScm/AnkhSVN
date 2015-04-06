@@ -314,7 +314,22 @@ namespace Ankh
 
         IList<GitItem> IGitItemStateUpdate.GetUpdateQueueAndClearScheduled()
         {
-            throw new NotImplementedException();
+            lock (_stateChanged)
+            {
+                _scheduled = false;
+
+                if (_stateChanged.Count == 0)
+                    return null;
+
+                List<GitItem> modified = new List<GitItem>(_stateChanged.Count);
+                modified.AddRange(_stateChanged);
+                _stateChanged.Clear();
+
+                foreach (GitItem i in modified)
+                    i._enqueued = false;
+
+                return modified;
+            }
         }
 
         void IGitItemStateUpdate.SetDocumentDirty(bool value)
