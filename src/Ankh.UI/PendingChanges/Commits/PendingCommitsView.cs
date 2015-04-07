@@ -387,7 +387,7 @@ namespace Ankh.UI.PendingChanges.Commits
                     _listItems.Dispose();
                     _listItems = null;
                 }
-                _listItems = new PendingCommitItemCollection(Context, value);
+                _listItems = new PendingCommitItemCollection(this, value);
                 _listItems.CollectionChanged += OnPendingChangesChanged;
                 _items = value;
                 ClearItems();

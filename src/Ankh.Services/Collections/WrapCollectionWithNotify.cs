@@ -10,11 +10,11 @@ namespace Ankh
         where TInner : class
         where TWrapped : class
     {
-        readonly IAnkhServiceProvider _context;
+        readonly object _context;
         readonly WrapInnerCollection _inner;
         readonly WrapItem<TInner, TWrapped> _wrapper;
 
-        public WrapNotifyCollection(INotifyCollection<TInner> collection, WrapItem<TInner, TWrapped> wrapper, IAnkhServiceProvider context)
+        public WrapNotifyCollection(INotifyCollection<TInner> collection, WrapItem<TInner, TWrapped> wrapper, object context)
             : base(new WrapInnerCollection(collection))
         {
             _context = context;
@@ -23,6 +23,7 @@ namespace Ankh
             _inner = (WrapInnerCollection)this.Items;
             _inner.Converter = this;
 
+            OnPreInitialize(context);
             _inner.ResetCollection();
         }
 
@@ -34,7 +35,17 @@ namespace Ankh
             : this(collection, null, null)
         { }
 
-        protected IAnkhServiceProvider Context
+        /// <summary>
+        /// Called from the constructor before copying the inner list
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        protected virtual void OnPreInitialize(object context)
+        {
+
+        }
+
+        protected object Context
         {
             get { return _context; }
         }

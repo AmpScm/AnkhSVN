@@ -9,16 +9,17 @@ namespace Ankh
         where TInner : class
         where TWrapped : class
     {
-        readonly IAnkhServiceProvider _context;
+        readonly object _context;
         WrapInnerCollection _inner;
 
-        public KeyedWrapNotifyCollection(IKeyedNotifyCollection<TKey, TInner> collection, IAnkhServiceProvider context)
+        public KeyedWrapNotifyCollection(IKeyedNotifyCollection<TKey, TInner> collection, object context)
             : base(new WrapInnerKeyedCollection(collection))
         {
             _context = context;
             _inner = (WrapInnerCollection)base.Items;
             _inner.Converter = this;
 
+            OnPreInitialize(context);
             _inner.ResetCollection();
         }
 
@@ -33,14 +34,25 @@ namespace Ankh
             _inner = (WrapInnerKeyedCollection)base.Items;
             _inner.Converter = this;
 
+            OnPreInitialize(context);
             _inner.ResetCollection();
+        }
+
+        /// <summary>
+        /// Called from the constructor before copying the inner list
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        protected virtual void OnPreInitialize(object context)
+        {
+
         }
 
         public KeyedWrapNotifyCollection(INotifyCollection<TInner> collection, IEqualityComparer<TKey> comparer)
             : this(collection, comparer, (IAnkhServiceProvider)null)
         { }
 
-        protected IAnkhServiceProvider Context
+        protected object Context
         {
             get { return _context; }
         }
