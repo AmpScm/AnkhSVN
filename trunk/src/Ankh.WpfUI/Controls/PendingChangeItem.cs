@@ -4,7 +4,7 @@ using Ankh.Scc;
 
 namespace Ankh.WpfUI.Controls
 {
-    public class PendingChangeItem : INotifyPropertyChanged
+    class PendingChangeItem : INotifyPropertyChanged
     {
         readonly PendingChange _pc;
         bool _isChecked;
@@ -27,7 +27,7 @@ namespace Ankh.WpfUI.Controls
 
         public string Path
         {
-            get { return FullPath; }
+            get { return _pc.RelativePath; }
         }
 
         public bool IsChecked
@@ -67,6 +67,11 @@ namespace Ankh.WpfUI.Controls
         internal void InvokePropertyChange(string propertyName)
         {
             RaisePropertyChange(propertyName);
+        }
+
+        public object IconSource
+        {
+            get { return null; }
         }
     }
 }
