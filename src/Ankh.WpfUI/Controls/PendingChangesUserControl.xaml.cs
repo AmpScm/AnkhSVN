@@ -12,13 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WinPoint = System.Drawing.Point;
+using Ankh.Commands;
 
 namespace Ankh.WpfUI.Controls
 {
     /// <summary>
     /// Interaction logic for PendingChangesUserControl.xaml
     /// </summary>
-    public partial class PendingChangesUserControl : UserControl
+    partial class PendingChangesUserControl : UserControl
     {
         public PendingChangesUserControl()
         {
@@ -32,9 +34,26 @@ namespace Ankh.WpfUI.Controls
 
         public IAnkhServiceProvider Context { get; set; }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        private void OnContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
+            e.Handled = true;
+            UIElement el = e.OriginalSource as UIElement ?? PendingChangesList;
 
+            Point wp = el.PointToScreen(new Point(e.CursorLeft, e.CursorTop));
+            WinPoint p = new WinPoint((int)wp.X, (int)wp.Y);
+            bool showSort = false;
+
+            if (PendingChangesList.ContainerFromElement(el) == null)
+                showSort = true;
+
+            IAnkhCommandService mcs = Context.GetService<IAnkhCommandService>();
+            if (mcs != null)
+            {
+                if (showSort)
+                    mcs.ShowContextMenu(AnkhCommandMenu.PendingCommitsHeaderContextMenu, p);
+                else
+                    mcs.ShowContextMenu(AnkhCommandMenu.PendingCommitsContextMenu, p);
+            }
         }
     }
 }

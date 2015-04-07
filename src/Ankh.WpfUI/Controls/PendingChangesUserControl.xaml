@@ -12,14 +12,14 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <ListView Margin="0" SelectionChanged="ListView_SelectionChanged" Name="PendingChangesList">
+    <ListView Margin="0" SelectionChanged="ListView_SelectionChanged" Name="PendingChangesList" ContextMenuOpening="OnContextMenuOpening">
         <ListView.View>
             <GridView>
-                <GridViewColumn Header="Path" Width="200">
+                <GridViewColumn Header="Path" Width="200" x:Name="PathColumn">
                     <GridViewColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="PathHeaderCheckbox"/>
+                                <CheckBox IsChecked="{Binding IsHeaderChecked}" Margin="0,0,4,0"/>
                                 <TextBlock Text="Path" />
                             </StackPanel>
                         </DataTemplate>
@@ -27,32 +27,18 @@
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding IsChecked}" />
+                                <CheckBox IsChecked="{Binding IsChecked}" Margin="0,0,4,0"/>
+                                <Image Width="16" Height="16" Source="{Binding IconSource}"/>
                                 <TextBlock Text="{Binding Path}" />
                             </StackPanel>
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
                 </GridViewColumn>
-                <GridViewColumn Header="Project" Width="80">
-                    <GridViewColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Project}"/>
-                        </DataTemplate>
-                    </GridViewColumn.CellTemplate>
+                <GridViewColumn Header="Project" Width="80" DisplayMemberBinding="{Binding Project}">
                 </GridViewColumn>
-                <GridViewColumn DisplayMemberBinding="{Binding ChangeText}">
-                    <GridViewColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="QQ" />
-                        </DataTemplate>
-                    </GridViewColumn.HeaderTemplate>
+                <GridViewColumn Header="Change" Width="80" DisplayMemberBinding="{Binding ChangeText}">
                 </GridViewColumn>
-                <GridViewColumn Header="FullPath" Width="300">
-                    <GridViewColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding FullPath}"/>
-                        </DataTemplate>
-                    </GridViewColumn.CellTemplate>
+                <GridViewColumn Header="Full Path" Width="300" DisplayMemberBinding="{Binding FullPath}">
                 </GridViewColumn>
             </GridView>
         </ListView.View>

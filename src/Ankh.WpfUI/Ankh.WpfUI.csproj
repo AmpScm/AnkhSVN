@@ -68,6 +68,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -89,6 +90,8 @@
     </Compile>
     <Compile Include="Controls\ReadOnlyObservableWrapper.cs" />
     <Compile Include="Controls\PendingChangeItem.cs" />
+    <Compile Include="Controls\PendingChangeWrapCollection.cs" />
+    <Compile Include="Controls\PendingChangeControlWrapper.cs" />
     <Compile Include="Controls\WpfUIFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
