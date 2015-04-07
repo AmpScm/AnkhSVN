@@ -8,10 +8,15 @@ namespace Ankh.UI.PendingChanges.Commits
     class PendingCommitItemCollection : KeyedWrapNotifyCollection<string, PendingChange, PendingCommitItem>
     {
         PendingCommitsView _view;
-        public PendingCommitItemCollection(IAnkhServiceProvider context, IKeyedNotifyCollection<string, PendingChange> collection)
-            : base(collection, context)
+        public PendingCommitItemCollection(PendingCommitsView view, IKeyedNotifyCollection<string, PendingChange> collection)
+            : base(collection, view)
         {
 
+        }
+
+        protected PendingCommitsView View
+        {
+            get { return _view ?? (_view = (PendingCommitsView)Context); }
         }
 
         protected override string GetKeyForItem(PendingCommitItem item)
@@ -21,10 +26,7 @@ namespace Ankh.UI.PendingChanges.Commits
 
         protected override PendingCommitItem GetWrapItem(PendingChange inner)
         {
-            if (_view == null)
-                _view = Context.GetService<PendingCommitsPage>().PendingCommitsView;
-
-            return new PendingCommitItem(_view, inner);
+            return new PendingCommitItem(View, inner);
         }
     }
 }
