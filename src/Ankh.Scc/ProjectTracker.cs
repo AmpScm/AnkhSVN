@@ -30,8 +30,8 @@ using System.ComponentModel.Design;
 namespace Ankh.Scc
 {
     //[CLSCompliant(false)]
-    [GlobalService(typeof(IAnkhProjectDocumentTracker))]
-    partial class ProjectTracker : AnkhService, IAnkhProjectDocumentTracker, IVsTrackProjectDocumentsEvents2, IVsTrackProjectDocumentsEvents3
+    [GlobalService(typeof(ProjectTracker))]
+    partial class ProjectTracker : AnkhService, IVsTrackProjectDocumentsEvents2, IVsTrackProjectDocumentsEvents3
     {
         bool _hookedSolution;
         bool _hookedProjects;

@@ -105,7 +105,6 @@
     <Compile Include="Scc\Git\GitStatusData.cs" />
     <Compile Include="Collections\INotifyCollection.cs" />
     <Compile Include="Scc\IAnkhGitSccService.cs" />
-    <Compile Include="Scc\IAnkhProjectDocumentTracker.cs" />
     <Compile Include="Scc\IAnkhSccProviderEvents.cs" />
     <Compile Include="Scc\Git\IGitStatusCache.cs" />
     <Compile Include="Scc\ISccHelper.cs" />

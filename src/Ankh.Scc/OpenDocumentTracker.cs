@@ -79,7 +79,7 @@ namespace Ankh.Scc
         protected ProjectTracker ProjectTracker
         {
             [DebuggerStepThrough]
-            get { return _projectTracker ?? (_projectTracker = GetService<ProjectTracker>(typeof(IAnkhProjectDocumentTracker))); }
+            get { return _projectTracker ?? (_projectTracker = GetService<ProjectTracker>()); }
         }
 
         void LoadInitial()
