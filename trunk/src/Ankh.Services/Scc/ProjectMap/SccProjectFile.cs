@@ -111,6 +111,38 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
+        public IEnumerable<string> GetAllFiles()
+        {
+            HybridCollection<string> mapped = null;
+
+            yield return FullPath;
+
+            SccProjectFileReference rf = FirstReference;
+            while(rf != null)
+            {
+                IList<string> subFiles = rf.GetSubFiles();
+
+                if (subFiles.Count > 0)
+                {
+                    if (mapped == null)
+                    {
+                        mapped = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                        mapped.Add(FullPath);
+                    }
+
+                    foreach(string sf in subFiles)
+                    {
+                        if (mapped.Contains(sf))
+                            continue;
+
+                        mapped.Add(sf);
+                        yield return sf;
+                    }
+                }
+                rf = rf.NextReference;
+            }
+        }
+
         /// <summary>
         /// Gets the first project reference to this file
         /// </summary>
