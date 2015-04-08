@@ -16,44 +16,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections;
 using System.Diagnostics;
-using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
-using Ankh.Selection;
 using System.Windows.Forms;
 
-namespace Ankh.UI.VSSelectionControls
+namespace Ankh.Selection
 {
-    public interface ISelectionMapOwner<T>
-    {
-        IList Selection { get; }
-        IList AllItems { get; }
-
-        bool SelectionContains(T item);
-
-        IntPtr GetImageList();
-        int GetImageListIndex(T item);
-        string GetText(T item);
-
-        object GetSelectionObject(T item);
-
-        T GetItemFromSelectionObject(object item);
-        void SetSelection(T[] items);
-        event EventHandler HandleDestroyed;
-
-        Control Control { get; }
-
-        /// <summary>
-        /// Gets the canonical (path / uri) of the item. Used by packages to determine a selected file
-        /// </summary>
-        /// <param name="item">The item.</param>
-        /// <returns>A canonical name or null</returns>
-        string GetCanonicalName(T item);
-    }
-
     [ComVisible(true), ComDefaultInterfaceAttribute(typeof(IVsMultiItemSelect))]
     public sealed class SelectionItemMap : IVsMultiItemSelect, ISelectionContainer
     {
@@ -590,7 +560,7 @@ namespace Ankh.UI.VSSelectionControls
                 Tracker.OnSelectChangeEx(_hierHandle, VSItemId.Nil, null, _selHandle);
         }
 
-        internal void EnsureSelection()
+        public void EnsureSelection()
         {
             if (Tracker == null)
                 return;

@@ -24,8 +24,8 @@ using Ankh.Collections;
 using Ankh.Commands;
 using Ankh.Configuration;
 using Ankh.Scc;
+using Ankh.Selection;
 using Ankh.UI.VSSelectionControls;
-using Ankh.VS;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
