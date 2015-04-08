@@ -359,7 +359,7 @@ namespace Ankh.Scc
 
                 if (svnItem.IsVersioned)
                 {
-                    _fileOrigins[newItem] = maybeFrom;
+                    _fileOrigins[newItem] = svnItem.FullPath;
                 }
             }
         }

@@ -173,36 +173,16 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(documentName))
                 throw new ArgumentNullException("document");
 
-            SvnItem item = StatusCache[documentName];
-
-            if (item == null)
+            SccProjectFile pf;
+            if (!ProjectMap.TryGetFile(documentName, out pf))
                 yield break;
 
-            yield return item.FullPath;
-
-            SccProjectFile pf;
-            if (ProjectMap.TryGetFile(item.FullPath, out pf))
+            foreach(string path in pf.GetAllFiles())
             {
-                HybridCollection<string> subFiles = null;
+                SvnItem item = StatusCache[documentName];
 
-                if (pf.FirstReference != null)
-                    foreach (string path in pf.FirstReference.GetSubFiles())
-                    {
-                        if (subFiles == null)
-                        {
-                            subFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-                            subFiles.Add(item.FullPath);
-                        }
-
-                        if (subFiles.Contains(path))
-                            continue;
-
-                        item = StatusCache[path];
-                        if (item != null)
-                            yield return item.FullPath;
-
-                        subFiles.Add(item.FullPath);
-                    }
+                if (item != null)
+                    yield return item.FullPath; // Use true path
             }
         }
 

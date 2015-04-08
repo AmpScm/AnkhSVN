@@ -26,6 +26,7 @@ using Ankh.Commands;
 using Ankh.Configuration;
 using Ankh.VS;
 using System.ComponentModel.Design;
+using Ankh.Scc.ProjectMap;
 
 namespace Ankh.Scc
 {
@@ -291,7 +292,14 @@ namespace Ankh.Scc
 
         public IEnumerable<string> GetAllDocumentFiles(string documentName)
         {
-            return _sccProvider.GetAllDocumentFiles(documentName);
+            SccProjectFile file;
+
+            if (ProjectMap.TryGetFile(documentName, out file))
+                return file.GetAllFiles();
+            else if (SvnItem.IsValidPath(documentName))
+                return new string[] { documentName };
+            else
+                return new string[0];
         }
     }
 }

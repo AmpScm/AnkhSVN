@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Ankh.Commands;
 using Ankh.Scc;
+using Ankh.Scc.ProjectMap;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.GitScc
@@ -172,9 +173,27 @@ namespace Ankh.GitScc
         }
         #endregion
 
+        /// <summary>
+        /// Gets the SvnItem of the document file and all subdocument files (SccSpecial files)
+        /// </summary>
+        /// <param name="documentName">The document.</param>
+        /// <returns></returns>
         public override IEnumerable<string> GetAllDocumentFiles(string documentName)
         {
-            yield return documentName;
+            if (string.IsNullOrEmpty(documentName))
+                throw new ArgumentNullException("document");
+
+            SccProjectFile pf;
+            if (!ProjectMap.TryGetFile(documentName, out pf))
+                yield break;
+
+            foreach (string path in pf.GetAllFiles())
+            {
+                GitItem item = StatusCache[documentName];
+
+                if (item != null)
+                    yield return item.FullPath; // Use true path
+            }
         }
     }
 }
