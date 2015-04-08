@@ -123,7 +123,7 @@ namespace Ankh.Scc
                 if (pc.Refresh(RefreshContext, item))
                 {
                     if (!pc.IsClean)
-                        OnChanged(new PendingChangeEventArgs(pc));
+                        RaiseChanged(pc);
                     else
                         pc = null;
                 }
@@ -172,7 +172,7 @@ namespace Ankh.Scc
                         _extraFiles.Remove(file);
                     }
                     else
-                        OnChanged(new PendingChangeEventArgs(pc));
+                        RaiseChanged(pc);
                 }
             }
             else if (PendingChange.CreateIfPending(RefreshContext, item, out pc))

@@ -16,38 +16,11 @@
 
 using System;
 using System.Collections.Generic;
+using Ankh.Collections;
 using Ankh.UI;
 
 namespace Ankh.Scc
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class PendingChangeEventArgs : EventArgs
-    {
-        readonly PendingChange _change;
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PendingChangeEventArgs"/> class.
-        /// </summary>
-        /// <param name="change">The change.</param>
-        public PendingChangeEventArgs(PendingChange change)
-        {
-            if (change == null)
-                throw new ArgumentNullException("change");
-
-            _change = change;
-        }
-
-        /// <summary>
-        /// Gets the change.
-        /// </summary>
-        /// <value>The change.</value>
-        public PendingChange Change
-        {
-            get { return _change; }
-        }
-    }
-
     public sealed class BatchStartedEventArgs : EventArgs, IDisposable
     {
         Stack<AnkhAction> _closers = new Stack<AnkhAction>();
@@ -126,7 +99,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Gets a the actual list of all current pending changes
         /// </summary>
-        ReadOnlyKeyedNotifyCollection<string, PendingChange> PendingChanges { get; }
+        PendingChangeCollection PendingChanges { get; }
 
         /// <summary>
         /// Gets a list of all current pending changes below a specific path
@@ -149,19 +122,6 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="paths"></param>
         void Refresh(IEnumerable<string> paths);
-
-        /// <summary>
-        /// Gets the pending change information for the specified path or <c>null</c> if none is available
-        /// </summary>
-        /// <param name="fullPath"></param>
-        /// <returns></returns>
-        PendingChange this[string fullPath] { get; }
-
-        /// <summary>
-        /// Raised when the properties of a pending change have changed
-        /// </summary>
-        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
-        event EventHandler<PendingChangeEventArgs> Changed;
 
         /// <summary>
         /// Raised around 'large' updates

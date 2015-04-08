@@ -388,7 +388,7 @@ namespace Ankh.Services.IssueTracker
             if (Manager != null)
             {
                 Manager.PendingChanges.CollectionChanged += OnPendingChangesCollectionChanged;
-                Manager.Changed += OnPendingChangeChanged;
+                Manager.PendingChanges.ItemChanged += OnPendingChangeChanged;
             }
         }
 
@@ -404,9 +404,9 @@ namespace Ankh.Services.IssueTracker
             get { return _solutionSettings ?? (_solutionSettings = GetService<IAnkhSolutionSettings>()); }
         }
 
-        private void OnPendingChangeChanged(object sender, PendingChangeEventArgs e)
+        private void OnPendingChangeChanged(object sender, ItemChangedEventArgs<PendingChange> e)
         {
-            OnSvnItemChanged(e.Change.SvnItem);
+            OnSvnItemChanged(e.Item.SvnItem);
         }
 
         void OnPendingChangesCollectionChanged(object sender, CollectionChangedEventArgs<PendingChange> e)
