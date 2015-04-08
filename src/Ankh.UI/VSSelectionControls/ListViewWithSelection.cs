@@ -25,6 +25,7 @@ using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using Ankh.Selection;
 
 namespace Ankh.UI.VSSelectionControls
 {

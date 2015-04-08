@@ -834,7 +834,6 @@
     <Compile Include="PathSelector\VersionSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="VSSelectionControls\SelectionItemMap.cs" />
     <Compile Include="VSSelectionControls\TreeViewWithSelection.cs">
       <SubType>Component</SubType>
     </Compile>

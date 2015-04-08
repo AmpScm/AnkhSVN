@@ -145,6 +145,8 @@
     <Compile Include="Collections\IWrapNotifyCollection.cs" />
     <Compile Include="Collections\WrapCollectionWithNotify.cs" />
     <Compile Include="Selection\SccHierarchy.cs" />
+    <Compile Include="Selection\ISelectionMapOwner.cs" />
+    <Compile Include="Selection\SelectionItemMap.cs" />
     <Compile Include="UI\IHasSplitterColor.cs" />
     <Compile Include="UI\IPendingChangeControl.cs" />
     <Compile Include="UI\IAnkhHelpService.cs" />

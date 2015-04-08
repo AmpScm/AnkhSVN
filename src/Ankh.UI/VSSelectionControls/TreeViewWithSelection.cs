@@ -15,12 +15,9 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using Microsoft.VisualStudio.Shell.Interop;
 using System.ComponentModel;
-using System.Drawing;
+using System.Windows.Forms;
+using Ankh.Selection;
 
 namespace Ankh.UI.VSSelectionControls
 {
