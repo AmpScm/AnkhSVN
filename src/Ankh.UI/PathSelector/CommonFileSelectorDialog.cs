@@ -104,19 +104,21 @@ namespace Ankh.UI.PathSelector
 
             public IEnumerator<PendingChange> GetEnumerator()
             {
+                PendingChangeCollection pcc = Manager.PendingChanges;
                 foreach (SvnItem item in _items)
                 {
                     if (item.IsFile && !item.IsLocked)
                     {
-                        PendingChange pc = Manager[item.FullPath];
+                        PendingChange pc;
 
-                        if (pc == null && !_pcs.TryGetValue(item.FullPath, out pc))
+                        if (!pcc.TryGetValue(item.FullPath, out pc)
+                            && !_pcs.TryGetValue(item.FullPath, out pc))
                         {
                             pc = new PendingChange(_rc, item);
                         }
 
                         if (pc == null)
-                            yield break; // Not a pending change
+                            continue; // Not a pending change
 
                         _pcs[item.FullPath] = pc;
 

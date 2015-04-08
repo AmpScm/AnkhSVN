@@ -172,19 +172,21 @@ namespace Ankh.UI.SccManagement
 
             public IEnumerator<PendingChange> GetEnumerator()
             {
+                PendingChangeCollection pcc = Manager.PendingChanges;
                 foreach (SvnItem item in _items)
                 {
                     if (PendingChange.IsPending(item))
                     {
-                        PendingChange pc = Manager[item.FullPath];
+                        PendingChange pc;
 
-                        if (pc == null && !_pcs.TryGetValue(item.FullPath, out pc))
+                        if (!pcc.TryGetValue(item.FullPath, out pc)
+                            && !_pcs.TryGetValue(item.FullPath, out pc))
                         {
                             PendingChange.CreateIfPending(_rc, item, out pc);
                         }
 
                         if (pc == null)
-                            yield break; // Not a pending change
+                            continue; // Not a pending change
 
                         _pcs[item.FullPath] = pc;
 
