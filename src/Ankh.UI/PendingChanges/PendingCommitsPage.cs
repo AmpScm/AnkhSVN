@@ -197,7 +197,7 @@ namespace Ankh.UI.PendingChanges
                 _manager.BatchUpdateStarted += new EventHandler<BatchStartedEventArgs>(OnBatchUpdateStarted);
             }
 
-            _manager.Changed += OnPendingChangesChanged;
+            _manager.PendingChanges.ItemChanged += OnPendingChangesChanged;
 
             if (!_manager.IsActive)
             {
@@ -277,9 +277,9 @@ namespace Ankh.UI.PendingChanges
             Enabled = Manager.IsActive;
         }
 
-        void OnPendingChangesChanged(object sender, PendingChangeEventArgs e)
+        void OnPendingChangesChanged(object sender, ItemChangedEventArgs<PendingChange> e)
         {
-            PendingChange pc = e.Change;
+            PendingChange pc = e.Item;
 
             UI.OnChange(pc.FullPath);
         }
