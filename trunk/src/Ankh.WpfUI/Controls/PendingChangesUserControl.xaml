@@ -9,16 +9,18 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ListViewStyle.xaml" />
+                <ResourceDictionary Source="ListViewStyleThemed.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+    <UserControl.SnapsToDevicePixels>true</UserControl.SnapsToDevicePixels>
     <ListView Margin="0" SelectionChanged="ListView_SelectionChanged" Name="PendingChangesList" ContextMenuOpening="OnContextMenuOpening">
         <ListView.View>
             <GridView>
                 <GridViewColumn Header="Path" Width="200" x:Name="PathColumn">
                     <GridViewColumn.HeaderTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" DataContext="{Binding ElementName=PendingChangesList, Path=DataContext}">
                                 <CheckBox IsChecked="{Binding IsHeaderChecked}" Margin="0,0,4,0"/>
                                 <TextBlock Text="Path" />
                             </StackPanel>
@@ -27,7 +29,7 @@
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding IsChecked}" Margin="0,0,4,0"/>
+                                <CheckBox IsChecked="{Binding IsChecked}" Margin="0,0,4,0" IsTabStop="False"/>
                                 <Image Width="16" Height="16" Source="{Binding IconSource}"/>
                                 <TextBlock Text="{Binding Path}" />
                             </StackPanel>

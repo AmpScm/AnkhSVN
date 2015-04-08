@@ -119,6 +119,10 @@
     <None Include="Ankh.WpfUI.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\ListViewStyleThemed.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\PendingChangesUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -54,7 +54,7 @@ namespace Ankh.UI.PendingChanges
 
             Control pendingCommitsControl;
 #if DEBUG
-            if (!VSVersion.VS2012OrLater) /// Enable for VS2010 when theme proxy supports this
+            if (!VSVersion.VS2010OrLater)
 #else
             if (true)
 #endif
