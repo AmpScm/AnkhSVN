@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Ankh.Collections;
 
-namespace Ankh
+namespace Ankh.Collections
 {
     public abstract class KeyedWrapNotifyCollection<TKey, TInner, TWrapped> : ReadOnlyKeyedNotifyCollection<TKey, TWrapped>, IKeyedNotifyCollection<TKey, TWrapped>, IWrapCollectionWithNotify<TInner, TWrapped>
         where TInner : class

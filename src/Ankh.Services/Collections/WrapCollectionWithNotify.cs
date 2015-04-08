@@ -1,24 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Ankh.Collections;
 
-namespace Ankh
+namespace Ankh.Collections
 {
-    public class WrapNotifyCollection<TInner, TWrapped> : ReadOnlyNotifyCollection<TWrapped>, IWrapCollectionWithNotify<TInner, TWrapped>
+    public abstract class WrapNotifyCollection<TInner, TWrapped> : ReadOnlyNotifyCollection<TWrapped>, IWrapCollectionWithNotify<TInner, TWrapped>
         where TInner : class
         where TWrapped : class
     {
         readonly object _context;
         readonly WrapInnerCollection _inner;
-        readonly WrapItem<TInner, TWrapped> _wrapper;
 
-        public WrapNotifyCollection(INotifyCollection<TInner> collection, WrapItem<TInner, TWrapped> wrapper, object context)
+        public WrapNotifyCollection(INotifyCollection<TInner> collection,  object context)
             : base(new WrapInnerCollection(collection))
         {
             _context = context;
-            _wrapper = wrapper;
 
             _inner = (WrapInnerCollection)this.Items;
             _inner.Converter = this;
@@ -27,12 +23,8 @@ namespace Ankh
             _inner.ResetCollection();
         }
 
-        public WrapNotifyCollection(INotifyCollection<TInner> collection, WrapItem<TInner, TWrapped> wrapper)
-            : this(collection, wrapper, (IAnkhServiceProvider)null)
-        { }
-
         protected WrapNotifyCollection(INotifyCollection<TInner> collection)
-            : this(collection, null, null)
+            : this(collection, null)
         { }
 
         /// <summary>
@@ -171,10 +163,7 @@ namespace Ankh
             Dispose(true);
         }
 
-        protected virtual TWrapped GetWrapItem(TInner inner)
-        {
-            return _wrapper(inner);
-        }
+        protected abstract TWrapped GetWrapItem(TInner inner);
 
         public INotifyCollection<TInner> GetWrappedCollection()
         {
