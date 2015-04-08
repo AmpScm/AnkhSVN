@@ -71,6 +71,7 @@
     <Compile Include="AnkhRuntime.cs" />
     <Compile Include="AnkhService.cs" />
     <Compile Include="AnkhServiceEvents.cs" />
+    <Compile Include="Collections\IItemChanged.cs" />
     <Compile Include="Commands\AnkhAction.cs" />
     <Compile Include="Commands\CommandTarget.cs" />
     <Compile Include="Commands\CommandAttribute.cs" />

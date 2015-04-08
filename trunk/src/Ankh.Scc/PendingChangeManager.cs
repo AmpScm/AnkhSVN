@@ -28,14 +28,14 @@ namespace Ankh.Scc
     [GlobalService(typeof(IPendingChangesManager))]
     partial class PendingChangeManager : AnkhService, IPendingChangesManager
     {
-        readonly PendingChangeCollection _pendingChanges = new PendingChangeCollection();
-        readonly ReadOnlyKeyedNotifyCollection<string, PendingChange> _pendingChangesRo;
+        readonly ThePendingChangeCollection _pendingChanges = new ThePendingChangeCollection();
+        readonly PendingChangeCollection _pendingChangesRo;
         bool _isActive;
         bool _solutionOpen;
         public PendingChangeManager(IAnkhServiceProvider context)
             : base(context)
         {
-            _pendingChangesRo = new ReadOnlyKeyedNotifyCollection<string, PendingChange>(_pendingChanges);
+            _pendingChangesRo = new PendingChangeCollection(_pendingChanges);
         }
 
         protected override void OnInitialize()
@@ -317,19 +317,12 @@ namespace Ankh.Scc
         }
 
         /// <summary>
-        /// Raised when the properties of a pending change have changed
-        /// </summary>
-        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
-        public event EventHandler<PendingChangeEventArgs> Changed;
-
-        /// <summary>
         /// Raises the <see cref="E:Changed"/> event.
         /// </summary>
         /// <param name="e">The <see cref="Ankh.Scc.PendingChangeEventArgs"/> instance containing the event data.</param>
-        void OnChanged(PendingChangeEventArgs e)
+        void RaiseChanged(PendingChange pc)
         {
-            if (Changed != null)
-                Changed(this, e);
+            _pendingChangesRo.RaiseChanged(pc);
         }
 
         public event EventHandler<BatchStartedEventArgs> BatchUpdateStarted;
@@ -404,9 +397,30 @@ namespace Ankh.Scc
             }
         }
 
-        ReadOnlyKeyedNotifyCollection<string, PendingChange> IPendingChangesManager.PendingChanges
+        PendingChangeCollection IPendingChangesManager.PendingChanges
         {
             get { return _pendingChangesRo; }
+        }
+    }
+
+    public sealed class ThePendingChangeCollection : KeyedNotifyCollection<string, PendingChange>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ThePendingChangeCollection"/> class.
+        /// </summary>
+        public ThePendingChangeCollection()
+            : base(StringComparer.OrdinalIgnoreCase)
+        {
+        }
+
+        /// <summary>
+        /// Extracts the FullPath from the specified element.
+        /// </summary>
+        /// <param name="item">The element from which to extract the key.</param>
+        /// <returns>The key for the specified element.</returns>
+        protected override string GetKeyForItem(PendingChange item)
+        {
+            return item.FullPath;
         }
     }
 }

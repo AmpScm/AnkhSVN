@@ -25,6 +25,7 @@ using Ankh.Selection;
 using Ankh.VS;
 using SharpSvn;
 using System.IO;
+using Ankh.Collections;
 
 namespace Ankh.Scc
 {
@@ -528,24 +529,27 @@ namespace Ankh.Scc
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PendingChangeCollection : KeyedNotifyCollection<string, PendingChange>
+    public sealed class PendingChangeCollection : ReadOnlyKeyedNotifyCollection<string, PendingChange>, INotifyItemChanged<PendingChange>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PendingChangeCollection"/> class.
+        /// Initializes a new instance of the <see cref="ThePendingChangeCollection"/> class.
         /// </summary>
-        public PendingChangeCollection()
-            : base(StringComparer.OrdinalIgnoreCase)
+        public PendingChangeCollection(IKeyedNotifyCollection<string, PendingChange> inner)
+            : base(inner)
         {
         }
 
-        /// <summary>
-        /// Extracts the FullPath from the specified element.
-        /// </summary>
-        /// <param name="item">The element from which to extract the key.</param>
-        /// <returns>The key for the specified element.</returns>
-        protected override string GetKeyForItem(PendingChange item)
+        public event EventHandler<ItemChangedEventArgs<PendingChange>> ItemChanged;
+
+        void OnItemChanged(ItemChangedEventArgs<PendingChange> e)
         {
-            return item.FullPath;
+            if (ItemChanged != null)
+                ItemChanged(this, e);
+        }
+
+        public void RaiseChanged(PendingChange pendingChange)
+        {
+            OnItemChanged(new ItemChangedEventArgs<PendingChange>(pendingChange));
         }
     }
 }
