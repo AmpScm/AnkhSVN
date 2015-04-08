@@ -25,10 +25,14 @@ namespace Ankh.WpfUI.Controls
             ElementHost host = new ElementHost();
 
             PendingChangesUserControl puc = new PendingChangesUserControl();
+
+            puc.Resources.MergedDictionaries.RemoveAt(VSVersion.VS2012OrLater ? 0 : 1);
+
             puc.Context = context;
+
             host.Child = puc;
 
-            return new PendingChangeControlWrapper(this, host, puc);
+            return new PendingChangeControlWrapper(context, host, puc);
         }
     }
 

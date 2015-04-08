@@ -1,31 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Forms.Integration;
+using System.Reflection;
 using Ankh.Collections;
-using Ankh.Commands;
 using Ankh.Scc;
+using Ankh.Selection;
 using Ankh.UI;
-using Point = System.Drawing.Point;
+using WFControl = System.Windows.Forms.Control;
 
 namespace Ankh.WpfUI.Controls
 {
-    sealed class PendingChangeControlWrapper : AnkhService, IPendingChangeControl, IDisposable, IPendingChangeUI, INotifyPropertyChanged
+    sealed class PendingChangeControlWrapper : AnkhService, IPendingChangeControl, IDisposable, IPendingChangeUI, INotifyPropertyChanged, ISelectionMapOwner<PendingChangeItem>
     {
-        Control _control;
+        WFControl _control;
         PendingChangesUserControl _puc;
         PendingChangeWrapCollection _wc;
+        SelectionItemMap _sim;
 
-        public PendingChangeControlWrapper(IAnkhServiceProvider context, Control control, PendingChangesUserControl puc)
+        public PendingChangeControlWrapper(IAnkhServiceProvider context, WFControl control, PendingChangesUserControl puc)
             : base(context)
         {
             _puc = puc;
-            _puc.Context = context;
+            //_puc.Context = context; // Done by cakker
+            _puc.DataContext = this;
+
             control.Disposed += OnControlDisposed;
             _control = control;
+
+            _sim = SelectionItemMap.Create(this);
+            _sim.PublishHierarchy = true;
+            _sim.Context = context;
+
+            // Set Notify that we have a selection, otherwise the first selection request fails.
+            _sim.NotifySelectionUpdated();
+            puc.PendingChangesList.SelectionChanged += PendingChangesList_SelectionChanged;
+        }
+
+        void PendingChangesList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            _sim.NotifySelectionUpdated();
         }
 
         private void OnControlDisposed(object sender, EventArgs e)
@@ -43,14 +56,18 @@ namespace Ankh.WpfUI.Controls
             try
             {
                 _control.Disposed -= OnControlDisposed;
+
+                if (_handleDestroyed != null)
+                    _handleDestroyed(this, EventArgs.Empty);
             }
             finally
             {
+                _handleDestroyed = null;
                 base.Dispose(disposing);
             }
         }
 
-        public Control Control
+        public WFControl Control
         {
             get { return _control; }
         }
@@ -90,8 +107,8 @@ namespace Ankh.WpfUI.Controls
             get { return this; }
         }
 
-        bool _headerChecked;
-        public bool IsHeaderChecked
+        bool? _headerChecked = true;
+        public bool? IsHeaderChecked
         {
             get { return _headerChecked; }
             set { _headerChecked = value; RaisePropertyChanged("IsHeaderChecked"); }
@@ -115,8 +132,6 @@ namespace Ankh.WpfUI.Controls
                 {
                     _wc = new PendingChangeWrapCollection(this, value);
                     _puc.PendingChangesList.ItemsSource = new ReadOnlyObservableWrapper<PendingChangeItem>(_wc);
-                    _puc.PendingChangesList.DataContext = this;
-                    _puc.DataContext = this;
                 }
                 else
                 {
@@ -145,5 +160,78 @@ namespace Ankh.WpfUI.Controls
         {
             OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
+
+        #region Selection owner
+        System.Collections.IList ISelectionMapOwner<PendingChangeItem>.Selection
+        {
+            get { return _puc.PendingChangesList.SelectedItems; }
+        }
+
+        System.Collections.IList ISelectionMapOwner<PendingChangeItem>.AllItems
+        {
+            get { return _puc.PendingChangesList.SelectedItems; }
+        }
+
+        bool ISelectionMapOwner<PendingChangeItem>.SelectionContains(PendingChangeItem item)
+        {
+            return false;
+        }
+
+        IntPtr ISelectionMapOwner<PendingChangeItem>.GetImageList()
+        {
+            return IntPtr.Zero;
+        }
+
+        int ISelectionMapOwner<PendingChangeItem>.GetImageListIndex(PendingChangeItem item)
+        {
+            return -1;
+        }
+
+        string ISelectionMapOwner<PendingChangeItem>.GetText(PendingChangeItem item)
+        {
+            return item.FullPath;
+        }
+
+        object ISelectionMapOwner<PendingChangeItem>.GetSelectionObject(PendingChangeItem item)
+        {
+            return item.PendingChange;
+        }
+
+        PendingChangeItem ISelectionMapOwner<PendingChangeItem>.GetItemFromSelectionObject(object item)
+        {
+            PendingChange pc = (PendingChange)item;
+            PendingChangeItem pci = null;
+
+            if (pc != null && _wc != null)
+                _wc.TryGetValue(pc.FullPath, out pci);
+
+            return pci;
+        }
+
+        delegate bool SetSelectedItems(System.Collections.IEnumerable items);
+        SetSelectedItems _setSelectedItems;
+        void ISelectionMapOwner<PendingChangeItem>.SetSelection(PendingChangeItem[] items)
+        {
+            if (_setSelectedItems == null)
+            {
+                MethodInfo setInfo = typeof(System.Windows.Controls.ListBox).GetMethod("SetSelectedItems", BindingFlags.NonPublic | BindingFlags.Instance);
+                _setSelectedItems = (SetSelectedItems)Delegate.CreateDelegate(typeof(SetSelectedItems), _puc.PendingChangesList, setInfo);
+            }
+
+            _setSelectedItems(items);
+        }
+
+        EventHandler _handleDestroyed;
+        event EventHandler ISelectionMapOwner<PendingChangeItem>.HandleDestroyed
+        {
+            add { _handleDestroyed += value; }
+            remove { _handleDestroyed -= value; }
+        }
+
+        string ISelectionMapOwner<PendingChangeItem>.GetCanonicalName(PendingChangeItem item)
+        {
+            return item.FullPath;
+        }
+#endregion
     }
 }
