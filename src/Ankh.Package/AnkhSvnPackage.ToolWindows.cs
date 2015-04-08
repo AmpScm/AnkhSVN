@@ -374,7 +374,7 @@ namespace Ankh.VSPackage
         #endregion
     }
 
-    class AnkhToolWindowPane : ToolWindowPane, IOleCommandTarget, IVsWindowFrameNotify3, IVsWindowFrameNotify2, IVsWindowFrameNotify
+    abstract class AnkhToolWindowPane : ToolWindowPane, IOleCommandTarget, IVsWindowFrameNotify3, IVsWindowFrameNotify2, IVsWindowFrameNotify
     {
         readonly AnkhToolWindowHost _host;
         AnkhToolWindowControl _control;
