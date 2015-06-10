@@ -2,19 +2,23 @@
 
 Usage of the Ankh build environment requires at least:
 
-  * Visual Studio 2012, 2010, 2008 (or 2005) Standard Edition or Higher
-    (The C# and C/C++ parts must be installed)
-  * Visual Studio 2012, 2010 or 2008 SDK for developing in VS 2012, 2010, 2008.
-  * Visual Studio 2005 SP1 SDK (4.0) for developing in Visual Studio 2005.
+  * Visual Studio 2005 Standard or higher (e.g. VS 2013), or Visual Studio
+    2013 Community Edition or higher
+    (The C# and C/C++ parts must be installed. Visual Studio Express doesn't
+     support third party plugins)
+  * The Visual Studio SDK for your Visual Studio version. Latest SDK version
+    for 2005 and 2008 required (or you see build errors); for others latest
+    recommended. Before Visual Studio 2015 this is a separate download; from
+    2015 the SDK is available as setup option in the Visual Studio setup.
   * A subversion client (e.g. AnkhSVN itself)
   * When using the VS 2005 SDK administrative permissions are required. Later
     SDK versions work without administrative permissions.
   
 If you wish to build your own installers:
 
-  * Votive 3.6 (Including Wix 3.6)
-  * Replicating our published setups requires VS2008 with the 2008 SDK and
-    VS2010 with the 2010 SDK.
+  * Votive 3.7R2 (Including Wix 3.7)
+  * Replicating our published setups requires VS2008 with the VS 2008 SDK and
+    VS2010 with the VS 2010 SDK.
 
 Now you are ready to check out AnkhSVN itself. Type the following:
 
@@ -45,11 +49,11 @@ You can start Visual Studio with the experimental hive if you select the
 VS SDK group in the start menu. But it is easier to copy these settings to the
 debug command of the AnkhSvn project by performing the following:
 
-	1. Right-click the Ankh.Package project and select the "Properties" option.
-	2. Select the Debug tab and put the path to devenv.exe for your appropriate
-	   version of VS.NET into the "Start External Program" field.
-	3. Based on the version of VS.NET, input the proper arguments into the
-	   "Command line arguments" field.  (Options documented below.)
+    1. Right-click the Ankh.Package project and select the "Properties" option.
+    2. Select the Debug tab and put the path to devenv.exe for your appropriate
+       version of VS.NET into the "Start External Program" field.
+    3. Based on the version of VS.NET, input the proper arguments into the
+       "Command line arguments" field.  (Options documented below.)
 
 Experimental Hive Options
 
@@ -62,12 +66,12 @@ VS2010:
    Default arguments: /rootSuffix Exp
 
 VS2008: 
-	Default path to devenv: "%programfiles%\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe"
-	Default arguments: /rootSuffix Exp /RANU
+    Default path to devenv: "%programfiles%\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe"
+    Default arguments: /rootSuffix Exp /RANU
 
 VS2005:
-	Default path to devenv: "%programfiles%\Microsoft Visual Studio 8\Common7\IDE\devenv.exe"
-	Default arguments: /rootSuffix Exp
+    Default path to devenv: "%programfiles%\Microsoft Visual Studio 8\Common7\IDE\devenv.exe"
+    Default arguments: /rootSuffix Exp
 
 
 ** Installing your own build in Visual Studio **
@@ -89,3 +93,4 @@ VS2005:
 "%programfiles%\Microsoft Visual Studio 8.0\Common7\IDE\devenv.com" /setup
 
 (To remove the package from your Visual Studio you can replace /codebase with /unregister)
+
