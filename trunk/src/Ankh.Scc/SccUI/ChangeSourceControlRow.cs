@@ -142,7 +142,9 @@ namespace Ankh.Scc.SccUI
                         : ""
                     );
             }
-            else if (null != (projectInfo = ProjectMap.GetProjectInfo(_project)) && null != (projectInfo.ProjectDirectory))
+            else if (null != (projectInfo = ProjectMap.GetProjectInfo(_project)) 
+                     && null != (projectInfo.ProjectDirectory)
+                     && null != (projectInfo.SccBaseDirectory))
             {
                 SvnItem dirItem = Cache[projectInfo.SccBaseDirectory];
 
