@@ -30,11 +30,11 @@
     <PropertyRef Id="VS2010DEVENV" />
     <PropertyRef Id="VS2010_EXTENSIONS_DIR" />
 
-    <PropertyRef Id="VS11DEVENV" />
-    <PropertyRef Id="VS11_EXTENSIONS_DIR" />
+    <PropertyRef Id="VS2012DEVENV" />
+    <PropertyRef Id="VS2012_EXTENSIONS_DIR" />
 
-    <PropertyRef Id="VS12DEVENV" />
-    <PropertyRef Id="VS12_EXTENSIONS_DIR" />
+    <PropertyRef Id="VS2013DEVENV" />
+    <PropertyRef Id="VS2013_EXTENSIONS_DIR" />
 
     <PropertyRef Id="VS14DEVENV" />
     <PropertyRef Id="VS14_EXTENSIONS_DIR" />
@@ -100,11 +100,11 @@
           </Directory>
         </Directory>
       </Directory>
-      <Directory Name="Extensions" Id="VS11_EXTENSIONS_DIR">
+      <Directory Name="Extensions" Id="VS2012_EXTENSIONS_DIR">
         <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_2012">
           <Directory Name="2.X" Id="ANKHSVN_EXTENSION_2012">
             <Component Id="C_Reg2012" Guid="06D5D441-6469-49B5-9FA7-FF8B2FD7382E">
-              <Condition>VS11DEVENV</Condition>
+              <Condition>VS2012DEVENV</Condition>
               <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS2012-Info" Value="[ANKHSVN_EXTENSION_2012]" Type="string" KeyPath="yes" />
               <CopyFile Id="Vsix_Mnf_2012" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
               <CopyFile Id="Vsix_Lic_2012" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2012" />
@@ -114,11 +114,11 @@
           </Directory>
         </Directory>
       </Directory>
-      <Directory Name="Extensions" Id="VS12_EXTENSIONS_DIR">
+      <Directory Name="Extensions" Id="VS2013_EXTENSIONS_DIR">
         <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_2013">
           <Directory Name="2.X" Id="ANKHSVN_EXTENSION_2013">
             <Component Id="C_Reg2013" Guid="D98F2A8C-3C9F-4291-AB4C-0CE74232CE38">
-              <Condition>VS12DEVENV</Condition>
+              <Condition>VS2013DEVENV</Condition>
               <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS12.0-Info" Value="[ANKHSVN_EXTENSION_2013]" Type="string" KeyPath="yes" />
               <CopyFile Id="Vsix_Mnf_12.0" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
               <CopyFile Id="Vsix_Lic_12.0" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_2013" />
