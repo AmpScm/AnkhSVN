@@ -223,24 +223,26 @@ namespace Ankh.Commands
 
                 if (newRepositoryRoot != null && DialogResult.Yes == e.Context.GetService<IAnkhDialogOwner>()
                    .MessageBox.Show(string.Format("The repository root specified is different from the one in your " +
-                   "working copy. Would you like to relocate from '{0}' to '{1}'?",
+                   "working copy. Would you like to relocate '{0}' from '{1}' to '{2}'?",
+                   pathItem.WorkingCopy.FullPath,
                    pathItem.WorkingCopy.RepositoryRoot, newRepositoryRoot),
                    "Relocate", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                 {
                     // We can fix this by relocating
+                    string wcRoot = pathItem.WorkingCopy.FullPath;
                     try
                     {
                         e.GetService<IProgressRunner>().RunModal(
                             CommandStrings.RelocatingTitle,
                             delegate(object sender, ProgressWorkerArgs a)
                             {
-                                a.Client.Relocate(path, pathItem.WorkingCopy.RepositoryRoot, newRepositoryRoot);
+                                a.Client.Relocate(wcRoot, pathItem.WorkingCopy.RepositoryRoot, newRepositoryRoot);
                             });
                     }
                     finally
                     {
-                        statusCache.MarkDirtyRecursive(path);
-                        e.GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(SvnItem.GetPaths(statusCache.GetCachedBelow(path)));
+                        statusCache.MarkDirtyRecursive(wcRoot);
+                        e.GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(SvnItem.GetPaths(statusCache.GetCachedBelow(wcRoot)));
                     }
 
 
