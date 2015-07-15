@@ -291,7 +291,6 @@ namespace Ankh.GitScc.StatusCache
             args.IncludeIgnored = true;
             //args.IncludeDirectories = true;
             args.IncludeSubmodules = true;
-            args.IncludeConflicts = true;
             args.GenerateVersionedDirs = true;
 
             lock (_lock)
