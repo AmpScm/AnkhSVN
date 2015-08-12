@@ -394,31 +394,31 @@ namespace Ankh.Selection
             if (src == null || cObjects > src.Count)
                 return VSErr.E_FAIL;
 
-            if (_sel == null && src == _data.Selection)
+            if (src == _data.Selection)
             {
-                if (_ht == null)
-                    _ht = new Hashtable();
-
-                // Create cache of wrapper objects
-                object[] from = new object[src.Count];
-                _sel = new object[src.Count];
-
-                src.CopyTo(from, 0);
-
-                for (int i = 0; i < from.Length; i++)
+                if (_sel == null || _sel.Length != src.Count)
                 {
-                    object s = from[i];
+                    if (_ht == null)
+                        _ht = new Hashtable();
 
-                    _sel[i] = _ht[s] ?? _data.GetSelectionObject(s);
+                    // Create cache of wrapper objects
+                    object[] from = new object[src.Count];
+                    _sel = new object[src.Count];
+
+                    src.CopyTo(from, 0);
+
+                    for (int i = 0; i < from.Length; i++)
+                    {
+                        object s = from[i];
+
+                        _sel[i] = _ht[s] ?? _data.GetSelectionObject(s);
+                    }
+                    _ht.Clear();
+
+                    for (int i = 0; i < from.Length; i++)
+                        _ht[from[i]] = _sel[i];
                 }
-                _ht.Clear();
 
-                for (int i = 0; i < from.Length; i++)
-                    _ht[from[i]] = _sel[i];
-            }
-
-            if (_sel != null && src == _data.Selection)
-            {
                 Array.Copy(_sel, apUnkObjects, cObjects);
 
                 return VSErr.S_OK;
