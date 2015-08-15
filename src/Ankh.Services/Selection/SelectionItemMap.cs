@@ -442,6 +442,7 @@ namespace Ankh.Selection
             for (int i = 0; i < cSelect; i++)
                 items[i] = _data.GetRealObject(apUnkSelect[i]);
 
+            _sel = null;
             _data.SetSelection(items);
 
             return VSErr.S_OK; // E_NOTIMPL kills VS from the property explorer
