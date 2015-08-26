@@ -80,7 +80,7 @@
           <arg line="--keep 28.0:00" />
           <!--arg line="- -result resulting.uri" /-->
           
-          <arg line="--folder 562" />
+          <arg line="--folder 794" />
           
           <arg value="--name" />
             <arg value="AnkhSVN-${artifactLabel}-Daily.msi" />
@@ -96,7 +96,7 @@
           <arg line="--keep 28.0:00" />
           <!--arg line="- -result resulting.uri" /-->
           
-          <arg line="--folder 563" />
+          <arg line="--folder 795" />
           
           <arg value="--name" />
             <arg value="AnkhSVN-${artifactLabel}-Symbols.zip" />
