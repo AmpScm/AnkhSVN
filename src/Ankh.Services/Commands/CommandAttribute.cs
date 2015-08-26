@@ -20,18 +20,6 @@ using System.Text;
 
 namespace Ankh.Commands
 {
-    [Flags]
-    public enum CommandAvailability
-    {
-        None,
-        SvnActive       = 0x01,
-        GitActive       = 0x02,
-
-        AlwaysFlag      = 0x800,
-        Always          = 0xFFFF
-    }
-
-
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class CommandAttribute : AnkhInstanceConditionalAttribute
     {
@@ -100,7 +88,18 @@ namespace Ankh.Commands
             set { _showWhenDisabled = !value; }
         }
 
-        CommandAvailability _availability;
+        bool _showWhenUnavailable;
+        /// <summary>
+        /// Gets or sets a value indicating whether [hide when unavailable].
+        /// </summary>
+        /// <value><c>true</c> if [hide when disabled]; otherwise, <c>false</c>.</value>
+        public bool HiddenWhenUnavailable
+        {
+            get { return !_showWhenUnavailable; }
+            set { _showWhenUnavailable = !value; }
+        }
+
+        bool _alwaysAvailable;
 
         /// <summary>
         /// Gets or sets a boolean indicating whether this command might be enabled if AnkhSVN is not the current SCC provider
@@ -108,23 +107,8 @@ namespace Ankh.Commands
         /// <remarks>If set to false the command is disabled (and when <see cref="HideWhenDisabled"/> also hidden)</remarks>
         public bool AlwaysAvailable
         {
-            get { return (_availability == CommandAvailability.Always); }
-            set
-            {
-                if (value)
-                    _availability = CommandAvailability.Always;
-                else if ((_availability & CommandAvailability.AlwaysFlag) != 0)
-                    throw new InvalidOperationException();
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public CommandAvailability Availability
-        {
-            get { return _availability; }
-            protected set { _availability = value; }
+            get { return _alwaysAvailable; }
+            set { _alwaysAvailable = value; }
         }
 
         string _argumentDefinition;

@@ -16,11 +16,50 @@
 
 using System;
 using System.Collections.Generic;
-using Ankh.Collections;
 using Ankh.UI;
 
 namespace Ankh.Scc
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    public class PendingChangeEventArgs : EventArgs
+    {
+        readonly IPendingChangesManager _context;
+        readonly PendingChange _change;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PendingChangeEventArgs"/> class.
+        /// </summary>
+        /// <param name="service">The service.</param>
+        /// <param name="change">The change.</param>
+        public PendingChangeEventArgs(IPendingChangesManager service, PendingChange change)
+        {
+            if (service == null)
+                throw new ArgumentNullException("service");
+
+            _change = change; // change can be null
+            _context = service;
+        }
+
+        /// <summary>
+        /// Gets the manager.
+        /// </summary>
+        /// <value>The manager.</value>
+        public IPendingChangesManager Manager
+        {
+            get { return _context; }
+        }
+
+        /// <summary>
+        /// Gets the change.
+        /// </summary>
+        /// <value>The change.</value>
+        public PendingChange Change
+        {
+            get { return _change; }
+        }
+    }
+
     public sealed class BatchStartedEventArgs : EventArgs, IDisposable
     {
         Stack<AnkhAction> _closers = new Stack<AnkhAction>();
@@ -97,9 +136,10 @@ namespace Ankh.Scc
         bool IsActive { get; set; }
 
         /// <summary>
-        /// Gets a the actual list of all current pending changes
+        /// Gets a list of all current pending changes
         /// </summary>
-        PendingChangeCollection PendingChanges { get; }
+        /// <returns></returns>
+        IEnumerable<PendingChange> GetAll();
 
         /// <summary>
         /// Gets a list of all current pending changes below a specific path
@@ -124,14 +164,48 @@ namespace Ankh.Scc
         void Refresh(IEnumerable<string> paths);
 
         /// <summary>
+        /// Gets the pending change information for the specified path or <c>null</c> if none is available
+        /// </summary>
+        /// <param name="fullPath"></param>
+        /// <returns></returns>
+        PendingChange this[string fullPath] { get; }
+
+        /// <summary>
+        /// Raised when a pending change item has been added
+        /// </summary>
+        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
+        event EventHandler<PendingChangeEventArgs> Added;
+        /// <summary>
+        /// Raised when a pending change item has been removed
+        /// </summary>
+        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
+        event EventHandler<PendingChangeEventArgs> Removed;
+        /// <summary>
+        /// Raised when the properties of a pending change have changed
+        /// </summary>
+        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
+        event EventHandler<PendingChangeEventArgs> Changed;
+        /// <summary>
+        /// Raised when the complete pending change state has been flushed; All listeners should
+        /// use GetAll() to get a new initial state
+        /// </summary>
+        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
+        event EventHandler<PendingChangeEventArgs> ListFlushed;
+
+        /// <summary>
         /// Raised around 'large' updates
         /// </summary>
         event EventHandler<BatchStartedEventArgs> BatchUpdateStarted;
 
         /// <summary>
+        /// Occurs when [initial update].
+        /// </summary>
+        event EventHandler<PendingChangeEventArgs> InitialUpdate;
+
+        /// <summary>
         /// Raised when the pending changes manager is activated or disabled
         /// </summary>
-        event EventHandler IsActiveChanged;
+        event EventHandler<PendingChangeEventArgs> IsActiveChanged;
 
         /// <summary>
         /// Clears all state; called on solution close

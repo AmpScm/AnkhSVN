@@ -22,15 +22,11 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.VSPackage
 {
-    [ProvideOptionPage(typeof(UserToolsSettingsPage), AnkhSvnPackage.SccOptionGroup, "Subversion User Tools", 106, 108, false)]
-    [ProvideToolsOptionsPageVisibility(AnkhSvnPackage.SccOptionGroup, "Subversion User Tools", AnkhId.SccProviderId)]
-    [ProvideToolsOptionsPageVisibility(AnkhSvnPackage.SccOptionGroup, "Subversion User Tools", AnkhId.GitSccProviderId)]
-    [ProvideOptionPage(typeof(SvnSettingsPage), AnkhSvnPackage.SccOptionGroup, "Subversion", 106, 107, false)]
-    [ProvideToolsOptionsPageVisibility(AnkhSvnPackage.SccOptionGroup, "Subversion", AnkhId.SccProviderId)]
-    [ProvideOptionPage(typeof(GitSettingsPage), AnkhSvnPackage.SccOptionGroup, "AnkhGIT", 106, 109, false)]
-    [ProvideToolsOptionsPageVisibility(AnkhSvnPackage.SccOptionGroup, "AnkhGIT", AnkhId.GitSccProviderId)]
+    [ProvideOptionPage(typeof(UserToolsSettingsPage), "Source Control", "Subversion User Tools", 106, 108, false)]
+    [ProvideToolsOptionsPageVisibility("Source Control", "Subversion User Tools", AnkhId.SccProviderId)]
+    [ProvideOptionPage(typeof(EnvironmentSettingsPage), "Source Control", "Subversion", 106, 107, false)]
+    [ProvideToolsOptionsPageVisibility("Source Control", "Subversion", AnkhId.SccProviderId)]
     partial class AnkhSvnPackage
     {
-        internal const string SccOptionGroup = "Source Control";
     }
 }

@@ -64,10 +64,10 @@ namespace Ankh.UI.Commands
             set { this.toBox.Text = value; }
         }
 
-        ISvnStatusCache _fc;
-        ISvnStatusCache FileCache
+        IFileStatusCache _fc;
+        IFileStatusCache FileCache
         {
-            get { return _fc ?? (_fc = Context.GetService<ISvnStatusCache>()); }
+            get { return _fc ?? (_fc = Context.GetService<IFileStatusCache>()); }
         }
 
         SvnOrigin _baseOrigin;

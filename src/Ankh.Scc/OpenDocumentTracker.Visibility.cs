@@ -73,7 +73,7 @@ namespace Ankh.Scc
 
             if (prj != null)
             {
-                SccProject project = new Ankh.Selection.SccProject(null, prj);
+                SvnProject project = new Ankh.Selection.SvnProject(null, prj);
 
                 foreach (string file in GetService<IProjectFileMapper>().GetAllFilesOf(project))
                 {

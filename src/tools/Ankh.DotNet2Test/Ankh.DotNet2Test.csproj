@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="../../tools/Ankh-Common.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{44F45502-66EA-4C89-9C7C-9E1526C931F3}</ProjectGuid>
@@ -27,8 +26,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-    <AutoGenerateBindingRedirects Condition="'$(UseVsSdkVersion)' &gt;= '14.0'">true</AutoGenerateBindingRedirects>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\Release\</OutputPath>
@@ -38,8 +36,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-    <AutoGenerateBindingRedirects Condition="'$(UseVsSdkVersion)' &gt;= '14.0'">true</AutoGenerateBindingRedirects>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop" />
@@ -48,33 +45,14 @@
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop" />
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0" />
     <Reference Include="$(MsVsShellAssembly)" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="'$(UseVsSdkVersion)' &gt;= '9.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="'$(UseVsSdkVersion)' != '8.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="'$(UseVsSdkVersion)' &gt;= '10.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.11.0" Condition="'$(UseVsSdkVersion)' &gt;= '11.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0'">
       <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0" Condition="'$(UseVsSdkVersion)' &gt;= '12.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' &gt;= '10.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" Condition="'$(UseVsSdkVersion)' &gt;= '11.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" Condition="'$(UseVsSdkVersion)' &gt;= '12.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0" Condition="'$(UseVsSdkVersion)' &gt;= '14.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="SharpGit">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\autolib\SharpGit\SharpGit.dll</HintPath>
     </Reference>
     <Reference Include="SharpSvn">
       <SpecificVersion>False</SpecificVersion>

@@ -28,70 +28,19 @@ using Ankh.Configuration;
 using Ankh.Scc;
 using Ankh.UI.PendingChanges.Commits;
 using Ankh.VS;
-using Ankh.Collections;
 
 namespace Ankh.UI.PendingChanges
 {
-    partial class PendingCommitsPage : PendingChangesPage
+    partial class PendingCommitsPage : PendingChangesPage, ILastChangeInfo
     {
-        PendingCommitsView pendingCommits;
-        IPendingChangeControl pendingChangeControl;
-        IPendingChangeUI _ui;
-
         public PendingCommitsPage()
         {
             InitializeComponent();
-        }
-
-        bool _insertedPendingChanges;
-        void InsertPendingChanges()
-        {
-            if (_insertedPendingChanges)
-                return;
-            _insertedPendingChanges = true;
-            splitContainer.SuspendLayout();
-            splitContainer.Panel2.Controls.Clear();
-
-            Control pendingCommitsControl;
-#if DEBUG
-            if (!VSVersion.VS2010OrLater)
-#else
-            if (true)
-#endif
-            {
-                pendingCommitsControl = pendingCommits = new PendingCommitsView(this.components);
-                _ui = pendingCommits;
-            }
-            else
-            {
-                // Load WPF control
-                IPendingChangeControlFactory factory = Context.GetService<IPendingChangeControlFactory>();
-
-                pendingChangeControl = factory.Create(Context, this.components);
-
-                pendingCommitsControl = pendingChangeControl.Control;
-                _ui = pendingChangeControl.UI;
-            }
-
-            splitContainer.Panel2.Controls.Add(pendingCommitsControl);
-
-            pendingCommitsControl.Dock = changeListDummy.Dock;
-            pendingCommitsControl.Location = changeListDummy.Location;
-            pendingCommitsControl.Size = changeListDummy.Size;
-
-            changeListDummy.Dispose();
-            changeListDummy = null;
-            this.splitContainer.ResumeLayout(true);
 
             if (VSVersion.VS2012OrLater)
             {
-                if (pendingCommits != null)
-                    pendingCommits.BorderStyle = BorderStyle.None;
+                pendingCommits.BorderStyle = BorderStyle.None;
                 borderPanel.BorderStyle = BorderStyle.None;
-            }
-            else
-            {
-
             }
         }
 
@@ -106,27 +55,12 @@ namespace Ankh.UI.PendingChanges
             get { return _commandService ?? (_commandService = Context.GetService<IAnkhCommandService>()); }
         }
 
-        protected IPendingChangeUI UI
-        {
-            get { return _ui; }
-        }
-
         protected override void OnLoad(EventArgs e)
         {
-            InsertPendingChanges();
-
             base.OnLoad(e);
 
             if (pendingCommits != null)
             {
-                pendingCommits.AllowColumnReorder = true;
-                pendingCommits.CheckBoxes = true;
-                pendingCommits.HideSelection = false;
-                pendingCommits.Name = "pendingCommits";
-                pendingCommits.ShowItemToolTips = true;
-                pendingCommits.ShowSelectAllCheckBox = true;
-                pendingCommits.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pendingCommits_KeyUp);
-
                 pendingCommits.SelectionPublishServiceProvider = Context;
                 pendingCommits.Context = Context;
                 pendingCommits.OpenPendingChangeOnDoubleClick = true;
@@ -134,13 +68,9 @@ namespace Ankh.UI.PendingChanges
                 pendingCommits.ColumnWidthChanged += new ColumnWidthChangedEventHandler(pendingCommits_ColumnWidthChanged);
                 IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
                 pendingCommits.SetColumnWidths(widths);
-
-                logMessageEditor.PendingChangeUI = this.pendingCommits;
             }
-            else
-                logMessageEditor.PendingChangeUI = this.pendingChangeControl.UI;
 
-            Context.GetService<AnkhServiceEvents>().LastChanged += OnLastChanged;
+            Context.GetService<IServiceContainer>().AddService(typeof(ILastChangeInfo), this);
 
             VSCommandHandler.Install(Context, this, new CommandID(VSConstants.VSStd2K, 1635 /* cmdidExploreFolderInWindows */), OnOpenFolder, OnUpdateOpenFolder);
 
@@ -171,39 +101,38 @@ namespace Ankh.UI.PendingChanges
         }
 
         IPendingChangesManager _manager;
-        
         private void HookList()
         {
             if (_manager != null || Context == null)
                 return;
+
+            if (pendingCommits.SmallImageList == null)
+            {
+                IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
+
+                pendingCommits.SmallImageList = mapper.ImageList;
+            }
 
             _manager = Context.GetService<IPendingChangesManager>();
 
             if (_manager == null)
                 return;
 
-            UI.Items = _manager.PendingChanges;
-
-            if (pendingCommits != null)
-            {
-                if (pendingCommits.SmallImageList == null)
-                {
-                    IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
-
-                    pendingCommits.SmallImageList = mapper.ImageList;
-                }
-
-                _manager.IsActiveChanged += OnPendingChangesActiveChanged;
-                _manager.BatchUpdateStarted += new EventHandler<BatchStartedEventArgs>(OnBatchUpdateStarted);
-            }
-
-            _manager.PendingChanges.ItemChanged += OnPendingChangesChanged;
+            _manager.Added += new EventHandler<PendingChangeEventArgs>(OnPendingChangeAdded);
+            _manager.Removed += new EventHandler<PendingChangeEventArgs>(OnPendingChangeRemoved);
+            _manager.Changed += new EventHandler<PendingChangeEventArgs>(OnPendingChangesChanged);
+            _manager.InitialUpdate += new EventHandler<PendingChangeEventArgs>(OnPendingChangesInitialUpdate);
+            _manager.IsActiveChanged += new EventHandler<PendingChangeEventArgs>(OnPendingChangesActiveChanged);
+            _manager.ListFlushed += new EventHandler<PendingChangeEventArgs>(OnPendingChangesListFlushed);
+            _manager.BatchUpdateStarted += new EventHandler<BatchStartedEventArgs>(OnBatchUpdateStarted);
 
             if (!_manager.IsActive)
             {
                 _manager.IsActive = true;
                 _manager.FullRefresh(false);
             }
+            else
+                PerformInitialUpdate(_manager);
 
             AnkhServiceEvents ev = Context.GetService<AnkhServiceEvents>();
 
@@ -212,10 +141,33 @@ namespace Ankh.UI.PendingChanges
             OnSolutionRefresh(this, EventArgs.Empty);
         }
 
+        int _inBatchUpdate;
+        List<PendingCommitItem> _toAdd;
         void OnBatchUpdateStarted(object sender, BatchStartedEventArgs e)
         {
-            if (this.pendingCommits != null)
-                e.Disposers += this.pendingCommits.BeginBatch();
+            pendingCommits.BeginUpdate();
+            _inBatchUpdate++;
+            e.Disposers += OnBatchEnd;
+        }
+
+        void OnBatchEnd()
+        {
+            try
+            {
+                if (--_inBatchUpdate == 0)
+                {
+                    if (_toAdd != null)
+                    {
+                        PendingCommitItem[] toAdd = _toAdd.ToArray();
+                        _toAdd = null;
+                        pendingCommits.Items.AddRange(toAdd);
+                    }
+                }
+            }
+            finally
+            {
+                pendingCommits.EndUpdate();
+            }
         }
 
         void OnSolutionRefresh(object sender, EventArgs e)
@@ -271,23 +223,165 @@ namespace Ankh.UI.PendingChanges
             set { splitContainer.Panel1Collapsed = !value; }
         }
 
-         void OnPendingChangesActiveChanged(object sender, EventArgs e)
+        readonly Dictionary<string, PendingCommitItem> _listItems = new Dictionary<string, PendingCommitItem>(StringComparer.OrdinalIgnoreCase);
+
+        void OnPendingChangeAdded(object sender, PendingChangeEventArgs e)
+        {
+            PendingCommitItem pci;
+
+            string path = e.Change.FullPath;
+
+            if (_listItems.TryGetValue(path, out pci))
+            {
+                // Should never happend; will refresh checkbox, etc.
+                _listItems.Remove(path);
+                pci.Remove();
+            }
+
+            pci = new PendingCommitItem(pendingCommits, e.Change);
+            _listItems.Add(path, pci);
+            if (_inBatchUpdate > 0)
+            {
+                if (_toAdd == null)
+                    _toAdd = new List<PendingCommitItem>();
+                _toAdd.Add(pci);
+            }
+            else
+                pendingCommits.Items.Add(pci);
+
+            // TODO: Maybe add something like
+            //pendingCommits.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
+
+            OnPendingChangeActivity(sender, e);
+        }
+
+        HybridCollection<string> _checkedItems;
+        void OnPendingChangesListFlushed(object sender, PendingChangeEventArgs e)
+        {
+            if (_listItems.Count > 0)
+            {
+                _checkedItems = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (PendingCommitItem pci in _listItems.Values)
+                {
+                    if (pci.Checked && !_checkedItems.Contains(pci.FullPath))
+                        _checkedItems.Add(pci.FullPath);
+                }
+                _listItems.Clear();
+                pendingCommits.ClearItems();
+                _toAdd = null;
+            }
+        }
+
+        void OnPendingChangesActiveChanged(object sender, PendingChangeEventArgs e)
         {
             // Just ignore for now
-            Enabled = Manager.IsActive;
+            Enabled = e.Manager.IsActive;
         }
 
-        void OnPendingChangesChanged(object sender, ItemChangedEventArgs<PendingChange> e)
+        void OnPendingChangesInitialUpdate(object sender, PendingChangeEventArgs e)
         {
-            PendingChange pc = e.Item;
-
-            UI.OnChange(pc.FullPath);
+            PerformInitialUpdate(e.Manager);
         }
 
-        IAnkhSolutionSettings _settings;
-        IAnkhSolutionSettings Settings
+        void PerformInitialUpdate(IPendingChangesManager manager)
         {
-            get { return _settings ?? (_settings = Context.GetService<IAnkhSolutionSettings>()); }
+            if (manager == null)
+                throw new ArgumentNullException("manager");
+
+            pendingCommits.BeginUpdate();
+            _listItems.Clear(); // Make sure we are clear
+            pendingCommits.ClearItems();
+            try
+            {
+                List<ListViewItem> newItems = new List<ListViewItem>();
+                foreach (PendingChange pc in manager.GetAll())
+                {
+                    PendingCommitItem pi = new PendingCommitItem(pendingCommits, pc);
+                    _listItems.Add(pc.FullPath, pi);
+
+                    /* Store the old checked state (checked or unchecked) in pi */
+                    if (_checkedItems != null)
+                        pi.Checked = _checkedItems.Contains(pc.FullPath);
+
+                    newItems.Add(pi);
+                }
+
+                if (newItems.Count > 0)
+                    pendingCommits.Items.AddRange(newItems.ToArray());
+            }
+            finally
+            {
+                _checkedItems = null;
+                pendingCommits.EndUpdate();
+            }
+        }
+
+        void OnPendingChangesChanged(object sender, PendingChangeEventArgs e)
+        {
+            PendingCommitItem pci;
+
+            string path = e.Change.FullPath;
+
+            if (!_listItems.TryGetValue(path, out pci))
+            {
+                pci = new PendingCommitItem(pendingCommits, e.Change);
+                _listItems.Add(path, pci);
+                pendingCommits.Items.Add(pci);
+            }
+            else
+            {
+                if (PendingChange.IsIgnoreOnCommitChangeList(pci.PendingChange.ChangeList)
+                    && pci.Checked)
+                {
+                    // Uncheck items that were moved to the ignore list
+                    if (!PendingChange.IsIgnoreOnCommitChangeList(pci.LastChangeList))
+                        pci.Checked = false; // Uncheck items that weren't on the ignore list before
+
+                    // Note: We don't check items that were previously ignored, as the user didn't
+                    // ask us to do that.
+                }
+
+                pci.RefreshText(Context);
+            }
+            OnPendingChangeActivity(sender, e);
+        }
+
+        void OnPendingChangeRemoved(object sender, PendingChangeEventArgs e)
+        {
+            PendingCommitItem pci;
+
+            string path = e.Change.FullPath;
+
+            if (_listItems.TryGetValue(path, out pci))
+            {
+                _listItems.Remove(path);
+                pci.Remove();
+
+                // Currently probably not necessary, but just to be sure
+                if (_toAdd != null)
+                    _toAdd.Remove(pci);
+
+                pendingCommits.RefreshGroupsAvailable();
+            }
+            OnPendingChangeActivity(sender, e);
+        }
+
+        void OnPendingChangeActivity(object sender, PendingChangeEventArgs args)
+        {
+            IAnkhSolutionSettings settings = null;
+            if (true
+                && args.Change != null
+                && (settings = Context.GetService<IAnkhSolutionSettings>()) != null
+                && string.Equals(settings.ProjectRoot, args.Change.FullPath)
+                // TODO add filter for property changes
+                )
+            {
+                IAnkhIssueService iService = Context.GetService<IAnkhIssueService>();
+                if (iService != null)
+                {
+                    iService.MarkDirty();
+                }
+            }
         }
 
         public override bool CanRefreshList
@@ -297,7 +391,7 @@ namespace Ankh.UI.PendingChanges
 
         public override void RefreshList()
         {
-            Context.GetService<ISvnStatusCache>().ClearCache();
+            Context.GetService<IFileStatusCache>().ClearCache();
 
             IAnkhOpenDocumentTracker dt = Context.GetService<IAnkhOpenDocumentTracker>();
 
@@ -305,6 +399,17 @@ namespace Ankh.UI.PendingChanges
                 dt.RefreshDirtyState();
 
             Manager.FullRefresh(true);
+        }
+
+        private void pendingCommits_ResolveItem(object sender, PendingCommitsView.ResolveItemEventArgs e)
+        {
+            PendingChange pc = e.SelectionItem as PendingChange;
+
+            PendingCommitItem pci;
+            if (pc != null && this._listItems.TryGetValue(pc.FullPath, out pci))
+            {
+                e.Item = pci;
+            }
         }
 
         private void pendingCommits_KeyUp(object sender, KeyEventArgs e)
@@ -324,8 +429,12 @@ namespace Ankh.UI.PendingChanges
             switch (e.Command)
             {
                 case AnkhCommand.PcLogEditorPasteFileList:
-                    if (!UI.HasCheckedItems)
-                        e.Enabled = false;
+                    foreach (PendingCommitItem pci in _listItems.Values)
+                    {
+                        if (pci.Checked)
+                            return;
+                    }
+                    e.Enabled = false;
                     return;
                 case AnkhCommand.PcLogEditorPasteRecentLog:
                     return;
@@ -346,14 +455,14 @@ namespace Ankh.UI.PendingChanges
 
         #region ILastChangeInfo Members
 
-        void OnLastChanged(object sender, LastChangedEventArgs e)
+        void ILastChangeInfo.SetLastChange(string caption, string value)
         {
-            if (string.IsNullOrEmpty(e.Caption))
+            if (string.IsNullOrEmpty(caption))
                 lastRevBox.Enabled = lastRevBox.Visible = lastRevLabel.Enabled = lastRevLabel.Visible = false;
             else
             {
-                lastRevLabel.Text = e.Caption ?? "";
-                lastRevBox.Text = e.Value ?? "";
+                lastRevLabel.Text = caption ?? "";
+                lastRevBox.Text = value ?? "";
 
                 lastRevBox.Enabled = lastRevBox.Visible = lastRevLabel.Enabled = lastRevLabel.Visible = true;
             }
@@ -363,7 +472,15 @@ namespace Ankh.UI.PendingChanges
 
         public void DoCommit(bool keepLocks)
         {
-            List<PendingChange> changes = new List<PendingChange>(UI.CheckedItems);
+            List<PendingChange> changes = new List<PendingChange>();
+
+            foreach (PendingCommitItem pci in _listItems.Values)
+            {
+                if (pci.Checked)
+                {
+                    changes.Add(pci.PendingChange);
+                }
+            }
 
             IPendingChangeHandler pch = Context.GetService<IPendingChangeHandler>();
 
@@ -372,7 +489,7 @@ namespace Ankh.UI.PendingChanges
             a.KeepLocks = keepLocks;
 
             if (issueNumberBox.Visible)
-                a.IssueText = issueNumberBox.Text; // The pc handler verifies if it should be used
+                a.IssueText = issueNumberBox.Text; // The pc handler verifies if it should be used            
 
             if (pch.Commit(changes, a))
             {
@@ -395,7 +512,15 @@ namespace Ankh.UI.PendingChanges
             a.RelativeToPath = ss.ProjectRoot;
             a.AddUnversionedFiles = true;
 
-            List<PendingChange> changes = new List<PendingChange>(UI.CheckedItems);
+            List<PendingChange> changes = new List<PendingChange>();
+
+            foreach (PendingCommitItem pci in _listItems.Values)
+            {
+                if (pci.Checked)
+                {
+                    changes.Add(pci.PendingChange);
+                }
+            }
 
             if (Context.GetService<IPendingChangeHandler>().CreatePatch(changes, a))
             {
@@ -404,9 +529,15 @@ namespace Ankh.UI.PendingChanges
 
         internal bool CanCommit(bool keepingLocks)
         {
-            foreach (PendingChange pc in UI.CheckedItems)
+            if (_listItems.Count == 0)
+                return false;
+
+            foreach (PendingCommitItem pci in _listItems.Values)
             {
-                if (!keepingLocks || pc.SvnItem.IsLocked)
+                if (!pci.Checked)
+                    continue;
+
+                if (!keepingLocks || pci.PendingChange.SvnItem.IsLocked)
                     return true;
             }
 
@@ -418,12 +549,16 @@ namespace Ankh.UI.PendingChanges
             if (!CanCommit(false))
                 return false;
 
-            foreach (PendingChange pc in UI.CheckedItems)
+            foreach (PendingCommitItem pci in _listItems.Values)
             {
+                if (!pci.Checked)
+                    continue;
+                PendingChange pc = pci.PendingChange;
+
                 if (pc.SvnItem.IsModified)
                     return true;
                 else if (!pc.SvnItem.IsVersioned && pc.SvnItem.IsVersionable && pc.SvnItem.InSolution)
-                    return true; // Will be added
+                    return true; // Will be added                
             }
 
             return false;
@@ -431,9 +566,12 @@ namespace Ankh.UI.PendingChanges
 
         internal bool CanApplyToWorkingCopy()
         {
-            foreach (PendingChange pc in UI.CheckedItems)
+            foreach (PendingCommitItem pci in _listItems.Values)
             {
-                if (pc.CanApply)
+                if (!pci.Checked)
+                    continue;
+
+                if (pci.PendingChange.CanApply)
                     return true;
             }
 
@@ -442,7 +580,15 @@ namespace Ankh.UI.PendingChanges
 
         internal void ApplyToWorkingCopy()
         {
-            List<PendingChange> changes = new List<PendingChange>(UI.CheckedItems);
+            List<PendingChange> changes = new List<PendingChange>();
+
+            foreach (PendingCommitItem pci in _listItems.Values)
+            {
+                if (!pci.Checked)
+                    continue;
+
+                changes.Add(pci.PendingChange);
+            }
 
             PendingChangeApplyArgs args = new PendingChangeApplyArgs();
 
@@ -506,11 +652,6 @@ namespace Ankh.UI.PendingChanges
 
                 return null;
             }
-        }
-
-        internal PendingCommitsView PendingCommitsView
-        {
-            get { return pendingCommits; }
         }
     }
 }

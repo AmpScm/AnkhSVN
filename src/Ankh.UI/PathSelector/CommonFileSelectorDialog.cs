@@ -76,6 +76,13 @@ namespace Ankh.UI.PathSelector
             UpdateLayout();
 
             LoadItems(_items);
+
+            UpdateOkButton();
+        }
+
+        private void UpdateOkButton()
+        {
+            okButton.Enabled = pendingList.HasCheckedItems;
         }
 
         class ItemLister : AnkhService, IEnumerable<PendingChange>
@@ -104,21 +111,19 @@ namespace Ankh.UI.PathSelector
 
             public IEnumerator<PendingChange> GetEnumerator()
             {
-                PendingChangeCollection pcc = Manager.PendingChanges;
                 foreach (SvnItem item in _items)
                 {
                     if (item.IsFile && !item.IsLocked)
                     {
-                        PendingChange pc;
+                        PendingChange pc = Manager[item.FullPath];
 
-                        if (!pcc.TryGetValue(item.FullPath, out pc)
-                            && !_pcs.TryGetValue(item.FullPath, out pc))
+                        if (pc == null && !_pcs.TryGetValue(item.FullPath, out pc))
                         {
                             pc = new PendingChange(_rc, item);
                         }
 
                         if (pc == null)
-                            continue; // Not a pending change
+                            yield break; // Not a pending change
 
                         _pcs[item.FullPath] = pc;
 
@@ -376,11 +381,8 @@ namespace Ankh.UI.PathSelector
 
                 if (parent != null && parent.IsVersioned)
                     revisionPickerEnd.SvnOrigin = revisionPickerStart.SvnOrigin = new SvnOrigin(parent);
-
-                okButton.Enabled = true;
             }
-            else
-                okButton.Enabled = false;
+            UpdateOkButton();
         }
 
         private void suppressLabel_Click(object sender, EventArgs e)

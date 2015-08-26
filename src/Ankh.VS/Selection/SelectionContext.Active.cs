@@ -185,27 +185,14 @@ namespace Ankh.VS.Selection
             }
         }
 
-        public SvnItem ActiveDocumentSvnItem
+        public SvnItem ActiveDocumentItem
         {
             get
             {
                 string p = ActiveDocumentFilename;
 
                 if (p != null)
-                    return SvnCache[p];
-                else
-                    return null;
-            }
-        }
-
-        public GitItem ActiveDocumentGitItem
-        {
-            get
-            {
-                string p = ActiveDocumentFilename;
-
-                if (p != null)
-                    return GitCache[p];
+                    return _cache[p];
                 else
                     return null;
             }
@@ -424,7 +411,7 @@ namespace Ankh.VS.Selection
             public int GetCurrentSelection(out IntPtr ppHier, out uint pitemid, out IVsMultiItemSelect ppMIS, out IntPtr ppSC)
             {
                 ppHier = IntPtr.Zero;
-                pitemid = VSItemId.Nil;
+                pitemid = VSConstants.VSITEMID_NIL;
                 ppMIS = null;
                 ppSC = IntPtr.Zero;
 

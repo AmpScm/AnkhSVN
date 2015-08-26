@@ -26,9 +26,10 @@ namespace Ankh.Scc
 {
     partial class PendingChangeManager
     {
+        readonly PendingChangeCollection _pendingChanges = new PendingChangeCollection();
         readonly HybridCollection<string> _extraFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
         IFileIconMapper _iconMap;
-        ISvnStatusCache _cache;
+        IFileStatusCache _cache;
         IProjectFileMapper _mapper;
         IAnkhOpenDocumentTracker _tracker;
 
@@ -37,9 +38,9 @@ namespace Ankh.Scc
             get { return _iconMap ?? (_iconMap = GetService<IFileIconMapper>()); }
         }
 
-        protected ISvnStatusCache Cache
+        protected IFileStatusCache Cache
         {
-            get { return _cache ?? (_cache = GetService<ISvnStatusCache>()); }
+            get { return _cache ?? (_cache = GetService<IFileStatusCache>()); }
         }
 
         protected IProjectFileMapper Mapper
@@ -52,6 +53,11 @@ namespace Ankh.Scc
             get { return _tracker ?? (_tracker = GetService<IAnkhOpenDocumentTracker>()); }
         }
 
+        public IEnumerable<PendingChange> GetAll()
+        {
+            return new List<PendingChange>(_pendingChanges);
+        }
+
         PendingChange.RefreshContext _refreshContext;
         protected PendingChange.RefreshContext RefreshContext
         {
@@ -60,11 +66,14 @@ namespace Ankh.Scc
 
         void InnerRefresh()
         {
+            PendingChangeEventArgs pceMe = new PendingChangeEventArgs(this, null);
+
             using (BatchStartedEventArgs br = BatchRefresh())
             {
-                HybridCollection<string> mapped = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                bool wasClean = (_pendingChanges.Count == 0);
+                Dictionary<string, PendingChange> mapped = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
 
-                ISvnStatusCache cache = Cache;
+                IFileStatusCache cache = Cache;
 
                 foreach (string file in Mapper.GetAllFilesOfAllProjects())
                 {
@@ -76,10 +85,10 @@ namespace Ankh.Scc
                     if (item == null)
                         continue;
 
-                    PendingChange pc = UpdatePendingChange(item);
+                    PendingChange pc = UpdatePendingChange(wasClean, item);
 
                     if (pc != null)
-                        mapped.Add(pc.FullPath);
+                        mapped[pc.FullPath] = pc;
                 }
 
                 foreach (string file in new List<string>(_extraFiles))
@@ -93,12 +102,10 @@ namespace Ankh.Scc
                         continue;
                     }
 
-                    PendingChange pc = UpdatePendingChange(item);
+                    PendingChange pc = UpdatePendingChange(wasClean, item);
 
                     if (pc != null)
-                        mapped.Add(pc.FullPath);
-                    else
-                        _extraFiles.Remove(file);
+                        mapped[pc.FullPath] = pc;
                 }
 
                 for (int i = 0; i < _pendingChanges.Count; i++)
@@ -106,29 +113,40 @@ namespace Ankh.Scc
                     br.Tick();
                     PendingChange pc = _pendingChanges[i];
 
-                    if (mapped.Contains(pc.FullPath))
+                    if (mapped.ContainsKey(pc.FullPath))
                         continue;
 
                     _pendingChanges.RemoveAt(i--);
+                    if (!wasClean)
+                    {
+                        OnRemoved(new PendingChangeEventArgs(this, pc));
+                    }
                 }
+
+                if (wasClean && _pendingChanges.Count > 0)
+                    OnInitialUpdate(pceMe);
             }
         }
 
-        private PendingChange UpdatePendingChange(SvnItem item)
+        private PendingChange UpdatePendingChange(bool wasClean, SvnItem item)
         {
             PendingChange pc;
             string file = item.FullPath;
             if (_pendingChanges.TryGetValue(file, out pc))
             {
-                if (pc.Refresh(RefreshContext, item))
+                if (pc.Refresh(RefreshContext, item) && !wasClean)
                 {
-                    if (!pc.IsClean)
-                        RaiseChanged(pc);
-                    else
-                        pc = null;
+                    if (pc.IsClean)
+                    {
+                        _pendingChanges.Remove(file);
+                        _extraFiles.Remove(file);
+
+                        // No need to check wasClean
+                        OnRemoved(new PendingChangeEventArgs(this, pc));
+                    }
+                    else if (!wasClean)
+                        OnChanged(new PendingChangeEventArgs(this, pc));
                 }
-                else if (pc.IsClean)
-                    pc = null;
             }
             else if (PendingChange.CreateIfPending(RefreshContext, item, out pc))
             {
@@ -136,6 +154,9 @@ namespace Ankh.Scc
 
                 if (!_pendingChanges.Contains(pc))
                     _pendingChanges.Add(pc);
+
+                if (!wasClean)
+                    OnAdded(new PendingChangeEventArgs(this, pc));
             }
             
             return pc;
@@ -152,7 +173,11 @@ namespace Ankh.Scc
 
             if (!inProject && !inExtra)
             {
-                _pendingChanges.Remove(file);
+                if (_pendingChanges.TryGetValue(file, out pc))
+                {
+                    _pendingChanges.Remove(file);
+                    OnRemoved(new PendingChangeEventArgs(this, pc));
+                }
 
                 return;
             }
@@ -170,15 +195,28 @@ namespace Ankh.Scc
                     {
                         _pendingChanges.Remove(file);
                         _extraFiles.Remove(file);
+
+                        // No need to check wasClean or external files; not possible in this case
+                        OnRemoved(new PendingChangeEventArgs(this, pc));
                     }
                     else
-                        RaiseChanged(pc);
+                        OnChanged(new PendingChangeEventArgs(this, pc));
                 }
             }
             else if (PendingChange.CreateIfPending(RefreshContext, item, out pc))
             {
                 _pendingChanges.Add(pc);
+
+                OnAdded(new PendingChangeEventArgs(this, pc));
             }
+        }
+
+        public event EventHandler<PendingChangeEventArgs> InitialUpdate;
+
+        private void OnInitialUpdate(PendingChangeEventArgs e)
+        {
+            if (InitialUpdate != null)
+                InitialUpdate(this, e);
         }
 
         /// <summary>
@@ -257,9 +295,9 @@ namespace Ankh.Scc
         {
             Dictionary<string, string> usedNames = new Dictionary<string, string>();
 
-            foreach (PendingChange pc in _pendingChanges.ToArray())
+            foreach (PendingChange pc in GetAll()) // Get copy of list to make sure the list doesn't change on our back
             {
-                string cl = pc.ChangeList;
+                string cl = pc.SvnItem.Status.ChangeList;
 
                 if (!string.IsNullOrEmpty(cl) && !string.Equals(cl, IgnoreOnCommit))
                 {

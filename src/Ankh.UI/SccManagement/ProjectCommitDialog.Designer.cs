@@ -105,7 +105,7 @@ namespace Ankh.UI.SccManagement
             resources.ApplyResources(this.logMessage, "logMessage");
             this.logMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logMessage.Name = "logMessage";
-            this.logMessage.PendingChangeUI = this.pendingList;
+            this.logMessage.PasteSource = this.pendingList;
             // 
             // label1
             // 

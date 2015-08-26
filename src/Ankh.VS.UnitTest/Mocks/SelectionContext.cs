@@ -50,12 +50,12 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 yield break;
             }
 
-            public IEnumerable<SccProject> GetOwnerProjects()
+            public IEnumerable<SvnProject> GetOwnerProjects()
             {
                 yield break;
             }
 
-            public IEnumerable<SccProject> GetOwnerProjects(bool recursive)
+            public IEnumerable<SvnProject> GetOwnerProjects(bool recursive)
             {
                 yield break;
             }
@@ -65,7 +65,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 get { return null; }
             }
 
-            public IEnumerable<SccProject> GetSelectedProjects(bool recursive)
+            public IEnumerable<SvnProject> GetSelectedProjects(bool recursive)
             {
                 yield break;
             }
@@ -152,7 +152,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 get { return null; }
             }
 
-            public Ankh.SvnItem ActiveDocumentSvnItem
+            public Ankh.SvnItem ActiveDocumentItem
             {
                 get { return null; }
             }
@@ -189,7 +189,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
             #endregion
 
 
-            public IEnumerable<SccHierarchy> GetSelectedHierarchies()
+            public IEnumerable<SvnHierarchy> GetSelectedHierarchies()
             {
                 yield break;
             }
@@ -197,18 +197,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
 
             public Microsoft.VisualStudio.TextManager.Interop.IVsTextView ActiveDocumentFrameTextView
             {
-                get { return null; }
-            }
-
-
-            public IEnumerable<Ankh.GitItem> GetSelectedGitItems(bool recursive)
-            {
-                yield break;
-            }
-
-            public Ankh.GitItem ActiveDocumentGitItem
-            {
-                get { return null; }
+                get { throw new NotImplementedException(); }
             }
         }
     }

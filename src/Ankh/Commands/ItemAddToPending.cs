@@ -34,7 +34,7 @@ namespace Ankh.Commands
         {
             if (e.Command == AnkhCommand.DocumentAddToPending || e.Command == AnkhCommand.DocumentRemoveFromPending)
             {
-                SvnItem i = e.Selection.ActiveDocumentSvnItem;
+                SvnItem i = e.Selection.ActiveDocumentItem;
                 if (i == null)
                     return new SvnItem[0];
                 else

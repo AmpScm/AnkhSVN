@@ -23,7 +23,7 @@ namespace Ankh.Scc.Commands
     /// Handles the finishtasks special command; this command is posted to the back of the command queueue
     /// if the SCC implementation needs to perform some post processing of VSs scc actions
     /// </summary>
-    [SvnCommand(AnkhCommand.SccFinishTasks, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.SccFinishTasks, AlwaysAvailable=true)]
     sealed class TaskFinisher : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
@@ -39,14 +39,14 @@ namespace Ankh.Scc.Commands
             if (_commandService == null)
                 _commandService = e.GetService<IAnkhCommandService>();
             if (_projectTracker == null)
-                _projectTracker = e.GetService<ProjectTracker>();
-            if (_sccProvider == null)
-                _sccProvider = e.GetService<SvnSccProvider>(typeof(IAnkhSccService));
+                _projectTracker = e.GetService<ProjectTracker>(typeof(IAnkhProjectDocumentTracker));
+            if(_sccProvider == null)
+                _sccProvider = e.GetService<SvnSccProvider>(typeof(IAnkhSccService));            
 
             _commandService.TockCommand(e.Command);
 
             _projectTracker.OnSccCleanup(e);
-            _sccProvider.OnSccCleanup(e);
+            _sccProvider.OnSccCleanup(e);            
         }
     }
 }

@@ -76,12 +76,6 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' != '10.0' and '$(UseVsSdkVersion)' != '11.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' != '10.0' and '$(UseVsSdkVersion)' != '11.0' and '$(UseVsSdkVersion)' != '12.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' != '10.0' and '$(UseVsSdkVersion)' != '11.0' and '$(UseVsSdkVersion)' != '12.0'">
-      <Visible>false</Visible>
-    </Reference>
     <Reference Include="SharpSvn, Version=1.4999.384.29813, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
@@ -94,12 +88,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnkhSccModule.cs" />
-    <Compile Include="SvnSccProjectMap.cs" />
     <Compile Include="SvnSccProvider.cs" />
     <Compile Include="SvnSccProvider.Enlistment.cs">
       <DependentUpon>SvnSccProvider.cs</DependentUpon>
     </Compile>
     <Compile Include="SvnSccProvider.Glyphs.cs">
+      <DependentUpon>SvnSccProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SvnSccProvider.IVsSccManager3.cs">
       <DependentUpon>SvnSccProvider.cs</DependentUpon>
     </Compile>
     <Compile Include="SvnSccProvider.Projects.cs">
@@ -123,8 +119,11 @@
     <Compile Include="Commands\UnsupportedWcVersion.cs" />
     <Compile Include="Native\ICOMPropertyBag.cs" />
     <Compile Include="Native\SolutionExplorerDataItem.cs" />
+    <Compile Include="ProjectMap\SccProjectData.ProjectRefresh.cs">
+      <DependentUpon>SccProjectData.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProjectMap\SccSvnOrigin.cs" />
-    <Compile Include="ProjectMap\SvnSccProject.cs" />
+    <Compile Include="ProjectMap\SccSvnProject.cs" />
     <Compile Include="SettingsMap\SccTranslatePathInfo.cs" />
     <Compile Include="SccUI\Commands\MakeNonSccFileWritableCommand.cs" />
     <Compile Include="SccUI\SccEditReadOnlyFileDialog.cs">
@@ -164,9 +163,9 @@
     <Compile Include="SccUI\ChangeSolutionRoot.Designer.cs">
       <DependentUpon>ChangeSolutionRoot.cs</DependentUpon>
     </Compile>
-    <Compile Include="StatusCache\SvnStatusCache.cs" />
+    <Compile Include="StatusCache\FileStatusCache.cs" />
     <Compile Include="StatusCache\Commands\FileStatusCleanup.cs" />
-    <Compile Include="StatusCache\SvnStatusCache.ShellMonitor.cs" />
+    <Compile Include="StatusCache\FileStatusCache.ShellMonitor.cs" />
     <Compile Include="TextEditingTracker.cs" />
     <Compile Include="OpenDocumentTracker.cs" />
     <Compile Include="OpenDocumentTracker.Api.cs">
@@ -180,14 +179,12 @@
     <Compile Include="PendingChangeManager.Map.cs">
       <DependentUpon>PendingChangeManager.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProjectMap\SccDocumentData.cs" />
     <Compile Include="ProjectTracker.cs" />
     <Compile Include="ProjectTracker.Add.cs">
       <DependentUpon>ProjectTracker.cs</DependentUpon>
     </Compile>
     <Compile Include="ProjectTracker.Batching.cs">
-      <DependentUpon>ProjectTracker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ProjectTracker.Map.cs">
       <DependentUpon>ProjectTracker.cs</DependentUpon>
     </Compile>
     <Compile Include="ProjectTracker.Remove.cs">
@@ -199,6 +196,13 @@
     <Compile Include="ProjectTracker.Solution.cs">
       <DependentUpon>ProjectTracker.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProjectMap\SccProjectData.cs" />
+    <Compile Include="ProjectMap\SccProjectData.Hierarchy.cs">
+      <DependentUpon>SccProjectData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectMap\SccProjectFile.cs" />
+    <Compile Include="ProjectMap\SccProjectFileCollection.cs" />
+    <Compile Include="ProjectMap\SccProjectFileReference.cs" />
     <Compile Include="ProjectNotifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">

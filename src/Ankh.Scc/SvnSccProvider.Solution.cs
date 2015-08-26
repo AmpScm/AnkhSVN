@@ -23,7 +23,7 @@ using Ankh.Commands;
 
 namespace Ankh.Scc
 {
-    partial class SvnSccProvider : IVsSccOpenFromSourceControl
+    partial class SvnSccProvider : IVsSccControlNewSolution, IVsSccOpenFromSourceControl
 	{
         /// <summary>
         /// Adds the current solution to source control.
@@ -41,19 +41,21 @@ namespace Ankh.Scc
         /// <summary>
         /// Retrieves the text to be displayed with the "Add to Source Control" check box in the New Projects dialog box.
         /// </summary>
+        /// <param name="pbstrActionName">[out] Returns the text to be used for the "Add to Source Control" check box.</param>
         /// <returns>
-        /// Returns the text to be used for the "Add to Source Control" check box.
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
         /// </returns>
-        protected override string GetDisplayStringForAddNewSolutionToSourceControl()
+        public int GetDisplayStringForAction(out string pbstrActionName)
         {
-            return Resources.AddToSubversionCommandName;
+            pbstrActionName = Resources.AddToSubversionCommandName;
+            return VSErr.S_OK;
         }
 
         /// <summary>
         /// Adds the specified item or items to the specified project directly from source control.
         /// </summary>
         /// <param name="pProject">[in] <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsProject"></see> interface for the project to add the items to.T:Microsoft.VisualStudio.Shell.Interop.IVsProject is an old interface that is not used directly. Instead, query the <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsProject3"></see> interface for the <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsProject"></see> interface and pass that in.</param>
-        /// <param name="itemidLoc">[in] A value indicating where in the project hierarchy to add the items. This is a unique identifier for a project or folder item or one of the following values: <see cref="F:Microsoft.VisualStudio.VSItemId.Nil"></see>, <see cref="F:Microsoft.VisualStudio.VSItemId.Root"></see>, or <see cref="F:Microsoft.VisualStudio.VSItemId.Selection"></see>.</param>
+        /// <param name="itemidLoc">[in] A value indicating where in the project hierarchy to add the items. This is a unique identifier for a project or folder item or one of the following values: <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_NIL"></see>, <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_ROOT"></see>, or <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_SELECTION"></see>.</param>
         /// <param name="cFilesToAdd">[in] Number of files specified in rgpszFilesToAdd array.</param>
         /// <param name="rgpszFilesToAdd">[in] Array of files names to add to the project from source control.</param>
         /// <param name="hwndDlgOwner">[in] Handle to the parent of the dialog box that will be used.</param>

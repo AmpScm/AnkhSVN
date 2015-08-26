@@ -27,6 +27,18 @@ using Ankh.VS;
 namespace Ankh.UI
 {
     /// <summary>
+    /// 
+    /// </summary>
+    public interface IAnkhDialogHelpService
+    {
+        /// <summary>
+        /// Shows generic help for the specified form
+        /// </summary>
+        /// <param name="form">The form.</param>
+        void RunHelp(VSDialogForm form);
+    }
+
+    /// <summary>
     /// .Net form which when shown modal let's the VS command routing continue
     /// </summary>
     /// <remarks>If the IAnkhDialogOwner service is not available this form behaves like any other form</remarks>
@@ -163,7 +175,7 @@ namespace Ankh.UI
 
             if (!HelpButton && ControlBox && !_addedHelp)
             {
-                IAnkhHelpService helpService = GetService<IAnkhHelpService>();
+                IAnkhDialogHelpService helpService = GetService<IAnkhDialogHelpService>();
 
                 if (helpService != null)
                 {
@@ -254,7 +266,7 @@ namespace Ankh.UI
             {
                 e.Cancel = true; // Don't go in context help mode
 
-                IAnkhHelpService helpService = GetService<IAnkhHelpService>();
+                IAnkhDialogHelpService helpService = GetService<IAnkhDialogHelpService>();
 
                 helpService.RunHelp(this);
             }
@@ -368,7 +380,7 @@ namespace Ankh.UI
                 {
                     if (!IsHandleCreated)
                         CreateHandle();
-                    themer.ThemeRecursive(this, true);
+                    themer.ThemeRecursive(this);
                 }
             }
         }
@@ -405,7 +417,7 @@ namespace Ankh.UI
         /// </summary>
         /// <typeparam name="T">The type of service to get</typeparam>
         /// <returns>
-        /// A service object of type <typeparamref name="T"/>.-or- null if there is no service object of type <typeparamref name="T"/>.
+        /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
         [DebuggerStepThrough]
         T IAnkhServiceProvider.GetService<T>()
@@ -418,7 +430,7 @@ namespace Ankh.UI
         /// </summary>
         /// <typeparam name="T">The type of service to get</typeparam>
         /// <returns>
-        /// A service object of type <typeparamref name="T"/>.-or- null if there is no service object of type <typeparamref name="T"/>.
+        /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
         protected T GetService<T>()
             where T : class

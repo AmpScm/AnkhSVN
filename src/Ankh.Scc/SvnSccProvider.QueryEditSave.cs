@@ -166,24 +166,74 @@ namespace Ankh.Scc
         /// <summary>
         /// Gets the SvnItem of the document file and all subdocument files (SccSpecial files)
         /// </summary>
-        /// <param name="documentName">The document.</param>
+        /// <param name="document">The document.</param>
         /// <returns></returns>
-        public override IEnumerable<string> GetAllDocumentFiles(string documentName)
+        internal IEnumerable<SvnItem> GetAllDocumentItems(string document)
         {
-            if (string.IsNullOrEmpty(documentName))
+            if (string.IsNullOrEmpty(document))
                 throw new ArgumentNullException("document");
 
-            SccProjectFile pf;
-            if (!ProjectMap.TryGetFile(documentName, out pf))
+            SvnItem item = StatusCache[document];
+
+            if (item == null)
                 yield break;
 
-            foreach(string path in pf.GetAllFiles())
-            {
-                SvnItem item = StatusCache[documentName];
+            yield return item;
 
-                if (item != null)
-                    yield return item.FullPath; // Use true path
+            SccProjectFile pf;
+            if (_fileMap.TryGetValue(item.FullPath, out pf))
+            {
+                HybridCollection<string> subFiles = null;
+
+                if (pf.FirstReference != null)
+                    foreach (string path in pf.FirstReference.GetSubFiles())
+                    {
+                        if (subFiles == null)
+                        {
+                            subFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                            subFiles.Add(item.FullPath);
+                        }
+
+                        if (subFiles.Contains(path))
+                            continue;
+
+                        item = StatusCache[path];
+                        if (item != null)
+                            yield return item;
+
+                        subFiles.Add(item.FullPath);
+                    }
             }
+        }
+
+        string _tempPath;
+        string TempPathWithSeparator
+        {
+            get
+            {
+                if (_tempPath == null)
+                {
+                    string p = System.IO.Path.GetTempPath();
+
+                    if (p.Length > 0 && p[p.Length - 1] != Path.DirectorySeparatorChar)
+                        p += Path.DirectorySeparatorChar;
+
+                    _tempPath = p;
+                }
+                return _tempPath;
+            }
+        }
+
+        internal bool IsSafeSccPath(string file)
+        {
+            if (string.IsNullOrEmpty(file))
+                return false;
+            else if (!SvnItem.IsValidPath(file))
+                return false;
+            else if (file.StartsWith(TempPathWithSeparator, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            return true;
         }
 
         /// <summary>
@@ -310,12 +360,12 @@ namespace Ankh.Scc
                     // to make it easier to lock them too
                     foreach (string lockFile in new List<string>(mustLockFiles))
                     {
-                        foreach (string file in GetAllDocumentFiles(lockFile))
+                        foreach (SvnItem item in GetAllDocumentItems(lockFile))
                         {
-                            if (!mustLockFiles.Contains(file))
+                            if (!mustLockFiles.Contains(item.FullPath))
                             {
-                                mustLockFiles.Add(file);
-                                mustLockItems.Add(StatusCache[file]);
+                                mustLockFiles.Add(item.FullPath);
+                                mustLockItems.Add(item);
                             }
                         }
                     }

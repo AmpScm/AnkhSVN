@@ -27,7 +27,6 @@ using SharpSvn;
 using Ankh.Commands;
 using Ankh.Selection;
 using Ankh.UI;
-using Ankh.Scc.Engine;
 
 namespace Ankh.Scc
 {
@@ -37,7 +36,7 @@ namespace Ankh.Scc
         readonly object _lock = new object();
         bool _posted;
         bool _onIdle;
-        List<SccProject> _dirtyProjects;
+        List<SvnProject> _dirtyProjects;
         HybridCollection<string> _maybeAdd;
         uint _cookie;
 
@@ -83,17 +82,11 @@ namespace Ankh.Scc
             get { return _commandService ?? (_commandService = GetService<IAnkhCommandService>()); }
         }
 
-        ISccStatusCache _statusCache;
-        ISccStatusCache Cache
+        IFileStatusCache _statusCache;
+        IFileStatusCache Cache
         {
             [DebuggerStepThrough]
-            get { return _statusCache ?? (_statusCache = GetService<ISvnStatusCache>()); }
-        }
-
-        ISvnStatusCache _svnCache;
-        ISvnStatusCache SvnCache
-        {
-            get { return _svnCache ?? (_svnCache = GetService<ISvnStatusCache>()); }
+            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
         }
 
         IProjectFileMapper _mapper;
@@ -155,7 +148,7 @@ namespace Ankh.Scc
         /// Schedules a glyph refresh of all specified projects
         /// </summary>
         /// <param name="projects"></param>
-        public void ScheduleGlyphOnlyUpdate(IEnumerable<SccProject> projects)
+        public void ScheduleGlyphOnlyUpdate(IEnumerable<SvnProject> projects)
         {
             if (projects == null)
                 throw new ArgumentNullException("projects");
@@ -163,9 +156,9 @@ namespace Ankh.Scc
             lock (_lock)
             {
                 if (_dirtyProjects == null)
-                    _dirtyProjects = new List<SccProject>();
+                    _dirtyProjects = new List<SvnProject>();
 
-                foreach (SccProject project in projects)
+                foreach (SvnProject project in projects)
                 {
                     if (!_dirtyProjects.Contains(project))
                         _dirtyProjects.Add(project);
@@ -221,7 +214,7 @@ namespace Ankh.Scc
 
         internal void HandleEvent(AnkhCommand command)
         {
-            List<SccProject> dirtyProjects;
+            List<SvnProject> dirtyProjects;
             HybridCollection<string> dirtyCheck;
             HybridCollection<string> maybeAdd;
 
@@ -251,7 +244,7 @@ namespace Ankh.Scc
 
             if (dirtyProjects != null)
             {
-                foreach (SccProject project in dirtyProjects)
+                foreach (SvnProject project in dirtyProjects)
                 {
                     if (project.IsSolution)
                         provider.UpdateSolutionGlyph();
@@ -266,7 +259,7 @@ namespace Ankh.Scc
                 {
                     foreach (string file in maybeAdd)
                     {
-                        SvnItem item = SvnCache[file];
+                        SvnItem item = Cache[file];
                         // Only add
                         // * files
                         // * that are unversioned
@@ -360,7 +353,13 @@ namespace Ankh.Scc
             foreach (SvnClientAction action in actions.Values)
             {
                 if (action.Recursive)
-                    ScheduleGlyphUpdate(Cache.GetCachedBelow(action.FullPath));
+                {
+                    foreach (SvnItem item in Cache.GetCachedBelow(action.FullPath))
+                    {
+                        item.MarkDirty();
+                        ScheduleGlyphUpdate(item.FullPath);
+                    }
+                }
 
                 if (action.AddOrRemove)
                 {
@@ -469,7 +468,7 @@ namespace Ankh.Scc
                 ScheduleSvnStatus(modified.Keys);
                 foreach (KeyValuePair<string, DocumentLock> file in modified)
                 {
-                    SvnItem item = SvnCache[file.Key];
+                    SvnItem item = Cache[file.Key];
 
                     if (item.IsConflicted)
                     {
@@ -561,21 +560,5 @@ namespace Ankh.Scc
         }
 
         #endregion
-
-        public void SetDocumentDirty(string FullPath, bool dirty)
-        {
-            SvnItem item = SvnCache[FullPath];
-
-            if (item == null)
-                return;
-
-            ISvnItemStateUpdate sisu = item;
-            sisu.SetDocumentDirty(dirty);
-
-            if (item.IsModified)
-                return; // No need to update glyph!
-
-            ScheduleGlyphUpdate(FullPath);
-        }
     }
 }

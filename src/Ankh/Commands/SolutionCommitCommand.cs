@@ -77,7 +77,7 @@ namespace Ankh.Commands
             readonly HybridCollection<string> folders = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             readonly IProjectFileMapper _mapper;
 
-            public ProjectListFilter(IAnkhServiceProvider context, IEnumerable<SccProject> projects)
+            public ProjectListFilter(IAnkhServiceProvider context, IEnumerable<SvnProject> projects)
             {
                 if (context == null)
                     throw new ArgumentNullException("context");
@@ -85,13 +85,13 @@ namespace Ankh.Commands
                     throw new ArgumentNullException("projects");
 
                 _mapper = context.GetService<IProjectFileMapper>();
-                List<SccProject> projectList = new List<SccProject>(projects);
+                List<SvnProject> projectList = new List<SvnProject>(projects);
 
                 files.AddRange(_mapper.GetAllFilesOf(projectList));
 
-                foreach (SccProject p in projectList)
+                foreach (SvnProject p in projectList)
                 {
-                    ISccProjectInfo pi = _mapper.GetProjectInfo(p);
+                    ISvnProjectInfo pi = _mapper.GetProjectInfo(p);
 
                     if (pi == null)
                         continue; // Ignore solution and non scc projects
@@ -126,10 +126,9 @@ namespace Ankh.Commands
         static IEnumerable<PendingChange> GetChanges(BaseCommandEventArgs e)
         {
             IPendingChangesManager pcm = e.GetService<IPendingChangesManager>();
-            PendingChange[] pendingChanges = pcm.PendingChanges.ToArray();
             if (e.Command == AnkhCommand.SolutionCommit)
             {
-                foreach (PendingChange pc in pendingChanges)
+                foreach (PendingChange pc in pcm.GetAll())
                 {
                     yield return pc;
                 }
@@ -138,7 +137,7 @@ namespace Ankh.Commands
             {
                 ProjectListFilter plf = new ProjectListFilter(e.Context, e.Selection.GetSelectedProjects(false));
 
-                foreach (PendingChange pc in pendingChanges)
+                foreach (PendingChange pc in pcm.GetAll())
                 {
                     if (plf.ShowChange(pc))
                         yield return pc;

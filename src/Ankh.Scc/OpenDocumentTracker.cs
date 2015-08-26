@@ -79,7 +79,7 @@ namespace Ankh.Scc
         protected ProjectTracker ProjectTracker
         {
             [DebuggerStepThrough]
-            get { return _projectTracker ?? (_projectTracker = GetService<ProjectTracker>()); }
+            get { return _projectTracker ?? (_projectTracker = GetService<ProjectTracker>(typeof(IAnkhProjectDocumentTracker))); }
         }
 
         void LoadInitial()
@@ -250,7 +250,7 @@ namespace Ankh.Scc
                     flags = GetDocumentFlags_cb(cookie);
 
                     hier = null;
-                    itemId = VSItemId.Nil;
+                    itemId = VSConstants.VSITEMID_NIL;
                     document = null;
                     return true;
                 }
@@ -278,7 +278,7 @@ namespace Ankh.Scc
             else
             {
                 hier = null;
-                itemId = VSItemId.Nil;
+                itemId = VSConstants.VSITEMID_NIL;
                 document = null;
                 return false;
             }
@@ -288,7 +288,7 @@ namespace Ankh.Scc
         /// Called before a document is locked in the Running Document Table (RDT) for the first time.
         /// </summary>
         /// <param name="pHier">[in] The <see cref="T:Microsoft.VisualStudio.Shell.Interop.IVsHierarchy"></see> object that owns the document about to be locked.</param>
-        /// <param name="itemid">[in] The item ID in the hierarchy. This is a unique identifier or it can be one of the following values: <see cref="F:Microsoft.VisualStudio.VSItemId.Nil"></see>, <see cref="F:Microsoft.VisualStudio.VSItemId.Root"></see>, or <see cref="F:Microsoft.VisualStudio.VSItemId.Selection"></see>.</param>
+        /// <param name="itemid">[in] The item ID in the hierarchy. This is a unique identifier or it can be one of the following values: <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_NIL"></see>, <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_ROOT"></see>, or <see cref="F:Microsoft.VisualStudio.VSConstants.VSITEMID_SELECTION"></see>.</param>
         /// <param name="pszMkDocument">[in] The path to the document about to be locked.</param>
         /// <returns>
         /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>. If it fails, it returns an error code.
@@ -375,11 +375,13 @@ namespace Ankh.Scc
         }
 
 
+        internal const __VSRDTATTRIB RDTA_DocumentInitialized = (__VSRDTATTRIB)0x00100000; // VS2013+
+        internal const __VSRDTATTRIB RDTA_HierarchyInitialized = (__VSRDTATTRIB)0x00200000; // VS2013+
         const uint HandledRDTAttributes = (uint)(__VSRDTATTRIB.RDTA_DocDataReloaded
                                                  | __VSRDTATTRIB.RDTA_DocDataIsDirty
                                                  | __VSRDTATTRIB.RDTA_DocDataIsNotDirty
-                                                 | SccDocumentData.RDTA_DocumentInitialized
-                                                 | SccDocumentData.RDTA_HierarchyInitialized);
+                                                 | /*__VSRDTATTRIB3.*/RDTA_DocumentInitialized
+                                                 | /*__VSRDTATTRIB3.*/RDTA_HierarchyInitialized);
 
         const uint TrackedRDTAttributes = HandledRDTAttributes
                                           | (uint)(__VSRDTATTRIB.RDTA_ItemID
@@ -402,7 +404,7 @@ namespace Ankh.Scc
 
                 if (!wasInitialized
                     && GetDocumentFlags_cb != null
-                    && (attribs & (SccDocumentData.RDTA_DocumentInitialized | SccDocumentData.RDTA_HierarchyInitialized)) != 0)
+                    && (attribs & (RDTA_DocumentInitialized | RDTA_HierarchyInitialized)) != 0)
                 {
                     uint newFlags = GetDocumentFlags_cb(data.Cookie);
                     data.SetFlags((_VSRDTFLAGS)newFlags);
@@ -430,7 +432,7 @@ namespace Ankh.Scc
 
                 if (!wasInitialized
                     && GetDocumentFlags_cb != null
-                    && (attribs & (SccDocumentData.RDTA_DocumentInitialized | SccDocumentData.RDTA_HierarchyInitialized)) != 0)
+                    && (attribs & (RDTA_DocumentInitialized | RDTA_HierarchyInitialized)) != 0)
                 {
                     uint newFlags = GetDocumentFlags_cb(data.Cookie);
                     data.SetFlags((_VSRDTFLAGS)newFlags);
@@ -672,7 +674,7 @@ namespace Ankh.Scc
             }
         }
 
-        public void DoDispose(SccDocumentData data)
+        internal void DoDispose(SccDocumentData data)
         {
             if (data == null)
                 throw new ArgumentNullException("data");

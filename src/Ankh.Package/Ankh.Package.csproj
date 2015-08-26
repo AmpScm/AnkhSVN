@@ -82,10 +82,6 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0" Condition="'$(UseVsSdkVersion)' &gt;= '14.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="SharpGit">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\autolib\SharpGit\SharpGit.dll</HintPath>
-    </Reference>
     <Reference Include="SharpSvn">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
@@ -101,9 +97,6 @@
     <Compile Include="Attributes\ProvideAnkhExtensionRedirectAttribute.cs" />
     <Compile Include="Attributes\ProvideSourceControlCommand.cs" />
     <Compile Include="Attributes\ProvideThemeInformation.cs" />
-    <Compile Include="OptionPages\GitSettingsPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -184,7 +177,7 @@
     <Compile Include="AnkhEditorFactories.cs" />
     <Compile Include="Attributes\ProvideOutputWindow.cs" />
     <Compile Include="Attributes\ProvideProjectTypeSettings.cs" />
-    <Compile Include="OptionPages\SvnSettingsPage.cs">
+    <Compile Include="OptionPages\EnvironmentSettingsPage.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="OptionPages\IssueTrackerPage.cs" />
@@ -221,9 +214,6 @@
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
     <Compile Include="AnkhSvnPackage.Themes.cs">
-      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AnkhSvnPackage.GitScc.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
     <Compile Include="Attributes\ProvideLanguageSettings.cs" />
@@ -524,10 +514,6 @@
     <ProjectReference Include="..\Ankh.ExtensionPoints\Ankh.ExtensionPoints.csproj">
       <Project>{B7168874-E05E-458D-95CC-5D7BBC243986}</Project>
       <Name>Ankh.ExtensionPoints</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ankh.GitScc\Ankh.GitScc.csproj">
-      <Project>{1d429fcf-3eab-4ba6-9982-d33f74a65efe}</Project>
-      <Name>Ankh.GitScc</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>

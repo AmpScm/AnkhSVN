@@ -25,6 +25,8 @@ using Ankh.Selection;
 using Ankh.UI;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Scc.SccUI
 {
@@ -101,14 +103,14 @@ namespace Ankh.Scc.SccUI
             // TODO: Optimize to one time init and then just refresh
             if (SvnItem.IsValidPath(SolutionSettings.SolutionFilename))
             {
-                bindingGrid.Rows.Add(new ChangeSourceControlRow(Context, SccProject.Solution));
+                bindingGrid.Rows.Add(new ChangeSourceControlRow(Context, SvnProject.Solution));
             }
-            foreach (SccProject project in ProjectMapper.GetAllProjects())
+            foreach (SvnProject project in ProjectMapper.GetAllProjects())
             {
                 if (project.IsSolution)
                     continue;
 
-                ISccProjectInfo projectInfo = ProjectMapper.GetProjectInfo(project);
+                ISvnProjectInfo projectInfo = ProjectMapper.GetProjectInfo(project);
 
                 if (projectInfo == null || string.IsNullOrEmpty(projectInfo.ProjectDirectory))
                     continue;
@@ -151,7 +153,7 @@ namespace Ankh.Scc.SccUI
             IAnkhSccService scc = Context.GetService<IAnkhSccService>();
 
             bool isSolution = false;
-            foreach (SccProject project in SelectedProjects)
+            foreach (SvnProject project in SelectedProjects)
             {
                 if (project.IsSolution)
                     isSolution = true;
@@ -163,7 +165,7 @@ namespace Ankh.Scc.SccUI
                     SvnItem item = null;
                     if (!project.IsSolution)
                     {
-                        ISccProjectInfo projectInfo = ProjectMapper.GetProjectInfo(project);
+                        ISvnProjectInfo projectInfo = ProjectMapper.GetProjectInfo(project);
 
                         if (projectInfo == null || string.IsNullOrEmpty(projectInfo.ProjectDirectory))
                             continue;
@@ -205,7 +207,7 @@ namespace Ankh.Scc.SccUI
 
             IAnkhSccService scc = Context.GetService<IAnkhSccService>();
 
-            foreach (SccProject project in SelectedProjects)
+            foreach (SvnProject project in SelectedProjects)
             {
                 scc.SetProjectManaged(project, true);
             }
@@ -219,7 +221,7 @@ namespace Ankh.Scc.SccUI
 
             IAnkhSccService scc = Context.GetService<IAnkhSccService>();
 
-            foreach (SccProject project in SelectedProjects)
+            foreach (SvnProject project in SelectedProjects)
             {
                 scc.SetProjectManaged(project, false);
             }
@@ -233,10 +235,10 @@ namespace Ankh.Scc.SccUI
             get { return _projectMapper ?? (_projectMapper = Context.GetService<IProjectFileMapper>()); }
         }
 
-        ISvnStatusCache _fileCache;
-        ISvnStatusCache StatusCache
+        IFileStatusCache _fileCache;
+        IFileStatusCache StatusCache
         {
-            get { return _fileCache ?? (_fileCache = Context.GetService<ISvnStatusCache>()); }
+            get { return _fileCache ?? (_fileCache = Context.GetService<IFileStatusCache>()); }
         }
 
         IAnkhSolutionSettings _solutionSettings;
@@ -245,14 +247,14 @@ namespace Ankh.Scc.SccUI
             get { return _solutionSettings ?? (_solutionSettings = Context.GetService<IAnkhSolutionSettings>()); }
         }
 
-        IEnumerable<SccProject> SelectedProjects
+        IEnumerable<SvnProject> SelectedProjects
         {
             get
             {
-                List<SccProject> projects = new List<SccProject>();
+                List<SvnProject> projects = new List<SvnProject>();
                 foreach (ChangeSourceControlRow row in bindingGrid.SelectedRows)
                 {
-                    SccProject project = row.Project;
+                    SvnProject project = row.Project;
 
                     if (projects.Contains(project))
                         continue;
@@ -295,9 +297,9 @@ namespace Ankh.Scc.SccUI
             bool first = true;
             Uri projectUri = null;
 
-            foreach (SccProject p in SelectedProjects)
+            foreach (SvnProject p in SelectedProjects)
             {
-                ISccProjectInfo info;
+                ISvnProjectInfo info;
                 if (p.IsSolution ||
                     null == (info = ProjectMapper.GetProjectInfo(p)) ||
                     string.IsNullOrEmpty(info.ProjectDirectory))
@@ -331,10 +333,10 @@ namespace Ankh.Scc.SccUI
                     if (ps != null)
                     {
                         string doc;
-                        if (VSErr.Succeeded(ps.GetMkDocument(VSItemId.Root, out doc)))
+                        if (VSErr.Succeeded(ps.GetMkDocument(VSConstants.VSITEMID_ROOT, out doc)))
                         {
                             if (SvnItem.IsValidPath(doc))
-                                pLoc = SvnItem.MakeRelative(SolutionSettings.SolutionFilename, doc);
+                                pLoc = PackageUtilities.MakeRelative(SolutionSettings.SolutionFilename, doc);
                             else
                                 pLoc = doc;
                         }
@@ -379,7 +381,7 @@ namespace Ankh.Scc.SccUI
             slnProjectLocation.Text = SolutionSettings.SolutionFilename;
             slnBindPath.Text = SolutionSettings.ProjectRoot;
 
-            string slRelativePath = Path.GetDirectoryName(SvnItem.MakeRelative(SolutionSettings.ProjectRoot, SolutionSettings.SolutionFilename));
+            string slRelativePath = Path.GetDirectoryName(PackageUtilities.MakeRelative(SolutionSettings.ProjectRoot, SolutionSettings.SolutionFilename));
 
             slnRelativePath.Text = string.IsNullOrEmpty(slRelativePath) ? "." : slRelativePath;
 

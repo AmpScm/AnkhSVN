@@ -97,7 +97,7 @@ namespace Ankh.Commands
                     // TODO: Notify the working copy explorer here!
                     // (Maybe via one of these methods below)
 
-                    e.GetService<ISvnStatusCache>().MarkDirtyRecursive(item.FullPath);
+                    e.GetService<IFileStatusCache>().MarkDirtyRecursive(item.FullPath);
                     e.GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(item.FullPath);
                 }
 
@@ -105,9 +105,9 @@ namespace Ankh.Commands
 
                 IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
 
-                List<SccProject> projects = new List<SccProject>(pfm.GetAllProjectsContaining(item.FullPath));
+                List<SvnProject> projects = new List<SvnProject>(pfm.GetAllProjectsContaining(item.FullPath));
 
-                foreach (SccProject p in projects)
+                foreach (SvnProject p in projects)
                 {
                     IVsProject2 p2 = p.RawHandle as IVsProject2;
 

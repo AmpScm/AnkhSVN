@@ -52,10 +52,14 @@ namespace Ankh
         event EventHandler IssueRepositoryChanged;
 
         /// <summary>
+        /// Marks Issue Service as dirty which signals Issues page to refresh itself.
+        /// </summary>
+        void MarkDirty();
+
+        /// <summary>
         /// Gets the issue references from the specified text
         /// </summary>
-        /// <param name="text">text.</param>
-        /// <param name="issues"></param>
+        /// <param name="logmessage">text.</param>
         /// <returns></returns>
         /// <remarks>Precondition: Current solution is associated with a repository.</remarks>
         bool TryGetIssues(string text, out IEnumerable<TextMarker> issues);
@@ -69,7 +73,12 @@ namespace Ankh
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="text"></param>
+        void ShowConnectHelp();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="combined"></param>
         /// <param name="markers"></param>
         /// <returns></returns>
         bool TryGetRevisions(string text, out IEnumerable<TextMarker> markers);

@@ -41,7 +41,7 @@ namespace Ankh.Commands
         /// <param name="e">The <see cref="Ankh.Commands.CommandUpdateEventArgs"/> instance containing the event data.</param>
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            ISvnStatusCache cache;
+            IFileStatusCache cache;
 
             int count = 0;
             switch (e.Command)
@@ -73,10 +73,10 @@ namespace Ankh.Commands
                     break;
                 case AnkhCommand.ProjectEditProperties:
                     IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
-                    cache = e.GetService<ISvnStatusCache>();
-                    foreach (SccProject project in e.Selection.GetSelectedProjects(false))
+                    cache = e.GetService<IFileStatusCache>();
+                    foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
                     {
-                        ISccProjectInfo info = pfm.GetProjectInfo(project);
+                        ISvnProjectInfo info = pfm.GetProjectInfo(project);
                         if (info == null || string.IsNullOrEmpty(info.ProjectDirectory))
                         {
                             e.Enabled = false;
@@ -92,7 +92,7 @@ namespace Ankh.Commands
                     }
                     break;
                 case AnkhCommand.SolutionEditProperties:
-                    cache = e.GetService<ISvnStatusCache>();
+                    cache = e.GetService<IFileStatusCache>();
                     IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
                     if (solutionSettings == null || string.IsNullOrEmpty(solutionSettings.ProjectRoot))
                     {
@@ -113,7 +113,7 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             SvnItem firstVersioned = null;
-            ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
 
             switch (e.Command)
             {
@@ -129,12 +129,12 @@ namespace Ankh.Commands
                     }
                     break;
                 case AnkhCommand.ProjectEditProperties: // use project folder
-                    foreach (SccProject p in e.Selection.GetSelectedProjects(false))
+                    foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
                     {
                         IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
                         if (pfm != null)
                         {
-                            ISccProjectInfo info = pfm.GetProjectInfo(p);
+                            ISvnProjectInfo info = pfm.GetProjectInfo(p);
                             if (info != null && info.ProjectDirectory != null)
                             {
                                 firstVersioned = cache[info.ProjectDirectory];

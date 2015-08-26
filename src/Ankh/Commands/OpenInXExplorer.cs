@@ -100,7 +100,7 @@ namespace Ankh.Commands
                             hierWindow.ExpandItem(project as IVsUIHierarchy, id, EXPANDFLAGS.EXPF_SelectItem);
                         }
                         else if (string.Equals(node.FullPath, e.Selection.SolutionFilename, StringComparison.OrdinalIgnoreCase))
-                            hierWindow.ExpandItem(e.GetService<IVsUIHierarchy>(typeof(SVsSolution)), VSItemId.Root, EXPANDFLAGS.EXPF_SelectItem);
+                            hierWindow.ExpandItem(e.GetService<IVsUIHierarchy>(typeof(SVsSolution)), VSConstants.VSITEMID_ROOT, EXPANDFLAGS.EXPF_SelectItem);
 
                         // Now try to activate the solution explorer
                         IVsWindowFrame solutionExplorer;

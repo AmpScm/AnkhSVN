@@ -32,7 +32,8 @@ namespace Ankh
         /// Schedules the specified command at or after the specified time
         /// </summary>
         /// <param name="time"></param>
-        /// <param name="action"></param>
+        /// <param name="dlg"></param>
+        /// <param name="args"></param>
         int ScheduleAt(DateTime time, AnkhAction action);
         /// <summary>
         /// Schedules the specified command at or after the specified interval
@@ -44,7 +45,7 @@ namespace Ankh
         /// Schedules the specified command at or after the specified interval
         /// </summary>
         /// <param name="timeSpan"></param>
-        /// <param name="action"></param>
+        /// <param name="command"></param>
         int Schedule(TimeSpan timeSpan, AnkhAction action);
 
         /// <summary>

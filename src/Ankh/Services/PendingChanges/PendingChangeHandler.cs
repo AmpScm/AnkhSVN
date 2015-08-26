@@ -208,10 +208,10 @@ namespace Ankh.Services.PendingChanges
         public bool Commit(IEnumerable<PendingChange> changes, PendingChangeCommitArgs args)
         {
             // Ok, to make a commit happen we have to take 'a few' steps
-            IAnkhServiceEvents ci = GetService<IAnkhServiceEvents>();
+            ILastChangeInfo ci = GetService<ILastChangeInfo>();
 
             if (ci != null)
-                ci.OnLastChanged(new LastChangedEventArgs(null, null));
+                ci.SetLastChange(null, null);
 
             bool storeMessage = args.StoreMessageOnError;
 
@@ -746,10 +746,10 @@ namespace Ankh.Services.PendingChanges
 
             if (rslt != null)
             {
-                IAnkhServiceEvents ci = GetService<IAnkhServiceEvents>();
+                ILastChangeInfo ci = GetService<ILastChangeInfo>();
 
                 if (ci != null)
-                    ci.OnLastChanged(new LastChangedEventArgs(PccStrings.CommittedPrefix, rslt.Revision.ToString()));
+                    ci.SetLastChange(PccStrings.CommittedPrefix, rslt.Revision.ToString());
 
                 if (!string.IsNullOrEmpty(rslt.PostCommitError))
                     state.MessageBox.Show(rslt.PostCommitError, PccStrings.PostCommitError, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);

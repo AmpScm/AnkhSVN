@@ -33,13 +33,14 @@ namespace Ankh.Scc
     sealed class SvnSccContext : AnkhService
     {
         SvnClient _svnClient;
-        readonly ISvnStatusCache _statusCache;
+        SvnWorkingCopyClient _wcClient;
+        readonly IFileStatusCache _statusCache;
         bool _disposed;
 
         public SvnSccContext(IAnkhServiceProvider context)
             : base(context)
         {
-            _statusCache = GetService<ISvnStatusCache>();
+            _statusCache = GetService<IFileStatusCache>();
         }
 
         protected override void Dispose(bool disposing)
@@ -50,6 +51,9 @@ namespace Ankh.Scc
 
                 if (_svnClient != null)
                     ((IDisposable)_svnClient).Dispose();
+
+                if (_wcClient != null)
+                    ((IDisposable)_wcClient).Dispose();
             }
             base.Dispose(disposing);
         }
@@ -59,9 +63,47 @@ namespace Ankh.Scc
             get { return _svnClient ?? (_svnClient = GetService<ISvnClientPool>().GetNoUIClient()); }
         }
 
-        ISvnStatusCache StatusCache
+        public SvnWorkingCopyClient WcClient
+        {
+            get { return _wcClient ?? (_wcClient = GetService<ISvnClientPool>().GetWcClient()); }
+        }
+
+        IFileStatusCache StatusCache
         {
             get { return _statusCache; }
+        }
+
+        /// <summary>
+        /// Gets the working copy entry information on the specified path from its parent
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public SvnEntry SafeGetEntry(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            // We only have to look in the parent.
+            // If the path is the working copy root, the name doesn't matter!
+
+            string dir = SvnTools.GetNormalizedDirectoryName(path);
+
+            SvnWorkingCopyEntryEventArgs entry = null;
+            SvnWorkingCopyEntriesArgs wa = new SvnWorkingCopyEntriesArgs();
+            wa.ThrowOnError = false;
+            wa.ThrowOnCancel = false;
+            WcClient.ListEntries(dir, wa,
+                delegate(object sender, SvnEntry e)
+                {
+                    if (entry == null && path == e.FullPath)
+                    {
+                        e.Detach();
+                        entry = e;
+                        e.Cancel = true;
+                    }
+                });
+
+            return entry;
         }
 
         public void MetaMove(string oldName, string newName)
@@ -75,11 +117,11 @@ namespace Ankh.Scc
 
         public void MetaCopy(string from, string newName)
         {
-            SvnCopyArgs ca = new SvnCopyArgs();
+            SvnWorkingCopyCopyArgs ca = new SvnWorkingCopyCopyArgs();
             ca.ThrowOnError = false;
             ca.MetaDataOnly = true;
 
-            Client.Copy(from, newName, ca);
+            WcClient.Copy(from, newName, ca);
         }
 
         public bool MetaDelete(string path)
@@ -195,6 +237,25 @@ namespace Ankh.Scc
                         change.IgnoreFile(0, file, 0);
                     }
                 });
+        }
+
+        public bool IsUnversioned(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException("name");
+
+            SvnWorkingCopyEntryEventArgs status = SafeGetEntry(name);
+
+            if (status == null)
+                return true;
+
+            switch (status.Schedule)
+            {
+                case SvnSchedule.Delete:
+                    return true; // The item was already deleted
+                default:
+                    return false;
+            }
         }
 
         sealed class DelegateRunner : IDisposable

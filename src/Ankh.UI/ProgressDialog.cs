@@ -136,8 +136,6 @@ namespace Ankh.UI
                 case SvnNotifyAction.UpdateShadowedAdd:
                 case SvnNotifyAction.UpdateShadowedDelete:
                 case SvnNotifyAction.UpdateShadowedUpdate:
-                case SvnNotifyAction.UpdateExternalRemoved:
-                case SvnNotifyAction.UpdateBrokenLock:
                     actionText = actionText.Substring(6);
                     break;
                 case SvnNotifyAction.UpgradedDirectory:
@@ -149,7 +147,6 @@ namespace Ankh.UI
                 case SvnNotifyAction.CommitReplaced:
                 case SvnNotifyAction.CommitAddCopy:
                 case SvnNotifyAction.CommitReplacedWithCopy:
-                case SvnNotifyAction.CommitFinalizing:
                     actionText = actionText.Substring(6);
                     break;
                 case SvnNotifyAction.CommitSendData:
@@ -161,7 +158,6 @@ namespace Ankh.UI
                 case SvnNotifyAction.UpdateStarted:
                 case SvnNotifyAction.RecordMergeInfoStarted:
                 case SvnNotifyAction.FollowUrlRedirect:
-                case SvnNotifyAction.OperationRequiresTarget:
                     actionText = null;
                     break;
             }
@@ -254,14 +250,7 @@ namespace Ankh.UI
                         {
                             string sr = SplitRoot;
                             if (!string.IsNullOrEmpty(sr) && SvnItem.IsBelowRoot(path, sr))
-                            {
-                                string np = SvnItem.SubPath(path, sr, true);
-                                
-                                if (np.IndexOf(':') == 1)
-                                    path = np; // Full path
-                                else
-                                    path = np.Replace(Path.DirectorySeparatorChar, '/');
-                            }
+                                path = SvnItem.SubPath(path, sr, true).Replace(Path.DirectorySeparatorChar, '/');
 
                             item.SubItems.Add(path);
                         }

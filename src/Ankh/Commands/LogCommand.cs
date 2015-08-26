@@ -44,16 +44,16 @@ namespace Ankh.Commands
             switch (e.Command)
             {
                 case AnkhCommand.ProjectHistory:
-                    SccProject p = EnumTools.GetFirst(e.Selection.GetSelectedProjects(false));
+                    SvnProject p = EnumTools.GetFirst(e.Selection.GetSelectedProjects(false));
                     if (p == null)
                         break;
 
-                    ISccProjectInfo pi = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
+                    ISvnProjectInfo pi = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
 
                     if (pi == null || string.IsNullOrEmpty(pi.ProjectDirectory))
                         break; // No project location
 
-                    if (e.GetService<ISvnStatusCache>()[pi.ProjectDirectory].HasCopyableHistory)
+                    if (e.GetService<IFileStatusCache>()[pi.ProjectDirectory].HasCopyableHistory)
                         return; // Ok, we have history!                                           
 
                     break; // No history
@@ -64,12 +64,12 @@ namespace Ankh.Commands
                     if (ss == null || string.IsNullOrEmpty(ss.ProjectRoot))
                         break;
 
-                    if (e.GetService<ISvnStatusCache>()[ss.ProjectRoot].HasCopyableHistory)
+                    if (e.GetService<IFileStatusCache>()[ss.ProjectRoot].HasCopyableHistory)
                         return; // Ok, we have history!
 
                     break; // No history
                 case AnkhCommand.DocumentHistory:
-                    SvnItem docitem = e.Selection.ActiveDocumentSvnItem;
+                    SvnItem docitem = e.Selection.ActiveDocumentItem;
                     if (docitem != null && docitem.HasCopyableHistory)
                         return;
                     break; // No history
@@ -134,7 +134,7 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             List<SvnOrigin> selected = new List<SvnOrigin>();
-            ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
 
             switch (e.Command)
             {
@@ -165,9 +165,9 @@ namespace Ankh.Commands
                     break;
                 case AnkhCommand.ProjectHistory:
                     IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
-                    foreach (SccProject p in e.Selection.GetSelectedProjects(false))
+                    foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
                     {
-                        ISccProjectInfo info = mapper.GetProjectInfo(p);
+                        ISvnProjectInfo info = mapper.GetProjectInfo(p);
 
                         if (info != null)
                             selected.Add(new SvnOrigin(cache[info.ProjectDirectory]));
@@ -176,7 +176,7 @@ namespace Ankh.Commands
                     PerformLog(e.Context, selected, null, null);
                     break;
                 case AnkhCommand.DocumentHistory:
-                    SvnItem docItem = e.Selection.ActiveDocumentSvnItem;
+                    SvnItem docItem = e.Selection.ActiveDocumentItem;
                     Debug.Assert(docItem != null);
 
                     PerformLog(e.Context, new SvnOrigin[] { new SvnOrigin(docItem) }, null, null);

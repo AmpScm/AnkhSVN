@@ -169,10 +169,5 @@ namespace Ankh
         public const int E_ACCESSDENIED = unchecked((int)0x80070005);
         /// <summary>Error HRESULT for a pending condition.</summary>
         public const int E_PENDING = unchecked((int)0x8000000A);
-
-        internal static int GetHRForException(Exception e)
-        {
-            return Marshal.GetHRForException(e);
-        }
     }
 }

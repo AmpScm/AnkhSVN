@@ -162,7 +162,7 @@ namespace Ankh.Commands
             using (ProjectAddInfoDialog pai = new ProjectAddInfoDialog())
             {
                 IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
-                ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
+                IFileStatusCache cache = e.GetService<IFileStatusCache>();
                 SvnItem rootItem;
 
                 pai.EnableSlnConnection = false;
@@ -230,12 +230,12 @@ namespace Ankh.Commands
                                 }
                             break;
                         case ProjectAddMode.Copy:
-                            using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
+                            using (SvnWorkingCopyClient cl = e.GetService<ISvnClientPool>().GetWcClient())
                             {
                                 string tmpDir = localDir + "-Src-copyTmp";
                                 Directory.CreateDirectory(tmpDir);
                                 Directory.Move(Path.Combine(localDir, SvnClient.AdministrativeDirectoryName), Path.Combine(tmpDir, SvnClient.AdministrativeDirectoryName));
-                                SvnCopyArgs ma = new SvnCopyArgs();
+                                SvnWorkingCopyCopyArgs ma = new SvnWorkingCopyCopyArgs();
                                 ma.MetaDataOnly = true;
                                 cl.Copy(tmpDir, localDir, ma);
                                 SvnItem.DeleteDirectory(tmpDir, true);
@@ -258,7 +258,7 @@ namespace Ankh.Commands
 
             if (sol != null)
             {
-                sol.CloseSolutionElement(VSItemId.Root, null, 0); // Closes the current solution
+                sol.CloseSolutionElement(VSConstants.VSITEMID_ROOT, null, 0); // Closes the current solution
             }
 
             IAnkhSccService scc = e.GetService<IAnkhSccService>();

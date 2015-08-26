@@ -219,6 +219,30 @@
   <data name="logMessageEditor.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
+  <data name="pendingCommits.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="pendingCommits.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="pendingCommits.Size" type="System.Drawing.Size, System.Drawing">
+    <value>768, 215</value>
+  </data>
+  <data name="pendingCommits.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;pendingCommits.Name" xml:space="preserve">
+    <value>pendingCommits</value>
+  </data>
+  <data name="&gt;&gt;pendingCommits.Type" xml:space="preserve">
+    <value>Ankh.UI.PendingChanges.Commits.PendingCommitsView, Ankh.UI, Version=2.3.4566.29083, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+  </data>
+  <data name="&gt;&gt;pendingCommits.Parent" xml:space="preserve">
+    <value>splitContainer.Panel2</value>
+  </data>
+  <data name="&gt;&gt;pendingCommits.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="logMessageEditor.Size" type="System.Drawing.Size, System.Drawing">
     <value>766, 61</value>
   </data>
@@ -229,7 +253,7 @@
     <value>logMessageEditor</value>
   </data>
   <data name="&gt;&gt;logMessageEditor.Type" xml:space="preserve">
-    <value>Ankh.UI.PendingChanges.LogMessageEditor, Ankh.UI, Version=2.5.5571.20748, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.PendingChanges.LogMessageEditor, Ankh.UI, Version=2.3.4566.29083, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;logMessageEditor.Parent" xml:space="preserve">
     <value>topLayoutPanel</value>
@@ -408,33 +432,6 @@
   <data name="splitContainer.Panel1MinSize" type="System.Int32, mscorlib">
     <value>23</value>
   </data>
-  <data name="changeListDummy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="changeListDummy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="changeListDummy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>768, 215</value>
-  </data>
-  <data name="changeListDummy.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="changeListDummy.Text" xml:space="preserve">
-    <value>label2</value>
-  </data>
-  <data name="&gt;&gt;changeListDummy.Name" xml:space="preserve">
-    <value>changeListDummy</value>
-  </data>
-  <data name="&gt;&gt;changeListDummy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;changeListDummy.Parent" xml:space="preserve">
-    <value>splitContainer.Panel2</value>
-  </data>
-  <data name="&gt;&gt;changeListDummy.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="&gt;&gt;splitContainer.Panel2.Name" xml:space="preserve">
     <value>splitContainer.Panel2</value>
   </data>
@@ -456,6 +453,9 @@
   <data name="splitContainer.SplitterDistance" type="System.Int32, mscorlib">
     <value>83</value>
   </data>
+  <data name="splitContainer.SplitterWidth" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
   <data name="splitContainer.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
@@ -463,7 +463,7 @@
     <value>splitContainer</value>
   </data>
   <data name="&gt;&gt;splitContainer.Type" xml:space="preserve">
-    <value>Ankh.UI.VSSelectionControls.SmartSplitContainer, Ankh.UI, Version=2.5.5571.20748, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.VSSelectionControls.SmartSplitContainer, Ankh.UI, Version=2.3.4566.29083, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;splitContainer.Parent" xml:space="preserve">
     <value>$this</value>
@@ -508,6 +508,6 @@
     <value>PendingCommitsPage</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.PendingChanges.PendingChangesPage, Ankh.UI, Version=2.5.5571.20748, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.PendingChanges.PendingChangesPage, Ankh.UI, Version=2.3.4566.29083, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>

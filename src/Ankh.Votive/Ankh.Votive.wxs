@@ -57,13 +57,8 @@
               <Merge Id="CRT" Language="0" SourceFile="$(sys.SOURCEFILEDIR)..\lib\microsoft_vc90_crt_x86.msm" DiskId="1" />
               <Merge Id="CRT_Policy" Language="0" SourceFile="$(sys.SOURCEFILEDIR)..\lib\policy_9_0_Microsoft_VC90_CRT_x86.msm" DiskId="1" />
             </Directory>
-            <Directory Id="DIR_SharpGit" Name=".">
-            </Directory>
             <Directory Id="DIR_SharpSvnLicenses" Name="Licenses">
               <!-- SharpSvn licenses will be placed here -->
-            </Directory>
-            <Directory Id="DIR_SharpGitLicenses" Name="Licenses">
-              <!-- SharpGit licenses will be placed here -->
             </Directory>
             <Component Id="C_CONTRIBUTORS" Guid="BD3AA74E-8B7D-4582-A2E0-CC5F0E2D08A7">
               <File Id="CF_CONTRIBUTORS.txt" Name="CONTRIBUTORS.txt" KeyPath="yes"/>
@@ -195,7 +190,6 @@
       <ComponentRef Id="C_VSIXMANIFEST10" />
       <ComponentRef Id="C_VSIXICO" />
       <ComponentRef Id="C_VSIXPREVIEW" />
-      <ComponentGroupRef Id="SharpGit_LICENSES" />
       <ComponentGroupRef Id="SharpSvn_LICENSES" />
       <MergeRef Id="CRT" />
       <MergeRef Id="CRT_Policy" />

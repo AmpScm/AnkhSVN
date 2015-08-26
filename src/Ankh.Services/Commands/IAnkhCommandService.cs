@@ -100,7 +100,6 @@ namespace Ankh.Commands
         /// Executes the specified command synchronously
         /// </summary>
         /// <param name="command">The command.</param>
-        /// <param name="verifyEnabled"></param>
         /// <returns></returns>
         CommandResult ExecCommand(AnkhCommand command, bool verifyEnabled);
         /// <summary>
@@ -149,7 +148,6 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="command">The command.</param>
         /// <param name="args">The args.</param>
-        /// <param name="prompt"></param>
         /// <returns></returns>
         CommandResult DirectlyExecCommand(AnkhCommand command, object args, CommandPrompt prompt);
 

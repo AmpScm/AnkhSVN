@@ -39,12 +39,10 @@ namespace Ankh
         // Tick commands; one shot delayed task handlers
         TickFirst,
         MarkProjectDirty,
-        SvnCacheFinishTasks,
-        GitCacheFinishTasks,
+        FileCacheFinishTasks,
         SccFinishTasks,
         TickRefreshPendingTasks,
         TickRefreshSvnItems,
-        TickRefreshGitItems,
         // /Tick Commands
         TickLast,
 

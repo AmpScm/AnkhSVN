@@ -22,7 +22,6 @@ namespace Ankh.ExtensionPoints.RepositoryProvider
         /// <summary>
         /// Creates a SCM repository selection control which provides the UI to select  a repository
         /// </summary>
-        /// <remarks>This loads the service package if not already loaded</remarks>
         public abstract ScmRepositorySelectionControl CreateSelectionControl();
 
         /// <summary>

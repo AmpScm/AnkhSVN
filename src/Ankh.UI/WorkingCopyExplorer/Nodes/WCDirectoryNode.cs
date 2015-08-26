@@ -36,10 +36,10 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             _item = item;
         }
 
-        ISvnStatusCache _statusCache;
-        protected ISvnStatusCache StatusCache
+        IFileStatusCache _statusCache;
+        protected IFileStatusCache StatusCache
         {
-            get { return _statusCache ?? (_statusCache = Context.GetService<ISvnStatusCache>()); }
+            get { return _statusCache ?? (_statusCache = Context.GetService<IFileStatusCache>()); }
         }
  
         public override string Title

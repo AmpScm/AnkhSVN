@@ -37,7 +37,7 @@ namespace Ankh.Scc.Commands
             
             if (map != null)
             {
-                SccHierarchy hier = EnumTools.GetSingle(e.Selection.GetSelectedHierarchies());
+                SvnHierarchy hier = EnumTools.GetSingle(e.Selection.GetSelectedHierarchies());
 
                 if (hier != null && map.ContainsKey(hier.Name))
                     return;
@@ -49,7 +49,7 @@ namespace Ankh.Scc.Commands
         public void OnExecute(CommandEventArgs e)
         {
             SvnSccProvider scc = e.GetService<SvnSccProvider>();
-            SccHierarchy hier = EnumTools.GetSingle(e.Selection.GetSelectedHierarchies());
+            SvnHierarchy hier = EnumTools.GetSingle(e.Selection.GetSelectedHierarchies());
 
             if (hier == null)
                 throw new InvalidOperationException();

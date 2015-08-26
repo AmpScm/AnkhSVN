@@ -19,7 +19,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <Cultures>en-US</Cultures>
-    <DefineConstants>Debug;SharpSvn_NoXml=yes;SharpGit_NoXml=yes;SharpGit_NoSvnLicenses=yes</DefineConstants>
+    <DefineConstants>Debug;SharpSvn_NoXml=yes</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
     <OutputPath>Ankh.Votive\bin\$(Configuration)\</OutputPath>
@@ -41,7 +41,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <Cultures>en-US</Cultures>
-    <DefineConstants>SharpSvn_NoXml=yes;SharpGit_NoXml=yes;SharpGit_NoSvnLicenses=yes</DefineConstants>
+    <DefineConstants>SharpSvn_NoXml=yes</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
     <OutputPath>Ankh.Votive\bin\$(Configuration)\</OutputPath>
@@ -68,19 +68,14 @@
     <Compile Include="Ankh.Ids\Ankh.Ids.wxs" />
     <Compile Include="Ankh.Package\Ankh.Package.wxs" />
     <Compile Include="Ankh.Scc\Ankh.Scc.wxs" />
-    <Compile Include="Ankh.GitScc\Ankh.GitScc.wxs" />
     <Compile Include="Ankh.Services\Ankh.Services.wxs" />
     <Compile Include="Ankh.UI\Ankh.UI.wxs" />
     <Compile Include="Ankh.VS.Interop\Ankh.VS.Interop.wxs" />
-    <Compile Include="Ankh.VS.WpfServices\Ankh.VS.WpfServices.wxs" />
     <Compile Include="Ankh.VS\Ankh.VS.wxs" />
     <Compile Include="Ankh.WpfEditor.Package\Ankh.WpfEditor.Package.wxs" />
-    <Compile Include="Ankh.WpfUI\Ankh.WpfUI.wxs" />
     <Compile Include="Ankh\Ankh.wxs" />
     <Compile Include="Ankh.Votive\Ankh.Votive.wxs" />
     <Compile Include="Ankh.Votive\AnkhVSExtension.wxs" />
-    <Compile Include="autolib\SharpGit\SharpGit.wxs" />
-    <Compile Include="autolib\SharpGit\Licenses\SharpGit-Licenses.wxs" />
     <Compile Include="autolib\SharpSvn\SharpSvn.wxs" />
     <Compile Include="autolib\SharpSvn\Licenses\SharpSvn-Licenses.wxs" />
   </ItemGroup>
@@ -88,19 +83,14 @@
     <Folder Include="Ankh.Diff\" />
     <Folder Include="Ankh.ExtensionPoints\" />
     <Folder Include="Ankh.Ids\" />
-    <Folder Include="Ankh.GitScc\" />
     <Folder Include="Ankh.Scc\" />
     <Folder Include="Ankh.Services\" />
     <Folder Include="Ankh.UI\" />
     <Folder Include="Ankh.VS.Interop\" />
-    <Folder Include="Ankh.VS.WpfServices\" />
     <Folder Include="Ankh.VS\" />
     <Folder Include="Ankh.WpfEditor.Package\" />
-    <Folder Include="Ankh.WpfUI\" />
     <Folder Include="Ankh\" />
     <Folder Include="autolib\" />
-    <Folder Include="autolib\SharpGit\" />
-    <Folder Include="autolib\SharpGit\Licenses\" />
     <Folder Include="autolib\SharpSvn\" />
     <Folder Include="autolib\SharpSvn\Licenses\" />
     <Folder Include="Ankh.Package" />
@@ -110,12 +100,6 @@
     <ProjectReference Include="Ankh.ExtensionPoints\Ankh.ExtensionPoints.csproj">
       <Name>Ankh.ExtensionPoints</Name>
       <Project>{b7168874-e05e-458d-95cc-5d7bbc243986}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-    </ProjectReference>
-    <ProjectReference Include="Ankh.GitScc\Ankh.GitScc.csproj">
-      <Name>Ankh.GitScc</Name>
-      <Project>{1d429fcf-3eab-4ba6-9982-d33f74a65efe}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
@@ -155,12 +139,6 @@
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>
-    <ProjectReference Include="Ankh.VS.WpfServices\Ankh.VS.WpfServices.csproj">
-      <Name>Ankh.VS.WpfServices</Name>
-      <Project>{fb146856-23a8-4151-9467-19ae22fb166f}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-    </ProjectReference>
     <ProjectReference Include="Ankh.VS\Ankh.VS.csproj">
       <Name>Ankh.VS</Name>
       <Project>{906e3f01-cd79-4f80-bca7-1105224328c4}</Project>
@@ -170,12 +148,6 @@
     <ProjectReference Include="Ankh.WpfEditor.Package\Ankh.WpfEditor.Package.csproj">
       <Name>Ankh.WpfEditor.Package</Name>
       <Project>{d3ffd86d-b2ac-4659-86dd-559e42844bd0}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-    </ProjectReference>
-    <ProjectReference Include="Ankh.WpfUI\Ankh.WpfUI.csproj">
-      <Name>Ankh.WpfUI</Name>
-      <Project>{8fc7114e-5a84-4221-8187-c3d1c370404e}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
     </ProjectReference>

@@ -30,13 +30,11 @@ namespace Ankh.Commands
         public SvnCommandAttribute(AnkhCommand command)
             : base(command)
         {
-            Availability = CommandAvailability.SvnActive;
         }
 
         public SvnCommandAttribute(AnkhCommand command, AnkhCommandContext context)
             : base(command, context)
         {
-            Availability = CommandAvailability.SvnActive;
         }
     }
 }

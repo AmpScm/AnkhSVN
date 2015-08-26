@@ -374,7 +374,7 @@ namespace Ankh.Configuration
 
         #region IAnkhConfigurationService Members
 
-        [Guid("5C45B909-E820-4ACC-B894-0A013C6DA212"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [Guid("5C45B909-E820-4ACC-B894-0A013C6DA212"), InterfaceType(1)]
         [ComImport]
         public interface IMyLocalRegistry4
         {

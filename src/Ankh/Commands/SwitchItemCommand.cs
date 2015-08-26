@@ -54,7 +54,7 @@ namespace Ankh.Commands
                     break;
 
                 case AnkhCommand.SwitchProject:
-                    SccProject oneProject = EnumTools.GetSingle(e.Selection.GetSelectedProjects(false));
+                    SvnProject oneProject = EnumTools.GetSingle(e.Selection.GetSelectedProjects(false));
 
                     if (oneProject == null)
                     {
@@ -63,7 +63,7 @@ namespace Ankh.Commands
                     }
 
                     IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
-                    ISccProjectInfo pi = pfm.GetProjectInfo(oneProject);
+                    ISvnProjectInfo pi = pfm.GetProjectInfo(oneProject);
 
                     if (pi == null || pi.ProjectDirectory == null)
                     {
@@ -71,7 +71,7 @@ namespace Ankh.Commands
                         return;
                     }
 
-                    SvnItem projectItem = e.GetService<ISvnStatusCache>()[pi.ProjectDirectory];
+                    SvnItem projectItem = e.GetService<IFileStatusCache>()[pi.ProjectDirectory];
 
                     if (projectItem == null || !projectItem.IsVersioned || projectItem.IsNewAddition)
                         e.Enabled = false;
@@ -101,9 +101,9 @@ namespace Ankh.Commands
                 IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
                 path = null;
 
-                foreach (SccProject item in e.Selection.GetSelectedProjects(true))
+                foreach (SvnProject item in e.Selection.GetSelectedProjects(true))
                 {
-                    ISccProjectInfo pi = mapper.GetProjectInfo(item);
+                    ISvnProjectInfo pi = mapper.GetProjectInfo(item);
 
                     if (pi == null)
                         continue;
@@ -129,7 +129,7 @@ namespace Ankh.Commands
                 path = theItem.FullPath;
             }
 
-            ISvnStatusCache statusCache = e.GetService<ISvnStatusCache>();
+            IFileStatusCache statusCache = e.GetService<IFileStatusCache>();
 
             SvnItem pathItem = statusCache[path];
             Uri uri = pathItem.Uri;
@@ -153,7 +153,7 @@ namespace Ankh.Commands
                     dlg.Context = e.Context;
 
                     dlg.LocalPath = path;
-                    dlg.RepositoryRoot = e.GetService<ISvnStatusCache>()[path].WorkingCopy.RepositoryRoot;
+                    dlg.RepositoryRoot = e.GetService<IFileStatusCache>()[path].WorkingCopy.RepositoryRoot;
                     dlg.SwitchToUri = uri;
                     dlg.Revision = SvnRevision.Head;
 
@@ -242,7 +242,7 @@ namespace Ankh.Commands
                     finally
                     {
                         statusCache.MarkDirtyRecursive(wcRoot);
-                        e.GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(statusCache.GetCachedBelow(wcRoot));
+                        e.GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(SvnItem.GetPaths(statusCache.GetCachedBelow(wcRoot)));
                     }
 
 

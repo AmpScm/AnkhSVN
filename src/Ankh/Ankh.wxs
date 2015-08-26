@@ -7,8 +7,6 @@
       <ComponentGroupRef Id="Ankh.UI" />
       <ComponentGroupRef Id="LOCAL_SharpSvn_Win32" />
       <ComponentGroupRef Id="LOCAL_SharpSvnUI" />
-      <ComponentGroupRef Id="LOCAL_SharpGit_Win32" />
-      <ComponentGroupRef Id="LOCAL_SharpGitUI" />
       <ComponentRef Id="C_Ankh.dll" />
     </ComponentGroup>
     <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.TargetDir)">

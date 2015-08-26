@@ -74,11 +74,11 @@ namespace Ankh.Scc
             {
                 string s = rgszMkOldNames[i];
                 if (SvnItem.IsValidPath(s))
-                    SvnCache.MarkDirty(s);
+                    StatusCache.MarkDirty(s);
 
                 s = rgszMkNewNames[i];
                 if (SvnItem.IsValidPath(s))
-                    SvnCache.MarkDirty(s);
+                    StatusCache.MarkDirty(s);
             }
 
             if (!SccProvider.IsActive)
@@ -94,7 +94,7 @@ namespace Ankh.Scc
                 {
                     IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                    bool track = SccEvents.TrackProjectChanges(sccProject);
+                    bool track = SccProvider.TrackProjectChanges(sccProject);
 
                     for (; iFile < iLastFileThisProject; iFile++)
                     {
@@ -110,7 +110,7 @@ namespace Ankh.Scc
                         if (oldName == newName)
                             continue;
 
-                        SccEvents.OnProjectFileRenamed(sccProject, oldName, newName, rgFlags[iFile]);
+                        SccProvider.OnProjectRenamedFile(sccProject, oldName, newName, rgFlags[iFile]);
                     }
                 }
                 else
@@ -125,9 +125,9 @@ namespace Ankh.Scc
                         string newName = SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]);
 
                         if (oldName != newName)
-                            SccEvents.OnSolutionRenamedFile(oldName, newName);
+                            SccProvider.OnSolutionRenamedFile(oldName, newName);
 
-                        SccEvents.Translate_SolutionRenamed(rgszMkOldNames[iFile], rgszMkNewNames[iFile]);
+                        SccProvider.Translate_SolutionRenamed(rgszMkOldNames[iFile], rgszMkNewNames[iFile]);
                     }
                 }
             }
@@ -193,8 +193,8 @@ namespace Ankh.Scc
             if (_alreadyProcessed.Contains(newName))
                 return true;
 
-            SvnItem old = SvnCache[oldName];
-            SvnItem nw = SvnCache[newName];
+            SvnItem old = StatusCache[oldName];
+            SvnItem nw = StatusCache[newName];
 
             if (old.IsVersioned && !old.IsDeleteScheduled
                 && nw.IsVersionable
@@ -266,11 +266,11 @@ namespace Ankh.Scc
             {
                 string s = rgszMkOldNames[i];
                 if (!string.IsNullOrEmpty(s))
-                    SvnCache.MarkDirty(s);
+                    StatusCache.MarkDirty(s);
 
                 s = rgszMkNewNames[i];
                 if (!string.IsNullOrEmpty(s))
-                    SvnCache.MarkDirty(s);
+                    StatusCache.MarkDirty(s);
             }
 
             if (!SccProvider.IsActive)
@@ -284,14 +284,14 @@ namespace Ankh.Scc
 
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                bool track = SccEvents.TrackProjectChanges(sccProject);
+                bool track = SccProvider.TrackProjectChanges(sccProject);
 
                 for (; iDirectory < iLastDirectoryThisProject; iDirectory++)
                 {
                     if (sccProject == null || !track)
                         continue; // Not handled by our provider
 
-                    SccEvents.OnProjectDirectoryRenamed(sccProject,
+                    SccProvider.OnProjectDirectoryRenamed(sccProject,
                         SvnTools.GetNormalizedFullPath(rgszMkOldNames[iDirectory]),
                         SvnTools.GetNormalizedFullPath(rgszMkNewNames[iDirectory]), rgFlags[iDirectory]);
                 }

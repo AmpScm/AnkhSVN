@@ -27,45 +27,51 @@ using Microsoft.VsSDK.IntegrationTestLibrary;
 
 namespace IntegrationTests
 {
-    [TestClass]
-    public class SolutionTests
-    {
-        #region fields
-        private delegate void ThreadInvoker();
-        private TestContext _testContext;
-        #endregion
+	[TestClass]
+	public class SolutionTests
+	{
+		#region fields
+		private delegate void ThreadInvoker();
+		private TestContext _testContext;
+		#endregion
 
-        #region properties
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
+		#region properties
+		/// <summary>
+		///Gets or sets the test context which provides
+		///information about and functionality for the current test run.
+		///</summary>
+		public TestContext TestContext
+		{
+			get { return _testContext; }
+			set { _testContext = value; }
+		}
+		#endregion
+
+
+		#region ctors
+		public SolutionTests()
+		{
+		}
+
+		#endregion
+
+        [TestInitialize]
+        public void Initialize()
         {
-            get { return _testContext; }
-            set { _testContext = value; }
-        }
-        #endregion
-
-
-        #region ctors
-        public SolutionTests()
-        {
-        }
-
-        #endregion
-
-        [TestMethod]
-        [HostType("VS IDE")]
-        public void CreateEmptySolution()
-        {
-            UIThreadInvoker.Invoke((ThreadInvoker)delegate()
-            {
-                TestUtils testUtils = new TestUtils();
-                testUtils.CloseCurrentSolution(__VSSLNSAVEOPTIONS.SLNSAVEOPT_NoSave);
-                testUtils.CreateEmptySolution(TestContext.TestDir, "EmptySolution");
-            });
+            UIThreadInvoker.Initialize();
         }
 
-    }
+		[TestMethod]
+		[HostType("VS IDE")]
+		public void CreateEmptySolution()
+		{
+			UIThreadInvoker.Invoke((ThreadInvoker)delegate()
+			{
+				TestUtils testUtils = new TestUtils();
+				testUtils.CloseCurrentSolution(__VSSLNSAVEOPTIONS.SLNSAVEOPT_NoSave);
+				testUtils.CreateEmptySolution(TestContext.TestDir, "CreateEmptySolution");
+			});
+		}
+
+	}
 }

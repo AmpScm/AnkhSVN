@@ -8,21 +8,100 @@ using Ankh.Commands;
 using EnvDTESourceControl = EnvDTE.SourceControl;
 using EnvDTESourceControl2 = EnvDTE80.SourceControl2;
 using System.IO;
+using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Scc
 {
-    partial class SvnSccProvider
+    partial class SvnSccProvider : EnvDTESourceControl2, EnvDTESourceControl
     {
+        readonly HybridCollection<string> _sccExcluded = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+
         public void SerializeSccExcludeData(System.IO.Stream store, bool writeData)
         {
-            ProjectMap.SerializeSccExcludeData(store, writeData);
+            LoadSolutionInfo(); // Force the right data
+            string baseDir = SolutionDirectory;
+
+            if (writeData)
+            {
+                if (_sccExcluded.Count == 0)
+                    return;
+
+                using (BinaryWriter bw = new BinaryWriter(store))
+                {
+                    bw.Write(_sccExcluded.Count);
+
+                    foreach (string path in _sccExcluded)
+                    {
+                        if (baseDir != null)
+                            bw.Write(PackageUtilities.MakeRelative(baseDir, path));
+                        else
+                            bw.Write(path);
+                    }
+                }
+            }
+            else
+            {
+                if (store.Length == 0)
+                    return;
+
+                using (BinaryReader br = new BinaryReader(store))
+                {
+                    int count = br.ReadInt32();
+
+                    while (count-- > 0)
+                    {
+                        string path = br.ReadString();
+
+                        try
+                        {
+                            if (baseDir != null)
+                                path = SvnTools.GetNormalizedFullPath(Path.Combine(baseDir, path));
+                            else
+                                path = SvnTools.GetNormalizedFullPath(path);
+
+                            if (!_sccExcluded.Contains(path))
+                                _sccExcluded.Add(path);
+                        }
+                        catch { }
+                    }
+                }
+            }
         }
 
-        protected override bool CheckOutItems(string[] itemNames, EnvDTE80.vsSourceControlCheckOutOptions flags)
+
+
+        public bool IsSccExcluded(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            return _sccExcluded.Contains(path);
+        }
+
+        public bool CheckOutItem(string ItemName)
+        {
+            return CheckOutItem2(ItemName, EnvDTE80.vsSourceControlCheckOutOptions.vsSourceControlCheckOutOptionLocalVersion);
+        }
+
+        public bool CheckOutItem2(string ItemName, EnvDTE80.vsSourceControlCheckOutOptions Flags)
+        {
+            if (string.IsNullOrEmpty(ItemName))
+                return false;
+
+            object[] items = new string[] { ItemName };
+            return CheckOutItems2(ref items, Flags);
+        }
+
+        public bool CheckOutItems(ref object[] ItemNames)
+        {
+            return CheckOutItems2(ref ItemNames, EnvDTE80.vsSourceControlCheckOutOptions.vsSourceControlCheckOutOptionLocalVersion);
+        }
+
+        public bool CheckOutItems2(ref object[] ItemNames, EnvDTE80.vsSourceControlCheckOutOptions Flags)
         {
             HybridCollection<string> mustLockItems = null;
 
-            foreach (string item in itemNames)
+            foreach (string item in ItemNames)
             {
                 if (!IsSafeSccPath(item))
                     continue;
@@ -55,25 +134,34 @@ namespace Ankh.Scc
             return true;
         }
 
-        protected override void ExcludeItems(string projectFile, string[] itemNames)
+        public void ExcludeItem(string ProjectFile, string ItemName)
+        {
+            if (string.IsNullOrEmpty(ItemName))
+                return;
+
+            object[] items = new string[] { ItemName };
+            ExcludeItems(ProjectFile, ref items);
+        }
+
+        public void ExcludeItems(string ProjectFile, ref object[] ItemNames)
         {
             List<string> changed = null;
-            foreach (string item in itemNames)
+            foreach (string item in ItemNames)
             {
                 if (!IsSafeSccPath(item))
                     continue;
 
                 string path = SvnTools.GetNormalizedFullPath(item);
 
-                if (!ProjectMap.IsSccExcluded(path))
+                if (!_sccExcluded.Contains(path))
                 {
-                    ProjectMap.SccExclude(path);
+                    _sccExcluded.Add(path);
 
                     if (changed == null)
                         changed = new List<string>();
                     changed.Add(path);
 
-                    StatusCache.SetSolutionContained(path, ProjectMap.ContainsFile(path), true);
+                    StatusCache.SetSolutionContained(path, _fileMap.ContainsKey(path), _sccExcluded.Contains(path));
                 }
             }
 
@@ -81,17 +169,26 @@ namespace Ankh.Scc
                 PendingChanges.Refresh(changed);
         }
 
-        protected override void UndoExcludeItems(string projectFile, string[] itemNames)
+        public void UndoExcludeItem(string ProjectFile, string ItemName)
+        {
+            if (string.IsNullOrEmpty(ItemName))
+                return;
+
+            object[] items = new string[] { ItemName };
+            UndoExcludeItems(ProjectFile, ref items);
+        }
+
+        public void UndoExcludeItems(string ProjectFile, ref object[] ItemNames)
         {
             List<string> changed = null;
-            foreach (string item in itemNames)
+            foreach (string item in ItemNames)
             {
                 if (!IsSafeSccPath(item))
                     continue;
 
                 string path = SvnTools.GetNormalizedFullPath(item);
 
-                if (ProjectMap.SccRemoveExcluded(path))
+                if (_sccExcluded.Remove(path))
                 {
                     if (changed == null)
                         changed = new List<string>();
@@ -197,7 +294,7 @@ namespace Ankh.Scc
             }
         }
 
-        public override EnvDTE80.SourceControlBindings GetBindings(string ItemPath)
+        public EnvDTE80.SourceControlBindings GetBindings(string ItemPath)
         {
             if (!IsSafeSccPath(ItemPath))
                 return null;
@@ -205,7 +302,7 @@ namespace Ankh.Scc
             return new AnkhSccSourceControlBinding(this, SvnTools.GetNormalizedFullPath(ItemPath));
         }
 
-        public override bool IsItemCheckedOut(string ItemName)
+        public bool IsItemCheckedOut(string ItemName)
         {
             if (!IsSafeSccPath(ItemName))
                 return false;
@@ -218,9 +315,31 @@ namespace Ankh.Scc
             return item.IsVersioned || (item.InSolution && item.IsVersionable && !item.IsSccExcluded);
         }
 
-        public override bool IsItemUnderSCC(string ItemName)
+        public bool IsItemUnderSCC(string ItemName)
         {
             return true;
+        }                
+
+        #region DTE properties
+        EnvDTE.DTE EnvDTESourceControl.DTE
+        {
+            get { return GetService<EnvDTE.DTE>(typeof(SDTE)); }
         }
+
+        EnvDTE.DTE EnvDTESourceControl2.DTE
+        {
+            get { return GetService<EnvDTE.DTE>(typeof(SDTE)); }
+        }
+
+        EnvDTE.DTE EnvDTESourceControl.Parent
+        {
+            get { return GetService<EnvDTE.DTE>(typeof(SDTE)); }
+        }
+
+        EnvDTE.DTE EnvDTESourceControl2.Parent
+        {
+            get { return GetService<EnvDTE.DTE>(typeof(SDTE)); }
+        }
+        #endregion
     }
 }

@@ -67,7 +67,7 @@ namespace UnitTestProject
             IVsPackage package = new AnkhSvnPackage() as IVsPackage;
             Assert.IsNotNull(package, "The object does not implement IVsPackage");
             
-            var statusCache = new Mock<ISvnStatusCache>();
+            var statusCache = new Mock<IFileStatusCache>();
             var regEditors = new Mock<SVsRegisterEditors>().As<IVsRegisterEditors>();
             
             var vsShell = new Mock<SVsShell>().As<IVsShell>();
@@ -88,7 +88,7 @@ namespace UnitTestProject
             using (ServiceProviderHelper.AddService(typeof(SVsTextManager), vsTextMgr.Object))
             using (ServiceProviderHelper.AddService(typeof(SVsShell), vsShell.Object))
             using (ServiceProviderHelper.AddService(typeof(SVsRegisterEditors), regEditors.Object))
-            using (ServiceProviderHelper.AddService(typeof(ISvnStatusCache), statusCache.Object))
+            using (ServiceProviderHelper.AddService(typeof(IFileStatusCache), statusCache.Object))
             using (ServiceProviderHelper.SetSite(package))
             {
                 // Unsite the package

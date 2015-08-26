@@ -95,7 +95,7 @@ namespace Ankh
         /// </summary>
         /// <typeparam name="T">The type of service to get</typeparam>
         /// <returns>
-        /// A service object of type <typeparamref name="T"/>.-or- null if there is no service object of type <typeparamref name="T"/>.
+        /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
         [DebuggerStepThrough]
         T IAnkhServiceProvider.GetService<T>()
@@ -120,7 +120,7 @@ namespace Ankh
         /// </summary>
         /// <typeparam name="T">The type of service to get</typeparam>
         /// <returns>
-        /// A service object of type <typeparamref name="T"/>.-or- null if there is no service object of type <typeparamref name="T"/>.
+        /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
         /// </returns>
         [DebuggerStepThrough]
         protected T GetService<T>()
@@ -226,11 +226,8 @@ namespace Ankh
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                if (Disposed != null)
-                    Disposed(this, EventArgs.Empty);
-            }
+            if (Disposed != null)
+                Disposed(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -367,14 +364,14 @@ namespace Ankh
         /// <summary>
         /// Releases the hook.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="S"></typeparam>
         /// <param name="container">The container.</param>
         /// <param name="cookie">The cookie.</param>
         [CLSCompliant(false)]
-        protected static void ReleaseHook<T>(object container, uint cookie)
-            where T : class
+        protected static void ReleaseHook<S>(object container, uint cookie)
+            where S : class
         {
-            ReleaseHook(container, typeof(T), cookie);
+            ReleaseHook(container, typeof(S), cookie);
         }
 
         /// <summary>
@@ -552,6 +549,10 @@ namespace Ankh
         /// <summary>
         /// Call <paramref name="func"/> with the specified arguments, returning false on exceptions
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="func"></param>
+        /// <param name="a1"></param>
+        /// <returns></returns>
         [DebuggerNonUserCode]
         public static bool SafeSucceeded<T1,T2>(HR_Func_O<T1, T2> func, T1 a1, out T2 a2)
         {
@@ -623,11 +624,6 @@ namespace Ankh
             {
                 return false;
             }
-        }
-
-        public static IAnkhServiceProvider StaticContext
-        {
-            get { return AnkhRuntime.StaticContext; }
         }
     }
 }

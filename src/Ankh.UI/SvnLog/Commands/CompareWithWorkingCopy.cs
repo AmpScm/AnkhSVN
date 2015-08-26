@@ -45,7 +45,7 @@ namespace Ankh.UI.SvnLog.Commands
 
                         if (pt != null)
                         {
-                            SvnItem svnItem = e.GetService<ISvnStatusCache>()[pt.FullPath];
+                            SvnItem svnItem = e.GetService<IFileStatusCache>()[pt.FullPath];
 
                             if (svnItem != null && !svnItem.IsDirectory)
                             {

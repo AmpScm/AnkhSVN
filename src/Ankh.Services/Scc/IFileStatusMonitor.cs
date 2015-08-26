@@ -29,12 +29,12 @@ namespace Ankh.Scc
     public interface IFileStatusMonitor
     {
         /// <summary>
-        /// Marks the specified path dirty in the file status cache and calls <see cref="ScheduleGlyphUpdate(String)"/> on the path
+        /// Marks the specified path dirty in the file status cache and calls <see cref="ScheduleGlyphUpdate"/> on the path
         /// </summary>
         /// <param name="path">The path.</param>
         void ScheduleSvnStatus(string path);
         /// <summary>
-        /// Marks the specified paths dirty in the file status cache and calls <see cref="ScheduleGlyphUpdate(IEnumerable&lt;String&gt;)"/> on the paths
+        /// Marks the specified paths dirty in the file status cache and calls <see cref="ScheduleGlyphUpdate"/> on the paths
         /// </summary>
         /// <param name="path">The path.</param>
         void ScheduleSvnStatus(IEnumerable<string> path);
@@ -54,7 +54,7 @@ namespace Ankh.Scc
         /// Schedules a glyph only update for the specified project
         /// </summary>
         /// <param name="projects">The projects.</param>
-        void ScheduleGlyphOnlyUpdate(IEnumerable<SccProject> projects);
+        void ScheduleGlyphOnlyUpdate(IEnumerable<SvnProject> projects);
 
         /// <summary>
         /// Adds the specified path to the paths to monitor for pending changes
@@ -64,11 +64,11 @@ namespace Ankh.Scc
         /// <summary>
         /// Adds the specified paths to the paths to monitor for pending changes
         /// </summary>
-        /// <param name="paths">The path.</param>
+        /// <param name="path">The path.</param>
         void ScheduleMonitor(IEnumerable<string> paths);
 
         /// <summary>
-        /// Removes a path that previously was scheduled for monitor with <see cref="ScheduleMonitor(String)"/>
+        /// Removes a path that previously was scheduled for monitor with <see cref="ScheduleMonitor"/>
         /// </summary>
         /// <param name="path">The path.</param>
         void StopMonitoring(string path);
@@ -76,14 +76,13 @@ namespace Ankh.Scc
         /// <summary>
         /// Schedules a dirty check for the specified document
         /// </summary>
-        /// <param name="item">The path.</param>
+        /// <param name="path">The path.</param>
         void ScheduleDirtyCheck(SvnItem item);
 
         /// <summary>
         /// Called when a file is changed outside VS (E.g. via a diff tool)
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="isDirty"></param>
         void ExternallyChanged(string path, out bool isDirty);
 
         /// <summary>
@@ -97,7 +96,5 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="actions">The actions.</param>
         void HandleSvnResult(IDictionary<string, SvnClientAction> actions);
-
-        void SetDocumentDirty(string FullPath, bool dirty);
     }
 }

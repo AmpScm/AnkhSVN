@@ -97,10 +97,10 @@ namespace Ankh.UI.PendingChanges
             this.conflictsButton.Name = "conflictsButton";
             this.conflictsButton.Click += new System.EventHandler(this.conflictsButton_Click);
             // 
-            // contentPanel
+            // panel1
             // 
-            resources.ApplyResources(this.contentPanel, "contentPanel");
-            this.contentPanel.Name = "contentPanel";
+            resources.ApplyResources(this.contentPanel, "panel1");
+            this.contentPanel.Name = "panel1";
             // 
             // PendingChangesToolControl
             // 

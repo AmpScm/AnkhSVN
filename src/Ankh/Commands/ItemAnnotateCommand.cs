@@ -56,7 +56,7 @@ namespace Ankh.Commands
                     }
                     break;
                 case AnkhCommand.DocumentAnnotate:
-                    if (e.Selection.ActiveDocumentSvnItem != null && e.Selection.ActiveDocumentSvnItem.HasCopyableHistory)
+                    if (e.Selection.ActiveDocumentItem != null && e.Selection.ActiveDocumentItem.HasCopyableHistory)
                         return;
                     break;
                 case AnkhCommand.LogAnnotateRevision:
@@ -105,7 +105,7 @@ namespace Ankh.Commands
                     break;
                 case AnkhCommand.DocumentAnnotate:
                     //TryObtainBlock(e);
-                    targets.Add(new SvnOrigin(e.GetService<ISvnStatusCache>()[e.Selection.ActiveDocumentFilename]));
+                    targets.Add(new SvnOrigin(e.GetService<IFileStatusCache>()[e.Selection.ActiveDocumentFilename]));
                     endRev = SvnRevision.Working;
                     break;
             }

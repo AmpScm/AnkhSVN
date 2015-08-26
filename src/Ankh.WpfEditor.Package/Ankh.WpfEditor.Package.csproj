@@ -78,7 +78,7 @@
       <Visible>false</Visible>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime" Condition="'$(UseVsSdkVersion)' &gt;= '14.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.14.0" Condition="'$(UseVsSdkVersion)' &gt;= '14.0'">
       <Visible>false</Visible>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -89,9 +89,6 @@
       <Visible>false</Visible>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" Condition="'$(UseVsSdkVersion)' &gt;= '12.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0" Condition="'$(UseVsSdkVersion)' &gt;= '14.0'">
       <Visible>false</Visible>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -166,14 +163,6 @@
     <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
       <Project>{d90a8e89-66b2-451e-8b31-3d86f0cd4afb}</Project>
       <Name>Ankh.Services</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ankh.VS.WpfServices\Ankh.VS.WpfServices.csproj">
-      <Project>{fb146856-23a8-4151-9467-19ae22fb166f}</Project>
-      <Name>Ankh.VS.WpfServices</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ankh.WpfUI\Ankh.WpfUI.csproj">
-      <Project>{8fc7114e-5a84-4221-8187-c3d1c370404e}</Project>
-      <Name>Ankh.WpfUI</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

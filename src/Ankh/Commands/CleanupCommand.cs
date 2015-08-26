@@ -29,20 +29,10 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            bool multiple = false;
-
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                if (item.NeedsCleanup)
+                if (item.IsVersioned)
                     return;
-
-                if (!item.IsVersioned)
-                    continue;
-
-                if (!item.IsFile || multiple)
-                    return;
-
-                multiple = true;
             }
             e.Enabled = false;
         }

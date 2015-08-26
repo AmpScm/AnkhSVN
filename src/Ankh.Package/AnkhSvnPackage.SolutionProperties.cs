@@ -314,21 +314,19 @@ namespace Ankh.VSPackage
                 }
                 return VSErr.S_OK; // Our data is in subversion properties
             }
-            catch (EndOfStreamException)
+            catch (EndOfStreamException ex)
             {
                 // Ignore: Old version? Broken Solution File? (Common error)
-                return VSErr.S_OK;;
+                return Marshal.GetHRForException(ex);
             }
             catch (Exception ex)
             {
-#if DEBUG
                 IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
 
                 if (handler != null)
                     handler.OnError(ex);
-#endif
 
-                return VSErr.S_OK;
+                return Marshal.GetHRForException(ex);
             }
             finally
             {
@@ -408,13 +406,13 @@ namespace Ankh.VSPackage
 
             using (BinaryWriter bw = new BinaryWriter(storageStream))
             {
-                PendingChange[] changes = (pendingChanges != null) ? pendingChanges.PendingChanges.ToArray() : null;
+                List<PendingChange> changes = (pendingChanges != null) ? new List<PendingChange>(pendingChanges.GetAll()) : null;
 
                 if (changes == null)
                     bw.Write((int)0);
                 else
                 {
-                    bw.Write((int)changes.Length);
+                    bw.Write((int)changes.Count);
 
                     foreach (PendingChange pc in changes)
                     {

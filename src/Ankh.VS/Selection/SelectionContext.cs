@@ -40,8 +40,7 @@ namespace Ankh.VS.Selection
     [GlobalService(typeof(ISccProjectWalker))]
     partial class SelectionContext : AnkhService, IVsSelectionEvents, ISelectionContext, ISelectionContextEx, ISccProjectWalker
     {
-        ISvnStatusCache _svnCache;
-        IGitStatusCache _gitCache;
+        IFileStatusCache _cache;
         bool _disposed;
         uint _cookie;
 
@@ -61,12 +60,10 @@ namespace Ankh.VS.Selection
         CachedEnumerable<string> _filenamesRecursive;
         CachedEnumerable<SvnItem> _svnItems;
         CachedEnumerable<SvnItem> _svnItemsRecursive;
-        CachedEnumerable<GitItem> _gitItems;
-        CachedEnumerable<GitItem> _gitItemsRecursive;
-        CachedEnumerable<SccProject> _selectedProjects;
-        CachedEnumerable<SccProject> _selectedProjectsRecursive;
-        CachedEnumerable<SccHierarchy> _selectedHierarchies;
-        CachedEnumerable<SccProject> _ownerProjects;
+        CachedEnumerable<SvnProject> _selectedProjects;
+        CachedEnumerable<SvnProject> _selectedProjectsRecursive;
+        CachedEnumerable<SvnHierarchy> _selectedHierarchies;
+        CachedEnumerable<SvnProject> _ownerProjects;
         Dictionary<Type, IEnumerable> _selectedItemsMap;
         readonly Hashtable _hashCache = new Hashtable();
         IVsHierarchy _miscFiles;
@@ -82,25 +79,17 @@ namespace Ankh.VS.Selection
         public SelectionContext(IAnkhServiceProvider context)
             : base(context)
         {
-            _filterItem = VSItemId.Nil;
+            _filterItem = VSConstants.VSITEMID_NIL;
         }
 
         protected override void OnInitialize()
         {
+            _cache = GetService<IFileStatusCache>();
+
             IVsMonitorSelection monitor = GetService<IVsMonitorSelection>();
 
             if (monitor != null)
                 Marshal.ThrowExceptionForHR(monitor.AdviseSelectionEvents(this, out _cookie));
-        }
-
-        protected ISvnStatusCache SvnCache
-        {
-            get { return _svnCache ?? (_svnCache = GetService<ISvnStatusCache>()); }
-        }
-
-        protected IGitStatusCache GitCache
-        {
-            get { return _gitCache ?? (_gitCache = GetService<IGitStatusCache>()); }
         }
 
         protected override void Dispose(bool disposing)
@@ -158,13 +147,13 @@ namespace Ankh.VS.Selection
                 _currentContainer = pSCNew;
             }
 
-            if (_filterItem != VSItemId.Nil)
+            if (_filterItem != VSConstants.VSITEMID_NIL)
             {
                 if (_filterItem != current.id || _filterHierarchy != current.hierarchy)
                 {
                     // Clear the filter if the selection change is not to exactly the filtered item
                     _filterHierarchy = null;
-                    _filterItem = VSItemId.Nil;
+                    _filterItem = VSConstants.VSITEMID_NIL;
                 }
             }
 
@@ -181,8 +170,6 @@ namespace Ankh.VS.Selection
             _filenamesRecursive = null;
             _svnItems = null;
             _svnItemsRecursive = null;
-            _gitItems = null;
-            _gitItemsRecursive = null;
             _selectedProjects = null;
             _selectedProjectsRecursive = null;
             _selectedHierarchies = null;
@@ -319,7 +306,7 @@ namespace Ankh.VS.Selection
             {
                 if (!_isSingleNodeSelection.HasValue)
                 {
-                    if (current.id == VSItemId.Selection
+                    if (current.id == VSConstants.VSITEMID_SELECTION
                         && current.selection != null)
                     {
                         uint nItems;
@@ -338,8 +325,8 @@ namespace Ankh.VS.Selection
                     {
                         switch (current.id)
                         {
-                            case VSItemId.Selection:
-                            case VSItemId.Nil:
+                            case VSConstants.VSITEMID_SELECTION:
+                            case VSConstants.VSITEMID_NIL:
                                 _isSingleNodeSelection = false;
                                 break;
                             default:
@@ -378,7 +365,7 @@ namespace Ankh.VS.Selection
         {
             HierarchySelection sel = current; // Cache the selection to make sure we don't use an id for another hierarchy
 
-            if (sel.id == VSItemId.Selection)
+            if (sel.id == VSConstants.VSITEMID_SELECTION)
             {
                 uint nItems;
                 int withinSingleHierarchy;
@@ -404,14 +391,14 @@ namespace Ankh.VS.Selection
                         yield return new SelectionItem(hier, items[i].itemid);
                     else
                     {
-                        if (items[i].itemid == VSItemId.Root && MightBeSolutionExplorerSelection)
-                            yield return new SelectionItem((IVsHierarchy)Solution, VSItemId.Root,
+                        if (items[i].itemid == VSConstants.VSITEMID_ROOT && MightBeSolutionExplorerSelection)
+                            yield return new SelectionItem((IVsHierarchy)Solution, VSConstants.VSITEMID_ROOT,
                                 SelectionUtils.GetSolutionAsSccProject(Context));
                         // else skip
                     }
                 }
             }
-            else if (sel.id != VSItemId.Nil && (sel.hierarchy != null))
+            else if (sel.id != VSConstants.VSITEMID_NIL && (sel.hierarchy != null))
             {
                 if (sel.id == _filterItem && sel.hierarchy == _filterHierarchy)
                     yield break;
@@ -422,7 +409,7 @@ namespace Ankh.VS.Selection
             {
                 // No selection, no hierarchy.... -> no selection!
             }
-            else if (sel.id == VSItemId.Root)
+            else if (sel.id == VSConstants.VSITEMID_ROOT)
             {
                 // This is the case in the solution explorer when only the solution is selected
 
@@ -433,7 +420,7 @@ namespace Ankh.VS.Selection
                     IVsHierarchy hier = (IVsHierarchy)Solution;
 
                     if (hier != null)
-                        yield return new SelectionItem(hier, VSItemId.Root,
+                        yield return new SelectionItem(hier, VSConstants.VSITEMID_ROOT,
                             SelectionUtils.GetSolutionAsSccProject(Context));
                 }
             }
@@ -463,7 +450,7 @@ namespace Ankh.VS.Selection
 
         internal static uint GetItemIdFromObject(object pvar)
         {
-            if (pvar == null) return VSItemId.Nil;
+            if (pvar == null) return VSConstants.VSITEMID_NIL;
             if (pvar is int) return (uint)(int)pvar;
             if (pvar is uint) return (uint)pvar;
             if (pvar is short) return (uint)(short)pvar;
@@ -472,7 +459,7 @@ namespace Ankh.VS.Selection
             if (pvar is sbyte) return (uint)(sbyte)pvar;
             if (pvar is long) return (uint)(long)pvar;
             if (pvar is ulong) return (uint)(ulong)pvar;
-            return VSItemId.Nil;
+            return VSConstants.VSITEMID_NIL;
         }
 
         static Guid hierarchyId = typeof(IVsHierarchy).GUID;
@@ -508,7 +495,7 @@ namespace Ankh.VS.Selection
                     hr = VSErr.E_FAIL;
 
                 hierPtr = IntPtr.Zero;
-                subId = VSItemId.Nil;
+                subId = VSConstants.VSITEMID_NIL;
             }
 
             if (VSErr.Succeeded(hr) && hierPtr != IntPtr.Zero)
@@ -547,7 +534,7 @@ namespace Ankh.VS.Selection
             }
 
             uint childId = GetItemIdFromObject(value);
-            while (childId != VSItemId.Nil)
+            while (childId != VSConstants.VSITEMID_NIL)
             {
                 SelectionItem i = new SelectionItem(si.Hierarchy, childId);
 
@@ -607,16 +594,16 @@ namespace Ankh.VS.Selection
             return true;
         }
 
-        IProjectFileMapper _projectMap;
-        IProjectFileMapper ProjectMap
+        IAnkhSccService _sccService;
+        IAnkhSccService SccService
         {
             [DebuggerStepThrough]
-            get { return _projectMap ?? (_projectMap = GetService<IProjectFileMapper>()); }
+            get { return _sccService ?? (_sccService = GetService<IAnkhSccService>()); }
         }
 
         private bool IgnoreSideEffects(IVsSccProject2 sccProject)
         {
-            if (sccProject != null && ProjectMap.IgnoreEnumerationSideEffects(sccProject))
+            if (sccProject != null && SccService.IgnoreEnumerationSideEffects(sccProject))
                 return true;
 
             return false;
@@ -689,38 +676,12 @@ namespace Ankh.VS.Selection
 
         IEnumerable<SvnItem> InternalGetSelectedSvnItems(bool recursive)
         {
-            if (SvnCache == null)
+            if (_cache == null)
                 yield break;
 
             foreach (string file in GetSelectedFiles(recursive))
             {
-                yield return SvnCache[file];
-            }
-        }
-
-        protected IEnumerable<GitItem> GetSelectedGitItems()
-        {
-            return _gitItems ?? (_gitItems = new CachedEnumerable<GitItem>(InternalGetSelectedGitItems(false), Disposer));
-        }
-
-        protected IEnumerable<GitItem> GetSelectedGitItemsRecursive()
-        {
-            return _gitItemsRecursive ?? (_gitItemsRecursive = new CachedEnumerable<GitItem>(InternalGetSelectedGitItems(true), Disposer));
-        }
-
-        public IEnumerable<GitItem> GetSelectedGitItems(bool recursive)
-        {
-            return recursive ? GetSelectedGitItemsRecursive() : GetSelectedGitItems();
-        }
-
-        IEnumerable<GitItem> InternalGetSelectedGitItems(bool recursive)
-        {
-            if (GitCache == null)
-                yield break;
-
-            foreach (string file in GetSelectedFiles(recursive))
-            {
-                yield return GitCache[file];
+                yield return _cache[file];
             }
         }
 
@@ -728,12 +689,12 @@ namespace Ankh.VS.Selection
 
         #region ISelectionContext Members: Get*Projects()
 
-        public IEnumerable<SccProject> GetOwnerProjects()
+        public IEnumerable<SvnProject> GetOwnerProjects()
         {
-            return _ownerProjects ?? (_ownerProjects = new CachedEnumerable<SccProject>(InternalGetOwnerProjects(), Disposer));
+            return _ownerProjects ?? (_ownerProjects = new CachedEnumerable<SvnProject>(InternalGetOwnerProjects(), Disposer));
         }
 
-        protected IEnumerable<SccProject> InternalGetOwnerProjects()
+        protected IEnumerable<SvnProject> InternalGetOwnerProjects()
         {
             Hashtable ht = new Hashtable();
             bool searchedProjectMapper = false;
@@ -748,7 +709,7 @@ namespace Ankh.VS.Selection
 
                 if (si.SccProject != null)
                 {
-                    yield return new SccProject(null, si.SccProject);
+                    yield return new SvnProject(null, si.SccProject);
                     continue;
                 }
                 else if (si.Hierarchy is IVsSccVirtualFolders)
@@ -763,13 +724,13 @@ namespace Ankh.VS.Selection
                 if (projectMapper == null && !searchedProjectMapper)
                 {
                     searchedProjectMapper = true;
-                    projectMapper = GetService<IProjectFileMapper>();
+                    projectMapper = Context.GetService<IProjectFileMapper>();
                 }
 
                 if (projectMapper != null)
                     foreach (string file in files)
                     {
-                        foreach (SccProject project in projectMapper.GetAllProjectsContaining(file))
+                        foreach (SvnProject project in projectMapper.GetAllProjectsContaining(file))
                         {
                             if (project.RawHandle != null)
                             {
@@ -789,46 +750,46 @@ namespace Ankh.VS.Selection
             }
         }
 
-        protected IEnumerable<SccProject> GetSelectedProjects()
+        protected IEnumerable<SvnProject> GetSelectedProjects()
         {
-            return _selectedProjects ?? (_selectedProjects = new CachedEnumerable<SccProject>(InternalGetSelectedProjects(false), Disposer));
+            return _selectedProjects ?? (_selectedProjects = new CachedEnumerable<SvnProject>(InternalGetSelectedProjects(false), Disposer));
         }
 
-        protected IEnumerable<SccProject> GetSelectedProjectsRecursive()
+        protected IEnumerable<SvnProject> GetSelectedProjectsRecursive()
         {
-            return _selectedProjectsRecursive ?? (_selectedProjectsRecursive = new CachedEnumerable<SccProject>(InternalGetSelectedProjects(true), Disposer));
+            return _selectedProjectsRecursive ?? (_selectedProjectsRecursive = new CachedEnumerable<SvnProject>(InternalGetSelectedProjects(true), Disposer));
         }
 
-        public IEnumerable<SccProject> GetSelectedProjects(bool recursive)
+        public IEnumerable<SvnProject> GetSelectedProjects(bool recursive)
         {
             return recursive ? GetSelectedProjectsRecursive() : GetSelectedProjects();
         }
 
-        public IEnumerable<SccHierarchy> GetSelectedHierarchies()
+        public IEnumerable<SvnHierarchy> GetSelectedHierarchies()
         {
-            return _selectedHierarchies ?? (_selectedHierarchies = new CachedEnumerable<SccHierarchy>(InternalGetSelectedHierarchies(false), Disposer));
+            return _selectedHierarchies ?? (_selectedHierarchies = new CachedEnumerable<SvnHierarchy>(InternalGetSelectedHierarchies(false), Disposer));
         }
 
-        protected IEnumerable<SccProject> InternalGetSelectedProjects(bool recursive)
+        protected IEnumerable<SvnProject> InternalGetSelectedProjects(bool recursive)
         {
             foreach (SelectionItem item in GetSelectedItems(recursive))
             {
-                if (item.Id == VSItemId.Root)
+                if (item.Id == VSConstants.VSITEMID_ROOT)
                 {
                     if (!item.IsSolution && item.SccProject != null)
-                        yield return new SccProject(null, item.SccProject);
+                        yield return new SvnProject(null, item.SccProject);
                 }
             }
         }
 
-        protected IEnumerable<SccHierarchy> InternalGetSelectedHierarchies(bool recursive)
+        protected IEnumerable<SvnHierarchy> InternalGetSelectedHierarchies(bool recursive)
         {
             foreach (SelectionItem item in GetSelectedItems(recursive))
             {
-                if (item.Id == VSItemId.Root)
+                if (item.Id == VSConstants.VSITEMID_ROOT)
                 {
                     if (!item.IsSolution && item.Hierarchy != null)
-                        yield return new SccHierarchy(item.Hierarchy);
+                        yield return new SvnHierarchy(item.Hierarchy);
                 }
             }
         }
@@ -946,7 +907,7 @@ namespace Ankh.VS.Selection
 
         void ISccProjectWalker.SetPrecreatedFilterItem(IVsHierarchy hierarchy, uint id)
         {
-            if (id != VSItemId.Nil || _filterItem != VSItemId.Nil)
+            if (id != VSConstants.VSITEMID_NIL || _filterItem != VSConstants.VSITEMID_NIL)
                 ClearCache(); // Make sure we use the filter directly
 
             _filterHierarchy = hierarchy;

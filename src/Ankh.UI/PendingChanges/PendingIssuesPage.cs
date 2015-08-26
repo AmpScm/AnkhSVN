@@ -90,7 +90,7 @@ namespace Ankh.UI.PendingChanges
                             IWinFormsThemingService wts = Context.GetService<IWinFormsThemingService>();
 
                             if (wts != null)
-                                wts.ThemeRecursive(control, false);
+                                wts.ThemeRecursive(control);
                         }
                         return;
                     }
@@ -108,10 +108,8 @@ namespace Ankh.UI.PendingChanges
 
         private void pleaseConfigureLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            IAnkhHelpService help = Context.GetService<IAnkhHelpService>();
-            
-            if (help != null)
-                help.RunHelp(this);
+            if (IssueService != null)
+                IssueService.ShowConnectHelp();
         }
     }
 }

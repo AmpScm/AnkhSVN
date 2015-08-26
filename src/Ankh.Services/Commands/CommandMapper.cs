@@ -55,17 +55,7 @@ namespace Ankh.Commands
 
             if (_map.TryGetValue(command, out item))
             {
-                bool skip;
-                if ((item.Availability & CommandAvailability.AlwaysFlag) != 0)
-                    skip = false;
-                else if (((item.Availability & CommandAvailability.SvnActive) != 0) && States.SccProviderActive)
-                    skip = false;
-                else if (((item.Availability & CommandAvailability.GitActive) != 0) && States.GitSccProviderActive)
-                    skip = false;
-                else
-                    skip = true;
-
-                if (skip)
+                if (!item.AlwaysAvailable && !States.SccProviderActive)
                     e.Enabled = false;
                 else
                     try
@@ -230,7 +220,7 @@ namespace Ankh.Commands
 
                     ICommandHandler instance = null;
 
-                    foreach (CommandAttribute cmdAttr in type.GetCustomAttributes(typeof(CommandAttribute), false))
+                    foreach (SvnCommandAttribute cmdAttr in type.GetCustomAttributes(typeof(CommandAttribute), false))
                     {
                         if (cmdAttr.Context != _commandContext || !cmdAttr.Applies())
                             continue;
@@ -261,8 +251,9 @@ namespace Ankh.Commands
                             Debug.Assert(item.ICommand == null || item.ICommand == instance, string.Format("No previous ICommand registered on the CommandMapItem for {0}", cmdAttr.Command));
 
                             item.ICommand = instance; // hooks all events via interface
-                            item.Availability = cmdAttr.Availability;
+                            item.AlwaysAvailable = cmdAttr.AlwaysAvailable;
                             item.HiddenWhenDisabled = cmdAttr.HideWhenDisabled;
+                            item.HiddenWhenUnavailable = cmdAttr.HiddenWhenUnavailable;
                             item.CommandTarget = cmdAttr.CommandTarget;
                             item.ArgumentDefinition = cmdAttr.ArgumentDefinition ?? CalculateDefinition(cmdAttr.CommandTarget);
                         }
@@ -423,6 +414,7 @@ namespace Ankh.Commands
             return OLECMDTEXTF.OLECMDTEXTF_NONE;
         }
 
+        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="OLECMDTEXTF.SetText"]/*' />
         /// <devdoc>
         /// Accessing the text of this structure is very cumbersome.  Instead, you may
         /// use this method to access an integer pointer of the structure.

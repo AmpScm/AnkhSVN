@@ -89,7 +89,7 @@ namespace Ankh.UI
 
             IWinFormsThemingService wfts = Context.GetService<IWinFormsThemingService>();
             if (wfts != null)
-                wfts.ThemeRecursive(this, false);
+                wfts.ThemeRecursive(this);
             else
             {
                 IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();

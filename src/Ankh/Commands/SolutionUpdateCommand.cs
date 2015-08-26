@@ -74,9 +74,9 @@ namespace Ankh.Commands
             }
         }
 
-        static IEnumerable<SccProject> GetSelectedProjects(BaseCommandEventArgs e)
+        static IEnumerable<SvnProject> GetSelectedProjects(BaseCommandEventArgs e)
         {
-            foreach (SccProject p in e.Selection.GetSelectedProjects(false))
+            foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
             {
                 yield return p;
             }
@@ -142,21 +142,21 @@ namespace Ankh.Commands
             else
             {
                 IProjectFileMapper pfm = null;
-                ISvnStatusCache fsc = null;
+                IFileStatusCache fsc = null;
 
                 Uri rootUrl = null;
-                foreach (SccProject p in GetSelectedProjects(e))
+                foreach (SvnProject p in GetSelectedProjects(e))
                 {
                     if (pfm == null)
                         pfm = e.GetService<IProjectFileMapper>();
 
-                    ISccProjectInfo pi = pfm.GetProjectInfo(p);
+                    ISvnProjectInfo pi = pfm.GetProjectInfo(p);
 
                     if (pi == null || pi.ProjectDirectory == null)
                         continue;
 
                     if (fsc == null)
-                        fsc = e.GetService<ISvnStatusCache>();
+                        fsc = e.GetService<IFileStatusCache>();
 
                     SvnItem rootItem = fsc[pi.ProjectDirectory];
 
@@ -208,10 +208,10 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IAnkhServiceEvents ci = e.GetService<IAnkhServiceEvents>();
+            ILastChangeInfo ci = e.GetService<ILastChangeInfo>();
 
             if (ci != null)
-                ci.OnLastChanged(new LastChangedEventArgs(null, null));
+                ci.SetLastChange(null, null);
 
             SvnRevision rev;
             bool allowUnversionedObstructions = false;
@@ -219,7 +219,7 @@ namespace Ankh.Commands
             bool setDepthInfinity = true;
 
             IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
-            ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
             IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
             Uri reposRoot = null;
 
@@ -274,9 +274,9 @@ namespace Ankh.Commands
 
                 SvnItem si = null;
                 SvnOrigin origin = null;
-                foreach (SccProject p in GetSelectedProjects(e))
+                foreach (SvnProject p in GetSelectedProjects(e))
                 {
-                    ISccProjectInfo pi = mapper.GetProjectInfo(p);
+                    ISvnProjectInfo pi = mapper.GetProjectInfo(p);
                     if (pi == null || pi.ProjectDirectory == null)
                         continue;
 
@@ -404,7 +404,7 @@ namespace Ankh.Commands
 
                 if (ci != null && updateResult != null && IsSolutionCommand(e.Command))
                 {
-                    ci.OnLastChanged(new LastChangedEventArgs(CommandStrings.UpdatedToTitle, updateResult.Revision.ToString()));
+                    ci.SetLastChange("Updated to:", updateResult.Revision.ToString());
                 }
             }
         }
@@ -457,7 +457,7 @@ namespace Ankh.Commands
         private static IEnumerable<SvnItem> GetAllUpdateRoots(CommandEventArgs e)
         {
             // Duplicate handling is handled above this method!
-            ISvnSolutionLayout pls = e.GetService<ISvnSolutionLayout>();
+            IAnkhProjectLayoutService pls = e.GetService<IAnkhProjectLayoutService>();
             if (IsSolutionCommand(e.Command))
                 foreach (SvnItem item in pls.GetUpdateRoots(null))
                 {
@@ -470,7 +470,7 @@ namespace Ankh.Commands
                     yield return item;
                 }
             else
-                foreach (SccProject project in GetSelectedProjects(e))
+                foreach (SvnProject project in GetSelectedProjects(e))
                 {
                     foreach (SvnItem item in pls.GetUpdateRoots(project))
                     {

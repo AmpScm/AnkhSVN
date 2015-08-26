@@ -173,7 +173,7 @@ namespace Ankh.UI.PendingChanges
 
         void DoRefresh(bool showProgressDialog)
         {
-            ISvnSolutionLayout pls = Context.GetService<ISvnSolutionLayout>();
+            IAnkhProjectLayoutService pls = Context.GetService<IAnkhProjectLayoutService>();
             List<SvnStatusEventArgs> resultList = new List<SvnStatusEventArgs>();
             List<string> roots = new List<string>(SvnItem.GetPaths(pls.GetUpdateRoots(null)));
             Dictionary<string, string> found = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -308,7 +308,7 @@ namespace Ankh.UI.PendingChanges
             syncView.Items.Clear();
             if (resultList != null && resultList.Count > 0)
             {
-                ISvnStatusCache fs = Context.GetService<ISvnStatusCache>();
+                IFileStatusCache fs = Context.GetService<IFileStatusCache>();
                 List<SynchronizeListItem> items = new List<SynchronizeListItem>(resultList.Count);
                 foreach (SvnStatusEventArgs s in resultList)
                 {

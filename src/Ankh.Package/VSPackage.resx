@@ -119,11 +119,6 @@
   </resheader>
   <data name="100" xml:space="preserve">
     <value>AnkhSVN - Subversion Support for Visual Studio</value>
-    <comment>SCC GUI Name</comment>
-  </data>
-  <data name="101" xml:space="preserve">
-    <value>AnkhSVN - Experimental Git Support for Visual Studio</value>
-    <comment>SCC GUI Name</comment>
   </data>
   <data name="106" xml:space="preserve">
     <value>Source Control</value>
@@ -187,13 +182,10 @@
     <value>Settings for edditing .patch files</value>
   </data>
   <data name="108" xml:space="preserve">
-    <value>User Tools</value>
+    <value>Subversion User Tools</value>
   </data>
   <data name="111" xml:space="preserve">
     <value>Subversion - AnkhSVN</value>
     <comment>Output Pane title</comment>
-  </data>
-  <data name="109" xml:space="preserve">
-    <value>Git Environment</value>
   </data>
 </root>

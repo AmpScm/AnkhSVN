@@ -120,15 +120,15 @@ namespace Ankh.Settings
         }
 
         ISelectionContext _selectionContext;
-        ISvnStatusCache _statusCache;
+        IFileStatusCache _statusCache;
         ISelectionContext SelectionContext
         {
             get { return _selectionContext ?? (_selectionContext = GetService<ISelectionContext>()); }
         }
 
-        ISvnStatusCache StatusCache
+        IFileStatusCache StatusCache
         {
-            get { return _statusCache ?? (_statusCache = GetService<ISvnStatusCache>()); }
+            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
         }
 
 
@@ -230,7 +230,7 @@ namespace Ankh.Settings
 
         private bool LoadSolutionProperties(SettingsCache cache, SvnItem item)
         {
-            // Subversion loads all properties in memory at once; loading them 
+            // Subversion -1.5 loads all properties in memory at once; loading them 
             // all is always faster than loading a few
             // We must change this algorithm if Subversions implementation changes
 
@@ -484,7 +484,7 @@ namespace Ankh.Settings
 
                 client.SetProperty(SolutionFilename, AnkhSccPropertyNames.ProjectRoot, solUri.MakeRelativeUri(resUri).ToString(), ps);
 
-                GetService<ISvnStatusCache>().MarkDirty(SolutionFilename);
+                GetService<IFileStatusCache>().MarkDirty(SolutionFilename);
                 // The getter will reload the settings for us
             }
 

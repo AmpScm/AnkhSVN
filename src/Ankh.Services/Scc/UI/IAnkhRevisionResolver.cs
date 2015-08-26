@@ -34,7 +34,6 @@ namespace Ankh.Scc.UI
         /// <summary>
         /// Resolves the specified revision.
         /// </summary>
-        /// <param name="origin"></param>
         /// <param name="revision">The revision.</param>
         /// <returns></returns>
         AnkhRevisionType Resolve(SvnOrigin origin, SvnRevision revision);
@@ -160,7 +159,7 @@ namespace Ankh.Scc.UI
         /// <summary>
         /// Determines whether [is valid on] [the specified SVN origin].
         /// </summary>
-        /// <param name="origin">The SVN origin.</param>
+        /// <param name="SvnOrigin">The SVN origin.</param>
         /// <returns>
         /// 	<c>true</c> if [is valid on] [the specified SVN origin]; otherwise, <c>false</c>.
         /// </returns>

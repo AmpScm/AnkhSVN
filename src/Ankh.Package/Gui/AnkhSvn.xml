@@ -263,8 +263,8 @@
     <GroupRef id="guidSHLMainMenu:IDG_VS_WNDO_OTRWNDWS1">
       <ButtonRef id="Cmd_ShowPendingChanges" priority="0x800" />
       <Button id="Cmd_ShowSubversionInfo" name="ShowSubversionInfo" priority="0x801"
-                text="Source Control in&amp;fo"
-                toolTip="Show the Source Control Info Window." defaultInvisible="true">
+                text="Sub&amp;version Info"
+                toolTip="Show the Subversion Info Window." defaultInvisible="true">
       </Button>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_TOOLSB_NEWWINDOWS">
@@ -1132,12 +1132,10 @@
       <Group id="Grp_NoUI" priority="0">
         <!-- This group contains our non-ui commands which are only used for triggering postcommands -->
         <Button id="Cmd_MarkProjectDirty" text="&#160;" priority="0" commandWellOnly="true" postExec="true" defaultInvisible="true" defaultDisabled="false" />
-        <Button id="Cmd_SvnCacheFinishTasks" text="&#160;" priority="0" commandWellOnly="true" postExec="true" defaultInvisible="true" defaultDisabled="false" />
-        <Button id="Cmd_GitCacheFinishTasks" text="&#160;" priority="0" commandWellOnly="true" postExec="true" defaultInvisible="true" defaultDisabled="false" />
+        <Button id="Cmd_FileCacheFinishTasks" text="&#160;" priority="0" commandWellOnly="true" postExec="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_SccFinishTasks" text="&#160;" priority="0" commandWellOnly="true" postExec="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_TickRefreshPendingTasks" text="&#160;" priority="0" commandWellOnly="true" postExec="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_TickRefreshSvnItems" text="&#160;" priority="0" commandWellOnly="true" postExec="true" defaultInvisible="true" defaultDisabled="false" />
-        <Button id="Cmd_TickRefreshGitItems" text="&#160;" priority="0" commandWellOnly="true" postExec="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_SccLock" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_CheckForUpdates" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_WorkingCopyBrowse" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" defaultInvisible="true" defaultDisabled="false" />

@@ -30,7 +30,7 @@ namespace Ankh.Commands
         {
             if (e.Command == AnkhCommand.DocumentConflictEdit)
             {
-                SvnItem item = e.Selection.ActiveDocumentSvnItem;
+                SvnItem item = e.Selection.ActiveDocumentItem;
 
                 if (item != null && item.IsConflicted)
                     return;
@@ -52,7 +52,7 @@ namespace Ankh.Commands
 
             if (e.Command == AnkhCommand.DocumentConflictEdit)
             {
-                conflict = e.Selection.ActiveDocumentSvnItem;
+                conflict = e.Selection.ActiveDocumentItem;
 
                 if (conflict == null || !conflict.IsConflicted)
                     return;

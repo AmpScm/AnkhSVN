@@ -24,8 +24,6 @@ namespace Ankh.Scc
     public interface IStatusImageMapper
     {
         AnkhGlyph GetStatusImageForSvnItem(SvnItem item);
-        AnkhGlyph GetStatusImageForGitItem(GitItem item);
-
         ImageList StatusImageList { get; }
 
         ImageList CreateStatusImageList();

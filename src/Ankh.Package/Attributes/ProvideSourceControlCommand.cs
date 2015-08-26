@@ -61,7 +61,7 @@ namespace Ankh.VSPackage.Attributes
             Type enumType = commandValue.GetType();
             Type undertype = Enum.GetUnderlyingType(enumType);
 
-            commandValue = Convert.ChangeType(commandValue, undertype);
+            commandValue  = Convert.ChangeType(commandValue, undertype);
 
             return (int)commandValue;
         }
@@ -91,11 +91,17 @@ namespace Ankh.VSPackage.Attributes
         {
             // Declare the source control provider, its name, the provider's service 
             // and aditionally the packages implementing this provider
-            using (Key sccProviderNameKey = context.CreateKey(string.Format("SourceControlProviders\\{0:B}\\Commands", RegGuid)))
+            using (Key sccProviders = context.CreateKey("SourceControlProviders"))
             {
-                sccProviderNameKey.SetValue(
-                    string.Format("{0}Command", _command),
-                    string.Format("{0:B}|{1}", _commandGroup, _commandId));
+                using (Key sccProviderKey = sccProviders.CreateSubkey(RegGuid.ToString("B")))
+                {
+                    using (Key sccProviderNameKey = sccProviderKey.CreateSubkey("Commands"))
+                    {
+                        sccProviderNameKey.SetValue(
+                            string.Format("{0}Command", _command),
+                            string.Format("{0:B}|{1}", _commandGroup, _commandId));
+                    }
+                }
             }
         }
 

@@ -20,18 +20,25 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Windows.Forms;
-using Ankh.Collections;
+
 using Ankh.Commands;
 using Ankh.Configuration;
 using Ankh.Scc;
-using Ankh.Selection;
 using Ankh.UI.VSSelectionControls;
+using Ankh.VS;
+
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.UI.PendingChanges.Commits
 {
-    class PendingCommitsView : ListViewWithSelection<PendingCommitItem>, IPendingChangeUI
+    public interface IPendingChangeSource
+    {
+        bool HasPendingChanges { get; }
+        IEnumerable<PendingChange> PendingChanges { get; }
+    }
+
+    class PendingCommitsView : ListViewWithSelection<PendingCommitItem>, IPendingChangeSource
     {
         public PendingCommitsView()
         {
@@ -166,12 +173,12 @@ namespace Ankh.UI.PendingChanges.Commits
             set { _openPCOnDoubleClick = value; }
         }
 
-        bool IPendingChangeUI.HasCheckedItems
+        bool IPendingChangeSource.HasPendingChanges
         {
             get { return CheckedIndices.Count > 0; }
         }
 
-        IEnumerable<PendingChange> IPendingChangeUI.CheckedItems
+        IEnumerable<PendingChange> IPendingChangeSource.PendingChanges
         {
             get
             {
@@ -331,151 +338,6 @@ namespace Ankh.UI.PendingChanges.Commits
             }
 
             base.OnThemeChange(sender, e);
-        }
-
-        public void OnChange(string fullPath)
-        {
-            PendingCommitItem pci;
-            if (_listItems != null && _listItems.TryGetValue(fullPath, out pci))
-            {
-                if (PendingChange.IsIgnoreOnCommitChangeList(pci.PendingChange.ChangeList)
-                    && pci.Checked)
-                {
-                    // Uncheck items that were moved to the ignore list
-                    if (!PendingChange.IsIgnoreOnCommitChangeList(pci.LastChangeList))
-                        pci.Checked = false; // Uncheck items that weren't on the ignore list before
-
-                    // Note: We don't check items that were previously ignored, as the user didn't
-                    // ask us to do that.
-                }
-
-                pci.RefreshText(Context);
-                RefreshGroupsAvailable();
-            }
-        }
-
-        protected override void OnResolveItem(ResolveItemEventArgs e)
-        {
-            base.OnResolveItem(e);
-
-            if (_listItems != null)
-            {
-                PendingChange pc = e.SelectionItem as PendingChange;
-
-                PendingCommitItem pci;
-                if (pc != null && this._listItems.TryGetValue(pc.FullPath, out pci))
-                {
-                    e.Item = pci;
-                }
-            }
-        }
-
-        PendingCommitItemCollection _listItems;
-        IKeyedNotifyCollection<string, PendingChange> _items;
-
-        Collections.IKeyedNotifyCollection<string, PendingChange> IPendingChangeUI.Items
-        {
-            get
-            {
-                return _items;
-            }
-            set
-            {
-                if (_listItems != null)
-                {
-                    ClearItems();
-                    _listItems.Dispose();
-                    _listItems = null;
-                }
-                _listItems = new PendingCommitItemCollection(this, value);
-                _listItems.CollectionChanged += OnPendingChangesChanged;
-                _items = value;
-                ClearItems();
-                Items.AddRange(_listItems.ToArray());
-                if (IsHandleCreated)
-                    RefreshGroups();
-            }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (disposing)
-                {
-                    if (_listItems != null)
-                    {
-                        _listItems.Dispose();
-                        _listItems = null;
-                    }
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
-
-        private void OnPendingChangesChanged(object sender, CollectionChangedEventArgs<PendingCommitItem> e)
-        {
-            switch (e.Action)
-            {
-                case CollectionChange.Add:
-                    if (_toAdd != null)
-                        _toAdd.AddRange(e.NewItems);
-                    else
-                        Items.AddRange(e.NewItems);
-                    break;
-                case CollectionChange.Remove:
-                    foreach (PendingCommitItem pci in e.OldItems)
-                        Items.Remove(pci);
-                    break;
-                case CollectionChange.Reset:
-                    ClearItems();
-                    if (_toAdd != null)
-                        _toAdd.Clear();
-                    Items.AddRange(_listItems.ToArray());
-                    if (IsHandleCreated)
-                        RefreshGroups();
-                    break;
-            }
-
-            this.RefreshGroupsAvailable();
-        }
-
-        List<PendingCommitItem> _toAdd;
-        int _inBatchUpdate;
-        void OnBatchEnd()
-        {
-            if (--_inBatchUpdate == 0)
-            {
-                try
-                {
-
-                    if (_toAdd != null && _toAdd.Count > 0)
-                    {
-                        PendingCommitItem[] toAdd = _toAdd.ToArray();
-                        _toAdd = null;
-                        Items.AddRange(toAdd);
-                    }
-                    _toAdd = null;
-                }
-                finally
-                {
-                    EndUpdate();
-                }
-            }
-        }
-
-
-        internal AnkhAction BeginBatch()
-        {
-            if(_inBatchUpdate++ == 0)
-            {
-                BeginUpdate();
-                _toAdd = new List<PendingCommitItem>();
-            }
-            return OnBatchEnd;
         }
     }
 }

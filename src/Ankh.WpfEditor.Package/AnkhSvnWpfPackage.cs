@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using Ankh.UI;
-using Ankh.WpfUI;
 
 namespace Ankh.WpfPackage
 {
@@ -59,10 +58,7 @@ namespace Ankh.WpfPackage
                 runtime = AnkhRuntime.Get(pkg);
 
             if (runtime != null)
-            {
                 runtime.AddModule(new AnkhWpfModule(runtime));
-                runtime.AddModule(new AnkhWpfUIModule(runtime));
-            }
             else
                 Trace.WriteLine(string.Format("Failed to initialize {0}, because the Ankh Runtime is not available", typeof(AnkhSvnWpfPackage).FullName));
         }

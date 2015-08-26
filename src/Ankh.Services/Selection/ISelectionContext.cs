@@ -43,7 +43,6 @@ namespace Ankh.Selection
         /// <param name="recursive"><c>true</c> to select all descendants of selected nodes too</param>
         /// <returns></returns>
         IEnumerable<string> GetSelectedFiles(bool recursive);
-
         /// <summary>
         /// Gets a list of the currently selected <see cref="SvnItem"/> instances, mapped via their path. See <see cref="GetSelectedFiles(Boolean)"/>
         /// </summary>
@@ -52,29 +51,23 @@ namespace Ankh.Selection
         IEnumerable<SvnItem> GetSelectedSvnItems(bool recursive);
 
         /// <summary>
-        /// Gets a list of the currently selected <see cref="SvnItem"/> instances, mapped via their path. See <see cref="GetSelectedFiles(Boolean)"/>
-        /// </summary>
-        /// <param name="recursive"></param>
-        /// <returns></returns>
-        IEnumerable<GitItem> GetSelectedGitItems(bool recursive);
-
-        /// <summary>
         /// Gets the projects owning selected files
         /// </summary>
         /// <returns></returns>
-        IEnumerable<SccProject> GetOwnerProjects();
+        IEnumerable<SvnProject> GetOwnerProjects();
 
         /// <summary>
         /// Gets a list of currently selected projects
         /// </summary>
         /// <returns></returns>
-        IEnumerable<SccProject> GetSelectedProjects(bool recursive);
+        IEnumerable<SvnProject> GetSelectedProjects(bool recursive);
 
         /// <summary>
         /// Gets a list of currently selected hierarchies (non-recursive)
         /// </summary>
+        /// <param name="recursive"></param>
         /// <returns></returns>
-        IEnumerable<SccHierarchy> GetSelectedHierarchies();
+        IEnumerable<SvnHierarchy> GetSelectedHierarchies();
 
         /// <summary>
         /// Gets the item selection if it is available in the specified type
@@ -116,13 +109,7 @@ namespace Ankh.Selection
         /// Gets the active document SvnItem.
         /// </summary>
         /// <value>The active document item.</value>
-        SvnItem ActiveDocumentSvnItem { get; }
-
-        /// <summary>
-        /// Gets the active document GitItem.
-        /// </summary>
-        /// <value>The active document item.</value>
-        GitItem ActiveDocumentGitItem { get; }
+        SvnItem ActiveDocumentItem { get; }
 
         /// <summary>
         /// Gets the .Net control of the <see cref="ISelectionContextEx.ActiveFrame"/>

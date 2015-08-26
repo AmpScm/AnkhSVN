@@ -5,7 +5,7 @@ namespace Ankh.UI
 {
     public interface IWinFormsThemingService
     {
-        void ThemeRecursive(Control control, bool forDialog);
+        void ThemeRecursive(Control control);
         bool TryGetIcon(string path, out IntPtr hIcon);
         bool GetCurrentTheme(out Guid themeGuid);
     }

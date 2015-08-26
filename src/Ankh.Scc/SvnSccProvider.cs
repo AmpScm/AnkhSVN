@@ -29,16 +29,22 @@ using Ankh.VS;
 
 namespace Ankh.Scc
 {
+    [GuidAttribute(AnkhId.SccServiceId), ComVisible(true), CLSCompliant(false)]
+    public interface ITheAnkhSvnSccProvider : IVsSccProvider
+    {
+    }
+
     [GlobalService(typeof(SvnSccProvider))]
     [GlobalService(typeof(IAnkhSccService))]
     [GlobalService(typeof(ITheAnkhSvnSccProvider), true)]
-    partial class SvnSccProvider : SccProvider, ITheAnkhSvnSccProvider, IAnkhSccService, IVsSccEnlistmentPathTranslation
+    partial class SvnSccProvider : AnkhService, ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService, IVsSccEnlistmentPathTranslation
     {
-        ISvnStatusCache _statusCache;
+        bool _active;
+        IFileStatusCache _statusCache;
         IAnkhOpenDocumentTracker _documentTracker;
 
         public SvnSccProvider(IAnkhServiceProvider context)
-            : base(context, new SvnSccProjectMap(context))
+            : base(context)
         {
         }
 
@@ -67,18 +73,22 @@ namespace Ankh.Scc
                 };
         }
 
-        protected override Guid ProviderGuid
+        public void RegisterAsPrimarySccProvider()
         {
-            get { return AnkhId.SccProviderGuid; }
+            IVsRegisterScciProvider rscp = GetService<IVsRegisterScciProvider>();
+            if (rscp != null)
+            {
+                Marshal.ThrowExceptionForHR(rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid));
+            }
         }
 
         /// <summary>
         /// Gets the status cache.
         /// </summary>
         /// <value>The status cache.</value>
-        ISvnStatusCache StatusCache
+        IFileStatusCache StatusCache
         {
-            get { return _statusCache ?? (_statusCache = GetService<ISvnStatusCache>()); }
+            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
         }
 
         IAnkhOpenDocumentTracker DocumentTracker
@@ -93,22 +103,24 @@ namespace Ankh.Scc
         /// <returns>
         /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
         /// </returns>
-        public override bool AnyItemsUnderSourceControl()
+        public int AnyItemsUnderSourceControl(out int pfResult)
         {
-            if (!IsActive)
-                return false;
+            // Set pfResult to false when the solution can change to an other scc provider
+            bool oneManaged = _active && IsSolutionManaged;
 
-            // Return false when the solution can change to an other scc provider
-            if (IsSolutionManaged)
-                return true;
-            
-            foreach (SccProjectData data in ProjectMap.AllSccProjects)
+            if (_active && !oneManaged)
             {
-                if (data.IsManaged)
-                    return true;
+                foreach (SccProjectData data in _projectMap.Values)
+                {
+                    if (data.IsManaged)
+                    {
+                        oneManaged = true;
+                        break;
+                    }
+                }
             }
-
-            return false;
+            pfResult = oneManaged ? 1 : 0;
+            return VSErr.S_OK;
         }
 
         /// <summary>
@@ -117,56 +129,174 @@ namespace Ankh.Scc
         /// <returns>
         /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
         /// </returns>
-        protected override void SetActive(bool active)
+        public int SetActive()
         {
-            base.SetActive(active);
+            _active = true;
 
-            if (active)
+            // Send activate before scheduling glyphs to make sure the project data is
+            // loaded
+            GetService<IAnkhServiceEvents>().OnSccProviderActivated(EventArgs.Empty);
+
+            // Delayed flush all glyphs of all projects when a user enables us.
+
+            List<SvnProject> allProjects = new List<SvnProject>(GetAllProjects());
+            allProjects.Add(SvnProject.Solution);
+            Monitor.ScheduleGlyphOnlyUpdate(allProjects);
+
+            RegisterForSccCleanup();
+
+            IAnkhConfigurationService cfg = GetService<IAnkhConfigurationService>();
+            
+            if (cfg != null && !cfg.Instance.DontHookSolutionExplorerRefresh)
             {
-                // Send activate before scheduling glyphs to make sure the project data is
-                // loaded
-                GetService<IAnkhServiceEvents>().OnSccProviderActivated(EventArgs.Empty);
+                IAnkhGlobalCommandHook cmdHook = GetService<IAnkhGlobalCommandHook>();
 
-                // Delayed flush all glyphs of all projects when a user enables us.
-
-                List<SccProject> allProjects = new List<SccProject>(ProjectMap.GetAllProjects());
-                allProjects.Add(SccProject.Solution);
-                Monitor.ScheduleGlyphOnlyUpdate(allProjects);
-
-                RegisterForSccCleanup();
+                if (cmdHook != null)
+                    cmdHook.HookCommand(new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.SLNREFRESH),
+                                        OnSlnRefresh);
             }
-            else
-            {
-                _unreloadable.Clear();
 
-                GetService<IAnkhServiceEvents>().OnSccProviderDeactivated(EventArgs.Empty);
-            }
+            return VSErr.S_OK;
         }
 
-        protected override void OnSolutionRefreshCommand(EventArgs e)
+        private void OnSlnRefresh(object sender, EventArgs e)
         {
             CommandService.PostExecCommand(AnkhCommand.Refresh);
+        }
+
+        /// <summary>
+        /// Called by environment to mark a particular source control package as inactive.
+        /// </summary>
+        /// <returns>
+        /// The method returns <see cref="F:Microsoft.VisualStudio.VSErr.S_OK"></see>.
+        /// </returns>
+        public int SetInactive()
+        {
+            if (_active)
+            {
+                _active = false;
+                // If VS asked us for custom glyphs, we can release the handle now
+                if (_glyphList != null)
+                {
+                    _glyphList.Dispose();
+                    _glyphList = null;
+                }
+
+                // Remove all glyphs currently set
+                foreach (SccProjectData pd in new List<SccProjectData>(_projectMap.Values))
+                {
+                    pd.NotifyGlyphsChanged();
+                    pd.Dispose();
+                }
+
+                ClearSolutionGlyph();
+
+                _projectMap.Clear();
+                _fileMap.Clear();
+                _unreloadable.Clear();
+                _sccExcluded.Clear();
+            }
+
+            GetService<IAnkhServiceEvents>().OnSccProviderDeactivated(EventArgs.Empty);
+
+            IAnkhGlobalCommandHook cmdHook = GetService<IAnkhGlobalCommandHook>();
+
+            if (cmdHook != null)
+                cmdHook.UnhookCommand(new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.SLNREFRESH),
+                                      OnSlnRefresh);
+
+            return VSErr.S_OK;
+        }
+
+        /// <summary>
+        /// This function determines whether the source control package is installed. 
+        /// Source control packages should always return S_OK and pbInstalled = nonzero..
+        /// </summary>
+        /// <param name="pbInstalled">The pb installed.</param>
+        /// <returns></returns>
+        public int IsInstalled(out int pbInstalled)
+        {
+            pbInstalled = 1; // We are always installed as we have no external dependencies
+
+            return VSErr.S_OK;
         }
 
         /// <summary>
         /// This method is called by projects that are under source control 
         /// when they are first opened to register project settings.
         /// </summary>
-
-        protected override void OnRegisterSccProject(SccProjectData data, string pszProvider)
+        /// <param name="pscp2Project">The PSCP2 project.</param>
+        /// <param name="pszSccProjectName">Name of the PSZ SCC project.</param>
+        /// <param name="pszSccAuxPath">The PSZ SCC aux path.</param>
+        /// <param name="pszSccLocalPath">The PSZ SCC local path.</param>
+        /// <param name="pszProvider">The PSZ provider.</param>
+        /// <returns></returns>
+        public int RegisterSccProject(IVsSccProject2 pscp2Project, string pszSccProjectName, string pszSccAuxPath, string pszSccLocalPath, string pszProvider)
         {
-            base.OnRegisterSccProject(data, pszProvider);
+            SccProjectData data;
+            if (!_projectMap.TryGetValue(pscp2Project, out data))
+            {
+                // This method is called before the OpenProject calls
+                _projectMap.Add(pscp2Project, data = new SccProjectData(Context, pscp2Project));
+            }
 
             data.IsManaged = (pszProvider == AnkhId.SubversionSccName);
+            data.IsRegistered = true;
 
             _syncMap = true;
             RegisterForSccCleanup();
+
+            return VSErr.S_OK;
         }
 
-        internal void AddedToSolution(string path)
+        /// <summary>
+        /// Called by projects registered with the source control portion of the environment before they are closed.
+        /// </summary>
+        /// <param name="pscp2Project">The PSCP2 project.</param>
+        /// <returns></returns>
+        public int UnregisterSccProject(IVsSccProject2 pscp2Project)
         {
-            // Force an initial status into the SvnItem
-            StatusCache.SetSolutionContained(path, true, ProjectMap.IsSccExcluded(path));
+            SccProjectData data;
+            if (_projectMap.TryGetValue(pscp2Project, out data))
+            {
+                data.IsRegistered = false;
+            }
+
+            return VSErr.S_OK;
         }
+
+        /// <summary>
+        /// Gets a value indicating whether the Ankh Scc service is active
+        /// </summary>
+        /// <value><c>true</c> if this instance is active; otherwise, <c>false</c>.</value>
+        public bool IsActive
+        {
+            get { return _active; }
+        }
+
+        #region // Obsolete Methods
+        /// <summary>
+        /// Obsolete: returns E_NOTIMPL.
+        /// </summary>
+        /// <param name="pbstrDirectory">The PBSTR directory.</param>
+        /// <param name="pfOK">The pf OK.</param>
+        /// <returns></returns>
+        public int BrowseForProject(out string pbstrDirectory, out int pfOK)
+        {
+            pbstrDirectory = null;
+            pfOK = 0;
+
+            return VSErr.E_NOTIMPL;
+        }
+
+        /// <summary>
+        /// Obsolete: returns E_NOTIMPL.
+        /// </summary>
+        /// <returns></returns>
+        public int CancelAfterBrowseForProject()
+        {
+            return VSErr.E_NOTIMPL;
+        }
+        #endregion
     }
 }

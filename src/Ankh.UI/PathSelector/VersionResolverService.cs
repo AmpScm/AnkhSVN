@@ -148,7 +148,7 @@ namespace Ankh.UI.PathSelector
 
                 if (isPath)
                 {
-                    SvnItem item = GetService<ISvnStatusCache>()[pt.FullPath];
+                    SvnItem item = GetService<IFileStatusCache>()[pt.FullPath];
 
                     if (item.IsVersioned)
                     {

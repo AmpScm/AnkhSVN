@@ -51,7 +51,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">A reference to the project or null for the solution</param>
         /// <param name="managed"></param>
-        void SetProjectManaged(SccProject project, bool managed);    
+        void SetProjectManaged(SvnProject project, bool managed);    
 
         /// <summary>
         /// Gets a boolean indicating whether the specified project (or the solution) is 
@@ -59,7 +59,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">A reference to the project or null for the solution</param>
         /// <returns><c>true</c> if the solution is managed by the scc provider, otherwise <c>false</c></returns>
-        bool IsProjectManaged(SccProject project);
+        bool IsProjectManaged(SvnProject project);
 
         /// <summary>
         /// Gets a value indicating whether this instance is solution managed.
@@ -97,10 +97,17 @@ namespace Ankh.Scc
         void SerializeSccExcludeData(Stream store, bool writeData);
 
         /// <summary>
+        /// Gets a boolean indicating whether to ignores the enumeration side effects flag on this project
+        /// </summary>
+        /// <param name="sccProject">The SCC project.</param>
+        /// <returns></returns>
+        bool IgnoreEnumerationSideEffects(Microsoft.VisualStudio.Shell.Interop.IVsSccProject2 sccProject);
+
+        /// <summary>
         /// Ensures the check out reference for the specified project
         /// </summary>
         /// <param name="project">The project.</param>
-        void EnsureCheckOutReference(SccProject project);
+        void EnsureCheckOutReference(SvnProject project);
 
         /// <summary>
         /// Ensure that all project state is loaded

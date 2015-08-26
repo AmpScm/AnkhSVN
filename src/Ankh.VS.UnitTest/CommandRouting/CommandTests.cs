@@ -58,7 +58,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             selection.Setup(x => x.Cache[It.IsAny<object>()]).Returns(null);
 
             var rawHandle = new Mock<IVsSccProject2>();
-            var p = new SccProject("c:\foo\bar", rawHandle.Object);
+            var p = new SvnProject("c:\foo\bar", rawHandle.Object);
             selection.Setup(x => x.GetSelectedProjects(It.IsAny<bool>())).Returns(new[] { p });
             sp.AddService(typeof(ISelectionContext), selection.Object);
 
@@ -93,9 +93,9 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         public void TestOnUpdateProjDirNull()
         {
             var projMapper = new Mock<IProjectFileMapper>();
-            var projInfo = new Mock<ISccProjectInfo>();
+            var projInfo = new Mock<ISvnProjectInfo>();
             projInfo.SetupGet(x => x.ProjectDirectory).Returns((string)null);
-            projMapper.Setup(x => x.GetProjectInfo(It.IsAny<SccProject>())).Returns(projInfo.Object);
+            projMapper.Setup(x => x.GetProjectInfo(It.IsAny<SvnProject>())).Returns(projInfo.Object);
             sp.AddService(typeof(IProjectFileMapper), projMapper.Object);
 
             // The sln projectroot also returns null
@@ -110,7 +110,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         public void TestOnUpdateProjInfoNull()
         {
             var projMapper = new Mock<IProjectFileMapper>();
-            projMapper.Setup(x => x.GetProjectInfo(It.IsAny<SccProject>())).Returns((ISccProjectInfo)null);
+            projMapper.Setup(x => x.GetProjectInfo(It.IsAny<SvnProject>())).Returns((ISvnProjectInfo)null);
             sp.AddService(typeof(IProjectFileMapper), projMapper.Object);
 
             // sln settings unavailable

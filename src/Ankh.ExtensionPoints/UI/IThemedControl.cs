@@ -11,29 +11,17 @@ namespace Ankh.ExtensionPoints.UI
         readonly IServiceProvider _serviceProvider;
         bool _cancelRecurse;
         bool _dontTheme;
-        bool _forDialog;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="serviceProvider"></param>
-        /// <param name="forDialog"></param>
-        public ApplyThemeEventArgs(IServiceProvider serviceProvider, bool forDialog)
-        {
-            if (serviceProvider == null)
-                throw new ArgumentNullException("serviceProvider");
-
-            _serviceProvider = serviceProvider;
-        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="serviceProvider"></param>
         public ApplyThemeEventArgs(IServiceProvider serviceProvider)
-            : this(serviceProvider, false)
         {
+            if (serviceProvider == null)
+                throw new ArgumentNullException("serviceProvider");
 
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -61,15 +49,6 @@ namespace Ankh.ExtensionPoints.UI
         {
             get { return _dontTheme; }
             set { _dontTheme = value;  }
-        }
-
-        /// <summary>
-        /// Gets or sets boolean whether themes should be applied for dialog (vs toolwindow) UI
-        /// </summary>
-        public bool ForDialog
-        {
-            get { return _forDialog; }
-            set { _forDialog = value; }
         }
     }
 

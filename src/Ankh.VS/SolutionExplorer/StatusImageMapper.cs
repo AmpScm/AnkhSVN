@@ -24,7 +24,6 @@ using SharpSvn;
 using System.IO;
 using System.Diagnostics;
 using System.Globalization;
-using SharpGit;
 
 namespace Ankh.VS.SolutionExplorer
 {
@@ -131,72 +130,6 @@ namespace Ankh.VS.SolutionExplorer
                     return AnkhGlyph.InConflict;
 
                 case SvnStatus.Zero:
-                default:
-                    return AnkhGlyph.None;
-            }
-        }
-
-
-        public AnkhGlyph GetStatusImageForGitItem(GitItem item)
-        {
-            if (item == null)
-                throw new ArgumentNullException("item");
-
-            if (item.IsConflicted)
-                return AnkhGlyph.InConflict;
-            else if (!item.IsVersioned)
-            {
-                if (!item.Exists)
-                    return AnkhGlyph.FileMissing;
-                else if (item.IsIgnored)
-                    return AnkhGlyph.Ignored;
-                else if (item.IsVersionable)
-                {
-                    if (item.InSolution)
-                        return item.IsSccExcluded ? AnkhGlyph.Ignored : AnkhGlyph.ShouldBeAdded;
-                    else
-                        return AnkhGlyph.None;
-                }
-                else
-                    return AnkhGlyph.None;
-            }
-
-            GitStatus status = item.Status.WorkingStatus;
-
-            if (status == GitStatus.Normal || status == GitStatus.None)
-                status = item.Status.IndexStatus;
-
-            switch (status)
-            {
-                case GitStatus.Normal:
-                    if (item.IsDocumentDirty)
-                        return AnkhGlyph.FileDirty;
-                    else
-                        return AnkhGlyph.Normal;
-                /*case GitStatus.Replaced:
-                    return AnkhGlyph.CopiedOrMoved;*/
-                case GitStatus.New:
-                    return false ? AnkhGlyph.CopiedOrMoved : AnkhGlyph.Added;
-
-                case GitStatus.Renamed:
-                    return AnkhGlyph.CopiedOrMoved;
-
-                case GitStatus.Deleted:
-                    if (item.Exists && item.InSolution)
-                        return item.IsSccExcluded ? AnkhGlyph.Ignored : AnkhGlyph.ShouldBeAdded;
-                    return AnkhGlyph.Deleted;
-
-                /*case GitStatus.Conflicted: // Should have been handled above
-                case GitStatus.Obstructed:
-                    return AnkhGlyph.InConflict;*/
-
-                case GitStatus.Unreadable:
-                    return AnkhGlyph.InConflict;
-                /*case GitStatus.External:
-                case GitStatus.Incomplete:
-                    return AnkhGlyph.InConflict;
-
-                case GitStatus.Zero:*/
                 default:
                     return AnkhGlyph.None;
             }

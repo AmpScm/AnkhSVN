@@ -49,7 +49,7 @@ namespace Ankh.Commands
             }
 
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
-            ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
             if (scc == null || cache == null)
             {
                 e.Enabled = false;
@@ -90,18 +90,18 @@ namespace Ankh.Commands
 
             int n = 0;
             bool foundOne = false;
-            foreach (IEnumerable<SccProject> projects in
-                new IEnumerable<SccProject>[] 
+            foreach (IEnumerable<SvnProject> projects in
+                new IEnumerable<SvnProject>[] 
                 { 
                     e.Selection.GetSelectedProjects(true),
                     e.Selection.GetSelectedProjects(false) 
                 })
             {
-                foreach (SccProject p in projects)
+                foreach (SvnProject p in projects)
                 {
                     foundOne = true;
 
-                    ISccProjectInfo pi = pfm.GetProjectInfo(p);
+                    ISvnProjectInfo pi = pfm.GetProjectInfo(p);
 
                     if (pi == null || !pi.IsSccBindable)
                         continue; // Not an SCC project
@@ -127,10 +127,10 @@ namespace Ankh.Commands
             e.Enabled = false;
         }
 
-        private static IEnumerable<SccProject> GetSelection(ISelectionContext iSelectionContext)
+        private static IEnumerable<SvnProject> GetSelection(ISelectionContext iSelectionContext)
         {
             bool foundOne = false;
-            foreach (SccProject pr in iSelectionContext.GetSelectedProjects(true))
+            foreach (SvnProject pr in iSelectionContext.GetSelectedProjects(true))
             {
                 yield return pr;
                 foundOne = true;
@@ -139,7 +139,7 @@ namespace Ankh.Commands
             if (foundOne)
                 yield break;
 
-            foreach (SccProject pr in iSelectionContext.GetOwnerProjects())
+            foreach (SvnProject pr in iSelectionContext.GetOwnerProjects())
             {
                 yield return pr;
             }
@@ -147,7 +147,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
 
             if (cache == null || e.Selection.SolutionFilename == null)
                 return;
@@ -438,7 +438,7 @@ namespace Ankh.Commands
 
         static void SetProjectsManaged(CommandEventArgs e)
         {
-            ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
             IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
             IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
@@ -447,16 +447,16 @@ namespace Ankh.Commands
             if (mapper == null)
                 return;
 
-            List<SccProject> projectsToBeManaged = new List<SccProject>();
+            List<SvnProject> projectsToBeManaged = new List<SvnProject>();
             SvnItem slnItem = cache[e.Selection.SolutionFilename];
             Uri solutionReposRoot = null;
             if (slnItem.WorkingCopy != null)
             {
                 solutionReposRoot = slnItem.WorkingCopy.RepositoryRoot;
 
-                foreach (SccProject project in GetSelection(e.Selection))
+                foreach (SvnProject project in GetSelection(e.Selection))
                 {
-                    ISccProjectInfo projInfo = mapper.GetProjectInfo(project);
+                    ISvnProjectInfo projInfo = mapper.GetProjectInfo(project);
 
                     if (projInfo == null || projInfo.ProjectDirectory == null
                         || !projInfo.IsSccBindable)
@@ -525,7 +525,7 @@ namespace Ankh.Commands
             if (!AskSetManagedSelectionProjects(e, mapper, scc, projectsToBeManaged))
                 return;
 
-            foreach (SccProject project in projectsToBeManaged)
+            foreach (SvnProject project in projectsToBeManaged)
             {
                 if (!scc.IsProjectManaged(project))
                 {
@@ -544,7 +544,7 @@ namespace Ankh.Commands
         /// <param name="scc"></param>
         /// <param name="succeededProjects"></param>
         /// <returns></returns>
-        static bool AskSetManagedSelectionProjects(CommandEventArgs e, IProjectFileMapper mapper, IAnkhSccService scc, IEnumerable<SccProject> succeededProjects)
+        static bool AskSetManagedSelectionProjects(CommandEventArgs e, IProjectFileMapper mapper, IAnkhSccService scc, IEnumerable<SvnProject> succeededProjects)
         {
             if (e.DontPrompt || e.IsInAutomation)
                 return true;
@@ -552,9 +552,9 @@ namespace Ankh.Commands
             AnkhMessageBox mb = new AnkhMessageBox(e.Context);
             StringBuilder sb = new StringBuilder();
             bool foundOne = false;
-            foreach (SccProject project in succeededProjects)
+            foreach (SvnProject project in succeededProjects)
             {
-                ISccProjectInfo info;
+                ISvnProjectInfo info;
                 if (!scc.IsProjectManaged(project) && null != (info = mapper.GetProjectInfo(project)))
                 {
                     if (sb.Length > 0)
@@ -587,7 +587,7 @@ namespace Ankh.Commands
         /// <param name="shouldMarkAsManaged"></param>
         /// <param name="storeReference"></param>
         /// <returns></returns>
-        static bool CheckoutWorkingCopyForProject(CommandEventArgs e, SccProject project, ISccProjectInfo projectInfo, Uri solutionReposRoot, out bool shouldMarkAsManaged, out bool storeReference)
+        static bool CheckoutWorkingCopyForProject(CommandEventArgs e, SvnProject project, ISvnProjectInfo projectInfo, Uri solutionReposRoot, out bool shouldMarkAsManaged, out bool storeReference)
         {
             shouldMarkAsManaged = false;
             storeReference = false;

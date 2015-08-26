@@ -19,7 +19,7 @@ using Ankh.Commands;
 
 namespace Ankh.Scc.StatusCache.Commands
 {
-    [SvnCommand(AnkhCommand.SvnCacheFinishTasks, AlwaysAvailable = true)]
+    [SvnCommand(AnkhCommand.FileCacheFinishTasks, AlwaysAvailable = true)]
     [SvnCommand(AnkhCommand.TickRefreshSvnItems, AlwaysAvailable = true)]
     public class FileStatusCleanup : ICommandHandler
     {
@@ -27,7 +27,7 @@ namespace Ankh.Scc.StatusCache.Commands
         {
         }
 
-        SvnStatusCache _fileCache;
+        FileStatusCache _fileCache;
         IAnkhCommandService _commandService;
 
         public void OnExecute(CommandEventArgs e)
@@ -35,11 +35,11 @@ namespace Ankh.Scc.StatusCache.Commands
             if (_commandService == null)
                 _commandService = e.GetService<IAnkhCommandService>();
             if (_fileCache == null)
-                _fileCache = e.GetService<SvnStatusCache>(typeof(ISvnStatusCache));
+                _fileCache = e.GetService<FileStatusCache>(typeof(IFileStatusCache));
 
             _commandService.TockCommand(e.Command);
 
-            if (e.Command == AnkhCommand.SvnCacheFinishTasks)
+            if (e.Command == AnkhCommand.FileCacheFinishTasks)
                 _fileCache.OnCleanup();
             else
                 _fileCache.BroadcastChanges();

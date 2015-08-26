@@ -29,14 +29,14 @@ namespace Ankh.Scc.SccUI
     sealed class ChangeSourceControlRow : DataGridViewRow
     {
         readonly IAnkhServiceProvider _context;
-        readonly SccProject _project;
+        readonly SvnProject _project;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangeSourceControlRow"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="project">The project.</param>
-        public ChangeSourceControlRow(IAnkhServiceProvider context, SccProject project)
+        public ChangeSourceControlRow(IAnkhServiceProvider context, SvnProject project)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -84,7 +84,7 @@ namespace Ankh.Scc.SccUI
         /// Gets the project.
         /// </summary>
         /// <value>The project.</value>
-        public SccProject Project
+        public SvnProject Project
         {
             get { return _project; }
         }
@@ -107,10 +107,10 @@ namespace Ankh.Scc.SccUI
             get { return _scc ?? (_scc = _context.GetService<IAnkhSccService>()); }
         }
 
-        ISvnStatusCache _cache;
-        ISvnStatusCache Cache
+        IFileStatusCache _cache;
+        IFileStatusCache Cache
         {
-            get { return _cache ?? (_cache = _context.GetService<ISvnStatusCache>()); }
+            get { return _cache ?? (_cache = _context.GetService<IFileStatusCache>()); }
         }
 
         string SafeToString(object value)
@@ -123,7 +123,7 @@ namespace Ankh.Scc.SccUI
         /// </summary>
         public void Refresh()
         {
-            ISccProjectInfo projectInfo;
+            ISvnProjectInfo projectInfo;
             if (_project.IsSolution)
             {
                 SvnItem rootItem = SolutionSettings.ProjectRootSvnItem;
@@ -135,7 +135,7 @@ namespace Ankh.Scc.SccUI
                     SafeRepositoryPath(rootItem),
                     GetStatus(rootItem, null, SolutionSettings.SolutionFilename),
                     (rootItem != null)
-                        ? EmptyToDot(SvnItem.MakeRelative(rootItem.FullPath, SvnTools.GetNormalizedDirectoryName(SolutionSettings.SolutionFilename)))
+                        ? EmptyToDot(PackageUtilities.MakeRelative(rootItem.FullPath, SvnTools.GetNormalizedDirectoryName(SolutionSettings.SolutionFilename)))
                         : "",
                     (rootItem != null)
                         ? rootItem.FullPath
@@ -154,7 +154,7 @@ namespace Ankh.Scc.SccUI
                     SafeRepositoryRoot(dirItem),
                     SafeRepositoryPath(dirItem),
                     GetStatus(dirItem, projectInfo, projectInfo.ProjectFile),
-                    EmptyToDot(SvnItem.MakeRelative(projectInfo.SccBaseDirectory, projectInfo.ProjectDirectory)),
+                    EmptyToDot(PackageUtilities.MakeRelative(projectInfo.SccBaseDirectory, projectInfo.ProjectDirectory)),
                     projectInfo.SccBaseDirectory
                     );
             }
@@ -173,7 +173,7 @@ namespace Ankh.Scc.SccUI
             }
         }
 
-        private string GetStatus(SvnItem dirItem, ISccProjectInfo projectInfo, string file)
+        private string GetStatus(SvnItem dirItem, ISvnProjectInfo projectInfo, string file)
         {
             if (dirItem == null || !dirItem.Exists || !dirItem.IsVersioned)
                 return "<not found>";

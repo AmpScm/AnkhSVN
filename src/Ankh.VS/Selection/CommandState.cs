@@ -194,16 +194,10 @@ namespace Ankh.VS.Selection
             get { return (_solutionHasSingleProject ?? (_solutionHasSingleProject = GetCache(VSConstants.UICONTEXT_SolutionHasSingleProject))).Active; }
         }
 
-        CmdStateCacheItem _ankhSvnActiveScc;
+        CmdStateCacheItem _ankhActiveScc;
         public bool SccProviderActive
         {
-            get { return (_ankhSvnActiveScc ?? (_ankhSvnActiveScc = GetCache(AnkhId.SccProviderGuid))).Active; }
-        }
-
-        CmdStateCacheItem _ankhGitActiveScc;
-        public bool GitSccProviderActive
-        {
-            get { return (_ankhGitActiveScc ?? (_ankhGitActiveScc = GetCache(AnkhId.GitSccProviderGuid))).Active; }
+            get { return (_ankhActiveScc ?? (_ankhActiveScc = GetCache(AnkhId.SccProviderGuid))).Active; }
         }
 
         CmdStateCacheItem _sccManagerLoaded;
@@ -600,7 +594,7 @@ namespace Ankh.VS.Selection
 
         private bool GetOtherSccProviderActive()
         {
-            if (SccProviderActive || GitSccProviderActive)
+            if (SccProviderActive)
                 return false; // We are active
 
             return GetRawOtherSccProviderActive();

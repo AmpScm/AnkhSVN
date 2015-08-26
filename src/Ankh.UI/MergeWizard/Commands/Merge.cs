@@ -34,7 +34,7 @@ namespace Ankh.UI.MergeWizard.Commands
         /// <see cref="Ankh.Commands.ICommandHandler.OnUpdate" />
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            ISvnStatusCache statusCache;
+            IFileStatusCache statusCache;
             int n = 0;
             switch (e.Command)
             {
@@ -54,11 +54,11 @@ namespace Ankh.UI.MergeWizard.Commands
                     }
                     break;
                 case AnkhCommand.ProjectMerge:
-                    statusCache = e.GetService<ISvnStatusCache>();
+                    statusCache = e.GetService<IFileStatusCache>();
                     IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
-                    foreach (SccProject project in e.Selection.GetSelectedProjects(false))
+                    foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
                     {
-                        ISccProjectInfo projInfo = pfm.GetProjectInfo(project);
+                        ISvnProjectInfo projInfo = pfm.GetProjectInfo(project);
                         if (projInfo == null || string.IsNullOrEmpty(projInfo.ProjectDirectory))
                         {
                             e.Enabled = false;
@@ -78,7 +78,7 @@ namespace Ankh.UI.MergeWizard.Commands
                     }
                     break;
                 case AnkhCommand.SolutionMerge:
-                    statusCache = e.GetService<ISvnStatusCache>();
+                    statusCache = e.GetService<IFileStatusCache>();
                     IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
                     if (solutionSettings == null || string.IsNullOrEmpty(solutionSettings.ProjectRoot))
                     {
@@ -101,7 +101,7 @@ namespace Ankh.UI.MergeWizard.Commands
         public void OnExecute(CommandEventArgs e)
         {
             List<SvnItem> svnItems = new List<SvnItem>();
-            ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
 
             switch (e.Command)
             {
@@ -113,11 +113,11 @@ namespace Ankh.UI.MergeWizard.Commands
                     }
                     break;
                 case AnkhCommand.ProjectMerge:
-                    foreach (SccProject p in e.Selection.GetSelectedProjects(false))
+                    foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
                     {
                         IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
 
-                        ISccProjectInfo info = pfm.GetProjectInfo(p);
+                        ISvnProjectInfo info = pfm.GetProjectInfo(p);
                         if (info != null && info.ProjectDirectory != null)
                         {
                             svnItems.Add(cache[info.ProjectDirectory]);

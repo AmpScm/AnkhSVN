@@ -189,28 +189,28 @@
   <data name="&gt;&gt;pendingChangesTabs.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="contentPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="panel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="contentPanel.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
     <value>31, 0</value>
   </data>
-  <data name="contentPanel.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
     <value>773, 300</value>
   </data>
-  <data name="contentPanel.TabIndex" type="System.Int32, mscorlib">
+  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;contentPanel.Name" xml:space="preserve">
-    <value>contentPanel</value>
+  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
+    <value>panel1</value>
   </data>
-  <data name="&gt;&gt;contentPanel.Type" xml:space="preserve">
+  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
     <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;contentPanel.Parent" xml:space="preserve">
+  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;contentPanel.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -250,6 +250,6 @@
     <value>PendingChangesToolControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.AnkhToolWindowControl, Ankh.Services, Version=2.5.5571.25519, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
+    <value>Ankh.UI.AnkhToolWindowControl, Ankh.Services, Version=2.3.4469.24204, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
   </data>
 </root>

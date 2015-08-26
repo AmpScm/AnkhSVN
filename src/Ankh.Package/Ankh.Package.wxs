@@ -8,7 +8,6 @@
       <ComponentGroupRef Id="Ankh.Ids" />
       <ComponentGroupRef Id="Ankh.Services" />
       <ComponentGroupRef Id="Ankh" />
-      <ComponentGroupRef Id="Ankh.GitScc" />
       <ComponentGroupRef Id="Ankh.Scc" />
       <ComponentGroupRef Id="Ankh.UI" />
       <ComponentGroupRef Id="Ankh.VS" />

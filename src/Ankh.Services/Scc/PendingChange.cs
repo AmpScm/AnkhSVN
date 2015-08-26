@@ -25,7 +25,6 @@ using Ankh.Selection;
 using Ankh.VS;
 using SharpSvn;
 using System.IO;
-using Ankh.Collections;
 
 namespace Ankh.Scc
 {
@@ -130,15 +129,11 @@ namespace Ankh.Scc
         /// <summary>
         /// Refreshes the pending change. Returns true if the state was modified, otherwise false
         /// </summary>
-        /// <param name="context"></param>
         /// <param name="item"></param>
         /// <returns></returns>
         public bool Refresh(RefreshContext context, SvnItem item)
         {
             bool m = false;
-
-            if (!ReferenceEquals(item, SvnItem))
-                ReplaceSvnItem(item);
 
             RefreshValue(ref m, ref _iconIndex, GetIcon(context));
             RefreshValue(ref m, ref _projects, GetProjects(context));
@@ -168,9 +163,9 @@ namespace Ankh.Scc
         string GetProjects(RefreshContext context)
         {
             string name = null;
-            foreach (SccProject project in context.ProjectFileMapper.GetAllProjectsContaining(FullPath))
+            foreach (SvnProject project in context.ProjectFileMapper.GetAllProjectsContaining(FullPath))
             {
-                ISccProjectInfo info = context.ProjectFileMapper.GetProjectInfo(project);
+                ISvnProjectInfo info = context.ProjectFileMapper.GetProjectInfo(project);
 
                 if (info == null)
                 {
@@ -211,7 +206,7 @@ namespace Ankh.Scc
 
         PendingChangeStatus GetStatus(RefreshContext context, SvnItem item)
         {
-            SvnStatusData status = item.Status;
+            AnkhStatus status = item.Status;
             _kind = CombineStatus(status.LocalNodeStatus, status.LocalTextStatus, status.LocalPropertyStatus, item.IsTreeConflicted, item);
 
             if (_kind != PendingChangeKind.None)
@@ -259,25 +254,6 @@ namespace Ankh.Scc
             return create;
         }
 
-        public static bool IsPending(GitItem item)
-        {
-            if (item == null)
-                throw new ArgumentNullException("item");
-
-            bool create = false;
-            if (item.IsConflicted)
-                create = true; // Tree conflict (unversioned) or other conflict
-            else if (item.IsModified)
-                create = true; // Must commit
-            else if (item.InSolution && !item.IsVersioned && !item.IsIgnored && item.IsVersionable && !item.IsSccExcluded)
-                create = true; // To be added
-            else if (item.IsVersioned && item.IsDocumentDirty)
-                create = true;
-
-            return create;
-        }
-
-
         /// <summary>
         /// Determines if a change list name is one of the "Ignore On Commit" change lists
         /// </summary>
@@ -289,8 +265,8 @@ namespace Ankh.Scc
         /// <summary>
         /// Creates if pending.
         /// </summary>
-        /// <param name="context"></param>
         /// <param name="item">The item.</param>
+        /// <param name="isDirty">if set to <c>true</c> [is dirty].</param>
         /// <param name="pc">The pc.</param>
         /// <returns></returns>
         public static bool CreateIfPending(RefreshContext context, SvnItem item, out PendingChange pc)
@@ -324,7 +300,6 @@ namespace Ankh.Scc
             IFileIconMapper _iconMapper;
             IAnkhSolutionSettings _solutionSettings;
 
-            [CLSCompliant(false)]
             public IProjectFileMapper ProjectFileMapper
             {
                 [DebuggerStepThrough]
@@ -399,7 +374,6 @@ namespace Ankh.Scc
         /// Combines the statuses to a single PendingChangeKind status for UI purposes
         /// </summary>
         /// <param name="nodeStatus">The content status.</param>
-        /// <param name="textStatus"></param>
         /// <param name="propertyStatus">The property status.</param>
         /// <param name="treeConflict">if set to <c>true</c> [tree conflict].</param>
         /// <param name="item">The item or null if no on disk representation is availavke</param>
@@ -529,27 +503,48 @@ namespace Ankh.Scc
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PendingChangeCollection : ReadOnlyKeyedNotifyCollection<string, PendingChange>, INotifyItemChanged<PendingChange>
+    public sealed class PendingChangeCollection : KeyedCollection<string, PendingChange>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ThePendingChangeCollection"/> class.
+        /// Initializes a new instance of the <see cref="PendingChangeCollection"/> class.
         /// </summary>
-        public PendingChangeCollection(IKeyedNotifyCollection<string, PendingChange> inner)
-            : base(inner)
+        public PendingChangeCollection()
+            : base(StringComparer.OrdinalIgnoreCase)
         {
         }
 
-        public event EventHandler<ItemChangedEventArgs<PendingChange>> ItemChanged;
-
-        void OnItemChanged(ItemChangedEventArgs<PendingChange> e)
+        /// <summary>
+        /// Extracts the FullPath from the specified element.
+        /// </summary>
+        /// <param name="item">The element from which to extract the key.</param>
+        /// <returns>The key for the specified element.</returns>
+        protected override string GetKeyForItem(PendingChange item)
         {
-            if (ItemChanged != null)
-                ItemChanged(this, e);
+            return item.FullPath;
         }
 
-        public void RaiseChanged(PendingChange pendingChange)
+        /// <summary>
+        /// Gets the value associated with the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public bool TryGetValue(string key, out PendingChange value)
         {
-            OnItemChanged(new ItemChangedEventArgs<PendingChange>(pendingChange));
+            if (Dictionary != null)
+                return Dictionary.TryGetValue(key, out value);
+
+            foreach (PendingChange p in this)
+            {
+                if (String.Equals(p.FullPath, key, StringComparison.OrdinalIgnoreCase))
+                {
+                    value = p;
+                    return true;
+                }
+            }
+
+            value = null;
+            return false;
         }
     }
 }

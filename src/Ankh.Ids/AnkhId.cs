@@ -53,8 +53,6 @@ namespace Ankh
         public const string SvnOriginName = "SvnOrigin";
         public const string SccTranslateStream = SubversionSccName + "_SccTranslate";
 
-        public const string GitSccName = "GitScc";
-
         // Items for the VS 2010 Extension registration
         public const string ExtensionTitle = AnkhId.AssemblyProduct;
         public const string ExtensionAuthor = AnkhId.AssemblyCompany;
@@ -75,13 +73,6 @@ namespace Ankh
         public const string SccServiceId = "d8c473d2-9634-4513-91d5-e1a671fe2df4";
         /// <summary>Language neutral SCC Provider title</summary>
         public const string SccProviderTitle = "AnkhSVN - Subversion Support for Visual Studio";
-
-        /// <summary>The SCC Provider guid (used as SCC active marker by VS)</summary>
-        public const string GitSccProviderId = "e2d67382-8a13-44e0-a613-5d7d99701727";
-        /// <summary>The GUID of the SCC Service</summary>
-        public const string GitSccServiceId = "ea9a5772-42f4-48c1-94a9-5e1765bdef51";
-        /// <summary>Language neutral SCC Provider title</summary>
-        public const string GitSccProviderTitle = "AnkhSVN - Experimental Git Support for Visual Studio";
 
         //**********************************************************************************
 
@@ -114,12 +105,11 @@ namespace Ankh
 
 
         public const string RepositoryExplorerToolWindowId = "748becbe-04a1-4ffa-8e1e-46840f91a083";
-        public const string SvnPendingChangesToolWindowId = "896e815d-3862-4978-a1bc-cb6a3e70045c";
-        public const string GitPendingChangesToolWindowId = "ea7a57e0-dc86-49e0-94c4-1b701e82a354";
+        public const string PendingChangesToolWindowId = "896e815d-3862-4978-a1bc-cb6a3e70045c";
         public const string WorkingCopyExplorerToolWindowId = "a1929d7e-610a-48b0-8152-8e4aa202427f";
         public const string BlameToolWindowId = "a543ea62-696c-4c7c-ab42-78bd7267da92";
         public const string LogToolWindowId = "2fac1ebf-6b37-4be3-9a44-f9ed32d561cd";
-        public const string SccInfoToolWindowId = "c3630016-f162-4af5-b165-9f468a642e9a";
+        public const string SvnInfoToolWindowId = "c3630016-f162-4af5-b165-9f468a642e9a";
 
         public const string PendingChangeViewContext = "a02c6d65-1f8b-46ac-8db3-511ae5dba374";
         public const string DiffMergeViewContext = "6e66dfc4-cb72-4023-bdf5-6b139df2f19b";
@@ -129,8 +119,7 @@ namespace Ankh
         public const string AnnotateContext = "61ade608-f2f9-4983-ae28-623de0dca5c6";
         public const string DynamicEditorId = "923f6990-98c1-4dd5-983e-25088c02975d";
 
-        public const string SvnSettingsPageGuid = "f362b52e-e8f8-43de-a02d-5072a2a96e6a";
-        public const string GitSettingsPageGuid = "8eaf99ad-1496-4c6d-b1ba-45934c4975b0";
+        public const string EnvironmentSettingsPageGuid = "f362b52e-e8f8-43de-a02d-5072a2a96e6a";
         public const string UserToolsSettingsPageGuid = "ae1a4db8-09c3-438d-93bd-0fe37412ce34";
         public const string IssueTrackerSettingsPageGuid = "363b3e68-ee94-403d-88ba-681a7cad247a";
 
@@ -143,14 +132,9 @@ namespace Ankh
         public static readonly Guid CommandSetGuid = new Guid(CommandSet);
 
         /// <summary>
-        /// The package id as a guid
+        /// The package is as a guid
         /// </summary>
         public static readonly Guid PackageGuid = new Guid(PackageId);
-
-        /// <summary>
-        /// The Wpf package id as a guid
-        /// </summary>
-        public static readonly Guid WpfPackageGuid = new Guid(WpfPackageId);
 
         /// <summary>
         /// The guid for the generated Bmp
@@ -159,8 +143,6 @@ namespace Ankh
 
         public static readonly Guid SccProviderGuid = new Guid(SccProviderId);
         public static readonly Guid SccServiceGuid = new Guid(SccServiceId);
-
-        public static readonly Guid GitSccProviderGuid = new Guid(GitSccProviderId);
 
         public static readonly Guid PendingChangeContextGuid = new Guid(PendingChangeViewContext);
         public static readonly Guid DiffMergeContextGuid = new Guid(DiffMergeViewContext);

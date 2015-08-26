@@ -118,15 +118,22 @@ namespace Ankh.Commands
                 Update(this, e);
         }
 
-        CommandAvailability _availability;
+        bool _alwaysAvailable;
         /// <summary>
         /// Gets or sets a value indicating whether this command is available when AnkhSVN is not the active SCC
         /// </summary>
         /// <value><c>true</c> if [always available]; otherwise, <c>false</c>.</value>
-        public CommandAvailability Availability
+        public bool AlwaysAvailable
         {
-            get { return _availability; }
-            internal set { _availability = value; }
+            get { return _alwaysAvailable; }
+            internal set { _alwaysAvailable = value; }
+        }
+
+        bool _hideWhenUnavailable;
+        public bool HiddenWhenUnavailable
+        {
+            get { return _hideWhenUnavailable; }
+            internal set { _hideWhenUnavailable = value; }
         }
 
         bool _hideWhenDisabled;

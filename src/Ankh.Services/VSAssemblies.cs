@@ -15,17 +15,7 @@ namespace Ankh
                     _vsShellInterop11 = Assembly.Load("Microsoft.VisualStudio.Shell.Interop.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
                 return _vsShellInterop11;
             }
-        }
 
-        static Assembly _vsShell11Immutable;
-        public static Assembly VSShell11Immutable
-        {
-            get 
-            {
-                if (_vsShell11Immutable == null && VSVersion.VS2012OrLater)
-                    _vsShell11Immutable = Assembly.Load("Microsoft.VisualStudio.Shell.Immutable.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-                return _vsShell11Immutable;
-            }
         }
 
         static Assembly _vsShellInterop12;
@@ -37,6 +27,7 @@ namespace Ankh
                     _vsShellInterop12 = Assembly.Load("Microsoft.VisualStudio.Shell.Interop.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
                 return _vsShellInterop12;
             }
+
         }
     }
 }

@@ -144,7 +144,7 @@ namespace Ankh.Scc
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
                 bool trackCopies;
-                bool track = SccEvents.TrackProjectChanges(sccProject, out trackCopies);
+                bool track = SccProvider.TrackProjectChanges(sccProject, out trackCopies);
 
                 for (; iFile < iLastFileThisProject; iFile++)
                 {
@@ -161,16 +161,16 @@ namespace Ankh.Scc
 
                     if (sccActive && _solutionLoaded)
                     {
-                        SvnCache.MarkDirty(newName);
+                        StatusCache.MarkDirty(newName);
                         TryFindOrigin(newName, out origin);
                     }
 
                     // We do this before the copies to make sure a failed copy doesn't break the project
-                    SccEvents.OnProjectFileAdded(sccProject, newName);
+                    SccProvider.OnProjectFileAdded(sccProject, newName, origin, rgFlags[iFile]);
 
                     if (sccActive && trackCopies &&
                         !string.IsNullOrEmpty(origin) &&
-                        SvnCache[origin].HasCopyableHistory)
+                        StatusCache[origin].HasCopyableHistory)
                     {
                         if (copies == null)
                             copies = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -355,11 +355,11 @@ namespace Ankh.Scc
             else if (!maybeInfo.Exists)
             {
                 // Handles Delete followed by add. Triggered from Cut&Paste
-                SvnItem svnItem = SvnCache[maybeInfo.FullName];
+                SvnItem svnItem = StatusCache[maybeInfo.FullName];
 
                 if (svnItem.IsVersioned)
                 {
-                    _fileOrigins[newItem] = svnItem.FullPath;
+                    _fileOrigins[newItem] = maybeFrom;
                 }
             }
         }
@@ -458,7 +458,7 @@ namespace Ankh.Scc
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
                 bool trackCopies;
-                bool track = SccEvents.TrackProjectChanges(sccProject, out trackCopies);
+                bool track = SccProvider.TrackProjectChanges(sccProject, out trackCopies);
 
                 for (; iDir < iLastDirectoryThisProject; iDir++)
                 {
@@ -475,16 +475,16 @@ namespace Ankh.Scc
 
                     if (sccActive && _solutionLoaded)
                     {
-                        SvnCache.MarkDirty(dir);
+                        StatusCache.MarkDirty(dir);
                         TryFindOrigin(dir, out origin);
                     }
 
                     if (sccProject != null)
-                        SccEvents.OnProjectDirectoryAdded(sccProject, dir, origin);
+                        SccProvider.OnProjectDirectoryAdded(sccProject, dir, origin);
 
                     if (sccActive && trackCopies &&
                         !string.IsNullOrEmpty(origin) &&
-                        SvnCache[origin].HasCopyableHistory)
+                        StatusCache[origin].HasCopyableHistory)
                     {
                         using (SvnSccContext svn = new SvnSccContext(this))
                         {

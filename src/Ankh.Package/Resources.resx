@@ -112,22 +112,24 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutDetails" xml:space="preserve">
     <value>AnkhSVN - Subversion Support for Visual Studio {0} 
  * Ankh.Package {1}
- * Subversion {2} via SharpSvn {3}
- * Git/LibGit2 {4} via SharpGit {5}</value>
+ * Subversion {2} via SharpSvn {3}</value>
+  </data>
+  <data name="AboutDynamicallyLinkedTo" xml:space="preserve">
+    <value>SharpSvn is dynamically linked to: </value>
   </data>
   <data name="AboutLinkedTo" xml:space="preserve">
-    <value>{0} is linked to: </value>
+    <value>SharpSvn is linked to: </value>
   </data>
   <data name="AboutOptionallyLinkedTo" xml:space="preserve">
-    <value>{0} is optionally linked to: </value>
+    <value>SharpSvn is optionally linked to: </value>
   </data>
   <data name="AboutProductId" xml:space="preserve">
     <value>{0}</value>
@@ -156,8 +158,8 @@
   <data name="RepositoryExplorerToolWindowTitle" xml:space="preserve">
     <value>Repository Explorer</value>
   </data>
-  <data name="SccInfoToolWindowTitle" xml:space="preserve">
-    <value>Source Control Info</value>
+  <data name="SubversionInfoToolWindowTitle" xml:space="preserve">
+    <value>Subversion Info</value>
   </data>
   <data name="WorkingCopyExplorerToolWindowTitle" xml:space="preserve">
     <value>Working Copy Explorer</value>

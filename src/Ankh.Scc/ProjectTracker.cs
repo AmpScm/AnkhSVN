@@ -23,22 +23,22 @@ using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
 
 using Ankh.Commands;
-using Ankh.Configuration;
-using Ankh.VS;
-using System.ComponentModel.Design;
-using Ankh.Scc.ProjectMap;
 
 namespace Ankh.Scc
 {
+    interface IAnkhProjectDocumentTracker
+    {
+    }
+
     //[CLSCompliant(false)]
-    [GlobalService(typeof(ProjectTracker))]
-    partial class ProjectTracker : AnkhService, IVsTrackProjectDocumentsEvents2, IVsTrackProjectDocumentsEvents3
+    [GlobalService(typeof(IAnkhProjectDocumentTracker))]
+    partial class ProjectTracker : AnkhService, IAnkhProjectDocumentTracker, IVsTrackProjectDocumentsEvents2, IVsTrackProjectDocumentsEvents3
     {
         bool _hookedSolution;
         bool _hookedProjects;
         uint _projectCookie;
         uint _documentCookie;
-        SccProvider _sccProvider;
+        SvnSccProvider _sccProvider;
         bool _collectHints;
         bool _solutionLoaded;
         readonly HybridCollection<string> _fileHints = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -57,17 +57,11 @@ namespace Ankh.Scc
 
             AnkhServiceEvents ev = GetService<AnkhServiceEvents>();
 
-            ev.SccProviderActivated += OnSvnSccProviderActivated;
+            ev.SccProviderActivated += OnSccProviderActivated;
             ev.SccProviderDeactivated += OnSccProviderDeactivated;
-            ev.GitSccProviderActivated += OnGitSccProviderActivated;
-            ev.GitSccProviderDeactivated += OnSccProviderDeactivated;
 
-            IAnkhCommandStates states = GetService<IAnkhCommandStates>();
-
-            if (states != null && states.SccProviderActive)
-                OnSvnSccProviderActivated(this, EventArgs.Empty);
-            else if (states != null && states.GitSccProviderActive)
-                OnGitSccProviderActivated(this, EventArgs.Empty);
+            if (SccProvider.IsActive)
+                OnSccProviderActivated(this, EventArgs.Empty);
         }
 
         private void OnSccProviderDeactivated(object sender, EventArgs e)
@@ -75,16 +69,8 @@ namespace Ankh.Scc
             Hook(true, false);
         }
 
-        private void OnSvnSccProviderActivated(object sender, EventArgs e)
+        private void OnSccProviderActivated(object sender, EventArgs e)
         {
-            _sccProvider = GetService<SvnSccProvider>();
-            Hook(true, true);
-            LoadInitial();
-        }
-
-        private void OnGitSccProviderActivated(object sender, EventArgs e)
-        {
-            _sccProvider = GetService<ITheAnkhGitSccProvider>() as SccProvider;
             Hook(true, true);
             LoadInitial();
         }
@@ -104,21 +90,10 @@ namespace Ankh.Scc
             }
         }
 
-        IAnkhSccProviderEvents SccEvents
+        SvnSccProvider SccProvider
         {
             [DebuggerStepThrough]
-            get { return _sccProvider; }
-        }
-
-        SccProvider SccProvider
-        {
-            [DebuggerStepThrough]
-            get { return _sccProvider; }
-        }
-
-        SccProjectMap ProjectMap
-        {
-            get { return _sccProvider.ProjectMap; }
+            get { return _sccProvider ?? (_sccProvider = GetService<SvnSccProvider>()); }
         }
 
         private void LoadInitial()
@@ -151,12 +126,12 @@ namespace Ankh.Scc
                     IVsSccProject2 p2 = hiers[i] as IVsSccProject2;
 
                     if (p2 != null)
-                        SccEvents.OnProjectOpened(p2, false);
+                        SccProvider.OnProjectOpened(p2, false);
                 }
             }
 
             _solutionLoaded = true;
-            SccEvents.OnSolutionOpened(false);
+            SccProvider.OnSolutionOpened(false);
         }
 
         public void Hook(bool enableSolution, bool enableProjects)
@@ -192,34 +167,12 @@ namespace Ankh.Scc
                     Marshal.ThrowExceptionForHR(tracker.UnadviseTrackProjectDocumentsEvents(_projectCookie));
                     _hookedProjects = false;
                 }
-
-                IAnkhConfigurationService cfg = GetService<IAnkhConfigurationService>();
-
-                if (cfg != null && !cfg.Instance.DontHookSolutionExplorerRefresh)
-                {
-                    IAnkhGlobalCommandHook cmdHook = GetService<IAnkhGlobalCommandHook>();
-
-                    if (cmdHook != null)
-                    {
-                        CommandID slnRefresh = new CommandID(VSConstants.VSStd2K, (int)VSConstants.VSStd2KCmdID.SLNREFRESH);
-                        if (enableProjects)
-                            cmdHook.HookCommand(slnRefresh, OnSolutionRefreshCommand);
-                        else
-                            cmdHook.UnhookCommand(slnRefresh, OnSolutionRefreshCommand);
-                    }
-                }
             }
         }
 
-        private void OnSolutionRefreshCommand(object sender, EventArgs e)
+        IFileStatusCache StatusCache
         {
-            SccEvents.OnSolutionRefreshCommand(e);
-        }
-
-        ISvnStatusCache _svnCache;
-        ISvnStatusCache SvnCache
-        {
-            get { return _svnCache ?? (_svnCache = GetService<ISvnStatusCache>()); }
+            get { return GetService<IFileStatusCache>(); }
         }
 
         #region IVsTrackProjectDocumentsEvents2 Members
@@ -288,18 +241,6 @@ namespace Ankh.Scc
                 return;
 
             Context.GetService<IAnkhCommandService>().PostTickCommand(ref _registeredSccCleanup, AnkhCommand.SccFinishTasks);
-        }
-
-        public IEnumerable<string> GetAllDocumentFiles(string documentName)
-        {
-            SccProjectFile file;
-
-            if (ProjectMap.TryGetFile(documentName, out file))
-                return file.GetAllFiles();
-            else if (SvnItem.IsValidPath(documentName))
-                return new string[] { documentName };
-            else
-                return new string[0];
         }
     }
 }

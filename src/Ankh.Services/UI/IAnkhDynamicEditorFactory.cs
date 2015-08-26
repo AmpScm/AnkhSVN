@@ -51,10 +51,7 @@ namespace Ankh.UI
         /// <summary>
         /// Initializes the editor.
         /// </summary>
-        /// <param name="form"></param>
-        /// <param name="hier"></param>
         /// <param name="frame">The frame.</param>
-        /// <param name="docid"></param>
         void InitializeEditor(VSEditorControl form, IVsUIHierarchy hier, IVsWindowFrame frame, uint docid);
     }
 }

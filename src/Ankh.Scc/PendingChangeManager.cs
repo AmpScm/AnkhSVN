@@ -28,14 +28,12 @@ namespace Ankh.Scc
     [GlobalService(typeof(IPendingChangesManager))]
     partial class PendingChangeManager : AnkhService, IPendingChangesManager
     {
-        readonly ThePendingChangeCollection _pendingChanges = new ThePendingChangeCollection();
-        readonly PendingChangeCollection _pendingChangesRo;
         bool _isActive;
         bool _solutionOpen;
         public PendingChangeManager(IAnkhServiceProvider context)
             : base(context)
         {
-            _pendingChangesRo = new PendingChangeCollection(_pendingChanges);
+
         }
 
         protected override void OnInitialize()
@@ -74,37 +72,23 @@ namespace Ankh.Scc
                 {
                     _isActive = value;
 
-                    if (SvnChange != null)
+                    if (Change != null)
                     {
                         if (value)
-                            SvnChange.SvnItemsChanged += OnSvnItemsChanged;
+                            Change.SvnItemsChanged += new EventHandler<SvnItemsEventArgs>(OnSvnItemsChanged);
                         else
-                            SvnChange.SvnItemsChanged -= OnSvnItemsChanged;
+                            Change.SvnItemsChanged -= new EventHandler<SvnItemsEventArgs>(OnSvnItemsChanged);
                     }
 
-                    if (GitChange != null)
-                    {
-                        if (value)
-                            GitChange.GitItemsChanged += OnGitItemsChanged;
-                        else
-                            GitChange.GitItemsChanged -= OnGitItemsChanged;
-                    }
-
-                    OnIsActiveChanged(EventArgs.Empty);
+                    OnIsActiveChanged(new PendingChangeEventArgs(this, null));
                 }
             }
         }
 
-        ISvnItemChange _svnChange;
-        ISvnItemChange SvnChange
+        ISvnItemChange _change;
+        ISvnItemChange Change
         {
-            get { return _svnChange ?? (_svnChange = GetService<ISvnItemChange>()); }
-        }
-
-        IGitItemChange _gitChange;
-        IGitItemChange GitChange
-        {
-            get { return _gitChange ?? (_gitChange = GetService<IGitItemChange>()); }
+            get { return _change ?? (_change = GetService<ISvnItemChange>()); }
         }
 
         readonly HybridCollection<string> _toRefresh = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -169,7 +153,6 @@ namespace Ankh.Scc
         {
             BatchStartedEventArgs ba = new BatchStartedEventArgs(ThreadedWaitService);
             OnBatchUpdateStarted(ba);
-            ba.Disposers += _pendingChanges.BatchUpdate().Dispose;
             return ba;
         }
 
@@ -181,23 +164,6 @@ namespace Ankh.Scc
                     return;
 
                 foreach (SvnItem item in e.ChangedItems)
-                {
-                    if (!_toRefresh.Contains(item.FullPath))
-                        _toRefresh.Add(item.FullPath);
-                }
-
-                ScheduleRefresh();
-            }
-        }
-
-        void OnGitItemsChanged(object sender, GitItemsEventArgs e)
-        {
-            lock (_toRefresh)
-            {
-                if (_fullRefresh || !_solutionOpen)
-                    return;
-
-                foreach (GitItem item in e.ChangedItems)
                 {
                     if (!_toRefresh.Contains(item.FullPath))
                         _toRefresh.Add(item.FullPath);
@@ -238,6 +204,14 @@ namespace Ankh.Scc
 
             lock (_toRefresh)
             {
+                _pendingChanges.Clear();
+            }
+
+            PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);
+            OnListFlushed(ee);
+
+            lock (_toRefresh)
+            {
                 _fullRefresh = true;
                 _toRefresh.Clear();
 
@@ -247,6 +221,9 @@ namespace Ankh.Scc
 
         public void Clear()
         {
+            PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);
+            OnListFlushed(ee);
+
             lock (_toRefresh)
             {
                 _toRefresh.Clear();
@@ -317,12 +294,69 @@ namespace Ankh.Scc
         }
 
         /// <summary>
+        /// Raised when a pending change item has been added
+        /// </summary>
+        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
+        public event EventHandler<PendingChangeEventArgs> Added;
+
+        /// <summary>
+        /// Raises the <see cref="E:Added"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="Ankh.Scc.PendingChangeEventArgs"/> instance containing the event data.</param>
+        void OnAdded(PendingChangeEventArgs e)
+        {
+            if (Added != null)
+                Added(this, e);
+        }
+
+        /// <summary>
+        /// Raised when a pending change item has been removed
+        /// </summary>
+        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
+        public event EventHandler<PendingChangeEventArgs> Removed;
+
+        /// <summary>
+        /// Raises the <see cref="E:Removed"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="Ankh.Scc.PendingChangeEventArgs"/> instance containing the event data.</param>
+        void OnRemoved(PendingChangeEventArgs e)
+        {
+            if (Removed != null)
+                Removed(this, e);
+        }
+
+        /// <summary>
+        /// Raised when the properties of a pending change have changed
+        /// </summary>
+        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
+        public event EventHandler<PendingChangeEventArgs> Changed;
+
+        /// <summary>
         /// Raises the <see cref="E:Changed"/> event.
         /// </summary>
         /// <param name="e">The <see cref="Ankh.Scc.PendingChangeEventArgs"/> instance containing the event data.</param>
-        void RaiseChanged(PendingChange pc)
+        void OnChanged(PendingChangeEventArgs e)
         {
-            _pendingChangesRo.RaiseChanged(pc);
+            if (Changed != null)
+                Changed(this, e);
+        }
+
+        /// <summary>
+        /// Raised when the complete pending change state has been flushed; All listeners should
+        /// use GetAll() to get a new initial state
+        /// </summary>
+        /// <remarks>Handlers should also hook the <see cref="FullRefresh"/> event</remarks>
+        public event EventHandler<PendingChangeEventArgs> ListFlushed;
+
+        /// <summary>
+        /// Raises the <see cref="E:ListFlushed"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="Ankh.Scc.PendingChangeEventArgs"/> instance containing the event data.</param>
+        void OnListFlushed(PendingChangeEventArgs e)
+        {
+            if (ListFlushed != null)
+                ListFlushed(this, e);
+
         }
 
         public event EventHandler<BatchStartedEventArgs> BatchUpdateStarted;
@@ -336,13 +370,13 @@ namespace Ankh.Scc
         /// <summary>
         /// Raised when the pending changes manager is activated or disabled
         /// </summary>
-        public event EventHandler IsActiveChanged;
+        public event EventHandler<PendingChangeEventArgs> IsActiveChanged;
 
         /// <summary>
         /// Raises the <see cref="E:IsActiveChanged"/> event.
         /// </summary>
         /// <param name="e">The <see cref="Ankh.Scc.PendingChangeEventArgs"/> instance containing the event data.</param>
-        private void OnIsActiveChanged(EventArgs e)
+        private void OnIsActiveChanged(PendingChangeEventArgs e)
         {
             if (IsActiveChanged != null)
                 IsActiveChanged(this, e);
@@ -395,32 +429,6 @@ namespace Ankh.Scc
 
                 ScheduleRefreshPreLocked();
             }
-        }
-
-        PendingChangeCollection IPendingChangesManager.PendingChanges
-        {
-            get { return _pendingChangesRo; }
-        }
-    }
-
-    public sealed class ThePendingChangeCollection : KeyedNotifyCollection<string, PendingChange>
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ThePendingChangeCollection"/> class.
-        /// </summary>
-        public ThePendingChangeCollection()
-            : base(StringComparer.OrdinalIgnoreCase)
-        {
-        }
-
-        /// <summary>
-        /// Extracts the FullPath from the specified element.
-        /// </summary>
-        /// <param name="item">The element from which to extract the key.</param>
-        /// <returns>The key for the specified element.</returns>
-        protected override string GetKeyForItem(PendingChange item)
-        {
-            return item.FullPath;
         }
     }
 }

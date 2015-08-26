@@ -40,10 +40,10 @@ namespace Ankh.Services
         {
         }
 
-        ISvnStatusCache _statusCache;
-        ISvnStatusCache Cache
+        IFileStatusCache _statusCache;
+        IFileStatusCache Cache
         {
-            get { return _statusCache ?? (_statusCache = GetService<ISvnStatusCache>()); }
+            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
         }
 
         /// <summary>
@@ -438,7 +438,7 @@ namespace Ankh.Services
 
             public int DirectoryChanged(string pszDirectory)
             {
-                ISvnStatusCache fsc = GetService<ISvnStatusCache>();
+                IFileStatusCache fsc = GetService<IFileStatusCache>();
 
                 if (fsc != null)
                 {
@@ -943,7 +943,6 @@ namespace Ankh.Services
                         SvnFileVersionsArgs ea = new SvnFileVersionsArgs();
                         ea.Start = from;
                         ea.End = to;
-                        ea.AddExpectedError(SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE); // Github
 
                         e.Client.FileVersions(target, ea,
                             delegate(object sender2, SvnFileVersionEventArgs e2)

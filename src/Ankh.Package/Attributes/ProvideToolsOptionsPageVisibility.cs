@@ -87,7 +87,7 @@ namespace Ankh.VSPackage.Attributes
             using (Key childKey = context.CreateKey(RegistryPath))
             {
                 // Set the value for the command UI guid.
-                childKey.SetValue(CommandUIGuid.ToString("B"), "1");
+                childKey.SetValue(CommandUIGuid.ToString("B"), 1);
             }
         }
 

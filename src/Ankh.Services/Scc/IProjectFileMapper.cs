@@ -21,7 +21,6 @@ using Ankh.Selection;
 
 namespace Ankh.Scc
 {
-    [CLSCompliant(false)]
     public interface IProjectFileMapper
     {
         /// <summary>
@@ -29,49 +28,47 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        IEnumerable<SccProject> GetAllProjectsContaining(string path);
+        IEnumerable<SvnProject> GetAllProjectsContaining(string path);
         /// <summary>
         /// Gets an IEnumerable over all projects containing one or more of the specified <paramref name="paths"/>
         /// </summary>
-        /// <param name="paths"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        IEnumerable<SccProject> GetAllProjectsContaining(IEnumerable<string> paths);
+        IEnumerable<SvnProject> GetAllProjectsContaining(IEnumerable<string> paths);
 
         /// <summary>
         /// Gets all projects.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<SccProject> GetAllProjects();
+        IEnumerable<SvnProject> GetAllProjects();
 
         /// <summary>
         /// Gets a list of all files contained within <paramref name="project"/>
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        IEnumerable<string> GetAllFilesOf(SccProject project);
+        IEnumerable<string> GetAllFilesOf(SvnProject project);
 
         /// <summary>
         /// Gets a list of all files contained within <paramref name="project"/>
         /// </summary>
         /// <param name="project"></param>
-        /// <param name="exceptExcluded"></param>
         /// <returns></returns>
-        IEnumerable<string> GetAllFilesOf(SccProject project, bool exceptExcluded);
+        IEnumerable<string> GetAllFilesOf(SvnProject project, bool exceptExcluded);
 
         /// <summary>
         /// Gets a list of all files contained within the list of <paramref name="projects"/>
         /// </summary>
         /// <param name="projects"></param>
         /// <returns></returns>
-        IEnumerable<string> GetAllFilesOf(ICollection<SccProject> projects);
+        IEnumerable<string> GetAllFilesOf(ICollection<SvnProject> projects);
 
         /// <summary>
         /// Gets a list of all files contained within the list of <paramref name="projects"/>
         /// </summary>
         /// <param name="projects"></param>
-        /// <param name="exceptExcluded"></param>
         /// <returns></returns>
-        IEnumerable<string> GetAllFilesOf(ICollection<SccProject> projects, bool exceptExcluded);
+        IEnumerable<string> GetAllFilesOf(ICollection<SvnProject> projects, bool exceptExcluded);
 
         /// <summary>
         /// Gets all files of all projects.
@@ -117,7 +114,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The project.</param>
         /// <returns></returns>
-        ISccProjectInfo GetProjectInfo(SccProject project);
+        ISvnProjectInfo GetProjectInfo(SvnProject project);
 
         /// <summary>
         /// Gets the icon of the file in the first project containing the file
@@ -125,14 +122,5 @@ namespace Ankh.Scc
         /// <param name="path"></param>
         /// <returns></returns>
         ProjectIconReference GetPathIconHandle(string path);
-
-        /// <summary>
-        /// Gets a boolean indicating whether to ignores the enumeration side effects flag on this project
-        /// </summary>
-        /// <param name="sccProject">The SCC project.</param>
-        /// <returns></returns>
-        bool IgnoreEnumerationSideEffects(Microsoft.VisualStudio.Shell.Interop.IVsSccProject2 sccProject);
-
-        IEnumerable<string> GetAllDocumentFiles(string documentName);
     }
 }
