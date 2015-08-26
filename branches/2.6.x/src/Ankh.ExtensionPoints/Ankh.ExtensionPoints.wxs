@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:u="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <ComponentGroup Id="Ankh.ExtensionPoints">
+      <ComponentRef Id="C_Ankh.ExtensionPoints.dll" />
+      <ComponentRef Id="C_Ankh.ExtensionPoints.xml" />
+      <ComponentRef Id="C_Common_Ankh.ExtensionPoints.dll" />
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Services.TargetDir)">
+      <Component Id="C_Ankh.ExtensionPoints.dll" Guid="173DFEC9-E396-4884-94EE-127D4C7D1D20">
+        <!-- CF_[assemblyname].dll is used in ProvideAnkhExtensionRedirectAttribute and Ankh.ExtensionReg.wxi -->
+        <File Id="CF_Ankh.ExtensionPoints.dll" Name="Ankh.ExtensionPoints.dll" Checksum="yes" KeyPath="yes" />
+      </Component>
+      <Component Id="C_Ankh.ExtensionPoints.xml" Guid="755CDB02-E44B-4FD4-B926-52D737A1FD28">
+        <File Id="CF_Ankh.ExtensionPoints.xml" Name="Ankh.ExtensionPoints.xml" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="CommonFiles_MsShared_MsEnv_PublicAssemblies" FileSource="$(var.Ankh.Services.TargetDir)">
+      <Component Id="C_Common_Ankh.ExtensionPoints.dll" Guid="CFD655BB-0AA7-4A55-A597-34C3344186E0">
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="ExtensionPointsDir" Value="[CommonFiles_MsShared_MsEnv_PublicAssemblies]" Type="string" KeyPath="yes" />
+        <CopyFile Id="CF_Common_Ankh.ExtensionPoints.dll" FileId="CF_Ankh.ExtensionPoints.dll" DestinationProperty="CommonFiles_MsShared_MsEnv_PublicAssemblies" />
+        <CopyFile Id="CF_Common_Ankh.ExtensionPoints.xml" FileId="CF_Ankh.ExtensionPoints.xml" DestinationProperty="CommonFiles_MsShared_MsEnv_PublicAssemblies" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="Extension2005">
+      <ComponentRef Id="C_Extension2005" />
+    </ComponentGroup>
+    <PropertyRef Id="VS2005DEVENV" />
+    <DirectoryRef Id="TARGETDIR">
+      <Component Id="C_Extension2005" Guid="5169A935-C86F-4A84-B2F2-D97ED2EAF090">
+        <Condition>VS2005DEVENV</Condition>
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Ext-VS2005" Value="1" Type="integer" KeyPath="yes" />
+        <?define extId=VS2005DEVENV ?>
+        <?include $(var.Ankh.ExtensionPoints.ProjectDir)\Ankh.ExtensionReg.wxi?>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="Extension2008">
+      <ComponentRef Id="C_Extension2008" />
+    </ComponentGroup>
+    <PropertyRef Id="VS90DEVENV" />
+    <DirectoryRef Id="TARGETDIR">
+      <Component Id="C_Extension2008" Guid="BE5C2DCF-90F7-42EE-B2EA-0C3AE47F1C10">
+        <Condition>VS90DEVENV</Condition>
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Ext-VS2008" Value="1" Type="integer" KeyPath="yes" />
+        <?undef extId?>
+        <?define extId=VS90DEVENV ?>
+        <?include $(var.Ankh.ExtensionPoints.ProjectDir)\Ankh.ExtensionReg.wxi?>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="Extension2010">
+      <ComponentRef Id="C_Extension2010" />
+    </ComponentGroup>
+    <PropertyRef Id="VS2010DEVENV" />
+    <DirectoryRef Id="TARGETDIR">
+      <Component Id="C_Extension2010" Guid="86C257D5-AAF0-4782-B633-EED35052B33B">
+        <Condition>VS2010DEVENV</Condition>
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Ext-VS2010" Value="1" Type="integer" KeyPath="yes" />
+        <?undef extId?>
+        <?define extId=VS2010DEVENV ?>
+        <?include $(var.Ankh.ExtensionPoints.ProjectDir)\Ankh.ExtensionReg.wxi?>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
