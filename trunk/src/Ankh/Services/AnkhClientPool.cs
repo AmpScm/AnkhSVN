@@ -28,6 +28,7 @@ using SharpSvn.UI;
 using Ankh.Scc;
 using Ankh.UI;
 using Ankh.VS;
+using Ankh.Configuration;
 
 namespace Ankh.Services
 {
@@ -117,6 +118,12 @@ namespace Ankh.Services
             return client;
         }
 
+        IAnkhConfigurationService _cfg;
+        IAnkhConfigurationService Config
+        {
+            get { return _cfg ?? (_cfg = GetService<IAnkhConfigurationService>()); }
+        }
+
         // Use separate function to delay loading the SharpSvn.UI.dll
         private void HookUI(AnkhSvnPoolClient client)
         {
@@ -125,6 +132,9 @@ namespace Ankh.Services
             bindArgs.ParentWindow = new OwnerWrapper(DialogOwner);
             bindArgs.UIService = GetService<IUIService>();
             bindArgs.Synchronizer = _syncher;
+
+            if (Config != null && Config.Instance.PreferPuttyAsSSH)
+                client.Configuration.SshOverride = SharpSvn.Implementation.SvnSshOverride.ForceSharpPlinkAfterConfig;
 
             SvnUI.Bind(client, bindArgs);
         }

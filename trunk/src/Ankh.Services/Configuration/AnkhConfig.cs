@@ -42,6 +42,7 @@ namespace Ankh.Configuration
         bool _dontHookSlnRefresh;
         bool _floatDiffEditors;
         bool _useExternalWebbrowser;
+        bool _preferPuttySsh;
 
         /// <summary>
         /// Gets or sets the merge exe path.
@@ -161,6 +162,12 @@ namespace Ankh.Configuration
         {
             get { return _useExternalWebbrowser; }
             set { _useExternalWebbrowser = value; }
+        }
+
+        public bool PreferPuttyAsSSH
+        {
+            get { return _preferPuttySsh; }
+            set { _preferPuttySsh = value; }
         }
     }
 }
