@@ -41,6 +41,14 @@ namespace Ankh.UI.OptionsPages
             Config.FlashWindowWhenOperationCompletes = flashWindowAfterOperation.Checked;
             Config.PCDoubleClickShowsChanges = pcDefaultDoubleClick.SelectedIndex == 1;
             Config.EnableTortoiseSvnHooks = clientSideHooks.Checked;
+            Config.PreferPuttyAsSSH = preferPutty.Checked;
+
+            if (Context != null)
+            {
+                ISvnClientPool pool = Context.GetService<ISvnClientPool>();
+
+                pool.FlushAllClients();
+            }
         }
 
         protected override void LoadSettingsCore()
@@ -51,6 +59,7 @@ namespace Ankh.UI.OptionsPages
             flashWindowAfterOperation.Checked = Config.FlashWindowWhenOperationCompletes;
             pcDefaultDoubleClick.SelectedIndex = Config.PCDoubleClickShowsChanges ? 1 : 0;
             clientSideHooks.Checked = Config.EnableTortoiseSvnHooks;
+            preferPutty.Checked = Config.PreferPuttyAsSSH;
         }
 
         private void proxyEdit_Click(object sender, EventArgs e)

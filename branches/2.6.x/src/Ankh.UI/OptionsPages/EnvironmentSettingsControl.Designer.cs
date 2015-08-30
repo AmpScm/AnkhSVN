@@ -50,13 +50,14 @@ namespace Ankh.UI.OptionsPages
             this.label2 = new System.Windows.Forms.Label();
             this.proxyEdit = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.clientSideHooks = new System.Windows.Forms.CheckBox();
             this.interactiveMergeOnConflict = new System.Windows.Forms.CheckBox();
             this.autoAddFiles = new System.Windows.Forms.CheckBox();
             this.flashWindowAfterOperation = new System.Windows.Forms.CheckBox();
             this.autoLockFiles = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.pcDefaultDoubleClick = new System.Windows.Forms.ComboBox();
-            this.clientSideHooks = new System.Windows.Forms.CheckBox();
+            this.preferPutty = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -87,6 +88,7 @@ namespace Ankh.UI.OptionsPages
             // groupBox1
             // 
             resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Controls.Add(this.preferPutty);
             this.groupBox1.Controls.Add(this.clientSideHooks);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.proxyEdit);
@@ -94,6 +96,12 @@ namespace Ankh.UI.OptionsPages
             this.groupBox1.Controls.Add(this.authenticationEdit);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
+            // 
+            // clientSideHooks
+            // 
+            resources.ApplyResources(this.clientSideHooks, "clientSideHooks");
+            this.clientSideHooks.Name = "clientSideHooks";
+            this.clientSideHooks.UseVisualStyleBackColor = true;
             // 
             // interactiveMergeOnConflict
             // 
@@ -134,11 +142,11 @@ namespace Ankh.UI.OptionsPages
             resources.GetString("pcDefaultDoubleClick.Items1")});
             this.pcDefaultDoubleClick.Name = "pcDefaultDoubleClick";
             // 
-            // clientSideHooks
+            // preferPutty
             // 
-            resources.ApplyResources(this.clientSideHooks, "clientSideHooks");
-            this.clientSideHooks.Name = "clientSideHooks";
-            this.clientSideHooks.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.preferPutty, "preferPutty");
+            this.preferPutty.Name = "preferPutty";
+            this.preferPutty.UseVisualStyleBackColor = true;
             // 
             // EnvironmentSettingsControl
             // 
@@ -173,5 +181,6 @@ namespace Ankh.UI.OptionsPages
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox pcDefaultDoubleClick;
         private System.Windows.Forms.CheckBox clientSideHooks;
+        private System.Windows.Forms.CheckBox preferPutty;
     }
 }
