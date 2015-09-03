@@ -164,6 +164,7 @@ namespace Ankh.Configuration
             set { _useExternalWebbrowser = value; }
         }
 
+        [DefaultValue(false)]
         public bool PreferPuttyAsSSH
         {
             get { return _preferPuttySsh; }
