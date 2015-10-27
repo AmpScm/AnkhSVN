@@ -336,6 +336,9 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
+                if (ExcludedFromScc)
+                    return false;
+
                 IVsSccProjectProviderBinding providerBinding = VsProject as IVsSccProjectProviderBinding;
 
                 VSSCCPROVIDERBINDING[] ppb = new VSSCCPROVIDERBINDING[1];
@@ -378,7 +381,7 @@ namespace Ankh.Scc.ProjectMap
             {
                 if (_svnProjectInstance == null)
                 {
-                    if ((_projectFlags & SccProjectFlags.ForceSccGlyphChange) == SccProjectFlags.ForceSccGlyphChange)
+                    if (PerNodeGlyphChange)
                         _svnProjectInstance = Map.CreateProject(this);
                     else
                         _svnProjectInstance = new SccProject(ProjectFile, SccProject);
@@ -437,7 +440,7 @@ namespace Ankh.Scc.ProjectMap
 
         public void SetManaged(bool managed)
         {
-            if (managed == IsManaged)
+            if (managed == IsManaged || ExcludedFromScc)
                 return;
 
             bool ok;
@@ -502,15 +505,18 @@ namespace Ankh.Scc.ProjectMap
             if (_loaded || !_opened)
                 return;
 
+            _loaded = true;
+            _checkedProjectFile = false;
+            _projectFile = null;
+            _svnProjectInstance = null;
+
+            if (ExcludedFromScc)
+                return;
+
             _inLoad = true;
             try
             {
                 Debug.Assert(_files.Count == 0);
-
-                _checkedProjectFile = false;
-                _projectFile = null;
-                _svnProjectInstance = null;
-                _loaded = true;
 
                 ISccProjectWalker walker = GetService<ISccProjectWalker>();
 
@@ -555,9 +561,14 @@ namespace Ankh.Scc.ProjectMap
             get { return ((_projectFlags & SccProjectFlags.DontAddToProjectWindow) != 0); }
         }
 
+        private bool PerNodeGlyphChange
+        {
+            get { return ((_projectFlags & SccProjectFlags.ForceSccGlyphChange) != 0); }
+        }
+
         public bool TrackProjectChanges()
         {
-            return _loaded && !_inLoad && !ExcludedFromScc;
+            return _loaded && !ExcludedFromScc && !_inLoad;
         }
 
         public IEnumerable<string> GetAllFiles()
@@ -570,6 +581,9 @@ namespace Ankh.Scc.ProjectMap
 
         public void AddPath(string path)
         {
+            if (ExcludedFromScc)
+                return;
+
             bool alreadyLoaded = _loaded && !_inLoad;
 
             if (alreadyLoaded && WebLikeFileHandling)
@@ -640,6 +654,9 @@ namespace Ankh.Scc.ProjectMap
 
         private void AddPath(string path, Dictionary<string, uint> ids)
         {
+            if (ExcludedFromScc)
+                return;
+
             AddPath(path);
 
             uint id;
@@ -655,6 +672,9 @@ namespace Ankh.Scc.ProjectMap
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
+
+            if (ExcludedFromScc)
+                return;
 
             SccProjectFileReference pf;
             if (!_files.TryGetValue(path, out pf))
@@ -835,8 +855,8 @@ namespace Ankh.Scc.ProjectMap
             uint id;
             VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
 
-            if (VSErr.Succeeded(
-                VsProject.IsDocumentInProject(path, out found, prio, out id)))
+            if (!ExcludedFromScc
+                && VSErr.Succeeded(VsProject.IsDocumentInProject(path, out found, prio, out id)))
             {
                 // Priority also returns information on whether the file can be added
                 if (found != 0 && prio[0] >= VSDOCUMENTPRIORITY.DP_Standard && id != 0)
@@ -864,9 +884,12 @@ namespace Ankh.Scc.ProjectMap
         [DebuggerNonUserCode]
         public void NotifyGlyphsChanged()
         {
+            if (ExcludedFromScc || DontAddToProjectWindow)
+                return;
+
             try
             {
-                if ((_projectFlags & SccProjectFlags.ForceSccGlyphChange) == 0)
+                if (!PerNodeGlyphChange)
                     SccProject.SccGlyphChanged(0, null, null, null);
                 else
                     ForceGlyphChanges();
@@ -902,7 +925,7 @@ namespace Ankh.Scc.ProjectMap
             VsStateIcon[] newGlyphs = new VsStateIcon[idsArray.Length];
             uint[] sccState = new uint[idsArray.Length];
 
-            if (0 == Map.GetSccGlyph(namesArray, newGlyphs, sccState))
+            if (VSErr.Succeeded(Map.GetSccGlyph(namesArray, newGlyphs, sccState)))
                 SccProject.SccGlyphChanged(idsArray.Length, idsArray, newGlyphs, sccState);
         }
     }
