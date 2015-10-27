@@ -18,13 +18,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using SharpSvn;
+using Ankh.Commands;
 using Ankh.Selection;
-using Clipboard = System.Windows.Forms.Clipboard;
 using IDataObject = System.Windows.Forms.IDataObject;
 
 namespace Ankh.Scc
@@ -246,9 +247,10 @@ namespace Ankh.Scc
             // **************** Check the clipboard *********************
             // 3 - Copy & Paste in the solution explorer:
             //     The original hierarchy information is still on the clipboard
+
             IDataObject dataObject;
             string projectItemType;
-            if (null != (dataObject = Clipboard.GetDataObject()) && SolutionExplorerClipboardItem.CanRead(dataObject, out projectItemType))
+            if (null != (dataObject = SafeGetDataObject()) && SolutionExplorerClipboardItem.CanRead(dataObject, out projectItemType))
             {
                 IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
                 ISccProjectWalker walker = GetService<ISccProjectWalker>();
@@ -502,6 +504,58 @@ namespace Ankh.Scc
         {
             _fileOrigins[newName] = oldName;
             RegisterForSccCleanup();
+        }
+
+        IAnkhCommandStates _state;
+        IAnkhCommandStates State
+        {
+            get { return _state ?? (_state = GetService<IAnkhCommandStates>()); }
+        }
+
+
+        IDataObject SafeGetDataObject()
+        {
+            if (State.Debugging)
+            {
+                // We don't want a deadlock with our debug target, so when we are debugging
+                // we just handle pastes from VS itself and ignore everything else.
+                //
+                // We don't want to do this all the time, as there might be usefull cross-VS
+                // pastes... but not when the projects are mostly readonly during debugging
+
+                IntPtr hwnd = NativeMethods.GetClipboardOwner();
+
+                if (hwnd == IntPtr.Zero)
+                    return null; // No clipboard owner
+
+                // Check the process who owns the clipboard
+                UInt32 processId = 0;
+                UInt32 threadId = NativeMethods.GetWindowThreadProcessId(hwnd, out processId);
+
+                if (threadId == 0 || processId == 0)
+                    return null; // Lost the race condition. Not VS as we are that thread
+
+                UInt32 vsProcessId = NativeMethods.GetCurrentProcessId();
+
+                if (processId != vsProcessId)
+                    return null;
+            }
+
+            // This may call into a different program, as it relies on COM
+            // when debugging this may deadlock
+            return System.Windows.Forms.Clipboard.GetDataObject();
+        }
+
+        static class NativeMethods
+        {
+            [DllImport("user32.dll")]
+            public static extern IntPtr GetClipboardOwner();
+
+            [DllImport("user32.dll")]
+            public static extern UInt32 GetWindowThreadProcessId(IntPtr hwnd, out UInt32 processId);
+
+            [DllImport("kernel32.dll")]
+            public static extern UInt32 GetCurrentProcessId();
         }
     }
 }
