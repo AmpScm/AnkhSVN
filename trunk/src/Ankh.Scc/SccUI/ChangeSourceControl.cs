@@ -103,7 +103,7 @@ namespace Ankh.Scc.SccUI
             {
                 bindingGrid.Rows.Add(new ChangeSourceControlRow(Context, SccProject.Solution));
             }
-            foreach (SccProject project in ProjectMapper.GetAllProjects())
+            foreach (SccProject project in ProjectMapper.GetAllSccProjects())
             {
                 if (project.IsSolution)
                     continue;
@@ -190,8 +190,8 @@ namespace Ankh.Scc.SccUI
             connectButton.Enabled = enableConnect;
             disconnectButton.Enabled = enableDisconnect;
 
-            UpdateSettingTabs();            
-        }        
+            UpdateSettingTabs();
+        }
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
@@ -390,9 +390,9 @@ namespace Ankh.Scc.SccUI
 
             sharedProjectUrlBrowse.Enabled = false;// sharedBasePathBrowse.Visible
             sharedProjectUrlBrowse.Visible = false;
-                 //= (enlistMode > SccEnlistMode.None)
-                 //&& (projectBase != null)
-                 //&& (enlistMode > SccEnlistMode.SvnStateOnly || projectBase != SolutionSettings.ProjectRoot);
+            //= (enlistMode > SccEnlistMode.None)
+            //&& (projectBase != null)
+            //&& (enlistMode > SccEnlistMode.SvnStateOnly || projectBase != SolutionSettings.ProjectRoot);
 
             slnBindBrowse.Enabled = (SolutionSettings.ProjectRootSvnItem != null) && SolutionSettings.ProjectRootSvnItem.WorkingCopy != null;
         }

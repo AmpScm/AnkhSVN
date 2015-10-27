@@ -33,10 +33,16 @@ namespace Ankh.Scc.ProjectMap
     public enum SccProjectFlags
     {
         None,
+
+        // From solution types
         WebLikeFileHandling = 0x0010,
         ForceSccGlyphChange = 0x0100,
         StoredInSolution = 0x1000,
-        SolutionInfrastructure = 0x2000
+        SolutionInfrastructure = 0x2000,
+
+        // From GetVirtualProjectFlags()
+        ExcludedFromScc = 0x010000,
+        DontAddToProjectWindow = 0x020000,
     }
 
     public enum SccEnlistChoice
@@ -87,6 +93,16 @@ namespace Ankh.Scc.ProjectMap
 
             _projectFlags = GetProjectFlags(ProjectTypeGuid);
             _files = new SccProjectFileCollection();
+
+            uint addvpFlags;
+            IVsSolution sln = GetService<IVsSolution>(typeof(SVsSolution));
+            if (sln != null && VSErr.Succeeded(sln.GetVirtualProjectFlags(_hierarchy, out addvpFlags)))
+            {
+                if ((addvpFlags & (uint)__VSADDVPFLAGS.ADDVP_ExcludeFromSCC) != 0)
+                    _projectFlags |= SccProjectFlags.ExcludedFromScc;
+                if ((addvpFlags & (uint)__VSADDVPFLAGS.ADDVP_AddToProjectWindow) == 0)
+                    _projectFlags |= SccProjectFlags.DontAddToProjectWindow;
+            }
         }
 
         [DebuggerStepThrough]
@@ -529,9 +545,19 @@ namespace Ankh.Scc.ProjectMap
             Load();
         }
 
+        public bool ExcludedFromScc
+        {
+            get { return ((_projectFlags & SccProjectFlags.ExcludedFromScc) != 0); }
+        }
+
+        public bool DontAddToProjectWindow
+        {
+            get { return ((_projectFlags & SccProjectFlags.DontAddToProjectWindow) != 0); }
+        }
+
         public bool TrackProjectChanges()
         {
-            return _loaded && !_inLoad;
+            return _loaded && !_inLoad && !ExcludedFromScc;
         }
 
         public IEnumerable<string> GetAllFiles()

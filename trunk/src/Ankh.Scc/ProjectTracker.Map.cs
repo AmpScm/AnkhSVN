@@ -17,9 +17,9 @@ namespace Ankh.Scc
             return ProjectMap.GetAllProjectsContaining(paths);
         }
 
-        public IEnumerable<Selection.SccProject> GetAllProjects()
+        public IEnumerable<Selection.SccProject> GetAllSccProjects()
         {
-            return ProjectMap.GetAllProjects();
+            return ProjectMap.GetAllSccProjects();
         }
 
         public IEnumerable<string> GetAllFilesOf(SccProject project)

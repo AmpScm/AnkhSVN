@@ -145,10 +145,22 @@ namespace Ankh.Scc
             }
         }
 
-        public IEnumerable<SccProject> GetAllProjects()
+        public IEnumerable<SccProject> GetAllSccProjects()
         {
             foreach (SccProjectData pd in AllSccProjects)
-                yield return pd.SvnProject;
+            {
+                if (!pd.ExcludedFromScc)
+                    yield return pd.SvnProject;
+            }
+        }
+
+        public IEnumerable<SccProject> GetAllUIProjects()
+        {
+            foreach (SccProjectData pd in AllSccProjects)
+            {
+                if (!pd.DontAddToProjectWindow)
+                    yield return pd.SvnProject;
+            }
         }
 
         public SccProject ResolveRawProject(SccProject project)
