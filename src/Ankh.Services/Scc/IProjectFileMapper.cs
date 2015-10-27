@@ -41,7 +41,7 @@ namespace Ankh.Scc
         /// Gets all projects.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<SccProject> GetAllProjects();
+        IEnumerable<SccProject> GetAllSccProjects();
 
         /// <summary>
         /// Gets a list of all files contained within <paramref name="project"/>

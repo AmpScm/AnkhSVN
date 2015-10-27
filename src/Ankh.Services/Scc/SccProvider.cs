@@ -488,6 +488,11 @@ namespace Ankh.Scc
             SccProjectData data;
             if (ProjectMap.TryGetSccProject(sccProject, out data))
             {
+                if (data.ExcludedFromScc)
+                {
+                    trackCopies = false;
+                    return false;
+                }
                 return TrackProjectChanges(data, out trackCopies);
             }
             else
@@ -505,16 +510,20 @@ namespace Ankh.Scc
 
         bool IAnkhSccProviderEvents.TrackProjectChanges(IVsSccProject2 sccProject)
         {
-            bool trackCopies;
-
             SccProjectData data;
             if (ProjectMap.TryGetSccProject(sccProject, out data))
             {
-                return TrackProjectChanges(data, out trackCopies);
+                if (data.ExcludedFromScc)
+                    return false;
+                else
+                {
+                    bool trackCopies;
+
+                    return TrackProjectChanges(data, out trackCopies);
+                }
             }
             else
             {
-                trackCopies = false;
                 return false;
             }
         }
