@@ -61,6 +61,7 @@
         <arg line='/d' />
         <arg value="AnkhSVN ${ankhVersion}" />
         <arg line='/t http://timestamp.certum.pl/authenticode' />
+        <arg line='/as /fd sha56' />
         <arg value="release/AnkhSvn-${ankhVersion}.msi" />
       </exec>
       
