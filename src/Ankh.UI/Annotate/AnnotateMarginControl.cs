@@ -37,7 +37,7 @@ namespace Ankh.UI.Annotate
         int _firstLine;
         int _lastLine;
         IAnkhServiceProvider _context;
-        ToolTip _toolTip;
+        MyToolTip _toolTip;
 
         AnnotateRegion _hoverSection;
         AnnotateRegion _tipSection;
@@ -46,7 +46,7 @@ namespace Ankh.UI.Annotate
         {
             _regions = new List<AnnotateRegion>();
 
-            _toolTip = new ToolTip();
+            _toolTip = new MyToolTip();
             _toolTip.ShowAlways = true;
         }
 
@@ -138,57 +138,25 @@ namespace Ankh.UI.Annotate
                 Invalidate();
         }
 
-        Control _tipOwner;
-
-        [Localizable(false)]
-        public Control TipOwner
-        {
-            get { return _tipOwner ?? this; }
-            set
-            {
-                if (_tipOwner != null)
-                {
-                    _tipOwner.Leave -= new EventHandler(tipOwner_Leave);
-                    _tipOwner.MouseMove -= new MouseEventHandler(tipOwner_MouseMove);
-                    _tipOwner.MouseLeave -= new EventHandler(tipOwner_Leave);
-                    _tipOwner.LostFocus -= new EventHandler(tipOwner_Leave);
-
-                    _tipOwner = null;
-                }
-
-                if (value != null)
-                {
-                    _tipOwner = value;
-                    _tipOwner.Leave += new EventHandler(tipOwner_Leave);
-                    _tipOwner.MouseMove += new MouseEventHandler(tipOwner_MouseMove);
-                    _tipOwner.MouseLeave += new EventHandler(tipOwner_Leave);
-                    _tipOwner.LostFocus += new EventHandler(tipOwner_Leave);
-                }
-            }
-        }
-
         void HideTip()
         {
             _tipSection = null;
             _toolTip.Hide(this);
         }
 
-        void tipOwner_MouseMove(object sender, MouseEventArgs e)
+        protected override void OnLeave(EventArgs e)
         {
-            if (_tipSection != null && !Bounds.Contains(Parent.PointToClient(MousePosition)))
-                HideTip();
-        }
+            base.OnLeave(e);
 
-        void tipOwner_Leave(object sender, EventArgs e)
-        {
             if (_tipSection != null)
                 HideTip();
         }
 
-        protected override void OnLeave(EventArgs e)
+        protected override void OnLostFocus(EventArgs e)
         {
-            base.OnLeave(e);
-            if(_tipSection != null)
+            base.OnLostFocus(e);
+
+            if (_tipSection != null)
                 HideTip();
         }
 
@@ -250,6 +218,9 @@ namespace Ankh.UI.Annotate
                 return;
 
             DoMove(e);
+
+            if (_tipSection != null && !Bounds.Contains(Parent.PointToClient(MousePosition)))
+                HideTip();
         }
 
         void DoMove(EventArgs e)
@@ -299,6 +270,9 @@ namespace Ankh.UI.Annotate
                 Invalidate(GetRectangle(_hoverSection));
                 _hoverSection = null;
             }
+
+            if (_tipSection != null)
+                HideTip();
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -505,6 +479,21 @@ namespace Ankh.UI.Annotate
             public const uint TME_QUERY = 0x40000000;
             public const uint TME_CANCEL = 0x80000000;
             public const uint HOVER_DEFAULT = 0xFFFFFFFF;
+        }
+
+        class MyToolTip : ToolTip
+        {
+            protected override CreateParams CreateParams
+            {
+                get
+                {
+                    CreateParams cp = base.CreateParams;
+
+                    cp.ExStyle |= 0x00000020;
+
+                    return cp;
+                }
+            }
         }
     }
 }
