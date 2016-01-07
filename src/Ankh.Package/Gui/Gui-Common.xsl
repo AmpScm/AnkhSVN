@@ -273,6 +273,10 @@
     using(Graphics g = Graphics.FromImage(bmp))
     {
       int i = 0;
+
+      g.PageUnit = GraphicsUnit.Pixel;
+      g.PageScale = 1.0F;
+
       foreach(XPathNavigator n in nodes)
       {
         using(Image img = Image.FromFile(FindImage(baseDir, n.Value, imgSubdir)))
