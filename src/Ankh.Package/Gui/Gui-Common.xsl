@@ -308,6 +308,9 @@
     
     using(Graphics g = Graphics.FromImage(bmp))
     {
+      g.PageUnit = GraphicsUnit.Pixel;
+      g.PageScale = 1.0F;
+
       if (!transparent)
       {
         SolidBrush vsTransparent = new SolidBrush(Color.FromArgb(0xFF,0x00,0xFF));
