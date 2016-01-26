@@ -55,12 +55,13 @@
       <copy file="src/Ankh.Votive/bin/Release/AnkhSvn.msi"
           tofile="release/AnkhSvn-${ankhVersion}.msi" />
 
-      <exec program="${signtoolExe}" if="${signtoolExe != ''}">
-        <arg line='sign /v /n "Open Source"' />
+      <exec program="tools/signtool.exe" if="${signtoolExe != ''}">
+        <arg line='sign /v /n "Collabnet"' />
         <arg line='/du http://ankhsvn.open.collab.net/' />
         <arg line='/d' />
         <arg value="AnkhSVN ${ankhVersion}" />
-        <arg line='/t http://timestamp.certum.pl/authenticode' />
+        <arg line="/fd SHA256" />
+        <arg line='/t http://timestamp.digicert.com' />
         <arg value="release/AnkhSvn-${ankhVersion}.msi" />
       </exec>
       
