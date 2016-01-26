@@ -61,7 +61,8 @@
         <arg line='/d' />
         <arg value="AnkhSVN ${ankhVersion}" />
         <arg line="/fd SHA256" />
-        <arg line='/t http://timestamp.digicert.com' />
+        <arg line='/tr http://timestamp.digicert.com' />
+        <arg line="/td SHA256" />
         <arg value="release/AnkhSvn-${ankhVersion}.msi" />
       </exec>
       
