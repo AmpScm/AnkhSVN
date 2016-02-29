@@ -346,7 +346,6 @@ namespace Ankh.Scc
 
         protected override bool TrackProjectChanges(SccProjectData data, out bool trackCopies)
         {
-            // We can be called with a null project
             trackCopies = true;
 
             if (data.WebLikeFileHandling)
