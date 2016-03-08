@@ -633,21 +633,35 @@ namespace Ankh.VS.Selection
 
         #region IVsShellPropertyEvents Members
 
+        const __VSSPROPID VSSPROPID_ShellInitialized = (__VSSPROPID)(-9053);
+        bool sendActivate = false;
+
         public int OnShellPropertyChange(int propid, object var)
         {
-            switch ((__VSSPROPID)propid)
+            __VSSPROPID prop = (__VSSPROPID)propid;
+
+            switch (prop)
             {
                 case __VSSPROPID.VSSPROPID_Zombie:
-                    if (var is bool)
-                    {
-                        _zombie = (bool)var;
+                    if (!(var is bool))
+                        break;
 
-                        if (!_zombie)
-                        {
-                            IAnkhServiceEvents se = GetService<IAnkhServiceEvents>();
-                            if (se != null)
-                                se.OnUIShellActivate(EventArgs.Empty);
-                        }
+                    _zombie = (bool)var;
+                    if (!VSVersion.VS2010OrLater)
+                    {
+                        // VSSPROPID_ShellInitialized was added in VS2010.
+                        goto case VSSPROPID_ShellInitialized;
+                    }
+                    break;
+                case VSSPROPID_ShellInitialized:
+                    if (!(var is bool))
+                        break;
+
+                    if (!_zombie)
+                    {
+                        IAnkhServiceEvents se = GetService<IAnkhServiceEvents>();
+                        if (se != null)
+                            se.OnUIShellActivate(EventArgs.Empty);
                     }
                     break;
             }
