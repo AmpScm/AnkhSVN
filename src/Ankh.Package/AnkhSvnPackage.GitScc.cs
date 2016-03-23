@@ -7,6 +7,7 @@ using Ankh.VSPackage.Attributes;
 using Ankh.Scc;
 using Ankh.Scc.ProjectMap;
 using Ankh.GitScc;
+using ProvideSourceControlProviderAttribute = Ankh.VSPackage.Attributes.ProvideSourceControlProviderAttribute;
 
 namespace Ankh.VSPackage
 {

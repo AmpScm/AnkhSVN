@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Shell;
 using Ankh.VSPackage.Attributes;
 using Ankh.Scc;
 using Ankh.Scc.ProjectMap;
+using ProvideSourceControlProviderAttribute = Ankh.VSPackage.Attributes.ProvideSourceControlProviderAttribute;
 
 namespace Ankh.VSPackage
 {
