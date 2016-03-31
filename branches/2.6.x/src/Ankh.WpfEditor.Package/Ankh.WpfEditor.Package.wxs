@@ -28,6 +28,10 @@
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="PkgWpf-VS14.0" Value="1" Type="integer" KeyPath="yes" />
         <?include $(sys.SOURCEFILEDIR)obj\$(var.Ankh.WpfEditor.Package.TargetName)-14.0.wxi ?>
       </Component>
+      <Component Id="CR_PkgWpf_15.0" Guid="E849A111-E9AC-4871-83B5-4FA4D08A7021">
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="PkgWpf-VS15.0" Value="1" Type="integer" KeyPath="yes" />
+        <?include $(sys.SOURCEFILEDIR)obj\$(var.Ankh.WpfEditor.Package.TargetName)-15.0.wxi ?>
+      </Component>
     </DirectoryRef>
     <ComponentGroup Id="PkgWpfReg2010">
       <ComponentGroupRef Id="Ankh.WpfEditor.Package" />
@@ -44,6 +48,10 @@
     <ComponentGroup Id="PkgWpfReg14.0">
       <ComponentGroupRef Id="Ankh.WpfEditor.Package"/>
       <ComponentRef Id="CR_PkgWpf_14.0"/>
+    </ComponentGroup>
+    <ComponentGroup Id="PkgWpfReg15.0">
+      <ComponentGroupRef Id="Ankh.WpfEditor.Package"/>
+      <ComponentRef Id="CR_PkgWpf_15.0"/>
     </ComponentGroup>
   </Fragment>
 </Wix>

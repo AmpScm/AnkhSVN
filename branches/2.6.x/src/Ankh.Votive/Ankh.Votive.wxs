@@ -48,6 +48,9 @@
     <PropertyRef Id="VS14DEVENV" />
     <PropertyRef Id="VS14_EXTENSIONS_DIR" />
 
+    <PropertyRef Id="VS15DEVENV" />
+    <PropertyRef Id="VS15_EXTENSIONS_DIR" />
+
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="APPLICATIONFOLDER" Name="AnkhSVN 2">
@@ -151,6 +154,20 @@
           </Directory>
         </Directory>
       </Directory>
+      <Directory Name="Extensions" Id="VS15_EXTENSIONS_DIR">
+        <Directory Name="AnkhSVN" Id="EXTENSIONS_ANKH_VS15">
+          <Directory Name="2.X" Id="ANKHSVN_EXTENSION_VS15">
+            <Component Id="C_Reg15" Guid="D473E04A-D614-4B7A-950B-A452AA6222E3">
+              <Condition>VS15DEVENV</Condition>
+              <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="VS15.0-Info" Value="[ANKHSVN_EXTENSION_VS15]" Type="string" KeyPath="yes" />
+              <CopyFile Id="Vsix_Mnf_15.0" FileId="CF_VSIXMANIFEST" DestinationDirectory="ANKHSVN_EXTENSION_VS15" />
+              <CopyFile Id="Vsix_Lic_15.0" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_VS15" />
+              <CopyFile Id="Vsix_Ico_15.0" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_VS15" />
+              <CopyFile Id="Vsix_Pvw_15.0" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_VS15" />
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
     </Directory>
     <!-- Make sure the packages are set up in The VS Environment -->
     <CustomActionRef Id="AnkhVS2005Setup" />
@@ -159,6 +176,7 @@
     <CustomActionRef Id="AnkhVS2012Setup" />
     <CustomActionRef Id="AnkhVS2013Setup" />
     <CustomActionRef Id="AnkhVS14Setup" />
+    <CustomActionRef Id="AnkhVS15Setup" />
     <UI>
       <ProgressText Action="AnkhVS2005Setup" Template="[1]">Updating Visual Studio 2005 registration</ProgressText>
       <ProgressText Action="AnkhVS2008Setup" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
@@ -166,6 +184,7 @@
       <ProgressText Action="AnkhVS2012Setup" Template="[1]">Updating Visual Studio 2012 registration</ProgressText>
       <ProgressText Action="AnkhVS2013Setup" Template="[1]">Updating Visual Studio 2013 registration</ProgressText>
       <ProgressText Action="AnkhVS14Setup" Template="[1]">Updating Visual Studio 2015 registration</ProgressText>
+      <ProgressText Action="AnkhVS15Setup" Template="[1]">Updating Visual Studio Dev15 registration</ProgressText>
     </UI>
 
     <SetProperty Id="ARPINSTALLLOCATION" Value="[APPLICATIONFOLDER]" After="CostFinalize" />
@@ -224,6 +243,12 @@
         <ComponentGroupRef Id="PkgWpfReg14.0" />
         <!-- VS2012+ allows binding redirects in the registry, so no Extension* -->
         <ComponentRef Id="C_Reg14" />
+      </Feature>
+      <Feature Id="RegVS15" Title="Register in Microsoft Visual Studio Dev15" Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio Dev15" Level="1" AllowAdvertise="no">
+        <ComponentGroupRef Id="PkgReg15.0" />
+        <ComponentGroupRef Id="PkgWpfReg15.0" />
+        <!-- VS2012+ allows binding redirects in the registry, so no Extension* -->
+        <ComponentRef Id="C_Reg15" />
       </Feature>
     </Feature>
   </Product>

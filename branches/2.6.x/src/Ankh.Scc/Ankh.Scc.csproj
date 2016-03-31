@@ -76,6 +76,18 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' != '10.0' and '$(UseVsSdkVersion)' != '11.0'">
       <Visible>false</Visible>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' >= '14.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' >= '14.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.15.0.DesignTime" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' >= '15.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Imaging.Interop.15.0.DesignTime" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' >= '15.0'">
+      <Visible>false</Visible>
+    </Reference>
     <Reference Include="SharpSvn, Version=1.4999.384.29813, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>

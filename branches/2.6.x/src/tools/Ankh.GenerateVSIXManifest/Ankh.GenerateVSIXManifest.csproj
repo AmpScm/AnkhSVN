@@ -59,6 +59,9 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0'">
       <Visible>false</Visible>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.15.0" Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">
+      <Visible>false</Visible>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />

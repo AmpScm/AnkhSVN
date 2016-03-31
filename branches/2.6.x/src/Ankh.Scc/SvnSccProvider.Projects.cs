@@ -500,7 +500,6 @@ namespace Ankh.Scc
 
         internal bool TrackProjectChanges(IVsSccProject2 project, out bool trackCopies)
         {
-            // We can be called with a null project
             SccProjectData data;
 
             if (project != null && _projectMap.TryGetValue(project, out data))
