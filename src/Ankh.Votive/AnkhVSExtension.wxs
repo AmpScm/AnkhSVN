@@ -143,4 +143,87 @@
       <Custom Action="AnkhVS14Setup" Before="InstallFinalize" Overridable="yes">VS14DEVENV And ((Not UPGRADINGPRODUCTCODE) Or REINSTALL Or (Not VS140_TICKED))</Custom>
     </InstallExecuteSequence>
   </Fragment>
+
+  <!-- Visual Studio "Dev15" (15.0) -->
+  <Fragment>
+    <PropertyRef Id="VS15DEVENV" />
+    <CustomAction Id="AnkhVS15Setup" Property="VS15DEVENV" ExeCommand="/setup /NoSetupVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
+
+    <DirectoryRef Id="APP_bin">
+      <Component Id="VS150_Tick" Guid="B2B0D3F1-CAF0-49D3-A8A8-1E40ACFBAF55">
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\VS-Setup" Name="15.0" Value="1" KeyPath="yes" Type="integer" />
+      </Component>
+    </DirectoryRef>
+
+    <ComponentGroup Id="Tick_VS150">
+      <ComponentRef Id="VS150_Tick"/>
+    </ComponentGroup>
+
+    <Property Id="VS150_TICKED" Secure="yes">
+      <RegistrySearch Id="VS150_TickSearch" Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\VS-Setup" Name="15.0" Type="raw" />
+    </Property>
+
+    <InstallExecuteSequence>
+      <Custom Action="AnkhVS15Setup" Before="InstallFinalize" Overridable="yes">VS15DEVENV And ((Not UPGRADINGPRODUCTCODE) Or REINSTALL Or (Not VS150_TICKED))</Custom>
+    </InstallExecuteSequence>
+  </Fragment>
+
+  <!-- **************************************************************** -->
+  <!-- Will eventually be replaced when WIX adds support -->
+
+  <!-- Visual Studio 15.0 -->
+  <Fragment>
+    <Property Id="VS15DEVENV" Secure="yes">
+      <RegistrySearch Id="VS15DevEnvSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\15.0\Setup\VS" Name="EnvironmentPath" Type="raw" />
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS15_ITEMTEMPLATES_DIR" Secure="yes">
+      <RegistrySearch Id="VS11DevEnvForItemTemplatesSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\15.0\Setup\VS" Name="EnvironmentPath" Type="raw">
+        <DirectorySearch Id="VS15ItemTemplatesPathSearch" Path="ItemTemplates" Depth="1" />
+      </RegistrySearch>
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS15_PROJECTTEMPLATES_DIR" Secure="yes">
+      <RegistrySearch Id="VS15DevEnvForProjectTemplatesSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\15.0\Setup\VS" Name="EnvironmentPath" Type="raw">
+        <DirectorySearch Id="VS15ProjectTemplatesPathSearch" Path="ProjectTemplates" Depth="1" />
+      </RegistrySearch>
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS15_SCHEMAS_DIR" Secure="yes">
+      <RegistrySearch Id="VS15ProductPathSearch" Root="HKLM" Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="15.0" Type="raw">
+        <DirectorySearch Id="VS15XmlPathSearch" Path="Xml" Depth="1">
+          <DirectorySearch Id="VS15XmlSchemasPathSearch" Path="Schemas" Depth="1" />
+        </DirectorySearch>
+      </RegistrySearch>
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <CustomAction Id="VS15Setup" Property="VS15DEVENV" ExeCommand="/setup" Execute="deferred" Return="ignore" Impersonate="no" />
+    <PropertyRef Id="VS15DEVENV" />
+
+    <InstallExecuteSequence>
+      <Custom Action="VS15Setup" Before="InstallFinalize" Overridable="yes">VS15DEVENV</Custom>
+    </InstallExecuteSequence>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS15_ROOT_FOLDER" Secure="yes">
+      <RegistrySearch Id="SearchForVS15RootPath" Root="HKLM" Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="15.0" Type="raw" />
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS15_EXTENSIONS_DIR" Secure="yes">
+      <RegistrySearch Id="VS15DevEnvForExtensionsSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\15.0\Setup\VS" Name="EnvironmentDirectory" Type="raw">
+        <DirectorySearch Id="VS15ExtensionsPathSearch" Path="Extensions" Depth="1" />
+      </RegistrySearch>
+    </Property>
+  </Fragment>
 </Wix>

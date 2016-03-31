@@ -54,6 +54,24 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0'">
       <Visible>false</Visible>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0" Condition="'$(UseVsSdkVersion)' &gt;= '12.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' &gt;= '10.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" Condition="'$(UseVsSdkVersion)' &gt;= '11.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" Condition="'$(UseVsSdkVersion)' &gt;= '12.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0" Condition="'$(UseVsSdkVersion)' &gt;= '14.0'">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.15.0" Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">
+      <Visible>false</Visible>
+    </Reference>
     <Reference Include="SharpSvn">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\autolib\SharpSvn\SharpSvn.dll</HintPath>
