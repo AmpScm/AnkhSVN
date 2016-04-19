@@ -101,6 +101,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ProvideAnkhVersionThunkRedirectAttribute.cs" />
     <Compile Include="Attributes\ProvideAnkhExtensionRedirectAttribute.cs" />
     <Compile Include="Attributes\ProvideSourceControlCommand.cs" />
     <Compile Include="Attributes\ProvideThemeInformation.cs" />
@@ -551,6 +552,10 @@
     <ProjectReference Include="..\Ankh.VS.Interop\Ankh.VS.Interop.csproj">
       <Project>{b99cb919-1a2c-4e3b-9c15-8789b358ea99}</Project>
       <Name>Ankh.VS.Interop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.VS.VersionThunk\Ankh.VS.VersionThunk.csproj">
+      <Project>{06d68ab0-ed0b-4fc6-b085-318f9c253160}</Project>
+      <Name>Ankh.VS.VersionThunk</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ankh.VS\Ankh.VS.csproj">
       <Project>{906E3F01-CD79-4F80-BCA7-1105224328C4}</Project>
