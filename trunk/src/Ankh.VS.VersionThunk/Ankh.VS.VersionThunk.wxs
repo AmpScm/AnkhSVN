@@ -3,7 +3,7 @@
   <Fragment>
     <ComponentGroup Id="Ankh.VS.VersionThunk">
       <ComponentGroupRef Id="Ankh.Ids"/>
-      <ComponentGroupRef Id="Ankh.VS.Services"/>
+      <ComponentGroupRef Id="Ankh.Services"/>
       <ComponentRef Id="C_Ankh.VS.VersionThunk.dll" />
     </ComponentGroup>
   </Fragment>
