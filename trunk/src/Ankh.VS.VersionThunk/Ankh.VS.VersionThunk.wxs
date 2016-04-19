@@ -11,6 +11,7 @@
     <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.VS.VersionThunk.TargetDir)">
       <Component Id="C_Ankh.VS.VersionThunk.dll" Guid="D5885462-5BE7-47A8-876F-18CCE71DED6F">
         <File Id="CF_Ankh.VS.VersionThunk.dll" Name="Ankh.VS.VersionThunk.dll" Checksum="yes" KeyPath="yes" />
+        <File Id="CF_Ankh.VS.VersionThunk-V4.dll" Name="Ankh.VS.VersionThunk-V4.dll" Checksum="yes" Source="$(var.Ankh.VS.VersionThunk.V4.TargetDir)\Ankh.VS.VersionThunk.dll" />
       </Component>
     </DirectoryRef>
   </Fragment>
