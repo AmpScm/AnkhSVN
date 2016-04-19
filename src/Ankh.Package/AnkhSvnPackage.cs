@@ -74,6 +74,7 @@ namespace Ankh.VSPackage
     [ProvideKeyBindingTable(AnkhId.SccExplorerViewContext, 504)]
 
     [ProvideAnkhExtensionRedirect()]
+    [ProvideAnkhVersionThunkRedirect()]
 
     [CLSCompliant(false)]    
     [ProvideOutputWindow(AnkhId.AnkhOutputPaneId, "#111", InitiallyInvisible = false, Name = AnkhId.PlkProduct, ClearWithSolution = false)]

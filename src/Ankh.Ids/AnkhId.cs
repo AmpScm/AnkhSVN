@@ -108,7 +108,7 @@ namespace Ankh
         /// </summary>
         public const string BmpId = "9db594ca-ebdd-40e1-9e37-51b7f9ef8df0";
         public const string ExtensionRedirectId = "3cbbbf2e-22f7-4f02-af63-892bd2120485";
-
+        public const string VersionThunkId = "3bd72bcb-d99c-4061-ba42-83216facd4a4";
 
         public const string AnkhOutputPaneId = "ba0eec02-577c-424e-b6aa-fc8499d917ba";
 
