@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.VisualStudio.Shell.Embeddable</name>
+    </assembly>
+    <members>
+        <member name="P:Microsoft.VisualStudio.Shell.ISccUIClickedEventArgs.ClickedElementPosition">
+            <summary>
+            The rectangle of the UI element that was clicked in screen coordinates.
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Shell.IVsSccChanges">
+            <summary>
+            An interface that is implemented by a Source Control Provider to track the number of pending changes in the currently active repository and user interaction with the displayed information
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Shell.IVsSccChanges.PendingChangesUIClickedAsync(Microsoft.VisualStudio.Shell.ISccUIClickedEventArgs,System.Threading.CancellationToken)">
+            <summary>
+            Clicked handler that is called when the UI that displays pending changes information is clicked
+            </summary>
+            <param name="args">Absolute coordinates of the UI that was clicked</param>
+            <param name="cancellationToken">A cancellation token</param>
+            <returns>
+            A task that completes when the event has been handled. If the task is faulted, the exception will be recorded in the VS activity log.
+            </returns>        
+        </member>
+        <member name="T:Microsoft.VisualStudio.Shell.IVsSccChangesDisplayInformation">
+            <summary>
+            Information about pending changes in the current repository of the active Scc provider
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Shell.IVsSccChangesDisplayInformation.PendingChangeCount">
+            <summary>
+            The total number of pending changes in the current repository
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Shell.IVsSccChangesDisplayInformation.PendingChangeLabel">
+            <summary>
+            The label that temporarily indicates busy status when the number of pending changes is being calculated
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Shell.IVsSccChangesDisplayInformation.PendingChangeDetail">
+            <summary>
+            The detailed information for pending changes in a repository. This could, for example, be displayed as a
+            tooltip on control
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Shell.IVsSccCurrentBranch">
+            <summary>
+            An interface that is implemented by a Source Control Provider to track display information and user interaction with the displayed information
+            about the currently active branch in a repository.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Shell.IVsSccCurrentBranch.BranchUIClickedAsync(Microsoft.VisualStudio.Shell.ISccUIClickedEventArgs,System.Threading.CancellationToken)">
+            <summary>
+            Clicked handler that is called when the UI that displays current branch information in a UI is clicked
+            </summary>
+            <param name="args">Absolute coordinates of the UI that was clicked</param>
+            <param name="cancellationToken">A cancellation token</param>
+            <returns>
+            A task that completes when the event has been handled. If the task is faulted, the exception will be recorded in the VS activity log.
+            </returns>        
+        </member>
+        <member name="T:Microsoft.VisualStudio.Shell.IVsSccCurrentBranchDisplayInformation">
+            <summary>
+            Information about the current branch of the active Scc provider
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Shell.IVsSccCurrentBranchDisplayInformation.BranchName">
+            <summary>
+            The branch name that will be displayed in a UI
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Shell.IVsSccCurrentBranchDisplayInformation.BranchIcon">
+            <summary>
+            The icon to be displayed along with the branch name
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Shell.IVsSccCurrentBranchDisplayInformation.BranchDetail">
+            <summary>
+            The detailed information for a branch. This could, for example, be displayed as a
+            tooltip on control
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Shell.IVsSccCurrentRepository">
+            <summary>
+            An interface that is implemented by a Source Control Provider to track the currently active repository and user interaction with the displayed information
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Shell.IVsSccCurrentRepository.RepositoryUIClickedAsync(Microsoft.VisualStudio.Shell.ISccUIClickedEventArgs,System.Threading.CancellationToken)">
+            <summary>
+            Clicked handler that is called when the UI that displays repository information is clicked
+            </summary>
+            <param name="args">Absolute coordinates of the UI that was clicked</param>
+            <param name="cancellationToken">A cancellation token</param>
+            <returns>
+            A task that completes when the event has been handled. If the task is faulted, the exception will be recorded in the VS activity log.
+            </returns>        
+        </member>
+        <member name="T:Microsoft.VisualStudio.Shell.IVsSccCurrentRepositoryDisplayInformation">
+            <summary>
+            Information about the current repository of the active Scc provider
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Shell.IVsSccCurrentRepositoryDisplayInformation.RepositoryName">
+            <summary>
+            The repository name that will be displayed in a UI
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Shell.IVsSccCurrentRepositoryDisplayInformation.RepositoryIcon">
+            <summary>
+            The icon to be displayed along with the repository name
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Shell.IVsSccCurrentRepositoryDisplayInformation.RepositoryDetail">
+            <summary>
+            The detailed information for a repository. This could, for example, be displayed as a
+            tooltip on control
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Shell.IVsSccPublish">
+            <summary>
+            Interface that supports publishing of source code that is in a local repository
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Shell.IVsSccPublish.BeginPublishWorkflowAsync(System.Threading.CancellationToken)">
+            <summary>
+            Initiates a workflow to enable publishing of a local repository to a remote server.
+            </summary>
+            <param name="cancellationToken">A cancellation token</param>
+            <returns>
+            A task that completes when the event has been handled. If the task is faulted, the exception will be recorded in the VS activity log.
+            </returns>        
+        </member>
+        <member name="T:Microsoft.VisualStudio.Shell.IVsSccSolution">
+            <summary>
+            Interface that raises events related to a loaded solution and Scc 
+            </summary>
+        </member>
+        <member name="E:Microsoft.VisualStudio.Shell.IVsSccSolution.AddedToSourceControl">
+            <summary>
+            Event that is fired when a solution is added to Source Control
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Shell.IVsSccUnpublishedCommits">
+            <summary>
+            An interface that is implemented by a Source Control Provider to track the number of unpublished commits in the active repository and user interaction with the displayed information
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.Shell.IVsSccUnpublishedCommits.UnpublishedCommitsUIClickedAsync(Microsoft.VisualStudio.Shell.ISccUIClickedEventArgs,System.Threading.CancellationToken)">
+            <summary>
+            Clicked handler that is called when the UI that displays unpublished commits is clicked
+            </summary>
+            <param name="args">Absolute coordinates of the UI that was clicked</param>
+            <param name="cancellationToken">A cancellation token</param>
+            <returns>
+            A task that completes when the event has been handled. If the task is faulted, the exception will be recorded in the VS activity log.
+            </returns>
+        </member>
+        <member name="E:Microsoft.VisualStudio.Shell.IVsSccUnpublishedCommits.AdvertisePublish">
+            <summary>
+            Event that is raised to request the shell to advertise backing up the repository
+            </summary>
+        </member>
+        <member name="T:Microsoft.VisualStudio.Shell.IVsSccUnpublishedCommitsDisplayInformation">
+            <summary>
+            Information about Unpublished Commits
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Shell.IVsSccUnpublishedCommitsDisplayInformation.UnpublishedCommitCount">
+            <summary>
+            The number of unpublished commits in the current repository
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Shell.IVsSccUnpublishedCommitsDisplayInformation.UnpublishedCommitLabel">
+            <summary>
+            The label that temporarily indicates busy status when the number of pending changes is being calculated
+            </summary>
+        </member>
+        <member name="P:Microsoft.VisualStudio.Shell.IVsSccUnpublishedCommitsDisplayInformation.UnpublishedCommitDetail">
+            <summary>
+            The detailed information for unpublished commits. This could, for example, be displayed as a
+            tooltip on control
+            </summary>
+        </member>
+    </members>
+</doc>

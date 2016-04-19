@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:u="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <ComponentGroup Id="Ankh.VS.VersionThunk">
+      <ComponentGroupRef Id="Ankh.Ids"/>
+      <ComponentGroupRef Id="Ankh.VS.Services"/>
+      <ComponentRef Id="C_Ankh.VS.VersionThunk.dll" />
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
+    <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.VS.VersionThunk.TargetDir)">
+      <Component Id="C_Ankh.VS.VersionThunk.dll" Guid="D5885462-5BE7-47A8-876F-18CCE71DED6F">
+        <File Id="CF_Ankh.VS.VersionThunk.dll" Name="Ankh.VS.VersionThunk.dll" Checksum="yes" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
