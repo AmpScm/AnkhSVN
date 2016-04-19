@@ -72,6 +72,7 @@
     <Compile Include="Ankh.Services\Ankh.Services.wxs" />
     <Compile Include="Ankh.UI\Ankh.UI.wxs" />
     <Compile Include="Ankh.VS.Interop\Ankh.VS.Interop.wxs" />
+    <Compile Include="Ankh.VS.VersionThunk\Ankh.VS.VersionThunk.wxs" />
     <Compile Include="Ankh.VS.WpfServices\Ankh.VS.WpfServices.wxs" />
     <Compile Include="Ankh.VS\Ankh.VS.wxs" />
     <Compile Include="Ankh.WpfEditor.Package\Ankh.WpfEditor.Package.wxs" />
@@ -93,6 +94,7 @@
     <Folder Include="Ankh.Services\" />
     <Folder Include="Ankh.UI\" />
     <Folder Include="Ankh.VS.Interop\" />
+    <Folder Include="Ankh.VS.VersionThunk\" />
     <Folder Include="Ankh.VS.WpfServices\" />
     <Folder Include="Ankh.VS\" />
     <Folder Include="Ankh.WpfEditor.Package\" />
@@ -154,6 +156,22 @@
       <Project>{b99cb919-1a2c-4e3b-9c15-8789b358ea99}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
+    </ProjectReference>
+    <ProjectReference Include="Ankh.VS.VersionThunk\Ankh.VS.VersionThunk.csproj">
+      <Name>Ankh.VS.VersionThunk</Name>
+      <Project>{06d68ab0-ed0b-4fc6-b085-318f9c253160}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="Ankh.VS.VersionThunk\Ankh.VS.VersionThunk.V4.csproj">
+      <Name>Ankh.VS.VersionThunk.V4</Name>
+      <Project>{28f7c8b8-bf28-4429-bb67-da8fe737fb9e}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
     <ProjectReference Include="Ankh.VS.WpfServices\Ankh.VS.WpfServices.csproj">
       <Name>Ankh.VS.WpfServices</Name>
