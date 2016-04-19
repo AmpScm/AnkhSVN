@@ -33,6 +33,7 @@ namespace Ankh.VSPackage.Attributes
         readonly string _uiName;
         readonly Type _serviceType;
         bool _setDefault;
+        bool _isPublishSupported;
 
         /// <summary>
         /// </summary>
@@ -85,6 +86,12 @@ namespace Ankh.VSPackage.Attributes
             set { _setDefault = value;  }
         }
 
+        public bool IsPublishSupported
+        {
+            get { return _isPublishSupported; }
+            set { _isPublishSupported = value; }
+        }
+
         /// <summary>
         /// Get the guid of the provider's service
         /// </summary>
@@ -115,6 +122,8 @@ namespace Ankh.VSPackage.Attributes
                 {
                     sccProviderKey.SetValue("", RegName);
                     sccProviderKey.SetValue("Service", SccProviderService.ToString("B"));
+                    if (IsPublishSupported)
+                        sccProviderKey.SetValue("IsPublishSupported", Convert.ToInt32(this.IsPublishSupported));
 
                     using (Key sccProviderNameKey = sccProviderKey.CreateSubkey("Name"))
                     {
