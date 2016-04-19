@@ -22,7 +22,7 @@ namespace Ankh.VSPackage.Attributes
                 {
                     string dllName = name.Name + "-V4.dll";
 
-                    if (!context.GetType().Name.Contains("Ankh"))
+                    if (!context.GetType().FullName.Contains("Ankh"))
                         dllName = name.Name + ".dll"; // Doesn't work in debug mode at this time
 
                     key.SetValue("codeBase", Path.Combine("$PackageFolder$", dllName));
