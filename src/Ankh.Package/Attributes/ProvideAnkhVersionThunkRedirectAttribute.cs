@@ -11,7 +11,7 @@ namespace Ankh.VSPackage.Attributes
     {
         public override void Register(RegistrationAttribute.RegistrationContext context)
         {
-            AssemblyName name = typeof(Ankh.Scc.SccProviderThunk).Assembly.GetName();
+            AssemblyName name = typeof(Ankh.VS.VSVersionThunk).Assembly.GetName();
             using (Key key = context.CreateKey(GetKey()))
             {
                 key.SetValue("name", name.Name);
