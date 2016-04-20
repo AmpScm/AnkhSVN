@@ -65,6 +65,16 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' != '10.0' and '$(UseVsSdkVersion)' != '11.0'">
       <Visible>false</Visible>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" Condition="'$(UseVsSdkVersion)' &gt; '10.0'">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\Ankh.VS.VersionThunk\Embed\Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Embeddable, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" Condition="'$(UseVsSdkVersion)' &gt; '10.0'">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\Ankh.VS.VersionThunk\Embed\Microsoft.VisualStudio.Shell.Embeddable.dll</HintPath>
+    </Reference>
     <Reference Include="SharpGit">
       <HintPath>..\autolib\SharpGit\SharpGit.dll</HintPath>
     </Reference>
@@ -86,6 +96,10 @@
     <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
       <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>
       <Name>Ankh.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.VS.VersionThunk\Ankh.VS.VersionThunk.csproj">
+      <Project>{06d68ab0-ed0b-4fc6-b085-318f9c253160}</Project>
+      <Name>Ankh.VS.VersionThunk</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
