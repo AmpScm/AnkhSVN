@@ -111,7 +111,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="DiffWindow\DiffEditorControl.cs" />
+    <Compile Include="DiffWindow\DiffEditorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="DiffWindow\DiffEditorControl.Designer.cs">
       <DependentUpon>DiffEditorControl.cs</DependentUpon>
     </Compile>
