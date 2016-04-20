@@ -3,6 +3,7 @@
     <Fragment>
         <ComponentGroup Id="Ankh.Services">
             <ComponentGroupRef Id="Ankh.Ids" />
+            <ComponentGroupRef Id="Ankh.VS.VersionThunk" />
             <ComponentRef Id="C_Ankh.Services.dll" />
             <ComponentGroupRef Id="LOCAL_SharpSvn_Win32" />
             <ComponentGroupRef Id="LOCAL_SharpSvnUI" />

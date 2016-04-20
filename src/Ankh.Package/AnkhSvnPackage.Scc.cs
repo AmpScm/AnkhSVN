@@ -18,7 +18,7 @@ namespace Ankh.VSPackage
     [ProvideProjectTypeSettings("{f14b399a-7131-4c87-9e4b-1186c45ef12d}", SccProjectFlags.ForceSccGlyphChange, Name = ".rptproj")]
     [ProvideProjectTypeSettings("{999d2cb9-9277-4465-a902-1604ed3686a3}", SccProjectFlags.ForceSccGlyphChange, Name = ".smdlproj")]
     [ProvideService(typeof(ITheAnkhSvnSccProvider), ServiceName = AnkhId.SubversionSccName)]
-    [ProvideSourceControlProvider(AnkhId.SccProviderId, AnkhId.SccProviderTitle, "#100", typeof(ITheAnkhSvnSccProvider), SetDefault = true)]
+    [ProvideSourceControlProvider(AnkhId.SccProviderId, AnkhId.SccProviderTitle, "#100", typeof(ITheAnkhSvnSccProvider), SetDefault = true, IsPublishSupported =true)]
     [ProvideSourceControlCommand(AnkhId.SccProviderId, SccProviderCommand.Open, AnkhCommand.FileFileOpenFromSubversion)]
     [ProvideSourceControlCommand(AnkhId.SccProviderId, SccProviderCommand.Share, AnkhCommand.FileSccAddSolutionToSubversion)]
     partial class AnkhSvnPackage

@@ -88,16 +88,15 @@
     <Reference Include="Microsoft.VisualStudio.Imaging.Interop.15.0.DesignTime" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' &gt;= '15.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" Condition="'$(UseVsSdkVersion)' &gt; '10.0'" >
+    <Reference Include="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" Condition="'$(UseVsSdkVersion)' &gt; '10.0'">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>Embed\Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime.dll</HintPath>
+      <HintPath>..\Ankh.VS.VersionThunk\Embed\Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.Embeddable, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" Condition="'$(UseVsSdkVersion)' &gt; '10.0'">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>Embed\Microsoft.VisualStudio.Shell.Embeddable.dll</HintPath>
+      <HintPath>..\Ankh.VS.VersionThunk\Embed\Microsoft.VisualStudio.Shell.Embeddable.dll</HintPath>
     </Reference>
     <Reference Include="SharpSvn, Version=1.4999.384.29813, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -144,15 +143,11 @@
     <Compile Include="ProjectMap\SvnSccProject.cs" />
     <Compile Include="SettingsMap\SccTranslatePathInfo.cs" />
     <Compile Include="SccUI\Commands\MakeNonSccFileWritableCommand.cs" />
-    <Compile Include="SccUI\SccEditReadOnlyFileDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="SccUI\SccEditReadOnlyFileDialog.cs" />
     <Compile Include="SccUI\SccEditReadOnlyFileDialog.Designer.cs">
       <DependentUpon>SccEditReadOnlyFileDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="SccUI\SccFilesystemWarningDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="SccUI\SccFilesystemWarningDialog.cs" />
     <Compile Include="SccUI\SccFilesystemWarningDialog.Designer.cs">
       <DependentUpon>SccFilesystemWarningDialog.cs</DependentUpon>
     </Compile>
@@ -161,23 +156,17 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="SccUI\SccQuerySaveReadonlyDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="SccUI\SccQuerySaveReadonlyDialog.cs" />
     <Compile Include="SccUI\SccQuerySaveReadonlyDialog.Designer.cs">
       <DependentUpon>SccQuerySaveReadonlyDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="SccUI\ChangeSourceControl.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="SccUI\ChangeSourceControl.cs" />
     <Compile Include="SccUI\ChangeSourceControl.Designer.cs">
       <DependentUpon>ChangeSourceControl.cs</DependentUpon>
     </Compile>
     <Compile Include="SccUI\ChangeSourceControlRow.cs" />
     <Compile Include="SccUI\Commands\ChangeSourceControlCommand.cs" />
-    <Compile Include="SccUI\ChangeSolutionRoot.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="SccUI\ChangeSolutionRoot.cs" />
     <Compile Include="SccUI\ChangeSolutionRoot.Designer.cs">
       <DependentUpon>ChangeSolutionRoot.cs</DependentUpon>
     </Compile>

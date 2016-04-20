@@ -46,18 +46,20 @@ namespace Ankh.Scc
         bool IsBSLSupported();
     }
 
-    public abstract partial class SccProvider : AnkhService, IVsSccProvider, IVsSccManager2, ICOMVsSccManager3, IVsSccManagerTooltip, IAnkhSccProviderEvents, IVsSccControlNewSolution
+    public abstract partial class SccProvider : SccProviderThunk, IVsSccProvider, IVsSccManager2, ICOMVsSccManager3, IVsSccManagerTooltip, IAnkhSccProviderEvents, IVsSccControlNewSolution
     {
         bool _active;
         readonly SccProjectMap _projectMap;
 
         [CLSCompliant(false)]
         protected SccProvider(IAnkhServiceProvider context, SccProjectMap projectMap)
-            : base(context)
         {
+            if (context == null)
+                throw new ArgumentNullException("context");
             if (projectMap == null)
                 throw new ArgumentNullException("projectMap");
 
+            _context = context;
             _projectMap = projectMap;
         }
 

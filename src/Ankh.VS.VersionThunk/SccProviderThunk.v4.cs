@@ -6,16 +6,17 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Imaging.Interop;
+using System.Drawing;
 
 namespace Ankh.Scc
 {
-    partial class SccProviderThunk : IVsSccChanges, IVsSccChangesDisplayInformation, IVsSccCurrentBranch, IVsSccCurrentBranchDisplayInformation, IVsSccCurrentRepository, IVsSccCurrentRepositoryDisplayInformation, IVsSccUnpublishedCommits, IVsSccUnpublishedCommitsDisplayInformation
+    partial class SccProviderThunk : IVsSccChanges, IVsSccChangesDisplayInformation, IVsSccCurrentBranch, IVsSccCurrentBranchDisplayInformation, IVsSccCurrentRepository, IVsSccCurrentRepositoryDisplayInformation, IVsSccUnpublishedCommits, IVsSccUnpublishedCommitsDisplayInformation, IVsSccPublish
     {
         string IVsSccCurrentBranchDisplayInformation.BranchDetail
         {
             get
             {
-                throw new NotImplementedException();
+                return "Detail";
             }
         }
 
@@ -23,7 +24,11 @@ namespace Ankh.Scc
         {
             get
             {
-                throw new NotImplementedException();
+                return new ImageMoniker()
+                {
+                    Guid = new Guid("{ae27a6b0-e345-4288-96df-5eaf394ee369}"),
+                    Id = 3668
+                };
             }
         }
 
@@ -31,7 +36,7 @@ namespace Ankh.Scc
         {
             get
             {
-                throw new NotImplementedException();
+                return BranchName;
             }
         }
 
@@ -39,7 +44,7 @@ namespace Ankh.Scc
         {
             get
             {
-                throw new NotImplementedException();
+                return 2;
             }
         }
 
@@ -47,7 +52,7 @@ namespace Ankh.Scc
         {
             get
             {
-                throw new NotImplementedException();
+                return "That's 'two'";
             }
         }
 
@@ -55,7 +60,7 @@ namespace Ankh.Scc
         {
             get
             {
-                throw new NotImplementedException();
+                return "PC Label";
             }
         }
 
@@ -63,7 +68,7 @@ namespace Ankh.Scc
         {
             get
             {
-                throw new NotImplementedException();
+                return "REP detail";
             }
         }
 
@@ -71,7 +76,11 @@ namespace Ankh.Scc
         {
             get
             {
-                throw new NotImplementedException();
+                return new ImageMoniker()
+                {
+                    Guid = new Guid("{ae27a6b0-e345-4288-96df-5eaf394ee369}"),
+                    Id = 3668
+                };
             }
         }
 
@@ -79,7 +88,7 @@ namespace Ankh.Scc
         {
             get
             {
-                throw new NotImplementedException();
+                return "REP name";
             }
         }
 
@@ -87,7 +96,7 @@ namespace Ankh.Scc
         {
             get
             {
-                throw new NotImplementedException();
+                return 7;
             }
         }
 
@@ -95,7 +104,7 @@ namespace Ankh.Scc
         {
             get
             {
-                throw new NotImplementedException();
+                return "Seven";
             }
         }
 
@@ -103,54 +112,46 @@ namespace Ankh.Scc
         {
             get
             {
-                throw new NotImplementedException();
+                return "Unpublished L";
             }
         }
 
         event EventHandler IVsSccUnpublishedCommits.AdvertisePublish
         {
-            add
-            {
-                throw new NotImplementedException();
-            }
-
-            remove
-            {
-                throw new NotImplementedException();
-            }
+            add { AdvertisePublish += value; }
+            remove { AdvertisePublish -= value; }
         }
 
-        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        System.Threading.Tasks.Task IVsSccPublish.BeginPublishWorkflowAsync(CancellationToken cancellationToken)
         {
-            add
-            {
-                throw new NotImplementedException();
-            }
+            //throw new NotImplementedException();
+            return new System.Threading.Tasks.Task(OnPublishWorkflow, cancellationToken);
+        }
 
-            remove
-            {
-                throw new NotImplementedException();
-            }
+        System.Drawing.Rectangle GetRect(ISccUIClickedEventArgs args)
+        {
+            System.Windows.Rect r = args.ClickedElementPosition;
+            return new System.Drawing.Rectangle((int)r.X, (int)r.Y, (int)r.Width, (int)r.Height);
         }
 
         System.Threading.Tasks.Task IVsSccCurrentBranch.BranchUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return new System.Threading.Tasks.Task(() => OnBranchUIClicked(GetRect(args)), cancellationToken);
         }
 
         System.Threading.Tasks.Task IVsSccChanges.PendingChangesUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return new System.Threading.Tasks.Task(() => OnPendingChangesClicked(GetRect(args)), cancellationToken);
         }
 
         System.Threading.Tasks.Task IVsSccCurrentRepository.RepositoryUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return new System.Threading.Tasks.Task(() => OnRepositoryUIClicked(GetRect(args)), cancellationToken);
         }
 
         System.Threading.Tasks.Task IVsSccUnpublishedCommits.UnpublishedCommitsUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return new System.Threading.Tasks.Task(() => OnUnpublishedCommitsUIClickedAsync(GetRect(args)), cancellationToken);
         }
     }
 }
