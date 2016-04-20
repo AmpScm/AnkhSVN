@@ -2,8 +2,6 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:u="http://schemas.microsoft.com/wix/UtilExtension">
   <Fragment>
     <ComponentGroup Id="Ankh.VS.VersionThunk">
-      <ComponentGroupRef Id="Ankh.Ids"/>
-      <ComponentGroupRef Id="Ankh.Services"/>
       <ComponentRef Id="C_Ankh.VS.VersionThunk.dll" />
     </ComponentGroup>
   </Fragment>

@@ -552,7 +552,7 @@ namespace Ankh.Scc
             {
                 dlg.File = item.Name;
 
-                DialogResult result = dlg.ShowDialog(Context);
+                DialogResult result = dlg.ShowDialog(this);
                 switch (result)
                 {
                     case DialogResult.Yes:

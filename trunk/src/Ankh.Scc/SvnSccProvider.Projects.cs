@@ -397,7 +397,7 @@ namespace Ankh.Scc
                 IEnumerable<string> files = _delayedDelete;
                 _delayedDelete = null;
 
-                using (SvnSccContext svn = new SvnSccContext(Context))
+                using (SvnSccContext svn = new SvnSccContext(this))
                 {
                     foreach (string node in files)
                     {

@@ -32,7 +32,7 @@ namespace Ankh.Scc
     [GlobalService(typeof(SvnSccProvider))]
     [GlobalService(typeof(IAnkhSccService))]
     [GlobalService(typeof(ITheAnkhSvnSccProvider), true)]
-    partial class SvnSccProvider : SccProviderThunk, ITheAnkhSvnSccProvider, IAnkhSccService, IVsSccEnlistmentPathTranslation
+    partial class SvnSccProvider : SccProvider, ITheAnkhSvnSccProvider, IAnkhSccService, IVsSccEnlistmentPathTranslation
     {
         ISvnStatusCache _statusCache;
         IAnkhOpenDocumentTracker _documentTracker;
