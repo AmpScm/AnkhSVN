@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ankh.Scc
 {
-    public abstract partial class SccProviderThunk : IDisposable, INotifyPropertyChanged
+    public abstract partial class SccProviderThunk : IDisposable, INotifyPropertyChanged, IServiceProvider
     {
         protected SccProviderThunk()
         {
@@ -33,20 +33,20 @@ namespace Ankh.Scc
 
         }
 
-        protected virtual void OnBranchUIClicked(Rectangle clickedElement)
+        protected virtual void OnBranchUIClicked(Point clickedElement)
         {
         }
 
-        protected virtual void OnPendingChangesClicked(Rectangle clickedElement)
+        protected virtual void OnPendingChangesClicked(Point clickedElement)
         {
 
         }
 
-        protected virtual void OnRepositoryUIClicked(Rectangle clickedElement)
+        protected virtual void OnRepositoryUIClicked(Point clickedElement)
         {
         }
 
-        protected virtual void OnUnpublishedCommitsUIClickedAsync(Rectangle wr)
+        protected virtual void OnUnpublishedCommitsUIClickedAsync(Point wr)
         {
         }
 
@@ -93,6 +93,13 @@ namespace Ankh.Scc
                 GC.SuppressFinalize(this);
             }
         }
+
+        object IServiceProvider.GetService(Type serviceType)
+        {
+            return GetService(serviceType);
+        }
+
+        protected abstract object GetService(Type serviceType);
 
         #endregion
     }

@@ -29,7 +29,7 @@ namespace Ankh.Scc
             return GetService(serviceType);
         }
 
-        protected object GetService(Type serviceType)
+        protected sealed override object GetService(Type serviceType)
         {
             return _context.GetService(serviceType);
         }
