@@ -122,10 +122,7 @@ namespace Ankh.Scc
 
         System.Threading.Tasks.Task IVsSccPublish.BeginPublishWorkflowAsync(CancellationToken cancellationToken)
         {
-            System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(OnPublishWorkflow, cancellationToken);
-
-            t.Start();
-            return t;
+            return System.Threading.Tasks.Task.Run((Action)OnPublishWorkflow, cancellationToken);
         }
 
         System.Drawing.Point GetPoint(ISccUIClickedEventArgs args)
@@ -136,34 +133,22 @@ namespace Ankh.Scc
 
         System.Threading.Tasks.Task IVsSccCurrentBranch.BranchUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(delegate { OnBranchUIClicked(GetPoint(args)); }, cancellationToken);
-
-            t.Start();
-            return t;
+            return System.Threading.Tasks.Task.Run((Action)delegate { OnBranchUIClicked(GetPoint(args)); }, cancellationToken);
         }
 
         System.Threading.Tasks.Task IVsSccChanges.PendingChangesUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(delegate { OnPendingChangesClicked(GetPoint(args)); }, cancellationToken);
-
-            t.Start();
-            return t;
+            return System.Threading.Tasks.Task.Run((Action)delegate { OnPendingChangesClicked(GetPoint(args)); }, cancellationToken);
         }
 
         System.Threading.Tasks.Task IVsSccCurrentRepository.RepositoryUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(delegate { OnRepositoryUIClicked(GetPoint(args)); }, cancellationToken);
-
-            t.Start();
-            return t;
+            return System.Threading.Tasks.Task.Run((Action)delegate { OnRepositoryUIClicked(GetPoint(args)); }, cancellationToken);
         }
 
         System.Threading.Tasks.Task IVsSccUnpublishedCommits.UnpublishedCommitsUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(delegate { OnUnpublishedCommitsUIClickedAsync(GetPoint(args)); });
-
-            t.Start();
-            return t;
+            return System.Threading.Tasks.Task.Run((Action)delegate { OnUnpublishedCommitsUIClickedAsync(GetPoint(args)); });
         }
     }
 }
