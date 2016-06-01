@@ -26,6 +26,7 @@ using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
 using Ankh.Configuration;
 using Ankh.VS;
+using System.Drawing;
 
 namespace Ankh.Scc
 {
@@ -167,6 +168,26 @@ namespace Ankh.Scc
         {
             // Force an initial status into the SvnItem
             StatusCache.SetSolutionContained(path, true, ProjectMap.IsSccExcluded(path));
+        }
+
+        protected override void OnBranchUIClicked(Point clickedElement)
+        {
+            //throw new NotImplementedException();
+        }
+
+        protected override void OnPendingChangesClicked(Point clickedElement)
+        {
+            //throw new NotImplementedException();
+        }
+
+        protected override void OnUnpublishedCommitsUIClickedAsync(Point wr)
+        {
+            //throw new NotImplementedException();
+        }
+
+        protected override void OnRepositoryUIClicked(Point clickedElement)
+        {
+            //throw new NotImplementedException();
         }
     }
 }

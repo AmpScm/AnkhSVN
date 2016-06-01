@@ -6,6 +6,7 @@ using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.Scc.ProjectMap;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Drawing;
 
 namespace Ankh.GitScc
 {
@@ -194,6 +195,26 @@ namespace Ankh.GitScc
                 if (item != null)
                     yield return item.FullPath; // Use true path
             }
+        }
+
+        protected override void OnBranchUIClicked(Point clickedElement)
+        {
+            //throw new NotImplementedException();
+        }
+
+        protected override void OnPendingChangesClicked(Point clickedElement)
+        {
+            //throw new NotImplementedException();
+        }
+
+        protected override void OnUnpublishedCommitsUIClickedAsync(Point wr)
+        {
+            //throw new NotImplementedException();
+        }
+
+        protected override void OnRepositoryUIClicked(Point clickedElement)
+        {
+            //throw new NotImplementedException();
         }
     }
 }
