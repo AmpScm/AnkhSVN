@@ -66,6 +66,7 @@
     <Compile Include="Ankh.ExtensionPoints\Ankh.ExtensionPoints.wxs" />
     <None Include="Ankh.ExtensionPoints\Ankh.ExtensionReg.wxi" />
     <Compile Include="Ankh.Ids\Ankh.Ids.wxs" />
+    <Compile Include="Ankh.ImageCatalog\Ankh.ImageCatalog.wxs" />
     <Compile Include="Ankh.Package\Ankh.Package.wxs" />
     <Compile Include="Ankh.Scc\Ankh.Scc.wxs" />
     <Compile Include="Ankh.GitScc\Ankh.GitScc.wxs" />
@@ -89,6 +90,7 @@
     <Folder Include="Ankh.Diff\" />
     <Folder Include="Ankh.ExtensionPoints\" />
     <Folder Include="Ankh.Ids\" />
+    <Folder Include="Ankh.ImageCatalog\" />
     <Folder Include="Ankh.GitScc\" />
     <Folder Include="Ankh.Scc\" />
     <Folder Include="Ankh.Services\" />
@@ -126,6 +128,14 @@
       <Project>{61d343cf-77ba-4ef2-96f5-e0d4efd04844}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
+    </ProjectReference>
+    <ProjectReference Include="Ankh.ImageCatalog\Ankh.ImageCatalog.csproj">
+      <Name>Ankh.ImageCatalog</Name>
+      <Project>{b52ec60a-f421-4224-9038-6dd2ce9a7ab1}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
     <ProjectReference Include="Ankh.Package\Ankh.Package.csproj">
       <Name>Ankh.Package</Name>

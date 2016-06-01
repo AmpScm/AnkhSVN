@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25115.1
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Definitions", "Definitions", "{01F3ED56-C896-409C-8464-DB82B3AF1364}"
 	ProjectSection(SolutionItems) = preProject
@@ -87,6 +87,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.VS.VersionThunk", "Ankh.VS.VersionThunk\Ankh.VS.VersionThunk.csproj", "{06D68AB0-ED0B-4FC6-B085-318F9C253160}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.VS.VersionThunk.V4", "Ankh.VS.VersionThunk\Ankh.VS.VersionThunk.V4.csproj", "{28F7C8B8-BF28-4429-BB67-DA8FE737FB9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.ImageCatalog", "Ankh.ImageCatalog\Ankh.ImageCatalog.csproj", "{B52EC60A-F421-4224-9038-6DD2CE9A7AB1}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -251,6 +253,12 @@ Global
 		{28F7C8B8-BF28-4429-BB67-DA8FE737FB9E}.Release|x86.Build.0 = Release|x86
 		{28F7C8B8-BF28-4429-BB67-DA8FE737FB9E}.ReleaseMSI|x86.ActiveCfg = Release|x86
 		{28F7C8B8-BF28-4429-BB67-DA8FE737FB9E}.ReleaseMSI|x86.Build.0 = Release|x86
+		{B52EC60A-F421-4224-9038-6DD2CE9A7AB1}.Debug|x86.ActiveCfg = Debug|x86
+		{B52EC60A-F421-4224-9038-6DD2CE9A7AB1}.Debug|x86.Build.0 = Debug|x86
+		{B52EC60A-F421-4224-9038-6DD2CE9A7AB1}.Release|x86.ActiveCfg = Release|x86
+		{B52EC60A-F421-4224-9038-6DD2CE9A7AB1}.Release|x86.Build.0 = Release|x86
+		{B52EC60A-F421-4224-9038-6DD2CE9A7AB1}.ReleaseMSI|x86.ActiveCfg = Release|x86
+		{B52EC60A-F421-4224-9038-6DD2CE9A7AB1}.ReleaseMSI|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -281,6 +289,7 @@ Global
 		{8FC7114E-5A84-4221-8187-C3D1C370404E} = {9B380404-6594-4737-8518-291DEDEF3496}
 		{06D68AB0-ED0B-4FC6-B085-318F9C253160} = {01F3ED56-C896-409C-8464-DB82B3AF1364}
 		{28F7C8B8-BF28-4429-BB67-DA8FE737FB9E} = {01F3ED56-C896-409C-8464-DB82B3AF1364}
+		{B52EC60A-F421-4224-9038-6DD2CE9A7AB1} = {08FF496A-CD90-4B17-8FA0-F4CA88AB49D3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		DPBuild = 5

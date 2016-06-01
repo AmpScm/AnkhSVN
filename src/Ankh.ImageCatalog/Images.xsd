@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="Images"
+    xmlns:img="http://schemas.ankhsvn.net/2016/05/images/"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://schemas.ankhsvn.net/2016/05/images/"
+    elementFormDefault="qualified"
+    xmlns="http://schemas.ankhsvn.net/2016/05/images/"
+>
+  <xs:element name="VsImages">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:sequence>
+          <xs:element ref="img:Imports" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Imports"></xs:element>
+</xs:schema>

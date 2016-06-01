@@ -7,6 +7,7 @@
     <ComponentGroup Id="Ankh.Package">
       <ComponentGroupRef Id="Ankh.Ids" />
       <ComponentGroupRef Id="Ankh.Services" />
+      <ComponentGroupRef Id="Ankh.ImageCatalog" />
       <ComponentGroupRef Id="Ankh" />
       <ComponentGroupRef Id="Ankh.GitScc" />
       <ComponentGroupRef Id="Ankh.Scc" />
