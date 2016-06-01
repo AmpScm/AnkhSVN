@@ -46,7 +46,7 @@
   <ItemGroup>
     <XslSource Include="Images.xml">
       <Transform>CreateImageManifest.xsl</Transform>
-      <To>$(IntermediateOutputPath)AnkhSvn.imagemanifest</To>
+      <To>$(TargetDir)Ankh.imagemanifest</To>
       <Variables>
       </Variables>
       <SubType>Designer</SubType>
