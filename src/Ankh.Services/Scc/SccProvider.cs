@@ -624,5 +624,10 @@ namespace Ankh.Scc
         {
             throw new NotImplementedException();
         }
+
+        protected override object RunTaskOnMainThread(SccAction action)
+        {
+            return base.RunTaskOnMainThread(action);
+        }
     }
 }

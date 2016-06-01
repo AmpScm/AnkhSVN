@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Ankh.Scc
 {
+    public delegate void SccAction();
+    public delegate void SccAction<T>(T arg);
+
     public abstract partial class SccProviderThunk : IDisposable, INotifyPropertyChanged, IServiceProvider
     {
         protected SccProviderThunk()
@@ -33,21 +36,22 @@ namespace Ankh.Scc
 
         }
 
-        protected virtual void OnBranchUIClicked(Point clickedElement)
-        {
-        }
+        protected abstract void OnBranchUIClicked(Point clickedElement);
+        protected abstract void OnPendingChangesClicked(Point clickedElement);
+        protected abstract void OnRepositoryUIClicked(Point clickedElement);
 
-        protected virtual void OnPendingChangesClicked(Point clickedElement)
-        {
+        protected abstract void OnUnpublishedCommitsUIClickedAsync(Point wr);
 
-        }
+        partial void CreateDummyTask(ref object task);
 
-        protected virtual void OnRepositoryUIClicked(Point clickedElement)
+        protected virtual object RunTaskOnMainThread(SccAction action)
         {
-        }
+            object task = null;
 
-        protected virtual void OnUnpublishedCommitsUIClickedAsync(Point wr)
-        {
+            action();
+            CreateDummyTask(ref task);
+
+            return task;
         }
 
         public virtual string BranchName
