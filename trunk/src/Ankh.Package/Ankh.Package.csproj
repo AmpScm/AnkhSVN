@@ -537,6 +537,10 @@
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
       <Name>Ankh.Ids</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ankh.ImageCatalog\Ankh.ImageCatalog.csproj">
+      <Project>{b52ec60a-f421-4224-9038-6dd2ce9a7ab1}</Project>
+      <Name>Ankh.ImageCatalog</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.Scc\Ankh.Scc.csproj">
       <Project>{ECE36A69-DD85-4AAB-B329-12BAE4675056}</Project>
       <Name>Ankh.Scc</Name>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="Ankh.ImageCatalog">
+      <ComponentGroupRef Id="Ankh.Ids" />
+      <ComponentRef Id="C_Ankh.ImageCatalog.dll" />
+      <ComponentRef Id="C_Ankh.imagemanifest"/>
+    </ComponentGroup>
+    <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.ImageCatalog.TargetDir)">
+      <Component Id="C_Ankh.ImageCatalog.dll" Guid="9A343500-BE08-4C3A-8683-8861E2D1E5AF">
+        <File Id="CF_Ankh.ImageCatalog.dll" Name="Ankh.ImageCatalog.dll" Checksum="yes" KeyPath="yes" />
+      </Component>
+      <Component Id="C_Ankh.imagemanifest" Guid="E2F28562-323D-41D9-B2FF-81140507D5EB">
+        <File Id="CF_Ankh.imagemanifest" Name="Ankh.imagemanifest" KeyPath="yes" Source="$(var.Ankh.ImageCatalog.IntDir)\Ankh.imagemanifest"/>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
