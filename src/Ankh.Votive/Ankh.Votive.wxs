@@ -155,6 +155,8 @@
               <CopyFile Id="Vsix_Lic_14.0" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_VS14" />
               <CopyFile Id="Vsix_Ico_14.0" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_VS14" />
               <CopyFile Id="Vsix_Pvw_14.0" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_VS14" />
+              <CopyFile Id="Vsix_ImgCat_14.0" FileId="CF_Ankh.ImageCatalog.dll" DestinationDirectory="ANKHSVN_EXTENSION_VS14" />
+              <CopyFile Id="Vsix_ImgMnf_14.0" FileId="CF_Ankh.imagemanifest" DestinationDirectory="ANKHSVN_EXTENSION_VS14" />
             </Component>
           </Directory>
         </Directory>
@@ -169,6 +171,8 @@
               <CopyFile Id="Vsix_Lic_15.0" FileId="CF_LICENSE.rtf" DestinationDirectory="ANKHSVN_EXTENSION_VS15" />
               <CopyFile Id="Vsix_Ico_15.0" FileId="CF_VSIXICO" DestinationDirectory="ANKHSVN_EXTENSION_VS15" />
               <CopyFile Id="Vsix_Pvw_15.0" FileId="CF_VSIXPREVIEW" DestinationDirectory="ANKHSVN_EXTENSION_VS15" />
+              <CopyFile Id="Vsix_ImgCat_15.0" FileId="CF_Ankh.ImageCatalog.dll" DestinationDirectory="ANKHSVN_EXTENSION_VS15" />
+              <CopyFile Id="Vsix_ImgMnf_15.0" FileId="CF_Ankh.imagemanifest" DestinationDirectory="ANKHSVN_EXTENSION_VS15" />
             </Component>
           </Directory>
         </Directory>
