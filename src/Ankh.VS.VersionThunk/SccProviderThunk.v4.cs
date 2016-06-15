@@ -8,7 +8,7 @@ using Ankh.VS;
 
 namespace Ankh.Scc
 {
-    partial class SccProviderThunk : IVsSccChanges, IVsSccChangesDisplayInformation, IVsSccCurrentBranch, IVsSccCurrentBranchDisplayInformation, IVsSccCurrentRepository, IVsSccCurrentRepositoryDisplayInformation, IVsSccUnpublishedCommits, IVsSccUnpublishedCommitsDisplayInformation, IVsSccPublish, IVsSccSolution
+    partial class SccProviderThunk : IVsSccChanges, IVsSccChangesDisplayInformation, IVsSccCurrentBranch, IVsSccCurrentBranchDisplayInformation, IVsSccCurrentRepository, IVsSccCurrentRepositoryDisplayInformation/*, IVsSccUnpublishedCommits, IVsSccUnpublishedCommitsDisplayInformation*/, IVsSccPublish, IVsSccSolution
     {
         string IVsSccCurrentBranchDisplayInformation.BranchDetail
         {
@@ -89,7 +89,7 @@ namespace Ankh.Scc
             }
         }
 
-        int IVsSccUnpublishedCommitsDisplayInformation.UnpublishedCommitCount
+        /*int IVsSccUnpublishedCommitsDisplayInformation.UnpublishedCommitCount
         {
             get
             {
@@ -117,7 +117,7 @@ namespace Ankh.Scc
         {
             add { AdvertisePublish += value; }
             remove { AdvertisePublish -= value; }
-        }
+        }*/
 
         public event EventHandler AddedToSourceControl;
 
@@ -157,9 +157,9 @@ namespace Ankh.Scc
             return RunAsyncOnMainThread(delegate { OnRepositoryUIClicked(GetPoint(args)); });
         }
 
-        System.Threading.Tasks.Task IVsSccUnpublishedCommits.UnpublishedCommitsUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
-        {
-            return RunAsyncOnMainThread(delegate { OnUnpublishedCommitsUIClickedAsync(GetPoint(args)); });
-        }
+        //System.Threading.Tasks.Task IVsSccUnpublishedCommits.UnpublishedCommitsUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
+        //{
+        //    return RunAsyncOnMainThread(delegate { OnUnpublishedCommitsUIClickedAsync(GetPoint(args)); });
+        //}
     }
 }
