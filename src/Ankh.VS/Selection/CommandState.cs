@@ -634,7 +634,6 @@ namespace Ankh.VS.Selection
         #region IVsShellPropertyEvents Members
 
         const __VSSPROPID VSSPROPID_ShellInitialized = (__VSSPROPID)(-9053);
-        bool sendActivate = false;
 
         public int OnShellPropertyChange(int propid, object var)
         {

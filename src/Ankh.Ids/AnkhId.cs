@@ -110,6 +110,8 @@ namespace Ankh
         public const string ExtensionRedirectId = "3cbbbf2e-22f7-4f02-af63-892bd2120485";
         public const string VersionThunkId = "3bd72bcb-d99c-4061-ba42-83216facd4a4";
 
+        public const string ImageCatalogId = "0c431364-3245-4a8a-945f-97fa5aab2d98";
+
         public const string AnkhOutputPaneId = "ba0eec02-577c-424e-b6aa-fc8499d917ba";
 
 

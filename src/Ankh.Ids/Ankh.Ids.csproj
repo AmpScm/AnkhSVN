@@ -52,6 +52,7 @@
     <Compile Include="AnkhId.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AnkhImages.cs" />
     <Compile Include="AnkhSccPropertyNames.cs" />
     <Compile Include="AnkhToolBar.cs" />
     <Compile Include="AnkhToolWindow.cs" />
