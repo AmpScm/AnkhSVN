@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ankh.VS;
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Text;
@@ -54,9 +55,64 @@ namespace Ankh.Scc
             return task;
         }
 
-        public virtual string BranchName
+        protected virtual string BranchName
         {
             get { return "^/trunk"; }
+        }
+
+        protected virtual string BranchDetail
+        {
+            get { return "https://..."; }
+        }
+
+        protected virtual string RepositoryName
+        {
+            get { return "REP name"; }
+        }
+
+        protected virtual int UnpublishedCommitCount
+        {
+            get { return 7;  }
+        }
+
+        protected string UnpublishedCommitDetail
+        {
+            get { return "Seven"; }
+        }
+
+        protected virtual string UnpublishedCommitLabel
+        {
+            get { return "Pending Commits"; }
+        }
+
+        protected virtual string RepositoryDetail
+        {
+            get { return "Repository URL"; }
+        }
+
+        protected virtual string PendingChangeLabel
+        {
+            get { return "Pending Changes"; }
+        }
+
+        protected virtual string PendingChangeDetail
+        {
+            get { return "PendingChangeDetail"; }
+        }
+
+        protected virtual int PendingChangeCount
+        {
+            get { return 2; }
+        }
+
+        protected virtual ImageReference BranchIcon
+        {
+            get { return new ImageReference(new Guid("{ae27a6b0-e345-4288-96df-5eaf394ee369}"), 3668); }
+        }
+
+        protected virtual ImageReference RepositoryIcon
+        {
+            get { return new ImageReference(new Guid("{ae27a6b0-e345-4288-96df-5eaf394ee369}"), 3668); }
         }
 
         PropertyChangedEventHandler _propertyChangedHandler;

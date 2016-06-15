@@ -90,6 +90,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.VS.VersionThunk.V4", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.ImageCatalog", "Ankh.ImageCatalog\Ankh.ImageCatalog.csproj", "{B52EC60A-F421-4224-9038-6DD2CE9A7AB1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.ImageCatalogTest", "Ankh.ImageCatalogTest\Ankh.ImageCatalogTest.csproj", "{6A9DFA7F-17D4-4A0F-8926-1B0492B520D9}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -259,6 +261,12 @@ Global
 		{B52EC60A-F421-4224-9038-6DD2CE9A7AB1}.Release|x86.Build.0 = Release|x86
 		{B52EC60A-F421-4224-9038-6DD2CE9A7AB1}.ReleaseMSI|x86.ActiveCfg = Release|x86
 		{B52EC60A-F421-4224-9038-6DD2CE9A7AB1}.ReleaseMSI|x86.Build.0 = Release|x86
+		{6A9DFA7F-17D4-4A0F-8926-1B0492B520D9}.Debug|x86.ActiveCfg = Debug|x86
+		{6A9DFA7F-17D4-4A0F-8926-1B0492B520D9}.Debug|x86.Build.0 = Debug|x86
+		{6A9DFA7F-17D4-4A0F-8926-1B0492B520D9}.Release|x86.ActiveCfg = Release|x86
+		{6A9DFA7F-17D4-4A0F-8926-1B0492B520D9}.Release|x86.Build.0 = Release|x86
+		{6A9DFA7F-17D4-4A0F-8926-1B0492B520D9}.ReleaseMSI|x86.ActiveCfg = Release|x86
+		{6A9DFA7F-17D4-4A0F-8926-1B0492B520D9}.ReleaseMSI|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -290,6 +298,7 @@ Global
 		{06D68AB0-ED0B-4FC6-B085-318F9C253160} = {01F3ED56-C896-409C-8464-DB82B3AF1364}
 		{28F7C8B8-BF28-4429-BB67-DA8FE737FB9E} = {01F3ED56-C896-409C-8464-DB82B3AF1364}
 		{B52EC60A-F421-4224-9038-6DD2CE9A7AB1} = {08FF496A-CD90-4B17-8FA0-F4CA88AB49D3}
+		{6A9DFA7F-17D4-4A0F-8926-1B0492B520D9} = {E7D88D59-A87F-4939-AB58-315F8C41E20B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		DPBuild = 5

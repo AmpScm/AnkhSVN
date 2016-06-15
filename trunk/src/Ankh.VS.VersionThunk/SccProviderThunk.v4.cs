@@ -4,6 +4,7 @@ using System.Threading;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Imaging.Interop;
 using Task = System.Threading.Tasks.Task;
+using Ankh.VS;
 
 namespace Ankh.Scc
 {
@@ -13,7 +14,7 @@ namespace Ankh.Scc
         {
             get
             {
-                return "Detail";
+                return BranchDetail;
             }
         }
 
@@ -21,10 +22,11 @@ namespace Ankh.Scc
         {
             get
             {
+                ImageReference r = BranchIcon;
                 return new ImageMoniker()
                 {
-                    Guid = new Guid("{ae27a6b0-e345-4288-96df-5eaf394ee369}"),
-                    Id = 3668
+                    Guid = r.Guid,
+                    Id = r.Id
                 };
             }
         }
@@ -41,7 +43,7 @@ namespace Ankh.Scc
         {
             get
             {
-                return 2;
+                return PendingChangeCount;
             }
         }
 
@@ -49,7 +51,7 @@ namespace Ankh.Scc
         {
             get
             {
-                return "That's 'two'";
+                return PendingChangeDetail;
             }
         }
 
@@ -57,26 +59,24 @@ namespace Ankh.Scc
         {
             get
             {
-                return "PC Label";
+                return PendingChangeLabel;
             }
         }
 
         string IVsSccCurrentRepositoryDisplayInformation.RepositoryDetail
         {
-            get
-            {
-                return "REP detail";
-            }
+            get { return RepositoryDetail; }
         }
 
         ImageMoniker IVsSccCurrentRepositoryDisplayInformation.RepositoryIcon
         {
             get
             {
+                ImageReference r = RepositoryIcon;
                 return new ImageMoniker()
                 {
-                    Guid = new Guid("{ae27a6b0-e345-4288-96df-5eaf394ee369}"),
-                    Id = 3668
+                    Guid = r.Guid,
+                    Id = r.Id
                 };
             }
         }
@@ -85,7 +85,7 @@ namespace Ankh.Scc
         {
             get
             {
-                return "REP name";
+                return RepositoryName;
             }
         }
 
@@ -93,7 +93,7 @@ namespace Ankh.Scc
         {
             get
             {
-                return 7;
+                return UnpublishedCommitCount;
             }
         }
 
@@ -101,7 +101,7 @@ namespace Ankh.Scc
         {
             get
             {
-                return "Seven";
+                return UnpublishedCommitDetail;
             }
         }
 
@@ -109,7 +109,7 @@ namespace Ankh.Scc
         {
             get
             {
-                return "Unpublished L";
+                return UnpublishedCommitLabel;
             }
         }
 
