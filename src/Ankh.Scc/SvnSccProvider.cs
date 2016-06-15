@@ -175,19 +175,11 @@ namespace Ankh.Scc
             //throw new NotImplementedException();
         }
 
-        protected override void OnPendingChangesClicked(Point clickedElement)
-        {
-            //throw new NotImplementedException();
-        }
-
         protected override void OnUnpublishedCommitsUIClickedAsync(Point wr)
         {
             //throw new NotImplementedException();
         }
 
-        protected override void OnRepositoryUIClicked(Point clickedElement)
-        {
-            //throw new NotImplementedException();
-        }
+        
     }
 }
