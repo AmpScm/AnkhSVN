@@ -170,10 +170,6 @@ namespace Ankh.Scc
             StatusCache.SetSolutionContained(path, true, ProjectMap.IsSccExcluded(path));
         }
 
-        protected override void OnBranchUIClicked(Point clickedElement)
-        {
-            //throw new NotImplementedException();
-        }
 
         protected override void OnUnpublishedCommitsUIClickedAsync(Point wr)
         {

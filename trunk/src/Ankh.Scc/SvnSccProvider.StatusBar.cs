@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ankh.VS;
 using System.Drawing;
 using Ankh.Commands;
@@ -29,6 +26,12 @@ namespace Ankh.Scc
             return broken ? ".." + info : info;
         }
         #region Branch
+
+        protected override void OnBranchUIClicked(Point clickedElement)
+        {
+            GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.SolutionSwitchDialog);
+        }
+
         protected override string BranchName
         {
             get
@@ -70,10 +73,46 @@ namespace Ankh.Scc
             GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.ShowPendingChanges);
         }
 
+        bool _trackPendingChanges;
+        int _lastPcCount;
+
+        void TrackPendingChanges()
+        {
+            IPendingChangesManager pcm = GetService<IPendingChangesManager>();
+            if (pcm == null)
+                return;
+
+            _trackPendingChanges = true;
+            pcm.BatchUpdateStarted += SvnSccProvider_BatchUpdateStarted;
+            pcm.PendingChanges.CollectionChanged += PendingChanges_CollectionChanged;
+
+        }
+
+        private void PendingChanges_CollectionChanged(object sender, Collections.CollectionChangedEventArgs<PendingChange> e)
+        {
+            RaisePropertyChanged("PendingChangeCount");
+        }
+
+        private void SvnSccProvider_BatchUpdateStarted(object sender, BatchStartedEventArgs e)
+        {
+            e.Disposers += delegate
+            {
+                int n = GetService<IPendingChangesManager>().PendingChanges.Count;
+
+                if (n != _lastPcCount)
+                {
+                    _lastPcCount = n;
+                    RaisePropertyChanged("PendingChangeCount");
+                }
+            };
+        }
+
         protected override int PendingChangeCount
         {
             get
             {
+                if (!_trackPendingChanges)
+                    TrackPendingChanges();
                 return GetService<IPendingChangesManager>().PendingChanges.Count;
             }
         }
@@ -82,7 +121,7 @@ namespace Ankh.Scc
         {
             get
             {
-                return base.PendingChangeLabel;
+                return "Pending Changes";
             }
         }
 
@@ -90,7 +129,7 @@ namespace Ankh.Scc
         {
             get
             {
-                return base.PendingChangeDetail;
+                return "Open Pending Changes Window";
             }
         }
         #endregion
