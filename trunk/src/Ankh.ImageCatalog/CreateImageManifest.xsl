@@ -9,7 +9,7 @@
       <ImageManifest>
         <xsl:comment>Generated file; please edit the original file instead of this generated file</xsl:comment>
         <Symbols>
-          
+          <String Name="Resource" Value="/Ankh.ImageCatalog"/>
         </Symbols>
         <Images>
           

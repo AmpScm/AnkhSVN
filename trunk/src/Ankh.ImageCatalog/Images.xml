@@ -2,4 +2,12 @@
 <VsImages version="1.0"  xmlns="http://schemas.ankhsvn.net/2016/05/images/"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://schemas.ankhsvn.net/2016/05/images/ Images.xsd">
+  <Imports>
+    
+  </Imports>
+  <Images>
+    <ImageGroup name="QQ">
+      
+    </ImageGroup>
+  </Images>
 </VsImages>

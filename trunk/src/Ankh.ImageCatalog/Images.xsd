@@ -11,10 +11,12 @@
       <xs:sequence>
         <xs:sequence>
           <xs:element ref="img:Imports" minOccurs="0" maxOccurs="1" />
+          <xs:element ref="img:Images" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
       </xs:sequence>
       <xs:attribute name="version" type="xs:string" />
     </xs:complexType>
   </xs:element>
   <xs:element name="Imports"></xs:element>
+  <xs:element name="Images"></xs:element>
 </xs:schema>
