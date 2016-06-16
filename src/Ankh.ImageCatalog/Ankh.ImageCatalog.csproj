@@ -8,7 +8,7 @@
     <ProjectGuid>{B52EC60A-F421-4224-9038-6DD2CE9A7AB1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ankh</RootNamespace>
+    <RootNamespace>Ankh.ImageCatalog</RootNamespace>
     <AssemblyName>Ankh.ImageCatalog</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -19,6 +19,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -27,6 +28,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -46,7 +48,7 @@
   <ItemGroup>
     <XslSource Include="Images.xml">
       <Transform>CreateImageManifest.xsl</Transform>
-      <To>$(TargetDir)Ankh.imagemanifest</To>
+      <To>$(IntermediateOutputPath)Ankh.imagemanifest</To>
       <Variables>
       </Variables>
       <SubType>Designer</SubType>
@@ -71,6 +73,20 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\tools\turtletasks\QQn.TurtleTasks.targets" />
+  <PropertyGroup>
+    <GetCopyToOutputDirectoryItemsDependsOn>
+      $(GetCopyToOutputDirectoryItemsDependsOn);
+      GetImageCatalogTargetItems;
+    </GetCopyToOutputDirectoryItemsDependsOn>
+  </PropertyGroup>
+  <Target Name="GetImageCatalogTargetItems">
+    <ItemGroup>
+      <AllItemsFullPathWithTargetPath Include="$(IntermediateOutputPath)Ankh.imagemanifest" />
+      <_SourceItemsToCopyToOutputDirectory Include="$(IntermediateOutputPath)Ankh.imagemanifest">
+        <TargetPath>Ankh.imagemanifest</TargetPath>
+      </_SourceItemsToCopyToOutputDirectory>
+    </ItemGroup>
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
