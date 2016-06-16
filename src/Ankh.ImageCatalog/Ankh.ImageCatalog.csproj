@@ -67,10 +67,9 @@
     <Content Include="CreateImageManifest.xsl">
       <SubType>Designer</SubType>
     </Content>
+    <Resource Include="Imgs\RepositoryExplorer.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Imgs\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\tools\turtletasks\QQn.TurtleTasks.targets" />
   <PropertyGroup>

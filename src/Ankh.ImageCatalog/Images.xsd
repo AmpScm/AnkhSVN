@@ -18,5 +18,14 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="Imports"></xs:element>
-  <xs:element name="Images"></xs:element>
+  <xs:element name="Images">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="img:ImageGroup" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="img:Image" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Image"></xs:element>
+  <xs:element name="ImageGroup"></xs:element>
 </xs:schema>

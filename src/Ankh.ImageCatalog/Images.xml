@@ -3,11 +3,12 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://schemas.ankhsvn.net/2016/05/images/ Images.xsd">
   <Imports>
-    
+    <!--Import type="Ankh.AnkhId" from="..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Ankh_" /-->
+    <Import type="Ankh.AnkhImage" from="..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Img_" />
   </Imports>
   <Images>
-    <ImageGroup name="QQ">
-      
+    <ImageGroup guid="Ankh_AnkhImage">
+      <Image id="Img_SvnRepository" res="Imgs/RepositoryExplorer.png" />
     </ImageGroup>
   </Images>
 </VsImages>
