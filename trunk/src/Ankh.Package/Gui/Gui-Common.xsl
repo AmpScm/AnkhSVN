@@ -132,10 +132,8 @@
       {
         v = GetAsUnderlyingType((Enum)v);
         
-        string val = "";
         if(itemAttr != null)
         {
-          val = formatGuid(itemAttr.Value.ToString()) + ":";
           _idMap[prefix+fif.Name] = typeName + ':' + prefix + fif.Name;
         }
 
