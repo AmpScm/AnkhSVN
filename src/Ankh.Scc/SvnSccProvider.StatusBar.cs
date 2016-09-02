@@ -171,7 +171,7 @@ namespace Ankh.Scc
         {
             get
             {
-                return base.RepositoryIcon;
+                return new ImageReference(new Guid(AnkhId.ImageCatalogId), (int)AnkhImage.SvnRepository);
             }
         }
 #endregion
