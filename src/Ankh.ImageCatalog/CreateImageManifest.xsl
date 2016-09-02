@@ -151,7 +151,7 @@
     <ImageManifest>
       <xsl:comment>Generated file; please edit the original file instead of this generated file</xsl:comment>
       <Symbols>
-        <String Name="Resource" Value="/Ankh.ImageCatalog;Component/"/>
+        <String Name="Resource" Value="/Ankh.ImageCatalog;Component"/>
         <xsl:apply-templates select="img:Imports/img:Import[not (@include)]" mode="include" />
       </Symbols>
       <Images>
@@ -172,7 +172,7 @@
       ID="$({@id})"
       >
       <xsl:if test="@res">
-        <Source Uri="$(Resource){@res}">
+        <Source Uri="$(Resource)/{@res}">
           <Size Value="16" />
         </Source>
       </xsl:if>
