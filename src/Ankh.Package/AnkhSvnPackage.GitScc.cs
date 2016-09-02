@@ -11,8 +11,8 @@ using ProvideSourceControlProviderAttribute = Ankh.VSPackage.Attributes.ProvideS
 
 namespace Ankh.VSPackage
 {
-    [ProvideSourceControlProvider(AnkhId.GitSccProviderId, AnkhId.GitSccProviderTitle, "#101", typeof(ITheAnkhGitSccProvider))]
-    [ProvideService(typeof(ITheAnkhGitSccProvider), ServiceName = AnkhId.GitSccName)]
+    //[ProvideSourceControlProvider(AnkhId.GitSccProviderId, AnkhId.GitSccProviderTitle, "#101", typeof(ITheAnkhGitSccProvider))]
+    //[ProvideService(typeof(ITheAnkhGitSccProvider), ServiceName = AnkhId.GitSccName)]
     //[ProvideSourceControlCommand(AnkhId.GitSccProviderId, SccProviderCommand.Open, AnkhCommand.FileFileOpenFromSubversion)]
     //[ProvideSourceControlCommand(AnkhId.GitSccProviderId, SccProviderCommand.Share, AnkhCommand.FileSccAddSolutionToSubversion)]
     partial class AnkhSvnPackage
