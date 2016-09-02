@@ -305,8 +305,8 @@
       <Version>1</Version>
       <Visible>false</Visible>
     </DependencyDownload>
-    <DependencyDownload Include="SGit-0.2400.1111.223.zip">
-      <Url>https://sharpsvn.open.collab.net/files/documents/180/12631/</Url>
+    <DependencyDownload Include="SGit-0.2401.1116.230.zip">
+      <Url>https://sharpsvn.open.collab.net/files/documents/180/12884/</Url>
       <TargetDir>..\autolib</TargetDir>
       <Version>1</Version>
       <Visible>false</Visible>
