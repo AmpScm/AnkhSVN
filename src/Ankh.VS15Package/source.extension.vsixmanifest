@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="AnkhSVN.2.7.417f85d8-1b5c-47ee-a8ae-b58359e79899" Version="2.7.12809" Language="en-US" Publisher="AnkhSVN Team &amp; CollabNet" />
+    <DisplayName>AnkhSVN - Subversion Support for Visual Studio</DisplayName>
+    <Description xml:space="preserve">Open Source Subversion SCC Provider for Visual Studio 2005, 2008, 2010, 2012, 2013, 2015 and 2017.</Description>
+    <MoreInfo>http://www.ankhsvn.net/</MoreInfo>
+    <License>LICENSE.rtf</License>
+    <ReleaseNotes>http://ankhsvn.net/releasenotes</ReleaseNotes>
+    <Icon>Package.ico</Icon>
+    <PreviewImage>AnkhSVN-Preview.png</PreviewImage>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0,16.0)" />
+    <InstallationTarget Version="[15.0,16.0)" Id="Microsoft.VisualStudio.Pro" />
+    <InstallationTarget Version="[15.0,16.0)" Id="Microsoft.VisualStudio.Enterprise" />
+    <InstallationTarget Version="[15.0,16.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="Ankh.Package" Path="|Ankh.Package;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="Ankh.WpfEditor.Package" Path="|Ankh.WpfEditor.Package;PkgdefProjectOutputGroup|" />
+  </Assets>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
+</PackageManifest>
