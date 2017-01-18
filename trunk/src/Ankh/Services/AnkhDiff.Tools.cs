@@ -174,6 +174,11 @@ namespace Ankh.Services
                     ?? "$(LocalAppData)\\PlasticSCM4\\semanticmerge\\semanticmergetool.exe",
                 "--source='$(Base)' --destination='$(Mine)' --srcsymbolicname='$(BaseName)' --dstsymbolicname='$(MineName)'", true));
 
+            tools.Add(new DiffTool(this, "TcProjectCompare", "Beckhoff TcProjectCompare",
+                "C:\\TwinCAT\\3.1\\Components\\TcProjectCompare\\TcProjectCompare.exe",
+                "/filel '$(Mine)' /filer '$(Base)' /dl '$(MineName)' /dr '$(BaseName)' /sc",
+                true));
+
             LoadRegistryTools(DiffToolMode.Diff, tools);
 
             SortTools(tools);
@@ -273,6 +278,10 @@ namespace Ankh.Services
                 "--base='$(Base)' --source='$(Theirs)' --destination='$(Mine)' --result='$(Merged)' " +
                 "--basesymbolicname='$(BaseName)' --srcsymbolicname='$(TheirsName)' --dstsymbolicname='$(MineName)'", true));
 
+            tools.Add(new DiffTool(this, "TcProjectCompare", "Beckhoff TcProjectCompare",
+                "C:\\TwinCAT\\3.1\\Components\\TcProjectCompare\\TcProjectCompare.exe",
+                "/filel '$(Mine)' /filer '$(Theirs)' /filem '$(Merged)' /dl '$(MineName)' /dr '$(TheirName)' /sc",
+                true));
 
             LoadRegistryTools(DiffToolMode.Merge, tools);
 
