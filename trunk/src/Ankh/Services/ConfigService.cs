@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
@@ -131,8 +132,66 @@ namespace Ankh.Configuration
                 foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(config))
                 {
                     string value = reg.GetValue(pd.Name, null) as string;
+                    
+                    if (pd.Name.Equals("DiffExePaths"))
+                    {
+                        RegistryKey diffRegKey = OpenHKCUKey("Configuration");
+                        diffRegKey = diffRegKey.OpenSubKey(pd.Name);
 
-                    if (value != null)
+                        if (diffRegKey != null)
+                        {
+                            config._diffExePaths.Clear();
+
+                            foreach (string regKeyName in diffRegKey.GetValueNames())
+                            {
+                                string regValue = diffRegKey.GetValue(regKeyName) as string;
+
+                                try
+                                {
+                                    ExtToolDefinition extToolDef = new ExtToolDefinition();
+                                    extToolDef.extension = regKeyName;
+                                    extToolDef.exePath = regValue;
+
+                                    config._diffExePaths.Add(extToolDef);
+                                }
+                                catch
+                                {
+
+                                }
+                            }
+                        }
+                    }
+                    else if (pd.Name.Equals("MergeExePaths"))
+                    {
+                        RegistryKey mergeRegKey = OpenHKCUKey("Configuration");
+                        mergeRegKey = mergeRegKey.OpenSubKey(pd.Name);
+
+                        if (mergeRegKey != null)
+                        {
+                            config._mergeExePaths.Clear();
+
+                            foreach (string regKeyName in mergeRegKey.GetValueNames())
+                            {
+                                string regValue = mergeRegKey.GetValue(regKeyName) as string;
+
+                                try
+                                {
+                                    ExtToolDefinition extToolDef = new ExtToolDefinition();
+                                    extToolDef.extension = regKeyName;
+                                    extToolDef.exePath = regValue;
+
+                                    config._mergeExePaths.Add(extToolDef);
+                                }
+                                catch
+                                {
+
+                                }
+                            }
+                        }
+                    }
+
+
+                    else if (value != null)
                         try
                         {
                             pd.SetValue(config, pd.Converter.ConvertFromInvariantString(value));
@@ -169,7 +228,32 @@ namespace Ankh.Configuration
                             reg.DeleteValue(pd.Name, false);
                         }
                         else
-                            reg.SetValue(pd.Name, pd.Converter.ConvertToInvariantString(value));
+                        {
+                            if (value.GetType() == typeof(List<ExtToolDefinition>))
+                            {
+                                List<ExtToolDefinition> myExtToolList = value as List<ExtToolDefinition>;
+                                reg.CreateSubKey(pd.Name);
+                                RegistryKey extToolReg = OpenHKCUKey("Configuration");
+                                extToolReg = extToolReg.OpenSubKey(pd.Name, true);
+                                
+                                if (extToolReg != null)
+                                {
+                                    foreach (string extToolDef in extToolReg.GetValueNames())
+                                    {
+                                        extToolReg.DeleteValue(extToolDef, false);
+                                    }
+
+                                    foreach (ExtToolDefinition extTool in myExtToolList)
+                                    {
+                                        extToolReg.SetValue(extTool.extension, extTool.exePath);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                reg.SetValue(pd.Name, pd.Converter.ConvertToInvariantString(value));
+                            }
+                        }
                     }
                 }
             }

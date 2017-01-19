@@ -134,6 +134,8 @@ namespace Ankh
         public const string SvnSettingsPageGuid = "f362b52e-e8f8-43de-a02d-5072a2a96e6a";
         public const string GitSettingsPageGuid = "8eaf99ad-1496-4c6d-b1ba-45934c4975b0";
         public const string UserToolsSettingsPageGuid = "ae1a4db8-09c3-438d-93bd-0fe37412ce34";
+        public const string AdvancedDiffUserToolsSettingsPageGuid = "0ED40D59-9215-412A-B307-E2DF19B4877A";
+        public const string AdvancedMergeUserToolsSettingsPageGuid = "A31DC072-B271-49E2-84C2-D4509E9E4074";
         public const string IssueTrackerSettingsPageGuid = "363b3e68-ee94-403d-88ba-681a7cad247a";
 
         public const string LanguagePreferencesId = "c4cc1bd2-a679-4746-a09e-3e83e8906d7e";
