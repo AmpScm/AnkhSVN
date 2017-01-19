@@ -231,6 +231,30 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\WizardFramework\WizardPageChangingEventArgs.cs" />
+    <Compile Include="OptionsPages\AddAdvancedMergeUserTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionsPages\AddAdvancedMergeUserTool.designer.cs">
+      <DependentUpon>AddAdvancedMergeUserTool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsPages\AddAdvancedDiffUserTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionsPages\AddAdvancedDiffUserTool.designer.cs">
+      <DependentUpon>AddAdvancedDiffUserTool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsPages\AdvancedDiffUserToolSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OptionsPages\AdvancedDiffUserToolSettingsControl.designer.cs">
+      <DependentUpon>AdvancedDiffUserToolSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsPages\AdvancedMergeUserToolSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OptionsPages\AdvancedMergeUserToolSettingsControl.designer.cs">
+      <DependentUpon>AdvancedMergeUserToolSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="OptionsPages\AnkhOptionsPageControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -883,6 +907,18 @@
     <EmbeddedResource Include="Commands\UpdateDialog.resx">
       <DependentUpon>UpdateDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsPages\AddAdvancedMergeUserTool.resx">
+      <DependentUpon>AddAdvancedMergeUserTool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsPages\AddAdvancedDiffUserTool.resx">
+      <DependentUpon>AddAdvancedDiffUserTool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsPages\AdvancedDiffUserToolSettingsControl.resx">
+      <DependentUpon>AdvancedDiffUserToolSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsPages\AdvancedMergeUserToolSettingsControl.resx">
+      <DependentUpon>AdvancedMergeUserToolSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RepositoryExplorer\AddRepositoryRootDialog.resx">
       <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>

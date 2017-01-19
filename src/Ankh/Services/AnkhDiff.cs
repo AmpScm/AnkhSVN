@@ -51,7 +51,7 @@ namespace Ankh.Services
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected string GetDiffPath(DiffMode mode)
+        protected string GetDiffPath(DiffMode mode, String filename)
         {
             IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
 
@@ -60,7 +60,7 @@ namespace Ankh.Services
                 case DiffMode.PreferInternal:
                     return null;
                 default:
-                    return cs.Instance.DiffExePath;
+                    return cs.Instance.GetDiffExePath(filename);
             }
         }
 
@@ -73,7 +73,7 @@ namespace Ankh.Services
 
             SetFloat(args);
 
-            string diffApp = this.GetDiffPath(args.Mode);
+            string diffApp = this.GetDiffPath(args.Mode, args.MineFile);
 
             if (string.IsNullOrEmpty(diffApp))
             {
@@ -136,7 +136,7 @@ namespace Ankh.Services
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected string GetMergePath(DiffMode mode)
+        protected string GetMergePath(DiffMode mode, string filename)
         {
             IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
 
@@ -145,7 +145,7 @@ namespace Ankh.Services
                 case DiffMode.PreferInternal:
                     return null;
                 default:
-                    return cs.Instance.MergeExePath;
+                    return cs.Instance.GetMergeExePath(filename);
             }
         }
 
@@ -158,7 +158,7 @@ namespace Ankh.Services
 
             SetFloat(args);
 
-            string mergeApp = this.GetMergePath(args.Mode);
+            string mergeApp = this.GetMergePath(args.Mode, args.MineFile);
 
             if (string.IsNullOrEmpty(mergeApp))
             {

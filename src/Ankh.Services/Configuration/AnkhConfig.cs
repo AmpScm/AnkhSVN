@@ -20,6 +20,7 @@ using System.Windows.Forms.Design;
 using System.Drawing.Design;
 using Microsoft.Win32;
 using System.Security.AccessControl;
+using System.Collections.Generic;
 namespace Ankh.Configuration
 {
     /// <summary>
@@ -43,7 +44,31 @@ namespace Ankh.Configuration
         bool _floatDiffEditors;
         bool _useExternalWebbrowser;
         bool _preferPuttySsh;
+        public List<ExtToolDefinition> _mergeExePaths = new List<ExtToolDefinition>();
+        public List<ExtToolDefinition> _diffExePaths = new List<ExtToolDefinition>();
 
+        /// <summary>
+        /// Gets or sets the merge exe path.
+        /// </summary>
+        /// <value>The merge exe path.</value>
+        [DefaultValue(null)]
+        public List<ExtToolDefinition> MergeExePaths
+        {
+            get { return _mergeExePaths; }
+            set { _mergeExePaths = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the diff exe path.
+        /// </summary>
+        /// <value>The diff exe path.</value>
+        [DefaultValue(null)]
+        public List<ExtToolDefinition> DiffExePaths
+        {
+            get { return _diffExePaths; }
+            set { _diffExePaths = value; }
+        }
+                
         /// <summary>
         /// Gets or sets the merge exe path.
         /// </summary>
@@ -170,5 +195,35 @@ namespace Ankh.Configuration
             get { return _preferPuttySsh; }
             set { _preferPuttySsh = value; }
         }
+        public string GetMergeExePath(string filename)
+        {
+            foreach (ExtToolDefinition ext in _mergeExePaths)
+            {
+                if (filename.ToLower().Contains(ext.extension.ToLower()))
+                {
+                    return ext.exePath;
+                }
+            }
+            return _mergeExePath;
+        }
+
+        public string GetDiffExePath(string filename)
+        {
+            foreach (ExtToolDefinition ext in _diffExePaths)
+            {
+                if (filename.ToLower().Contains(ext.extension.ToLower()))
+                {
+                    return ext.exePath;
+                }
+            }
+            return _diffExePath;
+        }
+
+    }
+
+    public class ExtToolDefinition
+    {
+        public string extension;
+        public string exePath;
     }
 }

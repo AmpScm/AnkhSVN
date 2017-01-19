@@ -105,6 +105,12 @@
     <Compile Include="Attributes\ProvideAnkhExtensionRedirectAttribute.cs" />
     <Compile Include="Attributes\ProvideSourceControlCommand.cs" />
     <Compile Include="Attributes\ProvideThemeInformation.cs" />
+    <Compile Include="OptionPages\AdvancedDiffUserToolsSettingsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="OptionPages\AdvancedMergeUserToolsSettingsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="OptionPages\GitSettingsPage.cs">
       <SubType>Component</SubType>
     </Compile>
