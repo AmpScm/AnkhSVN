@@ -53,16 +53,17 @@ namespace Ankh.UI.PendingChanges
             splitContainer.Panel2.Controls.Clear();
 
             Control pendingCommitsControl;
+/*
 #if DEBUG
             if (!VSVersion.VS2010OrLater)
 #else
             if (true)
-#endif
+#endif*/
             {
                 pendingCommitsControl = pendingCommits = new PendingCommitsView(this.components);
                 _ui = pendingCommits;
             }
-            else
+/*            else
             {
                 // Load WPF control
                 IPendingChangeControlFactory factory = Context.GetService<IPendingChangeControlFactory>();
@@ -71,7 +72,7 @@ namespace Ankh.UI.PendingChanges
 
                 pendingCommitsControl = pendingChangeControl.Control;
                 _ui = pendingChangeControl.UI;
-            }
+            }*/
 
             splitContainer.Panel2.Controls.Add(pendingCommitsControl);
 
