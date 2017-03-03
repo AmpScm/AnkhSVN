@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.25914.0
+VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Definitions", "Definitions", "{01F3ED56-C896-409C-8464-DB82B3AF1364}"
 	ProjectSection(SolutionItems) = preProject
@@ -268,7 +268,6 @@ Global
 		{53DCB3B1-A20C-472E-A914-F3A8F1C57BB2}.Release|x86.ActiveCfg = Release|x86
 		{53DCB3B1-A20C-472E-A914-F3A8F1C57BB2}.Release|x86.Build.0 = Release|x86
 		{53DCB3B1-A20C-472E-A914-F3A8F1C57BB2}.ReleaseMSI|x86.ActiveCfg = Release|x86
-		{53DCB3B1-A20C-472E-A914-F3A8F1C57BB2}.ReleaseMSI|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
