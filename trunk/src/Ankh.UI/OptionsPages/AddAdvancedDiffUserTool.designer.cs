@@ -122,8 +122,8 @@
         private System.Windows.Forms.TextBox extensionTextBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        public System.Windows.Forms.Button okButton;
-        public System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.ComboBox diffExeBox;
     }
 }
