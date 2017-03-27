@@ -51,19 +51,19 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="$(MsVsShellAssembly)" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' &gt;= '10.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' &gt;= '10.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" Condition="'$(UseVsSdkVersion)' &gt;= '11.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" Condition="'$(UseVsSdkVersion)' &gt;= '11.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" Condition="'$(UseVsSdkVersion)' &gt;= '12.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" Condition="'$(UseVsSdkVersion)' &gt;= '12.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0" Condition="'$(UseVsSdkVersion)' &gt;= '14.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0" Condition="'$(UseVsSdkVersion)' &gt;= '14.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.15.0" Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Framework" Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">
       <Visible>false</Visible>
     </Reference>
   </ItemGroup>
