@@ -49,7 +49,7 @@ namespace Ankh.Scc
 
         public ICollection<string> GetAllFilesOfAllProjects(bool exceptExcluded)
         {
-            return GetAllFilesOfAllProjects(exceptExcluded);
+            return ProjectMap.GetAllFilesOfAllProjects(exceptExcluded);
         }
 
         bool IProjectFileMapper.ContainsPath(string path)
