@@ -407,6 +407,9 @@ namespace Ankh.VSPackage
                 Debug.Assert(_control == null);
                 _control = value;
                 _twControl = (IAnkhToolWindowControl)value;
+
+                if (value != null)
+                    value.ToolWindowHost = _host;
             }
         }
 
