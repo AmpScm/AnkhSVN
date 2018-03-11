@@ -21,7 +21,7 @@ namespace Ankh.UI.OptionsPages
 
         protected override void LoadSettingsCore()
         {
-            mergeExePaths = Config._mergeExePaths;
+            mergeExePaths = Config.MergeExePaths;
             listView.Items.Clear();
             
             foreach (ExtToolDefinition extToolDef in mergeExePaths)
@@ -44,7 +44,7 @@ namespace Ankh.UI.OptionsPages
 
                 mergeExePaths.Add(extToolDef);
             }
-            Config._mergeExePaths = mergeExePaths;
+            Config.MergeExePaths = mergeExePaths;
 
         }
 

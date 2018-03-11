@@ -44,8 +44,8 @@ namespace Ankh.Configuration
         bool _floatDiffEditors;
         bool _useExternalWebbrowser;
         bool _preferPuttySsh;
-        public List<ExtToolDefinition> _mergeExePaths = new List<ExtToolDefinition>();
-        public List<ExtToolDefinition> _diffExePaths = new List<ExtToolDefinition>();
+        List<ExtToolDefinition> _mergeExePaths = new List<ExtToolDefinition>();
+        List<ExtToolDefinition> _diffExePaths = new List<ExtToolDefinition>();
 
         /// <summary>
         /// Gets or sets the merge exe path.
