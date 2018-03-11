@@ -133,14 +133,14 @@ namespace Ankh.Configuration
                 {
                     string value = reg.GetValue(pd.Name, null) as string;
                     
-                    if (pd.Name.Equals("DiffExePaths"))
+                    if (pd.Name == "DiffExePaths")
                     {
                         RegistryKey diffRegKey = OpenHKCUKey("Configuration");
                         diffRegKey = diffRegKey.OpenSubKey(pd.Name);
 
                         if (diffRegKey != null)
                         {
-                            config._diffExePaths.Clear();
+                            config.DiffExePaths.Clear();
 
                             foreach (string regKeyName in diffRegKey.GetValueNames())
                             {
@@ -152,7 +152,7 @@ namespace Ankh.Configuration
                                     extToolDef.extension = regKeyName;
                                     extToolDef.exePath = regValue;
 
-                                    config._diffExePaths.Add(extToolDef);
+                                    config.DiffExePaths.Add(extToolDef);
                                 }
                                 catch
                                 {
@@ -161,14 +161,14 @@ namespace Ankh.Configuration
                             }
                         }
                     }
-                    else if (pd.Name.Equals("MergeExePaths"))
+                    else if (pd.Name == "MergeExePaths")
                     {
                         RegistryKey mergeRegKey = OpenHKCUKey("Configuration");
                         mergeRegKey = mergeRegKey.OpenSubKey(pd.Name);
 
                         if (mergeRegKey != null)
                         {
-                            config._mergeExePaths.Clear();
+                            config.MergeExePaths.Clear();
 
                             foreach (string regKeyName in mergeRegKey.GetValueNames())
                             {
@@ -180,7 +180,7 @@ namespace Ankh.Configuration
                                     extToolDef.extension = regKeyName;
                                     extToolDef.exePath = regValue;
 
-                                    config._mergeExePaths.Add(extToolDef);
+                                    config.MergeExePaths.Add(extToolDef);
                                 }
                                 catch
                                 {

@@ -22,7 +22,7 @@ namespace Ankh.UI.OptionsPages
 
         protected override void LoadSettingsCore()
         {
-            diffExePaths = Config._diffExePaths;
+            diffExePaths = Config.DiffExePaths;
             listView.Items.Clear();
 
             foreach (ExtToolDefinition extToolDef in diffExePaths)
@@ -46,7 +46,7 @@ namespace Ankh.UI.OptionsPages
                 diffExePaths.Add(extToolDef);
             }
 
-            Config._diffExePaths = diffExePaths;
+            Config.DiffExePaths = diffExePaths;
         }
 
         private void addButton_Click(object sender, EventArgs e)
