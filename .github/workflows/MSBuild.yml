@@ -35,3 +35,9 @@ jobs:
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /v:m /restore /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+
+    - name: Package vsix
+      uses: actions/upload-artifact@v2
+      with:
+        name: Ankh.VS15Package.vsix
+        path: build/src/Ankh.VS15Package/bin/release/Ankh.VS15Package.vsix
