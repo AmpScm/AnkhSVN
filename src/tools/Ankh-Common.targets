@@ -52,7 +52,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup Condition="'$(VisualStudioVersion)' &gt;= '15.0'">
-    <PackageReference Include=" SharpSvn.AnnotateAssembly" Version="1.14001.14" />
+    <PackageReference Include="SharpSvn.AnnotateAssembly" Version="1.14001.14" />
   </ItemGroup>
   <ItemGroup Condition="'$(VisualStudioVersion)' &gt;= '16.0'">
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.206" />
