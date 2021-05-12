@@ -61,17 +61,22 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(UseVsSdkVersion)' &gt;= '11.0'">
     <MsVsShellAssembly>Microsoft.VisualStudio.Shell.$(UseVsSdkVersion)</MsVsShellAssembly>
+    <MsVsShellAssembly Condition="'$(UseVsSdkVersion)' &gt;= '16.0'">Microsoft.VisualStudio.Shell.15.0</MsVsShellAssembly>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(UseVsSdkVersion)' &gt;= '12.0'">v4.5.1</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(UseVsSdkVersion)' &gt;= '14.0'">v4.5.2</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(UseVsSdkVersion)' &gt;= '16.0'">v4.7.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' &gt;= '10.0'">
     <LangVersion>3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' &gt;= '15.0'">
-    <TargetFrameworkVersion Condition="'$(LatestTargetFramework)' != 'true'">v4.7.2</TargetFrameworkVersion>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
+  <ItemGroup Condition="'$(VisualStudioVersion)' &gt;= '16.0'">
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.206" />
+  </ItemGroup>
   <Import Project="..\..\local\Common.targets.local" Condition="('$(ApplyLocalCustomizations)' != 'false') and Exists('..\..\local\Common.targets.local')" />
   <Import Project="..\..\local\$(MSBuildProjectName)\$(MSBuildProjectFile).local" Condition="('$(ApplyLocalCustomizations)' != 'false') and Exists('..\..\local\$(MSBuildProjectName)\$(MSBuildProjectFile).local')" />
   <PropertyGroup>
