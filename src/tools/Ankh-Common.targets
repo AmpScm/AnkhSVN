@@ -69,6 +69,9 @@
   <PropertyGroup Condition="'$(VisualStudioVersion)' &gt;= '10.0'">
     <LangVersion>3</LangVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(VisualStudioVersion)' &gt;= '15.0'">
+    <TargetFrameworkVersion Condition="'$(LatestTargetFramework)' != 'true'">v4.7.2</TargetFrameworkVersion>
+  </PropertyGroup>
   <Import Project="..\..\local\Common.targets.local" Condition="('$(ApplyLocalCustomizations)' != 'false') and Exists('..\..\local\Common.targets.local')" />
   <Import Project="..\..\local\$(MSBuildProjectName)\$(MSBuildProjectFile).local" Condition="('$(ApplyLocalCustomizations)' != 'false') and Exists('..\..\local\$(MSBuildProjectName)\$(MSBuildProjectFile).local')" />
   <PropertyGroup>

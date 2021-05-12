@@ -21,6 +21,7 @@
     <SccProvider>SubversionScc</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -51,7 +52,7 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-    <Reference Include="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" Condition="'$(UseVsSdkVersion)' &gt; '10.0'" >
+    <Reference Include="Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" Condition="'$(UseVsSdkVersion)' &gt; '10.0'">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\Ankh.VS.VersionThunk\Embed\Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime.dll</HintPath>
@@ -60,14 +61,6 @@
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\Ankh.VS.VersionThunk\Embed\Microsoft.VisualStudio.Shell.Embeddable.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpSvn">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpGit">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\autolib\SharpGit\SharpGit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -298,7 +291,7 @@
   <ItemGroup>
     <Content Include="Ankh.Services.wxs" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(VisualStudioVersion)' &lt; '15.0'">
     <DependencyDownload Include="SSvn-1.9005.3940.224.zip">
       <Url>https://sharpsvn.open.collab.net/files/documents/180/18649/</Url>
       <TargetDir>..\autolib</TargetDir>
@@ -311,6 +304,25 @@
       <Version>1</Version>
       <Visible>false</Visible>
     </DependencyDownload>
+    <Reference Include="SharpSvn">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpGit">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpGit\SharpGit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(VisualStudioVersion)' &gt;= '15.0'">
+    <PackageReference Include="SharpSvn">
+      <Version>1.14001.14</Version>
+    </PackageReference>
+    <PackageReference Include="SharpSvn.UI">
+      <Version>1.14001.14</Version>
+    </PackageReference>
+    <PackageReference Include="SharpGit">
+      <Version>1.1000.17</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scc\PendingChangeText.resx">
