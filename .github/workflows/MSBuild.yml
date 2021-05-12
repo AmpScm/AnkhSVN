@@ -34,4 +34,4 @@ jobs:
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /restore /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+      run: msbuild /m /v:m /restore /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp

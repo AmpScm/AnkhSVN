@@ -77,9 +77,6 @@
     <Compile Include="VSVersionThunk.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Ankh.VS.VersionThunk.wxs">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Embed\Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime.dll" />
     <Content Include="Embed\Microsoft.VisualStudio.Imaging.Interop.14.0.DesignTime.xml" />
     <Content Include="Embed\Microsoft.VisualStudio.Shell.Embeddable.dll" />

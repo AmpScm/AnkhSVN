@@ -140,7 +140,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Ankh.VS.wxs" />
     <EmbeddedResource Include="SolutionExplorer\StatusGlyphs7.bmp" />
     <EmbeddedResource Include="SolutionExplorer\StatusGlyphs8.bmp" />
     <EmbeddedResource Include="SolutionExplorer\SolutionExplorerStrings.resx">

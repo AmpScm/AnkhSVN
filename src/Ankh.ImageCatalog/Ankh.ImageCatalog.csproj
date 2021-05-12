@@ -61,9 +61,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Ankh.ImageCatalog.wxs">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="CreateImageManifest.xsl">
       <SubType>Designer</SubType>
     </Content>

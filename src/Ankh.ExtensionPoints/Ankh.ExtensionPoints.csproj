@@ -64,7 +64,6 @@
     <None Include="Ankh.ExtensionPoints.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Ankh.ExtensionPoints.wxs" />
     <Content Include="Ankh.ExtensionReg.wxi" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

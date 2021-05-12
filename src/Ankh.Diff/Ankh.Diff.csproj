@@ -151,7 +151,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Ankh.Diff.wxs" />
     <Content Include="DiffUtils\Controls\Bitmaps\16x16.bmp" />
     <Content Include="DiffUtils\Controls\Bitmaps\Changed.bmp" />
     <Content Include="DiffUtils\Controls\Bitmaps\Copy.bmp" />

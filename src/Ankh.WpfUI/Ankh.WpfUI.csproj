@@ -103,9 +103,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Ankh.WpfUI.wxs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Ankh.WpfUI.snk" />
   </ItemGroup>
   <ItemGroup>
