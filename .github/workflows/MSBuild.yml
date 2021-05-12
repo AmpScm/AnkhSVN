@@ -30,8 +30,7 @@ jobs:
       run: cmd.exe /C scripts\gh-version-setup ${{ github.run_number }}
       
     - name: Run nuget
-      working-directory: build
-      run: nuget restore src/SharpSvn.sln
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
