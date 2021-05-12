@@ -4,3 +4,7 @@
 .vs/
 V4_obj/
 V4_bin/
+
+# Buildbot
+scripts/gh.cache.bat
+scripts/msbuild-version.rsp

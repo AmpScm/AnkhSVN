@@ -1,0 +1,38 @@
+name: MSBuild
+
+on:
+  push:
+    branches: [ main, stable/* ]
+  pull_request:
+    branches: [ main, stable/* ]
+
+env:
+  SOLUTION_FILE_PATH: build/src/AnkhSVN.sln
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Git Checkout
+      uses: actions/checkout@v2
+      with:
+        path: build
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Setup VSTest Path
+      uses: darenm/Setup-VSTest@v1
+
+    - name: Setup version
+      working-directory: build
+      run: cmd.exe /C scripts\gh-version-setup ${{ github.run_number }}
+      
+    - name: Run nuget
+      working-directory: build
+      run: nuget restore src/SharpSvn.sln
+
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild /m /restore /p:Platform=x86 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
