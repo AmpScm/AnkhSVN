@@ -46,15 +46,16 @@
     <TargetFrameworkVersion Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">v4.6</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(UseVsSdkVersion)' &gt;= '16.0'">v4.7.2</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(VisualStudioVersion)' &gt;= '10.0'">
-    <LangVersion>3</LangVersion>
+  <PropertyGroup Condition="'$(UseVsSdkVersion)' &gt;= '10.0'">
+    <LangVersion>4</LangVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(VisualStudioVersion)' &gt;= '15.0'">
+  <PropertyGroup Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <NoPackageReferences>true</NoPackageReferences>
+    <LangVersion>7</LangVersion>
   </PropertyGroup>
   <ItemGroup Condition="'$(VisualStudioVersion)' &gt;= '15.0'">
-    <PackageReference Include="SharpSvn.AnnotateAssembly" Version="1.14001.14" />
+    <PackageReference Include="SharpSvn.AnnotateAssembly" Version="1.14001.17" />
   </ItemGroup>
   <ItemGroup Condition="'$(VisualStudioVersion)' &gt;= '16.0'">
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.206" />

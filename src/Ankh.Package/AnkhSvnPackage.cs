@@ -49,7 +49,7 @@ namespace Ankh.VSPackage
     /// </summary>
     // This attribute tells the registration utility (regpkg.exe) that this class needs
     // to be registered as package.
-    [PackageRegistration(UseManagedResourcesOnly = true)]
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading =true)]
     [Description(AnkhId.PackageDescription)]
     // A Visual Studio component can be registered under different regitry roots; for instance
     // when you debug your package you want to register it in the experimental hive. This
@@ -79,7 +79,7 @@ namespace Ankh.VSPackage
 
     [CLSCompliant(false)]    
     [ProvideOutputWindow(AnkhId.AnkhOutputPaneId, "#111", InitiallyInvisible = false, Name = AnkhId.PlkProduct, ClearWithSolution = false)]
-    sealed partial class AnkhSvnPackage : Package, IAnkhPackage, IAnkhQueryService
+    sealed partial class AnkhSvnPackage : AsyncPackage, IAnkhPackage, IAnkhQueryService
     {
         readonly AnkhRuntime _runtime;
 
@@ -102,21 +102,9 @@ namespace Ankh.VSPackage
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
         /// where you can put all the initialization code that rely on services provided by VisualStudio.
         /// </summary>
-        protected override void Initialize()
+        protected async override System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            // The VS2005 SDK code changes the global VS UI culture, but that
-            // is not the way we should behave: We should keep the global
-            // state how VS initialized it.
-            CultureInfo uiCulture = Thread.CurrentThread.CurrentUICulture;
-            try
-            {
-                base.Initialize();
-            }
-            finally
-            {
-                if (Thread.CurrentThread.CurrentUICulture != uiCulture)
-                    Thread.CurrentThread.CurrentUICulture = uiCulture;
-            }
+            await base.InitializeAsync(cancellationToken, progress);
 
             if (InCommandLineMode)
                 return; // Do nothing; speed up devenv /setup by not loading all our modules!
@@ -129,6 +117,8 @@ namespace Ankh.VSPackage
             {
                 new AnkhMessageBox(this).Show(Resources.DotNetTracingFails);
             }
+
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             InitializeRuntime(); // Moved to function of their own to speed up devenv /setup
             RegisterAsOleComponent();
