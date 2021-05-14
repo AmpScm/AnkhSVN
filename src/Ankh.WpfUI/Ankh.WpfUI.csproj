@@ -101,10 +101,6 @@
       <Project>{d90a8e89-66b2-451e-8b31-3d86f0cd4afb}</Project>
       <Name>Ankh.Services</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ankh.VS.WpfServices\Ankh.VS.WpfServices.csproj">
-      <Project>{fb146856-23a8-4151-9467-19ae22fb166f}</Project>
-      <Name>Ankh.VS.WpfServices</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.WpfUI.snk" />

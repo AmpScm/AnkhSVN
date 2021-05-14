@@ -162,10 +162,13 @@
     <Compile Include="UI\IHasSplitterColor.cs" />
     <Compile Include="UI\IPendingChangeControl.cs" />
     <Compile Include="UI\IAnkhHelpService.cs" />
+    <Compile Include="UI\VSWpfDialog.cs" />
+    <Compile Include="UI\VSWpfDialogBase.cs" />
     <Compile Include="VSAssemblies.cs" />
+    <Compile Include="VSColorProxy.cs" />
+    <Compile Include="VSColorProxyResolver.cs" />
     <Compile Include="VSErr.cs" />
     <Compile Include="VSItemId.cs" />
-    <Compile Include="VSVersionThunk.cs" />
     <Compile Include="VS\IAnkhGlobalCommandHook.cs" />
     <Compile Include="VS\TextMarker.cs" />
     <Compile Include="VS\ILinqInterfaceDelegateService.cs" />

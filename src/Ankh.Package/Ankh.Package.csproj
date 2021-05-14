@@ -105,7 +105,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\ProvideAnkhVersionThunkRedirectAttribute.cs" />
     <Compile Include="Attributes\ProvideAnkhExtensionRedirectAttribute.cs" />
     <Compile Include="Attributes\ProvideSourceControlCommand.cs" />
     <Compile Include="Attributes\ProvideThemeInformation.cs" />

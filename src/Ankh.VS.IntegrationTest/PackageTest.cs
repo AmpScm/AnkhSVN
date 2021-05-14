@@ -74,11 +74,6 @@ namespace IntegrationTestProject
                 Guid packageGuid = AnkhId.PackageGuid;
                 Assert.IsTrue(0 == shellService.LoadPackage(ref packageGuid, out package));
                 Assert.IsNotNull(package, "Package failed to load");
-
-
-                packageGuid = AnkhId.WpfPackageGuid;
-                Assert.IsTrue(0 == shellService.LoadPackage(ref packageGuid, out package));
-                Assert.IsNotNull(package, "Package failed to load");
             });
         }
     }

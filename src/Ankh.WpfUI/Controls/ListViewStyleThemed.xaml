@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:a="clr-namespace:Ankh.VS.WpfServices;assembly=Ankh.VS.WpfServices">
+                    xmlns:a="clr-namespace:Ankh.VS.WpfServices;assembly=Ankh.Services">
     <!-- Defines themes for ListView.  This theme is tied into dynamic Visual Studio colors, so
          when the Visual Studio theme changes between Light, Dark, High Contrast, or a custom theme,
          the ListView's style updates accordingly. -->
