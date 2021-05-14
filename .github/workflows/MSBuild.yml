@@ -39,5 +39,5 @@ jobs:
     - name: Package vsix
       uses: actions/upload-artifact@v2
       with:
-        name: Ankh.VS15Package.vsix
+        name: Ankh-VSIX
         path: build/src/Ankh.Package/bin/release/Ankh.Package.vsix
