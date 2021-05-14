@@ -4,6 +4,7 @@
     <VisualStudioVersion>8.0</VisualStudioVersion>
     <UseVsSdkVersion>8.0</UseVsSdkVersion>
     <UseCtcInsteadOfVsct>true</UseCtcInsteadOfVsct>
+    <NoPackageReferences>true</NoPackageReferences>
   </PropertyGroup>
   <Choose>
     <When Condition="'$(DistBuild)' == 'true'">
@@ -50,6 +51,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' &gt;= '15.0'">
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <NoPackageReferences>true</NoPackageReferences>
   </PropertyGroup>
   <ItemGroup Condition="'$(VisualStudioVersion)' &gt;= '15.0'">
     <PackageReference Include="SharpSvn.AnnotateAssembly" Version="1.14001.14" />

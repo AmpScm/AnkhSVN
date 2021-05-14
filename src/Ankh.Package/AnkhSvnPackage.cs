@@ -33,6 +33,7 @@ using Ankh.UI;
 using Ankh.VSPackage.Attributes;
 using Ankh.Diff;
 using Ankh.GitScc;
+using Ankh.WpfUI;
 
 namespace Ankh.VSPackage
 {
@@ -147,6 +148,7 @@ namespace Ankh.VSPackage
             _runtime.AddModule(new AnkhVSModule(_runtime));
             _runtime.AddModule(new AnkhUIModule(_runtime));
             _runtime.AddModule(new AnkhDiffModule(_runtime));
+            _runtime.AddModule(new AnkhWpfUIModule(_runtime));
 
             RegisterEditors();
 

@@ -40,4 +40,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Ankh.VS15Package.vsix
-        path: build/src/Ankh.VS15Package/bin/release/Ankh.VS15Package.vsix
+        path: build/src/Ankh.Package/bin/release/Ankh.Package.vsix

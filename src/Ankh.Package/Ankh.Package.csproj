@@ -16,10 +16,14 @@
     <TargetFrameworkVersion Condition="'$(TargetFrameworkVersion)' == ''">v2.0</TargetFrameworkVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Ankh.Package.snk</AssemblyOriginatorKeyFile>
-    <SccProjectName>Svn</SccProjectName>
-    <SccLocalPath>Svn</SccLocalPath>
-    <SccAuxPath>Svn</SccAuxPath>
-    <SccProvider>SubversionScc</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -58,31 +62,31 @@
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop" />
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0" />
     <Reference Include="$(MsVsShellAssembly)" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="'$(UseVsSdkVersion)' &gt;= '9.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '9.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="'$(UseVsSdkVersion)' &gt;= '10.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '10.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.11.0" Condition="'$(UseVsSdkVersion)' &gt;= '11.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.11.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '11.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0" Condition="'$(UseVsSdkVersion)' &gt;= '12.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '12.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' &gt;= '10.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '10.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" Condition="'$(UseVsSdkVersion)' &gt;= '11.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '11.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" Condition="'$(UseVsSdkVersion)' &gt;= '12.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '12.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0" Condition="'$(UseVsSdkVersion)' &gt;= '14.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '14.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Framework" Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Framework" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '15.0'">
       <Visible>false</Visible>
     </Reference>
     <Reference Include="SharpGit">
@@ -120,6 +124,14 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WpfServices\SccHelper.cs" />
+    <Compile Include="WpfServices\ServiceMethodResolver.cs" />
+    <Compile Include="WpfServices\ThemingService.cs" />
+    <Compile Include="WpfServices\ThemingService.GetTheme.cs">
+      <DependentUpon>ThemingService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WpfServices\ThreadedWaitService.cs" />
+    <Compile Include="WpfServices\WpfEditorInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -177,7 +189,17 @@
     </XslSource>
     <None Include="Ankh.Package.snk" />
     <None Include="Gui\Scc\CompareProperties.pdn" />
-    <None Include="source.extension.VsixManifest" />
+    <Content Include="AnkhSVN-Preview.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="LICENSE.rtf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="source.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
       <SubType>Designer</SubType>
@@ -560,13 +582,13 @@
       <Project>{b99cb919-1a2c-4e3b-9c15-8789b358ea99}</Project>
       <Name>Ankh.VS.Interop</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ankh.VS.VersionThunk\Ankh.VS.VersionThunk.csproj">
-      <Project>{06d68ab0-ed0b-4fc6-b085-318f9c253160}</Project>
-      <Name>Ankh.VS.VersionThunk</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ankh.VS\Ankh.VS.csproj">
       <Project>{906E3F01-CD79-4F80-BCA7-1105224328C4}</Project>
       <Name>Ankh.VS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.WpfUI\Ankh.WpfUI.csproj">
+      <Project>{8FC7114E-5A84-4221-8187-C3D1C370404E}</Project>
+      <Name>Ankh.WpfUI</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ankh\Ankh.csproj">
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
