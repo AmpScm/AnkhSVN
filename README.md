@@ -6,13 +6,11 @@ Contents:
  3 - Participating in the AnkhSVN community
  
 ## Welcome
-
  
   Thank you or checking out the sourcecode of AnkhSVN. You can always find
   the last version of this document on
  
-    http://ankhsvn.open.collab.net/svn/ankhsvn/trunk/README.txt
-    (Username: guest, no password)
+    https://github.com/AmpScm/AnkhSVN
   
   If you have a Subversion client you can get the latest version of the 
   AnkhSVN sourcecode with the command:
@@ -29,6 +27,8 @@ Contents:
      
   In the next dialog choose a location where you wish to store your local
   working copy and click Ok.
+
+  Of course you can also use your favorite git client to access our GitHub repository.
   
   
   Please read src/BUILD.txt for more information on how to test development
@@ -61,4 +61,4 @@ Contents:
   Read the FAQ:
       http://ankhsvn.open.collab.net/wiki/Faq
   
-  
+  Or just us the discussion, issue and pull request support on GitHub
