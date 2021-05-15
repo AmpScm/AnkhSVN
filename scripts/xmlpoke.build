@@ -1,0 +1,16 @@
+ <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" defaultTarget="Poke">
+  <PropertyGroup>
+    <Namespace>
+        <Namespace Prefix="nu" Uri="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd" />
+        <Namespace Prefix="vsx" Uri="http://schemas.microsoft.com/developer/vsx-schema/2011" />
+    </Namespace>
+  </PropertyGroup>
+
+<Target Name="Poke">
+  <XmlPoke
+    XmlInputPath="$(File)"
+    Value="$(Value)"
+    Query="$(XPath)"
+    Namespaces="$(Namespace)"/>
+</Target>
+</Project>
