@@ -13,7 +13,7 @@ FOR /F "usebackq" %%i in (`git rev-parse HEAD`) do (
 popd
 
 set    ANKHSVN_MAJOR=2
-set    ANKHSVN_MINOR=8
+set    ANKHSVN_MINOR=9
 set    ANKHSVN_PATCH=%1
 
 echo Prepare building AnkhSVN %ANKHSVN_MAJOR%.%ANKHSVN_MINOR%.%ANKHSVN_PATCH%
