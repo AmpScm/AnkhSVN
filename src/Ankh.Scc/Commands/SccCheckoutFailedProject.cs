@@ -70,7 +70,7 @@ namespace Ankh.Scc.Commands
                         if (!VSErr.Succeeded(s.GetGuidOfProject(hier.Hierarchy, out projectGuid)))
                             return;
 
-                        helper.EnsureProjectLoaded(projectGuid, false);
+                        e.GetService<IVsSolution4>(typeof(SVsSolution))?.ReloadProject(ref projectGuid);
                         break;
                     }
                 case AnkhCommand.SccEditFailedProjectLocation:

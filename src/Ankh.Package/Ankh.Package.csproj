@@ -124,14 +124,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WpfServices\SccHelper.cs" />
-    <Compile Include="WpfServices\ServiceMethodResolver.cs" />
-    <Compile Include="WpfServices\ThemingService.cs" />
-    <Compile Include="WpfServices\ThemingService.GetTheme.cs">
-      <DependentUpon>ThemingService.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WpfServices\ThreadedWaitService.cs" />
-    <Compile Include="WpfServices\WpfEditorInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

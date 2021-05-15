@@ -43,19 +43,14 @@ namespace Ankh.VSPackage
     /// The minimum requirement for a class to be considered a valid package for Visual Studio
     /// is to implement the IVsPackage interface and register itself with the shell.
     /// This package uses the helper classes defined inside the Managed Package Framework (MPF)
-    /// to do it: it derives from the Package class that provides the implementation of the 
-    /// IVsPackage interface and uses the registration attributes defined in the framework to 
+    /// to do it: it derives from the Package class that provides the implementation of the
+    /// IVsPackage interface and uses the registration attributes defined in the framework to
     /// register itself and its components with the shell.
     /// </summary>
     // This attribute tells the registration utility (regpkg.exe) that this class needs
     // to be registered as package.
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading =true)]
     [Description(AnkhId.PackageDescription)]
-    // A Visual Studio component can be registered under different regitry roots; for instance
-    // when you debug your package you want to register it in the experimental hive. This
-    // attribute specifies the registry root to use if no one is provided to regpkg.exe with
-    // the /root switch.
-    [DefaultRegistryRoot("Software\\Microsoft\\VisualStudio\\9.0")]
 
     [Guid(AnkhId.PackageId)]
     [ProvideAutoLoad(AnkhId.SccProviderId, PackageAutoLoadFlags.BackgroundLoad)] // Load on 'Scc active' for Subversion
@@ -71,17 +66,17 @@ namespace Ankh.VSPackage
 
     [ProvideAnkhExtensionRedirect()]
 
-    [CLSCompliant(false)]    
+    [CLSCompliant(false)]
     [ProvideOutputWindow(AnkhId.AnkhOutputPaneId, "#111", InitiallyInvisible = false, Name = AnkhId.PlkProduct, ClearWithSolution = false)]
     sealed partial class AnkhSvnPackage : AsyncPackage, IAnkhPackage, IAnkhQueryService
     {
-        readonly AnkhRuntime _runtime;
+        private AnkhRuntime _runtime;
 
         /// <summary>
         /// Default constructor of the package.
-        /// Inside this method you can place any initialization code that does not require 
-        /// any Visual Studio service because at this point the package object is created but 
-        /// not sited yet inside Visual Studio environment. The place to do all the other 
+        /// Inside this method you can place any initialization code that does not require
+        /// any Visual Studio service because at this point the package object is created but
+        /// not sited yet inside Visual Studio environment. The place to do all the other
         /// initialization is the Initialize method.
         /// </summary>
         public AnkhSvnPackage()
@@ -90,7 +85,7 @@ namespace Ankh.VSPackage
         }
 
         /////////////////////////////////////////////////////////////////////////////
-        // Overriden Package Implementation        
+        // Overriden Package Implementation
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -100,19 +95,10 @@ namespace Ankh.VSPackage
         {
             await base.InitializeAsync(cancellationToken, progress);
 
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
             if (InCommandLineMode)
                 return; // Do nothing; speed up devenv /setup by not loading all our modules!
-
-            try
-            {
-                Trace.WriteLine("AnkhSVN: Loading package");
-            }
-            catch
-            {
-                new AnkhMessageBox(this).Show(Resources.DotNetTracingFails);
-            }
-
-            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             InitializeRuntime(); // Moved to function of their own to speed up devenv /setup
             RegisterAsOleComponent();
@@ -120,6 +106,7 @@ namespace Ankh.VSPackage
 
         void InitializeRuntime()
         {
+            _runtime = new AnkhRuntime(this);
             _runtime.PreLoad();
 
             IServiceContainer container = GetService<IServiceContainer>();
@@ -147,7 +134,7 @@ namespace Ankh.VSPackage
         {
             // We set the user context AnkhLoadCompleted active when we are loaded
             // This event can be used to trigger loading other packages that depend on AnkhSVN
-            // 
+            //
             // When the use:
             // [ProvideAutoLoad(AnkhId.AnkhLoadCompleted)]
             // On their package, they load automatically when we are completely loaded

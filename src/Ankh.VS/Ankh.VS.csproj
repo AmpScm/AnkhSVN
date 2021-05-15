@@ -74,7 +74,6 @@
     <Compile Include="Services\GlobalCommandHook.cs" />
     <Compile Include="Services\DiffMergeInstance.cs" />
     <Compile Include="Services\InternalDiff.cs" />
-    <Compile Include="Services\ThreadedWaitService.cs" />
     <Compile Include="LanguageServices\Core\AnkhEditorFactory.cs" />
     <Compile Include="LanguageServices\Core\AnkhLanguagePreferences.cs" />
     <Compile Include="Services\AnkhVSColor.cs" />
@@ -88,11 +87,16 @@
     <Compile Include="Selection\SelectionContext.cs" />
     <Compile Include="Selection\SelectionUtils.cs" />
     <Compile Include="SolutionExplorer\FileIconMapper.cs" />
-    <Compile Include="SolutionExplorer\SolutionExplorerWindow.cs" />
-    <Compile Include="SolutionExplorer\SolutionTreeViewManager.cs" />
     <Compile Include="SolutionExplorer\StatusImageMapper.cs" />
     <Compile Include="SolutionExplorer\Win32TreeView.cs" />
     <Compile Include="WebBrowser\AnkhWebBrowser.cs" />
+    <Compile Include="WpfServices\ServiceMethodResolver.cs" />
+    <Compile Include="WpfServices\ThemingService.cs" />
+    <Compile Include="WpfServices\ThemingService.GetTheme.cs">
+      <DependentUpon>ThemingService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WpfServices\ThreadedWaitService.cs" />
+    <Compile Include="WpfServices\WpfEditorInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.VS.snk" />
@@ -134,6 +138,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Ankh.ExtensionPoints\Ankh.ExtensionPoints.csproj">
+      <Project>{b7168874-e05e-458d-95cc-5d7bbc243986}</Project>
+      <Name>Ankh.ExtensionPoints</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
       <Name>Ankh.Ids</Name>

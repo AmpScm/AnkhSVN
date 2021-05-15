@@ -114,7 +114,6 @@
     <Compile Include="Scc\IAnkhGitSccService.cs" />
     <Compile Include="Scc\IAnkhSccProviderEvents.cs" />
     <Compile Include="Scc\Git\IGitStatusCache.cs" />
-    <Compile Include="Scc\ISccHelper.cs" />
     <Compile Include="Collections\KeyedNotifyCollection.cs" />
     <Compile Include="Scc\ProjectMap\SccDocumentData.cs" />
     <Compile Include="Scc\ProjectMap\SccProjectData.cs" />

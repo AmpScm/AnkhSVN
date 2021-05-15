@@ -30,80 +30,38 @@ namespace Ankh.WpfPackage.Services
             base.OnInitialize();
         }
 
-        // This class does a lot of trickery in order not to break on different VS11 pre-release versions.
-        // VS11 doesn't follow the COM guidelines yet and *changes* com interfaces between builds.
-        //
-        // * We can't just link against Microsoft.VisualStudio.Shell.Interop.11.0 as that would break VS2010 support
-        // * We can't use the automatic PIA imports of .Net 4.0 as that breaks against newer builds
-        //
-        // So for the time being we use reflection. After VS11 goes to RTM we switch to the final API and
-        // break support of the Beta versions
-        delegate uint GetThemedColorType(ref Guid colorCategory, string colorName, uint colorType);
-        GetThemedColorType _getThemedColor;
 
-        private GetThemedColorType GetThemedColor
+        public Color GetThemedColorValue(ref Guid colorCategory, string colorName, bool foreground)
         {
-            get { return _getThemedColor ?? FetchThemedColor(); }
-        }
-
-        private GetThemedColorType FetchThemedColor()
-        {
-            Type vsUIShell5 = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5", false);
+            Type vsUIShell5 = typeof(IVsUIShell5);
 
             if (vsUIShell5 == null)
                 throw new InvalidOperationException();
 
-            object uiShell = GetService(typeof(SVsUIShell));
+            IVsUIShell5 vs5 = GetService<IVsUIShell5>(typeof(SVsUIShell));
             MethodInfo method = vsUIShell5.GetMethod("GetThemedColor");
-
-            _getThemedColor = (GetThemedColorType)Delegate.CreateDelegate(typeof(GetThemedColorType), uiShell, method, false);
-
-            if (_getThemedColor == null)
-            {
-                _getThemedColor = delegate(ref Guid colorCategory, string colorName, uint colorType)
-                {
-                    return (uint)method.Invoke(uiShell, new object[] { colorCategory, colorName, colorType });
-                };
-            }
-
-            return _getThemedColor;
-        }
-
-        public Color GetThemedColorValue(ref Guid colorCategory, string colorName, bool foreground)
-        {
-            uint clr = GetThemedColor(ref colorCategory, colorName, foreground ? (uint)1 : 0);
+            
+            uint clr = vs5.GetThemedColor(ref colorCategory, colorName, foreground ? (uint)1 : 0);
             // TODO: Use bitshifting
 
             byte[] colorComponents = BitConverter.GetBytes(clr);
             return System.Drawing.Color.FromArgb(colorComponents[3], colorComponents[0], colorComponents[1], colorComponents[2]);
         }
 
-        delegate bool ThemeWindow(IntPtr hwnd);
-        ThemeWindow _twd;
-        delegate void SetFixedThemeColors(IntPtr hwnd);
-        SetFixedThemeColors _sftc;
-
         bool VSThemeWindow(IntPtr hwnd, bool forDialog)
         {
-            if (_twd == null)
+            var ui6 = GetService<IVsUIShell6>(typeof(SVsUIShell));
+
+
+            if (ui6 != null)
             {
-                object uiShell = GetService(typeof(SVsUIShell));
-                _twd = GetInterfaceDelegate<ThemeWindow>(VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell5"), uiShell);
-
-                if (_twd == null)
-                    _twd = delegate(IntPtr h) { return false; };
-
-                if (VSVersion.VS2013OrLater)
-                    _sftc = GetInterfaceDelegate<SetFixedThemeColors>(VSAssemblies.VSShellInterop12.GetType("Microsoft.VisualStudio.Shell.Interop.IVsUIShell6"), uiShell);
-
-                if (_sftc == null)
-                    _sftc = delegate(IntPtr h) {};
+                bool r = ui6.ThemeWindow(hwnd);
+                if (r && forDialog)
+                    ui6.SetFixedThemeColors(hwnd);
+                return r;
             }
-
-            bool r = _twd(hwnd);
-            if (r && forDialog)
-                _sftc(hwnd);
-            return r;
+            else
+                return false;
         }
 
         delegate IVsUIObject GetIconForFile(string filename, __VSUIDATAFORMAT desiredFormat);
@@ -118,27 +76,13 @@ namespace Ankh.WpfPackage.Services
 
             if (_giff == null)
             {
-                Type type_SVsImageService = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.SVsImageService", false);
+                var imgs = GetService<IVsImageService>(typeof(SVsImageService));
 
-                if (type_SVsImageService == null)
-                    return false;
-
-                object service = GetService(type_SVsImageService);
-
-                if (service == null)
-                    return false;
-
-                Type type_IVsImageService = VSAssemblies.VSShellInterop11.GetType("Microsoft.VisualStudio.Shell.Interop.IVsImageService", false);
-
-                if (type_IVsImageService == null)
-                    return false;
-
-                _giff = GetInterfaceDelegate<GetIconForFile>(type_IVsImageService, service);
-
-                if (_giff == null)
-                    return false;
-
-                _giffEx = GetInterfaceDelegate<GetIconForFileEx>(type_IVsImageService, service);
+                if (imgs != null)
+                {
+                    _giff = imgs.GetIconForFile;
+                    _giffEx = imgs.GetIconForFileEx;
+                }
             }
 
             try
