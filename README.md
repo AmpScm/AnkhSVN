@@ -1,15 +1,12 @@
-          AnkhSVN - Subversion support for Visual Studio
-          ==============================================
-
-$Id$
+### AnkhSVN - Subversion support for Visual Studio
 
 Contents:
  1 - Welcome
  2 - Documentation References
  3 - Participating in the AnkhSVN community
  
-1. Welcome
-----------
+## Welcome
+
  
   Thank you or checking out the sourcecode of AnkhSVN. You can always find
   the last version of this document on
@@ -20,15 +17,15 @@ Contents:
   If you have a Subversion client you can get the latest version of the 
   AnkhSVN sourcecode with the command:
 
-  # svn co http://ankhsvn.open.collab.net/svn/ankhsvn/trunk/ AnkhSVN
+  $ svn co https://github.com/ampscm/ankhsvn/trunk/ AnkhSVN
   
-  If you have AnkhSVN 2.0 installed you can also automatically open the project
+  If you have AnkhSVN 2.0 or later installed you can also automatically open the project
   directly in Visual Studio with AnkhSVN itself
   
     Click: File -> Open -> Subversion Project
   
   And then choose the right Solution (.sln) file below:
-     http://ankhsvn.open.collab.net/svn/ankhsvn/trunk/src/
+     https://github.com/ampscm/ankhsvn/trunk/src/
      
   In the next dialog choose a location where you wish to store your local
   working copy and click Ok.
@@ -38,8 +35,7 @@ Contents:
   versions of AnkhSVN after the checkout completes.
 
 
-2. Documentation
-----------------
+## Documentation
  
   The development documentation of the AnkhSVN project is available in
  
@@ -55,8 +51,7 @@ Contents:
       http://ankhsvn.open.collab.net/wiki/
 
 
-3. Participating in the AnkhSVN community
------------------------------------------
+## Participating in the AnkhSVN community
 
   If you have any questions you can join the AnkhSVN user group on
       users@ankhsvn.open.collab.net
