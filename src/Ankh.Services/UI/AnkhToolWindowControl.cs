@@ -104,15 +104,19 @@ namespace Ankh.UI
                         ForeColor = color;
                 }
 
-                IUIService uis = Context.GetService<IUIService>();
-
-                if (uis != null)
+                try
                 {
-                    Font f = (Font)uis.Styles["DialogFont"];
+                    IUIService uis = Context.GetService<IUIService>();
 
-                    if (f != null)
-                        this.Font = f;
+                    if (uis != null)
+                    {
+                        Font f = (Font)uis.Styles["DialogFont"];
+
+                        if (f != null)
+                            this.Font = f;
+                    }
                 }
+                catch { }
             }
         }
 

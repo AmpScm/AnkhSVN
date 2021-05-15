@@ -57,14 +57,9 @@ namespace Ankh.VSPackage
     // the /root switch.
     [DefaultRegistryRoot("Software\\Microsoft\\VisualStudio\\9.0")]
 
-    // In order be loaded inside Visual Studio in a machine that has not the VS SDK installed, 
-    // package needs to have a valid load key (it can be requested at 
-    // http://msdn.microsoft.com/vstudio/extend/). This attributes tells the shell that this 
-    // package has a load key embedded in its resources.
-    [ProvideLoadKey("Standard", AnkhId.PlkVersion, AnkhId.PlkProduct, AnkhId.PlkCompany, 1)]
     [Guid(AnkhId.PackageId)]
-    [ProvideAutoLoad(AnkhId.SccProviderId)] // Load on 'Scc active' for Subversion
-    [ProvideAutoLoad(AnkhId.GitSccProviderId)] // Load on 'Scc active' for Git
+    [ProvideAutoLoad(AnkhId.SccProviderId, PackageAutoLoadFlags.BackgroundLoad)] // Load on 'Scc active' for Subversion
+    [ProvideAutoLoad(AnkhId.GitSccProviderId, PackageAutoLoadFlags.BackgroundLoad)] // Load on 'Scc active' for Git
 
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResourceEx("1000.ctmenu", 1, LegacyResourceID="1001.ctmenu")] // The numbers must match the number in the .csproj file for the ctc task

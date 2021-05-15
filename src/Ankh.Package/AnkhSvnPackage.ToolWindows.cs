@@ -117,9 +117,12 @@ namespace Ankh.VSPackage
                 {
                     IUIService uis = GetService<System.Windows.Forms.Design.IUIService>();
                     _ambientProperties = new AmbientProperties();
-                    Font f = (Font)uis.Styles["DialogFont"];
+                    if (uis != null)
+                    {
+                        Font f = (Font)uis.Styles["DialogFont"];
 
-                    _ambientProperties.Font = new Font(f.Name, f.Size);
+                        _ambientProperties.Font = new Font(f.Name, f.Size);
+                    }
                 }
                 return _ambientProperties;
             }
@@ -385,6 +388,9 @@ namespace Ankh.VSPackage
         protected AnkhToolWindowPane()
             : base(null)
         {
+            // I'n not really sure what I am doing here.
+            var prev = NativeImports.SetThreadDpiAwarenessContext(NativeImports.DPI_AWARENESS_CONTEXT.SystemAware);
+
             _host = new AnkhToolWindowHost(this);
         }
 
@@ -462,10 +468,17 @@ namespace Ankh.VSPackage
 
         protected override object GetService(Type serviceType)
         {
-            if (serviceType == typeof(IOleCommandTarget))
-                return _host;
-            else
-                return base.GetService(serviceType);
+            try
+            {
+                if (serviceType == typeof(IOleCommandTarget))
+                    return _host;
+                else
+                    return base.GetService(serviceType);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         internal object BaseGetService(Type serviceType)
