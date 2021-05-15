@@ -122,25 +122,6 @@ namespace Ankh.UI.PendingChanges
             if (renderer != null)
                 pendingChangesTabs.Renderer = renderer;
 
-            if (VSVersion.VS2008OrOlder && !SystemInformation.HighContrast)
-            {
-                // We should use the VS colors instead of the ones provided by the OS
-                IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
-
-                Color color;
-                if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
-                {
-                    pendingChangesTabs.BackColor = color;
-                    pendingChangesTabs.OverflowButton.BackColor = color;
-                }
-
-                if (renderer == null && colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
-                {
-                    pendingChangesTabs.ForeColor = color;
-                    pendingChangesTabs.OverflowButton.ForeColor = color;
-                }
-            }
-
             foreach (PendingChangesPage p in _pages)
             {
                 p.OnThemeChanged(e);

@@ -61,9 +61,8 @@ namespace Ankh.Scc.Commands
                         scc.EnlistAndCheckout(hier.Hierarchy, hier.Name);
 
                         IVsSolution s = e.GetService<IVsSolution>(typeof(SVsSolution));
-                        ISccHelper helper = e.GetService<ISccHelper>();
 
-                        if (s == null || helper == null)
+                        if (s == null)
                             return;
 
                         Guid projectGuid;

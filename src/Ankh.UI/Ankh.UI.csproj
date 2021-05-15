@@ -151,9 +151,6 @@
     <Compile Include="Commands\SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Commands\UIEditCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\UpdateDialog.cs">
       <SubType>Form</SubType>
     </Compile>

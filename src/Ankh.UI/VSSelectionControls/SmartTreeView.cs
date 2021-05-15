@@ -54,7 +54,7 @@ namespace Ankh.UI.VSSelectionControls
             set
             {
                 _showLines = value;
-                base.ShowLines = value && VSVersion.VS2008OrOlder;
+                base.ShowLines = value && false /*VSVersion.VS2008OrOlder*/;
             }
         }
 

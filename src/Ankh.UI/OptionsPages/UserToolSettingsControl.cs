@@ -39,10 +39,7 @@ namespace Ankh.UI.OptionsPages
 
             forceExternalBrowser.Checked = Config.ForceExternalBrowser;
 
-            if (VSVersion.VS2008OrOlder)
-                floatVSDiffViewers.Enabled = floatVSDiffViewers.Visible = false;
-            else
-                floatVSDiffViewers.Checked = Config.FloatDiffEditors;
+            floatVSDiffViewers.Checked = Config.FloatDiffEditors;
         }
 
         sealed class OtherTool

@@ -36,7 +36,6 @@ namespace Ankh.VS.Dialogs
         readonly VSContainerForm _form;
         readonly IAnkhVSContainerForm _vsForm;
         readonly static Dictionary<VSContainerForm, VSCommandRouting> _map = new Dictionary<VSContainerForm, VSCommandRouting>();
-        readonly bool _vsWpf;
         VSFormContainerPane _pane;
         IVsToolWindowToolbarHost _tbHost;
         IVsFilterKeys2 _fKeys;
@@ -65,7 +64,6 @@ namespace Ankh.VS.Dialogs
             Application.AddMessageFilter(this);
             _routers.Push(this);
             _installed = true;
-            _vsWpf = !VSVersion.VS2008OrOlder;
             _map.Add(form, this);
 
             _priorityCommandTarget = GetService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
@@ -288,32 +286,6 @@ namespace Ankh.VS.Dialogs
                 foreach (IVsWindowPane pane in _paneList)
                 {
                     if (pane.TranslateAccelerator(messages) == 0)
-                        return true;
-                }
-            }
-
-            if (!_vsWpf &&
-                (m.Msg == WM_KEYDOWN || m.Msg == WM_KEYUP || m.Msg == WM_SYSKEYDOWN || m.Msg == WM_SYSKEYUP))
-            {
-                // The old text editor handled commands and then forwarded them anyway
-                // With VS2010+ we assume that this is no longer a problem
-
-                Control c = _form.ActiveControl;
-                {
-                    IContainerControl cc;
-                    Control ac;
-
-                    while (null != (cc = c as IContainerControl) && null != (ac = cc.ActiveControl) && ac != cc)
-                    {
-                        c = ac;
-                    }
-                }
-
-                if (c != null)
-                {
-                    IAnkhLegacyKeyMessageSuppressFilter filter = c as IAnkhLegacyKeyMessageSuppressFilter;
-
-                    if (filter != null && filter.PreFilterKeyMessage((Keys)(int)m.WParam))
                         return true;
                 }
             }
