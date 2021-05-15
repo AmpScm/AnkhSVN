@@ -1,11 +1,11 @@
-### AnkhSVN - Subversion support for Visual Studio
+### AnkhSVN - Subversion Support for Visual Studio
 
 Contents:
- 1 - Welcome
- 2 - Documentation References
- 3 - Participating in the AnkhSVN community
+ 1. Welcome
+ 2. Documentation References
+ 3. Participating in the AnkhSVN community
  
-## Welcome
+## 1. Welcome
  
   Thank you or checking out the sourcecode of AnkhSVN. You can always find
   the last version of this document on
@@ -35,30 +35,24 @@ Contents:
   versions of AnkhSVN after the checkout completes.
 
 
-## Documentation
+## 2. Documentation
  
   The development documentation of the AnkhSVN project is available in
  
     src/BUILD.txt         - How to build your own AnkhSVN version
     src/CHANGES.txt       - Summarized changes per release    
     src/CONTRIBUTORS.txt  - List of committers and writers of patches
-    src/COPYING.txt       - The sourcecode license of AnkhSVN
-    src/LICENSE.rtf       - The runtime license of AnkhSVN
+    LICENSE       - The sourcecode license of AnkhSVN
     
   A lot more information about what is going on can be found on
-      http://ankhsvn.open.collab.net
-  and
-      http://ankhsvn.open.collab.net/wiki/
+      https://github.com/AmpScm/AnkhSVN
 
 
-## Participating in the AnkhSVN community
+## 3. Participating in the AnkhSVN community
 
   If you have any questions you can join the AnkhSVN user group on
       users@ankhsvn.open.collab.net
       
   Talk on IRC with developers: irc.freenode.net, channel #ankhsvn
   
-  Read the FAQ:
-      http://ankhsvn.open.collab.net/wiki/Faq
-  
-  Or just us the discussion, issue and pull request support on GitHub
+  Or just use the discussion, issue and pull request support on GitHub
