@@ -312,7 +312,7 @@
       <Version>1.14001.14</Version>
     </PackageReference>
     <PackageReference Include="SharpSvn.UI">
-      <Version>1.14001.14</Version>
+      <Version>1.14001.15</Version>
     </PackageReference>
     <PackageReference Include="SharpGit">
       <Version>1.1000.17</Version>
