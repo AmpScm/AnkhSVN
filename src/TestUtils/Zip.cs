@@ -14,8 +14,7 @@
 
 using System;
 using System.IO;
-using ICSharpCode.SharpZipLib;
-using ICSharpCode.SharpZipLib.Zip;
+using System.IO.Compression;
 
 namespace TestUtils
 {
@@ -35,61 +34,16 @@ namespace TestUtils
         /// <param name="destinationPath">The directory to extract to.</param>
         /// <param name="type">The type that contains the resource.</param>
         /// <param name="resourceName">The name of the embedded resource.</param>
-        public static void ExtractZipResource( string destinationPath, Type type, 
-            string resourceName )
+        public static void ExtractZipResource(string destinationPath, AssemblyLoadEventArgs assembly, string resourceName)
         {
-            Directory.CreateDirectory( destinationPath );
-            
+            Directory.CreateDirectory(destinationPath);
+
             //extract to the temp folder
-            Stream zipStream = type.Assembly.GetManifestResourceStream( resourceName );
-            ExtractZipStream( zipStream, destinationPath );
+            Stream zipStream = assembly.GetManifestResourceStream(resourceName);
+
+            ZipArchive za = new ZipArchive(zipStream);
+
+            za.ExtractToDirectory(destinationPath);
         }
-
-        /// <summary>
-        /// Extract a zip file
-        /// </summary>
-        /// <param name="zipFile">Path to the zip file</param>
-        /// <param name="parentPath">Path to the folder in which we want to extract the
-        /// zip file</param>
-        public static void ExtractZipStream( Stream zipStream, string parentPath )
-        {
-            ZipFile zip = new ZipFile( zipStream );
-
-            //Go through all the entries in the zip file
-            foreach( ZipEntry entry in zip )
-            {
-                string destPath = Path.Combine( parentPath, entry.Name );
-
-                //t'is a directory?
-                if ( entry.IsDirectory )
-                    Directory.CreateDirectory( destPath );
-                else
-                {  
-                    // nope - this is a file
-                    // EXTRACT IT!
-
-                    //make sure the parent path exists
-                    string parent = Path.GetDirectoryName( destPath );
-                    if ( !Directory.Exists( parent ) )
-                        Directory.CreateDirectory( parent );
-
-                    Stream instream = zip.GetInputStream( entry );
-                    using( Stream outstream = new FileStream( destPath, FileMode.Create ) )
-                    {
-                        byte[] buffer = new byte[ BUF_SIZE ];
-                        int count = 0;
-                        do
-                        {
-                            count = instream.Read( buffer, 0, BUF_SIZE );
-                            if( count > 0 )
-                                outstream.Write( buffer, 0, count );
-                        } while( count > 0 );
-                    } // using
-                } // else
-            } // foreach
-        }
-
-        private const int BUF_SIZE = 4096;
-
     }
 }

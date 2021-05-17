@@ -84,7 +84,7 @@ namespace NSvn.Core.Tests
             if (Directory.Exists(path))
                 RecursiveDelete(path);
 
-            Zip.ExtractZipResource(path, type, resourceName );
+            Zip.ExtractZipResource(path, type.Assembly, resourceName );
             string reposUrl = "file://" + 
                 path.Replace( "\\", "/" );
             if( reposUrl[ reposUrl.Length-1 ] != '/' )
@@ -102,7 +102,7 @@ namespace NSvn.Core.Tests
         public void ExtractWorkingCopy( )
         {
             this.wcPath = this.FindDirName( Path.Combine( BASEPATH, WC_NAME ) );
-            Zip.ExtractZipResource( this.wcPath, this.GetType(), WC_FILE );  
+            Zip.ExtractZipResource( this.wcPath, this.GetType().Assembly, WC_FILE );  
       
             this.RenameAdminDirs( wcPath );
 
