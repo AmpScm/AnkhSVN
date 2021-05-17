@@ -521,6 +521,9 @@
     <Content Include="Gui\Scc\Unlock.png" />
     <Content Include="Gui\Scc\ViewHistory.png" />
     <Content Include="Gui\Scc\ViewPendingCheckins.png" />
+    <Content Include="Package.ico">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
