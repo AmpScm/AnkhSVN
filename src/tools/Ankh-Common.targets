@@ -44,7 +44,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-    <NoPackageReferences>true</NoPackageReferences>
+    <NoPackageReferences>false</NoPackageReferences>
     <LangVersion>7</LangVersion>
   </PropertyGroup>
   <ItemGroup Condition="'$(VisualStudioVersion)' &gt;= '15.0'">
