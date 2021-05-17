@@ -51,7 +51,7 @@
     <PackageReference Include="SharpSvn.AnnotateAssembly" Version="1.14001.17" />
   </ItemGroup>
   <ItemGroup Condition="'$(VisualStudioVersion)' &gt;= '16.0'">
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.206" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.9.31025.194" />
   </ItemGroup>
   <PropertyGroup>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
