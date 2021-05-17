@@ -139,7 +139,7 @@
       <Version>14.3.25407</Version>
     </PackageReference>
     <PackageReference Include="Moq">
-      <Version>3.1.416.3</Version>
+      <Version>4.16.1</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestFramework">
       <Version>2.2.3</Version>
