@@ -306,14 +306,6 @@
       <Version>1</Version>
       <Visible>false</Visible>
     </DependencyDownload>
-    <Reference Include="SharpSvn">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpGit">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\autolib\SharpGit\SharpGit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(VisualStudioVersion)' &gt;= '15.0'">
     <PackageReference Include="SharpSvn">
