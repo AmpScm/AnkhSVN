@@ -287,14 +287,14 @@ namespace Ankh.VS.Selection
         /// <summary>
         /// Returns the filename of the solution
         /// </summary>
-        public static string GetSolutionFileName(IServiceProvider context)
+        public static string GetSolutionFileName(IAnkhServiceProvider context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            IVsSolution sol = (IVsSolution)context.GetService(typeof(SVsSolution));
+            IVsSolution sol = context.GetService<IVsSolution>(typeof(SVsSolution));
             string solutionDirectory, solutionFile, solutionUserOptions;
-            if (VSErr.Succeeded(sol.GetSolutionInfo(out solutionDirectory, out solutionFile, out solutionUserOptions))
+            if (sol != null && VSErr.Succeeded(sol.GetSolutionInfo(out solutionDirectory, out solutionFile, out solutionUserOptions))
                 && IsValidPath(solutionFile))
             {
                 return solutionFile;

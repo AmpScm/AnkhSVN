@@ -24,6 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BED3AA50-17ED-4A23-9104-72E31091B216}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		AllTests.testrunconfig = AllTests.testrunconfig
 		AnkhSvn.2010.vsmdi = AnkhSvn.2010.vsmdi
 	EndProjectSection
@@ -166,8 +167,8 @@ Global
 		{B52EC60A-F421-4224-9038-6DD2CE9A7AB1} = {08FF496A-CD90-4B17-8FA0-F4CA88AB49D3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		SolutionGuid = {DD5748C0-06A1-432B-BD8A-7F6F50291089}
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = AnkhSvn.2010.vsmdi

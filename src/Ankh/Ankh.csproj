@@ -89,6 +89,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ServiceStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="Ankh.snk" />
     <Compile Include="Commands\ApplyPatch.cs" />
     <Compile Include="Commands\ItemAddToPending.cs">
