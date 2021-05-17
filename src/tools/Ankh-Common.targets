@@ -53,6 +53,6 @@
   <Import Project="$(MSBuildThisFileDirectory)\VS-$(UseVsSdkVersion)-imports.targets"/>
   <PropertyGroup>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ImportVsSdkVersion Condition="'$(ImportVsSdkVersion)' == ''">$(UseVsSdkVersion)</ImportVsSdkVersion>
+    <ImportVsSdkVersion Condition="'$(ImportVsSdkVersion)' == ''">$(VisualStudioVersion)</ImportVsSdkVersion>
   </PropertyGroup>
 </Project>

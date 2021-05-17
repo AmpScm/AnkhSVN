@@ -8,5 +8,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="15.0.1" />
     <PackageReference Include="SharpSvn" Version="1.14001.15" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Embeddable" Version="15.7.27703" />
   </ItemGroup>
 </Project>
