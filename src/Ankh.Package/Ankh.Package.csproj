@@ -48,7 +48,6 @@
   <PropertyGroup>
     <RegisterOutputPackage>true</RegisterOutputPackage>
     <RegisterWithCodebase>true</RegisterWithCodebase>
-    <CtcCompileDependsOn>ApplyXslTemplates;$(CtcCompileDependsOn)</CtcCompileDependsOn>
     <VSCTCompileDependsOn>ApplyXslTemplates;$(VsctCompileDependsOn)</VSCTCompileDependsOn>
     <ApplyXslTemplatesDependsOn>ResolveAssemblyReferences;$(ResolveAssemblyReferences)</ApplyXslTemplatesDependsOn>
   </PropertyGroup>
@@ -134,19 +133,11 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Only edit this block if you really know what you are doing; part of the command compilation -->
-    <CtcFile Include="$(IntermediateOutputPath)AnkhSvn.ctc" Condition="'$(UseCtcInsteadOfVsct)' == 'true'">
-      <ResourceName>1000.ctmenu</ResourceName>
-      <Visible>false</Visible>
-    </CtcFile>
-    <VSCTCompile Include="$(IntermediateOutputPath)..\AnkhSvn.vsct" Condition="'$(UseCtcInsteadOfVsct)' != 'true'">
+    <VSCTCompile Include="$(IntermediateOutputPath)..\AnkhSvn.vsct">
       <ResourceName>1000.ctmenu</ResourceName>
       <Visible>false</Visible>
     </VSCTCompile>
-    <CtcFile Include="$(IntermediateOutputPath)AnkhSvn-legacy.ctc" Condition="'$(UseCtcInsteadOfVsct)' == 'true'">
-      <ResourceName>1001.ctmenu</ResourceName>
-      <Visible>false</Visible>
-    </CtcFile>
-    <VSCTCompile Include="$(IntermediateOutputPath)..\AnkhSvn-legacy.vsct" Condition="'$(UseCtcInsteadOfVsct)' != 'true'">
+    <VSCTCompile Include="$(IntermediateOutputPath)..\AnkhSvn-legacy.vsct">
       <ResourceName>1001.ctmenu</ResourceName>
       <Visible>false</Visible>
     </VSCTCompile>
@@ -161,19 +152,15 @@
   <ItemGroup>
     <!-- Xml based ctc generation; also generates Gui\Ctc\AnkhSvn.bmp -->
     <XslSource Include="Gui\AnkhSvn.xml">
-      <Transform Condition="'$(UseCtcInsteadOfVsct)' == 'true'">Gui\Gui-To-Ctc.xsl</Transform>
-      <To Condition="'$(UseCtcInsteadOfVsct)' == 'true'">$(IntermediateOutputPath)AnkhSvn.ctc</To>
-      <Transform Condition="'$(UseCtcInsteadOfVsct)' != 'true'">Gui\Gui-To-Vsct.xsl</Transform>
-      <To Condition="'$(UseCtcInsteadOfVsct)' != 'true'">$(IntermediateOutputPath)..\AnkhSvn.vsct</To>
+      <Transform>Gui\Gui-To-Vsct.xsl</Transform>
+      <To>$(IntermediateOutputPath)..\AnkhSvn.vsct</To>
       <Debug>true</Debug>
       <Variables>BitmapResId=Bmp_AnkhBmp</Variables>
       <SubType>Designer</SubType>
     </XslSource>
     <XslSource Include="Gui\AnkhSvn.xml">
-      <Transform Condition="'$(UseCtcInsteadOfVsct)' == 'true'">Gui\Gui-To-Ctc.xsl</Transform>
-      <To Condition="'$(UseCtcInsteadOfVsct)' == 'true'">$(IntermediateOutputPath)AnkhSvn-legacy.ctc</To>
-      <Transform Condition="'$(UseCtcInsteadOfVsct)' != 'true'">Gui\Gui-To-Vsct.xsl</Transform>
-      <To Condition="'$(UseCtcInsteadOfVsct)' != 'true'">$(IntermediateOutputPath)..\AnkhSvn-legacy.vsct</To>
+      <Transform>Gui\Gui-To-Vsct.xsl</Transform>
+      <To>$(IntermediateOutputPath)..\AnkhSvn-legacy.vsct</To>
       <Debug>true</Debug>
       <Variables>BitmapResId=Bmp_AnkhBmpLegacy;BitmapFile=../obj/CtCBitmap-legacy.bmp;ImgSubdir=legacy</Variables>
       <SubType>Designer</SubType>
@@ -192,7 +179,6 @@
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -590,8 +576,6 @@
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(ImportVsSdkVersion)\VSSDK\Microsoft.VsSDK.targets" Condition="$(ImportVsSdkVersion) != '8.0'" />
-  <Import Project="..\tools\VSSdk2005Tasks\VS9.0-fixes.targets" Condition="$(ImportVsSdkVersion) == '9.0'" />
-  <Import Project="..\tools\VSSdk2005Tasks\Microsoft.VsSDK.targets" Condition="$(ImportVsSdkVersion) == '8.0'" />
   <Import Project="..\tools\turtletasks\QQn.TurtleTasks.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

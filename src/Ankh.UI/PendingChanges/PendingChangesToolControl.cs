@@ -217,7 +217,7 @@ namespace Ankh.UI.PendingChanges
         {
             page._alreadyThemed = true;
 
-            if (VSVersion.SupportsTheming && Context != null)
+            if (VSVersion.VS2012OrLater && Context != null)
             {
                 IWinFormsThemingService wts = Context.GetService<IWinFormsThemingService>();
 

@@ -262,7 +262,7 @@ namespace Ankh.Scc
 
             _glyphList = StatusImages.CreateStatusImageList();
 
-            if (VSVersion.VS2012OrLater || SolutionNavigatorInstalled())
+            if (VSVersion.VS2012OrLater)
             {
                 for (int i = 0; i < 16; i++)
                 {
@@ -284,25 +284,6 @@ namespace Ankh.Scc
             pdwImageListHandle = unchecked((uint)_glyphList.Handle);
 
             return VSErr.S_OK;
-        }
-
-        private bool SolutionNavigatorInstalled()
-        {
-            if (!VSVersion.VS2010)
-                return false;
-
-            IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
-
-            if (shell == null)
-                return false;
-
-            Guid solutionNavigatorPackage = new Guid("{cf6a5c16-83b0-4d04-b702-195c35c6e887}");
-
-            int bInstalled;
-            if (!VSErr.Succeeded(shell.IsPackageInstalled(ref solutionNavigatorPackage, out bInstalled)))
-                return false;
-
-            return (bInstalled != 0);
         }
     }
 }

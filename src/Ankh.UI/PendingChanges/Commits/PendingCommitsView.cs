@@ -312,7 +312,7 @@ namespace Ankh.UI.PendingChanges.Commits
         {
             IAnkhCommandStates states;
 
-            if (VSVersion.SupportsTheming
+            if (VSVersion.VS2012OrLater
                 && null != (states = sender.GetService<IAnkhCommandStates>())
                 && states.ThemeLight)
             {

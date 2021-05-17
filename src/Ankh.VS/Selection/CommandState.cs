@@ -644,11 +644,6 @@ namespace Ankh.VS.Selection
                         break;
 
                     _zombie = (bool)var;
-                    if (!VSVersion.VS2010OrLater)
-                    {
-                        // VSSPROPID_ShellInitialized was added in VS2010.
-                        goto case VSSPROPID_ShellInitialized;
-                    }
                     break;
                 case VSSPROPID_ShellInitialized:
                     if (!(var is bool))

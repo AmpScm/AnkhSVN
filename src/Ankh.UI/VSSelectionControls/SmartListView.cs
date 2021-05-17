@@ -380,7 +380,7 @@ namespace Ankh.UI.VSSelectionControls
                     break;
             }
 
-            if (column == 0 && CheckBoxes && ShowSelectAllCheckBox && VSVersion.VistaOrLater)
+            if (column == 0 && CheckBoxes && ShowSelectAllCheckBox)
             {
                 if (!_setHeaderStyle)
                 {
@@ -504,13 +504,12 @@ namespace Ankh.UI.VSSelectionControls
 
             UpdateSortGlyphs();
 
-            if (IsXPPlus && !OwnerDraw)
+            if (!OwnerDraw)
             {
-                if (VSVersion.VS2010OrLater && !_isThemed)
+                if (!_isThemed)
                     NativeMethods.SetWindowTheme(Handle, "Explorer", null);
 
-                if (VSVersion.VS2010OrVistaOrLater)
-                    NativeMethods.SendMessage(Handle, LVM_SETEXTENDEDLISTVIEWSTYLE, (IntPtr)LVS_EX_DOUBLEBUFFER, (IntPtr)LVS_EX_DOUBLEBUFFER);
+                NativeMethods.SendMessage(Handle, LVM_SETEXTENDEDLISTVIEWSTYLE, (IntPtr)LVS_EX_DOUBLEBUFFER, (IntPtr)LVS_EX_DOUBLEBUFFER);
             }
         }
 

@@ -15,6 +15,7 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Reflection;
 
 namespace TestUtils
 {
@@ -34,7 +35,7 @@ namespace TestUtils
         /// <param name="destinationPath">The directory to extract to.</param>
         /// <param name="type">The type that contains the resource.</param>
         /// <param name="resourceName">The name of the embedded resource.</param>
-        public static void ExtractZipResource(string destinationPath, AssemblyLoadEventArgs assembly, string resourceName)
+        public static void ExtractZipResource(string destinationPath, Assembly assembly, string resourceName)
         {
             Directory.CreateDirectory(destinationPath);
 

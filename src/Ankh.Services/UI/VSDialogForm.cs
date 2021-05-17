@@ -358,7 +358,7 @@ namespace Ankh.UI
 
         protected virtual void ThemeDialog(EventArgs eventArgs)
         {
-            if (!DesignMode && VSVersion.SupportsTheming)
+            if (!DesignMode && VSVersion.VS2012OrLater)
             {
                 IWinFormsThemingService themer = GetService<IWinFormsThemingService>();
 
