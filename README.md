@@ -1,4 +1,4 @@
-### AnkhSVN - Subversion Support for Visual Studio
+# AnkhSVN - Subversion Support for Visual Studio
 
 Contents:
  1. Welcome
