@@ -1,0 +1,32 @@
+/* Collabnet specific */
+#main {
+   text-align: left;
+}
+
+#main h1, #main h2 {
+   text-align: center;
+}
+
+tr.d
+{
+	background-color: #FFFF99;
+	font-weight: bold;
+	vertical-align: top;
+}
+
+td.r, td.a
+{
+	vertical-align: top;
+	color: Black;
+}
+
+td.f
+{
+	vertical-align: top;
+}
+
+td.l
+{
+	vertical-align: top;
+	color: #575757;
+}

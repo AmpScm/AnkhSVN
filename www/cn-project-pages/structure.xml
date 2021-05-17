@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<structure>
+  <page>
+    <id>3794</id>
+    <name>Downloads</name>
+    <directory>Downloads</directory>
+    <ordinal>1</ordinal>
+  </page>
+  <page>
+    <id>PpvZJl</id>
+    <name>Screenshots</name>
+    <directory>Screenshots</directory>
+    <ordinal>2</ordinal>
+  </page>
+  <page>
+    <id>3795</id>
+    <name>Community Support</name>
+    <directory>Community Support</directory>
+    <ordinal>3</ordinal>
+  </page>
+  <page>
+    <id>3796</id>
+    <name>Roadmap</name>
+    <directory>Roadmap</directory>
+    <ordinal>4</ordinal>
+  </page>
+  <page>
+    <id>3797</id>
+    <name>Development</name>
+    <directory>Development</directory>
+    <ordinal>5</ordinal>
+  </page>
+  <page>
+    <id>3798</id>
+    <name>Tools &amp; admin</name>
+    <directory>Tools &amp; admin</directory>
+    <ordinal>6</ordinal>
+  </page>
+</structure>
+
