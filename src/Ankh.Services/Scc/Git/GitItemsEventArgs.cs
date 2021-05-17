@@ -1,5 +1,3 @@
-// $Id$
-//
 // Copyright 2008 The AnkhGit Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
