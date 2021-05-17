@@ -1,6 +1,4 @@
-﻿// $Id: AssemblyInfo.cs 12709 2015-08-26 16:24:34Z rhuijben $
-//
-// Copyright 2008-2009 The AnkhSVN Project
+﻿// Copyright 2008-2009 The AnkhSVN Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
