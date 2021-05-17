@@ -16,10 +16,10 @@ using System;
 using System.Collections.Specialized;
 using System.IO;
 using System.Windows.Forms;
-using Ankh.Diff.DiffUtils;
 using SharpSvn;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Ankh.Diff.DiffUtils;
 
 namespace Ankh.UI.MergeWizard
 {

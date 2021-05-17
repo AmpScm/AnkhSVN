@@ -62,10 +62,16 @@ namespace AnkhSvn_UnitTestProject.Services
             Assert.That(mapper.GetFileType("exe"), Is.EqualTo("Application"));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestNullSvnItem()
         {
-            mapper.GetFileType((SvnItem)null);
+            try
+            {
+                mapper.GetFileType((SvnItem)null);
+                Assert.Fail();
+            }
+            catch (ArgumentNullException)
+            { }
         }
 
         [Test]
@@ -228,10 +234,16 @@ namespace AnkhSvn_UnitTestProject.Services
             }
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestGetIcon_NullParam_Throws()
         {
-            mapper.GetIcon(null);
+            try
+            {
+                mapper.GetIcon(null);
+                Assert.Fail();
+            }
+            catch(ArgumentNullException)
+            { }
         }
     }
 }

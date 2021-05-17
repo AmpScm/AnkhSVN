@@ -65,26 +65,12 @@
       <Visible>false</Visible>
     </Reference>
     <!---->
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop" />
-    <Reference Include="Microsoft.VSSDK.UnitTestLibrary" />
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0'">
       <Visible>false</Visible>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" Condition="'$(UseVsSdkVersion)' != '8.0' and '$(UseVsSdkVersion)' != '9.0' and '$(UseVsSdkVersion)' != '10.0'">
       <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Moq, Version=3.0.204.1, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.4.6.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpSvn, Version=1.4999.384.29813, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -116,10 +102,6 @@
     <None Include="Ankh.VS.UnitTest.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ankh.Diff\Ankh.Diff.csproj">
-      <Project>{62F97060-6A9E-477D-B15B-E1A1F5320039}</Project>
-      <Name>Ankh.Diff</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ankh.Scc\Ankh.Scc.csproj">
       <Project>{ECE36A69-DD85-4AAB-B329-12BAE4675056}</Project>
       <Name>Ankh.Scc</Name>
@@ -151,6 +133,20 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Stubs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VSSDK.UnitTestLibrary">
+      <Version>14.3.25407</Version>
+    </PackageReference>
+    <PackageReference Include="Moq">
+      <Version>3.1.416.3</Version>
+    </PackageReference>
+    <PackageReference Include="MSTest.TestFramework">
+      <Version>2.2.3</Version>
+    </PackageReference>
+    <PackageReference Include="NUnit">
+      <Version>3.13.2</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

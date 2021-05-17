@@ -123,10 +123,18 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         }
 
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void AddWorkingCopyExplorerRootCommand()
         {
-            CommandTester.TestExecution(AnkhCommand.WorkingCopyBrowse);
+            try
+            {
+                CommandTester.TestExecution(AnkhCommand.WorkingCopyBrowse);
+                Assert.Fail();
+            }
+            catch(InvalidOperationException)
+            {
+
+            }
         }
 
         [Test, Explicit("Broken")]

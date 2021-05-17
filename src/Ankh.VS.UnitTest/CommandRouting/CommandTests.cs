@@ -21,7 +21,6 @@ using NUnit.Framework;
 
 using Ankh;
 using Ankh.Commands;
-using Ankh.Diff;
 using Ankh.Scc;
 using Ankh.Selection;
 using Ankh.UI;
@@ -81,7 +80,6 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             r.AddModule(new AnkhSccModule(r));
             //r.AddModule(new AnkhVSModule(r));
             r.AddModule(new AnkhUIModule(r));
-            r.AddModule(new AnkhDiffModule(r));
             r.Start();
 
             cm = r.GetService<CommandMapper>();

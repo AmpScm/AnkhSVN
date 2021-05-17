@@ -78,7 +78,7 @@
       <Name>System.XML</Name>
     </Reference>
     <ProjectReference Include="..\Ankh.Diff\Ankh.Diff.csproj">
-      <Project>{62F97060-6A9E-477D-B15B-E1A1F5320039}</Project>
+      <Project>{62f97060-6a9e-477d-b15b-e1a1f5320039}</Project>
       <Name>Ankh.Diff</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ankh.ExtensionPoints\Ankh.ExtensionPoints.csproj">

@@ -88,14 +88,6 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Framework" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '15.0'">
       <Visible>false</Visible>
     </Reference>
-    <Reference Include="SharpGit">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\autolib\SharpGit\SharpGit.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpSvn">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
@@ -527,10 +519,6 @@
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ankh.Diff\Ankh.Diff.csproj">
-      <Project>{62F97060-6A9E-477D-B15B-E1A1F5320039}</Project>
-      <Name>Ankh.Diff</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ankh.ExtensionPoints\Ankh.ExtensionPoints.csproj">
       <Project>{B7168874-E05E-458D-95CC-5D7BBC243986}</Project>
       <Name>Ankh.ExtensionPoints</Name>
