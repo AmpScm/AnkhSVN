@@ -42,6 +42,8 @@ namespace Ankh.UI.SvnLog
         LogRequest _currentRequest;
         LogMode _mode;
         BusyOverlay _busyOverlay;
+        ISvnClientPool _clientPool;
+        IAnkhIssueService _issueService;
 
         public LogRevisionControl()
             : this(null)
@@ -159,6 +161,14 @@ namespace Ankh.UI.SvnLog
                 return;
 
             fetchCount += args.Limit;
+
+            _clientPool = _context.GetService<ISvnClientPool>();
+            _issueService = _context.GetService<IAnkhIssueService>();
+
+            _clientPool.EnsureClient(); // Ensures UI can be setup
+            GC.KeepAlive(_issueService?.CurrentIssueRepositorySettings);
+            GC.KeepAlive(_issueService?.CurrentIssueRepository);
+
             _logAction.BeginInvoke(args, null, null);
         }
 
@@ -190,7 +200,7 @@ namespace Ankh.UI.SvnLog
             ShowBusyIndicator();
             try
             {
-                using (SvnClient client = _context.GetService<ISvnClientPool>().GetClient())
+                using (SvnClient client = _clientPool.GetClient())
                 {
                     SvnOrigin single = EnumTools.GetSingle(LogSource.Targets);
                     if (single != null)
@@ -263,7 +273,7 @@ namespace Ankh.UI.SvnLog
 
             e.Detach();
 
-            LogRevisionItem lri = new LogRevisionItem(this, _context, e);
+            LogRevisionItem lri = new LogRevisionItem(this, _issueService, e);
             bool post;
 
             lock (_logItems)

@@ -30,20 +30,18 @@ namespace Ankh.UI.SvnLog
 {
     class LogRevisionItem : SmartListViewItem
     {
-        readonly IAnkhServiceProvider _context;
+        readonly IAnkhIssueService _issueService;
         readonly SvnLoggingEventArgs _args;
-        public LogRevisionItem(LogRevisionControl listView, IAnkhServiceProvider context, SvnLoggingEventArgs e)
+        public LogRevisionItem(LogRevisionControl listView, IAnkhIssueService issueService, SvnLoggingEventArgs e)
             : base(listView)
         {
             if (listView == null)
-                throw new ArgumentNullException("listView");
-            else if (context == null)
                 throw new ArgumentNullException("listView");
             else if (e == null)
                 throw new ArgumentNullException("e");
 
             _args = e;
-            _context = context;
+            _issueService = issueService;
             RefreshText();
             UpdateColors();
         }
@@ -138,10 +136,6 @@ namespace Ankh.UI.SvnLog
             get { return _args; }
         }
 
-        internal IAnkhServiceProvider Context
-        {
-            get { return _context; }
-        }
 
         /// <summary>
         /// Returns IEnumerable for issue ids combining the issues found via associated issue repository and project commit settings.
@@ -155,11 +149,10 @@ namespace Ankh.UI.SvnLog
                 if (string.IsNullOrEmpty(logMessage))
                     yield break;
 
-                IAnkhIssueService iService = Context.GetService<IAnkhIssueService>();
-                if (iService != null)
+                if (_issueService != null)
                 {
                     IEnumerable<TextMarker> issues;
-                    if (iService.TryGetIssues(logMessage, out issues))
+                    if (_issueService.TryGetIssues(logMessage, out issues))
                     {
                         foreach (TextMarker issue in issues)
                         {
@@ -209,9 +202,9 @@ namespace Ankh.UI.SvnLog
         [Browsable(false)]
         public int Index
         {
-            get 
+            get
             {
-                return _index; 
+                return _index;
             }
         }
 
@@ -270,7 +263,7 @@ namespace Ankh.UI.SvnLog
         /// </summary>
         public System.Collections.Generic.IEnumerable<TextMarker> Issues
         {
-            get 
+            get
             {
                 return _lvi.Issues;
             }

@@ -83,6 +83,11 @@ namespace Ankh.Services
             }
         }
 
+        public void EnsureClient()
+        {
+            GetClient().Dispose();
+        }
+
         public SvnPoolClient GetNoUIClient()
         {
             lock (_clients)
@@ -122,13 +127,17 @@ namespace Ankh.Services
             get { return _cfg ?? (_cfg = GetService<IAnkhConfigurationService>()); }
         }
 
+        IUIService _uiService;
+        IUIService UIService => _uiService ?? (_uiService = GetService<IUIService>());
+
+
         // Use separate function to delay loading the SharpSvn.UI.dll
         private void HookUI(AnkhSvnPoolClient client)
         {
             // Let SharpSvnUI handle login and SSL dialogs
             SvnUIBindArgs bindArgs = new SvnUIBindArgs();
             bindArgs.ParentWindow = new OwnerWrapper(DialogOwner);
-            bindArgs.UIService = GetService<IUIService>();
+            bindArgs.UIService = UIService;
             bindArgs.Synchronizer = _syncher;
 
             if (Config != null && Config.Instance.PreferPuttyAsSSH)
@@ -142,7 +151,7 @@ namespace Ankh.Services
             // Let SharpSvnUI handle login and SSL dialogs
             SvnUIBindArgs bindArgs = new SvnUIBindArgs();
             bindArgs.ParentWindow = new OwnerWrapper(DialogOwner);
-            bindArgs.UIService = GetService<IUIService>();
+            bindArgs.UIService = UIService;
             bindArgs.Synchronizer = _syncher;
 
             if (Config != null && Config.Instance.PreferPuttyAsSSH)

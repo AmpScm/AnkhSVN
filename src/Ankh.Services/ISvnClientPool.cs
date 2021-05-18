@@ -73,6 +73,11 @@ namespace Ankh
         /// Flushes all clients to read settings again
         /// </summary>
         void FlushAllClients();
+
+        /// <summary>
+        /// Ensures that at least one client is available
+        /// </summary>
+        void EnsureClient();
     }
 
     public sealed class SvnClientAction : IComparable<SvnClientAction>

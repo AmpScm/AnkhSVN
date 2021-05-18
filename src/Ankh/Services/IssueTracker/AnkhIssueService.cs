@@ -37,6 +37,7 @@ namespace Ankh.Services.IssueTracker
         readonly Dictionary<string, IssueRepositoryConnector> _nameConnectorMap = new Dictionary<string, IssueRepositoryConnector>();
         private IssueRepository _repository;
         IProjectCommitSettings _commitSettings;
+        bool _fetchedCommit;
 
         public AnkhIssueService(IAnkhServiceProvider context)
             : base(context)
@@ -45,7 +46,7 @@ namespace Ankh.Services.IssueTracker
 
         IProjectCommitSettings CommitSettings
         {
-            get { return _commitSettings ?? (_commitSettings = GetService<IProjectCommitSettings>()); }
+            get { return _commitSettings; }
         }
 
         #region IAnkhIssueService Members
@@ -388,18 +389,23 @@ namespace Ankh.Services.IssueTracker
                 Manager.PendingChanges.CollectionChanged += OnPendingChangesCollectionChanged;
                 Manager.PendingChanges.ItemChanged += OnPendingChangeChanged;
             }
+
+            _commitSettings = GetService<IProjectCommitSettings>();
+            _mgr = GetService<IPendingChangesManager>();
+            _solutionSettings = GetService<IAnkhSolutionSettings>();
+            _settings = GetService<IIssueTrackerSettings>();
         }
 
         IPendingChangesManager _mgr;
         IPendingChangesManager Manager
         {
-            get { return _mgr ?? (_mgr = GetService<IPendingChangesManager>()); }
+            get { return _mgr; }
         }
 
         IAnkhSolutionSettings _solutionSettings;
         IAnkhSolutionSettings SolutionSettings
         {
-            get { return _solutionSettings ?? (_solutionSettings = GetService<IAnkhSolutionSettings>()); }
+            get { return _solutionSettings; }
         }
 
         private void OnPendingChangeChanged(object sender, ItemChangedEventArgs<PendingChange> e)
@@ -439,7 +445,7 @@ namespace Ankh.Services.IssueTracker
         IIssueTrackerSettings _settings;
         private IIssueTrackerSettings Settings
         {
-            get { return _settings ?? (_settings = GetService<IIssueTrackerSettings>()); }
+            get { return _settings; }
         }
 
         /// <summary>
