@@ -80,7 +80,7 @@ namespace Ankh.VSPackage
         /// </summary>
         public AnkhSvnPackage()
         {
-            _runtime = new AnkhRuntime(this);
+            // This function is executed async, so don't initialize here.
         }
 
         /////////////////////////////////////////////////////////////////////////////
@@ -214,6 +214,11 @@ namespace Ankh.VSPackage
             {
                 Marshal.Release(handle);
             }
+        }
+
+        protected override object GetService(Type serviceType)
+        {
+            return base.GetService(serviceType);
         }
 
         #endregion

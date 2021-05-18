@@ -138,14 +138,15 @@ namespace Ankh.Commands
                 ProgressRunnerArgs pa = new ProgressRunnerArgs();
                 pa.CreateLog = true;
 
+                var ih = e.GetService<IConflictHandler>();
+
                 e.GetService<IProgressRunner>().RunModal(CommandStrings.UpdatingTitle, pa,
                                                          delegate(object sender, ProgressWorkerArgs ee)
                                                          {
                                                              SvnUpdateArgs ua = new SvnUpdateArgs();
                                                              ua.Depth = SvnDepth.Infinity;
                                                              ua.Revision = updateTo;
-                                                             e.GetService<IConflictHandler>().
-                                                                 RegisterConflictHandler(ua, ee.Synchronizer);
+                                                             ih.RegisterConflictHandler(ua, ee.Synchronizer);
                                                              ee.Client.Update(files, ua, out ur);
                                                          });
             }

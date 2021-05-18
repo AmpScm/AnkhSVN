@@ -394,10 +394,12 @@ namespace Ankh.Commands
                 else
                     title = CommandStrings.UpdatingProject;
 
+                IConflictHandler ih = e.Context.GetService<IConflictHandler>();
+
                 e.GetService<IProgressRunner>().RunModal(title, pa,
                     delegate(object sender, ProgressWorkerArgs a)
                     {
-                        PerformUpdate(e, a, rev, allowUnversionedObstructions, updateExternals, setDepthInfinity, groups.Values, out updateResult);
+                        PerformUpdate(e, a, rev, allowUnversionedObstructions, updateExternals, setDepthInfinity, groups.Values, ih, out updateResult);
                     });
 
                 if (ci != null && updateResult != null && IsSolutionCommand(e.Command))
@@ -407,7 +409,7 @@ namespace Ankh.Commands
             }
         }
 
-        private static void PerformUpdate(CommandEventArgs e, ProgressWorkerArgs wa, SvnRevision rev, bool allowUnversionedObstructions, bool updateExternals, bool setDepthInfinity, IEnumerable<UpdateGroup> groups, out SvnUpdateResult updateResult)
+        private static void PerformUpdate(CommandEventArgs e, ProgressWorkerArgs wa, SvnRevision rev, bool allowUnversionedObstructions, bool updateExternals, bool setDepthInfinity, IEnumerable<UpdateGroup> groups, IConflictHandler ih, out SvnUpdateResult updateResult)
         {
             SvnUpdateArgs ua = new SvnUpdateArgs();
             ua.Revision = rev;
@@ -425,7 +427,8 @@ namespace Ankh.Commands
                         handledExternals.Add(ee.FullPath);
                 }
             };
-            e.Context.GetService<IConflictHandler>().RegisterConflictHandler(ua, wa.Synchronizer);
+
+            ih?.RegisterConflictHandler(ua, wa.Synchronizer);
 
             foreach (UpdateGroup group in groups)
             {
