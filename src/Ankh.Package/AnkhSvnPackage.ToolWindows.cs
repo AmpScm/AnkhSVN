@@ -82,7 +82,7 @@ namespace Ankh.VSPackage
         public void ShowToolWindow(AnkhToolWindow toolWindow, int id, bool create)
         {
             ToolWindowPane pane = FindToolWindow(GetPaneType(toolWindow), id, create);
-            
+
             IVsWindowFrame frame = pane.Frame as IVsWindowFrame;
             if (frame == null)
             {
@@ -103,7 +103,7 @@ namespace Ankh.VSPackage
             if (frame == null)
                 return;
 
-            Marshal.ThrowExceptionForHR(frame.CloseFrame((uint) close));
+            Marshal.ThrowExceptionForHR(frame.CloseFrame((uint)close));
         }
 
         AmbientProperties _ambientProperties;
@@ -377,7 +377,7 @@ namespace Ankh.VSPackage
 
     abstract class AnkhToolWindowPane : ToolWindowPane, IOleCommandTarget, IVsWindowFrameNotify3, IVsWindowFrameNotify2, IVsWindowFrameNotify
     {
-        readonly AnkhToolWindowHost _host;
+        AnkhToolWindowHost _host;
         AnkhToolWindowControl _control;
         IAnkhToolWindowControl _twControl;
         AnkhToolWindow _toolWindow;
@@ -386,25 +386,13 @@ namespace Ankh.VSPackage
         protected AnkhToolWindowPane()
             : base(null)
         {
-            // HACK from AnkHSVN2019 to get things working. Global fix to local issue :( (Affects all of Visual Studio),
-            // so code should be improved
-            try
-            {
-                // Set the DPI awareness for the current thread to 'System Aware'
-                // System DPI aware.
-                //
-                //  This window does not scale for DPI changes. It will query for the DPI once and
-                //  use that value for the lifetime of the process. If the DPI changes, the process
-                //  will not adjust to the new DPI value. It will be automatically scaled up or down
-                //  by the system when the DPI changes from the system value.
-                NativeImports.SetThreadDpiAwarenessContext(NativeImports.DPI_AWARENESS_CONTEXT.SystemAware);
-            }
-            catch (EntryPointNotFoundException)
-            {
-              // Fallback for not new enough Windows 10
-            }
+            AnkhToolWindowHost host = null;
+            WithDPIAwareness.Run(AnkhDpiAwareness.SystemAware,
+                () => {
+                    host = new AnkhToolWindowHost(this);
+                });
 
-            _host = new AnkhToolWindowHost(this);
+            _host = host ?? throw new InvalidOperationException();
         }
 
         public AnkhToolWindow AnkhToolWindow
@@ -457,16 +445,18 @@ namespace Ankh.VSPackage
                 {
                     _created = true;
                     if (!_control.IsHandleCreated)
-                    {
-                        Size sz = _control.Size;
-                        _control.Location = new Point(-15000, -15000); // Far, far away
-                        _control.Size = new Size(0, 0); // And just 1 pixel
+                        WithDPIAwareness.Run(AnkhDpiAwareness.SystemAware, () =>
+                        {
 
-                        _control.Visible = true; // If .Visible = false no window is created!
-                        _control.CreateControl();
-                        _control.Visible = false; // And hide the window now or we hijack the focus. See issue #507
-                        _control.Size = sz;
-                    }
+                            Size sz = _control.Size;
+                            _control.Location = new Point(-15000, -15000); // Far, far away
+                            _control.Size = new Size(0, 0); // And just 1 pixel
+
+                            _control.Visible = true; // If .Visible = false no window is created!
+                            _control.CreateControl();
+                            _control.Visible = false; // And hide the window now or we hijack the focus. See issue #507
+                            _control.Size = sz;
+                        });
                 }
                 return _control;
             }
@@ -502,14 +492,17 @@ namespace Ankh.VSPackage
         AnkhServiceEvents _serviceEvents;
         protected override void OnCreate()
         {
-            _host.Load();
-            //Control.Site = _host;
-            Control.ToolWindowHost = _host;
-            base.OnCreate();
+            WithDPIAwareness.Run(AnkhDpiAwareness.SystemAware, () =>
+            {
+                _host.Load();
+                //Control.Site = _host;
+                Control.ToolWindowHost = _host;
+                base.OnCreate();
 
-            _serviceEvents = _host.GetService<AnkhServiceEvents>();
-            if (_serviceEvents != null)
-                _serviceEvents.ThemeChanged += OnThemeChanged;
+                _serviceEvents = _host.GetService<AnkhServiceEvents>();
+                if (_serviceEvents != null)
+                    _serviceEvents.ThemeChanged += OnThemeChanged;
+            });
         }
 
         private void OnThemeChanged(object sender, EventArgs e)
@@ -625,13 +618,16 @@ namespace Ankh.VSPackage
     {
         public WorkingCopyExplorerToolWindow()
         {
-            Caption = Resources.WorkingCopyExplorerToolWindowTitle;
-            Control = new WorkingCopyExplorerControl();
+            WithDPIAwareness.Run(AnkhDpiAwareness.SystemAware, () =>
+            {
+                Caption = Resources.WorkingCopyExplorerToolWindowTitle;
+                Control = new WorkingCopyExplorerControl();
 
-            AnkhToolWindow = AnkhToolWindow.WorkingCopyExplorer;
+                AnkhToolWindow = AnkhToolWindow.WorkingCopyExplorer;
 
-            ToolBarId = (AnkhToolBar)AnkhCommandMenu.WorkingCopyExplorerToolBar;
-            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+                ToolBarId = (AnkhToolBar)AnkhCommandMenu.WorkingCopyExplorerToolBar;
+                ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            });
         }
     }
 
@@ -643,13 +639,16 @@ namespace Ankh.VSPackage
     {
         public RepositoryExplorerToolWindow()
         {
-            Caption = Resources.RepositoryExplorerToolWindowTitle;
-            Control = new RepositoryExplorerControl();
+            WithDPIAwareness.Run(AnkhDpiAwareness.SystemAware, () =>
+            {
+                Caption = Resources.RepositoryExplorerToolWindowTitle;
+                Control = new RepositoryExplorerControl();
 
-            AnkhToolWindow = AnkhToolWindow.RepositoryExplorer;
+                AnkhToolWindow = AnkhToolWindow.RepositoryExplorer;
 
-            ToolBarId = (AnkhToolBar)AnkhCommandMenu.RepositoryExplorerToolBar;
-            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+                ToolBarId = (AnkhToolBar)AnkhCommandMenu.RepositoryExplorerToolBar;
+                ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            });
         }
     }
 
@@ -661,13 +660,16 @@ namespace Ankh.VSPackage
     {
         public SvnPendingChangesToolWindow()
         {
-            Caption = Resources.PendingChangesToolWindowTitle;
-            Control = new Ankh.UI.PendingChanges.PendingChangesToolControl();
+            WithDPIAwareness.Run(AnkhDpiAwareness.SystemAware, () =>
+            {
+                Caption = Resources.PendingChangesToolWindowTitle;
+                Control = new Ankh.UI.PendingChanges.PendingChangesToolControl();
 
-            AnkhToolWindow = AnkhToolWindow.PendingChanges;
+                AnkhToolWindow = AnkhToolWindow.PendingChanges;
 
-            ToolBarId = AnkhToolBar.PendingChanges;
-            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+                ToolBarId = AnkhToolBar.PendingChanges;
+                ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            });
         }
     }
 
@@ -679,13 +681,16 @@ namespace Ankh.VSPackage
     {
         public GitPendingChangesToolWindow()
         {
-            Caption = Resources.PendingChangesToolWindowTitle;
-            Control = new Ankh.UI.PendingChanges.PendingChangesToolControl();
+            WithDPIAwareness.Run(AnkhDpiAwareness.SystemAware, () =>
+            {
+                Caption = Resources.PendingChangesToolWindowTitle;
+                Control = new Ankh.UI.PendingChanges.PendingChangesToolControl();
 
-            AnkhToolWindow = AnkhToolWindow.GitPendingChanges;
+                AnkhToolWindow = AnkhToolWindow.GitPendingChanges;
 
-            ToolBarId = AnkhToolBar.PendingChanges;
-            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+                ToolBarId = AnkhToolBar.PendingChanges;
+                ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            });
         }
     }
 
@@ -694,13 +699,16 @@ namespace Ankh.VSPackage
     {
         public LogToolWindow()
         {
-            Caption = Resources.LogToolWindowTitle;
-            Control = new LogToolWindowControl();
+            WithDPIAwareness.Run(AnkhDpiAwareness.SystemAware, () =>
+            {
+                Caption = Resources.LogToolWindowTitle;
+                Control = new LogToolWindowControl();
 
-            AnkhToolWindow = AnkhToolWindow.Log;
+                AnkhToolWindow = AnkhToolWindow.Log;
 
-            ToolBarId = AnkhToolBar.LogViewer;
-            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+                ToolBarId = AnkhToolBar.LogViewer;
+                ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            });
         }
     }
 
@@ -709,14 +717,17 @@ namespace Ankh.VSPackage
     {
         public SccInfoToolWindow()
         {
-            Caption = Resources.SccInfoToolWindowTitle;
-            Control = new SvnInfoGridControl();
+            WithDPIAwareness.Run(AnkhDpiAwareness.SystemAware, () =>
+            {
+                Caption = Resources.SccInfoToolWindowTitle;
+                Control = new SvnInfoGridControl();
 
-            AnkhToolWindow = AnkhToolWindow.SvnInfo;
+                AnkhToolWindow = AnkhToolWindow.SvnInfo;
 
-            ToolBarId = AnkhToolBar.SvnInfoCombo;
-            ExtraToolBarId = AnkhToolBar.SvnInfo;
-            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+                ToolBarId = AnkhToolBar.SvnInfoCombo;
+                ExtraToolBarId = AnkhToolBar.SvnInfo;
+                ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            });
         }
     }
 }
