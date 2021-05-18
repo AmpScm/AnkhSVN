@@ -240,6 +240,8 @@ namespace Ankh
             else if (context == null)
                 throw new ArgumentNullException("context");
 
+            IAnkhStaticServiceRegistry staticContainer = container as IAnkhStaticServiceRegistry;
+
             object[] constructorArgs = null;
             foreach (Type type in assembly.GetTypes())
             {
@@ -302,7 +304,10 @@ namespace Ankh
                     if (attr.PublicService && !Marshal.IsTypeVisibleFromCom(serviceType))
                         Trace.WriteLine(string.Format("ServiceType {0} is not visible from com, but promoted", serviceType.AssemblyQualifiedName));
 #endif
-                    container.AddService(serviceType, instance, attr.PublicService);
+                    if (staticContainer != null)
+                        staticContainer.AddStaticService(serviceType, instance, attr.PublicService);
+                    else
+                        container.AddService(serviceType, instance, attr.PublicService);
                 }
 
                 if (instance != null)

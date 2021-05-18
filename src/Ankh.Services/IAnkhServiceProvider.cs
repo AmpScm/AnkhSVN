@@ -187,4 +187,9 @@ namespace Ankh
         T QueryService<T>(Guid serviceGuid)
             where T : class;
     }
+
+    public interface IAnkhStaticServiceRegistry
+    {
+        void AddStaticService(Type type, object instance, bool promote);
+    }
 }

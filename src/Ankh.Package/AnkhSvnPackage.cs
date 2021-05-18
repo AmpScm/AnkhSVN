@@ -33,6 +33,7 @@ using Ankh.UI;
 using Ankh.VSPackage.Attributes;
 using Ankh.GitScc;
 using Ankh.WpfUI;
+using System.Collections.Generic;
 
 namespace Ankh.VSPackage
 {
@@ -67,9 +68,10 @@ namespace Ankh.VSPackage
 
     [CLSCompliant(false)]
     [ProvideOutputWindow(AnkhId.AnkhOutputPaneId, "#111", InitiallyInvisible = false, Name = AnkhId.PlkProduct, ClearWithSolution = false)]
-    sealed partial class AnkhSvnPackage : AsyncPackage, IAnkhPackage, IAnkhQueryService
+    sealed partial class AnkhSvnPackage : AsyncPackage, IAnkhPackage, IAnkhQueryService, IAnkhStaticServiceRegistry
     {
         private AnkhRuntime _runtime;
+        readonly Dictionary<Type, object> _staticServices = new Dictionary<Type, object>();
 
         /// <summary>
         /// Default constructor of the package.
@@ -229,11 +231,21 @@ namespace Ankh.VSPackage
                 {
                     return this;
                 }
+                else if (_staticServices.TryGetValue(serviceType, out var v))
+                {
+                    return v;
+                }
 
                 throw;
             }
         }
 
-#endregion
+        void IAnkhStaticServiceRegistry.AddStaticService(Type type, object instance, bool promote)
+        {
+            ((IServiceContainer)this).AddService(type, instance, promote);
+            _staticServices[type] = instance;
+        }
+
+        #endregion
     }
 }
