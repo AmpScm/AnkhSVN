@@ -39,6 +39,7 @@ namespace Ankh.Services
         readonly Control _syncher;
         const int MaxPoolSize = 10;
         int _returnCookie;
+        Version UIVersion;
 
         public AnkhClientPool(IAnkhServiceProvider context)
             : base(context)
@@ -49,16 +50,27 @@ namespace Ankh.Services
             GC.KeepAlive(_syncher.Handle); // Ensure the window is created
         }
 
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+            _dialogOwner = GetService<IAnkhDialogOwner>();
+            _monitor = GetService<IFileStatusMonitor>();
+            _cfg = GetService<IAnkhConfigurationService>();
+            _uiService = GetService<IUIService>();
+            UIVersion = GetService<IAnkhPackage>().UIVersion;
+            _scheduler = GetService<IAnkhScheduler>();
+        }
+
         IAnkhDialogOwner _dialogOwner;
         IAnkhDialogOwner DialogOwner
         {
-            get { return _dialogOwner ?? (_dialogOwner = GetService<IAnkhDialogOwner>()); }
+            get { return _dialogOwner; }
         }
 
         IFileStatusMonitor _monitor;
         IFileStatusMonitor StatusMonitor
         {
-            get { return _monitor ?? (_monitor = GetService<IFileStatusMonitor>()); }
+            get { return _monitor; }
         }
 
         bool _ensuredNames;
@@ -69,7 +81,7 @@ namespace Ankh.Services
             _ensuredNames = true;
 
             SvnClient.AddClientName("VisualStudio", VSVersion.FullVersion);
-            SvnClient.AddClientName("AnkhSVN", GetService<IAnkhPackage>().UIVersion);
+            SvnClient.AddClientName("AnkhSVN", UIVersion);
         }
 
         public SvnPoolClient GetClient()
@@ -124,11 +136,11 @@ namespace Ankh.Services
         IAnkhConfigurationService _cfg;
         IAnkhConfigurationService Config
         {
-            get { return _cfg ?? (_cfg = GetService<IAnkhConfigurationService>()); }
+            get { return _cfg; }
         }
 
         IUIService _uiService;
-        IUIService UIService => _uiService ?? (_uiService = GetService<IUIService>());
+        IUIService UIService => _uiService;
 
 
         // Use separate function to delay loading the SharpSvn.UI.dll
@@ -312,7 +324,7 @@ namespace Ankh.Services
         IAnkhScheduler _scheduler;
         IAnkhScheduler Scheduler
         {
-            get { return _scheduler ?? (_scheduler = GetService<IAnkhScheduler>()); }
+            get { return _scheduler; }
         }
 
 

@@ -37,7 +37,7 @@ namespace Ankh.Services
 		}
 
         readonly Timer _timer;
-        IAnkhCommandService _commands;
+        
         readonly SortedList<DateTime, ActionItem> _actions = new SortedList<DateTime, ActionItem>();
         Guid _grp = AnkhId.CommandSetGuid;
 		int _nextActionId;
@@ -50,9 +50,12 @@ namespace Ankh.Services
             _timer.Elapsed += new ElapsedEventHandler(OnTimerElapsed);
         }
 
-        IAnkhCommandService Commands
+        IAnkhCommandService Commands { get; set; }
+
+        protected override void OnInitialize()
         {
-            get { return _commands ?? (_commands = GetService<IAnkhCommandService>()); }
+            base.OnInitialize();
+            Commands = GetService<IAnkhCommandService>();
         }
 
         void OnTimerElapsed(object sender, ElapsedEventArgs e)

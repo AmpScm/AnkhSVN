@@ -224,12 +224,12 @@ namespace Ankh.VSPackage
             }
             catch(InvalidOperationException)
             {
-#if !DEBUG
-                var v = _runtime.GetService(serviceType); // Let's assume our local service table is safe :-(
+                if (serviceType == typeof(IAnkhServiceProvider)
+                    || serviceType == typeof(IAnkhQueryService))
+                {
+                    return this;
+                }
 
-                if (v != null)
-                    return v;
-#endif
                 throw;
             }
         }

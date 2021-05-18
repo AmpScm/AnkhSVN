@@ -336,6 +336,8 @@ namespace Ankh.UI.RepositoryExplorer
             if (_running.Count == 1)
                 OnRetrievingChanged(EventArgs.Empty);
 
+            var clientPool = Context.GetService<ISvnClientPool>();
+
             AnkhAction d = delegate()
             {
                 bool ok = false;
@@ -348,7 +350,7 @@ namespace Ankh.UI.RepositoryExplorer
                     la.ThrowOnError = false;
 
                     Collection<SvnListEventArgs> items;
-                    using (SvnClient client = Context.GetService<ISvnClientPool>().GetClient())
+                    using (SvnClient client = clientPool.GetClient())
                     {
                         client.GetList(uri, la, out items);
                     }

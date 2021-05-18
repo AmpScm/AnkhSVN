@@ -41,6 +41,7 @@ namespace Ankh.UI.RepositoryOpen
 
         int _dirOffset;
         int _fileOffset;
+        ISvnClientPool _pool;
         protected override void OnContextChanged(EventArgs e)
         {
             base.OnContextChanged(e);
@@ -53,6 +54,7 @@ namespace Ankh.UI.RepositoryOpen
             dirView.SmallImageList = mapper.ImageList;
             _dirOffset = mapper.DirectoryIcon;
             _fileOffset = mapper.FileIcon;
+            _pool = Context.GetService<ISvnClientPool>();
 
             if (VSVersion.VS2012OrLater)
             {
@@ -301,10 +303,8 @@ namespace Ankh.UI.RepositoryOpen
 
         protected SvnClient GetClient()
         {
-            ISvnClientPool pool = (Context != null) ? Context.GetService<ISvnClientPool>() : null;
-
-            if (pool != null)
-                return pool.GetClient();
+            if (_pool != null)
+                return _pool.GetClient();
             else
                 return new SvnClient();
         }
@@ -713,10 +713,8 @@ namespace Ankh.UI.RepositoryOpen
 
         private SvnPoolRemoteSession GetSession(Uri uri)
         {
-            ISvnClientPool pool = (Context != null) ? Context.GetService<ISvnClientPool>() : null;
-
-            if (pool != null)
-                return pool.GetRemoteSession(uri, true);
+            if (_pool != null)
+                return _pool.GetRemoteSession(uri, true);
 
             throw new InvalidOperationException();
         }

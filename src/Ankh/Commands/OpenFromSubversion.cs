@@ -321,9 +321,10 @@ namespace Ankh.Commands
 
         private static void FindRoot(IAnkhServiceProvider context, Uri selectedUri, CheckoutProject dlg)
         {
+            var clientPool = context.GetService<ISvnClientPool>();
             AnkhAction ds = delegate
             {
-                using (SvnClient client = context.GetService<ISvnClientPool>().GetClient())
+                using (SvnClient client = clientPool.GetClient())
                 {
                     string value;
                     if (client.TryGetProperty(selectedUri, AnkhSccPropertyNames.ProjectRoot, out value))

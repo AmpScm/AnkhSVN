@@ -34,6 +34,7 @@ namespace Ankh.UI.MergeWizard
 
         private IAnkhServiceProvider _context;
         private Dictionary<SvnDepth, string> _mergeDepths;
+        ISvnClientPool _pool;
 
         /// <summary>
         /// Constructor.
@@ -42,6 +43,8 @@ namespace Ankh.UI.MergeWizard
         public MergeUtils(IAnkhServiceProvider context)
         {
             Context = context;
+            _pool = Context.GetService<ISvnClientPool>();
+            _pool?.EnsureClient();
         }
 
         /// <summary>
@@ -107,20 +110,16 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         public SvnClient GetClient()
         {
-            ISvnClientPool pool = (Context != null) ? Context.GetService<ISvnClientPool>() : null;
-
-            if (pool != null)
-                return pool.GetClient();
+            if (_pool != null)
+                return _pool.GetClient();
             else
                 return new SvnClient();
         }
 
         public SvnWorkingCopyClient GetWcClient()
         {
-            ISvnClientPool pool = (Context != null) ? Context.GetService<ISvnClientPool>() : null;
-
-            if (pool != null)
-                return pool.GetWcClient();
+            if(_pool != null)
+                return _pool.GetWcClient();
             else
                 return new SvnWorkingCopyClient();
         }
