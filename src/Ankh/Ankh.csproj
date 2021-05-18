@@ -73,6 +73,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\NativeImports.cs" />
     <Compile Include="Services\RepositoryProvider\AnkhRepositoryProviderService.cs" />
     <Compile Include="Services\RepositoryProvider\ScmRepositoryProviderProxy.cs" />
     <Compile Include="Services\TempDirManager.cs" />
