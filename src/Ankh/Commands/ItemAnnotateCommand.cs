@@ -245,29 +245,18 @@ namespace Ankh.Commands
             if (!r.Succeeded)
                 return;
 
-            // HACK from AnkHSVN2019 to get things working. Global fix to local issue :( (Affects all of Visual Studio),
-            // so code should be improved
-            try
-            {
-                // Set the DPI awareness for the current thread to 'System Aware'
-                // System DPI aware.
-                //
-                //  This window does not scale for DPI changes. It will query for the DPI once and
-                //  use that value for the lifetime of the process. If the DPI changes, the process
-                //  will not adjust to the new DPI value. It will be automatically scaled up or down
-                //  by the system when the DPI changes from the system value.
-                NativeImports.SetThreadDpiAwarenessContext(NativeImports.DPI_AWARENESS_CONTEXT.SystemAware);
-            }
-            catch (EntryPointNotFoundException)
-            {
-                // Fallback for not new enough Windows 10
-            }
-            AnnotateEditorControl annEditor = new AnnotateEditorControl();
-            IAnkhEditorResolver er = e.GetService<IAnkhEditorResolver>();
+            AnnotateEditorControl annEditor = null;
+            IAnkhEditorResolver er = null;
 
-            annEditor.Create(e.Context, tempFile);
-            annEditor.LoadFile(tempFile);
-            annEditor.AddLines(item, blameResult);
+            WithDPIAwareness.Run(AnkhDpiAwareness.SystemAware, () =>
+            {
+                annEditor = new AnnotateEditorControl();
+                er = e.GetService<IAnkhEditorResolver>();
+
+                annEditor.Create(e.Context, tempFile);
+                annEditor.LoadFile(tempFile);
+                annEditor.AddLines(item, blameResult);
+            });
 
             // Detect and set the language service
             Guid language;

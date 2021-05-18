@@ -157,6 +157,7 @@
     <Compile Include="UI\IAnkhHelpService.cs" />
     <Compile Include="UI\VSWpfDialog.cs" />
     <Compile Include="UI\VSWpfDialogBase.cs" />
+    <Compile Include="UI\WithDPIAwareness.cs" />
     <Compile Include="VSAssemblies.cs" />
     <Compile Include="VSColorProxy.cs" />
     <Compile Include="VSColorProxyResolver.cs" />
