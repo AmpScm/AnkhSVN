@@ -25,7 +25,7 @@ Please post questions, comments, and bug reports to our <a href="https://github.
 
 ### Pending Changes window
 
- * *New* - Review incoming changes in "Recent Changes".
+ * **New** - Review incoming changes in "Recent Changes".
  * One window to handle the normal workflow.
  * Real-time overview of all project changes.
  * Easy access to most Subversion commands.
@@ -38,7 +38,7 @@ Please post questions, comments, and bug reports to our <a href="https://github.
 
 ### Optimized workflow
 
- * *New* - Use the fully integrated annotate viewer to find out who wrote what code, and when.
+ * **New** - Use the fully integrated annotate viewer to find out who wrote what code, and when.
  * Don't leave your IDE for most common operations.
  * Immediately view the source control status of all files in your project/solution.
  * View working copy information such as last committed author, last committed date and the repository URL.
@@ -58,7 +58,7 @@ Please post questions, comments, and bug reports to our <a href="https://github.
       - SourceGear DiffMerge.
       - TortoiseMerge.
       - WinMerge.
- * *New* - Set a patch tool to apply patch files right from Visual Studio.
+ * **New** - Set a patch tool to apply patch files right from Visual Studio.
 
 ### Repository Explorer
 
