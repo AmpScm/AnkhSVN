@@ -1,9 +1,3 @@
-<!doctype HTML>
-<html>
-<head>
-  <title>AnkhSVN - Subversion Support for Visual Studio</title>
-</head>
-<body>
 <table id="content" style="font-family: 'Segoe UI',helvetica,arial; font-size: 12px; background-color: #fff; border: 1px solid #d5d5d5; border-collapse: collapse; padding: 0px; margin: 0px;">
 <tbody>
 <tr>
@@ -99,5 +93,3 @@
 </tr>
 </tbody>
 </table>
-</body>
-</html>
