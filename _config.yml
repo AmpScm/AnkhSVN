@@ -1,1 +1,3 @@
-﻿theme: jekyll-theme-slate
+﻿title: AnkhSVN
+description: AnkhSVN provides Subversion support to Visual Studio
+theme: jekyll-theme-cayman
