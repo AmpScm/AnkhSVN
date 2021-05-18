@@ -28,19 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cloudForgeControl1 = new Ankh.UI.Controls.CloudForgeControl();
             this.repoProviderControlPanel = new System.Windows.Forms.Panel();
             this.errorLabel = new System.Windows.Forms.Label();
             this.repoProviderControlPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // cloudForgeControl1
-            // 
-            this.cloudForgeControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.cloudForgeControl1.Location = new System.Drawing.Point(10, 270);
-            this.cloudForgeControl1.Name = "cloudForgeControl1";
-            this.cloudForgeControl1.Size = new System.Drawing.Size(455, 70);
-            this.cloudForgeControl1.TabIndex = 0;
             // 
             // repoProviderControlPanel
             // 
@@ -67,7 +58,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.repoProviderControlPanel);
-            this.Controls.Add(this.cloudForgeControl1);
             this.Name = "RepositorySelectionPage";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(475, 350);
@@ -78,7 +68,6 @@
 
         #endregion
 
-        private Ankh.UI.Controls.CloudForgeControl cloudForgeControl1;
         private System.Windows.Forms.Panel repoProviderControlPanel;
         private System.Windows.Forms.Label errorLabel;
     }

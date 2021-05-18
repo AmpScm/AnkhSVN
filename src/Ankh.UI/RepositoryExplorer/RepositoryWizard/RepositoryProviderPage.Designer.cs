@@ -36,7 +36,6 @@
             this.wikiLinkLabel = new System.Windows.Forms.LinkLabel();
             this.providerListView = new Ankh.UI.VSSelectionControls.SmartListView();
             this.wikiLinkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.cloudForgeControl1 = new Ankh.UI.Controls.CloudForgeControl();
             this.nameColumn = new System.Windows.Forms.ColumnHeader();
             this.providerPanel.SuspendLayout();
             this.SuspendLayout();
@@ -108,11 +107,6 @@
             this.wikiLinkLabel1.TabStop = true;
             this.wikiLinkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.wikiLinkLabel_LinkClicked);
             // 
-            // cloudForgeControl1
-            // 
-            resources.ApplyResources(this.cloudForgeControl1, "cloudForgeControl1");
-            this.cloudForgeControl1.Name = "cloudForgeControl1";
-            // 
             // nameColumn
             // 
             resources.ApplyResources(this.nameColumn, "nameColumn");
@@ -122,7 +116,6 @@
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.providerPanel);
-            this.Controls.Add(this.cloudForgeControl1);
             this.Name = "RepositoryProviderPage";
             this.providerPanel.ResumeLayout(false);
             this.providerPanel.PerformLayout();
@@ -133,7 +126,6 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel providerPanel;
-        private Ankh.UI.Controls.CloudForgeControl cloudForgeControl1;
         private System.Windows.Forms.RadioButton urlRadioButton;
         private System.Windows.Forms.ComboBox urlComboBox;
         private System.Windows.Forms.RadioButton providerRadioButton;

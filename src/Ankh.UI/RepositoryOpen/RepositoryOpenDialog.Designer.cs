@@ -60,7 +60,6 @@ namespace Ankh.UI.RepositoryOpen
             this.label3 = new System.Windows.Forms.Label();
             this.fileTypeBox = new System.Windows.Forms.ComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.cloudForgeControl1 = new Ankh.UI.Controls.CloudForgeControl();
             this.dirView = new Ankh.UI.VSSelectionControls.SmartListView();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -182,11 +181,6 @@ namespace Ankh.UI.RepositoryOpen
             this.toolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.toolTip.ToolTipTitle = "Open from Subversion";
             // 
-            // cloudForgeControl1
-            // 
-            resources.ApplyResources(this.cloudForgeControl1, "cloudForgeControl1");
-            this.cloudForgeControl1.Name = "cloudForgeControl1";
-            // 
             // dirView
             // 
             resources.ApplyResources(this.dirView, "dirView");
@@ -202,7 +196,6 @@ namespace Ankh.UI.RepositoryOpen
             this.AcceptButton = this.openButton;
             resources.ApplyResources(this, "$this");
             this.CancelButton = this.cancelButton;
-            this.Controls.Add(this.cloudForgeControl1);
             this.Controls.Add(this.fileTypeBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.fileNameBox);
@@ -239,6 +232,5 @@ namespace Ankh.UI.RepositoryOpen
         private System.Windows.Forms.ToolStripLabel urlLabel;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ToolStripButton addButton;
-        private Ankh.UI.Controls.CloudForgeControl cloudForgeControl1;
     }
 }

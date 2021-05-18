@@ -218,9 +218,22 @@ namespace Ankh.VSPackage
 
         protected override object GetService(Type serviceType)
         {
-            return base.GetService(serviceType);
+            try
+            {
+                return base.GetService(serviceType);
+            }
+            catch(InvalidOperationException)
+            {
+#if !DEBUG
+                var v = _runtime.GetService(serviceType); // Let's assume our local service table is safe :-(
+
+                if (v != null)
+                    return v;
+#endif
+                throw;
+            }
         }
 
-        #endregion
+#endregion
     }
 }

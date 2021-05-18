@@ -62,7 +62,6 @@ namespace Ankh.UI.SccManagement
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.bodyPanel = new System.Windows.Forms.Panel();
             this.selectRepositoryButton = new System.Windows.Forms.Button();
-            this.cloudForgeControl1 = new Ankh.UI.Controls.CloudForgeControl();
             this.repositoryTree = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.locationBox.SuspendLayout();
             this.localFolderBox.SuspendLayout();
@@ -76,7 +75,6 @@ namespace Ankh.UI.SccManagement
             // 
             resources.ApplyResources(this.locationBox, "locationBox");
             this.locationBox.Controls.Add(this.selectRepositoryButton);
-            this.locationBox.Controls.Add(this.cloudForgeControl1);
             this.locationBox.Controls.Add(this.repositoryUrl);
             this.locationBox.Controls.Add(this.createFolderButton);
             this.locationBox.Controls.Add(this.repositoryTree);
@@ -202,11 +200,6 @@ namespace Ankh.UI.SccManagement
             this.selectRepositoryButton.UseVisualStyleBackColor = true;
             this.selectRepositoryButton.Click += new System.EventHandler(this.selectRepositoryButton_Click);
             // 
-            // cloudForgeControl1
-            // 
-            resources.ApplyResources(this.cloudForgeControl1, "cloudForgeControl1");
-            this.cloudForgeControl1.Name = "cloudForgeControl1";
-            // 
             // repositoryTree
             // 
             resources.ApplyResources(this.repositoryTree, "repositoryTree");
@@ -258,7 +251,6 @@ namespace Ankh.UI.SccManagement
         protected internal System.Windows.Forms.ErrorProvider errorProvider1;
         protected System.Windows.Forms.Panel bodyPanel;
         private System.Windows.Forms.CheckBox commitAll;
-        private Ankh.UI.Controls.CloudForgeControl cloudForgeControl1;
         private System.Windows.Forms.Button selectRepositoryButton;
     }
 }
