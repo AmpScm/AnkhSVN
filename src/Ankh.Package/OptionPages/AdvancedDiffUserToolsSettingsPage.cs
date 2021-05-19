@@ -1,5 +1,3 @@
-// $Id: UserToolsSettingsPage.cs 11153 2012-04-12 19:16:19Z rhuijben $
-//
 // Copyright 2008-2009 The AnkhSVN Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

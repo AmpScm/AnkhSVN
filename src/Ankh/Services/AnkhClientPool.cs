@@ -57,7 +57,7 @@ namespace Ankh.Services
             _monitor = GetService<IFileStatusMonitor>();
             _cfg = GetService<IAnkhConfigurationService>();
             _uiService = GetService<IUIService>();
-            UIVersion = GetService<IAnkhPackage>().UIVersion;
+            UIVersion = GetService<IAnkhPackage>().PackageVersion;
             _scheduler = GetService<IAnkhScheduler>();
         }
 

@@ -1,5 +1,3 @@
-// $Id: RepositoryBrowseCommand.cs 10665 2011-12-30 12:22:24Z rhuijben $
-//
 // Copyright 2005-2009 The AnkhSVN Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

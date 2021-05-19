@@ -119,9 +119,8 @@
   </resheader>
   <data name="AboutDetails" xml:space="preserve">
     <value>AnkhSVN - Subversion Support for Visual Studio {0} 
- * Ankh.Package {1}
- * Subversion {2} via SharpSvn {3}
- * Git/LibGit2 {4} via SharpGit {5}</value>
+ * Subversion {1} via SharpSvn {2}
+ * Git/LibGit2 {3} via SharpGit {4}</value>
   </data>
   <data name="AboutLinkedTo" xml:space="preserve">
     <value>{0} is linked to: </value>

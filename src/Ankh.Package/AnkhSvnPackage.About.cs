@@ -30,56 +30,9 @@ namespace Ankh.VSPackage
     // This attribute is used to register the informations needed to show the this package
     // in the Help/About dialog of Visual Studio.
     [InstalledProductRegistration(true, null, null, null)]
-    [Ankh.VSPackage.Attributes.ProvideUIVersion]
     public partial class AnkhSvnPackage : IVsInstalledProduct
     {
-        Version _uiVersion, _packageVersion;
-        /// <summary>
-        /// Gets the UI version. Retrieved from the registry after being installed by our MSI
-        /// </summary>
-        /// <value>The UI version.</value>
-        public Version UIVersion
-        {
-            get { return _uiVersion ?? (_uiVersion = GetUIVersion() ?? PackageVersion); }
-        }
-
-        /// <summary>
-        /// Gets the UI version (as might be remapped by the MSI)
-        /// </summary>
-        /// <returns></returns>
-        private Version GetUIVersion()
-        {
-            // We can't use our services here to help us :(
-            // This code might be used from devenv.exe /setup
-
-            IAnkhConfigurationService configService = GetService<IAnkhConfigurationService>();
-
-            if(configService == null)
-                return null;
-
-            using (RegistryKey rk = configService.OpenVSInstanceKey("Packages\\" + typeof(AnkhSvnPackage).GUID.ToString("b")))
-            {
-                if(rk == null)
-                    return null;
-
-                string v = rk.GetValue(Ankh.VSPackage.Attributes.ProvideUIVersionAttribute.RemapName) as string;
-
-                if(string.IsNullOrEmpty(v))
-                    return null;
-
-                if(v.IndexOf('[') >= 0)
-                    return null; // When not using remapping we can expect "[ProductVersion]" as value
-
-                try
-                {
-                    return new Version(v);
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-        }
+        Version _packageVersion;
 
         /// <summary>
         /// Gets the package version. The assembly version of Ankh.Package.dll
@@ -132,8 +85,7 @@ namespace Ankh.VSPackage
                 gitVersion = gitVersion.Substring(0, gitVersion.Length - 9);
 
             sb.AppendFormat(Resources.AboutDetails,
-                UIVersion.ToString(),
-                PackageVersion.ToString(),
+                PackageVersion,
                 svnVersion,
                 SvnClient.SharpSvnVersion,
                 gitVersion,
@@ -212,7 +164,7 @@ namespace Ankh.VSPackage
 
         public int ProductID(out string pbstrPID)
         {
-            pbstrPID = UIVersion.ToString();
+            pbstrPID = PackageVersion.ToString();
 
             return VSErr.S_OK;
         }

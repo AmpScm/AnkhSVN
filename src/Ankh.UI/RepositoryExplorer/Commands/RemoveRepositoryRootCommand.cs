@@ -1,5 +1,3 @@
-// $Id: RemoveRepositoryRootCommand.cs 6572 2009-03-29 13:15:24Z rhuijben $
-//
 // Copyright 2005-2009 The AnkhSVN Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

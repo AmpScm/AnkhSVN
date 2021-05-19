@@ -35,7 +35,7 @@ namespace Ankh.Services
         public void RunHelp(VSDialogForm form)
         {
             UriBuilder ub = new UriBuilder("http://svc.ankhsvn.net/svc/go/");
-            ub.Query = string.Format("t=dlgHelp&v={0}&l={1}&dt={2}", GetService<IAnkhPackage>().UIVersion, CultureInfo.CurrentUICulture.LCID, Uri.EscapeUriString(form.DialogHelpTypeName));
+            ub.Query = string.Format("t=dlgHelp&v={0}&l={1}&dt={2}", GetService<IAnkhPackage>().PackageVersion, CultureInfo.CurrentUICulture.LCID, Uri.EscapeUriString(form.DialogHelpTypeName));
 
             try
             {
@@ -61,7 +61,7 @@ namespace Ankh.Services
         public void RunHelp(IAnkhControlWithHelp control)
         {
             UriBuilder ub = new UriBuilder("http://svc.ankhsvn.net/svc/go/");
-            ub.Query = string.Format("t=ctrlHelp&v={0}&l={1}&dt={2}", GetService<IAnkhPackage>().UIVersion, CultureInfo.CurrentUICulture.LCID, Uri.EscapeUriString(control.DialogHelpTypeName));
+            ub.Query = string.Format("t=ctrlHelp&v={0}&l={1}&dt={2}", GetService<IAnkhPackage>().PackageVersion, CultureInfo.CurrentUICulture.LCID, Uri.EscapeUriString(control.DialogHelpTypeName));
 
             try
             {

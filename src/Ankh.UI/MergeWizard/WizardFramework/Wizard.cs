@@ -1,6 +1,4 @@
-﻿// $Id: MergeConflictHandler.cs 6697 2009-04-24 20:58:59Z rhuijben $
-//
-// Copyright 2008-2010 The AnkhSVN Project.
+﻿// Copyright 2008-2010 The AnkhSVN Project.
 // Copyright (c) 2008 CollabNet, Inc. ("CollabNet"), http://www.collab.net.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

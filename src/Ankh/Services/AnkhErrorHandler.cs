@@ -215,7 +215,7 @@ namespace Ankh.Services
 
             IAnkhPackage pkg = GetService<IAnkhPackage>();
             if (pkg != null)
-                additionalInfo.Add("Ankh-Version", pkg.UIVersion.ToString());
+                additionalInfo.Add("Ankh-Version", pkg.PackageVersion.ToString());
 
             additionalInfo.Add("SharpSvn-Version", SharpSvn.SvnClient.SharpSvnVersion.ToString());
             additionalInfo.Add("Svn-Version", SharpSvn.SvnClient.Version.ToString());

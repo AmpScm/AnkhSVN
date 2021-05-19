@@ -233,7 +233,6 @@
     <Compile Include="Attributes\ProvideSourceControlProvider.cs" />
     <Compile Include="Attributes\ProvideTextMarker.cs" />
     <Compile Include="Attributes\ProvideToolsOptionsPageVisibility.cs" />
-    <Compile Include="Attributes\ProvideUIVersion.cs" />
     <None Include="Gui\Gui-To-Vsct.xsl" />
     <None Include="Gui\Gui-Common.xsl" />
     <Content Include="Gui\menu\CopyUrlToClipboard.png" />

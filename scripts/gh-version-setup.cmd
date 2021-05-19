@@ -33,6 +33,7 @@ SET ANKHSVN_VER=%ANKHSVN_MAJOR%.%ANKHSVN_MINOR%.%ANKHSVN_PATCH%
   echo /p:ForceAssemblyInformationalVersion=%ANKHSVN_MAJOR%.%ANKHSVN_MINOR%.%ANKHSVN_PATCH%-%GIT_SHA%
   echo /p:ForceAssemblyCompany="AnkhSVN Project, powered by AmpScm, QQn & GitHub"
   echo /p:ForceAssemblyCopyright="Apache 2.0 licensed. See https://github.com/AmpScm/AnkhSVN"
+   echo /p:ForceAssemblyConfiguration=Release-%GIT_SHA%
   echo /p:BuildBotBuild=true
   echo /p:RestoreForce=true
 ) > %RSPFILE%

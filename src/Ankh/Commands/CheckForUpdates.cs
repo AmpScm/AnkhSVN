@@ -100,7 +100,7 @@ namespace Ankh.Commands
             return _currentVersion = typeof(CheckForUpdates).Assembly.GetName().Version;
         }
 
-        static Version GetUIVersion(AnkhContext context)
+        static Version GetPackageVersion(AnkhContext context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -108,7 +108,7 @@ namespace Ankh.Commands
             IAnkhPackage pkg = context.GetService<IAnkhPackage>();
 
             if (pkg != null)
-                return pkg.UIVersion;
+                return pkg.PackageVersion;
 
             return GetCurrentVersion(context);
         }
@@ -289,7 +289,7 @@ namespace Ankh.Commands
                     if (!string.IsNullOrEmpty(version))
                     {
                         uad.newVerLabel.Text = newVersion;
-                        uad.curVerLabel.Text = GetUIVersion(e.Context).ToString(3);
+                        uad.curVerLabel.Text = GetPackageVersion(e.Context).ToString(3);
                         uad.versionPanel.Enabled = uad.versionPanel.Visible = true;
                     }
 
