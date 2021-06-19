@@ -42,7 +42,7 @@ namespace Ankh.Services
                 bool showHelpInBrowser = true;
                 IVsHelpSystem help = GetService<IVsHelpSystem>(typeof(SVsHelpService));
                 if (help != null)
-                    showHelpInBrowser = !VSErr.Succeeded(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (uint)VHS_COMMAND.VHS_Default));
+                    showHelpInBrowser = !VSErr.Succeeded(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (XCastUInt32)(uint)VHS_COMMAND.VHS_Default));
 
                 if (showHelpInBrowser)
                     Help.ShowHelp(form, ub.Uri.AbsoluteUri);
@@ -68,7 +68,7 @@ namespace Ankh.Services
                 bool showHelpInBrowser = true;
                 IVsHelpSystem help = GetService<IVsHelpSystem>(typeof(SVsHelpService));
                 if (help != null)
-                    showHelpInBrowser = !VSErr.Succeeded(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (uint)VHS_COMMAND.VHS_Default));
+                    showHelpInBrowser = !VSErr.Succeeded(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (XCastUInt32)(uint)VHS_COMMAND.VHS_Default));
 
                 if (showHelpInBrowser)
                     Help.ShowHelp(control.Control, ub.Uri.AbsoluteUri);

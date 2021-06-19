@@ -107,13 +107,12 @@ namespace Ankh.WpfPackage.Services
                 if (vsIcon == null)
                     return false;
 
-                int iconHandle;
-                if (!VSErr.Succeeded(vsIcon.GetHICON(out iconHandle)))
+                if (!VSErr.Succeeded(vsIcon.GetHICON(out var iconHandle)))
                     return false;
 
                 hIcon = (IntPtr)iconHandle;
 
-                return (iconHandle != 0);
+                return (hIcon != IntPtr.Zero);
             }
             catch { }
 

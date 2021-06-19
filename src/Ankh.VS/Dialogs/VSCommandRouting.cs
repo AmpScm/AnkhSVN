@@ -185,8 +185,7 @@ namespace Ankh.VS.Dialogs
             IVsToolWindowToolbarHost host = _tbHost;
             if (host != null)
             {
-                int lResult;
-                hr = host.ProcessMouseActivationModal(m.HWnd, (uint)m.Msg, (uint)m.WParam, (int)m.LParam, out lResult);
+                hr = host.ProcessMouseActivationModal(m.HWnd, (uint)m.Msg, (XCastUInt32)m.WParam, (XCastInt32)m.LParam, out var lResult);
                 // Check for errors.
                 if (VSErr.Succeeded(hr))
                 {

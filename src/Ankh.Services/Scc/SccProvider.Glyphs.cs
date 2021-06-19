@@ -219,11 +219,24 @@ namespace Ankh.Scc
                 }
         }
 
-        int IVsSccGlyphs.GetCustomGlyphList(uint baseIndex, out uint pdwImageListHandle)
+        // Legacy VS Wrapper for GetCustomGlyphList
+        int GetCustomGlyphList(uint baseIndex, out int pdwImageListHandle)
+        {
+            IntPtr realHandle;
+
+            int r = GetCustomGlyphList(baseIndex, out realHandle);
+            pdwImageListHandle = unchecked((int)realHandle);
+            return r;
+        }
+
+
+        // pdwImageListHandle was int in VS < 2022
+        [CLSCompliant(false)]
+        public int GetCustomGlyphList(uint baseIndex, out IntPtr pdwImageListHandle)
         {
             if (baseIndex == _baseIndex && _glyphList != null)
             {
-                pdwImageListHandle = unchecked((uint)_glyphList.Handle);
+                pdwImageListHandle = _glyphList.Handle;
 
                 return VSErr.S_OK;
             }
@@ -256,7 +269,7 @@ namespace Ankh.Scc
 
             if (StatusImages == null)
             {
-                pdwImageListHandle = 0;
+                pdwImageListHandle = IntPtr.Zero;
                 return VSErr.E_FAIL; // Vital service missing
             }
 
@@ -281,7 +294,7 @@ namespace Ankh.Scc
             }
 
             _baseIndex = baseIndex;
-            pdwImageListHandle = unchecked((uint)_glyphList.Handle);
+            pdwImageListHandle = _glyphList.Handle;
 
             return VSErr.S_OK;
         }
