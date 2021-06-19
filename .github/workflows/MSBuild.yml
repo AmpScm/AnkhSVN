@@ -51,7 +51,7 @@ jobs:
                 
     - name: Build2022
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /v:m /restore /p:Platform=VS-CPU /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+      run: msbuild /m /v:m /restore /p:Platform=VS-CPU /p:UseVsSdkVersion=17.0 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
       
     - name: Package vsix 2022
       uses: actions/upload-artifact@v2
