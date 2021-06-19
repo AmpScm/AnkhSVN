@@ -39,9 +39,9 @@ Contents:
  
   The development documentation of the AnkhSVN project is available in
  
-    src/BUILD.md      - How to build your own AnkhSVN version
-    CONTRIBUTORS.txt  - List of committers and writers of patches
-    LICENSE           - The sourcecode license of AnkhSVN
+    src/BUILD.txt         - How to build your own AnkhSVN version
+    src/CONTRIBUTORS.txt  - List of committers and writers of patches
+    LICENSE       - The sourcecode license of AnkhSVN
     
   A lot more information about what is going on can be found on
       https://github.com/AmpScm/AnkhSVN

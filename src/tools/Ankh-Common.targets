@@ -27,6 +27,10 @@
     <!-- Assume Visual Studio 2012+. -->
     <VisualStudioVersion>11.0</VisualStudioVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <PlatformTarget Condition="'$(VisualStudioVersion)' &lt; '17.0'">x86</PlatformTarget>
+    <PlatformTarget Condition="'$(VisualStudioVersion)' &gt;= '17.0'">x64</PlatformTarget>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(UseVsSdkVersion)' == '' and '$(VisualStudioVersion)' != ''">
     <UseVsSdkVersion>$(VisualStudioVersion)</UseVsSdkVersion>
   </PropertyGroup>
