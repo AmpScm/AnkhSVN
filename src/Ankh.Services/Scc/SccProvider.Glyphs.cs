@@ -220,12 +220,12 @@ namespace Ankh.Scc
         }
 
         // Legacy VS Wrapper for GetCustomGlyphList
-        int GetCustomGlyphList(uint baseIndex, out int pdwImageListHandle)
+        public int GetCustomGlyphList(uint baseIndex, out uint pdwImageListHandle)
         {
             IntPtr realHandle;
 
             int r = GetCustomGlyphList(baseIndex, out realHandle);
-            pdwImageListHandle = unchecked((int)realHandle);
+            pdwImageListHandle = unchecked((uint)realHandle);
             return r;
         }
 
