@@ -505,10 +505,6 @@
       <Project>{906E3F01-CD79-4F80-BCA7-1105224328C4}</Project>
       <Name>Ankh.VS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ankh.WpfUI\Ankh.WpfUI.csproj">
-      <Project>{8FC7114E-5A84-4221-8187-C3D1C370404E}</Project>
-      <Name>Ankh.WpfUI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ankh\Ankh.csproj">
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
       <Name>Ankh</Name>

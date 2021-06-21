@@ -24,9 +24,4 @@ namespace Ankh.UI
         IPendingChangeUI UI { get; }
 
     }
-
-    public interface IPendingChangeControlFactory
-    {
-        IPendingChangeControl Create(IAnkhServiceProvider context, IContainer container);
-    }
 }
