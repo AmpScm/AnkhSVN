@@ -5,6 +5,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+	<VSToolsPath Condition="'$(VSToolsPath)' == '' And Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)')">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FA90174C-5763-46E8-9C95-328CA8451072}</ProjectGuid>
@@ -53,39 +54,6 @@
     <ApplicationIcon>Resources\Package.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.OLE.Interop" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0" />
-    <Reference Include="Microsoft.VisualStudio.TextManager.Interop" />
-    <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0" />
-    <Reference Include="$(MsVsShellAssembly)" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '9.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '10.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.11.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '11.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '12.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '10.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '11.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '12.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '14.0' and '$(UseVsSdkVersion)' &lt; '15.0'">
-      <Visible>false</Visible>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Framework" Condition="$(NoPackageReferences) and '$(UseVsSdkVersion)' &gt;= '15.0'">
-      <Visible>false</Visible>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
@@ -562,7 +530,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(ImportVsSdkVersion)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(UseVsSdkVersion)' &lt; '17.0'"/>
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="('$(VSToolsPath)' != '') And Exists('$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets')" />
   <Import Project="..\tools\turtletasks\QQn.TurtleTasks.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
