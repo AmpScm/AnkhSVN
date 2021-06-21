@@ -5,7 +5,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-	<VSToolsPath Condition="'$(VSToolsPath)' == '' And Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)')">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <VSToolsPath Condition="'$(VSToolsPath)' == '' And Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)')">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FA90174C-5763-46E8-9C95-328CA8451072}</ProjectGuid>
@@ -108,6 +108,12 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Xml based ctc generation; also generates Gui\Ctc\AnkhSvn.bmp -->
+    <None Include="x86\source.extension.VsixManifest" Condition="'$(PlatformTarget)' == 'x86'">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="x64\source.extension.VsixManifest" Condition="'$(PlatformTarget)' == 'x64'">
+      <SubType>Designer</SubType>
+    </None>
     <XslSource Include="Gui\AnkhSvn.xml">
       <Transform>Gui\Gui-To-Vsct.xsl</Transform>
       <To>$(IntermediateOutputPath)..\AnkhSvn.vsct</To>
@@ -133,9 +139,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <None Include="source.extension.vsixmanifest">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Gui\Gui.xsd">
       <SubType>Designer</SubType>
     </None>
