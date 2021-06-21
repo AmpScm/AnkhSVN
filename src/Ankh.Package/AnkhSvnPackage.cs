@@ -55,7 +55,7 @@ namespace Ankh.VSPackage
     [ProvideAutoLoad(AnkhId.GitSccProviderId, PackageAutoLoadFlags.BackgroundLoad)] // Load on 'Scc active' for Git
 
     // This attribute is needed to let the shell know that this package exposes some menus.
-    [ProvideMenuResourceEx("1000.ctmenu", 1, LegacyResourceID="1001.ctmenu")] // The numbers must match the number in the .csproj file for the ctc task
+    [ProvideMenuResource("1000.ctmenu", 1)] // The numbers must match the number in the .csproj file for the ctc task
 
     [ProvideKeyBindingTable(AnkhId.LogViewContext, 501)]
     [ProvideKeyBindingTable(AnkhId.DiffMergeViewContext, 502)]
