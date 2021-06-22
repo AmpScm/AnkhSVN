@@ -31,7 +31,7 @@ jobs:
       
     - name: Build 2017-2019
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /v:m /restore /p:Platform=VS-CPU /p:UseVsSdkVersion=15.0 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+      run: msbuild /m /v:m /restore /p:UseVsSdkVersion=15.0 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
 
     - name: Package vsix 2017-2019
       uses: actions/upload-artifact@v2
@@ -41,7 +41,7 @@ jobs:
 
     - name: Build 2019
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /v:m /restore /p:Platform=VS-CPU /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+      run: msbuild /m /v:m /restore /t:rebuild /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
       
     - name: Package vsix 2019
       uses: actions/upload-artifact@v2
@@ -49,9 +49,9 @@ jobs:
         name: Ankh-VSIX-2019-only
         path: build/src/Ankh.Package/bin/release/Ankh.Package.vsix
                 
-    - name: Build 2022-
+    - name: Build 2022
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /v:m /restore /p:Platform=VS-CPU /p:UseVsSdkVersion=17.0 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+      run: msbuild /m /v:m /restore /t:rebuild /p:UseVsSdkVersion=17.0 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
       
     - name: Package vsix 2022
       uses: actions/upload-artifact@v2
