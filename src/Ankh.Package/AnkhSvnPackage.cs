@@ -43,13 +43,9 @@ namespace Ankh.VSPackage
     /// IVsPackage interface and uses the registration attributes defined in the framework to
     /// register itself and its components with the shell.
     /// </summary>
-    // This attribute tells the registration utility (regpkg.exe) that this class needs
-    // to be registered as package.
-    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading =true)]
     [Description(AnkhId.PackageDescription)]
 
     [Guid(AnkhId.PackageId)]
-    [ProvideAutoLoad(AnkhId.SccProviderId, PackageAutoLoadFlags.BackgroundLoad)] // Load on 'Scc active' for Subversion
 
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("1000.ctmenu", 1)] // The numbers must match the number in the .csproj file for the ctc task
@@ -63,7 +59,7 @@ namespace Ankh.VSPackage
 
     [CLSCompliant(false)]
     [ProvideOutputWindow(AnkhId.AnkhOutputPaneId, "#111", InitiallyInvisible = false, Name = AnkhId.PlkProduct, ClearWithSolution = false)]
-    sealed partial class AnkhSvnPackage : AsyncPackage, IAnkhPackage, IAnkhQueryService, IAnkhStaticServiceRegistry
+    sealed partial class AnkhSvnPackage : /*Package | AsyncPackage, */ IAnkhPackage, IAnkhQueryService, IAnkhStaticServiceRegistry
     {
         private AnkhRuntime _runtime;
         readonly Dictionary<Type, object> _staticServices = new Dictionary<Type, object>();
@@ -82,23 +78,6 @@ namespace Ankh.VSPackage
 
         /////////////////////////////////////////////////////////////////////////////
         // Overriden Package Implementation
-
-        /// <summary>
-        /// Initialization of the package; this method is called right after the package is sited, so this is the place
-        /// where you can put all the initialization code that rely on services provided by VisualStudio.
-        /// </summary>
-        protected async override System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
-        {
-            await base.InitializeAsync(cancellationToken, progress);
-
-            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-
-            if (InCommandLineMode)
-                return; // Do nothing; speed up devenv /setup by not loading all our modules!
-
-            InitializeRuntime(); // Moved to function of their own to speed up devenv /setup
-            RegisterAsOleComponent();
-        }
 
         void InitializeRuntime()
         {
@@ -209,29 +188,7 @@ namespace Ankh.VSPackage
             {
                 Marshal.Release(handle);
             }
-        }
-
-        protected override object GetService(Type serviceType)
-        {
-            try
-            {
-                return base.GetService(serviceType);
-            }
-            catch(InvalidOperationException)
-            {
-                if (serviceType == typeof(IAnkhServiceProvider)
-                    || serviceType == typeof(IAnkhQueryService))
-                {
-                    return this;
-                }
-                else if (_staticServices.TryGetValue(serviceType, out var v))
-                {
-                    return v;
-                }
-
-                throw;
-            }
-        }
+        }        
 
         void IAnkhStaticServiceRegistry.AddStaticService(Type type, object instance, bool promote)
         {

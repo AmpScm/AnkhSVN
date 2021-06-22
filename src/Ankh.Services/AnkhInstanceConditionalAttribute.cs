@@ -5,14 +5,16 @@ namespace Ankh
     public enum VSInstance
     {
         None = 0,
-        VS2005,
-        VS2008,
-        VS2010,
-        VS2012,
-        VS2013,
-        VS2015,
-        VS2017,
-        VS2019
+        VS2005, //  8.0
+        VS2008, //  9.0
+        VS2010, // 10.0
+        VS2012, // 11.0
+        VS2013, // 12.0
+        No_VS13,
+        VS2015, // 14.0
+        VS2017, // 15.0
+        VS2019, // 16.0
+        VS2022  // 17.0
     }
 
     public abstract class AnkhInstanceConditionalAttribute : Attribute

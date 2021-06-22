@@ -144,7 +144,13 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AnkhSvnPackage.cs" />
-    <Compile Include="AnkhSvnPackage.About.cs">
+	<Compile Include="AnkhSvnPackage.AsyncPackage.cs" Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">
+		<DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+	</Compile>
+	<Compile Include="AnkhSvnPackage.LegacyPackage.cs" Condition="'$(UseVsSdkVersion)' &lt; '15.0'">
+		<DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+	</Compile>
+	<Compile Include="AnkhSvnPackage.About.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
     <Compile Include="AnkhSvnPackage.Commands.cs">

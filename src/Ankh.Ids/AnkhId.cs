@@ -43,9 +43,6 @@ namespace Ankh
         public const string AssemblyCompany = "AnkhSVN Team";
         //**********************************************************************************
 
-        public const string WpfPackageId = "7e64684f-d9bb-4e26-84db-e95a09307389";
-        public const string WpfPackageDescription = "AnkhSVN - Subversion Support for Visual Studio - Wpf Editor Support";
-
         /// <summary>The Subversion SCC Provider name as used in the solution file</summary>
         public const string SubversionSccName = "SubversionScc";
         public const string SvnOriginName = "SvnOrigin";
@@ -54,7 +51,7 @@ namespace Ankh
         // Items for the VS 2010 Extension registration
         public const string ExtensionTitle = AnkhId.AssemblyProduct;
         public const string ExtensionAuthor = AnkhId.AssemblyCompany;
-        public const string ExtensionDescription = "Open Source Subversion SCC Provider for Visual Studio 2012, 2013, 2015, 2017 and 2019.";
+        public const string ExtensionDescription = "Open Source Subversion SCC Provider for Visual Studio 2012, 2013, 2015, 2017, 2019 and 2022.";
         public const string ExtensionMoreInfoUrl = "http://www.ankhsvn.net/";
         public const string ExtensionGettingStartedUrl = "http://www.ankhsvn.net/";
         public const string ExtensionReleaseNotesUrl = "http://ankhsvn.net/releasenotes";
