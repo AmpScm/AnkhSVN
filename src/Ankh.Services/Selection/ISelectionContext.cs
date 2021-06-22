@@ -50,13 +50,6 @@ namespace Ankh.Selection
         IEnumerable<SvnItem> GetSelectedSvnItems(bool recursive);
 
         /// <summary>
-        /// Gets a list of the currently selected <see cref="SvnItem"/> instances, mapped via their path. See <see cref="GetSelectedFiles(Boolean)"/>
-        /// </summary>
-        /// <param name="recursive"></param>
-        /// <returns></returns>
-        IEnumerable<GitItem> GetSelectedGitItems(bool recursive);
-
-        /// <summary>
         /// Gets the projects owning selected files
         /// </summary>
         /// <returns></returns>
@@ -115,12 +108,6 @@ namespace Ankh.Selection
         /// </summary>
         /// <value>The active document item.</value>
         SvnItem ActiveDocumentSvnItem { get; }
-
-        /// <summary>
-        /// Gets the active document GitItem.
-        /// </summary>
-        /// <value>The active document item.</value>
-        GitItem ActiveDocumentGitItem { get; }
 
         /// <summary>
         /// Gets the .Net control of the <see cref="ISelectionContextEx.ActiveFrame"/>

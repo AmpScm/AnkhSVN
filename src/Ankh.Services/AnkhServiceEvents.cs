@@ -66,18 +66,6 @@ namespace Ankh
         void OnSccProviderDeactivated(EventArgs e);
 
         /// <summary>
-        /// Raises the <see cref="E:GitSccProviderActivated"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        void OnGitSccProviderActivated(EventArgs e);
-
-        /// <summary>
-        /// Raises the <see cref="E:GitSccProviderDeactivated"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        void OnGitSccProviderDeactivated(EventArgs e);
-
-        /// <summary>
         /// Raises the <see cref="E:DocumentTrackerActivated"/> event.
         /// </summary>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -151,16 +139,6 @@ namespace Ankh
         /// Occurs when our SCC provider is deactivated
         /// </summary>
         public event EventHandler SccProviderDeactivated;
-
-        /// <summary>
-        /// Occurs when our SCC provider is activated
-        /// </summary>
-        public event EventHandler GitSccProviderActivated;
-
-        /// <summary>
-        /// Occurs when our SCC provider is deactivated
-        /// </summary>
-        public event EventHandler GitSccProviderDeactivated;
 
         /// <summary>
         /// Occurs when the document tracker is activated
@@ -237,26 +215,6 @@ namespace Ankh
         {
             if (SccProviderDeactivated != null)
                 SccProviderDeactivated(this, e);
-        }
-
-        /// <summary>
-        /// Raises the <see cref="E:GitSccProviderActivated"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected void OnGitSccProviderActivated(EventArgs e)
-        {
-            if (GitSccProviderActivated != null)
-                GitSccProviderActivated(this, e);
-        }
-
-        /// <summary>
-        /// Raises the <see cref="E:GitSccProviderDeactivated"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected void OnGitSccProviderDeactivated(EventArgs e)
-        {
-            if (GitSccProviderDeactivated != null)
-                GitSccProviderDeactivated(this, e);
         }
 
         /// <summary>
@@ -357,24 +315,6 @@ namespace Ankh
         void IAnkhServiceEvents.OnSccProviderDeactivated(EventArgs e)
         {
             OnSccProviderDeactivated(e);
-        }
-
-        /// <summary>
-        /// Raises the <see cref="E:GitSccProviderActivated"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        void IAnkhServiceEvents.OnGitSccProviderActivated(EventArgs e)
-        {
-            OnGitSccProviderActivated(e);
-        }
-
-        /// <summary>
-        /// Raises the <see cref="E:GitSccProviderDeactivated"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        void IAnkhServiceEvents.OnGitSccProviderDeactivated(EventArgs e)
-        {
-            OnGitSccProviderDeactivated(e);
         }
 
         /// <summary>

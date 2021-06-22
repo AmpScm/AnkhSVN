@@ -23,7 +23,6 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
 using Ankh.Configuration;
 using Ankh.UI;
-using SharpGit;
 
 namespace Ankh.VSPackage
 {
@@ -80,16 +79,10 @@ namespace Ankh.VSPackage
             if (svnVersion.EndsWith("-SharpSvn"))
                 svnVersion = svnVersion.Substring(0, svnVersion.Length - 9);
 
-            string gitVersion = GitClient.VersionString;
-            if (gitVersion.EndsWith("-SharpGit"))
-                gitVersion = gitVersion.Substring(0, gitVersion.Length - 9);
-
             sb.AppendFormat(Resources.AboutDetails,
                 PackageVersion,
                 svnVersion,
-                SvnClient.SharpSvnVersion,
-                gitVersion,
-                GitClient.SharpGitVersion);
+                SvnClient.SharpSvnVersion);
 
             sb.AppendLine();
             sb.AppendLine();
@@ -115,39 +108,6 @@ namespace Ankh.VSPackage
                     {
                         has = true;
                         sb.AppendFormat(Resources.AboutOptionallyLinkedTo, "SharpSvn");
-                    }
-
-                    sb.AppendFormat("{0} {1}", lib.Name, lib.VersionString);
-                    sb.Append(", ");
-                }
-            }
-
-            sb.Length -= 2;
-
-            sb.AppendLine();
-            sb.AppendLine();
-            sb.AppendFormat(Resources.AboutLinkedTo, "SharpGit");
-            foreach (SharpGit.Implementation.GitLibrary lib in GitClient.GitLibraries)
-            {
-                if (!lib.Optional)
-                {
-                    sb.AppendFormat("{0} {1}", lib.Name, lib.VersionString);
-                    sb.Append(", ");
-                }
-            }
-
-            sb.Length -= 2;
-            sb.AppendLine();
-
-            has = false;
-            foreach (SharpGit.Implementation.GitLibrary lib in GitClient.GitLibraries)
-            {
-                if (lib.Optional)
-                {
-                    if (!has)
-                    {
-                        has = true;
-                        sb.AppendFormat(Resources.AboutOptionallyLinkedTo, "SharpGit");
                     }
 
                     sb.AppendFormat("{0} {1}", lib.Name, lib.VersionString);

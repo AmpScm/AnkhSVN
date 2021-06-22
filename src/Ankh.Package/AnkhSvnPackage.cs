@@ -29,7 +29,6 @@ using Ankh.Scc;
 using Ankh.VS;
 using Ankh.UI;
 using Ankh.VSPackage.Attributes;
-using Ankh.GitScc;
 using System.Collections.Generic;
 
 namespace Ankh.VSPackage
@@ -51,7 +50,6 @@ namespace Ankh.VSPackage
 
     [Guid(AnkhId.PackageId)]
     [ProvideAutoLoad(AnkhId.SccProviderId, PackageAutoLoadFlags.BackgroundLoad)] // Load on 'Scc active' for Subversion
-    [ProvideAutoLoad(AnkhId.GitSccProviderId, PackageAutoLoadFlags.BackgroundLoad)] // Load on 'Scc active' for Git
 
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("1000.ctmenu", 1)] // The numbers must match the number in the .csproj file for the ctc task
@@ -113,7 +111,6 @@ namespace Ankh.VSPackage
 
             _runtime.AddModule(new AnkhModule(_runtime));
             _runtime.AddModule(new AnkhSccModule(_runtime));
-            _runtime.AddModule(new AnkhGitSccModule(_runtime));
             _runtime.AddModule(new AnkhVSModule(_runtime));
             _runtime.AddModule(new AnkhUIModule(_runtime));
 

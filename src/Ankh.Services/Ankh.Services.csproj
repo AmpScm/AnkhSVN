@@ -64,7 +64,6 @@
     <Compile Include="Commands\CommandTarget.cs" />
     <Compile Include="Commands\CommandAttribute.cs" />
     <Compile Include="Commands\SccCommandAttribute.cs" />
-    <Compile Include="Commands\GitCommandAttribute.cs" />
     <Compile Include="ContextServices\GuidUtils.cs" />
     <Compile Include="EnumHelpers.cs" />
     <Compile Include="GlobalServiceAttribute.cs" />
@@ -87,15 +86,8 @@
     <Compile Include="Collections\NotifyCollection.cs" />
     <Compile Include="Scc\Engine\ISccStatusCache.cs" />
     <Compile Include="Scc\Engine\SccDirectory.cs" />
-    <Compile Include="Scc\Git\GitDirectory.cs" />
-    <Compile Include="Scc\Git\GitItem.cs" />
-    <Compile Include="Scc\Git\GitItem.State.cs" />
-    <Compile Include="Scc\Git\GitItemState.cs" />
-    <Compile Include="Scc\Git\GitStatusData.cs" />
     <Compile Include="Collections\INotifyCollection.cs" />
-    <Compile Include="Scc\IAnkhGitSccService.cs" />
     <Compile Include="Scc\IAnkhSccProviderEvents.cs" />
-    <Compile Include="Scc\Git\IGitStatusCache.cs" />
     <Compile Include="Collections\KeyedNotifyCollection.cs" />
     <Compile Include="Scc\ProjectMap\SccDocumentData.cs" />
     <Compile Include="Scc\ProjectMap\SccProjectData.cs" />
@@ -131,7 +123,6 @@
     <Compile Include="Scc\SccProvider.Service.cs">
       <DependentUpon>SccProvider.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scc\Git\GitItemsEventArgs.cs" />
     <Compile Include="Scc\NoSccStatus.cs" />
     <Compile Include="Collections\IWrapNotifyCollection.cs" />
     <Compile Include="Collections\WrapCollectionWithNotify.cs" />
@@ -282,12 +273,6 @@
       <Version>1</Version>
       <Visible>false</Visible>
     </DependencyDownload>
-    <DependencyDownload Include="SGit-0.2401.1116.230.zip">
-      <Url>https://sharpsvn.open.collab.net/files/documents/180/12884/</Url>
-      <TargetDir>..\autolib</TargetDir>
-      <Version>1</Version>
-      <Visible>false</Visible>
-    </DependencyDownload>
   </ItemGroup>
   <ItemGroup Condition="'$(VisualStudioVersion)' &gt;= '15.0'">
     <PackageReference Include="SharpSvn">
@@ -295,9 +280,6 @@
     </PackageReference>
     <PackageReference Include="SharpSvn.UI">
       <Version>1.14001.54</Version>
-    </PackageReference>
-    <PackageReference Include="SharpGit">
-      <Version>1.1000.17</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

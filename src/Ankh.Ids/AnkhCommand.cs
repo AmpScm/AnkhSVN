@@ -38,11 +38,9 @@ namespace Ankh
         TickFirst,
         MarkProjectDirty,
         SvnCacheFinishTasks,
-        GitCacheFinishTasks,
         SccFinishTasks,
         TickRefreshPendingTasks,
         TickRefreshSvnItems,
-        TickRefreshGitItems,
         // /Tick Commands
         TickLast,
 

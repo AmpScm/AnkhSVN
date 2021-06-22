@@ -197,17 +197,6 @@ namespace AnkhSvn_UnitTestProject.Mocks
             {
                 get { return null; }
             }
-
-
-            public IEnumerable<Ankh.GitItem> GetSelectedGitItems(bool recursive)
-            {
-                yield break;
-            }
-
-            public Ankh.GitItem ActiveDocumentGitItem
-            {
-                get { return null; }
-            }
         }
     }
 }

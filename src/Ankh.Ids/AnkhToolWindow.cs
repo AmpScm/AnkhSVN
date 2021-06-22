@@ -27,6 +27,5 @@ namespace Ankh
         PendingChanges,
         Log,
         SvnInfo,
-        GitPendingChanges
     }
 }

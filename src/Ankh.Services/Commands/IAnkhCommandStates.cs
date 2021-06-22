@@ -48,8 +48,6 @@ namespace Ankh.Commands
 
         bool SccProviderActive { get; }
 
-        bool GitSccProviderActive { get; }
-
         bool OtherSccProviderActive { get; }
 
         bool SccEnlistingInProject { get; }

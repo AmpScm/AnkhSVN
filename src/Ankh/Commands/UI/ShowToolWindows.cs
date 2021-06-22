@@ -35,7 +35,7 @@ namespace Ankh.Commands.UI
             switch (e.Command)
             {
                 case AnkhCommand.ShowPendingChanges:
-                    toolWindow = e.State.GitSccProviderActive ? AnkhToolWindow.GitPendingChanges : AnkhToolWindow.PendingChanges;
+                    toolWindow = AnkhToolWindow.PendingChanges;
                     break;
                 case AnkhCommand.ShowWorkingCopyExplorer:
                     toolWindow = AnkhToolWindow.WorkingCopyExplorer;

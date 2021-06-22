@@ -195,20 +195,6 @@ namespace Ankh.VS.Selection
                     return null;
             }
         }
-
-        public GitItem ActiveDocumentGitItem
-        {
-            get
-            {
-                string p = ActiveDocumentFilename;
-
-                if (p != null)
-                    return GitCache[p];
-                else
-                    return null;
-            }
-        }
-
         public IVsTextView ActiveFrameTextView
         {
             get

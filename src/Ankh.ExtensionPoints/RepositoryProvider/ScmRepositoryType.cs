@@ -18,10 +18,5 @@ namespace Ankh.ExtensionPoints.RepositoryProvider
         /// 
         /// </summary>
         Subversion,
-
-        /// <summary>
-        /// 
-        /// </summary>
-        Git
     }
 }

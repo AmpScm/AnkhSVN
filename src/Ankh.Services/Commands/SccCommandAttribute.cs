@@ -28,13 +28,13 @@ namespace Ankh.Commands
         public SccCommandAttribute(AnkhCommand command)
             : base(command)
         {
-            Availability = CommandAvailability.SvnActive | CommandAvailability.GitActive;
+            Availability = CommandAvailability.SvnActive;
         }
 
         public SccCommandAttribute(AnkhCommand command, AnkhCommandContext context)
             : base(command, context)
         {
-            Availability = CommandAvailability.SvnActive | CommandAvailability.GitActive;
+            Availability = CommandAvailability.SvnActive;
         }
     }
 }

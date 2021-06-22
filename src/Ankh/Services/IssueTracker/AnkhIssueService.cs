@@ -37,7 +37,6 @@ namespace Ankh.Services.IssueTracker
         readonly Dictionary<string, IssueRepositoryConnector> _nameConnectorMap = new Dictionary<string, IssueRepositoryConnector>();
         private IssueRepository _repository;
         IProjectCommitSettings _commitSettings;
-        bool _fetchedCommit;
 
         public AnkhIssueService(IAnkhServiceProvider context)
             : base(context)

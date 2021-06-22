@@ -121,8 +121,6 @@ namespace Ankh.Services.RepositoryProvider
         {
             if (string.Equals(typeString, "svn", StringComparison.OrdinalIgnoreCase))
                 return RepositoryType.Subversion;
-            if (string.Equals(typeString, "git", StringComparison.OrdinalIgnoreCase))
-                return RepositoryType.Git;
 
             return RepositoryType.Any;
         }

@@ -23,7 +23,7 @@ namespace Ankh.Commands
     {
         None,
         SvnActive       = 0x01,
-        GitActive       = 0x02,
+        //GitActive       = 0x02,
 
         AlwaysFlag      = 0x800,
         Always          = 0xFFFF
