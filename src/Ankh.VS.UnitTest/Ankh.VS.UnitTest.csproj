@@ -114,7 +114,7 @@
       <Version>4.16.1</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestFramework">
-      <Version>2.2.4</Version>
+      <Version>2.2.5</Version>
     </PackageReference>
     <PackageReference Include="NUnit">
       <Version>3.13.2</Version>
