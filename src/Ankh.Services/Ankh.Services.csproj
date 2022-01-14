@@ -279,7 +279,7 @@
       <Version>1.14001.54</Version>
     </PackageReference>
     <PackageReference Include="SharpSvn.UI">
-      <Version>1.14001.54</Version>
+      <Version>1.14001.132</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
