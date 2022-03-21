@@ -102,7 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit">
-      <Version>3.13.2</Version>
+      <Version>3.13.3</Version>
     </PackageReference>
     <PackageReference Include="RhinoMocks">
       <Version>3.6.1</Version>
