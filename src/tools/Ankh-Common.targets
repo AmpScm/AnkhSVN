@@ -44,7 +44,7 @@
     <NoPackageReferences>false</NoPackageReferences>
   </PropertyGroup>
   <ItemGroup Condition="'$(VisualStudioVersion)' &gt;= '15.0'">
-    <PackageReference Include="SharpSvn.AnnotateAssembly" Version="1.14001.132" />
+    <PackageReference Include="SharpSvn.AnnotateAssembly" Version="1.14001.156" />
   </ItemGroup>
   <Import Project="$(MSBuildThisFileDirectory)\VS-$(UseVsSdkVersion)-imports.targets"/>
   <PropertyGroup>
