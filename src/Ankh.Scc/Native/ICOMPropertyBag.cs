@@ -49,7 +49,7 @@ namespace Ankh.Scc.Native
 
         [CLSCompliant(false)]
         public PropertyBag(IPropertyBag bag)
-            : this((ICOMPropertyBag)bag)
+            : this(bag as ICOMPropertyBag ?? new MyComPropertyBag(bag))
         {
         }
 
@@ -161,6 +161,42 @@ namespace Ankh.Scc.Native
         public bool WrittenKey(string key)
         {
             return _toWrite.ContainsKey(key);
+        }
+
+        private sealed class MyComPropertyBag : ICOMPropertyBag
+        {
+            private readonly IPropertyBag _bag;
+
+            public MyComPropertyBag(IPropertyBag bag)
+            {
+                this._bag = bag;
+            }
+            public int Read(string pszPropName, out object pVar, IErrorLog pErrorLog, uint VARTYPE, object pUnkObj)
+            {
+                try
+                {
+                    _bag.Read(pszPropName, out pVar, pErrorLog, VARTYPE, pUnkObj);
+                    return VSConstants.S_OK;
+                }
+                catch(Exception e)
+                {
+                    pVar = null;
+                    return Marshal.GetHRForException(e);
+                }
+            }
+
+            public int Write(string pszPropName, ref object pVar)
+            {
+                try
+                {
+                    _bag.Write(pszPropName, pVar);
+                    return VSConstants.S_OK;
+                }
+                catch (Exception e)
+                {
+                    return Marshal.GetHRForException(e);
+                }
+            }
         }
     }
 }
