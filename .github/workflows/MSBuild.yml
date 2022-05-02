@@ -59,12 +59,12 @@ jobs:
         name: Ankh-VSIX-2022
         path: build/src/Ankh.Package/bin/release/Ankh.Package.vsix
 
-    - name: Build 2012-2015
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /v:m /restore /t:rebuild /p:UseVsSdkVersion=11.0 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
-
-    - name: Package vsix 2012-2015
-      uses: actions/upload-artifact@v2
-      with:
-        name: Ankh-VSIX-2012-2015
-        path: build/src/Ankh.Package/bin/release/Ankh.Package.vsix
+#    - name: Build 2012-2015
+#      working-directory: ${{env.GITHUB_WORKSPACE}}
+#      run: msbuild /m /v:m /restore /t:rebuild /p:UseVsSdkVersion=11.0 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+#
+#    - name: Package vsix 2012-2015
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: Ankh-VSIX-2012-2015
+#        path: build/src/Ankh.Package/bin/release/Ankh.Package.vsix
