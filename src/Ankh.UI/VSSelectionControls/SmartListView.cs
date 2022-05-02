@@ -757,7 +757,7 @@ namespace Ankh.UI.VSSelectionControls
                 {
                     case NativeMethods.WM_CONTEXTMENU:
                         {
-                            uint pos = unchecked((uint)m.LParam);
+                            uint pos = unchecked((uint)(ulong)m.LParam);
 
                             Select();
 
