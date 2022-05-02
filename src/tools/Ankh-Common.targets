@@ -36,7 +36,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(UseVsSdkVersion)' &gt;= '12.0'">v4.5.1</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(UseVsSdkVersion)' &gt;= '14.0'">v4.5.2</TargetFrameworkVersion>
-    <TargetFrameworkVersion Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">v4.6.2</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(UseVsSdkVersion)' &gt;= '16.0'">v4.7.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(UseVsSdkVersion)' &gt;= '15.0'">
