@@ -76,13 +76,13 @@ namespace Ankh.UI.PendingChanges.Commits
             });
 
             modified.Sorter = new SortWrapper(
-                delegate(PendingCommitItem x, PendingCommitItem y)
+                delegate (PendingCommitItem x, PendingCommitItem y)
                 {
                     return x.PendingChange.SvnItem.Modified.CompareTo(y.PendingChange.SvnItem.Modified);
                 });
 
             revision.Sorter = new SortWrapper(
-                delegate(PendingCommitItem x, PendingCommitItem y)
+                delegate (PendingCommitItem x, PendingCommitItem y)
                 {
                     long? xRev, yRev;
                     xRev = x.PendingChange.Revision;
@@ -283,6 +283,9 @@ namespace Ankh.UI.PendingChanges.Commits
                 if (info == null || info.Location == ListViewHitTestLocations.None)
                     return;
 
+                if (info.Item != null)
+                    info.Item.Checked = !info.Item.Checked;
+
                 if (info.Location == ListViewHitTestLocations.StateImage)
                     return; // Just check the item
 
@@ -468,7 +471,7 @@ namespace Ankh.UI.PendingChanges.Commits
 
         internal AnkhAction BeginBatch()
         {
-            if(_inBatchUpdate++ == 0)
+            if (_inBatchUpdate++ == 0)
             {
                 BeginUpdate();
                 _toAdd = new List<PendingCommitItem>();
