@@ -51,7 +51,7 @@ jobs:
 
     - name: Build 2022
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /v:m /restore /p:UseVsSdkVersion=17.0 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+      run: msbuild /m /v:m /restore /t:rebuild /p:UseVsSdkVersion=17.0 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
 
     - name: Package vsix 2022
       uses: actions/upload-artifact@v2
@@ -61,7 +61,7 @@ jobs:
 
     - name: Build 2012-2015
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /v:m /restore /p:UseVsSdkVersion=11.0 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
+      run: msbuild /m /v:m /restore /t:rebuild /p:UseVsSdkVersion=11.0 /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}} @build\scripts\msbuild-version.rsp
 
     - name: Package vsix 2012-2015
       uses: actions/upload-artifact@v2
