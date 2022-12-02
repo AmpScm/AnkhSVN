@@ -318,6 +318,7 @@ namespace Ankh.Services
         }
 
         readonly List<DelayDelegateCheck> _checks = new List<DelayDelegateCheck>();
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD001:Avoid legacy thread switching APIs", Justification = "<Pending>")]
         public void DelayPostCommands(DelayDelegateCheck check)
         {
             if (check == null)
@@ -340,6 +341,7 @@ namespace Ankh.Services
                 PostCheck();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD001:Avoid legacy thread switching APIs", Justification = "<Pending>")]
         void PostCheck()
         {
             AnkhAction pt = delegate()
@@ -410,16 +412,14 @@ namespace Ankh.Services
         {
             IVsUIShell shell = UIShell;
 
-            if (shell != null)
-                shell.UpdateCommandUI(performImmediately ? 1 : 0);
+            shell?.UpdateCommandUI(performImmediately ? 1 : 0);
         }
 
 
         public void ShowContextMenu(AnkhCommandMenu menu, int x, int y)
         {
             IMenuCommandService mcs = GetService<IMenuCommandService>();
-
-            IVsUIShell shell = GetService<IVsUIShell>();
+            _ = GetService<IVsUIShell>();
             if (mcs != null)
             {
                 try
@@ -469,8 +469,7 @@ namespace Ankh.Services
                 {
                     try
                     {
-                        if (action != null)
-                            action();
+                        action?.Invoke();
                     }
                     catch (Exception ex)
                     {

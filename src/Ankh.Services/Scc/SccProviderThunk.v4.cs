@@ -121,7 +121,7 @@ namespace Ankh.Scc
 
         public event EventHandler AddedToSourceControl;
 
-        protected Task RunAsyncOnMainThread(SccAction action)
+        protected Task RunOnMainThreadAsync(SccAction action)
         {
             return (Task)RunTaskOnMainThread(action);
         }
@@ -133,7 +133,7 @@ namespace Ankh.Scc
 
         System.Threading.Tasks.Task IVsSccPublish.BeginPublishWorkflowAsync(CancellationToken cancellationToken)
         {
-            return RunAsyncOnMainThread(OnPublishWorkflow);
+            return RunOnMainThreadAsync(OnPublishWorkflow);
         }
 
         System.Drawing.Point GetPoint(ISccUIClickedEventArgs args)
@@ -144,17 +144,17 @@ namespace Ankh.Scc
 
         System.Threading.Tasks.Task IVsSccCurrentBranch.BranchUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            return RunAsyncOnMainThread(delegate { OnBranchUIClicked(GetPoint(args)); });
+            return RunOnMainThreadAsync(delegate { OnBranchUIClicked(GetPoint(args)); });
         }
 
         System.Threading.Tasks.Task IVsSccChanges.PendingChangesUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            return RunAsyncOnMainThread(delegate { OnPendingChangesClicked(GetPoint(args)); });
+            return RunOnMainThreadAsync(delegate { OnPendingChangesClicked(GetPoint(args)); });
         }
 
         System.Threading.Tasks.Task IVsSccCurrentRepository.RepositoryUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            return RunAsyncOnMainThread(delegate { OnRepositoryUIClicked(GetPoint(args)); });
+            return RunOnMainThreadAsync(delegate { OnRepositoryUIClicked(GetPoint(args)); });
         }
 
         //System.Threading.Tasks.Task IVsSccUnpublishedCommits.UnpublishedCommitsUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)

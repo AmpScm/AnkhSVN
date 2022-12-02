@@ -99,9 +99,15 @@ namespace Ankh.VSPackage
     sealed class AnkhDynamicEditorFactory : AnkhEditorFactory, IAnkhDynamicEditorFactory
     {
         readonly Stack<VSEditorControl> _forms = new Stack<VSEditorControl>();
+
+        [Obsolete]
         public AnkhDynamicEditorFactory(AnkhSvnPackage package)
             : base(package)
         {
+            if (package is null)
+            {
+                throw new ArgumentNullException(nameof(package));
+            }
         }
 
         protected override VSEditorControl CreateForm()

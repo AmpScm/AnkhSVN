@@ -70,13 +70,14 @@ namespace Ankh.WpfPackage.Services
         delegate IVsUIObject GetIconForFileEx(string filename, __VSUIDATAFORMAT desiredFormat, out uint iconSource);
         GetIconForFileEx _giffEx;
 
+        [Obsolete]
         public bool TryGetIcon(string path, out IntPtr hIcon)
         {
             hIcon = IntPtr.Zero;
 
             if (_giff == null)
             {
-                var imgs = GetService<IVsImageService>(typeof(SVsImageService));
+                var imgs = GetService<IVsImageService2>(typeof(SVsImageService));
 
                 if (imgs != null)
                 {

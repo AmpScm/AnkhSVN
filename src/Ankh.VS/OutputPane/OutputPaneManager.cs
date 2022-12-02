@@ -35,9 +35,8 @@ namespace Ankh.VS.OutputPane
         }
 
         public void WriteToPane(string s)
-        {           
-            IVsOutputWindowPane pane;
-            Marshal.ThrowExceptionForHR(Window.GetPane(ref g, out pane));            
+        {
+            Marshal.ThrowExceptionForHR(Window.GetPane(ref g, out IVsOutputWindowPane pane));
             Marshal.ThrowExceptionForHR(pane.OutputString(s));
         }
     }

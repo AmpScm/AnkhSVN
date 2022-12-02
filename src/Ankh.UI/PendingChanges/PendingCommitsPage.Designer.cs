@@ -119,8 +119,8 @@ namespace Ankh.UI.PendingChanges
             this.issueNumberBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.issueNumberBox, "issueNumberBox");
             this.issueNumberBox.Name = "issueNumberBox";
-            this.issueNumberBox.TextChanged += new System.EventHandler(this.issueNumberBox_TextChanged);
-            this.issueNumberBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.issueNumberBox_KeyPress);
+            this.issueNumberBox.TextChanged += new System.EventHandler(this.IssueNumberBox_TextChanged);
+            this.issueNumberBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.IssueNumberBox_KeyPress);
             // 
             // lastRevLabel
             // 

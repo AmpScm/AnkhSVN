@@ -63,6 +63,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         }
 
         [SetUp]
+        [Obsolete]
         public void Initialize()
         {
             // Create the package
