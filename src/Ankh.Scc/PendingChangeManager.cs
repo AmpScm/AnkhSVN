@@ -127,8 +127,7 @@ namespace Ankh.Scc
                 {
                     foreach (string path in toRefresh)
                     {
-                        if (br != null)
-                            br.Tick();
+                        br?.Tick();
                         ItemRefresh(path);
                     }
                 }
@@ -273,9 +272,8 @@ namespace Ankh.Scc
         {
             get
             {
-                PendingChange pc;
 
-                if (_pendingChanges.TryGetValue(fullPath, out pc))
+                if (_pendingChanges.TryGetValue(fullPath, out PendingChange pc))
                 {
                     return pc;
                 }
@@ -296,8 +294,7 @@ namespace Ankh.Scc
 
         void OnBatchUpdateStarted(BatchStartedEventArgs e)
         {
-            if (BatchUpdateStarted != null)
-                BatchUpdateStarted(this, e);
+            BatchUpdateStarted?.Invoke(this, e);
         }
 
         /// <summary>
@@ -311,8 +308,7 @@ namespace Ankh.Scc
         /// <param name="e">The <see cref="Ankh.Scc.PendingChangeEventArgs"/> instance containing the event data.</param>
         private void OnIsActiveChanged(EventArgs e)
         {
-            if (IsActiveChanged != null)
-                IsActiveChanged(this, e);
+            IsActiveChanged?.Invoke(this, e);
         }
 
         #endregion
