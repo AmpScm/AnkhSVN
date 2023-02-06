@@ -42,7 +42,8 @@ namespace Ankh.Scc
         public ProjectNotifier(IAnkhServiceProvider context)
             : base(context)
         {
-            if (VSErr.Succeeded(Shell.AdviseBroadcastMessages(this, out uint cookie)))
+            uint cookie;
+            if (VSErr.Succeeded(Shell.AdviseBroadcastMessages(this, out cookie)))
                 _cookie = cookie;
         }
 
@@ -216,6 +217,99 @@ namespace Ankh.Scc
             }
         }
 
+        internal void HandleEvent(AnkhCommand command)
+        {
+            List<SccProject> dirtyProjects;
+            HybridCollection<string> dirtyCheck;
+            HybridCollection<string> maybeAdd;
+
+            SvnSccProvider provider = GetService<SvnSccProvider>();
+
+            lock (_lock)
+            {
+                _posted = false;
+                _onIdle = false;
+
+                if (provider == null)
+                    return;
+
+                dirtyProjects = _dirtyProjects;
+                dirtyCheck = _dirtyCheck;
+                maybeAdd = _maybeAdd;
+                _dirtyProjects = null;
+                _dirtyCheck = null;
+                _maybeAdd = null;
+            }
+
+            if (dirtyCheck != null)
+                foreach (string file in dirtyCheck)
+                {
+                    DocumentTracker.CheckDirty(file);
+                }
+
+            if (dirtyProjects != null)
+            {
+                foreach (SccProject project in dirtyProjects)
+                {
+                    if (project.IsSolution)
+                        provider.UpdateSolutionGlyph();
+                    else
+                        project.NotifyGlyphChanged();
+                }
+            }
+
+            if (maybeAdd != null)
+            {
+                using (SvnClient cl = GetService<ISvnClientPool>().GetNoUIClient())
+                {
+                    foreach (string file in maybeAdd)
+                    {
+                        SvnItem item = SvnCache[file];
+                        // Only add
+                        // * files
+                        // * that are unversioned
+                        // * that are addable
+                        // * that are not ignored
+                        // * and just to be sure: that are still part of the solution
+                        if (item.IsFile && !item.IsVersioned &&
+                            item.IsVersionable && !item.IsIgnored &&
+                            item.InSolution && !item.IsSccExcluded)
+                        {
+                            SvnAddArgs aa = new SvnAddArgs();
+                            aa.ThrowOnError = false; // Just ignore errors here; make the user add them themselves
+                            aa.AddParents = true;
+
+                            if (cl.Add(item.FullPath, aa))
+                            {
+                                item.MarkDirty();
+
+                                // Detect if we have a file that Subversion might detect as binary
+                                if (item.IsVersioned && !item.IsTextFile)
+                                {
+                                    // Only check small files, avoid checking big binary files
+                                    FileInfo fi = new FileInfo(item.FullPath);
+                                    if (fi.Length < 10)
+                                    {
+                                        // We're sure it's at most 10 bytes here, so just read all
+                                        byte[] fileBytes = File.ReadAllBytes(item.FullPath);
+
+                                        // If the file starts with a UTF8 BOM, we're sure enough it's a text file, keep UTF16 & 32 binary
+                                        if (StartsWith(fileBytes, new byte[] { 0xEF, 0xBB, 0xBF }))
+                                        {
+                                            // Delete the mime type property, so it's detected as a text file again
+                                            SvnSetPropertyArgs pa = new SvnSetPropertyArgs();
+                                            pa.ThrowOnError = false;
+                                            cl.DeleteProperty(item.FullPath, SvnPropertyNames.SvnMimeType, pa);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         static bool StartsWith(byte[] haystack, byte[] needle)
         {
             if (haystack == null)
@@ -344,7 +438,8 @@ namespace Ankh.Scc
                     }
                     else
                     {
-                        if (_externallyChanged.TryGetValue(path, out DocumentLock dl))
+                        DocumentLock dl;
+                        if (_externallyChanged.TryGetValue(path, out dl))
                         {
                             _externallyChanged.Remove(path);
                             dl.Dispose();
@@ -386,11 +481,8 @@ namespace Ankh.Scc
                             case DialogResult.Yes:
                                 using (SvnClient c = Context.GetService<ISvnClientPool>().GetNoUIClient())
                                 {
-                                    SvnResolveArgs svnResolveArgs = new SvnResolveArgs
-                                    {
-                                        ThrowOnError = false
-                                    };
-                                    SvnResolveArgs ra = svnResolveArgs;
+                                    SvnResolveArgs ra = new SvnResolveArgs();
+                                    ra.ThrowOnError = false;
 
                                     c.Resolve(file.Key, SvnAccept.Merged, ra);
                                 }
@@ -409,7 +501,8 @@ namespace Ankh.Scc
 
                     if (!item.IsDocumentDirty)
                     {
-                        file.Value?.Reload(file.Key);
+                        if (file.Value != null)
+                            file.Value.Reload(file.Key);
                     }
                 }
             }
@@ -426,12 +519,15 @@ namespace Ankh.Scc
             {
                 foreach (DocumentLock dl in modified.Values)
                 {
-                    dl?.Dispose();
+                    if (dl != null)
+                        dl.Dispose();
                 }
             }
         }
 
         #region IVsBroadcastMessageEvents Members
+
+        const uint WM_ACTIVATE = 0x0006;
         const uint WM_ACTIVATEAPP = 0x001C;
         const uint WM_SYSCOLORCHANGE = 0x0015;
         const uint WM_THEMECHANGED = 0x031A;

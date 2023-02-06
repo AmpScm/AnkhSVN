@@ -25,9 +25,6 @@ using IOleConnectionPoint = Microsoft.VisualStudio.OLE.Interop.IConnectionPoint;
 using IOleConnectionPointContainer = Microsoft.VisualStudio.OLE.Interop.IConnectionPointContainer;
 
 using Ankh.VS;
-using System.IO;
-using SharpSvn;
-using Ankh.Selection;
 
 namespace Ankh
 {
@@ -36,9 +33,6 @@ namespace Ankh
     /// </summary>
     public abstract class AnkhService : IAnkhServiceProvider, IComponent, IAnkhServiceImplementation, IOleServiceProvider
     {
-
-        
-        const uint WM_ACTIVATE = 0x0006;
         readonly IAnkhServiceProvider _context;
         /// <summary>
         /// Initializes a new instance of the <see cref="AnkhService"/> class.
@@ -626,104 +620,6 @@ namespace Ankh
             catch
             {
                 return false;
-            }
-        }
-
-        internal void HandleEvent(AnkhCommand command)
-        {
-            List<SccProject> dirtyProjects;
-            HybridCollection<string> dirtyCheck;
-            HybridCollection<string> maybeAdd;
-
-            SvnSccProvider provider = GetService<SvnSccProvider>();
-
-            lock (_lock)
-            {
-                _posted = false;
-                _onIdle = false;
-
-                if (provider == null)
-                    return;
-
-                dirtyProjects = _dirtyProjects;
-                dirtyCheck = _dirtyCheck;
-                maybeAdd = _maybeAdd;
-                _dirtyProjects = null;
-                _dirtyCheck = null;
-                _maybeAdd = null;
-            }
-
-            if (dirtyCheck != null)
-                foreach (string file in dirtyCheck)
-                {
-                    DocumentTracker.CheckDirty(file);
-                }
-
-            if (dirtyProjects != null)
-            {
-                foreach (SccProject project in dirtyProjects)
-                {
-                    if (project.IsSolution)
-                        provider.UpdateSolutionGlyph();
-                    else
-                        project.NotifyGlyphChanged();
-                }
-            }
-
-            if (maybeAdd != null)
-            {
-                using (SvnClient cl = GetService<ISvnClientPool>().GetNoUIClient())
-                {
-                    foreach (string file in maybeAdd)
-                    {
-                        SvnItem item = SvnCache[file];
-                        // Only add
-                        // * files
-                        // * that are unversioned
-                        // * that are addable
-                        // * that are not ignored
-                        // * and just to be sure: that are still part of the solution
-                        if (item.IsFile && !item.IsVersioned &&
-                            item.IsVersionable && !item.IsIgnored &&
-                            item.InSolution && !item.IsSccExcluded)
-                        {
-                            SvnAddArgs svnAddArgs = new SvnAddArgs
-                            {
-                                ThrowOnError = false, // Just ignore errors here; make the user add them themselves
-                                AddParents = true
-                            };
-                            SvnAddArgs aa = svnAddArgs;
-
-                            if (cl.Add(item.FullPath, aa))
-                            {
-                                item.MarkDirty();
-
-                                // Detect if we have a file that Subversion might detect as binary
-                                if (item.IsVersioned && !item.IsTextFile)
-                                {
-                                    // Only check small files, avoid checking big binary files
-                                    FileInfo fi = new FileInfo(item.FullPath);
-                                    if (fi.Length < 10)
-                                    {
-                                        // We're sure it's at most 10 bytes here, so just read all
-                                        byte[] fileBytes = File.ReadAllBytes(item.FullPath);
-
-                                        // If the file starts with a UTF8 BOM, we're sure enough it's a text file, keep UTF16 & 32 binary
-                                        if (StartsWith(fileBytes, new byte[] { 0xEF, 0xBB, 0xBF }))
-                                        {
-                                            // Delete the mime type property, so it's detected as a text file again
-                                            SvnSetPropertyArgs pa = new SvnSetPropertyArgs
-                                            {
-                                                ThrowOnError = false
-                                            };
-                                            cl.DeleteProperty(item.FullPath, SvnPropertyNames.SvnMimeType, pa);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }
 
