@@ -28,7 +28,6 @@ namespace Ankh.Scc
     class TextEditingTracker : AnkhService, IAnkhTextEditingTracker, IVsTextManagerEvents2
     {
         IVsTextManager _manager;
-        IVsTextManager2 _manager2;
         uint _cookie;
 
         public TextEditingTracker(IAnkhServiceProvider context)
@@ -39,11 +38,6 @@ namespace Ankh.Scc
         IVsTextManager Manager
         {
             get { return _manager ?? (_manager = GetService<IVsTextManager>(typeof(SVsTextManager))); }
-        }
-
-        IVsTextManager2 Manager2
-        {
-            get { return _manager2 ?? (_manager2 = Manager as IVsTextManager2); }
         }
 
         protected override void OnInitialize()
@@ -59,7 +53,6 @@ namespace Ankh.Scc
             {
                 if (_cookie != 0)
                 {
-                    uint ck = _cookie;
                     _cookie = 0;
                     ReleaseHook<IVsTextManagerEvents2>(Manager, _cookie);
                 }
