@@ -128,10 +128,8 @@ namespace Ankh.Scc
 
                 // Delayed flush all glyphs of all projects when a user enables us.
 
-                List<SccProject> allProjects = new List<SccProject>(ProjectMap.GetAllSccProjects())
-                {
-                    SccProject.Solution
-                };
+                List<SccProject> allProjects = new List<SccProject>(ProjectMap.GetAllSccProjects());
+                allProjects.Add(SccProject.Solution);
                 Monitor.ScheduleGlyphOnlyUpdate(allProjects);
 
                 RegisterForSccCleanup();

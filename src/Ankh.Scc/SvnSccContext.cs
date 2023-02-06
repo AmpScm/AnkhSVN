@@ -31,7 +31,7 @@ namespace Ankh.Scc
     sealed class SvnSccContext : AnkhService
     {
         SvnClient _svnClient;
-        private readonly ISvnStatusCache _statusCache;
+        readonly ISvnStatusCache _statusCache;
         bool _disposed;
 
         public SvnSccContext(IAnkhServiceProvider context)
@@ -57,24 +57,25 @@ namespace Ankh.Scc
             get { return _svnClient ?? (_svnClient = GetService<ISvnClientPool>().GetNoUIClient()); }
         }
 
+        ISvnStatusCache StatusCache
+        {
+            get { return _statusCache; }
+        }
+
         public void MetaMove(string oldName, string newName)
         {
-            SvnMoveArgs ma = new SvnMoveArgs
-            {
-                ThrowOnError = false,
-                MetaDataOnly = true
-            };
+            SvnMoveArgs ma = new SvnMoveArgs();
+            ma.ThrowOnError = false;
+            ma.MetaDataOnly = true;
 
             Client.Move(oldName, newName, ma);
         }
 
         public void MetaCopy(string from, string newName)
         {
-            SvnCopyArgs ca = new SvnCopyArgs
-            {
-                ThrowOnError = false,
-                MetaDataOnly = true
-            };
+            SvnCopyArgs ca = new SvnCopyArgs();
+            ca.ThrowOnError = false;
+            ca.MetaDataOnly = true;
 
             Client.Copy(from, newName, ca);
         }
@@ -84,14 +85,114 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            SvnDeleteArgs da = new SvnDeleteArgs
-            {
-                ThrowOnError = false,
-                Force = true,
-                KeepLocal = true
-            };
+            SvnDeleteArgs da = new SvnDeleteArgs();
+            da.ThrowOnError = false;
+            da.Force = true;
+            da.KeepLocal = true;
 
             return Client.Delete(path, da);
+        }
+
+        private void MaybeRevert(string newName, SvnEntry toBefore)
+        {
+            if (toBefore == null)
+                return;
+
+            SvnInfoArgs ia = new SvnInfoArgs();
+            SvnInfoEventArgs info = null;
+
+            ia.ThrowOnError = false;
+            ia.Depth = SvnDepth.Empty;
+            ia.Info += delegate(object sender, SvnInfoEventArgs e) { e.Detach(); info = e; };
+
+            if (!Client.Info(newName, ia, null) || info == null)
+                return;
+
+            // Use SvnEntry to peek below the current delete
+            if (toBefore.RepositoryId != info.RepositoryId
+                || toBefore.Uri != info.CopyFromUri
+                || toBefore.Revision != info.CopyFromRevision)
+            {
+                return;
+            }
+
+            using (MarkIgnoreRecursive(newName))
+            using (MoveAway(newName))
+            {
+                SvnRevertArgs ra = new SvnRevertArgs();
+                ra.Depth = SvnDepth.Empty;
+                ra.ThrowOnError = false;
+
+                // Do a quick check if we can safely revert with depth infinity
+                using (new SharpSvn.Implementation.SvnFsOperationRetryOverride(0))
+                {
+                    SvnStatusArgs sa = new SvnStatusArgs();
+                    sa.IgnoreExternals = true;
+                    sa.ThrowOnError = false;
+                    bool modifications = false;
+                    if (Client.Status(newName, sa,
+                                  delegate(object sender, SvnStatusEventArgs e)
+                                  {
+                                      if (e.Conflicted ||
+                                          (e.LocalPropertyStatus != SvnStatus.Normal
+                                          && e.LocalPropertyStatus != SvnStatus.None))
+                                      {
+                                          e.Cancel = modifications = true;
+                                      }
+                                      else if (e.FullPath == newName)
+                                          return;
+
+                                      switch (e.LocalNodeStatus)
+                                      {
+                                          case SvnStatus.None:
+                                          case SvnStatus.Normal:
+                                          case SvnStatus.Modified: // Text only change is ok
+                                          case SvnStatus.Ignored:
+                                          case SvnStatus.External:
+                                          case SvnStatus.NotVersioned:
+                                              break;
+                                          default:
+                                              e.Cancel = modifications = true;
+                                              break;
+                                      }
+                                  })
+                        && !modifications)
+                    {
+                        ra.Depth = SvnDepth.Infinity;
+                    }
+                }
+                
+                Client.Revert(newName, ra);
+            }
+        }
+
+        private IDisposable MarkIgnoreRecursive(string newDir)
+        {
+            IAnkhOpenDocumentTracker dt = GetService<IAnkhOpenDocumentTracker>();
+            IVsFileChangeEx change = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
+
+            if (dt == null || change == null)
+                return null;
+
+            ICollection<string> files = dt.GetDocumentsBelow(newDir);
+
+            if (files == null || files.Count == 0)
+                return null;
+
+            foreach (string file in files)
+            {
+                Marshal.ThrowExceptionForHR(change.IgnoreFile(0, file, 1));
+            }
+
+            return new DelegateRunner(
+                delegate()
+                {
+                    foreach (string file in files)
+                    {
+                        change.SyncFile(file);
+                        change.IgnoreFile(0, file, 0);
+                    }
+                });
         }
 
         sealed class DelegateRunner : IDisposable
@@ -99,7 +200,9 @@ namespace Ankh.Scc
             AnkhAction _runner;
             public DelegateRunner(AnkhAction runner)
             {
-                _runner = runner ?? throw new ArgumentNullException("runner");
+                if (runner == null)
+                    throw new ArgumentNullException("runner");
+                _runner = runner;
             }
 
             public void Dispose()
@@ -253,12 +356,10 @@ namespace Ankh.Scc
 
         internal void AddParents(string newParent)
         {
-            SvnAddArgs aa = new SvnAddArgs
-            {
-                AddParents = true,
-                ThrowOnError = false,
-                Depth = SvnDepth.Empty
-            };
+            SvnAddArgs aa = new SvnAddArgs();
+            aa.AddParents = true;
+            aa.ThrowOnError = false;
+            aa.Depth = SvnDepth.Empty;
 
             Client.Add(SvnTools.GetNormalizedDirectoryName(newParent), aa);
         }

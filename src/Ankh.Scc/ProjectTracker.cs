@@ -114,24 +114,30 @@ namespace Ankh.Scc
 
             if (solution == null)
                 return;
-            if (!VSErr.Succeeded(solution.GetSolutionInfo(out _, out string file, out _))
+
+            string dir, file, user;
+            if (!VSErr.Succeeded(solution.GetSolutionInfo(out dir, out file, out user))
                 || string.IsNullOrEmpty(file))
             {
                 return; // No solution loaded, nothing to load
             }
 
             Guid none = Guid.Empty;
-            if (!VSErr.Succeeded(solution.GetProjectEnum((uint)__VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION, ref none, out IEnumHierarchies hierEnum)))
+            IEnumHierarchies hierEnum;
+            if (!VSErr.Succeeded(solution.GetProjectEnum((uint)__VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION, ref none, out hierEnum)))
                 return;
 
             IVsHierarchy[] hiers = new IVsHierarchy[32];
-            while (VSErr.Succeeded(hierEnum.Next((uint)hiers.Length, hiers, out uint nFetched)))
+            uint nFetched;
+            while (VSErr.Succeeded(hierEnum.Next((uint)hiers.Length, hiers, out nFetched)))
             {
                 if (nFetched == 0)
                     break;
                 for (int i = 0; i < nFetched; i++)
                 {
-                    if (hiers[i] is IVsSccProject2 p2)
+                    IVsSccProject2 p2 = hiers[i] as IVsSccProject2;
+
+                    if (p2 != null)
                         SccEvents.OnProjectOpened(p2, false);
                 }
             }
@@ -255,11 +261,6 @@ namespace Ankh.Scc
         bool _registeredSccCleanup;
         internal void OnSccCleanup(CommandEventArgs e)
         {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
-
             _registeredSccCleanup = false;
             _collectHints = false;
 
@@ -278,8 +279,9 @@ namespace Ankh.Scc
 
         public IEnumerable<string> GetAllDocumentFiles(string documentName)
         {
+            SccProjectFile file;
 
-            if (ProjectMap.TryGetFile(documentName, out SccProjectFile file))
+            if (ProjectMap.TryGetFile(documentName, out file))
                 return file.GetAllFiles();
             else if (SvnItem.IsValidPath(documentName))
                 return new string[] { documentName };
