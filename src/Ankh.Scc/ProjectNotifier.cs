@@ -216,24 +216,6 @@ namespace Ankh.Scc
             }
         }
 
-        static bool StartsWith(byte[] haystack, byte[] needle)
-        {
-            if (haystack == null)
-                return false;
-            if (needle == null)
-                return false;
-            if (needle.Length > haystack.Length)
-                return false;
-
-            for (int i = 0; i < needle.Length; i++)
-            {
-                if (haystack[i] != needle[i])
-                    return false;
-            }
-
-            return true;
-        }
-
         public void ScheduleSvnStatus(string path)
         {
             if (string.IsNullOrEmpty(path))
