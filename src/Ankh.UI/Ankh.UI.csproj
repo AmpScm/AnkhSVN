@@ -1317,10 +1317,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="Microsoft.VisualStudio.SDK">
-      <Version>17.4.33103.184</Version>
+      <Version>17.5.33428.388</Version>
     </PackageReference>
     <PackageReference Update="Microsoft.VSSDK.BuildTools">
-      <Version>17.4.2119</Version>
+      <Version>17.5.4072</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
