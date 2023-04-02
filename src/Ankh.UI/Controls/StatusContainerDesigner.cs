@@ -18,6 +18,7 @@ using System.Text;
 using System.Windows.Forms.Design;
 using System.ComponentModel.Design;
 using System.Windows.Forms;
+using Microsoft;
 
 namespace Ankh.UI.Controls
 {
@@ -38,6 +39,8 @@ namespace Ankh.UI.Controls
             _container.ControlRemoved += new System.Windows.Forms.ControlEventHandler(OnControlRemoved);
 
             _designerHost = (IDesignerHost)component.Site.GetService(typeof(IDesignerHost));
+            Assumes.Present(
+            _designerHost);
         }
 
 

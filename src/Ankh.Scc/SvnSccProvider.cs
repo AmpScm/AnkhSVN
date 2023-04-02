@@ -169,7 +169,7 @@ namespace Ankh.Scc
         }
 
 
-        protected override void OnUnpublishedCommitsUIClickedAsync(Point wr)
+        protected override void OnUnpublishedCommitsUIClicked(Point wr)
         {
             //throw new NotImplementedException();
         }

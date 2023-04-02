@@ -86,21 +86,18 @@ namespace Ankh.Scc
             if (rdt == null)
                 return;
 
-            IEnumRunningDocuments docEnum;
-            if (!VSErr.Succeeded(rdt.GetRunningDocumentsEnum(out docEnum)))
+            if (!VSErr.Succeeded(rdt.GetRunningDocumentsEnum(out IEnumRunningDocuments docEnum)))
                 return;
 
             uint[] cookies = new uint[256];
-            uint nFetched;
-            while (VSErr.Succeeded(docEnum.Next((uint)cookies.Length, cookies, out nFetched)))
+            while (VSErr.Succeeded(docEnum.Next((uint)cookies.Length, cookies, out uint nFetched)))
             {
                 if (nFetched == 0)
                     break;
 
                 for (int i = 0; i < nFetched; i++)
                 {
-                    SccDocumentData data;
-                    if (TryGetDocument(cookies[i], out data))
+                    if (TryGetDocument(cookies[i], out SccDocumentData data))
                     {
                         data.OnCookieLoad(_poller);
                     }
@@ -155,13 +152,8 @@ namespace Ankh.Scc
                 return false;
             }
 
-            string name;
-            uint flags;
-            IVsHierarchy hier;
-            uint itemId;
-            object document;
 
-            if (TryGetDocumentInfo(cookie, out name, out flags, out hier, out itemId, out document))
+            if (TryGetDocumentInfo(cookie, out string name, out uint flags, out IVsHierarchy hier, out uint itemId, out object document))
             {
                 if (!string.IsNullOrEmpty(name))
                 {
@@ -256,12 +248,8 @@ namespace Ankh.Scc
                 { }
             }
 
-            IntPtr ppunkDocData;
-            uint locks;
-            uint editLocks;
-
             if (VSErr.Succeeded(RunningDocumentTable.GetDocumentInfo(cookie,
-                out flags, out locks, out editLocks, out name, out hier, out itemId, out ppunkDocData)))
+                out flags, out _, out _, out name, out hier, out itemId, out IntPtr ppunkDocData)))
             {
                 if (ppunkDocData != IntPtr.Zero)
                 {
@@ -298,9 +286,9 @@ namespace Ankh.Scc
                 return VSErr.S_OK; // Can't be a valid path; don't monitor
             }
 
-            SccDocumentData data;
-            if (!_docMap.TryGetValue(pszMkDocument, out data))
+            if (!_docMap.TryGetValue(pszMkDocument, out _))
             {
+                SccDocumentData data;
                 _docMap.Add(pszMkDocument, data = new SccDocumentData(Context, pszMkDocument));
 
                 data.Hierarchy = pHier;
@@ -323,8 +311,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(pszMkDocument))
                 return VSErr.S_OK;
 
-            SccDocumentData data;
-            if (_docMap.TryGetValue(pszMkDocument, out data))
+            if (_docMap.TryGetValue(pszMkDocument, out SccDocumentData data))
             {
                 data.OnClosed();
                 _docMap.Remove(data.Name);
@@ -338,8 +325,7 @@ namespace Ankh.Scc
 
         public int OnBeforeSave(uint docCookie)
         {
-            SccDocumentData data;
-            if (TryGetDocument(docCookie, out data))
+            if (TryGetDocument(docCookie, out SccDocumentData data))
             {
                 data.Saving = DateTime.Now;
             }
@@ -349,9 +335,8 @@ namespace Ankh.Scc
 
         public int OnAfterSave(uint docCookie)
         {
-            SccDocumentData data;
 
-            if (TryGetDocument(docCookie, out data))
+            if (TryGetDocument(docCookie, out SccDocumentData data))
             {
                 data.OnSaved();
 
@@ -389,9 +374,8 @@ namespace Ankh.Scc
             if ((grfAttribs & HandledRDTAttributes) == 0)
                 return VSErr.S_OK; // Not interested
 
-            SccDocumentData data;
 
-            if (TryGetDocument(docCookie, out data))
+            if (TryGetDocument(docCookie, out SccDocumentData data))
             {
                 __VSRDTATTRIB attribs = (__VSRDTATTRIB)grfAttribs;
 
@@ -415,8 +399,7 @@ namespace Ankh.Scc
             if ((grfAttribs & TrackedRDTAttributes) == 0)
                 return VSErr.S_OK; // Not interested
 
-            SccDocumentData data;
-            if (!TryGetDocument(docCookie, true, out data))
+            if (!TryGetDocument(docCookie, true, out SccDocumentData data))
                 return VSErr.S_OK;
 
             __VSRDTATTRIB attribs = (__VSRDTATTRIB)grfAttribs;
@@ -453,9 +436,8 @@ namespace Ankh.Scc
                 {
                     // The document changed names; Handle this as opening a new document
 
-                    SccDocumentData newData;
 
-                    if (!_docMap.TryGetValue(pszMkDocumentNew, out newData))
+                    if (!_docMap.TryGetValue(pszMkDocumentNew, out SccDocumentData newData))
                     {
                         newData = new SccDocumentData(Context, pszMkDocumentNew);
                         newData.CopyState(data);
@@ -470,7 +452,6 @@ namespace Ankh.Scc
                     }
 
                     _cookieMap[newData.Cookie] = newData;
-                    data = newData;
                 }
 
                 if (!string.IsNullOrEmpty(pszMkDocumentOld) && pszMkDocumentNew != pszMkDocumentOld)
@@ -545,17 +526,12 @@ namespace Ankh.Scc
             bool done = false;
 
             int dv;
-            IVsWindowFrame wf;
             object rawDoc = data.RawDocument;
 
             if (rawDoc != null)
             {
-                IVsPersistDocData pdd;
-                IPersistFileFormat pff;
-                IVsPersistHierarchyItem phi;
-
                 // Implemented by most editors
-                if (null != (pdd = rawDoc as IVsPersistDocData))
+                if (rawDoc is IVsPersistDocData pdd)
                 {
                     if (SafeSucceeded(pdd.IsDocDataDirty, out dv))
                     {
@@ -570,7 +546,7 @@ namespace Ankh.Scc
                 }
 
                 // Implemented by the common project types (Microsoft Project Base)
-                if (!done && null != (pff = rawDoc as IPersistFileFormat))
+                if (!done && rawDoc is IPersistFileFormat pff)
                 {
                     if (SafeSucceeded(pff.IsDirty, out dv))
                     {
@@ -585,7 +561,7 @@ namespace Ankh.Scc
                 }
 
                 // Project based documents will probably handle this
-                if (!done && null != (phi = data.Hierarchy as IVsPersistHierarchyItem) && rawDoc != null)
+                if (!done && data.Hierarchy is IVsPersistHierarchyItem phi && rawDoc != null)
                 {
                     IntPtr docHandle = Marshal.GetIUnknownForObject(rawDoc);
                     try
@@ -614,16 +590,15 @@ namespace Ankh.Scc
             }
 
             // Literally look if the frame window has a modified *
-            if (!done && TryGetOpenDocumentFrame(data, out wf) && wf != null)
+            if (!done && TryGetOpenDocumentFrame(data, out IVsWindowFrame wf) && wf != null)
             {
-                object ok;
-                if (VSErr.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
+                if (VSErr.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out object ok)))
                 {
                     if (ok == null)
                     { }
-                    else if (ok is bool) // Implemented by VS as bool
+                    else if (ok is bool boolean) // Implemented by VS as bool
                     {
-                        if ((bool)ok)
+                        if (boolean)
                         {
                             dirty = true;
                             return true;
@@ -646,10 +621,8 @@ namespace Ankh.Scc
                 return false;
             }
             Guid gV = Guid.Empty;
-            IVsUIHierarchy hier;
             uint[] openId = new uint[1];
 
-            int open;
 
             IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
             wf = null;
@@ -660,7 +633,7 @@ namespace Ankh.Scc
             try
             {
                 return VSErr.Succeeded(so.IsDocumentOpen(data.Hierarchy as IVsUIHierarchy, data.ItemId, data.Name, ref gV,
-                    (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView, out hier, openId, out wf, out open))
+                    (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView, out IVsUIHierarchy hier, openId, out wf, out int open))
                     && (open != 0)
                     && (wf != null);
             }

@@ -47,9 +47,11 @@ namespace UnitTestProject.MenuItemTests
     [TestFixture]
     public class MenuItemTest
     {
+        [Obsolete]
         AnkhSvnPackage package;
 
         [SetUp]
+        [Obsolete]
         public void SetUp()
         {
             // Create the package
@@ -95,6 +97,7 @@ namespace UnitTestProject.MenuItemTests
         /// This action takes place In the Initialize method of the Package object
         /// </summary>
         [Test]
+        [Obsolete]
         public void InitializeMenuCommand()
         {
             using (ServiceProviderHelper.SetSite(package))

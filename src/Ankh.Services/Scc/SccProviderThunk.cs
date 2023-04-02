@@ -41,7 +41,7 @@ namespace Ankh.Scc
         protected abstract void OnPendingChangesClicked(Point clickedElement);
         protected abstract void OnRepositoryUIClicked(Point clickedElement);
 
-        protected abstract void OnUnpublishedCommitsUIClickedAsync(Point wr);
+        protected abstract void OnUnpublishedCommitsUIClicked(Point wr);
 
         partial void CreateDummyTask(ref object task);
 
@@ -129,7 +129,7 @@ namespace Ankh.Scc
             }
         }
 
-        public event EventHandler AdvertisePublish;
+        //public event EventHandler AdvertisePublish;
 
         protected virtual void RaisePropertyChanged(string propertyName)
         {

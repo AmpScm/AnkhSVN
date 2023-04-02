@@ -100,7 +100,15 @@
     <EmbeddedResource Include="unversioned.zip" />
     <EmbeddedResource Include="wc.zip" />
   </ItemGroup>
-  <ItemGroup>
+    <ItemGroup>
+    <PackageReference Update="Microsoft.VisualStudio.SDK">
+      <Version>17.5.33428.388</Version>
+    </PackageReference>
+    <PackageReference Update="Microsoft.VSSDK.BuildTools">
+      <Version>17.5.4072</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="NUnit">
       <Version>3.13.3</Version>
     </PackageReference>

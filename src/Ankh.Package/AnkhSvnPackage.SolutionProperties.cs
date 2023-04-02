@@ -319,6 +319,7 @@ namespace Ankh.VSPackage
             }
             catch (Exception ex)
             {
+                string error = ex.Message;
 #if DEBUG
                 IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
 

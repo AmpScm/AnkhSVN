@@ -31,7 +31,7 @@ namespace Ankh.UI.Annotate
 {
     public partial class AnnotateEditorControl : VSEditorControl, ISelectionMapOwner<IAnnotateSection>
     {
-        List<AnnotateRegion> blameSections = new List<AnnotateRegion>();
+        readonly List<AnnotateRegion> blameSections = new List<AnnotateRegion>();
         SelectionItemMap _map;
         SvnOrigin _origin;
 

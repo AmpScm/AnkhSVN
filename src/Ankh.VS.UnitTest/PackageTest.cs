@@ -46,12 +46,14 @@ namespace UnitTestProject
     public class PackageTest
     {
         [Test]
+        [Obsolete]
         public void CreateInstance()
         {
             AnkhSvnPackage package = new AnkhSvnPackage();
         }
 
         [Test]
+        [Obsolete]
         public void IsIVsPackage()
         {
             AnkhSvnPackage package = new AnkhSvnPackage();
@@ -59,6 +61,7 @@ namespace UnitTestProject
         }
 
         [Test]
+        [Obsolete]
         public void SetSite()
         {
             // Create the package

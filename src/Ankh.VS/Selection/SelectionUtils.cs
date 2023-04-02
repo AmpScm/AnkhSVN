@@ -20,7 +20,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using IServiceProvider = System.IServiceProvider;
 using System.Runtime.InteropServices;
-
+using Microsoft;
 
 namespace Ankh.VS.Selection
 {
@@ -395,6 +395,7 @@ namespace Ankh.VS.Selection
 
                 // Set the solution's glyph directly in the hierarchy
                 IVsHierarchy solHier = (IVsHierarchy)_context.GetService(typeof(SVsSolution));
+                Assumes.Present(solHier);
                 return solHier.SetProperty(VSItemId.Root, (int)__VSHPROPID.VSHPROPID_StateIconIndex, (int)rgsiGlyphs[0]);
             }
 

@@ -33,7 +33,7 @@ namespace Ankh.UI.PendingChanges
     partial class PendingCommitsPage : PendingChangesPage
     {
         PendingCommitsView pendingCommits;
-        IPendingChangeControl pendingChangeControl;
+        readonly IPendingChangeControl pendingChangeControl;
         IPendingChangeUI _ui;
 
         public PendingCommitsPage()
@@ -124,13 +124,13 @@ namespace Ankh.UI.PendingChanges
                 pendingCommits.Name = "pendingCommits";
                 pendingCommits.ShowItemToolTips = true;
                 pendingCommits.ShowSelectAllCheckBox = true;
-                pendingCommits.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pendingCommits_KeyUp);
+                pendingCommits.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PendingCommits_KeyUp);
 
                 pendingCommits.SelectionPublishServiceProvider = Context;
                 pendingCommits.Context = Context;
                 pendingCommits.OpenPendingChangeOnDoubleClick = true;
                 pendingCommits.HookCommands();
-                pendingCommits.ColumnWidthChanged += new ColumnWidthChangedEventHandler(pendingCommits_ColumnWidthChanged);
+                pendingCommits.ColumnWidthChanged += new ColumnWidthChangedEventHandler(PendingCommits_ColumnWidthChanged);
                 IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
                 pendingCommits.SetColumnWidths(widths);
 
@@ -163,7 +163,7 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        protected void pendingCommits_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        protected void PendingCommits_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
         {
             IDictionary<string, int> widths = pendingCommits.GetColumnWidths();
             ConfigurationService.SaveColumnsWidths(GetType(), widths);
@@ -284,6 +284,7 @@ namespace Ankh.UI.PendingChanges
         }
 
         IAnkhSolutionSettings _settings;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
         IAnkhSolutionSettings Settings
         {
             get { return _settings ?? (_settings = Context.GetService<IAnkhSolutionSettings>()); }
@@ -300,20 +301,18 @@ namespace Ankh.UI.PendingChanges
 
             IAnkhOpenDocumentTracker dt = Context.GetService<IAnkhOpenDocumentTracker>();
 
-            if (dt != null)
-                dt.RefreshDirtyState();
+            dt?.RefreshDirtyState();
 
             Manager.FullRefresh(true);
         }
 
-        private void pendingCommits_KeyUp(object sender, KeyEventArgs e)
+        private void PendingCommits_KeyUp(object sender, KeyEventArgs e)
         {
             // TODO: Replace with VS command handling, instead of hooking it with Winforms
             if (e.KeyCode == Keys.Enter)
             {
                 // TODO: We should probably open just the focused file instead of the selection in the ItemOpenVisualStudio case to make it more deterministic what file is active after opening
-                if (CommandService != null)
-                    CommandService.ExecCommand(Config.PCDoubleClickShowsChanges
+                CommandService?.ExecCommand(Config.PCDoubleClickShowsChanges
                         ? AnkhCommand.ItemShowChanges : AnkhCommand.ItemOpenVisualStudio, true);
             }
         }
@@ -366,7 +365,8 @@ namespace Ankh.UI.PendingChanges
 
             IPendingChangeHandler pch = Context.GetService<IPendingChangeHandler>();
 
-            PendingChangeCommitArgs a = new PendingChangeCommitArgs();
+            PendingChangeCommitArgs pendingChangeCommitArgs = new PendingChangeCommitArgs();
+            PendingChangeCommitArgs a = pendingChangeCommitArgs;
             a.LogMessage = logMessageEditor.Text;
             a.KeepLocks = keepLocks;
 
@@ -387,7 +387,8 @@ namespace Ankh.UI.PendingChanges
                 return;
             }
 
-            PendingChangeCreatePatchArgs a = new PendingChangeCreatePatchArgs();
+            PendingChangeCreatePatchArgs pendingChangeCreatePatchArgs = new PendingChangeCreatePatchArgs();
+            PendingChangeCreatePatchArgs a = pendingChangeCreatePatchArgs;
             a.FileName = fileName;
 
             IAnkhSolutionSettings ss = Context.GetService<IAnkhSolutionSettings>();
@@ -451,7 +452,7 @@ namespace Ankh.UI.PendingChanges
         }
 
         bool _issueNummeric;
-        private void issueNumberBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void IssueNumberBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (_issueNummeric)
             {
@@ -460,7 +461,7 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        private void issueNumberBox_TextChanged(object sender, EventArgs e)
+        private void IssueNumberBox_TextChanged(object sender, EventArgs e)
         {
             if (_issueNummeric)
             {
@@ -485,9 +486,7 @@ namespace Ankh.UI.PendingChanges
         {
             get
             {
-                IAnkhHasVsTextView tv = logMessageEditor.ActiveControl as IAnkhHasVsTextView;
-
-                if (tv != null)
+                if (logMessageEditor.ActiveControl is IAnkhHasVsTextView tv)
                     return tv.TextView;
 
                 return null;
@@ -498,9 +497,7 @@ namespace Ankh.UI.PendingChanges
         {
             get
             {
-                IAnkhHasVsTextView tv = logMessageEditor.ActiveControl as IAnkhHasVsTextView;
-
-                if (tv != null)
+                if (logMessageEditor.ActiveControl is IAnkhHasVsTextView tv)
                     return tv.FindTarget;
 
                 return null;
