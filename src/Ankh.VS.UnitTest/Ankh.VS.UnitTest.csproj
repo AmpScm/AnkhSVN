@@ -109,7 +109,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.VSSDK.UnitTestLibrary" Version="14.3.25407" />
     <PackageReference Include="Moq" Version="4.20.69" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.2.0" />
     <PackageReference Include="NUnit" Version="3.13.3" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
