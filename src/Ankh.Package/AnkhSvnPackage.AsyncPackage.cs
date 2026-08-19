@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.VisualStudio.Shell;
 using System.Threading;
 
@@ -20,15 +20,28 @@ namespace Ankh.VSPackage
         /// </summary>
         protected async override System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            await base.InitializeAsync(cancellationToken, progress);
+            try
+            {
+                await base.InitializeAsync(cancellationToken, progress);
 
-            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+                await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
-            if (InCommandLineMode)
-                return; // Do nothing; speed up devenv /setup by not loading all our modules!
+                if (InCommandLineMode)
+                    return; // Do nothing; speed up devenv /setup by not loading all our modules!
 
-            InitializeRuntime(); // Moved to function of their own to speed up devenv /setup
-            RegisterAsOleComponent();
+                InitializeRuntime(); // Moved to function of their own to speed up devenv /setup
+                RegisterAsOleComponent();
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    string logPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AnkhSVN_LoadError.log");
+                    System.IO.File.WriteAllText(logPath, DateTime.Now.ToString("o") + "\r\n" + ex.ToString());
+                }
+                catch { }
+                throw;
+            }
         }
 
         protected override object GetService(Type serviceType)

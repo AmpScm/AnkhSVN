@@ -216,7 +216,7 @@ namespace Ankh.Commands
                 Assembly asm = _assembliesToLoad[0];
                 _assembliesToLoad.RemoveAt(0);
                 _assembliesLoaded.Add(asm);
-                foreach (Type type in asm.GetTypes())
+                foreach (Type type in AnkhRuntime.GetLoadedTypes(asm))
                 {
                     if (!type.IsClass || type.IsAbstract || type.IsNested || !Attribute.IsDefined(type, typeof(CommandAttribute), false))
                         continue;

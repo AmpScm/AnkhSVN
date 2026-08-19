@@ -227,6 +227,47 @@ namespace Ankh
             LoadServices(container, assembly, Context);
         }
 
+        public static IEnumerable<Type> GetLoadedTypes(Assembly asm)
+        {
+            if (asm == null)
+                return new Type[0];
+
+            try
+            {
+                return asm.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                try
+                {
+                    string logPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AnkhSVN_LoadError.log");
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("\r\n[ReflectionTypeLoadException in " + asm.FullName + "]");
+                    if (ex.LoaderExceptions != null)
+                    {
+                        foreach (Exception le in ex.LoaderExceptions)
+                        {
+                            if (le != null)
+                                sb.AppendLine(" LoaderException: " + le.Message);
+                        }
+                    }
+                    System.IO.File.AppendAllText(logPath, sb.ToString());
+                }
+                catch { }
+
+                List<Type> validTypes = new List<Type>();
+                if (ex.Types != null)
+                {
+                    foreach (Type t in ex.Types)
+                    {
+                        if (t != null)
+                            validTypes.Add(t);
+                    }
+                }
+                return validTypes;
+            }
+        }
+
         /// <summary>
         /// Loads the services from the specified assembly and adds them to the specified container; pass context to the services
         /// </summary>
@@ -243,7 +284,7 @@ namespace Ankh
             IAnkhStaticServiceRegistry staticContainer = container as IAnkhStaticServiceRegistry;
 
             object[] constructorArgs = null;
-            foreach (Type type in assembly.GetTypes())
+            foreach (Type type in GetLoadedTypes(assembly))
             {
                 if (!type.IsClass || type.IsAbstract || type.IsNested || !Attribute.IsDefined(type, typeof(GlobalServiceAttribute), false))
                     continue;

@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
   <!-- Import the SDK Manually, to allow including the VSTools later -->
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.props" Condition="('$(VSToolsPath)' != '') And Exists('$(VSToolsPath)\VSSDK\Microsoft.VsSDK.props')" />
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
@@ -87,10 +87,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" />
-    <PackageReference Include="SharpSvn">
+    <PackageReference Include="SharpSvn" GeneratePathProperty="true">
       <IncludeInVSIX>true</IncludeInVSIX>
     </PackageReference>
-    <PackageReference Include="SharpSvn.UI">
+    <PackageReference Include="SharpSvn.UI" GeneratePathProperty="true">
       <IncludeInVSIX>true</IncludeInVSIX>
     </PackageReference>
   </ItemGroup>
@@ -112,7 +112,28 @@
       <VSIXSourceItem Include="@(RuntimeCopyLocalItems)" Condition="'%(RuntimeCopyLocalItems.NuGetPackageId)' != '' And ! $([System.String]::Copy('%(RuntimeCopyLocalItems.NuGetPackageId)').StartsWith('Microsoft.VisualStudio.')) And ! $([System.String]::Copy('%(RuntimeCopyLocalItems.NuGetPackageId)').StartsWith('envdte')) And ! $([System.String]::Copy('%(RuntimeCopyLocalItems.NuGetPackageId)').StartsWith('VSLang'))">
         <IncludeInVSIX>true</IncludeInVSIX>
       </VSIXSourceItem>
+      <VSIXSourceItem Include="@(SharpSvnExternalFiles)">
+        <IncludeInVSIX>true</IncludeInVSIX>
+      </VSIXSourceItem>
     </ItemGroup>
+  </Target>
+
+  <Target Name="OverrideSharpSvnWithX64" AfterTargets="IncludeNuGetDependenciesInVsix" BeforeTargets="FindSourceVsixManifest;GetVsixSourceItems" Condition="'$(UseVsSdkVersion)' &gt;= '17.0'">
+    <ItemGroup>
+      <VSIXSourceItem Remove="@(VSIXSourceItem)" Condition="'%(Filename)' == 'SharpSvn' Or '%(Filename)' == 'SharpSvn-DB44-20-win32' Or '%(Filename)' == 'SharpPlink-Win32'" />
+      <VSIXSourceItem Include="$(PkgSharpSvn)\runtimes\win-x64\lib\net40\SharpSvn.dll">
+        <IncludeInVSIX>true</IncludeInVSIX>
+      </VSIXSourceItem>
+      <VSIXSourceItem Include="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpSvn-DB44-20-x64.svnDll">
+        <IncludeInVSIX>true</IncludeInVSIX>
+      </VSIXSourceItem>
+      <VSIXSourceItem Include="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpPlink-x64.svnExe">
+        <IncludeInVSIX>true</IncludeInVSIX>
+      </VSIXSourceItem>
+    </ItemGroup>
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\net40\SharpSvn.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpSvn-DB44-20-x64.svnDll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpPlink-x64.svnExe" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
   </Target>
 
   <!-- Import SDK targetm and then the VSSDK last -->

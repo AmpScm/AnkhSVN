@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Ankh
 {
@@ -14,7 +14,8 @@ namespace Ankh
         VS2015, // 14.0
         VS2017, // 15.0
         VS2019, // 16.0
-        VS2022  // 17.0
+        VS2022, // 17.0
+        VS2026  // 18.0
     }
 
     public abstract class AnkhInstanceConditionalAttribute : Attribute
