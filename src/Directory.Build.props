@@ -10,5 +10,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">17.0</VisualStudioVersion>
     <UseVsSdkVersion Condition="'$(UseVsSdkVersion)' == ''">$(VisualStudioVersion)</UseVsSdkVersion>
+    <PlatformTarget Condition="'$(UseVsSdkVersion)' >= '17.0'">AnyCPU</PlatformTarget>
+    <SharpSvnPlatform Condition="'$(UseVsSdkVersion)' >= '17.0'">x64</SharpSvnPlatform>
   </PropertyGroup>
 </Project>

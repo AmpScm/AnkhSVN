@@ -1,4 +1,4 @@
-﻿// Copyright 2008-2009 The AnkhSVN Project
+// Copyright 2008-2009 The AnkhSVN Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -81,25 +81,38 @@ namespace Ankh.VSPackage
 
         void InitializeRuntime()
         {
-            _runtime = new AnkhRuntime(this);
-            _runtime.PreLoad();
+            try
+            {
+                _runtime = new AnkhRuntime(this);
+                _runtime.PreLoad();
 
-            IServiceContainer container = GetService<IServiceContainer>();
-            container.AddService(typeof(IAnkhPackage), this, true);
-            container.AddService(typeof(IAnkhQueryService), this, true);
+                IServiceContainer container = GetService<IServiceContainer>();
+                container.AddService(typeof(IAnkhPackage), this, true);
+                container.AddService(typeof(IAnkhQueryService), this, true);
 
-            _runtime.AddModule(new AnkhModule(_runtime));
-            _runtime.AddModule(new AnkhSccModule(_runtime));
-            _runtime.AddModule(new AnkhVSModule(_runtime));
-            _runtime.AddModule(new AnkhUIModule(_runtime));
+                _runtime.AddModule(new AnkhModule(_runtime));
+                _runtime.AddModule(new AnkhSccModule(_runtime));
+                _runtime.AddModule(new AnkhVSModule(_runtime));
+                _runtime.AddModule(new AnkhUIModule(_runtime));
 
-            RegisterEditors();
+                RegisterEditors();
 
-            NotifyLoaded(false);
+                NotifyLoaded(false);
 
-            _runtime.Start();
+                _runtime.Start();
 
-            NotifyLoaded(true);
+                NotifyLoaded(true);
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    string logPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AnkhSVN_LoadError.log");
+                    System.IO.File.AppendAllText(logPath, "\r\n[InitializeRuntime Error]\r\n" + ex.ToString());
+                }
+                catch { }
+                throw;
+            }
         }
 
         private void NotifyLoaded(bool started)

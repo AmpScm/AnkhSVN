@@ -1,4 +1,4 @@
-﻿// Copyright 2008-2009 The AnkhSVN Project
+// Copyright 2008-2009 The AnkhSVN Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ namespace Ankh
         // Items for the VS 2010 Extension registration
         public const string ExtensionTitle = AnkhId.AssemblyProduct;
         public const string ExtensionAuthor = AnkhId.AssemblyCompany;
-        public const string ExtensionDescription = "Open Source Subversion SCC Provider for Visual Studio 2012, 2013, 2015, 2017, 2019 and 2022.";
+        public const string ExtensionDescription = "Open Source Subversion SCC Provider for Visual Studio 2012, 2013, 2015, 2017, 2019, 2022 and 2026.";
         public const string ExtensionMoreInfoUrl = "http://www.ankhsvn.net/";
         public const string ExtensionGettingStartedUrl = "http://www.ankhsvn.net/";
         public const string ExtensionReleaseNotesUrl = "http://ankhsvn.net/releasenotes";

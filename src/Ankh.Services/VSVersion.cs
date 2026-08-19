@@ -140,6 +140,16 @@ namespace Ankh
             get { return _osVersion ?? (_osVersion = Environment.OSVersion.Version); }
         }
 
+        public static bool VS2026OrLater
+        {
+            get { return FullVersion.Major >= 18; }
+        }
+
+        public static bool VS2022OrLater
+        {
+            get { return FullVersion.Major >= 17; }
+        }
+
         public static bool VS2013OrLater
         {
             get { return FullVersion.Major >= 12; }
