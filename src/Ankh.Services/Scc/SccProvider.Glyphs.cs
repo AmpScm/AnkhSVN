@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Ankh.Services;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Scc

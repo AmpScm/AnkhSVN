@@ -19,6 +19,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
+using Ankh.Services;
 
 namespace Ankh.Scc
 {

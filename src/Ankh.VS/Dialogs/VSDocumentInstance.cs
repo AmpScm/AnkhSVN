@@ -27,6 +27,7 @@ using ShellPackage = Microsoft.VisualStudio.Shell.Package;
 
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.TextManager.Interop;
+using Ankh.Services;
 
 
 namespace Ankh.VS.Dialogs

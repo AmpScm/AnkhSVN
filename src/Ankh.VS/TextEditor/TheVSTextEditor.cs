@@ -29,6 +29,7 @@ using Ankh.UI;
 
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+using Ankh.Services;
 
 namespace Ankh.VS.TextEditor
 {

@@ -27,6 +27,7 @@ using SharpSvn;
 using Ankh.Scc;
 using Ankh.Selection;
 using Ankh.VS.SolutionExplorer;
+using Ankh.Services;
 
 
 namespace Ankh.VS.Selection

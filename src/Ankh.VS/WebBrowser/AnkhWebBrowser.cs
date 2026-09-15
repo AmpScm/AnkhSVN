@@ -15,6 +15,7 @@
 using System;
 using System.Diagnostics;
 using Ankh.Configuration;
+using Ankh.Services;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.VS.WebBrowser

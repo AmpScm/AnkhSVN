@@ -19,6 +19,7 @@ using Ankh.VS.LanguageServices.Core;
 using Ankh.VS.LanguageServices.LogMessages;
 using Ankh.VS.LanguageServices.UnifiedDiff;
 using Ankh.VSPackage.Attributes;
+using System.Linq;
 
 namespace Ankh.VSPackage
 {
@@ -51,20 +52,17 @@ namespace Ankh.VSPackage
             object obj = base.GetAutomationObject(name);
             if (obj != null || name == null)
                 return obj;
-
+            foreach (var language in
             // Look for setting objects that must be accessible by their automation name for setting persistence.
-            foreach (ProvideLanguageSettingsAttribute ps in GetType().GetCustomAttributes(typeof(ProvideLanguageSettingsAttribute), true))
+            from ProvideLanguageSettingsAttribute ps in GetType().GetCustomAttributes(typeof(ProvideLanguageSettingsAttribute), true)
+            where name == ps.Name
+            let language = GetService<AnkhLanguage>(ps.Type)
+            select language)
             {
-                if (name == ps.Name)
-                {
-                    AnkhLanguage language = GetService<AnkhLanguage>(ps.Type);
-
-                    if (language != null)
-                        obj = language.LanguagePreferences;
-
-                    if (obj != null)
-                        return obj;
-                }
+                if (language != null)
+                    obj = language.LanguagePreferences;
+                if (obj != null)
+                    return obj;
             }
 
             return null;

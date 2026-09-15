@@ -22,6 +22,7 @@ using System.IO;
 using Microsoft.VisualStudio;
 using System.Diagnostics;
 using Ankh.UI;
+using Ankh.Services;
 
 namespace Ankh.VS.SolutionExplorer
 {

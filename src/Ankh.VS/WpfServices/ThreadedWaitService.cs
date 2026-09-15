@@ -3,6 +3,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.UI;
+using Ankh.Services;
 
 namespace Ankh.WpfPackage.Services
 {

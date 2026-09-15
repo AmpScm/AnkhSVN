@@ -83,17 +83,17 @@ namespace Ankh.Services
                 return internalDiff.RunDiff(args);
             }
 
-            string program;
-            string arguments;
-            if (!Substitute(diffApp, args, DiffToolMode.Diff, out program, out arguments)
+            if (!Substitute(diffApp, args, DiffToolMode.Diff, out string program, out string arguments)
                 || !File.Exists(program))
             {
                 new AnkhMessageBox(Context).Show(string.Format("Can't find diff program '{0}'", program ?? diffApp));
                 return false;
             }
 
-            Process p = new Process();
-            p.StartInfo = new ProcessStartInfo(program, arguments);
+            Process p = new Process
+            {
+                StartInfo = new ProcessStartInfo(program, arguments)
+            };
 
             string mergedFile = args.MineFile;
 
@@ -113,11 +113,8 @@ namespace Ankh.Services
             }
             finally
             {
-                if (!started)
-                {
-                    if (monitor != null)
-                        monitor.Dispose();
-                }
+                if (!started && monitor != null)
+                    monitor.Dispose();
             }
         }
 
@@ -175,17 +172,17 @@ namespace Ankh.Services
                 return false;
             }
 
-            string program;
-            string arguments;
-            if (!Substitute(mergeApp, args, DiffToolMode.Merge, out program, out arguments)
+            if (!Substitute(mergeApp, args, DiffToolMode.Merge, out string program, out string arguments)
                 || !File.Exists(program))
             {
                 new AnkhMessageBox(Context).Show(string.Format("Can't find merge program '{0}'", program ?? mergeApp));
                 return false;
             }
 
-            Process p = new Process();
-            p.StartInfo = new ProcessStartInfo(program, arguments);
+            Process p = new Process
+            {
+                StartInfo = new ProcessStartInfo(program, arguments)
+            };
 
             string mergedFile = args.MergedFile;
 
@@ -205,11 +202,8 @@ namespace Ankh.Services
             }
             finally
             {
-                if (!started)
-                {
-                    if (monitor != null)
-                        monitor.Dispose();
-                }
+                if (!started && monitor != null)
+                    monitor.Dispose();
             }
         }
 
@@ -244,16 +238,16 @@ namespace Ankh.Services
                 return false;
             }
 
-            string program;
-            string arguments;
-            if (!Substitute(diffApp, args, DiffToolMode.Patch, out program, out arguments))
+            if (!Substitute(diffApp, args, DiffToolMode.Patch, out string program, out string arguments))
             {
                 new AnkhMessageBox(Context).Show(string.Format("Can't find patch program '{0}'", program));
                 return false;
             }
 
-            Process p = new Process();
-            p.StartInfo = new ProcessStartInfo(program, arguments);
+            Process p = new Process
+            {
+                StartInfo = new ProcessStartInfo(program, arguments)
+            };
 
             string applyTo = args.ApplyTo;
 
@@ -273,11 +267,8 @@ namespace Ankh.Services
             }
             finally
             {
-                if (!started)
-                {
-                    if (monitor != null)
-                        monitor.Dispose();
-                }
+                if (!started && monitor != null)
+                    monitor.Dispose();
             }
         }
 
@@ -291,9 +282,11 @@ namespace Ankh.Services
             SvnUriTarget copiedFrom = null;
             using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
             {
-                SvnInfoArgs ia = new SvnInfoArgs();
-                ia.ThrowOnError = false;
-                ia.Depth = SvnDepth.Empty;
+                SvnInfoArgs ia = new SvnInfoArgs
+                {
+                    ThrowOnError = false,
+                    Depth = SvnDepth.Empty
+                };
 
                 client.Info(item.FullPath, ia,
                     delegate(object sender, SvnInfoEventArgs ee)
@@ -313,7 +306,7 @@ namespace Ankh.Services
             readonly string _toMonitor;
             readonly bool _monitorDir;
             IAnkhOpenDocumentTracker _odt;
-            int[] _resolvedExitCodes;
+            readonly int[] _resolvedExitCodes;
 
             public DiffToolMonitor(IAnkhServiceProvider context, string monitor, bool monitorDir, int[] resolvedExitCodes)
                 : base(context)
@@ -381,11 +374,12 @@ namespace Ankh.Services
                     }
                 }
 
-                if (_odt != null)
+                if (_odt == null)
                 {
-                    _odt.IgnoreChanges(_toMonitor, false);
-                    _odt = null;
+                    return;
                 }
+                _odt.IgnoreChanges(_toMonitor, false);
+                _odt = null;
             }
 
             private void MarkResolved()
@@ -408,7 +402,6 @@ namespace Ankh.Services
 
             void OnExited(object sender, EventArgs e)
             {
-                Process process = sender as Process;
                 IAnkhCommandService cmd = GetService<IAnkhCommandService>();
 
                 if (cmd != null)
@@ -416,8 +409,8 @@ namespace Ankh.Services
                 else
                     Dispose();
 
-                if (process != null && _resolvedExitCodes != null)
-                    foreach(int ec in _resolvedExitCodes)
+                if (sender is Process process && _resolvedExitCodes != null)
+                    foreach (int ec in _resolvedExitCodes)
                     {
                         if (ec == process.ExitCode)
                         {
@@ -428,20 +421,23 @@ namespace Ankh.Services
 
                 IFileStatusMonitor m = GetService<IFileStatusMonitor>();
 
-                if (m != null)
+                if (m == null)
                 {
-                    m.ScheduleSvnStatus(_toMonitor);
+                    return;
                 }
+                m.ScheduleSvnStatus(_toMonitor);
             }
 
             public int DirectoryChanged(string pszDirectory)
             {
                 ISvnStatusCache fsc = GetService<ISvnStatusCache>();
 
-                if (fsc != null)
+                if (fsc == null)
                 {
-                    fsc.MarkDirtyRecursive(SvnTools.GetNormalizedFullPath(pszDirectory));
+                    return VSErr.S_OK;
                 }
+
+                fsc.MarkDirtyRecursive(SvnTools.GetNormalizedFullPath(pszDirectory));
 
                 return VSErr.S_OK;
             }
@@ -459,8 +455,7 @@ namespace Ankh.Services
 
                         if (m != null)
                         {
-                            bool isDirty;
-                            m.ExternallyChanged(_toMonitor, out isDirty);
+                            m.ExternallyChanged(_toMonitor, out bool isDirty);
 
                             if (isDirty)
                                 Dispose();
@@ -647,8 +642,7 @@ namespace Ankh.Services
 
                         foreach (string s in value.Split(','))
                         {
-                            int i;
-                            if (int.TryParse(s.Trim(), out i))
+                            if (int.TryParse(s.Trim(), out int i))
                             {
                                 intVals.Add(i);
                             }
@@ -774,8 +768,7 @@ namespace Ankh.Services
                         IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
                         if (sol == null)
                             return false;
-                        object val;
-                        if (VSErr.Succeeded(sol.GetProperty((int)__VSSPROPID.VSSPROPID_InstallDirectory, out val)))
+                        if (VSErr.Succeeded(sol.GetProperty((int)__VSSPROPID.VSSPROPID_InstallDirectory, out object val)))
                             value = val as string;
                         return true;
                     default:
@@ -867,8 +860,10 @@ namespace Ankh.Services
             ProgressRunnerResult r = GetService<IProgressRunner>().RunModal(ServiceStrings.RetrievingFileForComparison,
                 delegate(object sender, ProgressWorkerArgs aa)
                 {
-                    SvnWriteArgs wa = new SvnWriteArgs();
-                    wa.Revision = revision;
+                    SvnWriteArgs wa = new SvnWriteArgs
+                    {
+                        Revision = revision
+                    };
 
                     using (Stream s = File.Create(file))
                         aa.Client.Write(target.FullPath, s, wa);
@@ -896,8 +891,10 @@ namespace Ankh.Services
             ProgressRunnerResult r = GetService<IProgressRunner>().RunModal(ServiceStrings.RetrievingFileForComparison,
                 delegate(object sender, ProgressWorkerArgs aa)
                 {
-                    SvnWriteArgs wa = new SvnWriteArgs();
-                    wa.Revision = revision;
+                    SvnWriteArgs wa = new SvnWriteArgs
+                    {
+                        Revision = revision
+                    };
                     wa.AddExpectedError(SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES);
 
                     using (Stream s = File.Create(file))
@@ -938,9 +935,12 @@ namespace Ankh.Services
                 ProgressRunnerResult r = Context.GetService<IProgressRunner>().RunModal(ServiceStrings.RetrievingMultipleVersionsOfFile,
                     delegate(object sender, ProgressWorkerArgs e)
                     {
-                        SvnFileVersionsArgs ea = new SvnFileVersionsArgs();
-                        ea.Start = from;
-                        ea.End = to;
+                        SvnFileVersionsArgs ea = new SvnFileVersionsArgs
+                        {
+                            Start = from,
+                            End = to
+                        };
+
                         ea.AddExpectedError(SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE); // Github
 
                         e.Client.FileVersions(target, ea,

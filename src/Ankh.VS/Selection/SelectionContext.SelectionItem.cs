@@ -27,10 +27,7 @@ namespace Ankh.VS.Selection
 
         public SelectionItem(IVsHierarchy hierarchy, uint id)
         {
-            if (hierarchy == null)
-                throw new ArgumentNullException("hierarchy");
-
-            _hierarchy = hierarchy;
+            _hierarchy = hierarchy ?? throw new ArgumentNullException("hierarchy");
             _id = id;
         }
 

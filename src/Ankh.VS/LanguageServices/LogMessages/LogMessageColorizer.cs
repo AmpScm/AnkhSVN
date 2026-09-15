@@ -89,8 +89,7 @@ namespace Ankh.VS.LanguageServices.LogMessages
 
             if (IssueService != null)
             {
-                IEnumerable<TextMarker> markers;
-                if (IssueService.TryGetRevisions(combined, out markers))
+                if (IssueService.TryGetRevisions(combined, out IEnumerable<TextMarker> markers))
                     foreach (TextMarker im in markers)
                     {
                         int from = Math.Max(im.Index, start);

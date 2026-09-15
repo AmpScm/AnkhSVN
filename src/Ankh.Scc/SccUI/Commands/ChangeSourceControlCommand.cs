@@ -22,6 +22,7 @@ using Microsoft.VisualStudio;
 
 using Ankh.UI;
 using Ankh.Commands;
+using Ankh.Services;
 
 namespace Ankh.Scc.SccUI.Commands
 {

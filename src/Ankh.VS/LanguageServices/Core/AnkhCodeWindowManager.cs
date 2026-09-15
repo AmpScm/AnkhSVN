@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-
+using Ankh.Services;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.TextManager.Interop;
 
@@ -18,10 +18,7 @@ namespace Ankh.VS.LanguageServices.Core
         public AnkhCodeWindowManager(AnkhLanguage language, IVsCodeWindow window)
             : base(language)
         {
-            if (window == null)
-                throw new ArgumentNullException("window");
-
-            _window = window;
+            _window = window ?? throw new ArgumentNullException("window");
             _views = new List<IVsTextView>();
 
             if (!TryHookConnectionPoint<IVsCodeWindowEvents>(_window, this, out _cookie))
@@ -62,11 +59,10 @@ namespace Ankh.VS.LanguageServices.Core
 
         public int AddAdornments()
         {
-            IVsTextView primaryView, secondaryView;
-            if (VSErr.Succeeded(_window.GetPrimaryView(out primaryView)) && primaryView != null)
+            if (VSErr.Succeeded(_window.GetPrimaryView(out IVsTextView primaryView)) && primaryView != null)
                 OnNewView(primaryView);
 
-            if (VSErr.Succeeded(_window.GetSecondaryView(out secondaryView)) && secondaryView != null)
+            if (VSErr.Succeeded(_window.GetSecondaryView(out IVsTextView secondaryView)) && secondaryView != null)
                 OnNewView(secondaryView);
 
             if (primaryView != null || secondaryView != null)
@@ -88,9 +84,8 @@ namespace Ankh.VS.LanguageServices.Core
         {
             AnkhLanguageDropDownBar bar = _bar;
             _bar = null;
+            bar?.Close();
 
-            if (bar != null)
-                bar.Close();
             return VSErr.S_OK;
         }
 
@@ -101,9 +96,7 @@ namespace Ankh.VS.LanguageServices.Core
             {
                 _views.Add(view);
                 Language.OnNewView(this, view);
-
-                if (_bar != null)
-                    _bar.OnNewView(view);
+                _bar?.OnNewView(view);
             }
 
             return VSErr.S_OK;
@@ -117,9 +110,7 @@ namespace Ankh.VS.LanguageServices.Core
             {
                 _views.Remove(view);
 
-                if (_bar != null)
-                    _bar.OnCloseView(view);
-
+                _bar?.OnCloseView(view);
 
                 Language.OnCloseView(this, view);
 

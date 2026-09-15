@@ -7,6 +7,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.TextManager.Interop;
 
 using Ankh.UI;
+using Ankh.Services;
 
 namespace Ankh.VS.LanguageServices.Core
 {
@@ -21,10 +22,7 @@ namespace Ankh.VS.LanguageServices.Core
         public AnkhLanguageDropDownBar(AnkhLanguage language, AnkhCodeWindowManager manager)
             : base(language)
         {
-            if (manager == null)
-                throw new ArgumentNullException("manager");
-
-            _manager = manager;
+            _manager = manager ?? throw new ArgumentNullException("manager");
         }
 
         protected AnkhCodeWindowManager Manager
@@ -49,9 +47,7 @@ namespace Ankh.VS.LanguageServices.Core
 
         protected internal virtual void Initialize()
         {
-            IVsDropdownBarManager dbm = Manager.CodeWindow as IVsDropdownBarManager;
-
-            if (dbm == null)
+            if (!(Manager.CodeWindow is IVsDropdownBarManager dbm))
                 return;
 
             int combos = NumberOfCombos;
@@ -62,8 +58,7 @@ namespace Ankh.VS.LanguageServices.Core
             if (!VSErr.Succeeded(dbm.AddDropdownBar(combos, this)))
                 return;
 
-            IVsDropdownBar bar;
-            if (!VSErr.Succeeded(dbm.GetDropdownBar(out bar)))
+            if (!VSErr.Succeeded(dbm.GetDropdownBar(out IVsDropdownBar bar)))
                 return;
 
             _added = true;
@@ -164,8 +159,7 @@ namespace Ankh.VS.LanguageServices.Core
 
                 if (_activeView != null)
                 {
-                    int line, col;
-                    if (VSErr.Succeeded(_activeView.GetCaretPos(out line, out col)))
+                    if (VSErr.Succeeded(_activeView.GetCaretPos(out int line, out int col)))
                     {
                         SynchronizeCombos(_activeView, line, col);
                     }
@@ -195,10 +189,7 @@ namespace Ankh.VS.LanguageServices.Core
         [CLSCompliant(false)]
         public int GetComboAttributes(int iCombo, out uint pcEntries, out uint puEntryType, out IntPtr phImageList)
         {
-            int numberOfEntries;
-            DROPDOWNENTRYTYPE entryType;
-            ImageList imageList;
-            GetSettings(iCombo, out numberOfEntries, out entryType, out imageList);
+            GetSettings(iCombo, out int numberOfEntries, out DROPDOWNENTRYTYPE entryType, out ImageList imageList);
             pcEntries = (uint)numberOfEntries;
             puEntryType = (uint)entryType;
 
@@ -315,8 +306,7 @@ namespace Ankh.VS.LanguageServices.Core
 
         internal void OnCloseView(IVsTextView view)
         {
-            ComboTextView v;
-            if (_comboViews.TryGetValue(view, out v))
+            if (_comboViews.TryGetValue(view, out ComboTextView v))
             {
                 _comboViews.Remove(view);
                 v.Dispose();
@@ -331,7 +321,7 @@ namespace Ankh.VS.LanguageServices.Core
         class ComboTextView : AnkhService, IVsTextViewEvents, IDisposable
         {
             IVsTextView _view;
-            uint _cookie;
+            readonly uint _cookie;
 
             public ComboTextView(AnkhLanguageDropDownBar bar, IVsTextView view)
                 : base(bar)
@@ -383,10 +373,10 @@ namespace Ankh.VS.LanguageServices.Core
 
         public class ComboMember
         {
-            string _text;
-            int _image;
+            readonly string _text;
+            readonly int _image;
             TextSpan _span;
-            DROPDOWNFONTATTR _attr;
+            readonly DROPDOWNFONTATTR _attr;
 
             [CLSCompliant(false)]
             public ComboMember(string text, int image, DROPDOWNFONTATTR attr)
@@ -453,7 +443,7 @@ namespace Ankh.VS.LanguageServices.Core
 
         public class ComboMemberCollection : Collection<ComboMember>
         {
-            AnkhLanguageDropDownBar _bar;
+            readonly AnkhLanguageDropDownBar _bar;
             readonly int _index;
             internal int _current;
             bool _dirty;

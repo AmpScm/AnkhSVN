@@ -8,9 +8,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text.Formatting;
 
-using Ankh.VS;
-
-namespace Ankh.WpfPackage.Services
+namespace Ankh.VS.WpfServices
 {
     [GlobalService(typeof(IGetWpfEditorInfo))]
     sealed class WpfEditorInfoService : AnkhService, IGetWpfEditorInfo

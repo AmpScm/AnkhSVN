@@ -17,8 +17,10 @@ namespace Ankh.VS.TextEditor
 
         public bool TryInstantiateIn(VSTextEditor editor, out IVSTextEditorImplementation implementation)
         {
-            TheVSTextEditor edit = new TheVSTextEditor();
-            edit.Dock = System.Windows.Forms.DockStyle.Fill;
+            TheVSTextEditor edit = new TheVSTextEditor
+            {
+                Dock = System.Windows.Forms.DockStyle.Fill
+            };
 
             implementation = edit;
 

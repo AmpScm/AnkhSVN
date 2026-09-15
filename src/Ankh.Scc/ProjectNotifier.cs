@@ -26,6 +26,7 @@ using Ankh.Commands;
 using Ankh.Selection;
 using Ankh.UI;
 using Ankh.Scc.Engine;
+using Ankh.Services;
 
 namespace Ankh.Scc
 {

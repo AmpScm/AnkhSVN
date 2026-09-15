@@ -25,6 +25,7 @@ using Ankh.Scc.UI;
 using Ankh.UI;
 
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+using Ankh.Services;
 
 namespace Ankh.VS.Dialogs
 {
@@ -73,9 +74,7 @@ namespace Ankh.VS.Dialogs
                 }
             }
 
-            IAnkhVSContainerForm ct = topParent as IAnkhVSContainerForm;
-
-            if (ct != null)
+            if (topParent is IAnkhVSContainerForm ct)
             {
                 ContextCommandHandler cx = new ContextCommandHandler(this, topParent);
                 acc.CommandHook = cx;
@@ -84,8 +83,7 @@ namespace Ankh.VS.Dialogs
                 return;
             }
 
-            IAnkhToolWindowControl toolWindow = topParent as IAnkhToolWindowControl;
-            if (toolWindow != null && toolWindow.ToolWindowHost != null)
+            if (topParent is IAnkhToolWindowControl toolWindow && toolWindow.ToolWindowHost != null)
             {
                 ContextCommandHandler cx = new ContextCommandHandler(this, topParent);
                 acc.CommandHook = cx;
@@ -113,7 +111,7 @@ namespace Ankh.VS.Dialogs
             }
         }
 
-        Dictionary<CommandID, List<CommandData>> _data = new Dictionary<CommandID, List<CommandData>>();
+        readonly Dictionary<CommandID, List<CommandData>> _data = new Dictionary<CommandID, List<CommandData>>();
         public ContextCommandHandler(IAnkhServiceProvider context, Control control)
             : base(context, control)
         {
@@ -123,8 +121,7 @@ namespace Ankh.VS.Dialogs
         {
             CommandData cd = new CommandData(control, handler, updateHandler);
 
-            List<CommandData> items;
-            if (!_data.TryGetValue(command, out items))
+            if (!_data.TryGetValue(command, out List<CommandData> items))
                 _data[command] = items = new List<CommandData>();
 
             items.Add(cd);
@@ -136,9 +133,7 @@ namespace Ankh.VS.Dialogs
         {
             CommandID cd = new CommandID(pguidCmdGroup, unchecked((int)nCmdID));
 
-            List<CommandData> items;
-
-            if (!_data.TryGetValue(cd, out items))
+            if (!_data.TryGetValue(cd, out List<CommandData> items))
                 return VSErr.OLECMDERR_E_NOTSUPPORTED;
 
             foreach (CommandData d in items)
@@ -174,9 +169,7 @@ namespace Ankh.VS.Dialogs
 
             CommandID cd = new CommandID(pguidCmdGroup, unchecked((int)prgCmds[0].cmdID));
 
-            List<CommandData> items;
-
-            if (!_data.TryGetValue(cd, out items))
+            if (!_data.TryGetValue(cd, out List<CommandData> items))
                 return VSErr.OLECMDERR_E_NOTSUPPORTED;
 
             foreach (CommandData d in items)
@@ -186,8 +179,7 @@ namespace Ankh.VS.Dialogs
 
                 CommandUpdateEventArgs ee = new CommandUpdateEventArgs((AnkhCommand)cd.ID, GetService<AnkhContext>());
 
-                if (d.UpdateHandler != null)
-                    d.UpdateHandler(d.Control, ee);
+                d.UpdateHandler?.Invoke(d.Control, ee);
 
                 if (ee.DynamicMenuEnd)
                     return VSErr.OLECMDERR_E_NOTSUPPORTED;

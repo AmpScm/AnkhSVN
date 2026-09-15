@@ -22,6 +22,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 using Ankh.UI;
+using Ankh.Services;
 
 namespace Ankh.VSPackage
 {

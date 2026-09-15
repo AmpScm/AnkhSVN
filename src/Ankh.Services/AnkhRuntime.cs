@@ -22,6 +22,7 @@ using System.Reflection;
 using Ankh.UI;
 using System.Threading;
 using System.Runtime.InteropServices;
+using Ankh.Services;
 
 namespace Ankh
 {

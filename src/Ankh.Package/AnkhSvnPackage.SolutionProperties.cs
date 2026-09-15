@@ -22,6 +22,7 @@ using Ankh.Scc;
 using Ankh.Scc.Native;
 using Ankh.VS;
 using Ankh.VSPackage.Attributes;
+using Ankh.Services;
 
 namespace Ankh.VSPackage
 {

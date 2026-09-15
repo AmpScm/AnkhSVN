@@ -23,8 +23,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using Ankh.Commands;
-using Ankh;
 using VSConstants = Microsoft.VisualStudio.VSConstants;
+using Ankh.Services;
 
 namespace Ankh.VSPackage
 {

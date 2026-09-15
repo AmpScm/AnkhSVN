@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh
+namespace Ankh.Services
 {
     public interface IAnkhServiceImplementation
     {

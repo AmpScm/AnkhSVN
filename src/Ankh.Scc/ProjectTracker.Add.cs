@@ -25,6 +25,7 @@ using SharpSvn;
 using Ankh.Commands;
 using Ankh.Selection;
 using IDataObject = System.Windows.Forms.IDataObject;
+using Ankh.Services;
 
 namespace Ankh.Scc
 {

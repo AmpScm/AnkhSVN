@@ -95,6 +95,7 @@ namespace Ankh.UI.PathSelector
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.pendingList);
+            this.MinimumSize = this.Size;
             this.Name = "PendingChangeSelector";
             this.Text = "Pending Change Selector";
             this.ResumeLayout(false);

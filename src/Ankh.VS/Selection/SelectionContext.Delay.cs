@@ -22,6 +22,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Ankh.Commands;
 using Microsoft.VisualStudio;
+using Ankh.Services;
 
 namespace Ankh.VS.Selection
 {

@@ -24,6 +24,7 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using Ankh.Selection;
 using Ankh.Configuration;
 using Ankh.UI;
+using Ankh.Services;
 
 namespace Ankh.VS.Selection
 {
@@ -51,12 +52,11 @@ namespace Ankh.VS.Selection
 
             if (shell != null)
             {
-                object v;
 
-                if (!VSErr.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_Zombie, out v)))
+                if (!VSErr.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_Zombie, out object v)))
                     _zombie = false;
                 else
-                    _zombie = (v is bool) && ((bool)v);
+                    _zombie = (v is bool v1) && v1;
 
                 if (!VSErr.Succeeded(shell.AdviseShellPropertyChanges(this, out _shellPropsCookie)))
                     _shellPropsCookie = 0;
@@ -79,8 +79,7 @@ namespace Ankh.VS.Selection
                     _shellPropsCookie = 0;
 
                     IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
-                    if (shell != null)
-                        shell.UnadviseShellPropertyChanges(ck);
+                    shell?.UnadviseShellPropertyChanges(ck);
                 }
             }
             finally
@@ -96,8 +95,7 @@ namespace Ankh.VS.Selection
 
         void OnCmdUIContextChanged(object sender, CmdUIContextChangeEventArgs e)
         {
-            CmdStateCacheItem item;
-            if (_cookieMap.TryGetValue(e.Cookie, out item))
+            if (_cookieMap.TryGetValue(e.Cookie, out CmdStateCacheItem item))
                 item.Active = e.Active;
 
             ClearState();
@@ -117,14 +115,11 @@ namespace Ankh.VS.Selection
 
         private CmdStateCacheItem GetCache(Guid cmdContextId)
         {
-            uint cookie;
 
-            if (!VSErr.Succeeded(Monitor.GetCmdUIContextCookie(ref cmdContextId, out cookie)))
+            if (!VSErr.Succeeded(Monitor.GetCmdUIContextCookie(ref cmdContextId, out uint cookie)))
                 return new CmdStateCacheItem(Monitor, 0);
 
-            CmdStateCacheItem item;
-
-            if (!_cookieMap.TryGetValue(cookie, out item))
+            if (!_cookieMap.TryGetValue(cookie, out CmdStateCacheItem item))
             {
                 _cookieMap[cookie] = item = new CmdStateCacheItem(Monitor, cookie);
             }
@@ -398,10 +393,9 @@ namespace Ankh.VS.Selection
 
             _themeLight = _themeDark = false;
             IAnkhConfigurationService config = GetService<IAnkhConfigurationService>();
-            Guid themeGuid;
 
             if (config == null
-                || !GetService<IWinFormsThemingService>().GetCurrentTheme(out themeGuid))
+                || !GetService<IWinFormsThemingService>().GetCurrentTheme(out Guid themeGuid))
             {
                 _themed = false;
                 return;
@@ -426,10 +420,10 @@ namespace Ankh.VS.Selection
                 else
                     v = null;
 
-                if (v is int)
+                if (v is int v1)
                 {
                     _themed = true;
-                    int vv = (int)v;
+                    int vv = v1;
 
                     _themeLight = (vv & 0x01) != 0;
                     _themeDark = (vv & 0x02) != 0;
@@ -459,8 +453,7 @@ namespace Ankh.VS.Selection
 
             internal void Reload(IVsMonitorSelection monitor)
             {
-                int active;
-                _active = VSErr.Succeeded(monitor.IsCmdUIContextActive(_cookie, out active)) && active != 0;
+                _active = VSErr.Succeeded(monitor.IsCmdUIContextActive(_cookie, out int active)) && active != 0;
             }
 
             public bool Active
@@ -519,8 +512,7 @@ namespace Ankh.VS.Selection
 
                         IVsSccProvider pv = GetService<IAnkhQueryService>().QueryService<IVsSccProvider>(gService);
 
-                        int iManaging;
-                        if (pv != null && VSErr.Succeeded(pv.AnyItemsUnderSourceControl(out iManaging)))
+                        if (pv != null && VSErr.Succeeded(pv.AnyItemsUnderSourceControl(out int iManaging)))
                         {
                             if (iManaging != 0)
                                 return true;
@@ -541,10 +533,8 @@ namespace Ankh.VS.Selection
                 List<SccData> sccs = new List<SccData>();
 
                 ILocalRegistry2 lr = GetService<ILocalRegistry2>(typeof(SLocalRegistry));
-
-                string root;
-                List<string> names = new List<string>();
-                if (VSErr.Succeeded(lr.GetLocalRegistryRoot(out root)))
+                _ = new List<string>();
+                if (VSErr.Succeeded(lr.GetLocalRegistryRoot(out string root)))
                 {
                     RegistryKey baseKey = Registry.LocalMachine;
 
@@ -606,8 +596,7 @@ namespace Ankh.VS.Selection
                 return false;
 
             // If the active manager is not installed, it is not active
-            int installed = 0;
-            if (!VSErr.Succeeded(manager.IsInstalled(out installed)) || (installed == 0))
+            if (!VSErr.Succeeded(manager.IsInstalled(out int installed)) || (installed == 0))
                 return false;
 
             if (GetOtherSccActive())
@@ -646,8 +635,7 @@ namespace Ankh.VS.Selection
                     if (!_zombie)
                     {
                         IAnkhServiceEvents se = GetService<IAnkhServiceEvents>();
-                        if (se != null)
-                            se.OnUIShellActivate(EventArgs.Empty);
+                        se?.OnUIShellActivate(EventArgs.Empty);
                     }
                     break;
             }

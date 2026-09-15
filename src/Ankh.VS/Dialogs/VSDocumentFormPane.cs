@@ -24,6 +24,7 @@ using Microsoft.VisualStudio.Shell;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using IOleObjectWithSite = Microsoft.VisualStudio.OLE.Interop.IObjectWithSite;
 using Microsoft.VisualStudio.TextManager.Interop;
+using Ankh.Services;
 
 
 namespace Ankh.VS.Dialogs
@@ -221,11 +222,7 @@ namespace Ankh.VS.Dialogs
                 return null;
             else
             {
-                object o = base.GetService(serviceType);
-
-                if (o == null)
-                    o = _host.ServiceProviderHierarchy.GetService(serviceType);
-
+                object o = base.GetService(serviceType) ?? _host.ServiceProviderHierarchy.GetService(serviceType);
                 return o;
             }
         }

@@ -20,6 +20,7 @@ using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
 using Ankh.UI;
 using Ankh.VS;
+using Ankh.Services;
 
 namespace Ankh.VSPackage
 {

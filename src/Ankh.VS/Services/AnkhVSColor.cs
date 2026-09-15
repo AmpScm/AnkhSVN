@@ -14,6 +14,7 @@
 
 using System;
 using System.Drawing;
+using Ankh.Services;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.VS.Services

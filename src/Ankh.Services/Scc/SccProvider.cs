@@ -9,6 +9,7 @@ using System.Text;
 using Ankh.Configuration;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
+using Ankh.Services;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
 

@@ -26,6 +26,7 @@ using Ankh.Selection;
 using Ankh.UI;
 using Ankh.VS;
 using AnkhSvn_UnitTestProject.Helpers;
+using Ankh.Services;
 
 namespace AnkhSvn_UnitTestProject.CommandRouting
 {

@@ -20,6 +20,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio;
 
 using Ankh.VS.LanguageServices.Core;
+using Ankh.Services;
 
 namespace Ankh.VS.LanguageServices.UnifiedDiff
 {
@@ -91,8 +92,7 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
         {
             IVsTextLines lines = _buffer;
 
-            int lastLine, linelen;
-            Marshal.ThrowExceptionForHR(lines.GetLastLineIndex(out lastLine, out linelen));
+            Marshal.ThrowExceptionForHR(lines.GetLastLineIndex(out int lastLine, out int linelen));
 
             bool changed = false;
 
@@ -103,8 +103,7 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
                 if (linelen < 8)
                     continue; // No 'Index: ' line
 
-                string start;
-                Marshal.ThrowExceptionForHR(lines.GetLineText(i, 0, i, 7, out start));
+                Marshal.ThrowExceptionForHR(lines.GetLineText(i, 0, i, 7, out string start));
                 if (!string.Equals(start, "Index: "))
                     continue;
 
@@ -155,6 +154,11 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
 
         public int OnLoadCompleted(int fReload)
         {
+            if (fReload < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(fReload), fReload, $"'{nameof(fReload)}' cannot be negative");
+            }
+
             _shouldParse = true;
             return VSErr.S_OK;
         }

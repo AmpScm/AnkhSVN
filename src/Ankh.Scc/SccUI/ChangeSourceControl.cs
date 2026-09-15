@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
 using Ankh.Selection;
+using Ankh.Services;
 using Ankh.UI;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;

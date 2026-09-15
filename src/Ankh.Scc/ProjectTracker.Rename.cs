@@ -20,6 +20,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
 using System.IO;
 using System.Diagnostics;
+using Ankh.Services;
 
 namespace Ankh.Scc
 {

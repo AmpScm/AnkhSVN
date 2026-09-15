@@ -22,6 +22,7 @@ using SharpSvn;
 using System.IO;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TextManager.Interop;
+using Ankh.Services;
 
 namespace Ankh.Scc
 {

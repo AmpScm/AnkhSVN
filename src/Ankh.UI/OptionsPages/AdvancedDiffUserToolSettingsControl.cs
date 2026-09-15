@@ -71,7 +71,7 @@ namespace Ankh.UI.OptionsPages
 
             using (AddAdvancedDiffUserTool myAddAdvancedUserTool = new AddAdvancedDiffUserTool(listView, diffHandler))
             {
-                myAddAdvancedUserTool.setItem(listView.SelectedItems[0]);
+                myAddAdvancedUserTool.SetItem(listView.SelectedItems[0]);
                 myAddAdvancedUserTool.ShowDialog(Context);
             }
         }

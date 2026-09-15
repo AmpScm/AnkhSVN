@@ -19,6 +19,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using SharpSvn;
 using System.Diagnostics;
+using Ankh.Services;
 
 namespace Ankh.Scc.ProjectMap
 {

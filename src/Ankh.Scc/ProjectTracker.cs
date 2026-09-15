@@ -25,6 +25,7 @@ using Ankh.Configuration;
 using Ankh.VS;
 using System.ComponentModel.Design;
 using Ankh.Scc.ProjectMap;
+using Ankh.Services;
 
 namespace Ankh.Scc
 {

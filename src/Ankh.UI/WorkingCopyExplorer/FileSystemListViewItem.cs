@@ -31,10 +31,7 @@ namespace Ankh.UI.WorkingCopyExplorer
         public FileSystemListViewItem(SmartListView view, SvnItem item)
             : base(view)
         {
-            if (item == null)
-                throw new ArgumentNullException("item");
-            
-            _svnItem = item;
+            _svnItem = item ?? throw new ArgumentNullException("item");
 
             ImageIndex = View.IconMapper.GetIcon(item.FullPath);
 
@@ -56,7 +53,7 @@ namespace Ankh.UI.WorkingCopyExplorer
     
         private void RefreshValues()
         {
-            bool exists = SvnItem.Exists;
+            _ = SvnItem.Exists;
             string name = string.IsNullOrEmpty(SvnItem.Name) ? SvnItem.FullPath : SvnItem.Name;
 
             SvnStatusData status = SvnItem.Status;

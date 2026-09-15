@@ -26,6 +26,7 @@ using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 
 using Ankh.Selection;
 using Ankh.UI;
+using Ankh.Services;
 
 namespace Ankh.VS.Dialogs
 {
@@ -38,7 +39,7 @@ namespace Ankh.VS.Dialogs
         IVsToolWindowToolbarHost _tbHost;
         IVsFilterKeys2 _fKeys;
         IVsRegisterPriorityCommandTarget _priorityCommandTarget;
-        uint _csCookie;
+        readonly uint _csCookie;
         Panel _panel;
         List<IOleCommandTarget> _ctList;
         List<IVsWindowPane> _paneList;
@@ -50,10 +51,7 @@ namespace Ankh.VS.Dialogs
         public VSCommandRouting(IAnkhServiceProvider context, VSContainerForm form)
             : base(context)
         {
-            if (form == null)
-                throw new ArgumentNullException("form");
-
-            _form = form;
+            _form = form ?? throw new ArgumentNullException("form");
             _vsForm = form;
 
             if (_routers.Count > 0)
@@ -82,9 +80,8 @@ namespace Ankh.VS.Dialogs
 
         public static VSCommandRouting FromForm(VSContainerForm form)
         {
-            VSCommandRouting vr;
 
-            if (_map.TryGetValue(form, out vr))
+            if (_map.TryGetValue(form, out VSCommandRouting vr))
                 return vr;
 
             return null;
@@ -120,17 +117,11 @@ namespace Ankh.VS.Dialogs
                 if (_panel != null)
                     RestoreLayout();
 
-                if (_pane != null)
-                {
-                    _pane.Dispose(); // Unhook
-                    _pane = null;
-                }
+                _pane?.Dispose(); // Unhook
+                _pane = null;
 
-                if (_panel != null)
-                {
-                    _panel.Dispose();
-                    _panel = null;
-                }
+                _panel?.Dispose();
+                _panel = null;
             }
             finally
             {
@@ -251,10 +242,6 @@ namespace Ankh.VS.Dialogs
 
             if (_fKeys != null && 0 != (mode & (VSContainerMode.TranslateKeys | VSContainerMode.UseTextEditorScope)))
             {
-                Guid cmdGuid;
-                uint cmdCode;
-                int cmdTranslated;
-                int keyComboStarts;
 
                 uint dwFlags = (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_AllowModalState;
 
@@ -265,10 +252,10 @@ namespace Ankh.VS.Dialogs
                     dwFlags,
                     0,
                     null,
-                    out cmdGuid,
-                    out cmdCode,
-                    out cmdTranslated,
-                    out keyComboStarts);
+                    out Guid cmdGuid,
+                    out uint cmdCode,
+                    out int cmdTranslated,
+                    out int keyComboStarts);
 
                 if (hr == VSErr.S_OK)
                 {
@@ -305,9 +292,11 @@ namespace Ankh.VS.Dialogs
             {
                 if (_panel == null)
                 {
-                    _panel = new Panel();
-                    _panel.Location = new Point(0, 0);
-                    _panel.Size = _form.ClientRectangle.Size;
+                    _panel = new Panel
+                    {
+                        Location = new Point(0, 0),
+                        Size = _form.ClientRectangle.Size
+                    };
                     _form.Controls.Add(_panel);
                 }
 
@@ -315,11 +304,10 @@ namespace Ankh.VS.Dialogs
 
                 IVsWindowPane p = _pane;
 
-                IntPtr hwnd;
                 Rectangle r = new Rectangle(_form.Location, _form.Size);
                 _form.Location = new Point(0, 0);
 
-                if (!VSErr.Succeeded(p.CreatePaneWindow(_form.Handle, 0, 0, r.Width, r.Height, out hwnd)))
+                if (!VSErr.Succeeded(p.CreatePaneWindow(_form.Handle, 0, 0, r.Width, r.Height, out IntPtr hwnd)))
                 {
                     _pane.Dispose();
                     _pane = null;

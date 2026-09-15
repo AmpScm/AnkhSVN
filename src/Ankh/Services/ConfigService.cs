@@ -23,6 +23,7 @@ using Microsoft.Win32;
 
 using Ankh.UI;
 using Ankh.VS;
+using Ankh.Services;
 
 namespace Ankh.Configuration
 {

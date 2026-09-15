@@ -26,8 +26,9 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Commands;
 using Ankh.UI;
 using Ankh.VS;
+using Ankh.Services;
 
-namespace Ankh.Services
+namespace Ankh.VS.Selection
 {
     [GlobalService(typeof(IAnkhCommandService))]
     sealed class AnkhCommandService : AnkhService, IAnkhCommandService, IAnkhIdleProcessor

@@ -34,6 +34,7 @@ using System.Windows.Forms.Design;
 using System.Windows.Forms;
 using System.IO;
 using Microsoft.VsSDK.UnitTestLibrary;
+using Ankh.Services;
 
 namespace AnkhSvn_UnitTestProject.CommandRouting
 {

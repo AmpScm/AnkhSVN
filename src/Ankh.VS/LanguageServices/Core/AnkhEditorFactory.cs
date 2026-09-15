@@ -1,16 +1,18 @@
-﻿using System;
+﻿using Ankh.Configuration;
+using Ankh.Services;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.Win32;
+using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
 using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.Win32;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using IServiceProvider = System.IServiceProvider;
-using Ankh.Configuration;
 
 namespace Ankh.VS.LanguageServices.Core
 {
@@ -328,15 +330,14 @@ namespace Ankh.VS.LanguageServices.Core
                 }
             }
 
-            IVsTextLines buffer = null;
+            IVsTextLines buffer;
             if (existingDocData != IntPtr.Zero)
             {
                 object dataObject = Marshal.GetObjectForIUnknown(existingDocData);
                 buffer = dataObject as IVsTextLines;
                 if (buffer == null)
                 {
-                    IVsTextBufferProvider bp = dataObject as IVsTextBufferProvider;
-                    if (bp != null)
+                    if (dataObject is IVsTextBufferProvider bp)
                     {
                         Marshal.ThrowExceptionForHR(bp.GetTextBuffer(out buffer));
                     }
@@ -358,8 +359,7 @@ namespace Ankh.VS.LanguageServices.Core
                 buffer = (IVsTextLines)package.CreateInstance(ref clsid, ref riid, textLinesType);
                 if (!string.IsNullOrEmpty(moniker))
                 {
-                    IVsUserData iud = buffer as IVsUserData;
-                    if (iud != null)
+                    if (buffer is IVsUserData iud)
                     {
                         Guid GUID_VsBufferMoniker = typeof(IVsUserData).GUID;
                         // Must be set in time for language service GetColorizer call in case the colorizer
@@ -367,16 +367,15 @@ namespace Ankh.VS.LanguageServices.Core
                         Marshal.ThrowExceptionForHR(iud.SetData(ref GUID_VsBufferMoniker, moniker));
                     }
                 }
-                IObjectWithSite ows = buffer as IObjectWithSite;
-                if (ows != null)
+                if (buffer is IObjectWithSite ows)
                 {
                     ows.SetSite(this.site.GetService(typeof(IOleServiceProvider)));
                 }
             }
 
-            if (this.promptFlags == __PROMPTONLOADFLAGS.codepagePrompt && buffer is IVsUserData)
+            if (this.promptFlags == __PROMPTONLOADFLAGS.codepagePrompt && buffer is IVsUserData data)
             {
-                IVsUserData iud = (IVsUserData)buffer;
+                IVsUserData iud = data;
                 Guid GUID_VsBufferEncodingPromptOnLoad = new Guid(0x99ec03f0, 0xc843, 0x4c09, 0xbe, 0x74, 0xcd, 0xca, 0x51, 0x58, 0xd3, 0x6c);
                 Marshal.ThrowExceptionForHR(iud.SetData(ref GUID_VsBufferEncodingPromptOnLoad, (uint)this.CodePagePrompt));
             }
@@ -385,8 +384,7 @@ namespace Ankh.VS.LanguageServices.Core
             if (langSid != Guid.Empty)
             {
                 Guid vsCoreSid = new Guid("{8239bec4-ee87-11d0-8c98-00c04fc2ab22}");
-                Guid currentSid;
-                Marshal.ThrowExceptionForHR(buffer.GetLanguageServiceID(out currentSid));
+                Marshal.ThrowExceptionForHR(buffer.GetLanguageServiceID(out Guid currentSid));
                 // If the language service is set to the default SID, then
                 // set it to our language
                 if (currentSid == vsCoreSid)
@@ -448,7 +446,6 @@ namespace Ankh.VS.LanguageServices.Core
             Guid riid = tcw.GUID;
             // Once this is done the project's assembly reference to "$(EnvRefPath)\Microsoft.VisualStudio.Editor.dll" may be removed
             Guid clsid = typeof(VsCodeWindowClass).GUID;
-            IntPtr docView = IntPtr.Zero;
             IVsCodeWindow window = (IVsCodeWindow)package.CreateInstance(ref clsid, ref riid, tcw);
 
             Marshal.ThrowExceptionForHR(window.SetBuffer(buffer));
@@ -457,7 +454,7 @@ namespace Ankh.VS.LanguageServices.Core
 
             Guid CMDUIGUID_TextEditor = new Guid(0x8B382828, 0x6202, 0x11d1, 0x88, 0x70, 0x00, 0x00, 0xF8, 0x75, 0x79, 0xD2);
             cmdUI = CMDUIGUID_TextEditor;
-            docView = Marshal.GetIUnknownForObject(window);
+            IntPtr docView = Marshal.GetIUnknownForObject(window);
 
             return docView;
         }
@@ -517,10 +514,9 @@ namespace Ankh.VS.LanguageServices.Core
             if (AnkhEditorFactory.languageExtensions != null)
                 return AnkhEditorFactory.languageExtensions;
 
-            IAnkhConfigurationService configService = site.GetService(typeof(IAnkhConfigurationService)) as IAnkhConfigurationService;
             StringDictionary extensions = new StringDictionary();
 
-            if (configService != null)
+            if (site.GetService(typeof(IAnkhConfigurationService)) is IAnkhConfigurationService configService)
                 using (RegistryKey key = configService.OpenVSInstanceKey("Languages\\File Extensions"))
                 {
                     if (key != null)
@@ -552,8 +548,8 @@ namespace Ankh.VS.LanguageServices.Core
                 return AnkhEditorFactory.editors;
 
             Hashtable editors = new Hashtable();
-            IAnkhConfigurationService configService = site.GetService(typeof(IAnkhConfigurationService)) as IAnkhConfigurationService;
-            if (configService == null)
+
+            if (!(site.GetService(typeof(IAnkhConfigurationService)) is IAnkhConfigurationService configService))
                 return editors;
 
             using (RegistryKey editorsKey = configService.OpenVSInstanceKey("Editors"))
@@ -573,13 +569,15 @@ namespace Ankh.VS.LanguageServices.Core
                                 {
                                     if (!string.IsNullOrEmpty(s))
                                     {
-                                        EditorInfo ei = new EditorInfo();
-                                        ei.Name = name;
-                                        ei.Guid = guid;
-                                        object obj = extensions.GetValue(s);
-                                        if (obj is int)
+                                        EditorInfo ei = new EditorInfo
                                         {
-                                            ei.Priority = (int)obj;
+                                            Name = name,
+                                            Guid = guid
+                                        };
+                                        object obj = extensions.GetValue(s);
+                                        if (obj is int priority)
+                                        {
+                                            ei.Priority = priority;
                                         }
                                         string ext = (s == "*") ? s : "." + s;
                                         AddEditorInfo(editors, ext, ei);
@@ -623,10 +621,9 @@ namespace Ankh.VS.LanguageServices.Core
 
         StringDictionary GetFileExtensionMappings()
         {
-            IAnkhConfigurationService configService = site.GetService(typeof(IAnkhConfigurationService)) as IAnkhConfigurationService;
-
             StringDictionary map = new StringDictionary();
-            if (configService == null)
+
+            if (!(site.GetService(typeof(IAnkhConfigurationService)) is IAnkhConfigurationService configService))
                 return map;
 
             using (RegistryKey key = configService.OpenVSInstanceKey("Default Editors"))

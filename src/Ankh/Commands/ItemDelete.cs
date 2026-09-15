@@ -25,6 +25,7 @@ using System.IO;
 using SharpSvn;
 using Ankh.Selection;
 using System.Runtime.InteropServices;
+using Ankh.Services;
 
 namespace Ankh.Commands
 {

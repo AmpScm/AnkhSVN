@@ -19,6 +19,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Ankh.Services;
 
 namespace Ankh.Selection
 {

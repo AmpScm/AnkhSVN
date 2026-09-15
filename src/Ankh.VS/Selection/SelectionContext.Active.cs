@@ -23,6 +23,7 @@ using Ankh.Selection;
 using SharpSvn;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Ankh.UI;
+using Ankh.Services;
 
 namespace Ankh.VS.Selection
 {

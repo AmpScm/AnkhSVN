@@ -32,13 +32,13 @@ using Ankh.VSPackage;
 using EnvDTE;
 using AnkhSvn_UnitTestProject.Mocks;
 using AnkhSvn_UnitTestProject.Helpers;
-using Ankh;
 using Ankh.Scc;
 using NUnit.Framework;
 using Moq;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
+using Ankh.Services;
 
 namespace UnitTestProject
 {

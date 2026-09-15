@@ -22,7 +22,7 @@ using System.Windows.Forms.Design;
 using Ankh.Commands;
 using Ankh.Selection;
 
-namespace Ankh
+namespace Ankh.Services
 {
     /// <summary>
     /// Globally available context; the entry point for the service framework.
@@ -64,9 +64,7 @@ namespace Ankh
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            IAnkhServiceProvider sp = context as IAnkhServiceProvider;
-
-            if (sp != null)
+            if (context is IAnkhServiceProvider sp)
                 return new AnkhContext(sp);
             else
                 return new AnkhContext(new AnkhServiceProviderWrapper(context));

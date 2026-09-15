@@ -26,6 +26,7 @@ using SharpSvn;
 using Ankh.Commands;
 using Ankh.Scc.ProjectMap;
 using Ankh.Scc.SccUI;
+using Ankh.Services;
 
 namespace Ankh.Scc
 {

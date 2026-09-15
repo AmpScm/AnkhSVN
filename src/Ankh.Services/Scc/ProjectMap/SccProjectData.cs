@@ -23,6 +23,7 @@ using SharpSvn;
 using Ankh.Configuration;
 using Ankh.Selection;
 using Ankh.VS;
+using Ankh.Services;
 
 
 namespace Ankh.Scc.ProjectMap

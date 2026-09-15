@@ -22,6 +22,7 @@ using SharpSvn;
 using System.IO;
 using Ankh.Scc;
 using System.Collections.Generic;
+using Ankh.Services;
 
 namespace Ankh.Commands
 {

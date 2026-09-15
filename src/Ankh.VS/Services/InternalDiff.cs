@@ -158,13 +158,12 @@ namespace Ankh.VS.Services
             if (_ormw == null || _umw == null || _qmws == null)
                 return false;
 
-            int cookie;
 
             IVsWindowFrame frame = _ormw(args.TheirsFile, args.MineFile, args.BaseFile, args.MergedFile,
                                          Path.GetFileName(args.TheirsFile), Path.GetFileName(args.MineFile),
                                          Path.GetFileName(args.BaseFile), Path.GetFileName(args.MergedFile),
                                          args.TheirsTitle, args.MineTitle, args.BaseTitle, args.MergedTitle,
-                                         Guid.Empty.ToString(), null, null, out cookie);
+                                         Guid.Empty.ToString(), null, null, out int cookie);
 
             if (frame != null)
             {

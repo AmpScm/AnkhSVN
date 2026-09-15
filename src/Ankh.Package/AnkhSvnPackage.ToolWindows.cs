@@ -35,6 +35,7 @@ using Ankh.UI.RepositoryExplorer;
 using Ankh.UI.SvnInfoGrid;
 using Ankh.UI.SvnLog;
 using Ankh.UI.WorkingCopyExplorer;
+using Ankh.Services;
 
 namespace Ankh.VSPackage
 {

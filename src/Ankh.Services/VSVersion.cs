@@ -19,6 +19,7 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Text.RegularExpressions;
+using Ankh.Services;
 
 namespace Ankh
 {

@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+using Ankh.Services;
 
 
 
@@ -22,6 +23,15 @@ namespace Ankh.VS.LanguageServices.Core
         public AnkhViewFilter(AnkhCodeWindowManager codeWindowManager, IVsTextView textView)
             : base(codeWindowManager)
         {
+            if (codeWindowManager is null)
+            {
+                throw new ArgumentNullException(nameof(codeWindowManager));
+            }
+
+            if (textView is null)
+            {
+                throw new ArgumentNullException(nameof(textView));
+            }
         }
 
         protected AnkhCodeWindowManager CodeWindowManager

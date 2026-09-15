@@ -1,5 +1,6 @@
 ﻿using System;
 using Ankh.Commands;
+using Ankh.Services;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 

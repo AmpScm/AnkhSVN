@@ -26,6 +26,7 @@ using Microsoft.Win32;
 using Ankh.Configuration;
 using Ankh.UI;
 using Ankh.UI.SccManagement;
+using Ankh.Services;
 
 
 /*****************************************************************

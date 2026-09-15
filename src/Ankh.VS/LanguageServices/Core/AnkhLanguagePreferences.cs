@@ -7,6 +7,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.Win32;
 using Ankh.Configuration;
+using Ankh.Services;
 
 namespace Ankh.VS.LanguageServices.Core
 {
@@ -35,7 +36,7 @@ namespace Ankh.VS.LanguageServices.Core
     [ComVisible(true), Guid(AnkhId.LanguagePreferencesId), ClassInterface(ClassInterfaceType.AutoDual), ComDefaultInterface(typeof(IAnkhLanguagePreferences))]
     public class AnkhLanguagePreferences : AnkhService, IAnkhLanguagePreferences, IVsTextManagerEvents2
     {
-        Guid langSvc;
+        readonly Guid langSvc;
         LANGPREFERENCES2 prefs;
         uint? _connection;
         bool enableCodeSense;
@@ -204,9 +205,8 @@ namespace Ankh.VS.LanguageServices.Core
         public int GetIntegerValue(RegistryKey key, string name, int def)
         {
             object o = key.GetValue(name);
-            if (o is int) return (int)o;
-            int result;
-            if (o is string && int.TryParse((string)o, NumberStyles.Integer, CultureInfo.InvariantCulture, out result))
+            if (o is int v1) return v1;
+            if (o is string v && int.TryParse(v, NumberStyles.Integer, CultureInfo.InvariantCulture, out int result))
                 return result;
             return def;
         }
@@ -214,9 +214,8 @@ namespace Ankh.VS.LanguageServices.Core
         public bool GetBooleanValue(RegistryKey key, string name, bool def)
         {
             object o = key.GetValue(name);
-            if (o is int) return ((int)o != 0);
-            bool result;
-            if (o is string && bool.TryParse((string)o, out result))
+            if (o is int v1) return (v1 != 0);
+            if (o is string v && bool.TryParse(v, out bool result))
                 return result;
             return def;
         }
@@ -421,9 +420,8 @@ namespace Ankh.VS.LanguageServices.Core
         private void Connect()
         {
             IVsTextManager2 textMgr = GetService<IVsTextManager2>(typeof(SVsTextManager));
-            uint cookie;
-            if (textMgr != null
-                && TryHookConnectionPoint<IVsTextManagerEvents2>(textMgr, this, out cookie))
+
+            if (textMgr != null && TryHookConnectionPoint<IVsTextManagerEvents2>(textMgr, this, out uint cookie))
             {
                 _connection = cookie;
             }

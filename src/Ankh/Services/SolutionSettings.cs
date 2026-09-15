@@ -28,6 +28,7 @@ using Ankh.Scc;
 using Ankh.Selection;
 using Ankh.UI;
 using Ankh.VS;
+using Ankh.Services;
 
 namespace Ankh.Settings
 {

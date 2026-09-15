@@ -30,6 +30,7 @@ using Ankh.VS;
 using Ankh.UI;
 using Ankh.VSPackage.Attributes;
 using System.Collections.Generic;
+using Ankh.Services;
 
 namespace Ankh.VSPackage
 {

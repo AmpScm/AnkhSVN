@@ -21,6 +21,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using IServiceProvider = System.IServiceProvider;
 using System.Runtime.InteropServices;
 using Microsoft;
+using Ankh.Services;
 
 namespace Ankh.VS.Selection
 {
@@ -90,7 +91,6 @@ namespace Ankh.VS.Selection
 
             try
             {
-
                 if (sccProject != null)
                 {
                     CALPOLESTR[] str = new CALPOLESTR[1];
@@ -113,14 +113,12 @@ namespace Ankh.VS.Selection
                 // If sccProject2.GetSccFiles() returns E_NOTIMPL we must try GetMkDocument
                 // We also try this if the item does not implement IVsSccProject2
 
-                IVsProject project = hierarchy as IVsProject;
-                if (project != null)
+                if (hierarchy is IVsProject project)
                 {
-                    string mkDocument;
 
                     try
                     {
-                        if (VSErr.Succeeded(project.GetMkDocument(id, out mkDocument)))
+                        if (VSErr.Succeeded(project.GetMkDocument(id, out string mkDocument)))
                         {
                             if (!IsValidPath(mkDocument, true))
                                 files = new string[0];
@@ -141,10 +139,9 @@ namespace Ankh.VS.Selection
                     return ok; // Will fail in GetCanonicalName in VS2008 SP1 Beta 1
                 }
 
-                string name;
                 try
                 {
-                    if (VSErr.Succeeded(hierarchy.GetCanonicalName(id, out name)))
+                    if (VSErr.Succeeded(hierarchy.GetCanonicalName(id, out string name)))
                     {
                         if (IsValidPath(name, true))
                         {
@@ -249,10 +246,7 @@ namespace Ankh.VS.Selection
         //[CLSCompliant(false)]
         static bool GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, bool includeSpecial, bool includeNoScc, IDictionary<string, uint> map)
         {
-            int[] flags;
-            files = null;
-
-            if (!GetSccFiles(hierarchy, sccProject, id, out files, out flags, includeNoScc, map))
+            if (!GetSccFiles(hierarchy, sccProject, id, out files, out int[] flags, includeNoScc, map))
                 return false;
             else if (flags == null || sccProject == null || !includeSpecial)
                 return true;
@@ -291,8 +285,7 @@ namespace Ankh.VS.Selection
                 throw new ArgumentNullException("context");
 
             IVsSolution sol = context.GetService<IVsSolution>(typeof(SVsSolution));
-            string solutionDirectory, solutionFile, solutionUserOptions;
-            if (sol != null && VSErr.Succeeded(sol.GetSolutionInfo(out solutionDirectory, out solutionFile, out solutionUserOptions))
+            if (sol != null && VSErr.Succeeded(sol.GetSolutionInfo(out string solutionDirectory, out string solutionFile, out string solutionUserOptions))
                 && IsValidPath(solutionFile))
             {
                 return solutionFile;

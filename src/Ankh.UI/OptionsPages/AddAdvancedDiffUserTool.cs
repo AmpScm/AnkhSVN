@@ -11,7 +11,7 @@ namespace Ankh.UI.OptionsPages
 {
     public partial class AddAdvancedDiffUserTool : VSDialogForm
     {
-        private ListView myListView;
+        private readonly ListView myListView;
         private ListViewItem myItem;
 
         public AddAdvancedDiffUserTool(ListView listview, IAnkhDiffHandler diff)
@@ -21,12 +21,12 @@ namespace Ankh.UI.OptionsPages
             LoadBox(diffExeBox, "", diff.DiffToolTemplates);
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void okButton_Click(object sender, EventArgs e)
+        private void OkButton_Click(object sender, EventArgs e)
         {
             if (myItem == null)
             {
@@ -43,26 +43,16 @@ namespace Ankh.UI.OptionsPages
             this.Close();
         }    
 
-        public void setItem(ListViewItem myInputItem)
+        public void SetItem(ListViewItem myInputItem)
         {
             myItem = myInputItem;
             extensionTextBox.Text = myItem.Text;
             diffExeBox.Text = myItem.SubItems[1].Text;
         }
 
-
-
-
-        //protected override void LoadSettingsCore()
-        //{
-        //    IAnkhDiffHandler diff = Context.GetService<IAnkhDiffHandler>();
-
-        //    LoadBox(diffExeBox, Config.DiffExePath, diff.DiffToolTemplates);
-        //}
-
         sealed class OtherTool
         {
-            string _title;
+            readonly string _title;
             public OtherTool(string title)
             {
                 _title = string.IsNullOrEmpty(title) ? "Other..." : title;
@@ -117,31 +107,10 @@ namespace Ankh.UI.OptionsPages
             }
         }
 
-
-        //protected override void SaveSettingsCore()
-        //{
-        //    Config.DiffExePath = SaveBox(diffExeBox);
-        //}
-
-        static string SaveBox(ComboBox box)
-        {
-            if (box == null)
-                throw new ArgumentNullException("box");
-
-            AnkhDiffTool tool = box.SelectedItem as AnkhDiffTool;
-
-            if (tool != null)
-                return tool.ToolTemplate;
-
-            return box.Text;
-        }
-
         void BrowseCombo(ComboBox box)
         {
-            AnkhDiffTool tool = box.SelectedItem as AnkhDiffTool;
-
             string line;
-            if (tool != null)
+            if (box.SelectedItem is AnkhDiffTool tool)
             {
                 line = string.Format("\"{0}\" {1}", tool.Program, tool.Arguments);
             }
@@ -167,7 +136,7 @@ namespace Ankh.UI.OptionsPages
             }
         }
 
-        private void diffExeBox_TextChanged(object sender, EventArgs e)
+        private void DiffExeBox_TextChanged(object sender, EventArgs e)
         {
             ComboBox box = (ComboBox)sender;
 
@@ -180,16 +149,13 @@ namespace Ankh.UI.OptionsPages
             }
         }
 
-        private void tool_selectionCommitted(object sender, EventArgs e)
+        private void Tool_selectionCommitted(object sender, EventArgs e)
         {
             ComboBox box = (ComboBox)sender;
 
-            AnkhDiffTool tool = box.SelectedItem as AnkhDiffTool;
-
-            if (tool != null)
+            if (box.SelectedItem is AnkhDiffTool tool)
             {
                 box.DropDownStyle = ComboBoxStyle.DropDownList;
-                //box.Tag = tool.ToolTemplate;
                 box.Tag = string.Format("\"{0}\" {1}", tool.Program, tool.Arguments);
                 box.Text = (string)box.Tag;
 
@@ -199,10 +165,10 @@ namespace Ankh.UI.OptionsPages
                 box.DropDownStyle = ComboBoxStyle.DropDown;
                 if (box.SelectedItem != null)
                     box.SelectedItem = null;
-                if (box.Tag is string)
-                    box.Text = (string)box.Tag;
-                else if (box.Tag is AnkhDiffTool)
-                    box.Text = ((AnkhDiffTool)box.Tag).ToolTemplate;
+                if (box.Tag is string text)
+                    box.Text = text;
+                else if (box.Tag is AnkhDiffTool tool1)
+                    box.Text = tool1.ToolTemplate;
 
                 if (!string.IsNullOrEmpty(box.Text))
                 {
@@ -212,7 +178,7 @@ namespace Ankh.UI.OptionsPages
             }
         }
 
-        private void diffBrowseBtn_Click(object sender, EventArgs e)
+        private void DiffBrowseBtn_Click(object sender, EventArgs e)
         {
             BrowseCombo(diffExeBox);
         }

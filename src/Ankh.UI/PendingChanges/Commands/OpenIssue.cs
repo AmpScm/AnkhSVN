@@ -9,6 +9,7 @@ using Ankh.Selection;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
+using Ankh.Services;
 
 
 namespace Ankh.UI.PendingChanges.Commands

@@ -71,7 +71,7 @@
             this.okButton.TabIndex = 21;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            this.okButton.Click += new System.EventHandler(this.OkButton_Click);
             // 
             // cancelButton
             // 
@@ -84,14 +84,14 @@
             this.cancelButton.TabIndex = 22;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // diffExeBox
             // 
             this.diffExeBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.diffExeBox.SelectionChangeCommitted += new System.EventHandler(this.tool_selectionCommitted);
-            this.diffExeBox.TextChanged += new System.EventHandler(this.diffExeBox_TextChanged);
+            this.diffExeBox.SelectionChangeCommitted += new System.EventHandler(this.Tool_selectionCommitted);
+            this.diffExeBox.TextChanged += new System.EventHandler(this.DiffExeBox_TextChanged);
             this.diffExeBox.DisplayMember = "DisplayName";
             this.diffExeBox.Location = new System.Drawing.Point(73, 41);
             this.diffExeBox.Name = "diffExeBox";

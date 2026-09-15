@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Ankh.Services;
 using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
 

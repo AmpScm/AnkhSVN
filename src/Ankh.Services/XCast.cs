@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ankh
+namespace Ankh.Services
 {
     [CLSCompliant(false)]
-    public struct XCastUInt32
+    public readonly struct XCastUInt32
     {
         public readonly IntPtr Value;
 
@@ -43,7 +43,7 @@ namespace Ankh
         }
     }
 
-    public struct XCastInt32
+    public readonly struct XCastInt32
     {
         public readonly IntPtr Value;
 

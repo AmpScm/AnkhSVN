@@ -24,6 +24,7 @@ using Ankh.Selection;
 using System.IO;
 using SharpSvn;
 using Marshal=System.Runtime.InteropServices.Marshal;
+using Ankh.Services;
 
 namespace Ankh.Scc
 {

@@ -139,10 +139,7 @@ namespace Ankh.VS.Selection
 
             public Walker(CachedEnumerable<T> cache)
             {
-                if (cache == null)
-                    throw new ArgumentNullException("cache");
-
-                _cache = cache;
+                _cache = cache ?? throw new ArgumentNullException("cache");
             }
 
             public bool MoveNext()

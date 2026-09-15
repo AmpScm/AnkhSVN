@@ -27,6 +27,7 @@ using Ankh.Scc;
 using Ankh.UI;
 using Ankh.VS;
 using Ankh.Configuration;
+using System.Linq;
 
 namespace Ankh.Services
 {
@@ -44,9 +45,11 @@ namespace Ankh.Services
         public AnkhClientPool(IAnkhServiceProvider context)
             : base(context)
         {
-            _syncher = new Control();
-            _syncher.Visible = false;
-            _syncher.Text = "AnkhSVN Synchronizer";
+            _syncher = new Control
+            {
+                Visible = false,
+                Text = "AnkhSVN Synchronizer"
+            };
             GC.KeepAlive(_syncher.Handle); // Ensure the window is created
         }
 
@@ -147,10 +150,12 @@ namespace Ankh.Services
         private void HookUI(AnkhSvnPoolClient client)
         {
             // Let SharpSvnUI handle login and SSL dialogs
-            SvnUIBindArgs bindArgs = new SvnUIBindArgs();
-            bindArgs.ParentWindow = new OwnerWrapper(DialogOwner);
-            bindArgs.UIService = UIService;
-            bindArgs.Synchronizer = _syncher;
+            SvnUIBindArgs bindArgs = new SvnUIBindArgs
+            {
+                ParentWindow = new OwnerWrapper(DialogOwner),
+                UIService = UIService,
+                Synchronizer = _syncher
+            };
 
             if (Config != null && Config.Instance.PreferPuttyAsSSH)
                 client.Configuration.SshOverride = SharpSvn.Implementation.SvnSshOverride.ForceSharpPlinkAfterConfig;
@@ -161,10 +166,12 @@ namespace Ankh.Services
         private void HookUI(AnkhSvnPoolRemoteSession client)
         {
             // Let SharpSvnUI handle login and SSL dialogs
-            SvnUIBindArgs bindArgs = new SvnUIBindArgs();
-            bindArgs.ParentWindow = new OwnerWrapper(DialogOwner);
-            bindArgs.UIService = UIService;
-            bindArgs.Synchronizer = _syncher;
+            SvnUIBindArgs bindArgs = new SvnUIBindArgs
+            {
+                ParentWindow = new OwnerWrapper(DialogOwner),
+                UIService = UIService,
+                Synchronizer = _syncher
+            };
 
             if (Config != null && Config.Instance.PreferPuttyAsSSH)
                 client.Configuration.SshOverride = SharpSvn.Implementation.SvnSshOverride.ForceSharpPlinkAfterConfig;
@@ -179,9 +186,7 @@ namespace Ankh.Services
 
         public bool ReturnClient(SvnPoolClient poolClient)
         {
-            AnkhSvnPoolClient pc = poolClient as AnkhSvnPoolClient;
-
-            if (pc != null && pc.ReturnCookie == _returnCookie)
+            if (poolClient is AnkhSvnPoolClient pc && pc.ReturnCookie == _returnCookie)
             {
                 Stack<SvnPoolClient> stack = pc.UIEnabled ? _uiClients : _clients;
 
@@ -282,8 +287,10 @@ namespace Ankh.Services
                 {
                     if (!parentOk || !sessionUri.AbsolutePath.StartsWith(reuse.SessionUri.AbsolutePath))
                     {
-                        SvnRemoteCommonArgs rca = new SvnRemoteCommonArgs();
-                        rca.ThrowOnError = false;
+                        SvnRemoteCommonArgs rca = new SvnRemoteCommonArgs
+                        {
+                            ThrowOnError = false
+                        };
 
                         if (!reuse.Reparent(sessionUri, rca))
                             reuse = null;
@@ -304,9 +311,7 @@ namespace Ankh.Services
 
         public bool ReturnClient(SvnPoolRemoteSession session)
         {
-            AnkhSvnPoolRemoteSession pc = session as AnkhSvnPoolRemoteSession;
-
-            if (pc != null && pc.ReturnCookie == _returnCookie && pc.SessionUri != null)
+            if (session is AnkhSvnPoolRemoteSession pc && pc.ReturnCookie == _returnCookie && pc.SessionUri != null)
             {
                 pc.ReturnTime = DateTime.Now;
 
@@ -353,7 +358,7 @@ namespace Ankh.Services
             {
                 DateTime now = DateTime.Now;
 
-                foreach (AnkhSvnPoolRemoteSession rs in _remoteSessions)
+                foreach (AnkhSvnPoolRemoteSession rs in _remoteSessions.Cast<AnkhSvnPoolRemoteSession>())
                 {
                     bool dispose = false;
                     switch (rs.SessionUri.Scheme)
@@ -390,7 +395,7 @@ namespace Ankh.Services
             }
 
             if (toDispose != null)
-                foreach (AnkhSvnPoolRemoteSession rs in toDispose)
+                foreach (AnkhSvnPoolRemoteSession rs in toDispose.Cast<AnkhSvnPoolRemoteSession>())
                 {
                     try
                     {
@@ -432,8 +437,7 @@ namespace Ankh.Services
                 if (string.IsNullOrEmpty(path))
                     return;
 
-                SvnClientAction action;
-                if (!_changes.TryGetValue(path, out action))
+                if (!_changes.TryGetValue(path, out SvnClientAction action))
                     _changes.Add(path, action = new SvnClientAction(path));
 
                 switch (e.Action)
@@ -471,15 +475,12 @@ namespace Ankh.Services
 
                     if (fp == null) // Non local operation
                         return;
-
-                    SvnClientAction action;
-
-                    if (!_changes.TryGetValue(fp, out action))
+                    if (!_changes.TryGetValue(fp, out _))
                         _changes.Add(fp, new SvnClientAction(fp));
 
                     if (!string.IsNullOrEmpty(item.MovedFrom))
                     {
-                        if (!_changes.TryGetValue(item.MovedFrom, out action))
+                        if (!_changes.TryGetValue(item.MovedFrom, out _))
                             _changes.Add(item.MovedFrom, new SvnClientAction(item.MovedFrom));
                     }
                 }
@@ -528,7 +529,7 @@ namespace Ankh.Services
         sealed class AnkhSvnPoolWorkingCopyClient : SvnWorkingCopyClient
         {
             readonly SortedDictionary<string, SvnClientAction> _changes = new SortedDictionary<string, SvnClientAction>(StringComparer.OrdinalIgnoreCase);
-            AnkhClientPool _pool;
+            readonly AnkhClientPool _pool;
 
             public AnkhSvnPoolWorkingCopyClient(AnkhClientPool pool)
             {
@@ -541,8 +542,7 @@ namespace Ankh.Services
 
                 string path = e.FullPath;
 
-                SvnClientAction action;
-                if (!_changes.TryGetValue(path, out action))
+                if (!_changes.TryGetValue(path, out SvnClientAction action))
                     _changes.Add(path, action = new SvnClientAction(path));
 
                 switch (e.Action)
@@ -644,14 +644,11 @@ namespace Ankh.Services
 
     sealed class OwnerWrapper : IWin32Window
     {
-        IAnkhDialogOwner _owner;
+        readonly IAnkhDialogOwner _owner;
 
         public OwnerWrapper(IAnkhDialogOwner owner)
         {
-            if (owner == null)
-                throw new ArgumentNullException("owner");
-
-            _owner = owner;
+            _owner = owner ?? throw new ArgumentNullException("owner");
         }
 
         public IntPtr Handle
@@ -662,9 +659,7 @@ namespace Ankh.Services
 
                 if (window != null)
                 {
-                    ISynchronizeInvoke invoker = window as ISynchronizeInvoke;
-
-                    if (invoker != null && invoker.InvokeRequired && Control.CheckForIllegalCrossThreadCalls)
+                    if (window is ISynchronizeInvoke invoker && invoker.InvokeRequired && Control.CheckForIllegalCrossThreadCalls)
                     {
                         Control.CheckForIllegalCrossThreadCalls = false;
                         try

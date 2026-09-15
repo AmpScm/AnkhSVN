@@ -21,6 +21,7 @@ using System.ComponentModel;
 using Microsoft.VisualStudio.OLE.Interop;
 using System.Runtime.InteropServices;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+using Ankh.Services;
 
 namespace Ankh.Commands
 {

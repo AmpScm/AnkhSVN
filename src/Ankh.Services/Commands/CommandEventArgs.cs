@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Ankh.Selection;
+using Ankh.Services;
 
 namespace Ankh.Commands
 {

@@ -25,6 +25,7 @@ using IOleConnectionPoint = Microsoft.VisualStudio.OLE.Interop.IConnectionPoint;
 using IOleConnectionPointContainer = Microsoft.VisualStudio.OLE.Interop.IConnectionPointContainer;
 
 using Ankh.VS;
+using Ankh.Services;
 
 namespace Ankh
 {

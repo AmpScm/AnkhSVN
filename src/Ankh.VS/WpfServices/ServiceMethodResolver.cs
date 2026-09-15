@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Ankh.VS;
 
-namespace Ankh.WpfPackage.Services
+namespace Ankh.VS.WpfServices
 {
     [GlobalService(typeof(ILinqInterfaceDelegateService))]
     sealed class ServiceMethodResolver : AnkhService, ILinqInterfaceDelegateService
@@ -24,8 +24,7 @@ namespace Ankh.WpfPackage.Services
             
             Type type = typeof(TDelegate);
 
-            ParameterExpression[] args;
-            MethodCallExpression mce = GetMethodCall(fromInterface, method, ob, out args);
+            MethodCallExpression mce = GetMethodCall(fromInterface, method, ob, out ParameterExpression[] args);
 
             if (mce != null)
                 return Expression.Lambda<TDelegate>(mce, args).Compile();

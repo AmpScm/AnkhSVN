@@ -41,6 +41,7 @@ using Ankh.UI;
 using System.Windows.Forms.Design;
 using System.Windows.Forms;
 using Microsoft.VisualStudio;
+using Ankh.Services;
 
 namespace UnitTestProject.MenuItemTests
 {

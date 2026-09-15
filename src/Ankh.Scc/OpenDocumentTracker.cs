@@ -21,6 +21,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
 
 using Ankh.Scc.ProjectMap;
+using Ankh.Services;
 
 
 namespace Ankh.Scc

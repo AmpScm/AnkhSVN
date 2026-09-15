@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio;
 using System.Windows.Forms;
+using Ankh.Services;
 
 namespace Ankh.VSPackage.OptionPages
 {

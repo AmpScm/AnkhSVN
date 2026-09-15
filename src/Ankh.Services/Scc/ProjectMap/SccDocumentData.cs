@@ -23,6 +23,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 using SharpSvn;
 using Ankh.Selection;
+using Ankh.Services;
 
 namespace Ankh.Scc.ProjectMap
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-
+using Ankh.Services;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.TextManager.Interop;
 
@@ -17,10 +17,7 @@ namespace Ankh.VS.LanguageServices.Core
         public AnkhColorizer(AnkhLanguage language, IVsTextLines lines)
             : base(language)
         {
-            if (lines == null)
-                throw new ArgumentNullException("lines");
-
-            _lines = lines;
+            _lines = lines ?? throw new ArgumentNullException("lines");
         }
 
         protected AnkhLanguage Language
@@ -53,8 +50,7 @@ namespace Ankh.VS.LanguageServices.Core
         {
             string text = Marshal.PtrToStringUni(pszText, iLength);
 
-            int endState;
-            ColorizeLine(text, iLine, iState, pAttributes, out endState);
+            ColorizeLine(text, iLine, iState, pAttributes, out int endState);
             return endState; // End state
         }
 
@@ -75,9 +71,7 @@ namespace Ankh.VS.LanguageServices.Core
                 throw new ArgumentOutOfRangeException("lineNr");
             else if (_lines == null)
                 return null;
-
-            int lastLine, lastIndex;
-            if (!VSErr.Succeeded(_lines.GetLastLineIndex(out lastLine, out lastIndex)))
+            if (!VSErr.Succeeded(_lines.GetLastLineIndex(out int lastLine, out _)))
                 return null;
 
             if (lineNr > lastLine)
@@ -106,9 +100,7 @@ namespace Ankh.VS.LanguageServices.Core
         {
             string text = Marshal.PtrToStringUni(pszText, iLength);
 
-            int endState;
-
-            GetStateAtEndOfLine(text, iLine, iState, out endState);
+            GetStateAtEndOfLine(text, iLine, iState, out int endState);
 
             return endState;
         }

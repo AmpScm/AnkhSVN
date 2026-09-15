@@ -19,6 +19,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using Ankh;
+using Ankh.Services;
 
 namespace AnkhSvn_UnitTestProject.Helpers
 {

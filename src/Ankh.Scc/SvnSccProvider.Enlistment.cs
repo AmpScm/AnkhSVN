@@ -24,6 +24,7 @@ using SharpSvn;
 using Ankh.Scc.ProjectMap;
 using Ankh.Scc.SettingMap;
 using Ankh.UI;
+using Ankh.Services;
 
 namespace Ankh.Scc
 {

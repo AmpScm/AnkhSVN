@@ -23,6 +23,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.UI;
 using Ankh.Scc;
+using Ankh.Services;
 
 namespace Ankh.Commands
 {

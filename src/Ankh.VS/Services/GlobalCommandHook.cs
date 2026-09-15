@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ankh.Services;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell.Interop;
 

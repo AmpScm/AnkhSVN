@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Ankh.Services;
 using Ankh.UI;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -41,12 +42,11 @@ namespace Ankh.VS.Dialogs
         public void InitializeEditor(VSEditorControl form, IVsUIHierarchy hier, IVsWindowFrame frame, uint docid)
         {
             VSDocumentFormPane pane = null;
-            object value;
-            if (VSErr.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out value)))
+
+            if (VSErr.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out object value)))
             {
                 pane = value as VSDocumentFormPane;
             }
-
 
             if (pane != null)
                 ((IVSEditorControlInit)form).InitializedForm(hier, docid, frame, pane.Host);

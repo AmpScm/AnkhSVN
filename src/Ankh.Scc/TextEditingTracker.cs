@@ -18,6 +18,7 @@ using System.Text;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio;
+using Ankh.Services;
 
 namespace Ankh.Scc
 {

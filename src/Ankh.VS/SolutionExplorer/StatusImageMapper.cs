@@ -53,8 +53,10 @@ namespace Ankh.VS.SolutionExplorer
 
                 Bitmap bitmap = (Bitmap)Image.FromStream(images, true);
 
-                ImageList imageList = new ImageList();
-                imageList.ImageSize = new Size(width, bitmap.Height);
+                ImageList imageList = new ImageList
+                {
+                    ImageSize = new Size(width, bitmap.Height)
+                };
                 bitmap.MakeTransparent(bitmap.GetPixel(0, 0));
 
                 imageList.Images.AddStrip(bitmap);

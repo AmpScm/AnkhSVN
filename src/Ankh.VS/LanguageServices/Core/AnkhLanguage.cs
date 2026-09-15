@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 
 using Ankh.Selection;
+using Ankh.Services;
 
 
 namespace Ankh.VS.LanguageServices.Core
@@ -114,16 +115,22 @@ namespace Ankh.VS.LanguageServices.Core
 
             if (filter != null)
             {
-                IOleCommandTarget chained;
-                view.AddCommandFilter(filter, out chained);
-
+                view.AddCommandFilter(filter, out IOleCommandTarget chained);
                 filter.AddChained(chained);
             }
         }
 
         internal void OnCloseView(AnkhCodeWindowManager ankhCodeWindowManager, IVsTextView view)
         {
+            if (ankhCodeWindowManager is null)
+            {
+                throw new ArgumentNullException(nameof(ankhCodeWindowManager));
+            }
 
+            if (view is null)
+            {
+                throw new ArgumentNullException(nameof(view));
+            }
         }
 
         [CLSCompliant(false)]

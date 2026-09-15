@@ -67,8 +67,7 @@ namespace Ankh.VS.Dialogs
         {
             VSCommandRouting routing = VSCommandRouting.FromForm(form);
 
-            if (routing != null)
-                routing.OnHandleCreated();
+            routing?.OnHandleCreated();
         }
 
         public AnkhMessageBox MessageBox

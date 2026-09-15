@@ -23,6 +23,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
 using Ankh.Configuration;
 using Ankh.UI;
+using Ankh.Services;
 
 namespace Ankh.VSPackage
 {

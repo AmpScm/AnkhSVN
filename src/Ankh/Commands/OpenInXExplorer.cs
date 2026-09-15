@@ -18,6 +18,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio;
 using SharpSvn;
 using System.Runtime.InteropServices;
+using Ankh.Services;
 
 namespace Ankh.Commands
 {
