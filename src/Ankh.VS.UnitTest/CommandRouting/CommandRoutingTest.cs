@@ -13,32 +13,28 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
+using Ankh;
+using Ankh.Commands;
+using Ankh.Scc;
+using Ankh.Selection;
+using Ankh.Services;
+using Ankh.UI;
+using Ankh.UI.Services;
 using Ankh.VSPackage;
 using AnkhSvn_UnitTestProject.Helpers;
-using Ankh.Commands;
-using Ankh;
 using AnkhSvn_UnitTestProject.Mocks;
-using Ankh.Selection;
-using Microsoft.VisualStudio.Shell.Interop;
-using Ankh.UI.Services;
-using Ankh.UI;
-using Ankh.Scc;
-using NUnit.Framework;
-using Moq;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio;
-using System.Windows.Forms.Design;
-using System.Windows.Forms;
-using System.IO;
-using Microsoft.VsSDK.UnitTestLibrary;
-using Ankh.Services;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Moq;
+using NUnit.Framework;
 
 namespace AnkhSvn_UnitTestProject.CommandRouting
 {
-    
     [TestFixture]
     public class CommandRoutingTest
     {
@@ -64,26 +60,23 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         }
 
         [SetUp]
-        [Obsolete]
         public void Initialize()
         {
-            // Create the package
+            // Visual Studio 2022+ package model. AsyncPackage still exposes IVsPackage
+            // for shell integration, which is the contract these routing tests need.
             IVsPackage package = new AnkhSvnPackage() as IVsPackage;
-            Assert.IsNotNull(package, "The object does not implement IVsPackage");
+            Assert.IsNotNull(package, "The package must implement IVsPackage");
 
             var statusCache = new Mock<ISvnStatusCache>();
             var regEditors = new Mock<SVsRegisterEditors>().As<IVsRegisterEditors>();
 
             var vsShell = new Mock<SVsShell>().As<IVsShell>();
-            object r = @"SOFTWARE\Microsoft\VisualStudio\8.0";
+            object r = @"SOFTWARE\Microsoft\VisualStudio\17.0";
             vsShell.Setup(x => x.GetProperty((int)__VSSPROPID.VSSPROPID_VirtualRegistryRoot, out r)).Returns(VSErr.S_OK);
 
             var vsTextMgr = new Mock<SVsTextManager>().As<IVsTextManager>();
-
             var monitorSelection = new Mock<IVsMonitorSelection>();
-
             var olMgr = new Mock<SOleComponentManager>().As<IOleComponentManager>();
-
             var outputWindow = new Mock<SVsOutputWindow>().As<IVsOutputWindow>();
 
             ServiceProviderHelper.AddService(typeof(IAnkhPackage), package);
@@ -97,7 +90,6 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             var uiService = new Mock<IUIService>();
             uiService.Setup(x => x.ShowDialog(It.IsAny<Form>())).Returns(DialogResult.OK);
-
             ServiceProviderHelper.AddService(typeof(IUIService), uiService.Object);
         }
 
@@ -111,11 +103,8 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         public void AddItem()
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
-
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.IsFalse(CommandTester.TestExecution(AnkhCommand.AddItem), "Add disabled with empty selection");
-            }
         }
 
         [Test]
@@ -124,54 +113,36 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             Assert.IsTrue(CommandTester.TestExecution(AnkhCommand.RepositoryBrowse), "Add repository root always enabled");
         }
 
-
         [Test]
         public void AddWorkingCopyExplorerRootCommand()
         {
-            try
-            {
-                CommandTester.TestExecution(AnkhCommand.WorkingCopyBrowse);
-                Assert.Fail();
-            }
-            catch(InvalidOperationException)
-            {
-
-            }
+            Assert.Throws<InvalidOperationException>(() => CommandTester.TestExecution(AnkhCommand.WorkingCopyBrowse));
         }
 
-        [Test, Explicit("Broken")]
+        [Test, Explicit("Requires a live working-copy UI path")]
         public void AddWorkingCopyExplorerRootCommandWithPath()
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.IsTrue(CommandTester.TestExecution(AnkhCommand.WorkingCopyBrowse, Path.GetTempPath()));
-            }
         }
-
 
         [Test]
         public void BlameCommand()
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
-
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
-                Assert.That(CommandTester.TestExecution(AnkhCommand.ItemAnnotate), Is.False, 
+                Assert.That(CommandTester.TestExecution(AnkhCommand.ItemAnnotate), Is.False,
                     "Blame with empty selection doesn't execute");
-            }
         }
 
         [Test]
         public void CheckoutCommand()
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
-
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.Checkout), Is.False,
                     "Checkout doesn't execute with empty selection");
-            }
         }
 
         [Test]
@@ -179,10 +150,8 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.Cleanup), Is.False,
                     "Cleanup doesn't run without selection");
-            }
         }
 
         [Test]
@@ -190,10 +159,8 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.CommitItem), Is.False,
                     "Commit doesn't run without selection");
-            }
         }
 
         [Test]
@@ -201,9 +168,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.CopyReposExplorerUrl), Is.False);
-            }
         }
 
         [Test]
@@ -211,9 +176,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.CreatePatch), Is.False);
-            }
         }
 
         [Test]
@@ -221,9 +184,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.DiffLocalItem), Is.False);
-            }
         }
 
         [Test]
@@ -231,147 +192,97 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.Export), Is.False);
-            }
         }
 
         [Test]
         public void LockCommand()
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
-
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.Lock), Is.False);
-            }
         }
 
         [Test]
         public void LogCommand()
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
-
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.Log), Is.False);
-            }
         }
 
         [Test]
         public void MakeDirectoryCommand()
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
-
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.NewFolder), Is.False);
-            }
         }
 
         [Test]
         public void Refresh()
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
-
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.Refresh), Is.True,
                     "Refresh works with empty selection");
-            }
         }
 
-        [Test, Explicit]
+        [Test, Explicit("Requires repository explorer state")]
         public void RemoveReposRoot()
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
-
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.RemoveRepositoryRoot), Is.False);
-            }
         }
 
-        [Test, Explicit]
+        [Test, Explicit("Requires working-copy explorer state")]
         public void RemoveWorkingCopyRoot()
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
-
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.RemoveWorkingCopyExplorerRoot), Is.False);
-            }
-        }       
+        }
 
         [Test]
         public void RevertItemCommand()
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
-
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.RevertItem), Is.False,
                     "Cannot revert empty selection");
-            }
         }
 
         [Test]
         public void SaveToFileCommand()
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
-
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.SaveToFile), Is.False);
-            }
         }
 
-        [Test, Explicit]
+        [Test, Explicit("Requires Visual Studio tool-window shell services")]
         public void ShowCommitDialog()
         {
             var state = new Mock<IAnkhCommandStates>();
             state.SetupGet(x => x.SccProviderActive).Returns(true);
-
             var uiShell = new Mock<SVsUIShell>().As<IVsUIShell>();
 
             using (ServiceProviderHelper.AddService(typeof(SVsUIShell), uiShell.Object))
             using (ServiceProviderHelper.AddService(typeof(IAnkhCommandStates), state.Object))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.ShowPendingChanges), Is.True);
-            }
         }
 
-        [Test, Explicit]
+        [Test, Explicit("Requires Visual Studio repository explorer tool window")]
         public void ShowReposExplorer()
         {
-            //IAnkhPackage package = mocks.CreateMock<IAnkhPackage>();
-            //using (mocks.Record())
-            //{
-            //    package.ShowToolWindow(AnkhToolWindow.RepositoryExplorer);
-            //    LastCall.Repeat.Once();
-            //}
-
-
-            //using (mocks.Playback())
-
             CommandTester.TestExecution(AnkhCommand.ShowRepositoryExplorer);
-
         }
 
-        [Test, Explicit]
+        [Test, Explicit("Requires Visual Studio working-copy explorer tool window")]
         public void ShowWorkingCopyExplorer()
         {
-            //IAnkhPackage package = mocks.CreateMock<IAnkhPackage>();
-            //using (mocks.Record())
-            //{
-            //    package.ShowToolWindow(AnkhToolWindow.WorkingCopyExplorer);
-            //    LastCall.Repeat.Once();
-            //}
-
-            //using (mocks.Playback())
-            //{
-                CommandTester.TestExecution(AnkhCommand.ShowWorkingCopyExplorer);
-            //}
+            CommandTester.TestExecution(AnkhCommand.ShowWorkingCopyExplorer);
         }
 
         [Test]
@@ -379,9 +290,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.SwitchItem), Is.False);
-            }
         }
 
         [Test]
@@ -389,9 +298,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.Unlock), Is.False);
-            }
         }
 
         [Test]
@@ -399,9 +306,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.UpdateItemSpecific), Is.False);
-            }
         }
 
         [Test]
@@ -409,9 +314,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.ViewInVsNet), Is.False);
-            }
         }
 
         [Test]
@@ -419,9 +322,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
                 Assert.That(CommandTester.TestExecution(AnkhCommand.ViewInWindows), Is.False);
-            }
         }
     }
 }
