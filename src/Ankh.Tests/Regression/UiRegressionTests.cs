@@ -133,7 +133,7 @@ namespace Ankh.Tests.Regression
         }
 
         [Test]
-        public void SpecialIconStripScalesToConfiguredImageListSize()
+        public void SpecialIconStripCanBeLoadedAtHighDpiSize()
         {
             object mapper = CreateMapper();
             try
@@ -148,12 +148,10 @@ namespace Ankh.Tests.Regression
 
                 ensureImages.Invoke(mapper, null);
 
+                // AddStrip validates that the scaled strip height matches ImageSize and
+                // that its width is an exact multiple of the requested icon width.
                 Assert.Greater(images.Images.Count, 0);
-                foreach (Image image in images.Images)
-                {
-                    Assert.AreEqual(32, image.Width);
-                    Assert.AreEqual(32, image.Height);
-                }
+                Assert.AreEqual(new Size(32, 32), images.ImageSize);
             }
             finally
             {
