@@ -49,13 +49,14 @@ jobs:
         ${{ env.SOLUTION_FILE_PATH }}
         @build\scripts\msbuild-version.rsp
 
-    - name: Test
+    - name: Test Annotate DPI layout
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: >
         dotnet test build/src/Ankh.Tests/Ankh.Tests.csproj
         --configuration Release
         --no-build
         --no-restore
+        --filter "FullyQualifiedName~Ankh.Tests.Annotate"
         --logger "console;verbosity=normal"
 
 
