@@ -82,6 +82,7 @@ namespace Ankh.UI.SccManagement
             this.pendingList.CheckBoxes = true;
             this.pendingList.HideSelection = false;
             resources.ApplyResources(this.pendingList, "pendingList");
+            this.pendingList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pendingList.Name = "pendingList";
             this.pendingList.ShowSelectAllCheckBox = true;
             this.pendingList.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.pendingList_ItemChecked);
@@ -102,6 +103,7 @@ namespace Ankh.UI.SccManagement
             // 
             this.logMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.logMessage, "logMessage");
+            this.logMessage.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             this.logMessage.Name = "logMessage";
             this.logMessage.PendingChangeUI = this.pendingList;
             // 
