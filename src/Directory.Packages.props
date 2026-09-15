@@ -9,9 +9,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageVersion Include="Microsoft.VisualStudio.SDK" Version="17.5.33428.388" />
     <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="17.5.4072" />
-    <PackageVersion Include="Microsoft.VSSDK.UnitTestLibrary" Version="14.3.25407" />
     <PackageVersion Include="Moq" Version="4.20.69" />
-    <PackageVersion Include="MSTest.TestFramework" Version="3.2.0" />
     <PackageVersion Include="NUnit" Version="3.13.3" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
     <PackageVersion Include="RhinoMocks" Version="3.6.1" />
