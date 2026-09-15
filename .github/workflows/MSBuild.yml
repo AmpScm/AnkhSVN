@@ -49,15 +49,31 @@ jobs:
         ${{ env.SOLUTION_FILE_PATH }}
         @build\scripts\msbuild-version.rsp
 
-    - name: Test Annotate DPI layout
+    - name: Run regression tests
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: >
         dotnet test build/src/Ankh.Tests/Ankh.Tests.csproj
         --configuration Release
         --no-build
         --no-restore
-        --filter "FullyQualifiedName~Ankh.Tests.Annotate"
         --logger "console;verbosity=normal"
+
+    - name: Verify VSIX contains Ankh.UI
+      shell: pwsh
+      run: |
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        $vsix = "${{ github.workspace }}\build\src\Ankh.Package\bin\release\Ankh.Package.vsix"
+        $archive = [System.IO.Compression.ZipFile]::OpenRead($vsix)
+        try {
+          $uiAssembly = $archive.Entries | Where-Object { $_.FullName -match '(^|/)Ankh\.UI\.dll$' } | Select-Object -First 1
+          if (-not $uiAssembly) {
+            throw "Ankh.UI.dll was not included in the generated VSIX"
+          }
+          Write-Host "Verified VSIX contains $($uiAssembly.FullName)"
+        }
+        finally {
+          $archive.Dispose()
+        }
 
 
     #

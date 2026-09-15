@@ -86,9 +86,6 @@ namespace Ankh.UI.SvnLog
 
         void UpdateColors(LogRevisionControl listView)
         {
-            if (SystemInformation.HighContrast)
-                return;
-
             if (_args.ChangedPaths == null)
                 return;
 
@@ -97,8 +94,11 @@ namespace Ankh.UI.SvnLog
             if (listView.Context != null)
                 states = listView.Context.GetService<IAnkhCommandStates>();
 
-            // Preserve the legacy copy-history color only when it is readable.
-            if (states == null || (states.ThemeDefined && !states.ThemeLight))
+            bool hasThemeState = states != null;
+            bool themeDefined = hasThemeState && states.ThemeDefined;
+            bool themeLight = hasThemeState && states.ThemeLight;
+
+            if (!ShouldUseCopyHistoryColor(SystemInformation.HighContrast, hasThemeState, themeDefined, themeLight))
                 return;
 
             foreach (SvnChangeItem ci in _args.ChangedPaths)
@@ -109,6 +109,14 @@ namespace Ankh.UI.SvnLog
                     break;
                 }
             }
+        }
+
+        internal static bool ShouldUseCopyHistoryColor(bool highContrast, bool hasThemeState, bool themeDefined, bool themeLight)
+        {
+            if (highContrast || !hasThemeState)
+                return false;
+
+            return !themeDefined || themeLight;
         }
 
         internal DateTime Date
