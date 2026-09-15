@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Ankh;
 using Ankh.UI;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -9,7 +7,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
 {
     static class PackageMock
     {
-        internal static object EmptyContext(Microsoft.VsSDK.UnitTestLibrary.OleServiceProvider serviceProvider)
+        internal static object EmptyContext(IServiceProvider serviceProvider)
         {
             return new EmptyPackage(serviceProvider);
         }
@@ -22,7 +20,6 @@ namespace AnkhSvn_UnitTestProject.Mocks
             {
                 _serviceProvider = serviceProvider;
             }
-            #region IAnkhPackage Members
 
             public Version UIVersion
             {
@@ -34,12 +31,12 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 get { throw new NotImplementedException(); }
             }
 
-            public void ShowToolWindow(Ankh.AnkhToolWindow window)
+            public void ShowToolWindow(AnkhToolWindow window)
             {
                 throw new NotImplementedException();
             }
 
-            public void ShowToolWindow(Ankh.AnkhToolWindow window, int id, bool create)
+            public void ShowToolWindow(AnkhToolWindow window, int id, bool create)
             {
                 throw new NotImplementedException();
             }
@@ -74,74 +71,55 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 get { throw new NotImplementedException(); }
             }
 
-            #endregion
-
-            #region IAnkhServiceProvider Members
-
             public T GetService<T>() where T : class
             {
-                throw new NotImplementedException();
+                return _serviceProvider.GetService(typeof(T)) as T;
             }
 
             public T GetService<T>(Type serviceType) where T : class
             {
-                throw new NotImplementedException();
+                return _serviceProvider.GetService(serviceType) as T;
             }
-
-            #endregion
-
-            #region IServiceProvider Members
 
             public object GetService(Type serviceType)
             {
-                throw new NotImplementedException();
+                return _serviceProvider.GetService(serviceType);
             }
-
-            #endregion
-
-            #region IServiceContainer Members
 
             public void AddService(Type serviceType, System.ComponentModel.Design.ServiceCreatorCallback callback, bool promote)
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             public void AddService(Type serviceType, System.ComponentModel.Design.ServiceCreatorCallback callback)
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             public void AddService(Type serviceType, object serviceInstance, bool promote)
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             public void AddService(Type serviceType, object serviceInstance)
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             public void RemoveService(Type serviceType, bool promote)
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             public void RemoveService(Type serviceType)
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
-
-            #endregion
-
-            #region IAnkhQueryService Members
 
             public T QueryService<T>(Guid serviceGuid) where T : class
             {
-                throw new NotImplementedException();
+                return null;
             }
-
-            #endregion
-
 
             public bool ForceLoadUserSettings(string streamName)
             {

@@ -57,6 +57,7 @@ jobs:
         --no-build
         --no-restore
         --logger "console;verbosity=normal"
+        -- RunConfiguration.TreatNoTestsAsError=true
 
     - name: Run Ankh.VS.UnitTest
       working-directory: ${{ env.GITHUB_WORKSPACE }}
@@ -66,6 +67,7 @@ jobs:
         --no-build
         --no-restore
         --logger "console;verbosity=normal"
+        -- RunConfiguration.TreatNoTestsAsError=true
 
     - name: Verify VSIX contains Ankh.UI
       shell: pwsh
@@ -84,140 +86,65 @@ jobs:
           $archive.Dispose()
         }
 
-
-    #
-    # Prepare a versioned VSIX filename
-    #
     - name: Prepare Release Files
       if: github.event_name != 'pull_request'
       shell: pwsh
       run: |
         $version = "2.9.${{ github.run_number }}"
-
-        New-Item `
-          -ItemType Directory `
-          -Force `
-          -Path "${{ github.workspace }}\release" |
-          Out-Null
-
-        Copy-Item `
-          "${{ github.workspace }}\build\src\Ankh.Package\bin\release\Ankh.Package.vsix" `
-          "${{ github.workspace }}\release\AnkhSVN-$version-VS2022.vsix"
-
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\release" | Out-Null
+        Copy-Item "${{ github.workspace }}\build\src\Ankh.Package\bin\release\Ankh.Package.vsix" "${{ github.workspace }}\release\AnkhSVN-$version-VS2022.vsix"
         Write-Host "Prepared AnkhSVN-$version-VS2022.vsix"
 
-
-    #
-    # Normal GitHub Actions artifact
-    #
     - name: Upload VSIX Artifact
       uses: actions/upload-artifact@v6
       with:
         name: Ankh-VSIX-2022-${{ github.run_number }}
         path: build/src/Ankh.Package/bin/release/Ankh.Package.vsix
 
-
-    #
-    # Create NuGet package for GitHub Packages
-    #
     - name: Create GitHub Package
       if: github.event_name != 'pull_request'
       shell: pwsh
       run: |
         $version = "2.9.${{ github.run_number }}"
-
         Write-Host "Creating AnkhSVN package version $version"
-
-        New-Item `
-          -ItemType Directory `
-          -Force `
-          -Path "${{ github.workspace }}\package" |
-          Out-Null
-
-        New-Item `
-          -ItemType Directory `
-          -Force `
-          -Path "${{ github.workspace }}\package\out" |
-          Out-Null
-
-        Copy-Item `
-          "${{ github.workspace }}\build\src\Ankh.Package\bin\release\Ankh.Package.vsix" `
-          "${{ github.workspace }}\package\AnkhSVN-$version-VS2022.vsix"
-
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\package\out" | Out-Null
+        Copy-Item "${{ github.workspace }}\build\src\Ankh.Package\bin\release\Ankh.Package.vsix" "${{ github.workspace }}\package\AnkhSVN-$version-VS2022.vsix"
         @"
         <?xml version="1.0"?>
         <package>
           <metadata>
             <id>AnkhSVN.VSIX.2022</id>
             <version>$version</version>
-
             <title>AnkhSVN for Visual Studio 2022</title>
-
             <authors>AnkhSVN Project</authors>
             <owners>AmpScm</owners>
-
             <requireLicenseAcceptance>false</requireLicenseAcceptance>
-
             <license type="expression">Apache-2.0</license>
-
             <projectUrl>https://github.com/${{ github.repository }}</projectUrl>
-
             <description>
               AnkhSVN Subversion integration for Visual Studio 2022.
               This package contains the AnkhSVN Visual Studio VSIX installer.
             </description>
-
-            <repository
-              type="git"
-              url="https://github.com/${{ github.repository }}"
-              commit="${{ github.sha }}" />
-
-            <tags>
-              AnkhSVN SVN Subversion VisualStudio VSIX
-            </tags>
+            <repository type="git" url="https://github.com/${{ github.repository }}" commit="${{ github.sha }}" />
+            <tags>AnkhSVN SVN Subversion VisualStudio VSIX</tags>
           </metadata>
-
           <files>
-            <file
-              src="AnkhSVN-$version-VS2022.vsix"
-              target="tools\AnkhSVN-$version-VS2022.vsix" />
+            <file src="AnkhSVN-$version-VS2022.vsix" target="tools\AnkhSVN-$version-VS2022.vsix" />
           </files>
         </package>
-        "@ | Set-Content `
-          -Encoding UTF8 `
-          "${{ github.workspace }}\package\AnkhSVN.VSIX.2022.nuspec"
+        "@ | Set-Content -Encoding UTF8 "${{ github.workspace }}\package\AnkhSVN.VSIX.2022.nuspec"
+        nuget pack "${{ github.workspace }}\package\AnkhSVN.VSIX.2022.nuspec" -BasePath "${{ github.workspace }}\package" -OutputDirectory "${{ github.workspace }}\package\out"
 
-        nuget pack `
-          "${{ github.workspace }}\package\AnkhSVN.VSIX.2022.nuspec" `
-          -BasePath "${{ github.workspace }}\package" `
-          -OutputDirectory "${{ github.workspace }}\package\out"
-
-
-    #
-    # Publish to GitHub Packages
-    #
     - name: Publish GitHub Package
       if: github.event_name != 'pull_request'
       shell: pwsh
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        $package = Get-ChildItem `
-          "${{ github.workspace }}\package\out\*.nupkg" |
-          Select-Object -First 1
-
+        $package = Get-ChildItem "${{ github.workspace }}\package\out\*.nupkg" | Select-Object -First 1
         Write-Host "Publishing $($package.Name)"
+        dotnet nuget push "$($package.FullName)" --api-key "$env:GITHUB_TOKEN" --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --skip-duplicate
 
-        dotnet nuget push `
-          "$($package.FullName)" `
-          --api-key "$env:GITHUB_TOKEN" `
-          --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" `
-          --skip-duplicate
-
-
-    #
-    # Create GitHub Release
-    #
     - name: Create GitHub Release
       if: github.event_name != 'pull_request'
       shell: pwsh
@@ -226,18 +153,7 @@ jobs:
       run: |
         $version = "2.9.${{ github.run_number }}"
         $tag = "v$version"
-
         $vsix = "${{ github.workspace }}\release\AnkhSVN-$version-VS2022.vsix"
-        $nupkg = Get-ChildItem `
-          "${{ github.workspace }}\package\out\*.nupkg" |
-          Select-Object -First 1
-
+        $nupkg = Get-ChildItem "${{ github.workspace }}\package\out\*.nupkg" | Select-Object -First 1
         Write-Host "Creating release $tag"
-
-        gh release create "$tag" `
-          "$vsix" `
-          "$($nupkg.FullName)" `
-          --repo "${{ github.repository }}" `
-          --target "${{ github.sha }}" `
-          --title "AnkhSVN $version" `
-          --generate-notes
+        gh release create "$tag" "$vsix" "$($nupkg.FullName)" --repo "${{ github.repository }}" --target "${{ github.sha }}" --title "AnkhSVN $version" --generate-notes

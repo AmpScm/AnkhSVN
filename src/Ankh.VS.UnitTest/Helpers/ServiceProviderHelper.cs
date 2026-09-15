@@ -13,36 +13,39 @@
 //  limitations under the License.
 
 using System;
-using Microsoft.VsSDK.UnitTestLibrary;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
+using NUnit.Framework;
 
 namespace AnkhSvn_UnitTestProject.Helpers
 {
     class ServiceProviderHelper : IDisposable
     {
-        internal static OleServiceProvider serviceProvider;
+        internal static readonly TestOleServiceProvider serviceProvider;
+
         static ServiceProviderHelper()
         {
-            serviceProvider = OleServiceProvider.CreateOleServiceProviderWithBasicServices();
+            serviceProvider = new TestOleServiceProvider();
             AddService(typeof(Ankh.UI.IAnkhPackage), AnkhSvn_UnitTestProject.Mocks.PackageMock.EmptyContext(serviceProvider));
         }
 
         Type type;
         readonly object _instance;
+
         private ServiceProviderHelper(Type t, object instance)
         {
             type = t;
             _instance = instance;
-            serviceProvider.AddService(t, instance, false);
+            serviceProvider.AddService(t, instance);
         }
 
         public void Dispose()
         {
-            IDisposable i = _instance as IDisposable;
-            if (i != null)
-                i.Dispose();
+            IDisposable disposable = _instance as IDisposable;
+            if (disposable != null)
+                disposable.Dispose();
 
             if (type != null && serviceProvider.GetService(type) != null)
                 serviceProvider.RemoveService(type);
@@ -58,8 +61,8 @@ namespace AnkhSvn_UnitTestProject.Helpers
 
         public static IDisposable SetSite(IVsPackage package)
         {
-            Assert.AreEqual(0, package.SetSite(serviceProvider), "SetSite did not return S_OK");
-            return null;// new ServiceProviderHelper();
+            Assert.AreEqual(VSConstants.S_OK, package.SetSite(serviceProvider), "SetSite did not return S_OK");
+            return null;
         }
 
         internal static void DisposeServices()
@@ -71,6 +74,64 @@ namespace AnkhSvn_UnitTestProject.Helpers
             }
 
             _types.Clear();
+        }
+    }
+
+    /// <summary>
+    /// Minimal managed OLE service provider for package unit tests.
+    /// Replaces the retired Microsoft.VsSDK.UnitTestLibrary OleServiceProvider
+    /// while preserving IVsPackage.SetSite behavior.
+    /// </summary>
+    sealed class TestOleServiceProvider : System.IServiceProvider, Microsoft.VisualStudio.OLE.Interop.IServiceProvider
+    {
+        readonly Dictionary<Type, object> _servicesByType = new Dictionary<Type, object>();
+        readonly Dictionary<Guid, object> _servicesByGuid = new Dictionary<Guid, object>();
+
+        public void AddService(Type serviceType, object instance)
+        {
+            if (serviceType == null)
+                throw new ArgumentNullException("serviceType");
+
+            _servicesByType[serviceType] = instance;
+            _servicesByGuid[serviceType.GUID] = instance;
+        }
+
+        public void RemoveService(Type serviceType)
+        {
+            if (serviceType == null)
+                return;
+
+            _servicesByType.Remove(serviceType);
+            _servicesByGuid.Remove(serviceType.GUID);
+        }
+
+        public object GetService(Type serviceType)
+        {
+            object service;
+            return serviceType != null && _servicesByType.TryGetValue(serviceType, out service)
+                ? service
+                : null;
+        }
+
+        public int QueryService(ref Guid guidService, ref Guid riid, out IntPtr ppvObject)
+        {
+            ppvObject = IntPtr.Zero;
+
+            object service;
+            if (!_servicesByGuid.TryGetValue(guidService, out service) || service == null)
+                return VSConstants.E_NOINTERFACE;
+
+            IntPtr unknown = IntPtr.Zero;
+            try
+            {
+                unknown = Marshal.GetIUnknownForObject(service);
+                return Marshal.QueryInterface(unknown, ref riid, out ppvObject);
+            }
+            finally
+            {
+                if (unknown != IntPtr.Zero)
+                    Marshal.Release(unknown);
+            }
         }
     }
 }

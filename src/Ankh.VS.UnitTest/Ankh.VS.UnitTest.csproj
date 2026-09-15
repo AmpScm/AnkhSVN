@@ -31,7 +31,6 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Microsoft.VisualStudio.SDK" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" />
-    <PackageReference Include="Microsoft.VSSDK.UnitTestLibrary" />
     <PackageReference Include="Moq" />
     <PackageReference Include="MSTest.TestFramework" />
     <PackageReference Include="NUnit" />
