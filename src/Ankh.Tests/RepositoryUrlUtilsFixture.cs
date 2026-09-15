@@ -13,8 +13,7 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Reflection;
 using Ankh.UI.SccManagement;
 using NUnit.Framework;
 
@@ -23,126 +22,85 @@ namespace Ankh.Tests
     [TestFixture]
     public class RepositoryUrlUtilsFixture
     {
-        [Test]
-        public void TestGuessLayoutSimpleTrunk()
+        [TestCase(
+            "http://svn.test.org/repos/project/trunk/project.sln",
+            "http://svn.test.org/repos/project/",
+            "http://svn.test.org/repos/project/trunk/",
+            "http://svn.test.org/repos/project/branches/",
+            "trunk/",
+            "trunk",
+            TestName = "TestGuessLayoutSimpleTrunk")]
+        [TestCase(
+            "http://svn.test.org/repos/project/trunk/s/r/c/project.sln",
+            "http://svn.test.org/repos/project/",
+            "http://svn.test.org/repos/project/trunk/",
+            "http://svn.test.org/repos/project/branches/",
+            "trunk/",
+            "trunk",
+            TestName = "TestGuessLayoutComplexTrunk")]
+        [TestCase(
+            "http://svn.test.org/repos/project/branches/experimental/project.sln",
+            "http://svn.test.org/repos/project/",
+            "http://svn.test.org/repos/project/branches/experimental/",
+            "http://svn.test.org/repos/project/branches/",
+            "experimental/",
+            "experimental",
+            TestName = "TestGuessLayoutSimpleBranch")]
+        [TestCase(
+            "http://svn.test.org/repos/project/branches/experimental/s/r/c/project.sln",
+            "http://svn.test.org/repos/project/",
+            "http://svn.test.org/repos/project/branches/experimental/",
+            "http://svn.test.org/repos/project/branches/",
+            "experimental/",
+            "experimental",
+            TestName = "TestGuessLayoutComplexBranch")]
+        [TestCase(
+            "http://svn.test.org/repos/myproj/sandbox/src/project.sln",
+            "http://svn.test.org/repos/myproj/sandbox/",
+            "http://svn.test.org/repos/myproj/sandbox/src/",
+            "http://svn.test.org/repos/myproj/sandbox/branches/",
+            "src/",
+            "src",
+            TestName = "TestGuessLayoutFromNonStandardBranch")]
+        [TestCase(
+            "http://svn.test.org/repos/project.sln",
+            "http://svn.test.org/",
+            "http://svn.test.org/repos/",
+            "http://svn.test.org/branches/",
+            "repos/",
+            "repos",
+            TestName = "TestGuessLayoutFromReposRoot")]
+        public void GuessLayoutFromNormalizedUri(
+            string repositoryUri,
+            string wholeProjectRoot,
+            string workingRoot,
+            string branchesRoot,
+            string selectedBranch,
+            string selectedBranchName)
         {
-            Uri u = new Uri("http://svn.test.org/repos/project/trunk/project.sln");
+            RepositoryLayoutInfo info = GuessNormalizedLayout(new Uri(repositoryUri));
 
-            RepositoryLayoutInfo i;
-            RepositoryUrlUtils.TryGuessLayout(new MockContext(), u, out i);
-
-            Assert.IsNotNull(i, "expected a layout info");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/project/"), i.WholeProjectRoot, "wrong project root");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/project/trunk/"), i.WorkingRoot, "wrong working root");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/project/branches/"), i.BranchesRoot, "wrong branch root");
-            Assert.AreEqual(new Uri("trunk/", UriKind.Relative), i.SelectedBranch, "wrong selected branch");
-            Assert.AreEqual("trunk", i.SelectedBranchName, "wrong branch name");
+            Assert.IsNotNull(info, "expected a layout info");
+            Assert.AreEqual(new Uri(wholeProjectRoot), info.WholeProjectRoot, "wrong project root");
+            Assert.AreEqual(new Uri(workingRoot), info.WorkingRoot, "wrong working root");
+            Assert.AreEqual(new Uri(branchesRoot), info.BranchesRoot, "wrong branch root");
+            Assert.AreEqual(new Uri(selectedBranch, UriKind.Relative), info.SelectedBranch, "wrong selected branch");
+            Assert.AreEqual(selectedBranchName, info.SelectedBranchName, "wrong branch name");
         }
 
-        [Test]
-        public void TestGuessLayoutComplexTrunk()
+        static RepositoryLayoutInfo GuessNormalizedLayout(Uri uri)
         {
-            Uri u = new Uri("http://svn.test.org/repos/project/trunk/s/r/c/project.sln");
+            MethodInfo parser = typeof(RepositoryUrlUtils).GetMethod(
+                "TryGuessLayoutNormalized",
+                BindingFlags.Static | BindingFlags.NonPublic);
 
-            RepositoryLayoutInfo i;
-            RepositoryUrlUtils.TryGuessLayout(new MockContext(), u, out i);
+            Assert.NotNull(parser, "Expected the managed repository layout parser");
 
-            Assert.IsNotNull(i, "expected a layout info");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/project/"), i.WholeProjectRoot, "wrong project root");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/project/trunk/"), i.WorkingRoot, "wrong working root");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/project/branches/"), i.BranchesRoot, "wrong branch root");
-            Assert.AreEqual(new Uri("trunk/", UriKind.Relative), i.SelectedBranch, "wrong selected branch");
-            Assert.AreEqual("trunk", i.SelectedBranchName, "wrong branch name");
-        }
+            object[] arguments = { uri, null };
+            bool success = (bool)parser.Invoke(null, arguments);
 
-        [Test]
-        public void TestGuessLayoutSimpleBranch()
-        {
-            Uri u = new Uri("http://svn.test.org/repos/project/branches/experimental/project.sln");
-
-            RepositoryLayoutInfo i;
-            RepositoryUrlUtils.TryGuessLayout(new MockContext(), u, out i);
-
-            Assert.IsNotNull(i, "expected a layout info");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/project/"), i.WholeProjectRoot, "wrong project root");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/project/branches/experimental/"), i.WorkingRoot, "wrong working root");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/project/branches/"), i.BranchesRoot, "wrong branch root");
-            Assert.AreEqual(new Uri("experimental/", UriKind.Relative), i.SelectedBranch, "wrong selected branch");
-            Assert.AreEqual("experimental", i.SelectedBranchName, "wrong selected name");
-        }
-
-        [Test]
-        public void TestGuessLayoutComplexBranch()
-        {
-            Uri u = new Uri("http://svn.test.org/repos/project/branches/experimental/s/r/c/project.sln");
-
-            RepositoryLayoutInfo i;
-            RepositoryUrlUtils.TryGuessLayout(new MockContext(), u, out i);
-
-            Assert.IsNotNull(i, "expected a layout info");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/project/"), i.WholeProjectRoot, "wrong project root");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/project/branches/experimental/"), i.WorkingRoot, "wrong working root");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/project/branches/"), i.BranchesRoot, "wrong branch root");
-            Assert.AreEqual(new Uri("experimental/", UriKind.Relative), i.SelectedBranch, "wrong selected branch");
-            Assert.AreEqual("experimental", i.SelectedBranchName, "wrong selected name");
-        }
-
-        [Test]
-        public void TestGuessLayoutFromNonStandardBranch()
-        {
-            Uri u = new Uri("http://svn.test.org/repos/myproj/sandbox/src/project.sln");
-
-            RepositoryLayoutInfo i;
-            RepositoryUrlUtils.TryGuessLayout(new MockContext(), u, out i);
-
-            Assert.IsNotNull(i, "expected a layout info");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/myproj/sandbox/"), i.WholeProjectRoot, "wrong project root");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/myproj/sandbox/src/"), i.WorkingRoot, "wrong working root");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/myproj/sandbox/branches/"), i.BranchesRoot, "wrong branch root");
-            Assert.AreEqual(new Uri("src/", UriKind.Relative), i.SelectedBranch, "wrong selected branch");
-            Assert.AreEqual("src", i.SelectedBranchName, "wrong selected name");
-        }
-
-        [Test]
-        public void TestGuessLayoutFromReposRoot()
-        {
-            Uri u = new Uri("http://svn.test.org/repos/project.sln");
-
-            RepositoryLayoutInfo i;
-            RepositoryUrlUtils.TryGuessLayout(new MockContext(), u, out i);
-
-            Assert.IsNotNull(i, "expected a layout info");
-            Assert.AreEqual(new Uri("http://svn.test.org/"), i.WholeProjectRoot, "wrong project root");
-            Assert.AreEqual(new Uri("http://svn.test.org/repos/"), i.WorkingRoot, "wrong working root");
-            Assert.AreEqual(new Uri("http://svn.test.org/branches/"), i.BranchesRoot, "wrong branch root");
-            Assert.AreEqual(new Uri("repos/", UriKind.Relative), i.SelectedBranch, "wrong selected branch");
-            Assert.AreEqual("repos", i.SelectedBranchName, "wrong selected name");
-        }
-
-        class MockContext : IAnkhServiceProvider
-        {
-            #region IAnkhServiceProvider Members
-
-            public T GetService<T>() where T : class
-            {
-                throw new NotImplementedException();
-            }
-
-            public T GetService<T>(Type serviceType) where T : class
-            {
-                throw new NotImplementedException();
-            }
-
-            #endregion
-
-            #region IServiceProvider Members
-
-            public object GetService(Type serviceType)
-            {
-                throw new NotImplementedException();
-            }
-
-            #endregion
+            Assert.IsTrue(success, "Expected repository layout parsing to succeed");
+            return arguments[1] as RepositoryLayoutInfo;
         }
     }
 }
