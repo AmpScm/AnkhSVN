@@ -14,6 +14,7 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using Ankh;
 using Ankh.Scc;
 using Ankh.VS;
@@ -33,7 +34,17 @@ namespace AnkhSvn_UnitTestProject.Services
         public void SetUp()
         {
             IAnkhServiceProvider serviceProvider = new AnkhServiceProvider();
-            mapper = new FileIconMapper(serviceProvider);
+            Type mapperType = typeof(ProjectIconReference).Assembly.GetType(
+                "Ankh.VS.SolutionExplorer.FileIconMapper",
+                true);
+            ConstructorInfo constructor = mapperType.GetConstructor(
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                null,
+                new[] { typeof(IAnkhServiceProvider) },
+                null);
+
+            Assert.That(constructor, Is.Not.Null, "Expected FileIconMapper constructor");
+            mapper = (IFileIconMapper)constructor.Invoke(new object[] { serviceProvider });
         }
 
         [TearDown]
