@@ -66,11 +66,22 @@ namespace Ankh.UI.SccManagement
             else if (uri == null)
                 throw new ArgumentNullException("uri");
 
-            info = null;
-
             uri = SvnTools.GetNormalizedUri(uri);
 
             GC.KeepAlive(context); // Allow future external hints
+
+            return TryGuessLayoutNormalized(uri, out info);
+        }
+
+        // Keep the layout parser independent from SharpSvn so its behavior can be
+        // tested without loading SharpSvn's native runtime. The public entry point
+        // remains responsible for normalizing repository URIs first.
+        internal static bool TryGuessLayoutNormalized(Uri uri, out RepositoryLayoutInfo info)
+        {
+            if (uri == null)
+                throw new ArgumentNullException("uri");
+
+            info = null;
 
             string path;
             if (uri.IsUnc)
