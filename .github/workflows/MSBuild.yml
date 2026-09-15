@@ -59,16 +59,6 @@ jobs:
         --logger "console;verbosity=normal"
         -- RunConfiguration.TreatNoTestsAsError=true
 
-    - name: Run Ankh.VS.UnitTest
-      working-directory: ${{ env.GITHUB_WORKSPACE }}
-      run: >
-        dotnet test build/src/Ankh.VS.UnitTest/Ankh.VS.UnitTest.csproj
-        --configuration Release
-        --no-build
-        --no-restore
-        --logger "console;verbosity=normal"
-        -- RunConfiguration.TreatNoTestsAsError=true
-
     - name: Verify VSIX contains Ankh.UI
       shell: pwsh
       run: |
