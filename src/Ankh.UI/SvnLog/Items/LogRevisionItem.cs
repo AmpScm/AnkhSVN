@@ -21,6 +21,7 @@ using Ankh.UI.VSSelectionControls;
 using System.Globalization;
 using System.Drawing;
 using Ankh.Scc;
+using Ankh.Commands;
 using SharpSvn.Implementation;
 using System.Collections.ObjectModel;
 using Ankh.VS;
@@ -43,7 +44,7 @@ namespace Ankh.UI.SvnLog
             _args = e;
             _issueService = issueService;
             RefreshText();
-            UpdateColors();
+            UpdateColors(listView);
         }
 
         [Browsable(false)]
@@ -83,7 +84,7 @@ namespace Ankh.UI.SvnLog
             return sb != null ? sb.ToString() : "";
         }
 
-        void UpdateColors()
+        void UpdateColors(LogRevisionControl listView)
         {
             if (SystemInformation.HighContrast)
                 return;
@@ -91,10 +92,22 @@ namespace Ankh.UI.SvnLog
             if (_args.ChangedPaths == null)
                 return;
 
+            IAnkhCommandStates states = null;
+
+            if (listView.Context != null)
+                states = listView.Context.GetService<IAnkhCommandStates>();
+
+            // Preserve the legacy copy-history color only when it is readable.
+            if (states == null || (states.ThemeDefined && !states.ThemeLight))
+                return;
+
             foreach (SvnChangeItem ci in _args.ChangedPaths)
             {
                 if (ci.CopyFromRevision >= 0)
+                {
                     ForeColor = Color.DarkBlue;
+                    break;
+                }
             }
         }
 
@@ -138,7 +151,7 @@ namespace Ankh.UI.SvnLog
 
 
         /// <summary>
-        /// Returns IEnumerable for issue ids combining the issues found via associated issue repository and project commit settings.
+        /// Returns IEnumerable combining the issues found via associated issue repository and project commit settings.
         /// </summary>
         internal IEnumerable<TextMarker> Issues
         {
@@ -191,7 +204,7 @@ namespace Ankh.UI.SvnLog
         /// <summary>
         /// Gets the repository root.
         /// </summary>
-        /// <value>The repository root.</value>
+        /// <value></value>
         [Browsable(false)]
         public Uri RepositoryRoot
         {
