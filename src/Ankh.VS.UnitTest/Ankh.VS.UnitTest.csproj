@@ -12,12 +12,6 @@
     <None Remove="Stubs\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Services\FileIconMapperTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Services\FileIconMapperTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
