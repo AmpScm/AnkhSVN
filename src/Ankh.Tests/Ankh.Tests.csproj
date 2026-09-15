@@ -5,22 +5,16 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="AnkhContextTest.cs" />
     <Compile Remove="Commands\BlameCommandTest.cs" />
     <Compile Remove="Commands\CommitItemTest.cs" />
     <Compile Remove="Commands\LogCommandTest.cs" />
-    <Compile Remove="Commands\SendErrorReportTest.cs" />
-    <Compile Remove="ProjectItemsEventSinkTest.cs" />
     <Compile Remove="StatusCacheTest.cs" />
     <Compile Remove="SvnItemTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AnkhContextTest.cs" />
     <Content Include="Commands\BlameCommandTest.cs" />
     <Content Include="Commands\CommitItemTest.cs" />
     <Content Include="Commands\LogCommandTest.cs" />
-    <Content Include="Commands\SendErrorReportTest.cs" />
-    <Content Include="ProjectItemsEventSinkTest.cs" />
     <Content Include="StatusCacheTest.cs" />
     <Content Include="SvnItemTest.cs" />
   </ItemGroup>
