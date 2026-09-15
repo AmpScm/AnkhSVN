@@ -14,7 +14,7 @@
 
 using System;
 using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace AnkhSvn_UnitTestProject.Helpers
 {
