@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Reflection;
 using Ankh.UI.SccManagement;
-using AnkhSvn_UnitTestProject.Helpers;
 using NUnit.Framework;
 
 namespace AnkhSvn_UnitTestProject
@@ -10,34 +8,30 @@ namespace AnkhSvn_UnitTestProject
     [TestFixture]
     public class RepositoryUrlUtilsTest
     {
-        [Test]
-        public void TryGuessLayout_HttpTrunk_ReturnsBranches()
+        [TestCase("http://server.tld/svn/trunk/something", "http://server.tld/svn/branches/", TestName = "TryGuessLayout_HttpTrunk_ReturnsBranches")]
+        [TestCase("file:///c:/repos/trunk/something", "file:///C:/repos/branches/", TestName = "TryGuessLayout_LocalFileTrunk_ReturnsBranches")]
+        [TestCase("file://server/share/repos/trunk/something", "file://server/share/repos/branches/", TestName = "TryGuessLayout_UNCFileTrunk_ReturnsBranches")]
+        public void GuessNormalizedLayoutReturnsBranches(string repositoryUri, string expectedBranchesRoot)
         {
-            RepositoryLayoutInfo info;
-            bool rslt = RepositoryUrlUtils.TryGuessLayout(new AnkhServiceProvider(), new Uri("http://server.tld/svn/trunk/something"), out info);
+            RepositoryLayoutInfo info = GuessNormalizedLayout(new Uri(repositoryUri));
 
-            Assert.That(rslt);
-            Assert.That(info.BranchesRoot, Is.EqualTo(new Uri("http://server.tld/svn/branches/")));
+            Assert.That(info, Is.Not.Null);
+            Assert.That(info.BranchesRoot, Is.EqualTo(new Uri(expectedBranchesRoot)));
         }
 
-        [Test]
-        public void TryGuessLayout_LocalFileTrunk_ReturnsBranches()
+        static RepositoryLayoutInfo GuessNormalizedLayout(Uri uri)
         {
-            RepositoryLayoutInfo info;
-            bool rslt = RepositoryUrlUtils.TryGuessLayout(new AnkhServiceProvider(), new Uri("file:///c:/repos/trunk/something"), out info);
+            MethodInfo parser = typeof(RepositoryUrlUtils).GetMethod(
+                "TryGuessLayoutNormalized",
+                BindingFlags.Static | BindingFlags.NonPublic);
 
-            Assert.That(rslt);
-            Assert.That(info.BranchesRoot, Is.EqualTo(new Uri("file:///C:/repos/branches/")));
-        }
+            Assert.That(parser, Is.Not.Null, "Expected the managed repository layout parser");
 
-        [Test]
-        public void TryGuessLayout_UNCFileTrunk_ReturnsBranches()
-        {
-            RepositoryLayoutInfo info;
-            bool rslt = RepositoryUrlUtils.TryGuessLayout(new AnkhServiceProvider(), new Uri("file://server/share/repos/trunk/something"), out info);
+            object[] arguments = { uri, null };
+            bool success = (bool)parser.Invoke(null, arguments);
 
-            Assert.That(rslt);
-            Assert.That(info.BranchesRoot, Is.EqualTo(new Uri("file://server/share/repos/branches/")));
+            Assert.That(success, Is.True, "Expected repository layout parsing to succeed");
+            return arguments[1] as RepositoryLayoutInfo;
         }
     }
 }
