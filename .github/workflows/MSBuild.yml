@@ -49,14 +49,13 @@ jobs:
         ${{ env.SOLUTION_FILE_PATH }}
         @build\scripts\msbuild-version.rsp
 
-    - name: Run regression tests
+    - name: Run Ankh.Tests
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: >
         dotnet test build/src/Ankh.Tests/Ankh.Tests.csproj
         --configuration Release
         --no-build
         --no-restore
-        --filter "FullyQualifiedName~Ankh.Tests.Annotate|FullyQualifiedName~Ankh.Tests.Regression"
         --logger "console;verbosity=normal"
 
     - name: Verify VSIX contains Ankh.UI
