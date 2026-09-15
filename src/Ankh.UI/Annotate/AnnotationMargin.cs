@@ -19,6 +19,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Formatting;
 using SharpSvn;
 
 namespace Ankh.UI.Annotate
