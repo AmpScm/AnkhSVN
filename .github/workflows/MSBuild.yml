@@ -12,7 +12,7 @@ permissions:
   packages: write
 
 env:
-  SOLUTION_FILE_PATH: build/src/AnkhSVN.sln
+  SOLUTION_FILE_PATH: build/src/AnkhSvn.sln
 
 jobs:
   build:
@@ -48,6 +48,15 @@ jobs:
         /p:Configuration=Release
         ${{ env.SOLUTION_FILE_PATH }}
         @build\scripts\msbuild-version.rsp
+
+    - name: Test
+      working-directory: ${{ env.GITHUB_WORKSPACE }}
+      run: >
+        dotnet test build/src/Ankh.Tests/Ankh.Tests.csproj
+        --configuration Release
+        --no-build
+        --no-restore
+        --logger "console;verbosity=normal"
 
 
     #
