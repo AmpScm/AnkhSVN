@@ -38,8 +38,8 @@ SET ANKHSVN_VER=%ANKHSVN_MAJOR%.%ANKHSVN_MINOR%.%ANKHSVN_PATCH%
   echo /p:RestoreForce=true
 ) > %RSPFILE%
 
-call :xmlpoke %CURD%\..\..\src\Ankh.Package\x86\source.extension.VsixManifest //vsx:Metadata/vsx:Identity/@Version "%ANKHSVN_VER%"
 call :xmlpoke %CURD%\..\..\src\Ankh.Package\x64\source.extension.VsixManifest //vsx:Metadata/vsx:Identity/@Version "%ANKHSVN_VER%"
+if errorlevel 1 exit /B 1
 
 goto :eof
 
