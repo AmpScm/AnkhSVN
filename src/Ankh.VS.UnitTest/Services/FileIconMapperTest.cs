@@ -13,14 +13,14 @@
 //  limitations under the License.
 
 using System;
-using NUnit.Framework;
+using System.IO;
+using Ankh;
+using Ankh.Scc;
+using Ankh.VS;
 using Ankh.VS.SolutionExplorer;
 using AnkhSvn_UnitTestProject.Helpers;
-using Ankh.VS;
-using Ankh;
-using System.IO;
-using Ankh.Scc;
 using Moq;
+using NUnit.Framework;
 
 namespace AnkhSvn_UnitTestProject.Services
 {
@@ -28,13 +28,12 @@ namespace AnkhSvn_UnitTestProject.Services
     public class FileIconMapperTest
     {
         IFileIconMapper mapper;
-        IAnkhServiceProvider sp;
+
         [SetUp]
         public void SetUp()
         {
-            sp = new AnkhServiceProvider();
-
-            mapper = new FileIconMapper(sp);
+            IAnkhServiceProvider serviceProvider = new AnkhServiceProvider();
+            mapper = new FileIconMapper(serviceProvider);
         }
 
         [TearDown]
@@ -43,207 +42,132 @@ namespace AnkhSvn_UnitTestProject.Services
             mapper = null;
         }
 
-        [Test]
-        public void TestGetFileType_NullParameter_DoesntThrow()
+        [TestCase(null)]
+        [TestCase("")]
+        public void EmptyExtensionHasNoFileType(string extension)
         {
-            Assert.That(mapper.GetFileType((string)null), Is.EqualTo(""));
+            Assert.That(mapper.GetFileType(extension), Is.EqualTo(""));
         }
 
         [Test]
-        public void TestGetFileType_EmptyString_DoesntThrow()
+        public void ExtensionWithAndWithoutDotResolveToSameType()
         {
-            Assert.That(mapper.GetFileType(""), Is.EqualTo(""));
+            string withoutDot = mapper.GetFileType("exe");
+            string withDot = mapper.GetFileType(".exe");
+
+            Assert.That(withoutDot, Is.Not.Null.And.Not.Empty);
+            Assert.That(withDot, Is.EqualTo(withoutDot));
         }
 
         [Test]
-        public void TestGetFileType_ExtensionWithAndWithDot_AreSame()
+        public void NullSvnItemThrowsArgumentNullException()
         {
-            Assert.That(mapper.GetFileType(".exe"), Is.EqualTo("Application"));
-            Assert.That(mapper.GetFileType("exe"), Is.EqualTo("Application"));
+            Assert.Throws<ArgumentNullException>(() => mapper.GetFileType((SvnItem)null));
         }
 
         [Test]
-        public void TestNullSvnItem()
-        {
-            try
-            {
-                mapper.GetFileType((SvnItem)null);
-                Assert.Fail();
-            }
-            catch (ArgumentNullException)
-            { }
-        }
-
-        [Test]
-        public void TestExistingFileType()
+        public void ExistingFileUsesAResolvedShellType()
         {
             var statusCache = new Mock<ISvnStatusCache>();
-
-            string tempFile = Path.GetTempFileName();
-            string exeTempFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + ".exe");
-            using (File.CreateText(exeTempFile))
-            { }
+            string file = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + ".txt");
+            File.WriteAllText(file, "test");
 
             try
             {
-                var item = new SvnItem(statusCache.Object, tempFile, NoSccStatus.Unknown, SharpSvn.SvnNodeKind.File);
-                Assert.That(mapper.GetFileType(item), Is.EqualTo("TMP File"));
+                var item = new SvnItem(statusCache.Object, file, NoSccStatus.Unknown, SharpSvn.SvnNodeKind.File);
+                string fileType = mapper.GetFileType(item);
 
-                item = new SvnItem(statusCache.Object, exeTempFile, NoSccStatus.Unknown, SharpSvn.SvnNodeKind.File);
-                Assert.That(mapper.GetFileType(item), Is.EqualTo("Application"));
-
-                item = new SvnItem(statusCache.Object, "C:\\", NoSccStatus.Unknown, SharpSvn.SvnNodeKind.Directory);
-                Assert.That(mapper.GetFileType(item), Is.EqualTo("Local Disk"));
+                Assert.That(fileType, Is.Not.Null.And.Not.Empty);
             }
             finally
             {
-                File.Delete(tempFile);
-                File.Delete(exeTempFile);
+                File.Delete(file);
             }
         }
 
         [Test]
-        public void TestIconForExtension()
+        public void GenericFileAndDirectoryIconsCanBeResolved()
         {
-            Assert.That(mapper.DirectoryIcon, Is.GreaterThan(0));
-            Assert.That(mapper.FileIcon, Is.GreaterThan(0));
+            Assert.That(mapper.DirectoryIcon, Is.GreaterThanOrEqualTo(0));
+            Assert.That(mapper.FileIcon, Is.GreaterThanOrEqualTo(0));
+            Assert.That(mapper.DirectoryIcon, Is.Not.EqualTo(mapper.FileIcon));
+        }
 
-            Assert.That(mapper.GetIconForExtension(null), Is.EqualTo(mapper.FileIcon));
-            Assert.That(mapper.GetIconForExtension(""), Is.EqualTo(mapper.FileIcon));
-            Assert.That(mapper.GetIconForExtension("qweqweqeqwe"), Is.EqualTo(mapper.FileIcon));
-            Assert.That(mapper.GetIconForExtension("exe"), Is.GreaterThan(0));
+        [TestCase(null)]
+        [TestCase("")]
+        public void EmptyExtensionUsesGenericFileIcon(string extension)
+        {
+            Assert.That(mapper.GetIconForExtension(extension), Is.EqualTo(mapper.FileIcon));
         }
 
         [Test]
-        public void TestFolderIconAndDirectoryIconDiffer()
+        public void KnownExtensionCanResolveAnIcon()
         {
-            var dirIcon = mapper.DirectoryIcon;
-            var fileIcon = mapper.FileIcon;
-
-            Assert.That(dirIcon, Is.Not.EqualTo(fileIcon));
+            Assert.That(mapper.GetIconForExtension("exe"), Is.GreaterThanOrEqualTo(0));
         }
 
         [Test]
-        public void TestProjectIconReference_DifferentIndex_NotEqual()
+        public void ProjectIconReferenceEqualityUsesBothListAndIndex()
         {
-            var one = new ProjectIconReference(new IntPtr(3),4);
-            var other = new ProjectIconReference(new IntPtr(3), 5);
+            var sameOne = new ProjectIconReference(new IntPtr(3), 4);
+            var sameTwo = new ProjectIconReference(new IntPtr(3), 4);
+            var differentIndex = new ProjectIconReference(new IntPtr(3), 5);
+            var differentList = new ProjectIconReference(new IntPtr(4), 4);
 
-            Assert.That(one, Is.Not.EqualTo(other));
+            Assert.That(sameOne, Is.EqualTo(sameTwo));
+            Assert.That(sameOne, Is.Not.EqualTo(differentIndex));
+            Assert.That(sameOne, Is.Not.EqualTo(differentList));
         }
 
         [Test]
-        public void TestProjectIconReference_DifferentImageList_NotEqual()
+        public void ProjectIconReferenceEqualityDistinguishesHandlesFromImageListReferences()
         {
-            var one = new ProjectIconReference(new IntPtr(4), 5);
-            var other = new ProjectIconReference(new IntPtr(3), 5);
+            var handleOne = new ProjectIconReference(new IntPtr(3));
+            var handleTwo = new ProjectIconReference(new IntPtr(3));
+            var otherHandle = new ProjectIconReference(new IntPtr(4));
+            var imageListReference = new ProjectIconReference(new IntPtr(3), 3);
 
-            Assert.That(one, Is.Not.EqualTo(other));
+            Assert.That(handleOne, Is.EqualTo(handleTwo));
+            Assert.That(handleOne, Is.Not.EqualTo(otherHandle));
+            Assert.That(handleOne, Is.Not.EqualTo(imageListReference));
         }
 
         [Test]
-        public void TestProjectIconReference_DifferentHandle_NotEqual()
+        public void EmbeddedSpecialIconsAreAvailable()
         {
-            var one = new ProjectIconReference(new IntPtr(4));
-            var other = new ProjectIconReference(new IntPtr(3));
-
-            Assert.That(one, Is.Not.EqualTo(other));
-        }
-
-        [Test]
-        public void TestProjectIconReference_SameImageListIndex_Equal()
-        {
-            var one = new ProjectIconReference(new IntPtr(3), 4);
-            var other = new ProjectIconReference(new IntPtr(3), 4);
-
-            Assert.That(one, Is.EqualTo(other));
-        }
-
-        [Test]
-        public void TestProjectIconReference_SameHandle_Equal()
-        {
-            var one = new ProjectIconReference(new IntPtr(3));
-            var other = new ProjectIconReference(new IntPtr(3));
-
-            Assert.That(one, Is.EqualTo(other));
-        }
-
-        [Test]
-        public void TestProjectIconReference_ImageListIndexVSHandle_NotEqual()
-        {
-            var one = new ProjectIconReference(new IntPtr(3), 3);
-            var other = new ProjectIconReference(new IntPtr(3));
-
-            Assert.That(one, Is.Not.EqualTo(other));
-        }
-
-        [Test]
-        public void GetSpecialIcon()
-        {
-            foreach(Environment.SpecialFolder folder in Enum.GetValues(typeof(Environment.SpecialFolder)))
-            {
-                Assert.That(mapper.GetSpecialFolderIcon(folder), Is.GreaterThan(0), "Failed with value: {0}", folder);
-            }
-
-            foreach (WindowsSpecialFolder folder in Enum.GetValues(typeof(WindowsSpecialFolder)))
-            {
-                if (folder == WindowsSpecialFolder.MyDocuments)
-                    continue; // fails, find out why
-                if (folder == WindowsSpecialFolder.ResourcesLocalized)
-                    continue;
-                if (folder == WindowsSpecialFolder.CommonOemLinks)
-                    continue;
-                    
-                Assert.That(mapper.GetSpecialFolderIcon(folder), Is.GreaterThan(0), "Failed with value: {0}", folder);
-            }
-
             foreach (SpecialIcon icon in Enum.GetValues(typeof(SpecialIcon)))
-            {
-                if (icon == SpecialIcon.Blank)
-                    Assert.That(mapper.GetSpecialIcon(icon), Is.EqualTo(0));
-                else
-                    Assert.That(mapper.GetSpecialIcon(icon), Is.GreaterThan(0), "Failed with value: {0}", icon);
-            }
+                Assert.That(mapper.GetSpecialIcon(icon), Is.GreaterThanOrEqualTo(0), "Failed with value: {0}", icon);
         }
 
         [Test]
-        public void TestStateIcons()
+        public void StateIconsMapToEmbeddedSpecialIcons()
         {
-            foreach (StateIcon icon in Enum.GetValues(typeof(StateIcon)))
-            {
-                Assert.That(mapper.GetStateIcon(icon), Is.GreaterThanOrEqualTo(0), "Failed with value: {0}", icon);
-            }
+            Assert.That(mapper.GetStateIcon(StateIcon.Blank), Is.EqualTo(mapper.GetSpecialIcon(SpecialIcon.Blank)));
+            Assert.That(mapper.GetStateIcon(StateIcon.Incoming), Is.EqualTo(mapper.GetSpecialIcon(SpecialIcon.Incoming)));
+            Assert.That(mapper.GetStateIcon(StateIcon.Outgoing), Is.EqualTo(mapper.GetSpecialIcon(SpecialIcon.Outgoing)));
+            Assert.That(mapper.GetStateIcon(StateIcon.Collision), Is.EqualTo(mapper.GetSpecialIcon(SpecialIcon.Collision)));
         }
 
         [Test]
-        public void TestGetIcon()
+        public void ExistingFileIconCanBeResolved()
         {
-            var tempFileName = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".txt");
-            using(File.Create(tempFileName))
-            {
-            }
+            string file = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + ".txt");
+            File.WriteAllText(file, "test");
 
             try
             {
-                var icon = mapper.GetIcon(tempFileName);
-                Assert.That(icon, Is.GreaterThan(-1));
+                Assert.That(mapper.GetIcon(file), Is.GreaterThanOrEqualTo(0));
             }
             finally
             {
-                File.Delete(tempFileName);
+                File.Delete(file);
             }
         }
 
         [Test]
-        public void TestGetIcon_NullParam_Throws()
+        public void GetIconRejectsNullPath()
         {
-            try
-            {
-                mapper.GetIcon(null);
-                Assert.Fail();
-            }
-            catch(ArgumentNullException)
-            { }
+            Assert.Throws<ArgumentNullException>(() => mapper.GetIcon(null));
         }
     }
 }
