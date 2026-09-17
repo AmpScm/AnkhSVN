@@ -19,6 +19,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Ankh.UI.PathSelector;
 using Ankh.UI.SccManagement;
+using Ankh.UI.WizardFramework;
 using NUnit.Framework;
 
 namespace Ankh.Tests.Regression
@@ -59,6 +60,27 @@ namespace Ankh.Tests.Regression
                 AssertButtonIsInsideClientArea(dialog, "okButton");
                 AssertButtonIsInsideClientArea(dialog, "cancelButton");
             }
+        }
+
+        [Test]
+        public void WizardFrameworkDesignerResourcesUseRuntimeNamespace()
+        {
+            string expectedResourceName = typeof(Wizard).FullName + ".resources";
+
+            CollectionAssert.Contains(
+                typeof(Wizard).Assembly.GetManifestResourceNames(),
+                expectedResourceName);
+
+            using (TestWizard wizard = new TestWizard())
+            {
+                Assert.NotNull(wizard.PageContainer);
+                Assert.Greater(wizard.ClientSize.Width, 0);
+                Assert.Greater(wizard.ClientSize.Height, 0);
+            }
+        }
+
+        sealed class TestWizard : Wizard
+        {
         }
 
         static Control GetControl(Form form, string fieldName)
