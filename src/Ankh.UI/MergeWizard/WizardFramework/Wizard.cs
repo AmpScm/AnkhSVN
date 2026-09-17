@@ -34,6 +34,7 @@ namespace Ankh.UI.WizardFramework
         readonly WizardPageCollection _pages;
         Image _defaultImage;
         bool _isMovingToPreviousPage;
+        bool _initialized;
 
         protected Wizard()
         {
@@ -61,14 +62,33 @@ namespace Ankh.UI.WizardFramework
                 InitializeDialog();
         }
 
+        protected override void OnBeforeShowDialog(EventArgs e)
+        {
+            // Visual Studio owns the modal-dialog host. Initialize the wizard before
+            // handing the form to that host so the page UI does not depend solely on
+            // the WinForms Load lifecycle being raised by a particular VS version.
+            InitializeDialog();
+
+            base.OnBeforeShowDialog(e);
+        }
+
         /// <summary>
-        /// Performance any pre-display initialization for the dialog,
+        /// Performs any pre-display initialization for the dialog,
         /// the wizard and the framework.
         /// </summary>
         private void InitializeDialog()
         {
+            if (_initialized)
+                return;
+
             AddPages();
-            ShowStartingPage();
+
+            WizardPage startingPage = StartingPage;
+            if (startingPage == null)
+                throw new InvalidOperationException("A wizard must contain at least one page before it is shown.");
+
+            ShowPage(startingPage);
+            _initialized = true;
         }
 
         /// <summary>
