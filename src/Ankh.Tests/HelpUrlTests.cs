@@ -25,7 +25,7 @@ namespace Ankh.Tests
         [TestCase("ctrlHelp", "Ankh.UI.PendingChanges.PendingCommitsPage")]
         public void HelpUrlsUseGitHubPages(string helpType, string dialogType)
         {
-            Type serviceType = typeof(AnkhCommand).Assembly.GetType("Ankh.Services.AnkhHelpService", true);
+            Type serviceType = Assembly.Load("Ankh").GetType("Ankh.Services.AnkhHelpService", true);
             MethodInfo builder = serviceType.GetMethod(
                 "BuildHelpUri",
                 BindingFlags.Static | BindingFlags.NonPublic);
