@@ -65,14 +65,27 @@ namespace Ankh.UI.SccManagement
                 throw new ArgumentNullException("repositoryRoot");
             if (candidate == null)
                 throw new ArgumentNullException("candidate");
+            if (!repositoryRoot.IsAbsoluteUri)
+                throw new ArgumentException("Repository root must be an absolute URI.", "repositoryRoot");
+            if (!candidate.IsAbsoluteUri)
+                throw new ArgumentException("Candidate must be an absolute URI.", "candidate");
 
-            Uri normalizedRoot = SvnTools.GetNormalizedUri(repositoryRoot);
-            Uri normalizedCandidate = SvnTools.GetNormalizedUri(candidate);
+            // This check is intentionally managed-only. Branch validation runs before
+            // the SharpSvn operation, and keeping it independent of SharpSvn's native
+            // runtime also makes the URL-boundary behavior directly unit testable.
+            if (!string.Equals(repositoryRoot.Scheme, candidate.Scheme, StringComparison.OrdinalIgnoreCase)
+                || !string.Equals(repositoryRoot.Host, candidate.Host, StringComparison.OrdinalIgnoreCase)
+                || repositoryRoot.Port != candidate.Port)
+            {
+                return false;
+            }
 
-            string root = normalizedRoot.AbsoluteUri.TrimEnd('/') + "/";
-            string value = normalizedCandidate.AbsoluteUri.TrimEnd('/') + "/";
+            string rootPath = repositoryRoot.GetComponents(UriComponents.Path, UriFormat.UriEscaped)
+                .TrimEnd('/') + "/";
+            string candidatePath = candidate.GetComponents(UriComponents.Path, UriFormat.UriEscaped)
+                .TrimEnd('/') + "/";
 
-            return value.StartsWith(root, StringComparison.Ordinal);
+            return candidatePath.StartsWith(rootPath, StringComparison.Ordinal);
         }
 
         public static bool TryGuessLayout(IAnkhServiceProvider context, Uri uri, out RepositoryLayoutInfo info)
