@@ -19,6 +19,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Ankh.UI.PathSelector;
 using Ankh.UI.SccManagement;
+using Ankh.UI.WizardFramework;
 using NUnit.Framework;
 
 namespace Ankh.Tests.Regression
@@ -58,6 +59,48 @@ namespace Ankh.Tests.Regression
                 Assert.GreaterOrEqual(dialog.Height, minimum.Height);
                 AssertButtonIsInsideClientArea(dialog, "okButton");
                 AssertButtonIsInsideClientArea(dialog, "cancelButton");
+            }
+        }
+
+        [Test]
+        public void WizardInitializesStartingPageBeforeVisualStudioHostsDialog()
+        {
+            using (TestWizard wizard = new TestWizard())
+            {
+                Assert.AreEqual(0, wizard.PageCount);
+
+                wizard.PrepareForShow();
+
+                Assert.AreEqual(1, wizard.PageCount);
+                Assert.AreSame(wizard.StartingPage, wizard.CurrentPage);
+                Assert.IsTrue(wizard.PageContainer.Controls.Contains(wizard.StartingPage));
+
+                // OnLoad can still run after Visual Studio begins hosting the dialog.
+                // Initialization must remain idempotent so pages are not duplicated.
+                wizard.PrepareForShow();
+
+                Assert.AreEqual(1, wizard.PageCount);
+                Assert.AreEqual(1, wizard.AddPagesCallCount);
+            }
+        }
+
+        sealed class TestWizard : Wizard
+        {
+            public int AddPagesCallCount { get; private set; }
+
+            public override void AddPages()
+            {
+                AddPagesCallCount++;
+                Pages.Add(new WizardPage
+                {
+                    IsPageComplete = true,
+                    Text = "Regression test page"
+                });
+            }
+
+            public void PrepareForShow()
+            {
+                base.OnBeforeShowDialog(EventArgs.Empty);
             }
         }
 
