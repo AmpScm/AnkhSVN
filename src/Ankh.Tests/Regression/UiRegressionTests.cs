@@ -91,16 +91,21 @@ namespace Ankh.Tests.Regression
             public override void AddPages()
             {
                 AddPagesCallCount++;
-                Pages.Add(new WizardPage
-                {
-                    IsPageComplete = true,
-                    Text = "Regression test page"
-                });
+                Pages.Add(new TestWizardPage());
             }
 
             public void PrepareForShow()
             {
                 base.OnBeforeShowDialog(EventArgs.Empty);
+            }
+        }
+
+        sealed class TestWizardPage : WizardPage
+        {
+            public TestWizardPage()
+            {
+                IsPageComplete = true;
+                Text = "Regression test page";
             }
         }
 
