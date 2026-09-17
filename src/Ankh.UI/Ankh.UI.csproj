@@ -26,6 +26,11 @@
     <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="MergeWizard\WizardFramework\Wizard.resx">
+      <LogicalName>Ankh.UI.WizardFramework.Wizard.resources</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
