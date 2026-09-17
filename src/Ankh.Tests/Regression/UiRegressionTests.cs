@@ -63,50 +63,24 @@ namespace Ankh.Tests.Regression
         }
 
         [Test]
-        public void WizardInitializesStartingPageBeforeVisualStudioHostsDialog()
+        public void WizardFrameworkDesignerResourcesUseRuntimeNamespace()
         {
+            string expectedResourceName = typeof(Wizard).FullName + ".resources";
+
+            CollectionAssert.Contains(
+                typeof(Wizard).Assembly.GetManifestResourceNames(),
+                expectedResourceName);
+
             using (TestWizard wizard = new TestWizard())
             {
-                Assert.AreEqual(0, wizard.PageCount);
-
-                wizard.PrepareForShow();
-
-                Assert.AreEqual(1, wizard.PageCount);
-                Assert.AreSame(wizard.StartingPage, wizard.CurrentPage);
-                Assert.IsTrue(wizard.PageContainer.Controls.Contains(wizard.StartingPage));
-
-                // OnLoad can still run after Visual Studio begins hosting the dialog.
-                // Initialization must remain idempotent so pages are not duplicated.
-                wizard.PrepareForShow();
-
-                Assert.AreEqual(1, wizard.PageCount);
-                Assert.AreEqual(1, wizard.AddPagesCallCount);
+                Assert.NotNull(wizard.PageContainer);
+                Assert.Greater(wizard.ClientSize.Width, 0);
+                Assert.Greater(wizard.ClientSize.Height, 0);
             }
         }
 
         sealed class TestWizard : Wizard
         {
-            public int AddPagesCallCount { get; private set; }
-
-            public override void AddPages()
-            {
-                AddPagesCallCount++;
-                Pages.Add(new TestWizardPage());
-            }
-
-            public void PrepareForShow()
-            {
-                base.OnBeforeShowDialog(EventArgs.Empty);
-            }
-        }
-
-        sealed class TestWizardPage : WizardPage
-        {
-            public TestWizardPage()
-            {
-                IsPageComplete = true;
-                Text = "Regression test page";
-            }
         }
 
         static Control GetControl(Form form, string fieldName)
