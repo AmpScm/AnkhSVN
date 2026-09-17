@@ -47,15 +47,88 @@ jobs:
         ${{ env.SOLUTION_FILE_PATH }}
         @build\scripts\msbuild-version.rsp
 
-    - name: Run Ankh.Tests
+    - name: Run Ankh.Tests with coverage
+      id: ankh_tests
+      continue-on-error: true
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: >
         dotnet test build/src/Ankh.Tests/Ankh.Tests.csproj
         --configuration Release
         --no-build
         --no-restore
+        --collect:"XPlat Code Coverage"
+        --results-directory "${{ github.workspace }}\TestResults\Ankh.Tests"
         --logger "console;verbosity=normal"
         -- RunConfiguration.TreatNoTestsAsError=true
+
+    - name: Run Ankh.VS.UnitTest with coverage
+      id: ankh_vs_tests
+      continue-on-error: true
+      working-directory: ${{ env.GITHUB_WORKSPACE }}
+      run: >
+        dotnet test build/src/Ankh.VS.UnitTest/Ankh.VS.UnitTest.csproj
+        --configuration Release
+        --no-build
+        --no-restore
+        --collect:"XPlat Code Coverage"
+        --results-directory "${{ github.workspace }}\TestResults\Ankh.VS.UnitTest"
+        --logger "console;verbosity=normal"
+        -- RunConfiguration.TreatNoTestsAsError=true
+
+    - name: Install ReportGenerator
+      if: always()
+      shell: pwsh
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.5.11
+
+    - name: Generate coverage report
+      if: always()
+      shell: pwsh
+      run: |
+        $coverageFiles = Get-ChildItem "${{ github.workspace }}\TestResults" -Recurse -Filter "coverage.cobertura.xml" -ErrorAction SilentlyContinue
+        if (-not $coverageFiles) {
+          throw "No Coverlet coverage.cobertura.xml files were produced."
+        }
+
+        $reports = ($coverageFiles.FullName -join ";")
+        Write-Host "Merging coverage reports:"
+        $coverageFiles | ForEach-Object { Write-Host "  $($_.FullName)" }
+
+        reportgenerator "-reports:$reports" "-targetdir:${{ github.workspace }}\CoverageReport" "-reporttypes:Html;Cobertura;MarkdownSummaryGithub"
+
+        $summary = "${{ github.workspace }}\CoverageReport\SummaryGithub.md"
+        if (Test-Path $summary) {
+          Get-Content $summary | Add-Content $env:GITHUB_STEP_SUMMARY
+        }
+
+    - name: Upload coverage report
+      if: always()
+      uses: actions/upload-artifact@v6
+      with:
+        name: AnkhSVN-Coverage-${{ github.run_number }}
+        path: |
+          TestResults
+          CoverageReport
+        if-no-files-found: error
+
+    - name: Verify test suites
+      if: always()
+      shell: pwsh
+      run: |
+        $failures = @()
+
+        if ("${{ steps.ankh_tests.outcome }}" -ne "success") {
+          $failures += "Ankh.Tests"
+        }
+
+        if ("${{ steps.ankh_vs_tests.outcome }}" -ne "success") {
+          $failures += "Ankh.VS.UnitTest"
+        }
+
+        if ($failures.Count -gt 0) {
+          throw ("Test suite failure(s): " + ($failures -join ", "))
+        }
+
+        Write-Host "Both test suites passed."
 
     - name: Verify VSIX contains Ankh.UI
       shell: pwsh
