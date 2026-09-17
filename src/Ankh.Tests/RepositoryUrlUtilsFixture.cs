@@ -88,6 +88,38 @@ namespace Ankh.Tests
             Assert.AreEqual(selectedBranchName, info.SelectedBranchName, "wrong branch name");
         }
 
+        [TestCase(
+            "https://svn.example.test/repos/project/",
+            "https://svn.example.test/repos/project/branches/feature/",
+            true,
+            TestName = "BranchDestinationInsideRepository")]
+        [TestCase(
+            "https://svn.example.test/repos/project/",
+            "https://svn.example.test/repos/project/trunk/subfolder/",
+            true,
+            TestName = "NestedDestinationInsideRepository")]
+        [TestCase(
+            "https://svn.example.test/repos/project/",
+            "https://svn.example.test/repos/other/branches/feature/",
+            false,
+            TestName = "SiblingRepositoryIsRejected")]
+        [TestCase(
+            "https://svn.example.test/repos/project/",
+            "https://other.example.test/repos/project/branches/feature/",
+            false,
+            TestName = "DifferentServerIsRejected")]
+        [TestCase(
+            "https://svn.example.test/repos/project/",
+            "https://svn.example.test/repos/project-other/branches/feature/",
+            false,
+            TestName = "SimilarRepositoryPrefixIsRejected")]
+        public void RepositoryDestinationValidation(string repositoryRoot, string destination, bool expected)
+        {
+            Assert.AreEqual(
+                expected,
+                RepositoryUrlUtils.IsWithinRepository(new Uri(repositoryRoot), new Uri(destination)));
+        }
+
         static RepositoryLayoutInfo GuessNormalizedLayout(Uri uri)
         {
             MethodInfo parser = typeof(RepositoryUrlUtils).GetMethod(
