@@ -32,20 +32,44 @@ namespace Ankh.Services
         }
         #region IAnkhDialogHelpService Members
 
+        const string HelpBaseUrl = "https://amp-scm.com/AnkhSVN/help/";
+
+        internal static Uri BuildHelpUri(string helpType, Version packageVersion, int lcid, string dialogHelpTypeName)
+        {
+            if (string.IsNullOrEmpty(helpType))
+                throw new ArgumentNullException("helpType");
+            if (packageVersion == null)
+                throw new ArgumentNullException("packageVersion");
+
+            UriBuilder ub = new UriBuilder(HelpBaseUrl);
+            ub.Query = string.Format(
+                CultureInfo.InvariantCulture,
+                "t={0}&v={1}&l={2}&dt={3}",
+                Uri.EscapeDataString(helpType),
+                Uri.EscapeDataString(packageVersion.ToString()),
+                lcid,
+                Uri.EscapeDataString(dialogHelpTypeName ?? string.Empty));
+
+            return ub.Uri;
+        }
+
         public void RunHelp(VSDialogForm form)
         {
-            UriBuilder ub = new UriBuilder("http://svc.ankhsvn.net/svc/go/");
-            ub.Query = string.Format("t=dlgHelp&v={0}&l={1}&dt={2}", GetService<IAnkhPackage>().PackageVersion, CultureInfo.CurrentUICulture.LCID, Uri.EscapeUriString(form.DialogHelpTypeName));
+            Uri uri = BuildHelpUri(
+                "dlgHelp",
+                GetService<IAnkhPackage>().PackageVersion,
+                CultureInfo.CurrentUICulture.LCID,
+                form.DialogHelpTypeName);
 
             try
             {
                 bool showHelpInBrowser = true;
                 IVsHelpSystem help = GetService<IVsHelpSystem>(typeof(SVsHelpService));
                 if (help != null)
-                    showHelpInBrowser = !VSErr.Succeeded(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (XCastUInt32)(uint)VHS_COMMAND.VHS_Default));
+                    showHelpInBrowser = !VSErr.Succeeded(help.DisplayTopicFromURL(uri.AbsoluteUri, (XCastUInt32)(uint)VHS_COMMAND.VHS_Default));
 
                 if (showHelpInBrowser)
-                    Help.ShowHelp(form, ub.Uri.AbsoluteUri);
+                    Help.ShowHelp(form, uri.AbsoluteUri);
             }
             catch (Exception ex)
             {
@@ -60,18 +84,21 @@ namespace Ankh.Services
 
         public void RunHelp(IAnkhControlWithHelp control)
         {
-            UriBuilder ub = new UriBuilder("http://svc.ankhsvn.net/svc/go/");
-            ub.Query = string.Format("t=ctrlHelp&v={0}&l={1}&dt={2}", GetService<IAnkhPackage>().PackageVersion, CultureInfo.CurrentUICulture.LCID, Uri.EscapeUriString(control.DialogHelpTypeName));
+            Uri uri = BuildHelpUri(
+                "ctrlHelp",
+                GetService<IAnkhPackage>().PackageVersion,
+                CultureInfo.CurrentUICulture.LCID,
+                control.DialogHelpTypeName);
 
             try
             {
                 bool showHelpInBrowser = true;
                 IVsHelpSystem help = GetService<IVsHelpSystem>(typeof(SVsHelpService));
                 if (help != null)
-                    showHelpInBrowser = !VSErr.Succeeded(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (XCastUInt32)(uint)VHS_COMMAND.VHS_Default));
+                    showHelpInBrowser = !VSErr.Succeeded(help.DisplayTopicFromURL(uri.AbsoluteUri, (XCastUInt32)(uint)VHS_COMMAND.VHS_Default));
 
                 if (showHelpInBrowser)
-                    Help.ShowHelp(control.Control, ub.Uri.AbsoluteUri);
+                    Help.ShowHelp(control.Control, uri.AbsoluteUri);
             }
             catch (Exception ex)
             {
