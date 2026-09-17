@@ -59,6 +59,22 @@ namespace Ankh.UI.SccManagement
 
     public static class RepositoryUrlUtils
     {
+        public static bool IsWithinRepository(Uri repositoryRoot, Uri candidate)
+        {
+            if (repositoryRoot == null)
+                throw new ArgumentNullException("repositoryRoot");
+            if (candidate == null)
+                throw new ArgumentNullException("candidate");
+
+            Uri normalizedRoot = SvnTools.GetNormalizedUri(repositoryRoot);
+            Uri normalizedCandidate = SvnTools.GetNormalizedUri(candidate);
+
+            string root = normalizedRoot.AbsoluteUri.TrimEnd('/') + "/";
+            string value = normalizedCandidate.AbsoluteUri.TrimEnd('/') + "/";
+
+            return value.StartsWith(root, StringComparison.Ordinal);
+        }
+
         public static bool TryGuessLayout(IAnkhServiceProvider context, Uri uri, out RepositoryLayoutInfo info)
         {
             if (context == null)

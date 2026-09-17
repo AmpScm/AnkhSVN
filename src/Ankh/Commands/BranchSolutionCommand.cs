@@ -103,6 +103,23 @@ namespace Ankh.Commands
 
                     string msg = dlg.LogMessage;
 
+                    Uri repositoryRoot = root.WorkingCopy != null ? root.WorkingCopy.RepositoryRoot : null;
+                    if (repositoryRoot != null && !RepositoryUrlUtils.IsWithinRepository(repositoryRoot, dlg.NewDirectoryName))
+                    {
+                        DialogResult differentRepository = new AnkhMessageBox(e.Context).Show(
+                            string.Format(
+                                "Subversion branches must be created inside the same repository as the source.\r\n\r\nSource repository:\r\n{0}\r\n\r\nBranch destination:\r\n{1}",
+                                repositoryRoot,
+                                dlg.NewDirectoryName),
+                            "Branch Destination Is In A Different Repository",
+                            MessageBoxButtons.RetryCancel);
+
+                        if (differentRepository == DialogResult.Retry)
+                            continue;
+
+                        return;
+                    }
+
                     bool retry = false;
                     bool ok = false;
                     ProgressRunnerResult rr =
