@@ -97,6 +97,7 @@ jobs:
         Write-Host "Creating AnkhSVN package version $version"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\package\out" | Out-Null
         Copy-Item "${{ github.workspace }}\build\src\Ankh.Package\bin\release\Ankh.Package.vsix" "${{ github.workspace }}\package\AnkhSVN-$version-VS2022.vsix"
+        Copy-Item "${{ github.workspace }}\build\README.md" "${{ github.workspace }}\package\README.md"
         @"
         <?xml version="1.0"?>
         <package>
@@ -108,6 +109,7 @@ jobs:
             <owners>AmpScm</owners>
             <requireLicenseAcceptance>false</requireLicenseAcceptance>
             <license type="expression">Apache-2.0</license>
+            <readme>README.md</readme>
             <projectUrl>https://github.com/${{ github.repository }}</projectUrl>
             <description>
               AnkhSVN Subversion integration for Visual Studio 2022.
@@ -118,6 +120,7 @@ jobs:
           </metadata>
           <files>
             <file src="AnkhSVN-$version-VS2022.vsix" target="tools\AnkhSVN-$version-VS2022.vsix" />
+            <file src="README.md" target="README.md" />
           </files>
         </package>
         "@ | Set-Content -Encoding UTF8 "${{ github.workspace }}\package\AnkhSVN.VSIX.2022.nuspec"
