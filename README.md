@@ -49,3 +49,8 @@ Contents:
   at https://github.com/ampscm/ankhsvn/
       
   Or use the discussion, issue, and pull request support on GitHub.
+
+
+## Issue status
+
+See [ISSUE_STATUS.md](ISSUE_STATUS.md) for the current upstream issue triage snapshot.
