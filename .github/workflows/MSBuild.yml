@@ -25,16 +25,14 @@ jobs:
         path: build
 
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
 
     - name: Add Subversion to PATH
       uses: ampscm/setup-subversion@v1
 
-    - name: Setup VSTest Path
-      uses: darenm/Setup-VSTest@v1
 
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v2
+      uses: NuGet/setup-nuget@v4.0
 
     - name: Setup version
       working-directory: build
