@@ -462,8 +462,8 @@ var assemblies = [
       { "name": "Ankh.Scc.AnkhSccModule", "rp": "Ankh.Scc_AnkhSccModule.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 56, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.Scc.Commands.MarkProjectDirty", "rp": "Ankh.Scc_MarkProjectDirty.html", "cl": 1, "ucl": 7, "cal": 8, "tl": 42, "cb": 0, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.Scc.Commands.PendingChangeTicker", "rp": "Ankh.Scc_PendingChangeTicker.html", "cl": 1, "ucl": 6, "cal": 7, "tl": 44, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Ankh.Scc.Commands.ProjectFileFilter", "rp": "Ankh.Scc_ProjectFileFilter.html", "cl": 0, "ucl": 14, "cal": 14, "tl": 63, "cb": 0, "tb": 16, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Ankh.Scc.Commands.SccCheckoutFailedProject", "rp": "Ankh.Scc_SccCheckoutFailedProject.html", "cl": 6, "ucl": 25, "cal": 31, "tl": 82, "cb": 2, "tb": 24, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Ankh.Scc.Commands.ProjectFileFilter", "rp": "Ankh.Scc_ProjectFileFilter.html", "cl": 6, "ucl": 8, "cal": 14, "tl": 63, "cb": 7, "tb": 16, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Ankh.Scc.Commands.SccCheckoutFailedProject", "rp": "Ankh.Scc_SccCheckoutFailedProject.html", "cl": 10, "ucl": 24, "cal": 34, "tl": 88, "cb": 4, "tb": 26, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.Scc.Commands.TaskFinisher", "rp": "Ankh.Scc_TaskFinisher.html", "cl": 1, "ucl": 10, "cal": 11, "tl": 50, "cb": 0, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.Scc.Commands.UnsupportedWcVersion", "rp": "Ankh.Scc_UnsupportedWcVersion.html", "cl": 1, "ucl": 12, "cal": 13, "tl": 55, "cb": 0, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.Scc.Native.PropertyBag", "rp": "Ankh.Scc_PropertyBag.html", "cl": 0, "ucl": 49, "cal": 49, "tl": 146, "cb": 0, "tb": 24, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -512,7 +512,7 @@ var assemblies = [
       { "name": "Ankh.Commands.CommandAttribute", "rp": "Ankh.Services_CommandAttribute.html", "cl": 22, "ucl": 9, "cal": 31, "tl": 169, "cb": 7, "tb": 12, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.Commands.CommandEventArgs", "rp": "Ankh.Services_CommandEventArgs.html", "cl": 3, "ucl": 14, "cal": 17, "tl": 75, "cb": 0, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.Commands.CommandMapItem", "rp": "Ankh.Services_CommandMapItem.html", "cl": 20, "ucl": 7, "cal": 27, "tl": 152, "cb": 5, "tb": 10, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Ankh.Commands.CommandMapper", "rp": "Ankh.Services_CommandMapper.html", "cl": 92, "ucl": 84, "cal": 176, "tl": 481, "cb": 74, "tb": 120, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Ankh.Commands.CommandMapper", "rp": "Ankh.Services_CommandMapper.html", "cl": 88, "ucl": 88, "cal": 176, "tl": 481, "cb": 72, "tb": 120, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.Commands.CommandResult", "rp": "Ankh.Services_CommandResult.html", "cl": 0, "ucl": 11, "cal": 11, "tl": 252, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.Commands.CommandUpdateEventArgs", "rp": "Ankh.Services_CommandUpdateEventArgs.html", "cl": 6, "ucl": 31, "cal": 37, "tl": 168, "cb": 0, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.Commands.SccCommandAttribute", "rp": "Ankh.Services_SccCommandAttribute.html", "cl": 3, "ucl": 3, "cal": 6, "tl": 40, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -766,7 +766,7 @@ var assemblies = [
       { "name": "Ankh.UI.SvnLog.BatchFinishedEventArgs", "rp": "Ankh.UI_BatchFinishedEventArgs.html", "cl": 0, "ucl": 8, "cal": 8, "tl": 41, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.UI.SvnLog.Commands.ChangeLogMessage", "rp": "Ankh.UI_ChangeLogMessage.html", "cl": 3, "ucl": 29, "cal": 32, "tl": 89, "cb": 2, "tb": 20, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.UI.SvnLog.Commands.CompareWithWorkingCopy", "rp": "Ankh.UI_CompareWithWorkingCopy.html", "cl": 4, "ucl": 24, "cal": 28, "tl": 83, "cb": 6, "tb": 16, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Ankh.UI.SvnLog.Commands.CopyRevision", "rp": "Ankh.UI_CopyRevision.html", "cl": 0, "ucl": 14, "cal": 14, "tl": 43, "cb": 0, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Ankh.UI.SvnLog.Commands.CopyRevision", "rp": "Ankh.UI_CopyRevision.html", "cl": 3, "ucl": 11, "cal": 14, "tl": 43, "cb": 2, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.UI.SvnLog.Commands.FetchAll", "rp": "Ankh.UI_FetchAll.html", "cl": 5, "ucl": 4, "cal": 9, "tl": 44, "cb": 4, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.UI.SvnLog.Commands.IncludeMergedRevisions", "rp": "Ankh.UI_IncludeMergedRevisions.html", "cl": 5, "ucl": 6, "cal": 11, "tl": 50, "cb": 3, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.UI.SvnLog.Commands.LogComboBox", "rp": "Ankh.UI_LogComboBox.html", "cl": 5, "ucl": 34, "cal": 39, "tl": 101, "cb": 3, "tb": 34, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -791,7 +791,7 @@ var assemblies = [
       { "name": "Ankh.UI.SvnLog.PathItem", "rp": "Ankh.UI_PathItem.html", "cl": 0, "ucl": 22, "cal": 22, "tl": 284, "cb": 0, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.UI.SvnLog.PathListViewItem", "rp": "Ankh.UI_PathListViewItem.html", "cl": 0, "ucl": 56, "cal": 56, "tl": 284, "cb": 0, "tb": 46, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.UI.VSSelectionControls.Commands.ListViewCommandBase", "rp": "Ankh.UI_ListViewCommandBase.html", "cl": 6, "ucl": 8, "cal": 14, "tl": 59, "cb": 2, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "Ankh.UI.VSSelectionControls.Commands.ListViewGroup", "rp": "Ankh.UI_ListViewGroup.html", "cl": 4, "ucl": 31, "cal": 35, "tl": 98, "cb": 2, "tb": 20, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Ankh.UI.VSSelectionControls.Commands.ListViewGroup", "rp": "Ankh.UI_ListViewGroup.html", "cl": 5, "ucl": 30, "cal": 35, "tl": 98, "cb": 3, "tb": 20, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.UI.VSSelectionControls.Commands.ListViewShow", "rp": "Ankh.UI_ListViewShow.html", "cl": 0, "ucl": 29, "cal": 29, "tl": 91, "cb": 0, "tb": 22, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.UI.VSSelectionControls.Commands.ListViewSort", "rp": "Ankh.UI_ListViewSort.html", "cl": 0, "ucl": 29, "cal": 29, "tl": 81, "cb": 0, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "Ankh.UI.VSSelectionControls.Commands.ListViewSortOrder", "rp": "Ankh.UI_ListViewSortOrder.html", "cl": 0, "ucl": 20, "cal": 20, "tl": 72, "cb": 0, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
@@ -2361,12 +2361,6 @@ var riskHotspots = [
       { "value": 16, "exceeded": true },
     ]},
   {
-    "assembly": "Ankh.Scc", "class": "Ankh.Scc.Commands.ProjectFileFilter", "reportPath": "Ankh.Scc_ProjectFileFilter.html", "methodName": "OnUpdate(Ankh.Commands.CommandUpdateEventArgs)", "methodShortName": "OnUpdate(...)", "fileIndex": 0, "line": 30,
-    "metrics": [
-      { "value": 272, "exceeded": true },
-      { "value": 16, "exceeded": true },
-    ]},
-  {
     "assembly": "Ankh.Scc", "class": "Ankh.Scc.OpenDocumentTracker", "reportPath": "Ankh.Scc_OpenDocumentTracker.html", "methodName": ".ctor(Ankh.Scc.OpenDocumentTracker,Ankh.HybridCollection\u00601\u003CSystem.String\u003E,Ankh.HybridCollection\u00601\u003CSystem.String\u003E,Ankh.HybridCollection\u00601\u003CSystem.String\u003E)", "methodShortName": ".ctor(...)", "fileIndex": 0, "line": 277,
     "metrics": [
       { "value": 272, "exceeded": true },
@@ -3261,7 +3255,7 @@ var riskHotspots = [
       { "value": 12, "exceeded": false },
     ]},
   {
-    "assembly": "Ankh.Scc", "class": "Ankh.Scc.Commands.SccCheckoutFailedProject", "reportPath": "Ankh.Scc_SccCheckoutFailedProject.html", "methodName": "OnExecute(Ankh.Commands.CommandEventArgs)", "methodShortName": "OnExecute(...)", "fileIndex": 0, "line": 52,
+    "assembly": "Ankh.Scc", "class": "Ankh.Scc.Commands.SccCheckoutFailedProject", "reportPath": "Ankh.Scc_SccCheckoutFailedProject.html", "methodName": "OnExecute(Ankh.Commands.CommandEventArgs)", "methodShortName": "OnExecute(...)", "fileIndex": 0, "line": 58,
     "metrics": [
       { "value": 156, "exceeded": true },
       { "value": 12, "exceeded": false },
@@ -5949,10 +5943,10 @@ var riskHotspots = [
       { "value": 40, "exceeded": true },
     ]},
   {
-    "assembly": "Ankh.Scc", "class": "Ankh.Scc.Commands.SccCheckoutFailedProject", "reportPath": "Ankh.Scc_SccCheckoutFailedProject.html", "methodName": "OnUpdate(Ankh.Commands.CommandUpdateEventArgs)", "methodShortName": "OnUpdate(...)", "fileIndex": 0, "line": 19,
+    "assembly": "Ankh.Scc", "class": "Ankh.Scc.Commands.ProjectFileFilter", "reportPath": "Ankh.Scc_ProjectFileFilter.html", "methodName": "OnUpdate(Ankh.Commands.CommandUpdateEventArgs)", "methodShortName": "OnUpdate(...)", "fileIndex": 0, "line": 30,
     "metrics": [
-      { "value": 55, "exceeded": true },
-      { "value": 12, "exceeded": false },
+      { "value": 56, "exceeded": true },
+      { "value": 16, "exceeded": true },
     ]},
   {
     "assembly": "Ankh", "class": "Ankh.Commands.ItemAddToPending", "reportPath": "Ankh_ItemAddToPending.html", "methodName": "OnUpdate(Ankh.Commands.CommandUpdateEventArgs)", "methodShortName": "OnUpdate(...)", "fileIndex": 0, "line": 48,
@@ -8037,6 +8031,12 @@ var riskHotspots = [
       { "value": 40, "exceeded": true },
     ]},
   {
+    "assembly": "Ankh.Scc", "class": "Ankh.Scc.Commands.SccCheckoutFailedProject", "reportPath": "Ankh.Scc_SccCheckoutFailedProject.html", "methodName": "OnUpdate(Ankh.Commands.CommandUpdateEventArgs)", "methodShortName": "OnUpdate(...)", "fileIndex": 0, "line": 19,
+    "metrics": [
+      { "value": 39, "exceeded": true },
+      { "value": 14, "exceeded": false },
+    ]},
+  {
     "assembly": "Ankh", "class": "Ankh.Commands.CreatePatch", "reportPath": "Ankh_CreatePatch.html", "methodName": "OnUpdate(Ankh.Commands.CommandUpdateEventArgs)", "methodShortName": "OnUpdate(...)", "fileIndex": 0, "line": 30,
     "metrics": [
       { "value": 32, "exceeded": true },
@@ -8051,7 +8051,7 @@ var riskHotspots = [
   {
     "assembly": "Ankh.Services", "class": "Ankh.Commands.CommandMapper", "reportPath": "Ankh.Services_CommandMapper.html", "methodName": "PerformUpdate(Ankh.AnkhCommand,Ankh.Commands.CommandUpdateEventArgs)", "methodShortName": "PerformUpdate(...)", "fileIndex": 0, "line": 52,
     "metrics": [
-      { "value": 23, "exceeded": false },
+      { "value": 30, "exceeded": false },
       { "value": 22, "exceeded": true },
     ]},
   {

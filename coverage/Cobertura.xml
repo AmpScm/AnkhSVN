@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage line-rate="0.03680967594705614" branch-rate="0.03853635942566003" lines-covered="1613" lines-valid="43820" branches-covered="832" branches-valid="21590" complexity="25656" version="0" timestamp="1789693604">
+<coverage line-rate="0.037035346735732375" branch-rate="0.038995924416450535" lines-covered="1623" lines-valid="43823" branches-covered="842" branches-valid="21592" complexity="25658" version="0" timestamp="1789693982">
   <sources>
     <source>D:\a\AnkhSVN\AnkhSVN\build\src\</source>
   </sources>
@@ -30026,7 +30026,7 @@
         </class>
       </classes>
     </package>
-    <package name="Ankh.Scc" line-rate="0.003088462386940216" branch-rate="0.001362862010221465" complexity="3154">
+    <package name="Ankh.Scc" line-rate="0.005291005291005291" branch-rate="0.004426285325161729" complexity="3156">
       <classes>
         <class name="Ankh.Scc.AnkhSccModule" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.Scc\AnkhSccModule.cs" line-rate="0" branch-rate="1" complexity="3">
           <methods>
@@ -30118,14 +30118,14 @@
             <line number="42" hits="0" branch="false" />
           </lines>
         </class>
-        <class name="Ankh.Scc.Commands.ProjectFileFilter" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.Scc\Commands\ProjectFileFilter.cs" line-rate="0" branch-rate="0" complexity="17">
+        <class name="Ankh.Scc.Commands.ProjectFileFilter" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.Scc\Commands\ProjectFileFilter.cs" line-rate="0.42857142857142855" branch-rate="0.4375" complexity="17">
           <methods>
-            <method name="OnUpdate" signature="(Ankh.Commands.CommandUpdateEventArgs)" line-rate="0" branch-rate="0" complexity="16">
+            <method name="OnUpdate" signature="(Ankh.Commands.CommandUpdateEventArgs)" line-rate="0.46153846153846156" branch-rate="0.4375" complexity="16">
               <lines>
-                <line number="30" hits="0" branch="true" condition-coverage="0% (0/2)" />
-                <line number="32" hits="0" branch="false" />
-                <line number="34" hits="0" branch="true" condition-coverage="0% (0/6)" />
-                <line number="36" hits="0" branch="false" />
+                <line number="30" hits="6" branch="true" condition-coverage="100% (2/2)" />
+                <line number="32" hits="2" branch="false" />
+                <line number="34" hits="2" branch="true" condition-coverage="83% (5/6)" />
+                <line number="36" hits="1" branch="false" />
                 <line number="39" hits="0" branch="true" condition-coverage="0% (0/4)" />
                 <line number="40" hits="0" branch="false" />
                 <line number="42" hits="0" branch="false" />
@@ -30133,8 +30133,8 @@
                 <line number="47" hits="0" branch="true" condition-coverage="0% (0/4)" />
                 <line number="48" hits="0" branch="false" />
                 <line number="50" hits="0" branch="false" />
-                <line number="53" hits="0" branch="false" />
-                <line number="54" hits="0" branch="false" />
+                <line number="53" hits="2" branch="false" />
+                <line number="54" hits="2" branch="false" />
               </lines>
             </method>
             <method name="OnExecute" signature="(Ankh.Commands.CommandEventArgs)" line-rate="0" branch-rate="1" complexity="1">
@@ -30144,10 +30144,10 @@
             </method>
           </methods>
           <lines>
-            <line number="30" hits="0" branch="true" condition-coverage="0% (0/2)" />
-            <line number="32" hits="0" branch="false" />
-            <line number="34" hits="0" branch="true" condition-coverage="0% (0/6)" />
-            <line number="36" hits="0" branch="false" />
+            <line number="30" hits="6" branch="true" condition-coverage="100% (2/2)" />
+            <line number="32" hits="2" branch="false" />
+            <line number="34" hits="2" branch="true" condition-coverage="83% (5/6)" />
+            <line number="36" hits="1" branch="false" />
             <line number="39" hits="0" branch="true" condition-coverage="0% (0/4)" />
             <line number="40" hits="0" branch="false" />
             <line number="42" hits="0" branch="false" />
@@ -30155,49 +30155,52 @@
             <line number="47" hits="0" branch="true" condition-coverage="0% (0/4)" />
             <line number="48" hits="0" branch="false" />
             <line number="50" hits="0" branch="false" />
-            <line number="53" hits="0" branch="false" />
-            <line number="54" hits="0" branch="false" />
+            <line number="53" hits="2" branch="false" />
+            <line number="54" hits="2" branch="false" />
             <line number="58" hits="0" branch="false" />
           </lines>
         </class>
-        <class name="Ankh.Scc.Commands.SccCheckoutFailedProject" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.Scc\Commands\SccCheckoutFailedProject.cs" line-rate="0.1935483870967742" branch-rate="0.08333333333333333" complexity="25">
+        <class name="Ankh.Scc.Commands.SccCheckoutFailedProject" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.Scc\Commands\SccCheckoutFailedProject.cs" line-rate="0.29411764705882354" branch-rate="0.15384615384615385" complexity="27">
           <methods>
-            <method name="OnUpdate" signature="(Ankh.Commands.CommandUpdateEventArgs)" line-rate="0.3333333333333333" branch-rate="0.16666666666666666" complexity="12">
+            <method name="OnUpdate" signature="(Ankh.Commands.CommandUpdateEventArgs)" line-rate="0.5" branch-rate="0.2857142857142857" complexity="14">
               <lines>
-                <line number="19" hits="2" branch="false" />
-                <line number="23" hits="2" branch="true" condition-coverage="50% (1/2)" />
-                <line number="25" hits="0" branch="false" />
-                <line number="26" hits="0" branch="false" />
+                <line number="19" hits="4" branch="false" />
+                <line number="23" hits="4" branch="true" condition-coverage="100% (2/2)" />
+                <line number="25" hits="2" branch="false" />
+                <line number="26" hits="2" branch="false" />
                 <line number="30" hits="2" branch="true" condition-coverage="50% (1/2)" />
                 <line number="31" hits="0" branch="false" />
                 <line number="34" hits="2" branch="false" />
-                <line number="35" hits="2" branch="false" />
-                <line number="36" hits="0" branch="true" condition-coverage="0% (0/2)" />
-                <line number="39" hits="0" branch="true" condition-coverage="0% (0/2)" />
+                <line number="35" hits="2" branch="true" condition-coverage="50% (1/2)" />
+                <line number="37" hits="2" branch="false" />
+                <line number="38" hits="2" branch="false" />
                 <line number="41" hits="0" branch="false" />
-                <line number="43" hits="0" branch="true" condition-coverage="0% (0/4)" />
-                <line number="44" hits="0" branch="false" />
+                <line number="42" hits="0" branch="true" condition-coverage="0% (0/2)" />
+                <line number="45" hits="0" branch="true" condition-coverage="0% (0/2)" />
                 <line number="47" hits="0" branch="false" />
-                <line number="48" hits="0" branch="false" />
+                <line number="49" hits="0" branch="true" condition-coverage="0% (0/4)" />
+                <line number="50" hits="0" branch="false" />
+                <line number="53" hits="0" branch="false" />
+                <line number="54" hits="0" branch="false" />
               </lines>
             </method>
             <method name="OnExecute" signature="(Ankh.Commands.CommandEventArgs)" line-rate="0" branch-rate="0" complexity="12">
               <lines>
-                <line number="52" hits="0" branch="false" />
-                <line number="53" hits="0" branch="false" />
-                <line number="55" hits="0" branch="true" condition-coverage="0% (0/2)" />
-                <line number="56" hits="0" branch="false" />
-                <line number="58" hits="0" branch="true" condition-coverage="0% (0/4)" />
+                <line number="58" hits="0" branch="false" />
+                <line number="59" hits="0" branch="false" />
+                <line number="61" hits="0" branch="true" condition-coverage="0% (0/2)" />
                 <line number="62" hits="0" branch="false" />
-                <line number="64" hits="0" branch="false" />
-                <line number="66" hits="0" branch="true" condition-coverage="0% (0/2)" />
-                <line number="67" hits="0" branch="false" />
-                <line number="70" hits="0" branch="true" condition-coverage="0% (0/2)" />
-                <line number="71" hits="0" branch="false" />
-                <line number="73" hits="0" branch="true" condition-coverage="0% (0/2)" />
-                <line number="74" hits="0" branch="false" />
+                <line number="64" hits="0" branch="true" condition-coverage="0% (0/4)" />
+                <line number="68" hits="0" branch="false" />
+                <line number="70" hits="0" branch="false" />
+                <line number="72" hits="0" branch="true" condition-coverage="0% (0/2)" />
+                <line number="73" hits="0" branch="false" />
+                <line number="76" hits="0" branch="true" condition-coverage="0% (0/2)" />
                 <line number="77" hits="0" branch="false" />
+                <line number="79" hits="0" branch="true" condition-coverage="0% (0/2)" />
                 <line number="80" hits="0" branch="false" />
+                <line number="83" hits="0" branch="false" />
+                <line number="86" hits="0" branch="false" />
               </lines>
             </method>
             <method name=".cctor" signature="()" line-rate="1" branch-rate="1" complexity="1">
@@ -30208,36 +30211,39 @@
           </methods>
           <lines>
             <line number="15" hits="1" branch="false" />
-            <line number="19" hits="2" branch="false" />
-            <line number="23" hits="2" branch="true" condition-coverage="50% (1/2)" />
-            <line number="25" hits="0" branch="false" />
-            <line number="26" hits="0" branch="false" />
+            <line number="19" hits="4" branch="false" />
+            <line number="23" hits="4" branch="true" condition-coverage="100% (2/2)" />
+            <line number="25" hits="2" branch="false" />
+            <line number="26" hits="2" branch="false" />
             <line number="30" hits="2" branch="true" condition-coverage="50% (1/2)" />
             <line number="31" hits="0" branch="false" />
             <line number="34" hits="2" branch="false" />
-            <line number="35" hits="2" branch="false" />
-            <line number="36" hits="0" branch="true" condition-coverage="0% (0/2)" />
-            <line number="39" hits="0" branch="true" condition-coverage="0% (0/2)" />
+            <line number="35" hits="2" branch="true" condition-coverage="50% (1/2)" />
+            <line number="37" hits="2" branch="false" />
+            <line number="38" hits="2" branch="false" />
             <line number="41" hits="0" branch="false" />
-            <line number="43" hits="0" branch="true" condition-coverage="0% (0/4)" />
-            <line number="44" hits="0" branch="false" />
+            <line number="42" hits="0" branch="true" condition-coverage="0% (0/2)" />
+            <line number="45" hits="0" branch="true" condition-coverage="0% (0/2)" />
             <line number="47" hits="0" branch="false" />
-            <line number="48" hits="0" branch="false" />
-            <line number="52" hits="0" branch="false" />
+            <line number="49" hits="0" branch="true" condition-coverage="0% (0/4)" />
+            <line number="50" hits="0" branch="false" />
             <line number="53" hits="0" branch="false" />
-            <line number="55" hits="0" branch="true" condition-coverage="0% (0/2)" />
-            <line number="56" hits="0" branch="false" />
-            <line number="58" hits="0" branch="true" condition-coverage="0% (0/4)" />
+            <line number="54" hits="0" branch="false" />
+            <line number="58" hits="0" branch="false" />
+            <line number="59" hits="0" branch="false" />
+            <line number="61" hits="0" branch="true" condition-coverage="0% (0/2)" />
             <line number="62" hits="0" branch="false" />
-            <line number="64" hits="0" branch="false" />
-            <line number="66" hits="0" branch="true" condition-coverage="0% (0/2)" />
-            <line number="67" hits="0" branch="false" />
-            <line number="70" hits="0" branch="true" condition-coverage="0% (0/2)" />
-            <line number="71" hits="0" branch="false" />
-            <line number="73" hits="0" branch="true" condition-coverage="0% (0/2)" />
-            <line number="74" hits="0" branch="false" />
+            <line number="64" hits="0" branch="true" condition-coverage="0% (0/4)" />
+            <line number="68" hits="0" branch="false" />
+            <line number="70" hits="0" branch="false" />
+            <line number="72" hits="0" branch="true" condition-coverage="0% (0/2)" />
+            <line number="73" hits="0" branch="false" />
+            <line number="76" hits="0" branch="true" condition-coverage="0% (0/2)" />
             <line number="77" hits="0" branch="false" />
+            <line number="79" hits="0" branch="true" condition-coverage="0% (0/2)" />
             <line number="80" hits="0" branch="false" />
+            <line number="83" hits="0" branch="false" />
+            <line number="86" hits="0" branch="false" />
           </lines>
         </class>
         <class name="Ankh.Scc.Commands.TaskFinisher" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.Scc\Commands\TaskFinisher.cs" line-rate="0.09090909090909091" branch-rate="0" complexity="7">
@@ -42113,7 +42119,7 @@
         </class>
       </classes>
     </package>
-    <package name="Ankh.Services" line-rate="0.0676368447163883" branch-rate="0.0516109785202864" complexity="4376">
+    <package name="Ankh.Services" line-rate="0.06697535968248719" branch-rate="0.05101431980906921" complexity="4376">
       <classes>
         <class name="Ankh.AnkhInstanceConditionalAttribute" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.Services\AnkhInstanceConditionalAttribute.cs" line-rate="0.4666666666666667" branch-rate="0.5" complexity="13">
           <methods>
@@ -42213,17 +42219,17 @@
             </method>
             <method name="GetService" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="125" hits="196" branch="false" />
+                <line number="125" hits="194" branch="false" />
               </lines>
             </method>
             <method name="GetService" signature="(System.Type)" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="138" hits="196" branch="false" />
+                <line number="138" hits="194" branch="false" />
               </lines>
             </method>
             <method name="GetService" signature="(System.Type)" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="155" hits="201" branch="false" />
+                <line number="155" hits="199" branch="false" />
               </lines>
             </method>
             <method name="get_CommandMapper" signature="()" line-rate="1" branch-rate="1" complexity="1">
@@ -42381,9 +42387,9 @@
                 <line number="100" hits="24" branch="false" />
                 <line number="108" hits="0" branch="false" />
                 <line number="109" hits="0" branch="false" />
-                <line number="125" hits="196" branch="false" />
-                <line number="138" hits="196" branch="false" />
-                <line number="155" hits="201" branch="false" />
+                <line number="125" hits="194" branch="false" />
+                <line number="138" hits="194" branch="false" />
+                <line number="155" hits="199" branch="false" />
                 <line number="166" hits="74" branch="false" />
                 <line number="175" hits="46" branch="false" />
                 <line number="178" hits="24" branch="false" />
@@ -42441,9 +42447,9 @@
             <line number="100" hits="24" branch="false" />
             <line number="108" hits="0" branch="false" />
             <line number="109" hits="0" branch="false" />
-            <line number="125" hits="196" branch="false" />
-            <line number="138" hits="196" branch="false" />
-            <line number="155" hits="201" branch="false" />
+            <line number="125" hits="194" branch="false" />
+            <line number="138" hits="194" branch="false" />
+            <line number="155" hits="199" branch="false" />
             <line number="166" hits="74" branch="false" />
             <line number="175" hits="46" branch="false" />
             <line number="178" hits="24" branch="false" />
@@ -44296,17 +44302,17 @@
           <methods>
             <method name="get_Command" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="40" hits="213" branch="false" />
+                <line number="40" hits="219" branch="false" />
               </lines>
             </method>
             <method name="get_Context" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="46" hits="434" branch="false" />
+                <line number="46" hits="444" branch="false" />
               </lines>
             </method>
             <method name="get_Selection" signature="()" line-rate="1" branch-rate="1" complexity="2">
               <lines>
-                <line number="58" hits="267" branch="true" condition-coverage="100% (2/2)" />
+                <line number="58" hits="277" branch="true" condition-coverage="100% (2/2)" />
               </lines>
             </method>
             <method name="get_State" signature="()" line-rate="1" branch-rate="1" complexity="2">
@@ -44325,7 +44331,7 @@
             </method>
             <method name="GetService" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="108" hits="102" branch="false" />
+                <line number="108" hits="104" branch="false" />
               </lines>
             </method>
             <method name="GetService" signature="(System.Type)" line-rate="0" branch-rate="1" complexity="1">
@@ -44343,41 +44349,41 @@
             </method>
             <method name="Prepare" signature="(Ankh.Commands.CommandMapItem)" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="144" hits="370" branch="false" />
-                <line number="145" hits="370" branch="false" />
+                <line number="144" hits="380" branch="false" />
+                <line number="145" hits="380" branch="false" />
               </lines>
             </method>
             <method name=".ctor" signature="(Ankh.AnkhCommand,Ankh.Services.AnkhContext)" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="31" hits="462" branch="false" />
-                <line number="33" hits="462" branch="false" />
-                <line number="34" hits="462" branch="false" />
-                <line number="35" hits="462" branch="false" />
+                <line number="31" hits="548" branch="false" />
+                <line number="33" hits="548" branch="false" />
+                <line number="34" hits="548" branch="false" />
+                <line number="35" hits="548" branch="false" />
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="31" hits="462" branch="false" />
-            <line number="33" hits="462" branch="false" />
-            <line number="34" hits="462" branch="false" />
-            <line number="35" hits="462" branch="false" />
-            <line number="40" hits="213" branch="false" />
-            <line number="46" hits="434" branch="false" />
-            <line number="58" hits="267" branch="true" condition-coverage="100% (2/2)" />
+            <line number="31" hits="548" branch="false" />
+            <line number="33" hits="548" branch="false" />
+            <line number="34" hits="548" branch="false" />
+            <line number="35" hits="548" branch="false" />
+            <line number="40" hits="219" branch="false" />
+            <line number="46" hits="444" branch="false" />
+            <line number="58" hits="277" branch="true" condition-coverage="100% (2/2)" />
             <line number="68" hits="187" branch="true" condition-coverage="100% (2/2)" />
             <line number="85" hits="0" branch="false" />
             <line number="87" hits="0" branch="true" condition-coverage="0% (0/2)" />
             <line number="91" hits="0" branch="true" condition-coverage="0% (0/2)" />
             <line number="92" hits="0" branch="false" />
             <line number="95" hits="0" branch="false" />
-            <line number="108" hits="102" branch="false" />
+            <line number="108" hits="104" branch="false" />
             <line number="121" hits="0" branch="false" />
             <line number="134" hits="0" branch="false" />
             <line number="136" hits="0" branch="true" condition-coverage="0% (0/2)" />
             <line number="137" hits="0" branch="false" />
             <line number="139" hits="0" branch="false" />
-            <line number="144" hits="370" branch="false" />
-            <line number="145" hits="370" branch="false" />
+            <line number="144" hits="380" branch="false" />
+            <line number="145" hits="380" branch="false" />
           </lines>
         </class>
         <class name="Ankh.Commands.CommandAttribute" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.Services\Commands\CommandAttribute.cs" line-rate="0.7096774193548387" branch-rate="0.5833333333333334" complexity="27">
@@ -44597,7 +44603,7 @@
             </method>
             <method name="get_ICommand" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="59" hits="1098" branch="false" />
+                <line number="59" hits="1130" branch="false" />
               </lines>
             </method>
             <method name="set_ICommand" signature="(Ankh.Commands.ICommandHandler)" line-rate="1" branch-rate="1" complexity="1">
@@ -44627,7 +44633,7 @@
             </method>
             <method name="get_DynamicMenuEnd" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="89" hits="356" branch="false" />
+                <line number="89" hits="368" branch="false" />
               </lines>
             </method>
             <method name="set_DynamicMenuEnd" signature="(System.Boolean)" line-rate="1" branch-rate="1" complexity="1">
@@ -44646,16 +44652,16 @@
             </method>
             <method name="OnUpdate" signature="(Ankh.Commands.CommandUpdateEventArgs)" line-rate="0.8" branch-rate="0.75" complexity="4">
               <lines>
-                <line number="112" hits="370" branch="true" condition-coverage="100% (2/2)" />
-                <line number="113" hits="370" branch="false" />
-                <line number="115" hits="368" branch="true" condition-coverage="50% (1/2)" />
+                <line number="112" hits="380" branch="true" condition-coverage="100% (2/2)" />
+                <line number="113" hits="380" branch="false" />
+                <line number="115" hits="380" branch="true" condition-coverage="50% (1/2)" />
                 <line number="116" hits="0" branch="false" />
-                <line number="117" hits="368" branch="false" />
+                <line number="117" hits="380" branch="false" />
               </lines>
             </method>
             <method name="get_Availability" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="126" hits="595" branch="false" />
+                <line number="126" hits="611" branch="false" />
               </lines>
             </method>
             <method name="set_Availability" signature="(Ankh.Commands.CommandAvailability)" line-rate="1" branch-rate="1" complexity="1">
@@ -44665,7 +44671,7 @@
             </method>
             <method name="get_HiddenWhenDisabled" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="137" hits="356" branch="false" />
+                <line number="137" hits="368" branch="false" />
               </lines>
             </method>
             <method name="set_HiddenWhenDisabled" signature="(System.Boolean)" line-rate="1" branch-rate="1" complexity="1">
@@ -44675,7 +44681,7 @@
             </method>
             <method name="get_IsHandled" signature="()" line-rate="1" branch-rate="0.5" complexity="2">
               <lines>
-                <line number="149" hits="356" branch="true" condition-coverage="50% (1/2)" />
+                <line number="149" hits="368" branch="true" condition-coverage="50% (1/2)" />
               </lines>
             </method>
             <method name=".ctor" signature="(Ankh.AnkhCommand)" line-rate="1" branch-rate="1" complexity="1">
@@ -44691,67 +44697,67 @@
             <line number="41" hits="9120" branch="false" />
             <line number="42" hits="9120" branch="false" />
             <line number="50" hits="0" branch="false" />
-            <line number="59" hits="1098" branch="false" />
+            <line number="59" hits="1130" branch="false" />
             <line number="60" hits="18048" branch="false" />
             <line number="69" hits="0" branch="false" />
             <line number="70" hits="18048" branch="false" />
             <line number="79" hits="0" branch="false" />
             <line number="80" hits="18048" branch="false" />
-            <line number="89" hits="356" branch="false" />
+            <line number="89" hits="368" branch="false" />
             <line number="90" hits="192" branch="false" />
             <line number="99" hits="1" branch="true" condition-coverage="50% (1/2)" />
             <line number="100" hits="1" branch="false" />
             <line number="102" hits="0" branch="true" condition-coverage="0% (0/2)" />
             <line number="103" hits="0" branch="false" />
             <line number="104" hits="0" branch="false" />
-            <line number="112" hits="370" branch="true" condition-coverage="100% (2/2)" />
-            <line number="113" hits="370" branch="false" />
-            <line number="115" hits="368" branch="true" condition-coverage="50% (1/2)" />
+            <line number="112" hits="380" branch="true" condition-coverage="100% (2/2)" />
+            <line number="113" hits="380" branch="false" />
+            <line number="115" hits="380" branch="true" condition-coverage="50% (1/2)" />
             <line number="116" hits="0" branch="false" />
-            <line number="117" hits="368" branch="false" />
-            <line number="126" hits="595" branch="false" />
+            <line number="117" hits="380" branch="false" />
+            <line number="126" hits="611" branch="false" />
             <line number="127" hits="18048" branch="false" />
-            <line number="137" hits="356" branch="false" />
+            <line number="137" hits="368" branch="false" />
             <line number="138" hits="18048" branch="false" />
-            <line number="149" hits="356" branch="true" condition-coverage="50% (1/2)" />
+            <line number="149" hits="368" branch="true" condition-coverage="50% (1/2)" />
           </lines>
         </class>
-        <class name="Ankh.Commands.CommandMapper" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.Services\Commands\CommandMapper.cs" line-rate="0.5227272727272727" branch-rate="0.6166666666666667" complexity="131">
+        <class name="Ankh.Commands.CommandMapper" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.Services\Commands\CommandMapper.cs" line-rate="0.5" branch-rate="0.6" complexity="131">
           <methods>
             <method name="get_States" signature="()" line-rate="1" branch-rate="1" complexity="2">
               <lines>
-                <line number="47" hits="229" branch="true" condition-coverage="100% (2/2)" />
+                <line number="47" hits="235" branch="true" condition-coverage="100% (2/2)" />
               </lines>
             </method>
-            <method name="PerformUpdate" signature="(Ankh.AnkhCommand,Ankh.Commands.CommandUpdateEventArgs)" line-rate="0.8928571428571429" branch-rate="0.9090909090909091" complexity="22">
+            <method name="PerformUpdate" signature="(Ankh.AnkhCommand,Ankh.Commands.CommandUpdateEventArgs)" line-rate="0.75" branch-rate="0.8181818181818182" complexity="22">
               <lines>
-                <line number="52" hits="422" branch="false" />
-                <line number="55" hits="422" branch="true" condition-coverage="100% (2/2)" />
-                <line number="58" hits="358" branch="true" condition-coverage="100% (2/2)" />
-                <line number="59" hits="121" branch="false" />
-                <line number="60" hits="237" branch="true" condition-coverage="100% (4/4)" />
-                <line number="61" hits="229" branch="false" />
+                <line number="52" hits="508" branch="false" />
+                <line number="55" hits="508" branch="true" condition-coverage="100% (2/2)" />
+                <line number="58" hits="368" branch="true" condition-coverage="100% (2/2)" />
+                <line number="59" hits="125" branch="false" />
+                <line number="60" hits="243" branch="true" condition-coverage="100% (4/4)" />
+                <line number="61" hits="235" branch="false" />
                 <line number="63" hits="8" branch="false" />
-                <line number="65" hits="358" branch="true" condition-coverage="100% (2/2)" />
+                <line number="65" hits="368" branch="true" condition-coverage="100% (2/2)" />
                 <line number="66" hits="8" branch="false" />
-                <line number="70" hits="350" branch="false" />
-                <line number="72" hits="350" branch="false" />
-                <line number="73" hits="348" branch="false" />
-                <line number="74" hits="2" branch="false" />
-                <line number="76" hits="2" branch="false" />
-                <line number="78" hits="2" branch="true" condition-coverage="50% (2/4)" />
+                <line number="70" hits="360" branch="false" />
+                <line number="72" hits="360" branch="false" />
+                <line number="73" hits="360" branch="false" />
+                <line number="74" hits="0" branch="false" />
+                <line number="76" hits="0" branch="false" />
+                <line number="78" hits="0" branch="true" condition-coverage="0% (0/4)" />
                 <line number="80" hits="0" branch="false" />
                 <line number="81" hits="0" branch="false" />
-                <line number="84" hits="2" branch="false" />
-                <line number="87" hits="356" branch="true" condition-coverage="100% (4/4)" />
-                <line number="88" hits="283" branch="false" />
-                <line number="90" hits="356" branch="true" condition-coverage="100% (2/2)" />
+                <line number="84" hits="0" branch="false" />
+                <line number="87" hits="368" branch="true" condition-coverage="100% (4/4)" />
+                <line number="88" hits="293" branch="false" />
+                <line number="90" hits="368" branch="true" condition-coverage="100% (2/2)" />
                 <line number="91" hits="8" branch="false" />
-                <line number="93" hits="356" branch="false" />
-                <line number="95" hits="64" branch="true" condition-coverage="100% (2/2)" />
+                <line number="93" hits="368" branch="false" />
+                <line number="95" hits="140" branch="true" condition-coverage="100% (2/2)" />
                 <line number="97" hits="54" branch="false" />
                 <line number="98" hits="54" branch="false" />
-                <line number="101" hits="10" branch="false" />
+                <line number="101" hits="86" branch="false" />
                 <line number="102" hits="0" branch="false" />
               </lines>
             </method>
@@ -44807,8 +44813,8 @@
             </method>
             <method name="EnsureLoaded" signature="()" line-rate="0.9705882352941176" branch-rate="0.975" complexity="40">
               <lines>
-                <line number="201" hits="442" branch="true" condition-coverage="100% (2/2)" />
-                <line number="202" hits="418" branch="false" />
+                <line number="201" hits="528" branch="true" condition-coverage="100% (2/2)" />
+                <line number="202" hits="504" branch="false" />
                 <line number="204" hits="24" branch="true" condition-coverage="100% (2/2)" />
                 <line number="206" hits="10272" branch="true" condition-coverage="100% (2/2)" />
                 <line number="208" hits="5112" branch="true" condition-coverage="100% (2/2)" />
@@ -44931,7 +44937,7 @@
                 <line number="477" hits="0" branch="false" />
               </lines>
             </method>
-            <method name=".ctor" signature="(Ankh.IAnkhServiceProvider)" line-rate="0.7313432835820896" branch-rate="0.7777777777777778" complexity="1">
+            <method name=".ctor" signature="(Ankh.IAnkhServiceProvider)" line-rate="0.6716417910447762" branch-rate="0.7222222222222222" complexity="1">
               <lines>
                 <line number="34" hits="24" branch="false" />
                 <line number="36" hits="24" branch="false" />
@@ -44939,34 +44945,34 @@
                 <line number="39" hits="0" branch="false" />
                 <line number="41" hits="0" branch="false" />
                 <line number="42" hits="0" branch="false" />
-                <line number="47" hits="229" branch="true" condition-coverage="100% (2/2)" />
-                <line number="52" hits="422" branch="false" />
-                <line number="55" hits="422" branch="true" condition-coverage="100% (2/2)" />
-                <line number="58" hits="358" branch="true" condition-coverage="100% (2/2)" />
-                <line number="59" hits="121" branch="false" />
-                <line number="60" hits="237" branch="true" condition-coverage="100% (4/4)" />
-                <line number="61" hits="229" branch="false" />
+                <line number="47" hits="235" branch="true" condition-coverage="100% (2/2)" />
+                <line number="52" hits="508" branch="false" />
+                <line number="55" hits="508" branch="true" condition-coverage="100% (2/2)" />
+                <line number="58" hits="368" branch="true" condition-coverage="100% (2/2)" />
+                <line number="59" hits="125" branch="false" />
+                <line number="60" hits="243" branch="true" condition-coverage="100% (4/4)" />
+                <line number="61" hits="235" branch="false" />
                 <line number="63" hits="8" branch="false" />
-                <line number="65" hits="358" branch="true" condition-coverage="100% (2/2)" />
+                <line number="65" hits="368" branch="true" condition-coverage="100% (2/2)" />
                 <line number="66" hits="8" branch="false" />
-                <line number="70" hits="350" branch="false" />
-                <line number="72" hits="350" branch="false" />
-                <line number="73" hits="348" branch="false" />
-                <line number="74" hits="2" branch="false" />
-                <line number="76" hits="2" branch="false" />
-                <line number="78" hits="2" branch="true" condition-coverage="50% (2/4)" />
+                <line number="70" hits="360" branch="false" />
+                <line number="72" hits="360" branch="false" />
+                <line number="73" hits="360" branch="false" />
+                <line number="74" hits="0" branch="false" />
+                <line number="76" hits="0" branch="false" />
+                <line number="78" hits="0" branch="true" condition-coverage="0% (0/4)" />
                 <line number="80" hits="0" branch="false" />
                 <line number="81" hits="0" branch="false" />
-                <line number="84" hits="2" branch="false" />
-                <line number="87" hits="356" branch="true" condition-coverage="100% (4/4)" />
-                <line number="88" hits="283" branch="false" />
-                <line number="90" hits="356" branch="true" condition-coverage="100% (2/2)" />
+                <line number="84" hits="0" branch="false" />
+                <line number="87" hits="368" branch="true" condition-coverage="100% (4/4)" />
+                <line number="88" hits="293" branch="false" />
+                <line number="90" hits="368" branch="true" condition-coverage="100% (2/2)" />
                 <line number="91" hits="8" branch="false" />
-                <line number="93" hits="356" branch="false" />
-                <line number="95" hits="64" branch="true" condition-coverage="100% (2/2)" />
+                <line number="93" hits="368" branch="false" />
+                <line number="95" hits="140" branch="true" condition-coverage="100% (2/2)" />
                 <line number="97" hits="54" branch="false" />
                 <line number="98" hits="54" branch="false" />
-                <line number="101" hits="10" branch="false" />
+                <line number="101" hits="86" branch="false" />
                 <line number="102" hits="0" branch="false" />
                 <line number="106" hits="20" branch="false" />
                 <line number="109" hits="20" branch="true" condition-coverage="50% (1/2)" />
@@ -45059,34 +45065,34 @@
             <line number="39" hits="0" branch="false" />
             <line number="41" hits="0" branch="false" />
             <line number="42" hits="0" branch="false" />
-            <line number="47" hits="229" branch="true" condition-coverage="100% (2/2)" />
-            <line number="52" hits="422" branch="false" />
-            <line number="55" hits="422" branch="true" condition-coverage="100% (2/2)" />
-            <line number="58" hits="358" branch="true" condition-coverage="100% (2/2)" />
-            <line number="59" hits="121" branch="false" />
-            <line number="60" hits="237" branch="true" condition-coverage="100% (4/4)" />
-            <line number="61" hits="229" branch="false" />
+            <line number="47" hits="235" branch="true" condition-coverage="100% (2/2)" />
+            <line number="52" hits="508" branch="false" />
+            <line number="55" hits="508" branch="true" condition-coverage="100% (2/2)" />
+            <line number="58" hits="368" branch="true" condition-coverage="100% (2/2)" />
+            <line number="59" hits="125" branch="false" />
+            <line number="60" hits="243" branch="true" condition-coverage="100% (4/4)" />
+            <line number="61" hits="235" branch="false" />
             <line number="63" hits="8" branch="false" />
-            <line number="65" hits="358" branch="true" condition-coverage="100% (2/2)" />
+            <line number="65" hits="368" branch="true" condition-coverage="100% (2/2)" />
             <line number="66" hits="8" branch="false" />
-            <line number="70" hits="350" branch="false" />
-            <line number="72" hits="350" branch="false" />
-            <line number="73" hits="348" branch="false" />
-            <line number="74" hits="2" branch="false" />
-            <line number="76" hits="2" branch="false" />
-            <line number="78" hits="2" branch="true" condition-coverage="50% (2/4)" />
+            <line number="70" hits="360" branch="false" />
+            <line number="72" hits="360" branch="false" />
+            <line number="73" hits="360" branch="false" />
+            <line number="74" hits="0" branch="false" />
+            <line number="76" hits="0" branch="false" />
+            <line number="78" hits="0" branch="true" condition-coverage="0% (0/4)" />
             <line number="80" hits="0" branch="false" />
             <line number="81" hits="0" branch="false" />
-            <line number="84" hits="2" branch="false" />
-            <line number="87" hits="356" branch="true" condition-coverage="100% (4/4)" />
-            <line number="88" hits="283" branch="false" />
-            <line number="90" hits="356" branch="true" condition-coverage="100% (2/2)" />
+            <line number="84" hits="0" branch="false" />
+            <line number="87" hits="368" branch="true" condition-coverage="100% (4/4)" />
+            <line number="88" hits="293" branch="false" />
+            <line number="90" hits="368" branch="true" condition-coverage="100% (2/2)" />
             <line number="91" hits="8" branch="false" />
-            <line number="93" hits="356" branch="false" />
-            <line number="95" hits="64" branch="true" condition-coverage="100% (2/2)" />
+            <line number="93" hits="368" branch="false" />
+            <line number="95" hits="140" branch="true" condition-coverage="100% (2/2)" />
             <line number="97" hits="54" branch="false" />
             <line number="98" hits="54" branch="false" />
-            <line number="101" hits="10" branch="false" />
+            <line number="101" hits="86" branch="false" />
             <line number="102" hits="0" branch="false" />
             <line number="106" hits="20" branch="false" />
             <line number="109" hits="20" branch="true" condition-coverage="50% (1/2)" />
@@ -45125,8 +45131,8 @@
             <line number="195" hits="50" branch="true" condition-coverage="100% (4/4)" />
             <line number="196" hits="50" branch="false" />
             <line number="197" hits="50" branch="false" />
-            <line number="201" hits="442" branch="true" condition-coverage="100% (2/2)" />
-            <line number="202" hits="418" branch="false" />
+            <line number="201" hits="528" branch="true" condition-coverage="100% (2/2)" />
+            <line number="202" hits="504" branch="false" />
             <line number="204" hits="24" branch="true" condition-coverage="100% (2/2)" />
             <line number="206" hits="10272" branch="true" condition-coverage="100% (2/2)" />
             <line number="208" hits="5112" branch="true" condition-coverage="100% (2/2)" />
@@ -45283,12 +45289,12 @@
           <methods>
             <method name="get_Enabled" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="58" hits="360" branch="false" />
+                <line number="58" hits="372" branch="false" />
               </lines>
             </method>
             <method name="set_Enabled" signature="(System.Boolean)" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="59" hits="768" branch="false" />
+                <line number="59" hits="788" branch="false" />
               </lines>
             </method>
             <method name="get_Visible" signature="()" line-rate="0" branch-rate="1" complexity="1">
@@ -45298,7 +45304,7 @@
             </method>
             <method name="set_Visible" signature="(System.Boolean)" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="68" hits="710" branch="false" />
+                <line number="68" hits="734" branch="false" />
               </lines>
             </method>
             <method name="get_HideOnContextMenu" signature="()" line-rate="0" branch-rate="1" complexity="1">
@@ -45390,8 +45396,8 @@
             </method>
             <method name=".ctor" signature="(Ankh.AnkhCommand,Ankh.Services.AnkhContext)" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="49" hits="442" branch="false" />
-                <line number="51" hits="442" branch="false" />
+                <line number="49" hits="528" branch="false" />
+                <line number="51" hits="528" branch="false" />
               </lines>
             </method>
           </methods>
@@ -45399,12 +45405,12 @@
             <line number="43" hits="0" branch="false" />
             <line number="45" hits="0" branch="false" />
             <line number="46" hits="0" branch="false" />
-            <line number="49" hits="442" branch="false" />
-            <line number="51" hits="442" branch="false" />
-            <line number="58" hits="360" branch="false" />
-            <line number="59" hits="768" branch="false" />
+            <line number="49" hits="528" branch="false" />
+            <line number="51" hits="528" branch="false" />
+            <line number="58" hits="372" branch="false" />
+            <line number="59" hits="788" branch="false" />
             <line number="67" hits="0" branch="false" />
-            <line number="68" hits="710" branch="false" />
+            <line number="68" hits="734" branch="false" />
             <line number="73" hits="0" branch="false" />
             <line number="74" hits="0" branch="false" />
             <line number="83" hits="0" branch="false" />
@@ -46162,11 +46168,11 @@
             </method>
             <method name="IsEmpty" signature="(System.Collections.Generic.IEnumerable`1&lt;T&gt;)" line-rate="0.5" branch-rate="0.5" complexity="4">
               <lines>
-                <line number="79" hits="4" branch="true" condition-coverage="50% (1/2)" />
+                <line number="79" hits="6" branch="true" condition-coverage="50% (1/2)" />
                 <line number="80" hits="0" branch="false" />
-                <line number="82" hits="8" branch="true" condition-coverage="50% (1/2)" />
+                <line number="82" hits="12" branch="true" condition-coverage="50% (1/2)" />
                 <line number="83" hits="0" branch="false" />
-                <line number="84" hits="4" branch="false" />
+                <line number="84" hits="6" branch="false" />
                 <line number="85" hits="0" branch="false" />
               </lines>
             </method>
@@ -46195,11 +46201,11 @@
             <line number="73" hits="0" branch="false" />
             <line number="74" hits="0" branch="false" />
             <line number="75" hits="0" branch="false" />
-            <line number="79" hits="4" branch="true" condition-coverage="50% (1/2)" />
+            <line number="79" hits="6" branch="true" condition-coverage="50% (1/2)" />
             <line number="80" hits="0" branch="false" />
-            <line number="82" hits="8" branch="true" condition-coverage="50% (1/2)" />
+            <line number="82" hits="12" branch="true" condition-coverage="50% (1/2)" />
             <line number="83" hits="0" branch="false" />
-            <line number="84" hits="4" branch="false" />
+            <line number="84" hits="6" branch="false" />
             <line number="85" hits="0" branch="false" />
           </lines>
         </class>
@@ -56163,7 +56169,7 @@
             </method>
             <method name="GetService" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="101" hits="164" branch="false" />
+                <line number="101" hits="166" branch="false" />
               </lines>
             </method>
             <method name="GetService" signature="(System.Type)" line-rate="0" branch-rate="1" complexity="1">
@@ -56183,7 +56189,7 @@
             </method>
             <method name="get_Selection" signature="()" line-rate="1" branch-rate="1" complexity="2">
               <lines>
-                <line number="141" hits="241" branch="true" condition-coverage="100% (2/2)" />
+                <line number="141" hits="249" branch="true" condition-coverage="100% (2/2)" />
               </lines>
             </method>
             <method name=".ctor" signature="(Ankh.IAnkhServiceProvider)" line-rate="0.8" branch-rate="0.5" complexity="2">
@@ -56214,11 +56220,11 @@
             <line number="83" hits="0" branch="true" condition-coverage="0% (0/2)" />
             <line number="84" hits="0" branch="false" />
             <line number="86" hits="0" branch="false" />
-            <line number="101" hits="164" branch="false" />
+            <line number="101" hits="166" branch="false" />
             <line number="114" hits="0" branch="false" />
             <line number="127" hits="0" branch="false" />
             <line number="134" hits="61" branch="true" condition-coverage="100% (2/2)" />
-            <line number="141" hits="241" branch="true" condition-coverage="100% (2/2)" />
+            <line number="141" hits="249" branch="true" condition-coverage="100% (2/2)" />
           </lines>
         </class>
         <class name="Ankh.Services.VSErr" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.Services\VSErr.cs" line-rate="0" branch-rate="0" complexity="13">
@@ -61401,7 +61407,7 @@
         </class>
       </classes>
     </package>
-    <package name="Ankh.UI" line-rate="0.038710740171315615" branch-rate="0.033719548425430776" complexity="8350">
+    <package name="Ankh.UI" line-rate="0.03893037557654294" branch-rate="0.034165181224004755" complexity="8350">
       <classes>
         <class name="Ankh.UI.AddRepositoryRootDialog" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.UI\RepositoryExplorer\AddRepositoryRootDialog.cs" line-rate="0" branch-rate="0" complexity="20">
           <methods>
@@ -80512,12 +80518,12 @@
             </method>
             <method name="TryGetMarker" signature="(Ankh.Commands.BaseCommandEventArgs,System.Boolean,Ankh.VS.TextMarker&amp;)" line-rate="0.14634146341463414" branch-rate="0.07142857142857142" complexity="28">
               <lines>
-                <line number="52" hits="2" branch="false" />
-                <line number="53" hits="2" branch="false" />
-                <line number="55" hits="2" branch="true" condition-coverage="50% (1/2)" />
-                <line number="57" hits="2" branch="false" />
-                <line number="59" hits="2" branch="true" condition-coverage="50% (1/2)" />
-                <line number="60" hits="2" branch="false" />
+                <line number="52" hits="4" branch="false" />
+                <line number="53" hits="4" branch="false" />
+                <line number="55" hits="4" branch="true" condition-coverage="50% (1/2)" />
+                <line number="57" hits="4" branch="false" />
+                <line number="59" hits="4" branch="true" condition-coverage="50% (1/2)" />
+                <line number="60" hits="4" branch="false" />
                 <line number="62" hits="0" branch="false" />
                 <line number="66" hits="0" branch="true" condition-coverage="0% (0/2)" />
                 <line number="67" hits="0" branch="false" />
@@ -80557,9 +80563,9 @@
             </method>
             <method name="OnUpdate" signature="(Ankh.Commands.CommandUpdateEventArgs)" line-rate="1" branch-rate="1" complexity="2">
               <lines>
-                <line number="132" hits="2" branch="true" condition-coverage="100% (2/2)" />
-                <line number="133" hits="2" branch="false" />
-                <line number="134" hits="2" branch="false" />
+                <line number="132" hits="4" branch="true" condition-coverage="100% (2/2)" />
+                <line number="133" hits="4" branch="false" />
+                <line number="134" hits="4" branch="false" />
               </lines>
             </method>
             <method name="OnExecute" signature="(Ankh.Commands.CommandEventArgs)" line-rate="0" branch-rate="0" complexity="12">
@@ -80591,12 +80597,12 @@
             <line number="42" hits="0" branch="true" condition-coverage="0% (0/2)" />
             <line number="43" hits="0" branch="false" />
             <line number="45" hits="0" branch="false" />
-            <line number="52" hits="2" branch="false" />
-            <line number="53" hits="2" branch="false" />
-            <line number="55" hits="2" branch="true" condition-coverage="50% (1/2)" />
-            <line number="57" hits="2" branch="false" />
-            <line number="59" hits="2" branch="true" condition-coverage="50% (1/2)" />
-            <line number="60" hits="2" branch="false" />
+            <line number="52" hits="4" branch="false" />
+            <line number="53" hits="4" branch="false" />
+            <line number="55" hits="4" branch="true" condition-coverage="50% (1/2)" />
+            <line number="57" hits="4" branch="false" />
+            <line number="59" hits="4" branch="true" condition-coverage="50% (1/2)" />
+            <line number="60" hits="4" branch="false" />
             <line number="62" hits="0" branch="false" />
             <line number="66" hits="0" branch="true" condition-coverage="0% (0/2)" />
             <line number="67" hits="0" branch="false" />
@@ -80632,9 +80638,9 @@
             <line number="122" hits="0" branch="false" />
             <line number="126" hits="0" branch="false" />
             <line number="127" hits="0" branch="false" />
-            <line number="132" hits="2" branch="true" condition-coverage="100% (2/2)" />
-            <line number="133" hits="2" branch="false" />
-            <line number="134" hits="2" branch="false" />
+            <line number="132" hits="4" branch="true" condition-coverage="100% (2/2)" />
+            <line number="133" hits="4" branch="false" />
+            <line number="134" hits="4" branch="false" />
             <line number="138" hits="0" branch="true" condition-coverage="0% (0/2)" />
             <line number="139" hits="0" branch="false" />
             <line number="141" hits="0" branch="true" condition-coverage="0% (0/2)" />
@@ -100950,13 +100956,13 @@
             <line number="81" hits="0" branch="false" />
           </lines>
         </class>
-        <class name="Ankh.UI.SvnLog.Commands.CopyRevision" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.UI\SvnLog\Commands\CopyRevision.cs" line-rate="0" branch-rate="0" complexity="8">
+        <class name="Ankh.UI.SvnLog.Commands.CopyRevision" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.UI\SvnLog\Commands\CopyRevision.cs" line-rate="0.21428571428571427" branch-rate="0.25" complexity="8">
           <methods>
-            <method name="OnUpdate" signature="(Ankh.Commands.CommandUpdateEventArgs)" line-rate="0" branch-rate="0" complexity="2">
+            <method name="OnUpdate" signature="(Ankh.Commands.CommandUpdateEventArgs)" line-rate="1" branch-rate="1" complexity="2">
               <lines>
-                <line number="15" hits="0" branch="true" condition-coverage="0% (0/2)" />
-                <line number="16" hits="0" branch="false" />
-                <line number="17" hits="0" branch="false" />
+                <line number="15" hits="2" branch="true" condition-coverage="100% (2/2)" />
+                <line number="16" hits="2" branch="false" />
+                <line number="17" hits="2" branch="false" />
               </lines>
             </method>
             <method name="OnExecute" signature="(Ankh.Commands.CommandEventArgs)" line-rate="0" branch-rate="0" complexity="6">
@@ -100976,9 +100982,9 @@
             </method>
           </methods>
           <lines>
-            <line number="15" hits="0" branch="true" condition-coverage="0% (0/2)" />
-            <line number="16" hits="0" branch="false" />
-            <line number="17" hits="0" branch="false" />
+            <line number="15" hits="2" branch="true" condition-coverage="100% (2/2)" />
+            <line number="16" hits="2" branch="false" />
+            <line number="17" hits="2" branch="false" />
             <line number="21" hits="0" branch="false" />
             <line number="23" hits="0" branch="false" />
             <line number="25" hits="0" branch="true" condition-coverage="0% (0/2)" />
@@ -105268,16 +105274,16 @@
             <line number="53" hits="10" branch="false" />
           </lines>
         </class>
-        <class name="Ankh.UI.VSSelectionControls.Commands.ListViewGroup" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.UI\VSSelectionControls\Commands\ListViewGroup.cs" line-rate="0.11428571428571428" branch-rate="0.1" complexity="20">
+        <class name="Ankh.UI.VSSelectionControls.Commands.ListViewGroup" filename="D:\a\AnkhSVN\AnkhSVN\build\src\Ankh.UI\VSSelectionControls\Commands\ListViewGroup.cs" line-rate="0.14285714285714285" branch-rate="0.15" complexity="20">
           <methods>
-            <method name="OnUpdate" signature="(Ankh.Commands.CommandUpdateEventArgs)" line-rate="0.5" branch-rate="0.5" complexity="4">
+            <method name="OnUpdate" signature="(Ankh.Commands.CommandUpdateEventArgs)" line-rate="0.625" branch-rate="0.75" complexity="4">
               <lines>
-                <line number="29" hits="2" branch="true" condition-coverage="50% (1/2)" />
+                <line number="29" hits="4" branch="true" condition-coverage="50% (1/2)" />
                 <line number="31" hits="0" branch="false" />
                 <line number="32" hits="0" branch="false" />
                 <line number="33" hits="0" branch="false" />
-                <line number="36" hits="2" branch="true" condition-coverage="50% (1/2)" />
-                <line number="37" hits="0" branch="false" />
+                <line number="36" hits="4" branch="true" condition-coverage="100% (2/2)" />
+                <line number="37" hits="2" branch="false" />
                 <line number="39" hits="2" branch="false" />
                 <line number="40" hits="2" branch="false" />
               </lines>
@@ -105323,12 +105329,12 @@
             </method>
           </methods>
           <lines>
-            <line number="29" hits="2" branch="true" condition-coverage="50% (1/2)" />
+            <line number="29" hits="4" branch="true" condition-coverage="50% (1/2)" />
             <line number="31" hits="0" branch="false" />
             <line number="32" hits="0" branch="false" />
             <line number="33" hits="0" branch="false" />
-            <line number="36" hits="2" branch="true" condition-coverage="50% (1/2)" />
-            <line number="37" hits="0" branch="false" />
+            <line number="36" hits="4" branch="true" condition-coverage="100% (2/2)" />
+            <line number="37" hits="2" branch="false" />
             <line number="39" hits="2" branch="false" />
             <line number="40" hits="2" branch="false" />
             <line number="44" hits="0" branch="false" />
@@ -106681,7 +106687,7 @@
             </method>
             <method name="get_SupportsGrouping" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="522" hits="2" branch="false" />
+                <line number="522" hits="4" branch="false" />
               </lines>
             </method>
             <method name="get_SupportsSortGlypgs" signature="()" line-rate="0" branch-rate="1" complexity="1">
@@ -107013,8 +107019,8 @@
             </method>
             <method name="get_OSLevel" signature="()" line-rate="0.5" branch-rate="0.3" complexity="10">
               <lines>
-                <line number="1100" hits="2" branch="false" />
-                <line number="1102" hits="2" branch="true" condition-coverage="100% (2/2)" />
+                <line number="1100" hits="4" branch="false" />
+                <line number="1102" hits="4" branch="true" condition-coverage="100% (2/2)" />
                 <line number="1104" hits="1" branch="false" />
                 <line number="1106" hits="1" branch="true" condition-coverage="50% (1/2)" />
                 <line number="1107" hits="1" branch="false" />
@@ -107025,13 +107031,13 @@
                 <line number="1113" hits="0" branch="false" />
                 <line number="1115" hits="0" branch="false" />
                 <line number="1118" hits="0" branch="false" />
-                <line number="1121" hits="2" branch="false" />
-                <line number="1123" hits="2" branch="false" />
+                <line number="1121" hits="4" branch="false" />
+                <line number="1123" hits="4" branch="false" />
               </lines>
             </method>
             <method name="get_IsXPPlus" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
-                <line number="1128" hits="2" branch="false" />
+                <line number="1128" hits="4" branch="false" />
               </lines>
             </method>
             <method name="get_HScrollPos" signature="()" line-rate="0" branch-rate="0" complexity="2">
@@ -107437,7 +107443,7 @@
             <line number="510" hits="0" branch="false" />
             <line number="512" hits="0" branch="false" />
             <line number="514" hits="0" branch="false" />
-            <line number="522" hits="2" branch="false" />
+            <line number="522" hits="4" branch="false" />
             <line number="527" hits="0" branch="false" />
             <line number="532" hits="2" branch="true" condition-coverage="50% (4/8)" />
             <line number="533" hits="2" branch="false" />
@@ -107679,8 +107685,8 @@
             <line number="1081" hits="0" branch="false" />
             <line number="1088" hits="0" branch="false" />
             <line number="1093" hits="1" branch="false" />
-            <line number="1100" hits="2" branch="false" />
-            <line number="1102" hits="2" branch="true" condition-coverage="100% (2/2)" />
+            <line number="1100" hits="4" branch="false" />
+            <line number="1102" hits="4" branch="true" condition-coverage="100% (2/2)" />
             <line number="1104" hits="1" branch="false" />
             <line number="1106" hits="1" branch="true" condition-coverage="50% (1/2)" />
             <line number="1107" hits="1" branch="false" />
@@ -107691,9 +107697,9 @@
             <line number="1113" hits="0" branch="false" />
             <line number="1115" hits="0" branch="false" />
             <line number="1118" hits="0" branch="false" />
-            <line number="1121" hits="2" branch="false" />
-            <line number="1123" hits="2" branch="false" />
-            <line number="1128" hits="2" branch="false" />
+            <line number="1121" hits="4" branch="false" />
+            <line number="1123" hits="4" branch="false" />
+            <line number="1128" hits="4" branch="false" />
             <line number="1137" hits="0" branch="false" />
             <line number="1138" hits="0" branch="false" />
             <line number="1139" hits="0" branch="false" />

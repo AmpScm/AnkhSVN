@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/18/2026 - 1:06:44 AM |
-| Coverage date: | 9/18/2026 - 1:06:26 AM - 9/18/2026 - 1:06:36 AM |
+| Generated on: | 9/18/2026 - 1:13:02 AM |
+| Coverage date: | 9/18/2026 - 1:12:43 AM - 9/18/2026 - 1:12:54 AM |
 | Parser: | MultiReport (2x Cobertura) |
 | Assemblies: | 10 |
 | Classes: | 557 |
 | Files: | 640 |
-| **Line coverage:** | 3.6% (1613 of 43820) |
-| Covered lines: | 1613 |
-| Uncovered lines: | 42207 |
-| Coverable lines: | 43820 |
-| Total lines: | 125858 |
-| **Branch coverage:** | 3.8% (832 of 21590) |
-| Covered branches: | 832 |
-| Total branches: | 21590 |
+| **Line coverage:** | 3.7% (1623 of 43823) |
+| Covered lines: | 1623 |
+| Uncovered lines: | 42200 |
+| Coverable lines: | 43823 |
+| Total lines: | 125864 |
+| **Branch coverage:** | 3.8% (842 of 21592) |
+| Covered branches: | 842 |
+| Total branches: | 21592 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -206,16 +206,16 @@
 |Ankh.VSPackage.WorkingCopyExplorerToolWindow|0%||
 
 </details>
-<details><summary>Ankh.Scc - 0.3%</summary>
+<details><summary>Ankh.Scc - 0.5%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Scc**|**0.3%**|**0.1%**|
+|**Ankh.Scc**|**0.5%**|**0.4%**|
 |Ankh.Scc.AnkhSccModule|0%||
 |Ankh.Scc.Commands.MarkProjectDirty|12.5%|0%|
 |Ankh.Scc.Commands.PendingChangeTicker|14.2%|0%|
-|Ankh.Scc.Commands.ProjectFileFilter|0%|0%|
-|Ankh.Scc.Commands.SccCheckoutFailedProject|19.3%|8.3%|
+|Ankh.Scc.Commands.ProjectFileFilter|42.8%|43.7%|
+|Ankh.Scc.Commands.SccCheckoutFailedProject|29.4%|15.3%|
 |Ankh.Scc.Commands.TaskFinisher|9%|0%|
 |Ankh.Scc.Commands.UnsupportedWcVersion|7.6%|0%|
 |Ankh.Scc.Native.PropertyBag|0%|0%|
@@ -246,11 +246,11 @@
 |Ankh.Scc.ThePendingChangeCollection|0%||
 
 </details>
-<details><summary>Ankh.Services - 6.7%</summary>
+<details><summary>Ankh.Services - 6.6%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Services**|**6.7%**|**5.1%**|
+|**Ankh.Services**|**6.6%**|**5.1%**|
 |Ankh.AnkhInstanceConditionalAttribute|46.6%|50%|
 |Ankh.AnkhRuntime|31.9%|24.3%|
 |Ankh.AnkhService|9.4%|6.4%|
@@ -267,7 +267,7 @@
 |Ankh.Commands.CommandAttribute|70.9%|58.3%|
 |Ankh.Commands.CommandEventArgs|17.6%|0%|
 |Ankh.Commands.CommandMapItem|74%|50%|
-|Ankh.Commands.CommandMapper|52.2%|61.6%|
+|Ankh.Commands.CommandMapper|50%|60%|
 |Ankh.Commands.CommandResult|0%|0%|
 |Ankh.Commands.CommandUpdateEventArgs|16.2%|0%|
 |Ankh.Commands.SccCommandAttribute|50%||
@@ -363,7 +363,7 @@
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**3.8%**|**3.3%**|
+|**Ankh.UI**|**3.8%**|**3.4%**|
 |Ankh.UI.AddRepositoryRootDialog|0%|0%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -524,7 +524,7 @@
 |Ankh.UI.SvnLog.BatchFinishedEventArgs|0%||
 |Ankh.UI.SvnLog.Commands.ChangeLogMessage|9.3%|10%|
 |Ankh.UI.SvnLog.Commands.CompareWithWorkingCopy|14.2%|37.5%|
-|Ankh.UI.SvnLog.Commands.CopyRevision|0%|0%|
+|Ankh.UI.SvnLog.Commands.CopyRevision|21.4%|25%|
 |Ankh.UI.SvnLog.Commands.FetchAll|55.5%|66.6%|
 |Ankh.UI.SvnLog.Commands.IncludeMergedRevisions|45.4%|50%|
 |Ankh.UI.SvnLog.Commands.LogComboBox|12.8%|8.8%|
@@ -549,7 +549,7 @@
 |Ankh.UI.SvnLog.PathItem|0%|0%|
 |Ankh.UI.SvnLog.PathListViewItem|0%|0%|
 |Ankh.UI.VSSelectionControls.Commands.ListViewCommandBase|42.8%|33.3%|
-|Ankh.UI.VSSelectionControls.Commands.ListViewGroup|11.4%|10%|
+|Ankh.UI.VSSelectionControls.Commands.ListViewGroup|14.2%|15%|
 |Ankh.UI.VSSelectionControls.Commands.ListViewShow|0%|0%|
 |Ankh.UI.VSSelectionControls.Commands.ListViewSort|0%|0%|
 |Ankh.UI.VSSelectionControls.Commands.ListViewSortOrder|0%|0%|
