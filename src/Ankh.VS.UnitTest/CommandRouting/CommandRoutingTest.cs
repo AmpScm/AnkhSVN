@@ -106,6 +106,10 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             ServiceProviderHelper.AddService(typeof(SVsRegisterEditors), regEditors.Object);
             ServiceProviderHelper.AddService(typeof(ISvnStatusCache), statusCache.Object);
 
+            var commandStates = new Mock<IAnkhCommandStates>();
+            commandStates.SetupGet(x => x.SccProviderActive).Returns(true);
+            ServiceProviderHelper.AddService(typeof(IAnkhCommandStates), commandStates.Object);
+
             var uiService = new Mock<IUIService>();
             uiService.Setup(x => x.ShowDialog(It.IsAny<Form>())).Returns(DialogResult.OK);
             ServiceProviderHelper.AddService(typeof(IUIService), uiService.Object);
