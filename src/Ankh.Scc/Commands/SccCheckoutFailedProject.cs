@@ -32,6 +32,12 @@ namespace Ankh.Scc.Commands
             else
             {
                 SvnSccProvider scc = e.GetService<SvnSccProvider>();
+                if (scc == null)
+                {
+                    e.Enabled = false;
+                    return;
+                }
+
                 map = scc.GetProjectsThatNeedEnlisting();
                 e.Selection.Cache[_failedProjectsKey] = map ?? _failedProjectsKey;
             }
