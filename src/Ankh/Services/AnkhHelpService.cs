@@ -34,6 +34,41 @@ namespace Ankh.Services
 
         const string HelpBaseUrl = "https://amp-scm.com/AnkhSVN/help/";
 
+        internal static string GetHelpTopicPath(string dialogHelpTypeName)
+        {
+            string name = (dialogHelpTypeName ?? string.Empty).ToLowerInvariant();
+
+            if (name.Contains("annotate") || name.Contains("blame"))
+                return "annotate/";
+            if (name.Contains("merge"))
+                return "merge/";
+            if (name.Contains("commit") || name.Contains("pendingchanges") || name.Contains("changelist"))
+                return "commit/";
+            if (name.Contains("conflict") || name.Contains("resolve"))
+                return "conflicts/";
+            if (name.Contains("external"))
+                return "externals/";
+            if (name.Contains("checkout") || name.Contains("repository"))
+                return "repository/";
+            if (name.Contains("update") || name.Contains("switch") || name.Contains("revert") ||
+                name.Contains("lock") || name.Contains("workingcopy") || name.Contains("cleanup"))
+                return "working-copy/";
+            if (name.Contains("sourcecontrol") || name.Contains("addtosubversion") ||
+                name.Contains("solutionroot") || name.Contains(".scc.") || name.Contains("sccui"))
+                return "source-control/";
+            if (name.Contains("property"))
+                return "properties/";
+            if (name.Contains("issue"))
+                return "issues/";
+            if (name.Contains("proxy") || name.Contains("authentication") || name.Contains("tool") ||
+                name.Contains("option") || name.Contains("setting"))
+                return "settings/";
+            if (name.Contains("error") || name.Contains("warning"))
+                return "troubleshooting/";
+
+            return string.Empty;
+        }
+
         internal static Uri BuildHelpUri(string helpType, Version packageVersion, int lcid, string dialogHelpTypeName)
         {
             if (string.IsNullOrEmpty(helpType))
@@ -41,7 +76,8 @@ namespace Ankh.Services
             if (packageVersion == null)
                 throw new ArgumentNullException("packageVersion");
 
-            UriBuilder ub = new UriBuilder(HelpBaseUrl);
+            Uri helpUri = new Uri(new Uri(HelpBaseUrl), GetHelpTopicPath(dialogHelpTypeName));
+            UriBuilder ub = new UriBuilder(helpUri);
             ub.Query = string.Format(
                 CultureInfo.InvariantCulture,
                 "t={0}&v={1}&l={2}&dt={3}",
