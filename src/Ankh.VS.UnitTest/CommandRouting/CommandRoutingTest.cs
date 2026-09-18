@@ -42,20 +42,26 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             public static bool TestExecution(AnkhCommand commandEnum)
             {
-                AnkhRuntime runtime = new AnkhRuntime(ServiceProviderHelper.serviceProvider);
-                runtime.AddModule(new AnkhModule(runtime));
-                runtime.Start();
+                AnkhRuntime runtime = CreateCommandRuntime();
 
                 return runtime.CommandMapper.Execute(commandEnum, new CommandEventArgs(commandEnum, runtime.Context));
             }
 
             public static bool TestExecution(AnkhCommand commandEnum, object argument)
             {
-                AnkhRuntime runtime = new AnkhRuntime(ServiceProviderHelper.serviceProvider);
-                runtime.AddModule(new AnkhModule(runtime));
-                runtime.Start();
+                AnkhRuntime runtime = CreateCommandRuntime();
 
                 return runtime.CommandMapper.Execute(commandEnum, new CommandEventArgs(commandEnum, runtime.Context, argument, false, false));
+            }
+
+            static AnkhRuntime CreateCommandRuntime()
+            {
+                // These are command-routing unit tests, not package/runtime integration tests.
+                // Load the command handlers directly instead of starting all Ankh services
+                // (update checks, registry-backed services, schedulers, etc.).
+                AnkhRuntime runtime = new AnkhRuntime(ServiceProviderHelper.serviceProvider);
+                runtime.CommandMapper.LoadFrom(typeof(AnkhModule).Assembly);
+                return runtime;
             }
         }
 

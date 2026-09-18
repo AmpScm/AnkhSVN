@@ -79,13 +79,16 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
 
             var r = new AnkhRuntime(sp);
-            r.AddModule(new AnkhModule(r));
-            r.AddModule(new AnkhSccModule(r));
-            //r.AddModule(new AnkhVSModule(r));
-            r.AddModule(new AnkhUIModule(r));
-            r.Start();
 
-            cm = r.GetService<CommandMapper>();
+            // This fixture verifies that command update handlers tolerate incomplete
+            // project metadata. Loading the command assemblies is sufficient; starting
+            // the full extension runtime initializes unrelated registry/network/UI
+            // services and turns this unit test into an environment-dependent integration test.
+            r.CommandMapper.LoadFrom(typeof(AnkhModule).Assembly);
+            r.CommandMapper.LoadFrom(typeof(AnkhSccModule).Assembly);
+            r.CommandMapper.LoadFrom(typeof(AnkhUIModule).Assembly);
+
+            cm = r.CommandMapper;
         }
 
         [Test]
