@@ -104,7 +104,7 @@ namespace Ankh.Commands
                     string msg = dlg.LogMessage;
 
                     Uri repositoryRoot = root.WorkingCopy != null ? root.WorkingCopy.RepositoryRoot : null;
-                    if (repositoryRoot != null && !RepositoryUrlUtils.IsWithinRepository(repositoryRoot, dlg.NewDirectoryName))
+                    if (!RepositoryUrlUtils.IsValidBranchDestination(repositoryRoot, dlg.NewDirectoryName))
                     {
                         DialogResult differentRepository = new AnkhMessageBox(e.Context).Show(
                             string.Format(
