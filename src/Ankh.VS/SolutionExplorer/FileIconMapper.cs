@@ -217,11 +217,26 @@ namespace Ankh.VS.SolutionExplorer
 
                 try
                 {
-                    _imageList.Images.Add(icon);
+                    // Clone the icon into a managed bitmap while the native icon
+                    // handle is still valid. Keeping Icon.FromHandle() instances in
+                    // the ImageList can leave it holding images backed by handles
+                    // that ProjectIconReference disposes below. Newer WinForms
+                    // (notably VS 2026) validates those images when the ImageList
+                    // handle is created and throws ArgumentException.
+                    using (Bitmap bitmap = icon.ToBitmap())
+                    {
+                        _imageList.Images.Add(bitmap);
+                    }
                 }
                 catch (InvalidOperationException)
                 {
                     // Unmanaged add icon operation failed (Reported on mailinglist)
+                    return -1;
+                }
+                catch (ArgumentException)
+                {
+                    // Invalid or stale native icon data must not prevent tool
+                    // windows such as Pending Changes from being constructed.
                     return -1;
                 }
             }
