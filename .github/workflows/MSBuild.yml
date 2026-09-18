@@ -3,6 +3,8 @@ name: MSBuild
 on:
   push:
     branches: [ main, stable/* ]
+    paths-ignore:
+      - 'coverage/**'
   pull_request:
     branches: [ main, stable/* ]
   workflow_dispatch:
@@ -142,6 +144,49 @@ jobs:
           CoverageReport
         if-no-files-found: error
 
+    - name: Publish coverage to GitHub Pages
+      if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+      shell: pwsh
+      run: |
+        $source = "${{ github.workspace }}\CoverageReport"
+        $target = "${{ github.workspace }}\build\coverage"
+
+        if (-not (Test-Path (Join-Path $source "index.html"))) {
+          throw "CoverageReport/index.html was not generated."
+        }
+
+        if (Test-Path $target) {
+          Remove-Item $target -Recurse -Force
+        }
+        New-Item -ItemType Directory -Force -Path $target | Out-Null
+        Copy-Item (Join-Path $source "*") $target -Recurse -Force
+
+        $metadata = [ordered]@{
+          runNumber = "${{ github.run_number }}"
+          runId = "${{ github.run_id }}"
+          commit = "${{ github.sha }}"
+          generatedUtc = (Get-Date).ToUniversalTime().ToString("o")
+        } | ConvertTo-Json
+        Set-Content -Path (Join-Path $target "build.json") -Value $metadata -Encoding UTF8
+
+        Push-Location "${{ github.workspace }}\build"
+        try {
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add coverage
+          git diff --cached --quiet
+
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Coverage site is already current."
+          }
+          else {
+            git commit -m "Update coverage report"
+            git push origin HEAD:main
+          }
+        }
+        finally {
+          Pop-Location
+        }
     - name: Verify test suites
       if: always()
       shell: pwsh
