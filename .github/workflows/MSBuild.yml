@@ -63,34 +63,6 @@ jobs:
         --logger "console;verbosity=normal"
         -- RunConfiguration.TreatNoTestsAsError=true
 
-    - name: Diagnose Ankh.VS.UnitTest load
-      continue-on-error: true
-      shell: pwsh
-      run: |
-        $testDir = "${{ github.workspace }}\build\src\Ankh.VS.UnitTest\bin\Release"
-        $assemblyPath = Join-Path $testDir "Ankh.VS.UnitTest.dll"
-        Write-Host "Loading $assemblyPath"
-        Write-Host "Files in test output:"
-        Get-ChildItem $testDir | Select-Object -ExpandProperty Name | Sort-Object | ForEach-Object { Write-Host "  $_" }
-
-        try {
-          $assembly = [System.Reflection.Assembly]::LoadFrom($assemblyPath)
-          Write-Host "Assembly loaded: $($assembly.FullName)"
-          try {
-            $types = $assembly.GetTypes()
-            Write-Host "Loaded $($types.Count) types successfully."
-          }
-          catch [System.Reflection.ReflectionTypeLoadException] {
-            Write-Host "ReflectionTypeLoadException loader errors:"
-            $_.Exception.LoaderExceptions | ForEach-Object { Write-Host $_.ToString() }
-            throw
-          }
-        }
-        catch {
-          Write-Host "Assembly load diagnostic failed:"
-          Write-Host $_.Exception.ToString()
-          throw
-        }
     - name: Run Ankh.VS.UnitTest with coverage
       id: ankh_vs_tests
       continue-on-error: true
