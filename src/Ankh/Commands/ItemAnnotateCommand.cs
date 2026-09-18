@@ -12,19 +12,18 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Forms;
-using Microsoft.VisualStudio.TextManager.Interop;
 using Ankh.Scc;
 using Ankh.Scc.UI;
 using Ankh.UI;
 using Ankh.UI.Annotate;
-using Ankh.VS;
-using SharpSvn;
-using System.Collections.Generic;
 using Ankh.UI.Commands;
+using Ankh.VS;
+using Microsoft.VisualStudio.Shell.Interop;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -102,7 +101,6 @@ namespace Ankh.Commands
                     }
                     break;
                 case AnkhCommand.DocumentAnnotate:
-                    //TryObtainBlock(e);
                     targets.Add(new SvnOrigin(e.GetService<ISvnStatusCache>()[e.Selection.ActiveDocumentFilename]));
                     endRev = SvnRevision.Working;
                     break;
@@ -152,36 +150,6 @@ namespace Ankh.Commands
 
             DoBlame(e, target, startRev, endRev, ignoreEols, ignoreSpacing, retrieveMergeInfo);
         }
-
-        /*private void TryObtainBlock(CommandEventArgs e)
-        {
-            ISelectionContextEx ex = e.GetService<ISelectionContextEx>(typeof(ISelectionContext));
-
-            if (ex == null)
-                return;
-
-            IVsTextView view = ex.ActiveDocumentFrameTextView;
-            IVsTextLines lines;
-            Guid languageService;
-            IVsLanguageInfo info;
-
-            if (view != null
-                && VSErr.Succeeded(view.GetBuffer(out lines))
-                && VSErr.Succeeded(lines.GetLanguageServiceID(out languageService))
-                && null != (info = e.QueryService<IVsLanguageInfo>(languageService)))
-            {
-                GC.KeepAlive(info);
-                IVsLanguageBlock b = info as IVsLanguageBlock;
-                if (b != null)
-                {
-                    GC.KeepAlive(b);
-                }
-            }
-            //IVsLanguageBlock
-
-
-            GC.KeepAlive(ex);
-        }*/
 
         static void DoBlame(CommandEventArgs e, SvnOrigin item, SvnRevision revisionStart, SvnRevision revisionEnd, bool ignoreEols, SvnIgnoreSpacing ignoreSpacing, bool retrieveMergeInfo)
         {
@@ -242,43 +210,17 @@ namespace Ankh.Commands
                 }
             }
 
-            if (!r.Succeeded)
+            if (!r.Succeeded || blameResult == null)
                 return;
 
-            AnnotateEditorControl annEditor = null;
-            IAnkhEditorResolver er = null;
+            // Use Visual Studio's native editor and a MEF WPF text-view margin instead of
+            // embedding the editor inside a WinForms document control. This allows Visual
+            // Studio/WPF to handle per-monitor DPI and editor zoom normally.
+            AnnotationDocumentRegistry.Register(tempFile, e.Context, item, blameResult);
 
-            WithDPIAwareness.Run(AnkhDpiAwareness.SystemAware, () =>
-            {
-                annEditor = new AnnotateEditorControl();
-                er = e.GetService<IAnkhEditorResolver>();
-
-                annEditor.Create(e.Context, tempFile);
-                annEditor.LoadFile(tempFile);
-                annEditor.AddLines(item, blameResult);
-            });
-
-            // Detect and set the language service
-            Guid language;
-            if (er.TryGetLanguageService(Path.GetExtension(target.FileName), out language))
-            {
-                // Extension is mapped -> user
-                annEditor.SetLanguageService(language);
-            }
-            else if (blameResult != null && blameResult.Count > 0 && blameResult[0].Line != null)
-            {
-                // Extension is not mapped -> Check if this is xml (like project files)
-                string line = blameResult[0].Line.Trim();
-
-                if (line.StartsWith("<?xml")
-                    || (line.StartsWith("<") && line.Contains("xmlns=\"http://schemas.microsoft.com/developer/msbuild/")))
-                {
-                    if (er.TryGetLanguageService(".xml", out language))
-                    {
-                        annEditor.SetLanguageService(language);
-                    }
-                }
-            }
+            EnvDTE.DTE dte = e.GetService<EnvDTE.DTE>(typeof(SDTE));
+            if (dte != null)
+                dte.ItemOperations.OpenFile(tempFile, EnvDTE.Constants.vsViewKindTextView);
         }
     }
 }

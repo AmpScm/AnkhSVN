@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Ankh.Scc;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.IO;
 using Microsoft.VisualStudio;
@@ -38,7 +39,7 @@ namespace Ankh.VS.SolutionExplorer
             : base(context)
         {
             _imageList = new ImageList();
-            _imageList.ImageSize = new Size(16, 16);
+            _imageList.ImageSize = SystemInformation.SmallIconSize;
             _imageList.ColorDepth = ColorDepth.Depth32Bit;
             _iconMap = new Dictionary<ProjectIconReference, int>();
             _folderMap = new SortedList<WindowsSpecialFolder, int>();
@@ -382,13 +383,39 @@ namespace Ankh.VS.SolutionExplorer
             if ((_lvUp != 0))
                 return;
 
-            Image img = Bitmap.FromStream(typeof(FileIconMapper).Assembly.GetManifestResourceStream(
-                typeof(FileIconMapper).Namespace + ".UpDnListView.png"));
+            using (Image img = Bitmap.FromStream(typeof(FileIconMapper).Assembly.GetManifestResourceStream(
+                typeof(FileIconMapper).Namespace + ".UpDnListView.png")))
+            {
+                const int sourceIconSize = 16;
+                int count = img.Width / sourceIconSize;
 
-            int count = img.Width / 16;
-            _imageList.Images.AddStrip(img);
+                if (_imageList.ImageSize.Width == sourceIconSize && _imageList.ImageSize.Height == sourceIconSize)
+                {
+                    _imageList.Images.AddStrip(img);
+                }
+                else
+                {
+                    Size iconSize = _imageList.ImageSize;
+                    using (Bitmap scaledStrip = new Bitmap(count * iconSize.Width, iconSize.Height))
+                    using (Graphics graphics = Graphics.FromImage(scaledStrip))
+                    {
+                        graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                        graphics.PixelOffsetMode = PixelOffsetMode.Half;
 
-            _lvUp = _imageList.Images.Count - count + 1;
+                        for (int i = 0; i < count; i++)
+                        {
+                            graphics.DrawImage(img,
+                                new Rectangle(i * iconSize.Width, 0, iconSize.Width, iconSize.Height),
+                                new Rectangle(i * sourceIconSize, 0, sourceIconSize, sourceIconSize),
+                                GraphicsUnit.Pixel);
+                        }
+
+                        _imageList.Images.AddStrip(scaledStrip);
+                    }
+                }
+
+                _lvUp = _imageList.Images.Count - count + 1;
+            }
         }
 
         static class NativeMethods

@@ -2,23 +2,33 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Ankh.UI.snk</AssemblyOriginatorKeyFile>
     <NoWarn>1574,1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ankh.Diff\Ankh.Diff.csproj" />
     <ProjectReference Include="..\Ankh.ExtensionPoints\Ankh.ExtensionPoints.csproj" />
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj" />
     <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="MergeWizard\WizardFramework\Wizard.resx">
+      <LogicalName>Ankh.UI.WizardFramework.Wizard.resources</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" />

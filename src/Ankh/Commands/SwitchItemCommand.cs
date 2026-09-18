@@ -43,7 +43,7 @@ namespace Ankh.Commands
             {
                 case AnkhCommand.SolutionSwitchDialog:
                     IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
-                    SvnItem solutionItem = solutionSettings.ProjectRootSvnItem;
+                    SvnItem solutionItem = solutionSettings != null ? solutionSettings.ProjectRootSvnItem : null;
                     if (solutionItem == null || !solutionItem.IsVersioned || solutionItem.IsNewAddition)
                     {
                         e.Enabled = false;

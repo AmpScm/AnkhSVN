@@ -12,33 +12,10 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-/***************************************************************************
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-This code is licensed under the Visual Studio SDK license terms.
-THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
-ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
-IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
-PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
-
-***************************************************************************/
-
 using System;
-using System.Collections;
-using System.Text;
-using System.Reflection;
-using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.VSPackage;
-using EnvDTE;
-using AnkhSvn_UnitTestProject.Mocks;
-using AnkhSvn_UnitTestProject.Helpers;
-using Ankh.Scc;
+using Microsoft.VisualStudio.Shell;
 using NUnit.Framework;
-using Moq;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
-using Ankh.Services;
 
 namespace UnitTestProject
 {
@@ -46,55 +23,21 @@ namespace UnitTestProject
     public class PackageTest
     {
         [Test]
-        [Obsolete]
-        public void CreateInstance()
+        public void UsesAsyncPackageModel()
         {
-            AnkhSvnPackage package = new AnkhSvnPackage();
+            Assert.That(typeof(AsyncPackage).IsAssignableFrom(typeof(AnkhSvnPackage)), Is.True,
+                "Visual Studio 2022+ packages should use the asynchronous package model.");
         }
 
         [Test]
-        [Obsolete]
-        public void IsIVsPackage()
+        public void AllowsBackgroundLoading()
         {
-            AnkhSvnPackage package = new AnkhSvnPackage();
-            Assert.IsNotNull(package as IVsPackage, "The object does not implement IVsPackage");
-        }
+            var registration = (PackageRegistrationAttribute)Attribute.GetCustomAttribute(
+                typeof(AnkhSvnPackage), typeof(PackageRegistrationAttribute));
 
-        [Test]
-        [Obsolete]
-        public void SetSite()
-        {
-            // Create the package
-            IVsPackage package = new AnkhSvnPackage() as IVsPackage;
-            Assert.IsNotNull(package, "The object does not implement IVsPackage");
-            
-            var statusCache = new Mock<ISvnStatusCache>();
-            var regEditors = new Mock<SVsRegisterEditors>().As<IVsRegisterEditors>();
-            
-            var vsShell = new Mock<SVsShell>().As<IVsShell>();
-            object r = @"SOFTWARE\Microsoft\VisualStudio\8.0";
-            vsShell.Setup(x => x.GetProperty((int)__VSSPROPID.VSSPROPID_VirtualRegistryRoot, out r)).Returns(VSErr.S_OK);
-
-            var vsTextMgr = new Mock<SVsTextManager>().As<IVsTextManager>();
-
-            var monitorSelection = new Mock<IVsMonitorSelection>();
-
-            var olMgr = new Mock<SOleComponentManager>().As<IOleComponentManager>();
-
-            var outputWindow = new Mock<SVsOutputWindow>().As<IVsOutputWindow>();
-
-            using (ServiceProviderHelper.AddService(typeof(SVsOutputWindow), outputWindow.Object))
-            using (ServiceProviderHelper.AddService(typeof(SOleComponentManager), olMgr.Object))
-            using (ServiceProviderHelper.AddService(typeof(IVsMonitorSelection), monitorSelection.Object))
-            using (ServiceProviderHelper.AddService(typeof(SVsTextManager), vsTextMgr.Object))
-            using (ServiceProviderHelper.AddService(typeof(SVsShell), vsShell.Object))
-            using (ServiceProviderHelper.AddService(typeof(SVsRegisterEditors), regEditors.Object))
-            using (ServiceProviderHelper.AddService(typeof(ISvnStatusCache), statusCache.Object))
-            using (ServiceProviderHelper.SetSite(package))
-            {
-                // Unsite the package
-                Assert.AreEqual(0, package.SetSite(null), "SetSite(null) did not return S_OK");
-            }
+            Assert.That(registration, Is.Not.Null);
+            Assert.That(registration.AllowsBackgroundLoading, Is.True,
+                "The VS2022+ package should remain background-load capable.");
         }
     }
 }

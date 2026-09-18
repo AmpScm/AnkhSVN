@@ -101,7 +101,6 @@ namespace Ankh.VSPackage
     {
         readonly Stack<VSEditorControl> _forms = new Stack<VSEditorControl>();
 
-        [Obsolete]
         public AnkhDynamicEditorFactory(AnkhSvnPackage package)
             : base(package)
         {

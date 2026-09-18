@@ -59,6 +59,35 @@ namespace Ankh.UI.SccManagement
 
     public static class RepositoryUrlUtils
     {
+        public static bool IsWithinRepository(Uri repositoryRoot, Uri candidate)
+        {
+            if (repositoryRoot == null)
+                throw new ArgumentNullException("repositoryRoot");
+            if (candidate == null)
+                throw new ArgumentNullException("candidate");
+            if (!repositoryRoot.IsAbsoluteUri)
+                throw new ArgumentException("Repository root must be an absolute URI.", "repositoryRoot");
+            if (!candidate.IsAbsoluteUri)
+                throw new ArgumentException("Candidate must be an absolute URI.", "candidate");
+
+            // This check is intentionally managed-only. Branch validation runs before
+            // the SharpSvn operation, and keeping it independent of SharpSvn's native
+            // runtime also makes the URL-boundary behavior directly unit testable.
+            if (!string.Equals(repositoryRoot.Scheme, candidate.Scheme, StringComparison.OrdinalIgnoreCase)
+                || !string.Equals(repositoryRoot.Host, candidate.Host, StringComparison.OrdinalIgnoreCase)
+                || repositoryRoot.Port != candidate.Port)
+            {
+                return false;
+            }
+
+            string rootPath = repositoryRoot.GetComponents(UriComponents.Path, UriFormat.UriEscaped)
+                .TrimEnd('/') + "/";
+            string candidatePath = candidate.GetComponents(UriComponents.Path, UriFormat.UriEscaped)
+                .TrimEnd('/') + "/";
+
+            return candidatePath.StartsWith(rootPath, StringComparison.Ordinal);
+        }
+
         public static bool TryGuessLayout(IAnkhServiceProvider context, Uri uri, out RepositoryLayoutInfo info)
         {
             if (context == null)
@@ -66,11 +95,22 @@ namespace Ankh.UI.SccManagement
             else if (uri == null)
                 throw new ArgumentNullException("uri");
 
-            info = null;
-
             uri = SvnTools.GetNormalizedUri(uri);
 
             GC.KeepAlive(context); // Allow future external hints
+
+            return TryGuessLayoutNormalized(uri, out info);
+        }
+
+        // Keep the layout parser independent from SharpSvn so its behavior can be
+        // tested without loading SharpSvn's native runtime. The public entry point
+        // remains responsible for normalizing repository URIs first.
+        internal static bool TryGuessLayoutNormalized(Uri uri, out RepositoryLayoutInfo info)
+        {
+            if (uri == null)
+                throw new ArgumentNullException("uri");
+
+            info = null;
 
             string path;
             if (uri.IsUnc)

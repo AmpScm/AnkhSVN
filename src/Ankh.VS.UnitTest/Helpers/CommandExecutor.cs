@@ -13,7 +13,7 @@
 //  limitations under the License.
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;

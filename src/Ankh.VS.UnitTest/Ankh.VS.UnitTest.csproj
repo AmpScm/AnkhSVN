@@ -4,17 +4,12 @@
     <UseWindowsForms>true</UseWindowsForms>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Ankh.VS.UnitTest.snk</AssemblyOriginatorKeyFile>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Stubs\**" />
     <EmbeddedResource Remove="Stubs\**" />
     <None Remove="Stubs\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Services\FileIconMapperTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Services\FileIconMapperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -33,11 +28,23 @@
     <ProjectReference Include="..\Ankh\Ankh.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="coverlet.collector">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Microsoft.VisualStudio.SDK" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" />
-    <PackageReference Include="Microsoft.VSSDK.UnitTestLibrary" />
     <PackageReference Include="Moq" />
-    <PackageReference Include="MSTest.TestFramework" />
     <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="SharpSvn" GeneratePathProperty="true">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
+  <Target Name="UseX64SharpSvnForTests" AfterTargets="Build">
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\net40\SharpSvn.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpSvn-DB44-20-x64.svnDll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpPlink-x64.svnExe" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+  </Target>
 </Project>

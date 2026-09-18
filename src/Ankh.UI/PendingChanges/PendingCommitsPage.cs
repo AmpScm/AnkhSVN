@@ -33,7 +33,6 @@ namespace Ankh.UI.PendingChanges
     partial class PendingCommitsPage : PendingChangesPage
     {
         PendingCommitsView pendingCommits;
-        readonly IPendingChangeControl pendingChangeControl;
         IPendingChangeUI _ui;
 
         public PendingCommitsPage()
@@ -116,9 +115,7 @@ namespace Ankh.UI.PendingChanges
 
             base.OnLoad(e);
 
-            if (pendingCommits != null)
-            {
-                pendingCommits.AllowColumnReorder = true;
+            pendingCommits.AllowColumnReorder = true;
                 pendingCommits.CheckBoxes = true;
                 pendingCommits.HideSelection = false;
                 pendingCommits.Name = "pendingCommits";
@@ -134,10 +131,7 @@ namespace Ankh.UI.PendingChanges
                 IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
                 pendingCommits.SetColumnWidths(widths);
 
-                logMessageEditor.PendingChangeUI = this.pendingCommits;
-            }
-            else
-                logMessageEditor.PendingChangeUI = this.pendingChangeControl.UI;
+            logMessageEditor.PendingChangeUI = this.pendingCommits;
 
             Context.GetService<AnkhServiceEvents>().LastChanged += OnLastChanged;
 

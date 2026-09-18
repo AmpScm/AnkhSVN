@@ -1,96 +1,63 @@
-# AnkhSVN source code
+# Building AnkhSVN
 
-Usage of the Ankh build environment requires at least:
+AnkhSVN now targets **Visual Studio 2022 and later**. The pre-VS2022 package, x86 VSIX, Visual Studio IDE-host test harnesses, and older SDK-specific build paths have been removed.
 
-  * Visual Studio 2005 Standard or higher (e.g. VS 2013), or Visual Studio
-    2013 Community Edition or higher
-    (The C# and C/C++ parts must be installed. Visual Studio Express doesn't
-     support third party plugins)
-  * The Visual Studio SDK for your Visual Studio version. Latest SDK version
-    for 2005 and 2008 required (or you see build errors); for others latest
-    recommended. Before Visual Studio 2015 this is a separate download; from
-    2015 the SDK is available as setup option in the Visual Studio setup.
-  * A subversion client (e.g. AnkhSVN itself)
-  * When using the VS 2005 SDK administrative permissions are required. Later
-    SDK versions work without administrative permissions.
-  
-If you wish to build your own installers:
+## Requirements
 
-  * Votive 3.7R2 (Including Wix 3.7)
-  * Replicating our published setups requires VS2008 with the VS 2008 SDK and
-    VS2010 with the VS 2010 SDK.
+- Visual Studio 2022 or later.
+- The **Visual Studio extension development** workload.
+- .NET Framework 4.7.2 targeting support.
+- Git.
+- A Subversion command-line client is recommended for development and is installed by CI.
 
-Now you are ready to check out AnkhSVN itself. Type the following:
+The solution restores the Visual Studio SDK, VSSDK Build Tools, SharpSvn, and test dependencies through NuGet.
 
-  $ svn checkout http://ankhsvn.open.collab.net/svn/ankhsvn/trunk/ ankhsvn
+## Build
 
-  * Open and build AnkhSvn.sln, AnkhSvn.2008.sln or AnkhSvn.2005.sln depending
-    on your Visual Studio version. (2010 and later share a single solution file)
+Open `src/AnkhSvn.sln` in Visual Studio 2022 or later and build the solution, or build from a Developer Command Prompt with:
 
-Or use AnkhSVN in your Visual Studio:
-  * File->Open->Subversion Project
-  * Type 'http://ankhsvn.open.collab.net/svn/ankhsvn/trunk/src/
-  * Pick the right .sln file for your Visual Studio version
-  * Perform the checkout
+```bat
+msbuild /m /restore /t:rebuild /p:UseVsSdkVersion=17.0 /p:Configuration=Release src\AnkhSvn.sln
+```
 
-Note: If you do not have Votive installed, you will get an error when you open
-the solution for the first time.  This only tells you that Visual Studio cannot
-build the MSI package. It will not break building or debugging/running AnkhSVN
-from within the IDE.
+`VisualStudioVersion` and `UseVsSdkVersion` default to `17.0`, which is the minimum supported Visual Studio version.
 
-When you build the AnkhSvn project inside the solution the AnkhSvn Package will
-be registered in the so called 'Experimental Hive' (a special test environment
-of your Visual Studio installation).  To run AnkhSVN from within the IDE for
-testing/debugging reasons, make sure to set the Ankh.Package as the default
-startup project for the solution.
+The generated VSIX is written to:
 
-You can start Visual Studio with the experimental hive if you select the
-'Start Microsoft Visual Studio XXXX under Experimental hive' icon below your
-VS SDK group in the start menu. But it is easier to copy these settings to the
-debug command of the AnkhSvn project by performing the following:
+```text
+src\Ankh.Package\bin\Release\Ankh.Package.vsix
+```
 
-    1. Right-click the Ankh.Package project and select the "Properties" option.
-    2. Select the Debug tab and put the path to devenv.exe for your appropriate
-       version of VS.NET into the "Start External Program" field.
-    3. Based on the version of VS.NET, input the proper arguments into the
-       "Command line arguments" field.  (Options documented below.)
+The VSIX is x64 and uses the Visual Studio 2022+ manifest in `Ankh.Package\x64`.
 
-Experimental Hive Options
+## Tests
 
-VS2012:
-   Default path to devenv: "%programfiles%\Microsoft Visual Studio 11.0\Common7\IDE\devenv.exe"
-   Default arguments: /rootSuffix Exp
+Run both active test projects after building:
 
-VS2010:
-   Default path to devenv: "%programfiles%\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe"
-   Default arguments: /rootSuffix Exp
+```bat
+dotnet test src\Ankh.Tests\Ankh.Tests.csproj --configuration Release --no-build --no-restore -- RunConfiguration.TreatNoTestsAsError=true
 
-VS2008: 
-    Default path to devenv: "%programfiles%\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe"
-    Default arguments: /rootSuffix Exp /RANU
+dotnet test src\Ankh.VS.UnitTest\Ankh.VS.UnitTest.csproj --configuration Release --no-build --no-restore -- RunConfiguration.TreatNoTestsAsError=true
+```
 
-VS2005:
-    Default path to devenv: "%programfiles%\Microsoft Visual Studio 8\Common7\IDE\devenv.exe"
-    Default arguments: /rootSuffix Exp
+CI intentionally treats zero discovered tests as a failure.
 
+Legacy tests are retained only when the behavior remains relevant to Visual Studio 2022+. Tests that depended on retired Visual Studio IDE-host, QualityTools, add-in, x86 package, or pre-2022 SDK infrastructure should be redesigned around the current APIs or removed.
 
-** Installing your own build in Visual Studio **
+## Debug in the Experimental Instance
 
-(Note: Nothing below is required for development and/or testing/debugging Ankh
-but is only mentioned in case you'd like to install the pre-release AnkhSVN
-into your non-experimental VS.NET IDE instance.  Perform at your own risk.)  To
-register the package in your real Visual Studio you can use:
+Set `Ankh.Package` as the startup project and launch Visual Studio with:
 
-VS2010 and later:
-Install the .vsix file that is generated by the Solution
+```text
+/rootSuffix Exp
+```
 
-VS2008:
-"%programfiles%\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Tools\Bin\RegPkg.exe" src\Ankh.Package\bin\release\Ankh.Package.dll /codebase /root:Software\Microsoft\VisualStudio\9.0
-"%programfiles%\Microsoft Visual Studio 9.0\Common7\IDE\devenv.com" /setup
+The package uses the modern `AsyncPackage` model and supports background loading.
 
-VS2005:
-"%programfiles%\Microsoft Visual Studio 2005 SDK\2007.02\VisualStudioIntegration\Tools\Bin\RegPkg.exe" src\Ankh.Package\bin\release\Ankh.Package.dll /codebase /root:Software\Microsoft\VisualStudio\8.0
-"%programfiles%\Microsoft Visual Studio 8.0\Common7\IDE\devenv.com" /setup
+## Installing a Local Build
 
-(To remove the package from your Visual Studio you can replace /codebase with /unregister)
+Install the generated `.vsix` directly. The old `RegPkg.exe`, VS2005/2008 registry registration, and pre-VS2022 installation paths are no longer supported.
 
+## CI
+
+`.github/workflows/MSBuild.yml` is the reference build. It builds the solution with the VS17 SDK path, runs both NUnit test projects, verifies that `Ankh.UI.dll` is present in the generated VSIX, and publishes VS2022+ artifacts/releases on non-PR builds.

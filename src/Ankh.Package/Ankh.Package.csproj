@@ -50,12 +50,6 @@
       <ManifestResourceName>VSPackage</ManifestResourceName>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup Condition="'$(PlatformTarget)' != 'x86'">
-    <Content Remove="x86\source.extension.VsixManifest" Condition="'$(PlatformTarget)' != 'x86'" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(PlatformTarget)' != 'x64'">
-    <Content Remove="x64\source.extension.VsixManifest" Condition="'$(PlatformTarget)' != 'x64'" />
-  </ItemGroup>
   <ItemGroup>
     <Content Include="AnkhSVN-Preview.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -70,16 +64,17 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="AnkhSvnPackage.AsyncPackage.cs" Condition="'$(UseVsSdkVersion)' &lt; '15.0'" />
-    <Compile Remove="AnkhSvnPackage.LegacyPackage.cs" Condition="'$(UseVsSdkVersion)' &gt;= '15.0'" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Ankh.ExtensionPoints\Ankh.ExtensionPoints.csproj" />
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj" />
     <ProjectReference Include="..\Ankh.ImageCatalog\Ankh.ImageCatalog.csproj" />
     <ProjectReference Include="..\Ankh.Scc\Ankh.Scc.csproj" />
     <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj" />
-    <ProjectReference Include="..\Ankh.UI\Ankh.UI.csproj" />
+    <ProjectReference Include="..\Ankh.UI\Ankh.UI.csproj">
+      <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
+      <Name>Ankh.UI</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.VS.Interop\Ankh.VS.Interop.csproj" />
     <ProjectReference Include="..\Ankh.VS\Ankh.VS.csproj" />
     <ProjectReference Include="..\Ankh\Ankh.csproj" />
@@ -94,10 +89,9 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </PackageReference>
   </ItemGroup>
-  <Target Name="RemoveUnneededPlatformTargets" BeforeTargets="FindSourceVsixManifest">
+  <Target Name="SelectVsixManifest" BeforeTargets="FindSourceVsixManifest">
     <ItemGroup>
-      <None Include="x86\*.VsixManifest" Condition="'$(UseVsSdkVersion)' &lt;  '17.0'" />
-      <None Include="x64\*.VsixManifest" Condition="'$(UseVsSdkVersion)' &gt;= '17.0'" />
+      <None Include="x64\*.VsixManifest" />
     </ItemGroup>
   </Target>
   <Target Name="GenerateVSCT" BeforeTargets="ResolveAssemblyReferences;VSCTCompile">
@@ -118,7 +112,7 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="OverrideSharpSvnWithX64" AfterTargets="IncludeNuGetDependenciesInVsix" BeforeTargets="FindSourceVsixManifest;GetVsixSourceItems" Condition="'$(UseVsSdkVersion)' &gt;= '17.0'">
+  <Target Name="OverrideSharpSvnWithX64" AfterTargets="IncludeNuGetDependenciesInVsix" BeforeTargets="FindSourceVsixManifest;GetVsixSourceItems">
     <ItemGroup>
       <VSIXSourceItem Remove="@(VSIXSourceItem)" Condition="'%(Filename)' == 'SharpSvn' Or '%(Filename)' == 'SharpSvn-DB44-20-win32' Or '%(Filename)' == 'SharpPlink-Win32'" />
       <VSIXSourceItem Include="$(PkgSharpSvn)\runtimes\win-x64\lib\net40\SharpSvn.dll">
@@ -136,7 +130,7 @@
     <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpPlink-x64.svnExe" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
   </Target>
 
-  <!-- Import SDK targetm and then the VSSDK last -->
+  <!-- Import SDK targets and then the VSSDK last -->
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="('$(VSToolsPath)' != '') And Exists('$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets')" />
 </Project>

@@ -1,8 +1,7 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31410.414
-MinimumVisualStudioVersion = 10.0.40219.1
+MinimumVisualStudioVersion = 17.0.0.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Definitions", "Definitions", "{01F3ED56-C896-409C-8464-DB82B3AF1364}"
 	ProjectSection(SolutionItems) = preProject
 		BUILD.md = BUILD.md
@@ -25,8 +24,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BED3AA50-17ED-4A23-9104-72E31091B216}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		AllTests.testrunconfig = AllTests.testrunconfig
-		AnkhSvn.2010.vsmdi = AnkhSvn.2010.vsmdi
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh", "Ankh\Ankh.csproj", "{CE58AAC8-2271-4223-882F-0CD1A7105A52}"
@@ -145,8 +142,5 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD5748C0-06A1-432B-BD8A-7F6F50291089}
 		DPBuild = 5
-	EndGlobalSection
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = AnkhSvn.2010.vsmdi
 	EndGlobalSection
 EndGlobal

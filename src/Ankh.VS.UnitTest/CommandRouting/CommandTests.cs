@@ -21,11 +21,13 @@ using NUnit.Framework;
 
 using Ankh;
 using Ankh.Commands;
+using Ankh.Collections;
 using Ankh.Scc;
 using Ankh.Selection;
 using Ankh.UI;
 using Ankh.VS;
 using AnkhSvn_UnitTestProject.Helpers;
+using AnkhSvn_UnitTestProject.Mocks;
 using Ankh.Services;
 
 namespace AnkhSvn_UnitTestProject.CommandRouting
@@ -40,6 +42,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         public void SetUp()
         {
             sp = new AnkhServiceProvider();
+            sp.AddService(typeof(IAnkhPackage), PackageMock.EmptyContext(sp));
 
             object pvar;
             var shell = new Mock<SVsShell>().As<IVsShell>();
@@ -52,19 +55,23 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             sp.AddService(typeof(IAnkhCommandStates), state.Object);
 
-            var selection = new Mock<ISelectionContext>();
-            selection.Setup(x => x.Cache[It.IsAny<object>()]).Returns(null);
+            var selection = new Mock<ISelectionContext>().As<ISelectionContextEx>();
+            selection.As<ISelectionContext>().Setup(x => x.Cache[It.IsAny<object>()]).Returns(null);
+            selection.SetupGet(x => x.ActiveFrameTextView).Returns((IVsTextView)null);
+            selection.SetupGet(x => x.ActiveDocumentFrameTextView).Returns((IVsTextView)null);
 
             var rawHandle = new Mock<IVsSccProject2>();
-            var p = new SccProject("c:\foo\bar", rawHandle.Object);
-            selection.Setup(x => x.GetSelectedProjects(It.IsAny<bool>())).Returns(new[] { p });
+            var p = new SccProject(@"c:\foo\bar", rawHandle.Object);
+            selection.As<ISelectionContext>().Setup(x => x.GetSelectedProjects(It.IsAny<bool>())).Returns(new[] { p });
+            selection.As<ISelectionContext>().Setup(x => x.GetSelectedSvnItems(It.IsAny<bool>())).Returns(new SvnItem[0]);
             sp.AddService(typeof(ISelectionContext), selection.Object);
 
-
-            
-
+            var pendingChangesInner = new Mock<IKeyedNotifyCollection<string, PendingChange>>();
+            pendingChangesInner.SetupGet(x => x.Count).Returns(0);
 
             var pcMgr = new Mock<IPendingChangesManager>();
+            pcMgr.SetupGet(x => x.PendingChanges)
+                .Returns(new PendingChangeCollection(pendingChangesInner.Object));
             sp.AddService(typeof(IPendingChangesManager), pcMgr.Object);
 
 
@@ -77,13 +84,16 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
 
             var r = new AnkhRuntime(sp);
-            r.AddModule(new AnkhModule(r));
-            r.AddModule(new AnkhSccModule(r));
-            //r.AddModule(new AnkhVSModule(r));
-            r.AddModule(new AnkhUIModule(r));
-            r.Start();
 
-            cm = r.GetService<CommandMapper>();
+            // This fixture verifies that command update handlers tolerate incomplete
+            // project metadata. Loading the command assemblies is sufficient; starting
+            // the full extension runtime initializes unrelated registry/network/UI
+            // services and turns this unit test into an environment-dependent integration test.
+            r.CommandMapper.LoadFrom(typeof(AnkhModule).Assembly);
+            r.CommandMapper.LoadFrom(typeof(AnkhSccModule).Assembly);
+            r.CommandMapper.LoadFrom(typeof(AnkhUIModule).Assembly);
+
+            cm = r.CommandMapper;
         }
 
         [Test]

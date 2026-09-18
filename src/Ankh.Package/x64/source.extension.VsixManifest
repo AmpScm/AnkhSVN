@@ -29,6 +29,7 @@
 	</Dependencies>
 	<Assets>
 		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+		<Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="Ankh.UI" Path="|Ankh.UI|" />
 	</Assets>
 	<Prerequisites>
 		<Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,20.0)" DisplayName="Visual Studio Core Editor" />
