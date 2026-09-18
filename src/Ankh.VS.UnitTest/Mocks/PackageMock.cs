@@ -23,12 +23,12 @@ namespace AnkhSvn_UnitTestProject.Mocks
 
             public Version UIVersion
             {
-                get { throw new NotImplementedException(); }
+                get { return new Version(2, 9, 0, 0); }
             }
 
             public Version PackageVersion
             {
-                get { throw new NotImplementedException(); }
+                get { return new Version(2, 9, 0, 0); }
             }
 
             public void ShowToolWindow(AnkhToolWindow window)

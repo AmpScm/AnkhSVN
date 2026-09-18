@@ -34,7 +34,7 @@ namespace AnkhSvn_UnitTestProject.Services
         public void SetUp()
         {
             IAnkhServiceProvider serviceProvider = new AnkhServiceProvider();
-            Type mapperType = typeof(ProjectIconReference).Assembly.GetType(
+            Type mapperType = typeof(AnkhVSModule).Assembly.GetType(
                 "Ankh.VS.SolutionExplorer.FileIconMapper",
                 true);
             ConstructorInfo constructor = mapperType.GetConstructor(

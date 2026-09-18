@@ -98,6 +98,7 @@ namespace UnitTestProject.MenuItemTests
         /// This action takes place In the Initialize method of the Package object
         /// </summary>
         [Test]
+        [Explicit("Requires a Visual Studio package host; AsyncPackage cannot be initialized by plain VSTest")]
         [Obsolete]
         public void InitializeMenuCommand()
         {

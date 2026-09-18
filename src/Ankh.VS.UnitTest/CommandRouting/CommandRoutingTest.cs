@@ -62,10 +62,10 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [SetUp]
         public void Initialize()
         {
-            // Visual Studio 2022+ package model. AsyncPackage still exposes IVsPackage
-            // for shell integration, which is the contract these routing tests need.
-            IVsPackage package = new AnkhSvnPackage() as IVsPackage;
-            Assert.IsNotNull(package, "The package must implement IVsPackage");
+            // Command-routing tests only require the Ankh package service contract.
+            // Constructing the real AsyncPackage outside Visual Studio requires
+            // ThreadHelper.JoinableTaskContext and is therefore an integration concern.
+            IAnkhPackage package = (IAnkhPackage)PackageMock.EmptyContext(ServiceProviderHelper.serviceProvider);
 
             var statusCache = new Mock<ISvnStatusCache>();
             var regEditors = new Mock<SVsRegisterEditors>().As<IVsRegisterEditors>();

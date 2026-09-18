@@ -26,6 +26,7 @@ using Ankh.Selection;
 using Ankh.UI;
 using Ankh.VS;
 using AnkhSvn_UnitTestProject.Helpers;
+using AnkhSvn_UnitTestProject.Mocks;
 using Ankh.Services;
 
 namespace AnkhSvn_UnitTestProject.CommandRouting
@@ -40,6 +41,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         public void SetUp()
         {
             sp = new AnkhServiceProvider();
+            sp.AddService(typeof(IAnkhPackage), PackageMock.EmptyContext(sp));
 
             object pvar;
             var shell = new Mock<SVsShell>().As<IVsShell>();
