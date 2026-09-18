@@ -204,15 +204,6 @@ jobs:
           $archive.Dispose()
         }
 
-    - name: Prepare Release Files
-      if: github.event_name != 'pull_request'
-      shell: pwsh
-      run: |
-        $version = "2.9.${{ github.run_number }}"
-        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\release" | Out-Null
-        Copy-Item "${{ github.workspace }}\build\src\Ankh.Package\bin\release\Ankh.Package.vsix" "${{ github.workspace }}\release\AnkhSVN-$version-VS2022.vsix"
-        Write-Host "Prepared AnkhSVN-$version-VS2022.vsix"
-
     - name: Upload VSIX Artifact
       uses: actions/upload-artifact@v6
       with:
@@ -238,6 +229,15 @@ jobs:
         }
 
         Write-Host "Both test suites passed."
+
+    - name: Prepare Release Files
+      if: github.event_name != 'pull_request'
+      shell: pwsh
+      run: |
+        $version = "2.9.${{ github.run_number }}"
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\release" | Out-Null
+        Copy-Item "${{ github.workspace }}\build\src\Ankh.Package\bin\release\Ankh.Package.vsix" "${{ github.workspace }}\release\AnkhSVN-$version-VS2022.vsix"
+        Write-Host "Prepared AnkhSVN-$version-VS2022.vsix"
 
     - name: Create GitHub Package
       if: github.event_name != 'pull_request'
