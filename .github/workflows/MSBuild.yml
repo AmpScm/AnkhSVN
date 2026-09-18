@@ -187,26 +187,6 @@ jobs:
         finally {
           Pop-Location
         }
-    - name: Verify test suites
-      if: always()
-      shell: pwsh
-      run: |
-        $failures = @()
-
-        if ("${{ steps.ankh_tests.outcome }}" -ne "success") {
-          $failures += "Ankh.Tests"
-        }
-
-        if ("${{ steps.ankh_vs_tests.outcome }}" -ne "success") {
-          $failures += "Ankh.VS.UnitTest"
-        }
-
-        if ($failures.Count -gt 0) {
-          throw ("Test suite failure(s): " + ($failures -join ", "))
-        }
-
-        Write-Host "Both test suites passed."
-
     - name: Verify VSIX contains Ankh.UI
       shell: pwsh
       run: |
@@ -238,6 +218,26 @@ jobs:
       with:
         name: Ankh-VSIX-2022-${{ github.run_number }}
         path: build/src/Ankh.Package/bin/release/Ankh.Package.vsix
+
+    - name: Verify test suites
+      if: always()
+      shell: pwsh
+      run: |
+        $failures = @()
+
+        if ("${{ steps.ankh_tests.outcome }}" -ne "success") {
+          $failures += "Ankh.Tests"
+        }
+
+        if ("${{ steps.ankh_vs_tests.outcome }}" -ne "success") {
+          $failures += "Ankh.VS.UnitTest"
+        }
+
+        if ($failures.Count -gt 0) {
+          throw ("Test suite failure(s): " + ($failures -join ", "))
+        }
+
+        Write-Host "Both test suites passed."
 
     - name: Create GitHub Package
       if: github.event_name != 'pull_request'
