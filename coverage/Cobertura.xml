@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage line-rate="0.03680967594705614" branch-rate="0.03853635942566003" lines-covered="1613" lines-valid="43820" branches-covered="832" branches-valid="21590" complexity="25656" version="0" timestamp="1789693125">
+<coverage line-rate="0.03680967594705614" branch-rate="0.03853635942566003" lines-covered="1613" lines-valid="43820" branches-covered="832" branches-valid="21590" complexity="25656" version="0" timestamp="1789693604">
   <sources>
     <source>D:\a\AnkhSVN\AnkhSVN\build\src\</source>
   </sources>
