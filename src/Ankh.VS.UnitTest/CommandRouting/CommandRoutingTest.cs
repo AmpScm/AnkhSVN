@@ -54,13 +54,25 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
                 return runtime.CommandMapper.Execute(commandEnum, new CommandEventArgs(commandEnum, runtime.Context, argument, false, false));
             }
 
+            public static bool TestEnabled(AnkhCommand commandEnum)
+            {
+                AnkhRuntime runtime = CreateCommandRuntime();
+                CommandUpdateEventArgs args = new CommandUpdateEventArgs(commandEnum, runtime.Context);
+
+                Assert.That(runtime.CommandMapper.PerformUpdate(commandEnum, args), Is.True,
+                    "Expected the command to be registered");
+
+                return args.Enabled;
+            }
+
             static AnkhRuntime CreateCommandRuntime()
             {
                 // These are command-routing unit tests, not package/runtime integration tests.
-                // Load the command handlers directly instead of starting all Ankh services
+                // Load command handlers directly instead of starting all Ankh services
                 // (update checks, registry-backed services, schedulers, etc.).
                 AnkhRuntime runtime = new AnkhRuntime(ServiceProviderHelper.serviceProvider);
                 runtime.CommandMapper.LoadFrom(typeof(AnkhModule).Assembly);
+                runtime.CommandMapper.LoadFrom(typeof(AnkhUIModule).Assembly);
                 return runtime;
             }
         }
@@ -116,7 +128,8 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [Test]
         public void AddRepositoryRoot()
         {
-            Assert.IsTrue(CommandTester.TestExecution(AnkhCommand.RepositoryBrowse), "Add repository root always enabled");
+            Assert.That(CommandTester.TestEnabled(AnkhCommand.RepositoryBrowse), Is.True,
+                "Repository Browse is declared AlwaysAvailable");
         }
 
         [Test]
@@ -230,8 +243,8 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         {
             ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-                Assert.That(CommandTester.TestExecution(AnkhCommand.Refresh), Is.True,
-                    "Refresh works with empty selection");
+                Assert.That(CommandTester.TestEnabled(AnkhCommand.Refresh), Is.False,
+                    "Refresh is disabled when there are no selected files");
         }
 
         [Test, Explicit("Requires repository explorer state")]
