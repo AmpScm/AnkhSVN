@@ -63,12 +63,22 @@ namespace AnkhSvn_UnitTestProject.Mocks
 
             public Microsoft.Win32.RegistryKey ApplicationRegistryRoot
             {
-                get { throw new NotImplementedException(); }
+                get
+                {
+                    return Microsoft.Win32.RegistryKey.OpenBaseKey(
+                        Microsoft.Win32.RegistryHive.CurrentUser,
+                        Microsoft.Win32.RegistryView.Default);
+                }
             }
 
             public Microsoft.Win32.RegistryKey UserRegistryRoot
             {
-                get { throw new NotImplementedException(); }
+                get
+                {
+                    return Microsoft.Win32.RegistryKey.OpenBaseKey(
+                        Microsoft.Win32.RegistryHive.CurrentUser,
+                        Microsoft.Win32.RegistryView.Default);
+                }
             }
 
             public T GetService<T>() where T : class
