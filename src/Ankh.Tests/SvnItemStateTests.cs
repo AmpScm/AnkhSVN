@@ -89,7 +89,7 @@ namespace Ankh.Tests
             Assert.That(item.IsVersioned, Is.True);
             Assert.That(item.IsReplaced, Is.True);
             Assert.That(item.HasCopyableHistory, Is.True);
-            Assert.That(item.IsModified, Is.False);
+            Assert.That(item.IsModified, Is.True);
         }
 
         [Test]
