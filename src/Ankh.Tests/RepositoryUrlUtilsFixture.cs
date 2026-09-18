@@ -120,6 +120,45 @@ namespace Ankh.Tests
                 RepositoryUrlUtils.IsWithinRepository(new Uri(repositoryRoot), new Uri(destination)));
         }
 
+        [TestCase(
+            "https://svn.example.test/repos/project/",
+            "https://svn.example.test/repos/project/branches/feature/",
+            true,
+            TestName = "BranchCommandAllowsSameRepositoryDestination")]
+        [TestCase(
+            "https://svn.example.test/repos/project/",
+            "https://svn.example.test/repos/project/branches/releases/2026/MyNewBranch/",
+            true,
+            TestName = "BranchCommandAllowsMissingNestedParents")]
+        [TestCase(
+            "https://svn.example.test/repos/project/",
+            "https://svn.example.test/repos/other/branches/feature/",
+            false,
+            TestName = "BranchCommandRejectsSiblingRepository")]
+        [TestCase(
+            "https://svn.example.test/repos/project/",
+            "https://other.example.test/repos/project/branches/feature/",
+            false,
+            TestName = "BranchCommandRejectsDifferentServer")]
+        public void BranchCommandDestinationPolicy(string repositoryRoot, string destination, bool expected)
+        {
+            Assert.AreEqual(
+                expected,
+                RepositoryUrlUtils.IsValidBranchDestination(
+                    new Uri(repositoryRoot),
+                    new Uri(destination)));
+        }
+
+        [Test]
+        public void BranchCommandAllowsDestinationWhenRepositoryRootIsUnavailable()
+        {
+            Assert.IsTrue(
+                RepositoryUrlUtils.IsValidBranchDestination(
+                    null,
+                    new Uri("https://svn.example.test/repos/project/branches/feature/")),
+                "Missing working-copy repository metadata must preserve the pre-e6623b1 fallback behavior.");
+        }
+
         [Test]
         public void BranchDestinationAllowsMissingNestedParentsInsideRepository()
         {
