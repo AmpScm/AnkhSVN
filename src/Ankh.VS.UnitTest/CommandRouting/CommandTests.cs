@@ -55,17 +55,16 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             sp.AddService(typeof(IAnkhCommandStates), state.Object);
 
-            var selection = new Mock<ISelectionContext>();
-            selection.Setup(x => x.Cache[It.IsAny<object>()]).Returns(null);
+            var selection = new Mock<ISelectionContext>().As<ISelectionContextEx>();
+            selection.As<ISelectionContext>().Setup(x => x.Cache[It.IsAny<object>()]).Returns(null);
+            selection.SetupGet(x => x.ActiveFrameTextView).Returns((IVsTextView)null);
+            selection.SetupGet(x => x.ActiveDocumentFrameTextView).Returns((IVsTextView)null);
 
             var rawHandle = new Mock<IVsSccProject2>();
-            var p = new SccProject("c:\foo\bar", rawHandle.Object);
-            selection.Setup(x => x.GetSelectedProjects(It.IsAny<bool>())).Returns(new[] { p });
+            var p = new SccProject(@"c:\foo\bar", rawHandle.Object);
+            selection.As<ISelectionContext>().Setup(x => x.GetSelectedProjects(It.IsAny<bool>())).Returns(new[] { p });
+            selection.As<ISelectionContext>().Setup(x => x.GetSelectedSvnItems(It.IsAny<bool>())).Returns(new SvnItem[0]);
             sp.AddService(typeof(ISelectionContext), selection.Object);
-
-
-            
-
 
             var pendingChangesInner = new Mock<IKeyedNotifyCollection<string, PendingChange>>();
             pendingChangesInner.SetupGet(x => x.Count).Returns(0);
