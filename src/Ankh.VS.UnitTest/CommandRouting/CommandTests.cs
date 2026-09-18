@@ -21,6 +21,7 @@ using NUnit.Framework;
 
 using Ankh;
 using Ankh.Commands;
+using Ankh.Collections;
 using Ankh.Scc;
 using Ankh.Selection;
 using Ankh.UI;
@@ -66,7 +67,12 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             
 
 
+            var pendingChangesInner = new Mock<IKeyedNotifyCollection<string, PendingChange>>();
+            pendingChangesInner.SetupGet(x => x.Count).Returns(0);
+
             var pcMgr = new Mock<IPendingChangesManager>();
+            pcMgr.SetupGet(x => x.PendingChanges)
+                .Returns(new PendingChangeCollection(pendingChangesInner.Object));
             sp.AddService(typeof(IPendingChangesManager), pcMgr.Object);
 
 
