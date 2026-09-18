@@ -176,6 +176,20 @@ namespace AnkhSvn_UnitTestProject.Services
         }
 
         [Test]
+        public void ImageListHandleCanBeCreatedAfterResolvingIcons()
+        {
+            Assert.That(mapper.GetIconForExtension("exe"), Is.GreaterThanOrEqualTo(0));
+            Assert.That(mapper.GetIconForExtension("txt"), Is.GreaterThanOrEqualTo(0));
+            Assert.That(mapper.DirectoryIcon, Is.GreaterThanOrEqualTo(0));
+
+            Assert.DoesNotThrow(() =>
+            {
+                IntPtr handle = mapper.ImageList.Handle;
+                Assert.That(handle, Is.Not.EqualTo(IntPtr.Zero));
+            }, "Pending Changes assigns this ImageList to ListView.SmallImageList; creating its handle must not fail.");
+        }
+
+        [Test]
         public void GetIconRejectsNullPath()
         {
             Assert.Throws<ArgumentNullException>(() => mapper.GetIcon(null));

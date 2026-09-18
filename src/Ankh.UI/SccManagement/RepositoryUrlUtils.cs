@@ -59,6 +59,14 @@ namespace Ankh.UI.SccManagement
 
     public static class RepositoryUrlUtils
     {
+        public static bool IsValidBranchDestination(Uri repositoryRoot, Uri candidate)
+        {
+            // BranchSolutionCommand historically allowed the copy to proceed when
+            // working-copy metadata could not provide a repository root. Preserve
+            // that fallback while making the e6623b1 validation policy testable.
+            return repositoryRoot == null || IsWithinRepository(repositoryRoot, candidate);
+        }
+
         public static bool IsWithinRepository(Uri repositoryRoot, Uri candidate)
         {
             if (repositoryRoot == null)

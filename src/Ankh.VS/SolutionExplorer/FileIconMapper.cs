@@ -217,11 +217,28 @@ namespace Ankh.VS.SolutionExplorer
 
                 try
                 {
-                    _imageList.Images.Add(icon);
+                    // Clone the icon into a managed bitmap while the native icon
+                    // handle is still valid. Keeping Icon.FromHandle() instances in
+                    // the ImageList can leave it holding images backed by handles
+                    // that ProjectIconReference disposes below. Newer WinForms
+                    // (notably VS 2026) validates those images when the ImageList
+                    // handle is created and throws ArgumentException.
+                    // ImageList defers creation of its native HIMAGELIST until the
+                    // control asks for Handle. Keep the managed bitmap alive until
+                    // ImageList itself is disposed; disposing it immediately after
+                    // Images.Add() leaves newer WinForms holding an invalid image.
+                    Bitmap bitmap = icon.ToBitmap();
+                    _imageList.Images.Add(bitmap);
                 }
                 catch (InvalidOperationException)
                 {
                     // Unmanaged add icon operation failed (Reported on mailinglist)
+                    return -1;
+                }
+                catch (ArgumentException)
+                {
+                    // Invalid or stale native icon data must not prevent tool
+                    // windows such as Pending Changes from being constructed.
                     return -1;
                 }
             }
@@ -388,30 +405,27 @@ namespace Ankh.VS.SolutionExplorer
             {
                 const int sourceIconSize = 16;
                 int count = img.Width / sourceIconSize;
+                Size iconSize = _imageList.ImageSize;
 
-                if (_imageList.ImageSize.Width == sourceIconSize && _imageList.ImageSize.Height == sourceIconSize)
+                // Do not use AddStrip with an Image that is disposed before the
+                // ImageList creates its native handle. VS 2026 / newer WinForms
+                // validates the backing Image at handle creation and throws
+                // ArgumentException when that source image has already gone away.
+                // Give ImageList one independently owned bitmap per icon instead.
+                for (int i = 0; i < count; i++)
                 {
-                    _imageList.Images.AddStrip(img);
-                }
-                else
-                {
-                    Size iconSize = _imageList.ImageSize;
-                    using (Bitmap scaledStrip = new Bitmap(count * iconSize.Width, iconSize.Height))
-                    using (Graphics graphics = Graphics.FromImage(scaledStrip))
+                    Bitmap icon = new Bitmap(iconSize.Width, iconSize.Height);
+                    using (Graphics graphics = Graphics.FromImage(icon))
                     {
                         graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
                         graphics.PixelOffsetMode = PixelOffsetMode.Half;
-
-                        for (int i = 0; i < count; i++)
-                        {
-                            graphics.DrawImage(img,
-                                new Rectangle(i * iconSize.Width, 0, iconSize.Width, iconSize.Height),
-                                new Rectangle(i * sourceIconSize, 0, sourceIconSize, sourceIconSize),
-                                GraphicsUnit.Pixel);
-                        }
-
-                        _imageList.Images.AddStrip(scaledStrip);
+                        graphics.DrawImage(img,
+                            new Rectangle(0, 0, iconSize.Width, iconSize.Height),
+                            new Rectangle(i * sourceIconSize, 0, sourceIconSize, sourceIconSize),
+                            GraphicsUnit.Pixel);
                     }
+
+                    _imageList.Images.Add(icon);
                 }
 
                 _lvUp = _imageList.Images.Count - count + 1;

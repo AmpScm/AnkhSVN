@@ -24,6 +24,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <ProjectReference Include="..\Ankh.Diff\Ankh.Diff.csproj" />
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj" />
     <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj" />
     <ProjectReference Include="..\Ankh.UI\Ankh.UI.csproj" />
@@ -51,5 +52,13 @@
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="RhinoMocks" />
+    <PackageReference Include="SharpSvn" GeneratePathProperty="true">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
+  <Target Name="UseX64SharpSvnForTests" AfterTargets="Build">
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\net40\SharpSvn.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpSvn-DB44-20-x64.svnDll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpPlink-x64.svnExe" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+  </Target>
 </Project>
