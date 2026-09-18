@@ -8,6 +8,8 @@ The **Pending Changes** window is the main place to review local Subversion chan
 
 A commit publishes selected working-copy changes as one repository revision. Until the commit succeeds, edits, adds, deletes, moves, and property changes remain local.
 
+**Add is not Commit.** Adding or scheduling a path only changes the working copy; nothing is published to repository history until commit succeeds.
+
 ## Recommended commit workflow
 
 1. **Update or check status** so you understand changes made by other people.
@@ -22,7 +24,7 @@ A commit publishes selected working-copy changes as one repository revision. Unt
 
 ## What happens during commit
 
-Subversion sends your selected working-copy changes to the repository as a transaction. A successful commit creates a new repository revision. A failed commit does not partially publish some of the selected changes as a normal successful revision.
+Subversion sends your selected working-copy changes to the repository as a transaction. A successful repository commit is **atomic**: the selected changes become one new repository revision together. A failed commit does not partially publish some of the selected changes as a normal successful revision.
 
 Committing does **not** automatically update every untouched path in your working copy to HEAD. Your working copy can therefore contain mixed BASE revisions.
 

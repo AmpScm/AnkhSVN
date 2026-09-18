@@ -23,6 +23,8 @@ Update can:
 
 Updating does not discard normal local edits; Subversion attempts to combine them with incoming repository changes.
 
+If Subversion cannot combine the changes safely, it can create **text conflicts**, **property conflicts**, or **tree conflicts**. Text conflicts concern file content, property conflicts concern versioned metadata, and tree conflicts concern structural changes such as deletes, moves, renames, or obstructing paths.
+
 ## Update to revision
 
 Updating to an older numbered revision is useful for investigation and reproduction, but it is not the same as undoing history.
