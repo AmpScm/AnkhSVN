@@ -66,6 +66,14 @@ A path's current URL is not always enough to identify older history after rename
 
 This is why a historical command may include both a path and a revision context.
 
+## Externals during checkout/update
+
+A checkout or update can also process `svn:externals` definitions below the selected tree. That means one repository operation can contact additional URLs, create additional working copies, and require additional credentials.
+
+If the primary checkout succeeds but the overall operation reports failures, inspect the external definitions and test those URLs separately.
+
+See [Externals](../externals/).
+
 ## Repository access problems
 
 If browsing works but checkout fails, or vice versa, check:

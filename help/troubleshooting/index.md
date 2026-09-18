@@ -57,6 +57,14 @@ Verify that you selected a path inside the actual checkout and that its working-
 
 Copying only project files to a new directory does not create a Subversion working copy.
 
+### Repository moved or URL changed
+
+If the same repository was moved to a new server or base URL, do not use **Switch** merely because the URL changed. Switch is normally for changing the working-copy path to another branch/location within the same repository history.
+
+A repository relocation operation is appropriate when the repository identity/history is the same and only its root URL changed. Verify the old and new repository URLs carefully before changing working-copy metadata.
+
+If repository identity changed as well, a fresh checkout may be safer than pretending the new repository is the old one.
+
 ### Path not found / repository path missing
 
 Check:
@@ -88,6 +96,19 @@ Preserve anything important, identify why the obstruction exists, then move/remo
 Inspect the `svn:externals` definition and test each external URL. Check credentials and whether the destination already exists.
 
 See [Externals](../externals/).
+
+### Status icons / Pending Changes do not reflect the file state
+
+If Visual Studio does not show the status you expect:
+
+- refresh Pending Changes/status,
+- verify the file is inside the working-copy root,
+- verify the file is not part of a separate external working copy,
+- check whether it is ignored or unversioned,
+- confirm another Subversion client reports the same status,
+- reopen the solution or Visual Studio if the working copy changed substantially outside the IDE.
+
+If command-line or another SVN client also reports unexpected status, investigate the working copy rather than treating it as only a Visual Studio display problem.
 
 ### Expected file does not appear in Pending Changes
 

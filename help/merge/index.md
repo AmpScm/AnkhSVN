@@ -22,6 +22,12 @@ Before a significant merge:
 
 Subversion can merge into a modified working copy, but mixing pre-existing edits with merge results makes review and conflict resolution harder.
 
+## Sync merges
+
+A **sync merge** brings a branch up to date with changes from its parent/source line of development, commonly bringing newer trunk changes into a feature branch before reintegration or continued work.
+
+When merge tracking is available, Subversion can avoid reapplying revisions that are already recorded as merged. Review the source, target, and eligible revision set before starting; a sync merge should not be treated as "merge everything blindly."
+
 ## Revision-range / cherry-pick merges
 
 Use a revision-range merge when you want changes introduced by particular revisions from a source line of history.
