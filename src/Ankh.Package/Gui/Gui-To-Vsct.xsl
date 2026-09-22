@@ -14,6 +14,9 @@
     <CommandTable language="en-us">
       <xsl:comment>Generated file; please edit the original file instead of this generated file</xsl:comment>
       <xsl:apply-templates select="gui:Imports/gui:Import[@include]" mode="include" />
+      <xsl:if test="//gui:UI//gui:Button[starts-with(@iconId, 'ImageCatalogGuid:')]">
+        <Include href="KnownImageIds.vsct"/>
+      </xsl:if>
 
       <xsl:variable name="symbols">
         <xsl:apply-templates select="gui:Imports/gui:Import[not (@include)]" mode="include" />
@@ -284,6 +287,9 @@
       </xsl:if>
       <xsl:if test="@iconAndText='true'">
         <CommandFlag>IconAndText</CommandFlag>
+      </xsl:if>
+      <xsl:if test="starts-with(@iconId, 'ImageCatalogGuid:')">
+        <CommandFlag>IconIsMoniker</CommandFlag>
       </xsl:if>
       <xsl:if test="@noButtonCustomize='true'">
         <CommandFlag>NoButtonCustomize</CommandFlag>

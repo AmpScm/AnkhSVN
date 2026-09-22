@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
@@ -101,10 +102,21 @@ namespace Ankh.VS.Selection
                         files = GetFileNamesFromOleBuffer(str, true);
                         flags = GetFlagsFromOleBuffer(dw, true);
 
-                        if (!includeNoScc || files.Length > 0)
+                        if (files.Length > 0)
                             return ok = true; // We have a result
-                        else
-                            ok = true; // Try the GetMkDocument route to find an alternative
+
+                        ok = true;
+
+                        // Visual C++ project systems have returned S_OK with an
+                        // empty file list for real project members when their
+                        // project cache is incomplete (issue #17). Preserve the
+                        // SCC contract for every other project type, but allow a
+                        // narrowly scoped VC++ fallback to GetMkDocument().
+                        if (!includeNoScc
+                            && !ShouldTryVcProjectDocumentFallback(hierarchy, id))
+                        {
+                            return true;
+                        }
                     }
                     else if (hr != VSErr.E_NOTIMPL)
                         return false; // 
@@ -162,6 +174,61 @@ namespace Ankh.VS.Selection
                         map[file] = id;
                 }
             }
+        }
+
+        internal static bool ShouldTryVcProjectDocumentFallback(
+            IVsHierarchy hierarchy,
+            uint id)
+        {
+            if (hierarchy == null || id == VSItemId.Root)
+                return false;
+
+            IVsProject project = hierarchy as IVsProject;
+            if (project == null)
+                return false;
+
+            try
+            {
+                string projectFile;
+                if (!VSErr.Succeeded(
+                        project.GetMkDocument(
+                            VSItemId.Root,
+                            out projectFile))
+                    || !String.Equals(
+                        Path.GetExtension(projectFile),
+                        ".vcxproj",
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            try
+            {
+                object nonMember;
+                if (VSErr.Succeeded(
+                        hierarchy.GetProperty(
+                            id,
+                            (int)__VSHPROPID.VSHPROPID_IsNonMemberItem,
+                            out nonMember))
+                    && nonMember is bool
+                    && (bool)nonMember)
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                // Some VC++ hierarchy implementations do not expose this
+                // property consistently. GetMkDocument() and path validation
+                // below remain the final safety checks.
+            }
+
+            return true;
         }
 
         /// <summary>

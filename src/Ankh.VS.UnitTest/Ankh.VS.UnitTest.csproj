@@ -19,6 +19,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Ankh.Diff\Ankh.Diff.csproj" />
     <ProjectReference Include="..\Ankh.Scc\Ankh.Scc.csproj" />
     <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj" />
     <ProjectReference Include="..\Ankh.UI\Ankh.UI.csproj" />

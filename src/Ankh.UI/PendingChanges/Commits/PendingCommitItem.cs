@@ -75,12 +75,9 @@ namespace Ankh.UI.PendingChanges.Commits
                 PendingChange.FileType,
                 SafeWorkingCopy(item));
 
-            IAnkhCommandStates states = context.GetService<IAnkhCommandStates>();
-
-            if (!SystemInformation.HighContrast
-                && (!states.ThemeDefined || states.ThemeLight))
+            if (!SystemInformation.HighContrast && ListView != null)
             {
-                System.Drawing.Color clr = System.Drawing.Color.Black;
+                System.Drawing.Color clr = System.Drawing.Color.Empty;
 
                 if (item.IsConflicted || PendingChange.Kind == PendingChangeKind.WrongCasing)
                     clr = System.Drawing.Color.Red;
@@ -98,16 +95,17 @@ namespace Ankh.UI.PendingChanges.Commits
                     if (item.InSolution && !item.IsIgnored)
                         clr = System.Drawing.Color.FromArgb(100, 0, 100); // Same as added+copied
                     else
-                        clr = System.Drawing.Color.Black;
+                        clr = System.Drawing.Color.Empty;
                 }
                 else if (item.IsModified)
                     clr = System.Drawing.Color.DarkBlue;
 
-                ForeColor = clr;
+                ForeColor = !clr.IsEmpty && AnkhThemePalette.ContrastRatio(clr, ListView.BackColor) >= 4.5
+                    ? clr : System.Drawing.Color.Empty;
             }
             else if (this.ListView != null)
             {
-                ForeColor = this.ListView.ForeColor;
+                ForeColor = System.Drawing.Color.Empty;
             }
         }
 

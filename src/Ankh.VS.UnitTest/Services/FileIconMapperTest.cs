@@ -189,6 +189,29 @@ namespace AnkhSvn_UnitTestProject.Services
             }, "Pending Changes assigns this ImageList to ListView.SmallImageList; creating its handle must not fail.");
         }
 
+        [TestCase(96, 16)]
+        [TestCase(120, 20)]
+        [TestCase(144, 24)]
+        [TestCase(192, 32)]
+        [TestCase(288, 48)]
+        [TestCase(0, 16)]
+        public void DpiIconSizeUsesLogicalSixteenPixels(int dpi, int expected)
+        {
+            Assert.That(
+                FileIconMapperDpiLogic.GetPixelSize(16, dpi),
+                Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ImageListUsesCurrentDpiInsteadOfFixedSixteenPixels()
+        {
+            int expected = FileIconMapperDpiLogic.GetPixelSize(
+                16,
+                FileIconMapperDpiLogic.GetCurrentDpi());
+
+            Assert.That(mapper.ImageList.ImageSize, Is.EqualTo(new System.Drawing.Size(expected, expected)));
+        }
+
         [Test]
         public void GetIconRejectsNullPath()
         {

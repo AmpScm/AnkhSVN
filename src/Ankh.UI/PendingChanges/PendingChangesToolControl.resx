@@ -168,7 +168,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="pendingChangesTabs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>31, 300</value>
+    <value>36, 300</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="pendingChangesTabs.TabIndex" type="System.Int32, mscorlib">
@@ -193,10 +193,10 @@
     <value>Fill</value>
   </data>
   <data name="contentPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>31, 0</value>
+    <value>36, 0</value>
   </data>
   <data name="contentPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>773, 300</value>
+    <value>768, 300</value>
   </data>
   <data name="contentPanel.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>

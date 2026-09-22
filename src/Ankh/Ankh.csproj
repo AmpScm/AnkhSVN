@@ -4,7 +4,11 @@
     <UseWindowsForms>true</UseWindowsForms>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Ankh.snk</AssemblyOriginatorKeyFile>
+    <AnkhHelpBaseUrl Condition="'$(AnkhHelpBaseUrl)' == ''">https://amp-scm.com/AnkhSVN/help/</AnkhHelpBaseUrl>
   </PropertyGroup>
+  <ItemGroup>
+    <AssemblyMetadata Include="AnkhHelpBaseUrl" Value="$(AnkhHelpBaseUrl)" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />

@@ -93,85 +93,115 @@ namespace Ankh.Services
             // Note: For TortoiseSVN use the host program files, as $(ProgramFiles) is invalid on X64 
             //       with TortoiseSVN integrated in explorer
             tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseSVN TortoiseMerge",
-                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath")
-                    ?? "$(HostProgramFiles)\\TortoiseSVN\\bin\\TortoiseMerge.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath"),
+                    "$(HostProgramFiles)\\TortoiseSVN\\bin\\TortoiseMerge.exe"),
                 "/base:'$(Base)' /mine:'$(Mine)' /basename:'$(BaseName)' /minename:'$(MineName)' " +
                 "$(ReadOnly?'/readonly')", true));
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
-                RelativePath(
-                    AppIdLocalServerSearch("Merge7.SVNFS") ??
-                    AppIdLocalServerSearch("Merge70.Application") ??
-                    ShellOpenSearch("Merge.Comparison.7"), "Compare.exe")
-                        ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    RelativePath(
+                        DiffToolTemplateLogic.FirstNonNull(
+                            AppIdLocalServerSearch("Merge7.SVNFS"),
+                            AppIdLocalServerSearch("Merge70.Application"),
+                            ShellOpenSearch("Merge.Comparison.7")),
+                        "Compare.exe"),
+                    "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe"),
                 "/wait /2 /title1:'$(BaseName)' /title2:'$(MineName)' '$(Base)' '$(Mine)' " +
                 "$(ReadOnly?'/readonly')", true));
 
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
-                RegistrySearch("SOFTWARE\\SourceGear\\Common\\DiffMerge\\Installer", "Location")
-                    ?? RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location")
-                    ?? "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    RegistrySearch("SOFTWARE\\SourceGear\\Common\\DiffMerge\\Installer", "Location"),
+                    RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location"),
+                    "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe"),
                 "'$(Base)' '$(Mine)' /t1='$(BaseName)' /t2='$(MineName)' "
                 + "$(ReadOnly?'/ro2')" , true));
 
             tools.Add(new DiffTool(this, "KDiff3", "KDiff3",
-                RegistrySearch("SOFTWARE\\KDiff3\\diff-ext", "diffcommand")
-                    ?? "$(ProgramFiles)\\KDiff3\\KDiff3.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    RegistrySearch("SOFTWARE\\KDiff3\\diff-ext", "diffcommand"),
+                    "$(ProgramFiles)\\KDiff3\\KDiff3.exe"),
                 "'$(Base)' --fname '$(BaseName)' '$(Mine)' --fname '$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "WinMerge", "WinMerge",
-                RegistrySearch("SOFTWARE\\Thingamahoochie\\WinMerge", "Executable")
-                    ?? "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    RegistrySearch("SOFTWARE\\Thingamahoochie\\WinMerge", "Executable"),
+                    "$(ProgramFiles)\\WinMerge\\WinMergeU.exe"),
                 "-e -u -wl$(ReadOnly?' -wr') -dl '$(BaseName)' -dr '$(MineName)' '$(base)' '$(mine)'", true));
 
             tools.Add(new DiffTool(this, "P4Merge", "Perforce Visual Merge",
-                Path.Combine((RegistrySearch("SOFTWARE\\Perforce\\Environment", "P4INSTROOT")
-                    ?? "$(ProgramFiles)\\Perforce"), "p4merge.exe"),
+                Path.Combine(
+                    DiffToolTemplateLogic.FirstNonNull(
+                        RegistrySearch("SOFTWARE\\Perforce\\Environment", "P4INSTROOT"),
+                        "$(ProgramFiles)\\Perforce"),
+                    "p4merge.exe"),
                     "'$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "BeyondCompare", "Beyond Compare",
-                RelativePath(ShellOpenSearch("BeyondCompare.Snapshot"), "BComp.exe")
-                    ?? "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    RelativePath(ShellOpenSearch("BeyondCompare.Snapshot"), "BComp.exe"),
+                    "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe"),
                 "'$(Base)' '$(Mine)' /fv /title1='$(BaseName)' /title2='$(MineName)' /leftreadonly", true));
 
             tools.Add(new DiffTool(this, "ECMerge", "Ellié Computing Merge",
-                RegistrySearch("SOFTWARE\\Ellié Computing\\Merge", "Path")
-                    ?? "$(ProgramFiles)\\Ellié Computing\\Merge\\guimerge.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    RegistrySearch("SOFTWARE\\Ellié Computing\\Merge", "Path"),
+                    "$(ProgramFiles)\\Ellié Computing\\Merge\\guimerge.exe"),
                 "'$(Base)' '$(Mine)' --mode=diff2 --title1='$(BaseName)' --title2='$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "ExamDiff", "PrestoSoft ExamDiff",
-                RegistrySearch("SOFTWARE\\PrestoSoft\\ExamDiff", "ExePath")
-                    ?? UserRegistrySearch("SOFTWARE\\PrestoSoft\\ExamDiff", "ExePath")
-                    ?? "$(ProgramFiles)\\ExamDiff\\ExamDiff.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    RegistrySearch("SOFTWARE\\PrestoSoft\\ExamDiff", "ExePath"),
+                    UserRegistrySearch("SOFTWARE\\PrestoSoft\\ExamDiff", "ExePath"),
+                    "$(ProgramFiles)\\ExamDiff\\ExamDiff.exe"),
                 "'$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "CompareIt", "Compare It!",
-                RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Compare It!_is1", "DisplayIcon")
-                    ?? "$(ProgramFiles)\\Compare It!\\wincmp.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Compare It!_is1", "DisplayIcon"),
+                    "$(ProgramFiles)\\Compare It!\\wincmp.exe"),
                 "'$(Base)' '/=$(BaseName)' '$(Mine)' '/=$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "SlickEdit", "SlickEdit",
-                RelativePath(RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\vs.exe", ""), "VSDiff.exe")
-                    ?? "$(ProgramFiles)\\SlickEdit\\win\\VSDiff.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    RelativePath(
+                        RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\vs.exe", ""),
+                        "VSDiff.exe"),
+                    "$(ProgramFiles)\\SlickEdit\\win\\VSDiff.exe"),
                 "-r1 $(ReadOnly?'-r2 ')'$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "DevartCodeCompare", "Devart CodeCompare",
-                RelativePath(ClsIdServerSearch(new Guid("{8C2B8E72-E398-482D-8609-FC606231624C}")), "CodeCompare.exe")
-                    ?? RelativePath(RegistrySearch("SOFTWARE\\Devart\\Code Compare", "HelpFile"), "CodeCompare.exe")
-                    ?? RelativePath(RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "HelpFile"), "CodeCompare.exe")
-                    ?? "$(HostProgramFiles)\\Devart\\Code Compare\\CodeCompare.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    RelativePath(
+                        ClsIdServerSearch(new Guid("{8C2B8E72-E398-482D-8609-FC606231624C}")),
+                        "CodeCompare.exe"),
+                    RelativePath(
+                        RegistrySearch("SOFTWARE\\Devart\\Code Compare", "HelpFile"),
+                        "CodeCompare.exe"),
+                    RelativePath(
+                        RegistrySearch("SOFTWARE\\Devart\\CodeCompare", "HelpFile"),
+                        "CodeCompare.exe"),
+                    "$(HostProgramFiles)\\Devart\\Code Compare\\CodeCompare.exe"),
                 "/WAIT /SC=SVN /t1='$(BaseName)' /t2='$(MineName)' '$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "ComparePlusPlus", "Coodesoft Compare++",
-                RelativePath(AppIdLocalServerSearch("CompareEnter.Connect"), "Compare++.exe")
-                    ?? "$(HostProgramFiles)\\Coode Software\\Compare++\\Compare++.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    RelativePath(
+                        AppIdLocalServerSearch("CompareEnter.Connect"),
+                        "Compare++.exe"),
+                    "$(HostProgramFiles)\\Coode Software\\Compare++\\Compare++.exe"),
                 "'$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "SemanticMerge", "Semanticmerge",
-                SubPath(RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SemanticMerge", "InstallLocation")
-                             ?? UserRegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SemanticMerge", "InstallLocation"),
-                             "semanticmergetool.exe")
-                    ?? "$(LocalAppData)\\PlasticSCM4\\semanticmerge\\semanticmergetool.exe",
+                DiffToolTemplateLogic.FirstNonNull(
+                    SubPath(
+                        DiffToolTemplateLogic.FirstNonNull(
+                            RegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SemanticMerge", "InstallLocation"),
+                            UserRegistrySearch("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SemanticMerge", "InstallLocation")),
+                        "semanticmergetool.exe"),
+                    "$(LocalAppData)\\PlasticSCM4\\semanticmerge\\semanticmergetool.exe"),
                 "--source='$(Base)' --destination='$(Mine)' --srcsymbolicname='$(BaseName)' --dstsymbolicname='$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "TcProjectCompare", "Beckhoff TcProjectCompare",

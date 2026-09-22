@@ -21,8 +21,10 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.IO;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.Imaging.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
-using Ankh.UI;
 using Ankh.Services;
 
 namespace Ankh.VS.SolutionExplorer
@@ -30,18 +32,62 @@ namespace Ankh.VS.SolutionExplorer
     [GlobalService(typeof(IFileIconMapper))]
     sealed class FileIconMapper : AnkhService, IFileIconMapper
     {
+        const int LogicalIconSize = 16;
+
         readonly ImageList _imageList;
         readonly Dictionary<ProjectIconReference, int> _iconMap;
+        readonly Dictionary<string, int> _monikerMap;
         readonly SortedList<WindowsSpecialFolder, int> _folderMap;
         readonly Dictionary<string, string> _fileTypeMap;
+        readonly int _imageDpi;
+        IVsImageService2 _imageService;
+        readonly Dictionary<string, ImageMoniker> _monikers = new Dictionary<string, ImageMoniker>();
+        AnkhServiceEvents _events;
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+            _events = GetService<AnkhServiceEvents>();
+            _events.ThemeChanged += OnThemeChanged;
+        }
+
+        void OnThemeChanged(object sender, EventArgs e)
+        {
+            _imageService = null;
+            // Keep indices stable: existing rows and tree nodes retain them.
+            foreach (var entry in _monikers)
+            {
+                try
+                {
+                    using (Bitmap bitmap = RenderMoniker(entry.Value))
+                    {
+                        if (bitmap != null)
+                            _imageList.Images[_monikerMap[entry.Key]] = bitmap;
+                    }
+                }
+                catch (COMException) { }
+                catch (ArgumentException) { }
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && _events != null)
+                _events.ThemeChanged -= OnThemeChanged;
+            base.Dispose(disposing);
+        }
 
         public FileIconMapper(IAnkhServiceProvider context)
             : base(context)
         {
+            _imageDpi = FileIconMapperDpiLogic.GetCurrentDpi();
+            int imageSize = FileIconMapperDpiLogic.GetPixelSize(LogicalIconSize, _imageDpi);
+
             _imageList = new ImageList();
-            _imageList.ImageSize = SystemInformation.SmallIconSize;
+            _imageList.ImageSize = new Size(imageSize, imageSize);
             _imageList.ColorDepth = ColorDepth.Depth32Bit;
             _iconMap = new Dictionary<ProjectIconReference, int>();
+            _monikerMap = new Dictionary<string, int>(StringComparer.Ordinal);
             _folderMap = new SortedList<WindowsSpecialFolder, int>();
             _fileTypeMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
@@ -53,10 +99,13 @@ namespace Ankh.VS.SolutionExplorer
 
             EnsureSpecialImages();
 
-            int icon = GetProjectIcon(path);
+            // Prefer Visual Studio's image catalog. It supplies the correct
+            // themed image for the current file type and can render it at the
+            // DPI requested by this ImageList.
+            int icon = GetThemeIcon(path);
 
-            if (icon == -1 && VSVersion.VS2012OrLater)
-                icon = GetThemeIcon(path);
+            if (icon == -1)
+                icon = GetProjectIcon(path);
 
             if (icon == -1)
                 icon = GetOsIcon(path);
@@ -147,17 +196,123 @@ namespace Ankh.VS.SolutionExplorer
             return fileinfo.szTypeName;
         }
 
-        IWinFormsThemingService themeService;
+        IVsImageService2 ImageService
+        {
+            get
+            {
+                if (_imageService == null)
+                {
+                    _imageService = GetService<IVsImageService2>(typeof(SVsImageService));
+                }
+
+                return _imageService;
+            }
+        }
+
         int GetThemeIcon(string path)
         {
-            if (themeService == null)
-                themeService = GetService<IWinFormsThemingService>();
-
-            IntPtr hIcon;
-            if (themeService == null || !themeService.TryGetIcon(path, out hIcon))
+            IVsImageService2 imageService = ImageService;
+            if (imageService == null)
                 return -1;
 
-            return ResolveReference(new ProjectIconReference(hIcon));
+            try
+            {
+                return ResolveMoniker(imageService.GetImageMonikerForFile(path));
+            }
+            catch (COMException)
+            {
+                return -1;
+            }
+            catch (ArgumentException)
+            {
+                return -1;
+            }
+        }
+
+        static bool IsEmptyMoniker(ImageMoniker moniker)
+        {
+            return moniker.Guid == Guid.Empty && moniker.Id == 0;
+        }
+
+        static string GetMonikerKey(ImageMoniker moniker)
+        {
+            return moniker.Guid.ToString("N") + ":" + moniker.Id.ToString();
+        }
+
+        Bitmap RenderMoniker(ImageMoniker moniker)
+        {
+            if (IsEmptyMoniker(moniker) || ImageService == null)
+                return null;
+
+            ImageAttributes attributes = new ImageAttributes
+            {
+                StructSize = Marshal.SizeOf(typeof(ImageAttributes)),
+                ImageType = (uint)_UIImageType.IT_Bitmap,
+                Format = (uint)_UIDataFormat.DF_WinForms,
+                LogicalWidth = LogicalIconSize,
+                LogicalHeight = LogicalIconSize,
+                Dpi = _imageDpi,
+                Flags = unchecked((uint)_ImageAttributesFlags.IAF_RequiredFlags)
+            };
+
+            IVsUIObject image = ImageService.GetImage(moniker, attributes);
+            if (image == null)
+                return null;
+
+            object data;
+            if (!VSErr.Succeeded(image.get_Data(out data)))
+                return null;
+
+            Bitmap bitmap = data as Bitmap;
+            if (bitmap == null)
+                return null;
+
+            // Detach the managed bitmap from the COM image object before the
+            // latter is released. ImageList owns this cloned bitmap afterward.
+            return new Bitmap(bitmap);
+        }
+
+        int ResolveMoniker(ImageMoniker moniker)
+        {
+            if (IsEmptyMoniker(moniker))
+                return -1;
+
+            string key = GetMonikerKey(moniker);
+            int value;
+            if (_monikerMap.TryGetValue(key, out value))
+                return value;
+
+            Bitmap bitmap;
+            try
+            {
+                bitmap = RenderMoniker(moniker);
+            }
+            catch (COMException)
+            {
+                return -1;
+            }
+            catch (ArgumentException)
+            {
+                return -1;
+            }
+
+            if (bitmap == null)
+                return -1;
+
+            try
+            {
+                _imageList.Images.Add(bitmap);
+            }
+            catch
+            {
+                bitmap.Dispose();
+                throw;
+            }
+
+            value = _imageList.Images.Count - 1;
+            _monikerMap[key] = value;
+            _monikers[key] = moniker;
+            return value;
         }
 
         int GetOsIcon(string path)
@@ -261,7 +416,11 @@ namespace Ankh.VS.SolutionExplorer
                 if (_dirIcon > 0)
                     return _dirIcon - 1;
 
-                int n = GetSpecialIcon(Path.GetTempPath(), FileAttributes.Directory);
+                EnsureSpecialImages();
+
+                int n = ResolveMoniker(KnownMonikers.FolderClosed);
+                if (n < 0)
+                    n = GetSpecialIcon(Path.GetTempPath(), FileAttributes.Directory);
 
                 if (n >= 0)
                     _dirIcon = n + 1;
@@ -278,9 +437,14 @@ namespace Ankh.VS.SolutionExplorer
                 if (_fileIcon > 0)
                     return _fileIcon - 1;
 
-                string dummyPath = Path.Combine(Path.GetTempPath(), "Dummy");
+                EnsureSpecialImages();
 
-                int n = GetSpecialIcon(dummyPath, FileAttributes.Normal);
+                int n = ResolveMoniker(KnownMonikers.Document);
+                if (n < 0)
+                {
+                    string dummyPath = Path.Combine(Path.GetTempPath(), "Dummy");
+                    n = GetSpecialIcon(dummyPath, FileAttributes.Normal);
+                }
 
                 if (n >= 0)
                     _fileIcon = n + 1;
@@ -311,7 +475,15 @@ namespace Ankh.VS.SolutionExplorer
             if (string.IsNullOrEmpty(ext))
                 return FileIcon;
 
-            return GetSpecialIcon("c:\\file." + ext.Trim('.'), FileAttributes.Normal);
+            EnsureSpecialImages();
+
+            string dummyPath = "c:\\file." + ext.Trim('.');
+            int icon = GetThemeIcon(dummyPath);
+
+            if (icon < 0)
+                icon = GetSpecialIcon(dummyPath, FileAttributes.Normal);
+
+            return icon;
         }
 
         int _lvUp;
@@ -395,40 +567,91 @@ namespace Ankh.VS.SolutionExplorer
             return GetSpecialIcon(si);
         }
 
+        static ImageMoniker GetSpecialMoniker(SpecialIcon icon)
+        {
+            switch (icon)
+            {
+                case SpecialIcon.Blank:
+                    return KnownMonikers.Blank;
+                case SpecialIcon.SortUp:
+                    return KnownMonikers.SortAscending;
+                case SpecialIcon.SortDown:
+                    return KnownMonikers.SortDescending;
+                case SpecialIcon.Servers:
+                case SpecialIcon.Server:
+                    return KnownMonikers.DataServer;
+                case SpecialIcon.Db:
+                    return KnownMonikers.Database;
+                case SpecialIcon.Collision:
+                    return KnownMonikers.Conflict;
+                default:
+                    // Incoming/outgoing are Ankh-specific synchronization
+                    // concepts; retain their existing artwork until there is a
+                    // semantically equivalent Visual Studio catalog image.
+                    return default(ImageMoniker);
+            }
+        }
+
+        Bitmap RenderLegacySpecialImage(Image strip, int index)
+        {
+            const int sourceIconSize = 16;
+            Size iconSize = _imageList.ImageSize;
+            Bitmap icon = new Bitmap(iconSize.Width, iconSize.Height);
+
+            using (Graphics graphics = Graphics.FromImage(icon))
+            {
+                graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                graphics.PixelOffsetMode = PixelOffsetMode.Half;
+                graphics.DrawImage(strip,
+                    new Rectangle(0, 0, iconSize.Width, iconSize.Height),
+                    new Rectangle(index * sourceIconSize, 0, sourceIconSize, sourceIconSize),
+                    GraphicsUnit.Pixel);
+            }
+
+            return icon;
+        }
+
         void EnsureSpecialImages()
         {
-            if ((_lvUp != 0))
+            if (_lvUp != 0)
                 return;
 
-            using (Image img = Bitmap.FromStream(typeof(FileIconMapper).Assembly.GetManifestResourceStream(
+            using (Image strip = Bitmap.FromStream(typeof(FileIconMapper).Assembly.GetManifestResourceStream(
                 typeof(FileIconMapper).Namespace + ".UpDnListView.png")))
             {
-                const int sourceIconSize = 16;
-                int count = img.Width / sourceIconSize;
-                Size iconSize = _imageList.ImageSize;
+                int baseIndex = _imageList.Images.Count;
+                int count = Enum.GetValues(typeof(SpecialIcon)).Length;
 
-                // Do not use AddStrip with an Image that is disposed before the
-                // ImageList creates its native handle. VS 2026 / newer WinForms
-                // validates the backing Image at handle creation and throws
-                // ArgumentException when that source image has already gone away.
-                // Give ImageList one independently owned bitmap per icon instead.
                 for (int i = 0; i < count; i++)
                 {
-                    Bitmap icon = new Bitmap(iconSize.Width, iconSize.Height);
-                    using (Graphics graphics = Graphics.FromImage(icon))
+                    SpecialIcon special = (SpecialIcon)i;
+                    ImageMoniker moniker = GetSpecialMoniker(special);
+                    Bitmap icon = null;
+
+                    if (!IsEmptyMoniker(moniker))
                     {
-                        graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-                        graphics.PixelOffsetMode = PixelOffsetMode.Half;
-                        graphics.DrawImage(img,
-                            new Rectangle(0, 0, iconSize.Width, iconSize.Height),
-                            new Rectangle(i * sourceIconSize, 0, sourceIconSize, sourceIconSize),
-                            GraphicsUnit.Pixel);
+                        try
+                        {
+                            icon = RenderMoniker(moniker);
+                        }
+                        catch (COMException)
+                        {
+                        }
+                        catch (ArgumentException)
+                        {
+                        }
                     }
 
+                    if (icon == null)
+                        icon = RenderLegacySpecialImage(strip, i);
+
                     _imageList.Images.Add(icon);
+
+                    if (!IsEmptyMoniker(moniker))
+                        _monikerMap[GetMonikerKey(moniker)] = baseIndex + i;
                 }
 
-                _lvUp = _imageList.Images.Count - count + 1;
+                _lvUp = baseIndex + (int)SpecialIcon.SortUp;
             }
         }
 

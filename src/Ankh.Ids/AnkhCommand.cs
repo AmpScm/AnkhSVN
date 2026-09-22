@@ -318,5 +318,6 @@ namespace Ankh
 
         CopyRevisionNumber,
         PcLogEditorOpenRevision,
+        PcGenerateCommitMessage,
     }
 }

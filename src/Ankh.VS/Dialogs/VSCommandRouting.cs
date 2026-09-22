@@ -193,46 +193,15 @@ namespace Ankh.VS.Dialogs
             if (!Enabled)
                 return false;
 
-            const int WM_KEYFIRST = 0x0100;
-            const int WM_IME_KEYLAST = 0x010F;
+            VSCommandRoutingKeyPlan plan =
+                VSCommandRoutingLogic.BuildKeyPlan(
+                    m.Msg,
+                    (Keys)(int)m.WParam,
+                    Control.ModifierKeys,
+                    _vsForm.ContainerMode);
 
-            const int WM_KEYDOWN = 0x0100;
-            const int WM_KEYUP = 0x0101;
-            //const int WM_CHAR = 0x0102;
-            //const int WM_DEADCHAR = 0x0103;
-            const int WM_SYSKEYDOWN = 0x0104;
-            const int WM_SYSKEYUP = 0x0105;
-            //const int WM_SYSCHAR = 0x0106;
-            //const int WM_SYSDEADCHAR = 0x0107;
-            //const int WM_UNICHAR = 0x0109;
-
-            if (m.Msg < WM_KEYFIRST || m.Msg > WM_IME_KEYLAST)
-                return false; // Only key translation below
-
-            VSContainerMode mode = _vsForm.ContainerMode;
-
-            if (m.Msg == WM_KEYDOWN || m.Msg == WM_KEYUP)
-                switch ((Keys)(int)m.WParam)
-                {
-                    case Keys.Tab:
-                        if ((Control.ModifierKeys & Keys.Control) != 0)
-                            return false; // Navigation
-                        break;
-                    case Keys.Return:
-                        if (Control.ModifierKeys == Keys.Control)
-                            mode = VSContainerMode.Default; // No translate
-                        break;
-                    case Keys.Escape:
-                        // Escape key should exit dialog
-                        return false;
-                }
-            if (m.Msg == WM_SYSKEYDOWN || m.Msg == WM_SYSKEYUP)
-                switch ((Keys)(int)m.WParam)
-                {
-                    case Keys.F4:
-                        return false; // Should close dialog
-                }
-
+            if (!plan.IsKeyboardMessage || plan.BypassRouting)
+                return false;
 
             MSG[] messages = new MSG[1];
             messages[0].hwnd = m.HWnd;
@@ -240,16 +209,10 @@ namespace Ankh.VS.Dialogs
             messages[0].wParam = m.WParam;
             messages[0].message = (uint)m.Msg;
 
-            if (_fKeys != null && 0 != (mode & (VSContainerMode.TranslateKeys | VSContainerMode.UseTextEditorScope)))
+            if (_fKeys != null && plan.UseFilterKeys)
             {
-
-                uint dwFlags = (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_AllowModalState;
-
-                if ((mode & VSContainerMode.UseTextEditorScope) != 0)
-                    dwFlags |= (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_UseTextEditorKBScope;
-
                 hr = _fKeys.TranslateAcceleratorEx(messages,
-                    dwFlags,
+                    plan.TranslationFlags,
                     0,
                     null,
                     out Guid cmdGuid,
@@ -257,12 +220,12 @@ namespace Ankh.VS.Dialogs
                     out int cmdTranslated,
                     out int keyComboStarts);
 
-                if (hr == VSErr.S_OK)
+                if (VSCommandRoutingLogic.ShouldConsumeTranslatedCommand(
+                        hr,
+                        cmdTranslated))
                 {
-                    if (cmdTranslated != 0)
-                        return true;
+                    return true;
                 }
-
             }
 
             if (_paneList != null)

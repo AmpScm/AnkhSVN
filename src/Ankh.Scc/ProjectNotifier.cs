@@ -192,6 +192,43 @@ namespace Ankh.Scc
             }
         }
 
+        static bool IsSvnConflictArtifact(
+            SvnClient client,
+            string path)
+        {
+            string conflictedPath;
+            if (!SvnConflictArtifactLogic.TryGetConflictedPath(
+                    path,
+                    out conflictedPath))
+            {
+                return false;
+            }
+
+            SvnInfoEventArgs conflictInfo;
+            try
+            {
+                if (!client.GetInfo(conflictedPath, out conflictInfo)
+                    || conflictInfo == null
+                    || !conflictInfo.Conflicted)
+                {
+                    return false;
+                }
+            }
+            catch (SvnException)
+            {
+                // Auto-add is best-effort. Failure to inspect a possible
+                // conflict helper must not break normal project processing.
+                return false;
+            }
+
+            return SvnConflictArtifactLogic.MatchesConflictMetadata(
+                path,
+                conflictedPath,
+                conflictInfo.ConflictOld,
+                conflictInfo.ConflictNew,
+                conflictInfo.ConflictWork);
+        }
+
         HybridCollection<string> _dirtyCheck = null;
 
         /// <summary>
@@ -276,6 +313,9 @@ namespace Ankh.Scc
                             item.IsVersionable && !item.IsIgnored &&
                             item.InSolution && !item.IsSccExcluded)
                         {
+                            if (IsSvnConflictArtifact(cl, item.FullPath))
+                                continue;
+
                             SvnAddArgs aa = new SvnAddArgs();
                             aa.ThrowOnError = false; // Just ignore errors here; make the user add them themselves
                             aa.AddParents = true;

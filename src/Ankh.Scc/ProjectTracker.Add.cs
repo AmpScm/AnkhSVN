@@ -203,136 +203,107 @@ namespace Ankh.Scc
             else
                 _fileOrigins.Add(newName, null);
 
-            // We haven't got the project file origin for free via OnQueryAddFilesEx
-            // So:
-            //  1 - The file is really new or
-            //  2 - The file is drag&dropped into the project from the solution explorer or
-            //  3 - The file is copy pasted into the project from an other project or
-            //  4 - The file is added via add existing item or
-            //  5 - The file is added via drag&drop from another application (OLE drop)
-            //
-            // The only way to determine is walking through these options
-            SortedList<string, string> nameToItem = new SortedList<string, string>();
+            SortedList<string, string> nameToItem =
+                ProjectTrackerOriginLogic.BuildNameToItem(
+                    newName,
+                    _fileOrigins);
 
-            nameToItem[Path.GetFileName(newName)] = newName;
-            foreach (KeyValuePair<string, string> kv in _fileOrigins)
-            {
-                if (kv.Value != null)
-                    continue;
+            CheckSelectedOrigins(nameToItem);
+            CheckClipboardOrigins(nameToItem);
+            CheckHintOrigins(nameToItem);
 
-                nameToItem[Path.GetFileName(kv.Key)] = kv.Key;
-            }
-
-            // 2 -  If the file is drag&dropped in the solution explorer
-            //      the current selection is still the original selection
-
-            // **************** Check the current selection *************
-            // Checks for drag&drop actions. The selection contains the original list of files
-            // BH: resx files are not correctly included if we don't retrieve this list recursive
-            foreach (string file in SelectionContext.GetSelectedFiles(true))
-            {
-                if (_fileOrigins.ContainsKey(file))
-                    continue;
-
-                string name = Path.GetFileName(file);
-                if (nameToItem.ContainsKey(name))
-                {
-                    string item = nameToItem[name];
-
-                    CheckForMatch(item, file);
-                }
-            }
-
-            // **************** Check the clipboard *********************
-            // 3 - Copy & Paste in the solution explorer:
-            //     The original hierarchy information is still on the clipboard
-
-            IDataObject dataObject;
-            string projectItemType;
-            if (null != (dataObject = SafeGetDataObject()) && SolutionExplorerClipboardItem.CanRead(dataObject, out projectItemType))
-            {
-                IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
-                ISccProjectWalker walker = GetService<ISccProjectWalker>();
-
-                foreach (string projref in SolutionExplorerClipboardItem.DecodeProjectItemData(dataObject, projectItemType))
-                {
-                    IVsHierarchy project;
-                    uint itemid;
-                    {
-                        string updatedRef;
-                        VSUPDATEPROJREFREASON[] updateReason = new VSUPDATEPROJREFREASON[1];
-                        if (!VSErr.Succeeded(solution.GetItemOfProjref(projref, out project, out itemid, out updatedRef, updateReason)))
-                            continue;
-                    }
-
-                    foreach(string rawFile in walker.GetSccFiles(project, itemid, ProjectWalkDepth.AllDescendantsInHierarchy, null))
-                    {
-                        if (!SvnItem.IsValidPath(rawFile))
-                            continue;
-
-                        string file = SvnTools.GetNormalizedFullPath(rawFile);
-
-                        if (_fileOrigins.ContainsKey(file))
-                            continue;
-
-                        string name = Path.GetFileName(file);
-                        if (nameToItem.ContainsKey(name))
-                        {
-                            string item = nameToItem[name];
-
-                            CheckForMatch(item, file);
-                        }
-                    }
-                }
-            }
-
-
-            // **************** Check external hints ********************
-            // Checks for HandsOff events send by the project system
-            foreach (string file in _fileHints)
-            {
-                if (_fileOrigins.ContainsKey(file))
-                    continue;
-
-                string name = Path.GetFileName(file);
-                if (nameToItem.ContainsKey(name))
-                {
-                    string item = nameToItem[name];
-
-                    CheckForMatch(item, file);
-                }
-            }
-
-            // The clipboard seems to have some other format which might contain other info
             origin = _fileOrigins[newName];
-
             if (origin == null)
             {
-                bool first = true;
-                string path = null;
+                origin = ProjectTrackerOriginLogic.InferOrigin(
+                    newName,
+                    _fileOrigins);
+            }
+        }
 
-                foreach (KeyValuePair<string, string> kv in _fileOrigins)
+        void CheckSelectedOrigins(
+            SortedList<string, string> nameToItem)
+        {
+            // Drag/drop from Solution Explorer keeps the original selection.
+            foreach (string file in SelectionContext.GetSelectedFiles(true))
+                CheckOriginCandidate(nameToItem, file);
+        }
+
+        void CheckClipboardOrigins(
+            SortedList<string, string> nameToItem)
+        {
+            IDataObject dataObject = SafeGetDataObject();
+            string projectItemType;
+
+            if (dataObject == null
+                || !SolutionExplorerClipboardItem.CanRead(
+                    dataObject,
+                    out projectItemType))
+            {
+                return;
+            }
+
+            IVsSolution solution =
+                GetService<IVsSolution>(typeof(SVsSolution));
+            ISccProjectWalker walker =
+                GetService<ISccProjectWalker>();
+
+            foreach (string projref in
+                SolutionExplorerClipboardItem.DecodeProjectItemData(
+                    dataObject,
+                    projectItemType))
+            {
+                IVsHierarchy project;
+                uint itemid;
+                string updatedRef;
+                VSUPDATEPROJREFREASON[] updateReason =
+                    new VSUPDATEPROJREFREASON[1];
+
+                if (!VSErr.Succeeded(
+                        solution.GetItemOfProjref(
+                            projref,
+                            out project,
+                            out itemid,
+                            out updatedRef,
+                            updateReason)))
                 {
-                    if (kv.Value == null)
+                    continue;
+                }
+
+                foreach (string rawFile in walker.GetSccFiles(
+                    project,
+                    itemid,
+                    ProjectWalkDepth.AllDescendantsInHierarchy,
+                    null))
+                {
+                    if (!SvnItem.IsValidPath(rawFile))
                         continue;
 
-                    if (SvnItem.IsBelowRoot(kv.Key, newName))
-                    {
-                        string itemRoot = kv.Value.Substring(0, kv.Value.Length - kv.Key.Length + newName.Length);
-                        if (first)
-                        {
-                            path = itemRoot;
-                            first = false;
-                        }
-                        else if (path != itemRoot)
-                        {
-                            origin = null;
-                            return;
-                        }
-                    }
+                    CheckOriginCandidate(
+                        nameToItem,
+                        SvnTools.GetNormalizedFullPath(rawFile));
                 }
-                origin = path;
             }
+        }
+
+        void CheckHintOrigins(
+            SortedList<string, string> nameToItem)
+        {
+            // Project-system HandsOff events can provide additional origins.
+            foreach (string file in _fileHints)
+                CheckOriginCandidate(nameToItem, file);
+        }
+
+        void CheckOriginCandidate(
+            SortedList<string, string> nameToItem,
+            string file)
+        {
+            if (_fileOrigins.ContainsKey(file))
+                return;
+
+            string item;
+            if (nameToItem.TryGetValue(Path.GetFileName(file), out item))
+                CheckForMatch(item, file);
         }
 
         void CheckForMatch(string newItem, string maybeFrom)

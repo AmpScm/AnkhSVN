@@ -20,6 +20,7 @@ using System.Globalization;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace Ankh.Services
 {
@@ -32,7 +33,26 @@ namespace Ankh.Services
         }
         #region IAnkhDialogHelpService Members
 
-        const string HelpBaseUrl = "https://amp-scm.com/AnkhSVN/help/";
+        const string DefaultHelpBaseUrl = "https://amp-scm.com/AnkhSVN/help/";
+
+        internal static string GetHelpBaseUrl()
+        {
+            Assembly assembly = typeof(AnkhHelpService).Assembly;
+            object[] metadata = assembly.GetCustomAttributes(typeof(AssemblyMetadataAttribute), false);
+
+            foreach (AssemblyMetadataAttribute item in metadata)
+            {
+                if (string.Equals(item.Key, "AnkhHelpBaseUrl", StringComparison.Ordinal)
+                    && !string.IsNullOrWhiteSpace(item.Value))
+                {
+                    return item.Value.EndsWith("/", StringComparison.Ordinal)
+                        ? item.Value
+                        : item.Value + "/";
+                }
+            }
+
+            return DefaultHelpBaseUrl;
+        }
 
         internal static string GetHelpTopicPath(string dialogHelpTypeName)
         {
@@ -40,6 +60,8 @@ namespace Ankh.Services
 
             if (name.Contains("annotate") || name.Contains("blame"))
                 return "annotate/";
+            if (name.Contains("commonfileselectordialog") || name.Contains("unifieddiff"))
+                return "diff/";
             if (name.Contains("merge"))
                 return "merge/";
             if (name.Contains("commit") || name.Contains("pendingchanges") || name.Contains("changelist"))
@@ -76,7 +98,7 @@ namespace Ankh.Services
             if (packageVersion == null)
                 throw new ArgumentNullException("packageVersion");
 
-            Uri helpUri = new Uri(new Uri(HelpBaseUrl), GetHelpTopicPath(dialogHelpTypeName));
+            Uri helpUri = new Uri(new Uri(GetHelpBaseUrl()), GetHelpTopicPath(dialogHelpTypeName));
             UriBuilder ub = new UriBuilder(helpUri);
             ub.Query = string.Format(
                 CultureInfo.InvariantCulture,

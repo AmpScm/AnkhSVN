@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using Ankh.Commands;
 
 namespace Ankh.UI.VSSelectionControls
 {
@@ -101,6 +102,8 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         private const int TV_FIRST = 0x1100;
+        private const int TVM_SETBKCOLOR = TV_FIRST + 29;
+        private const int TVM_SETTEXTCOLOR = TV_FIRST + 30;
         private const int TVM_SETEXTENDEDSTYLE = TV_FIRST + 44;
         private const int TVM_GETEXTENDEDSTYLE = TV_FIRST + 45;
 
@@ -111,9 +114,14 @@ namespace Ankh.UI.VSSelectionControls
             if (_stateImageList != null)
                 SetStateList();
 
-            if (!_inVSTheming && SmartListView.IsXPPlus)
+            if (SmartListView.IsXPPlus)
             {
-                NativeMethods.SetWindowTheme(Handle, "Explorer", null);
+                if (_useDarkNativeTheme)
+                {
+                    NativeMethods.SetWindowTheme(Handle, "DarkMode_Explorer", null);
+                }
+                else if (!_inVSTheming)
+                    NativeMethods.SetWindowTheme(Handle, "Explorer", null);
 
                 uint flags = (uint)NativeMethods.SendMessage(Handle, TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
 
@@ -121,6 +129,33 @@ namespace Ankh.UI.VSSelectionControls
 
                 NativeMethods.SendMessage(Handle, TVM_SETEXTENDEDSTYLE, (IntPtr)flags, (IntPtr)flags);
             }
+
+            // SetWindowTheme() can reset the native TreeView colors even though
+            // the managed BackColor/ForeColor still contain the VS palette.
+            // Reapply them to every newly-created handle so repository browser
+            // trees cannot fall back to a white Windows background.
+            RestoreNativeColors(this);
+        }
+
+        internal static void RestoreNativeColors(TreeView treeView)
+        {
+            if (treeView == null)
+                throw new ArgumentNullException("treeView");
+
+            if (!treeView.IsHandleCreated)
+                return;
+
+            NativeMethods.SendMessage(
+                treeView.Handle,
+                TVM_SETBKCOLOR,
+                IntPtr.Zero,
+                (IntPtr)ColorTranslator.ToWin32(treeView.BackColor));
+            NativeMethods.SendMessage(
+                treeView.Handle,
+                TVM_SETTEXTCOLOR,
+                IntPtr.Zero,
+                (IntPtr)ColorTranslator.ToWin32(treeView.ForeColor));
+            treeView.Invalidate();
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
@@ -211,9 +246,34 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         bool _inVSTheming;
+        bool _useDarkNativeTheme;
+
         void ISupportsVSTheming.OnThemeChange(IAnkhServiceProvider sender, CancelEventArgs e)
         {
-            _inVSTheming = true;
+            _inVSTheming = !e.Cancel;
+
+            IWinFormsThemingService themer = sender.GetService<IWinFormsThemingService>();
+            AnkhThemePalette palette = themer != null ? themer.ThemePalette : null;
+            bool darkSurface = palette != null
+                ? palette.IsDarkSurface
+                : AnkhThemePalette.IsDark(BackColor);
+
+            _useDarkNativeTheme = SmartTreeViewThemeLogic.ShouldUseDarkNativeTheme(
+                _inVSTheming,
+                darkSurface,
+                SystemInformation.HighContrast);
+
+            if (palette != null)
+            {
+                BackColor = palette.SurfaceBackground;
+                ForeColor = palette.SurfaceForeground;
+            }
+            else if (_inVSTheming && Parent != null)
+            {
+                BackColor = Parent.BackColor;
+                ForeColor = Parent.ForeColor;
+            }
+
             RecreateHandle();
         }
 

@@ -35,41 +35,17 @@ namespace Ankh.Commands
     {
         static bool IsSolutionCommand(AnkhCommand command)
         {
-            switch (command)
-            {
-                case AnkhCommand.SolutionUpdateLatest:
-                case AnkhCommand.SolutionUpdateSpecific:
-                case AnkhCommand.PendingChangesUpdateLatest:
-                    return true;
-                default:
-                    return false;
-            }
+            return SolutionUpdateLogic.GetScope(command) == UpdateCommandScope.Solution;
         }
 
         static bool IsFolderCommand(AnkhCommand command)
         {
-            switch (command)
-            {
-                case AnkhCommand.FolderUpdateLatest:
-                case AnkhCommand.FolderUpdateSpecific:
-                    return true;
-                default:
-                    return false;
-            }
+            return SolutionUpdateLogic.GetScope(command) == UpdateCommandScope.Folder;
         }
 
         static bool IsHeadCommand(AnkhCommand command)
         {
-            switch (command)
-            {
-                case AnkhCommand.SolutionUpdateLatest:
-                case AnkhCommand.ProjectUpdateLatest:
-                case AnkhCommand.PendingChangesUpdateLatest:
-                case AnkhCommand.FolderUpdateLatest:
-                    return true;
-                default:
-                    return false;
-            }
+            return SolutionUpdateLogic.IsHeadCommand(command);
         }
 
         static IEnumerable<SccProject> GetSelectedProjects(BaseCommandEventArgs e)
@@ -179,31 +155,6 @@ namespace Ankh.Commands
             }
         }
 
-        sealed class UpdateGroup
-        {
-            readonly string _wcroot;
-            readonly List<string> _files;
-
-            public UpdateGroup(string wcroot)
-            {
-                if (string.IsNullOrEmpty(wcroot))
-                    throw new ArgumentNullException("wcroot");
-
-                _wcroot = wcroot;
-                _files = new List<string>();
-            }
-
-            public string WorkingCopyRoot
-            {
-                get { return _wcroot; }
-            }
-
-            public List<string> Nodes
-            {
-                get { return _files; }
-            }
-        }
-
         public override void OnExecute(CommandEventArgs e)
         {
             IAnkhServiceEvents ci = e.GetService<IAnkhServiceEvents>();
@@ -211,131 +162,28 @@ namespace Ankh.Commands
             if (ci != null)
                 ci.OnLastChanged(new LastChangedEventArgs(null, null));
 
-            SvnRevision rev;
-            bool allowUnversionedObstructions = false;
-            bool updateExternals = true;
-            bool setDepthInfinity = true;
-
             IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
             ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
             IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
-            Uri reposRoot = null;
 
-            if (IsHeadCommand(e.Command) || e.DontPrompt)
-                rev = SvnRevision.Head;
-            else if (IsSolutionCommand(e.Command))
+            UpdateExecutionSettings updateSettings;
+            if (!TryGetUpdateSettings(
+                    e,
+                    settings,
+                    cache,
+                    mapper,
+                    out updateSettings))
             {
-                SvnItem projectItem = settings.ProjectRootSvnItem;
-
-                Debug.Assert(projectItem != null, "Has item");
-
-                using (UpdateDialog ud = new UpdateDialog())
-                {
-                    ud.ItemToUpdate = projectItem;
-                    ud.Revision = SvnRevision.Head;
-
-                    if (ud.ShowDialog(e.Context) != DialogResult.OK)
-                        return;
-
-                    rev = ud.Revision;
-                    allowUnversionedObstructions = ud.AllowUnversionedObstructions;
-                    updateExternals = ud.UpdateExternals;
-                    setDepthInfinity = ud.SetDepthInfinty;
-                }
-            }
-            else if (IsFolderCommand(e.Command))
-            {
-                SvnItem dirItem = EnumTools.GetFirst(e.Selection.GetSelectedSvnItems(false));
-
-                Debug.Assert(dirItem != null && dirItem.IsDirectory && dirItem.IsVersioned);
-
-                using (UpdateDialog ud = new UpdateDialog())
-                {
-                    ud.Text = CommandStrings.UpdateFolder;
-                    ud.FolderLabelText = CommandStrings.UpdateFolderLabel;
-                    ud.ItemToUpdate = dirItem;
-                    ud.Revision = SvnRevision.Head;
-
-                    if (ud.ShowDialog(e.Context) != DialogResult.OK)
-                        return;
-
-                    rev = ud.Revision;
-                    allowUnversionedObstructions = ud.AllowUnversionedObstructions;
-                    updateExternals = ud.UpdateExternals;
-                    setDepthInfinity = ud.SetDepthInfinty;
-                }
-            }
-            else
-            {
-                // We checked there was only a single repository to select a revision 
-                // from in OnUpdate, so we can suffice with only calculate the path
-
-                SvnItem si = null;
-                SvnOrigin origin = null;
-                foreach (SccProject p in GetSelectedProjects(e))
-                {
-                    ISccProjectInfo pi = mapper.GetProjectInfo(p);
-                    if (pi == null || pi.ProjectDirectory == null)
-                        continue;
-
-                    SvnItem item = cache[pi.ProjectDirectory];
-                    if (!item.IsVersioned)
-                        continue;
-
-                    if (si == null && origin == null)
-                    {
-                        si = item;
-                        origin = new SvnOrigin(item);
-                        reposRoot = item.WorkingCopy.RepositoryRoot;
-                    }
-                    else
-                    {
-                        si = null;
-                        string urlPath1 = origin.Uri.AbsolutePath;
-                        string urlPath2 = item.Uri.AbsolutePath;
-
-                        int i = 0;
-                        while (i < urlPath1.Length && i < urlPath2.Length
-                            && urlPath1[i] == urlPath2[i])
-                        {
-                            i++;
-                        }
-
-                        while (i > 0 && urlPath1[i - 1] != '/')
-                            i--;
-
-                        origin = new SvnOrigin(new Uri(origin.Uri, urlPath1.Substring(0, i)), origin.RepositoryRoot);
-                    }
-                }
-
-                Debug.Assert(origin != null);
-
-                using (UpdateDialog ud = new UpdateDialog())
-                {
-                    ud.Text = CommandStrings.UpdateProject;
-
-                    if (si != null)
-                        ud.ItemToUpdate = si;
-                    else
-                    {
-                        ud.SvnOrigin = origin;
-                        ud.SetMultiple(true);
-                    }
-
-                    ud.Revision = SvnRevision.Head;
-
-                    if (ud.ShowDialog(e.Context) != DialogResult.OK)
-                        return;
-
-                    rev = ud.Revision;
-                    allowUnversionedObstructions = ud.AllowUnversionedObstructions;
-                    updateExternals = ud.UpdateExternals;
-                    setDepthInfinity = ud.SetDepthInfinty;
-                }
+                return;
             }
 
-            Dictionary<string, SvnItem> itemsToUpdate = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
-            SortedList<string, UpdateGroup> groups = new SortedList<string, UpdateGroup>(StringComparer.OrdinalIgnoreCase);
+            SvnRevision rev = updateSettings.Revision;
+            bool allowUnversionedObstructions = updateSettings.AllowUnversionedObstructions;
+            bool updateExternals = updateSettings.UpdateExternals;
+            bool setDepthInfinity = updateSettings.SetDepthInfinity;
+            Uri reposRoot = updateSettings.RepositoryRoot;
+
+            SolutionUpdatePlan plan = new SolutionUpdatePlan();
 
             // Get a list of all documents below the specified paths that are open in editors inside VS
             HybridCollection<string> lockPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -344,29 +192,18 @@ namespace Ankh.Commands
             foreach (SvnItem item in GetAllUpdateRoots(e))
             {
                 // GetAllUpdateRoots can (and probably will) return duplicates!
-
-                if (itemsToUpdate.ContainsKey(item.FullPath) || !item.IsVersioned)
-                    continue;
-
                 SvnWorkingCopy wc = item.WorkingCopy;
 
-                if (!IsHeadCommand(e.Command) && reposRoot != null)
+                if (!plan.TryAddRoot(
+                        item.FullPath,
+                        item.IsVersioned,
+                        IsHeadCommand(e.Command),
+                        reposRoot,
+                        wc == null ? null : wc.RepositoryRoot,
+                        wc == null ? null : wc.FullPath))
                 {
-                    // Specific revisions are only valid on a single repository!
-                    if (wc != null && wc.RepositoryRoot != reposRoot)
-                        continue;
+                    continue;
                 }
-
-                UpdateGroup group;
-
-                if (!groups.TryGetValue(wc.FullPath, out group))
-                {
-                    group = new UpdateGroup(wc.FullPath);
-                    groups.Add(wc.FullPath, group);
-                }
-
-                group.Nodes.Add(item.FullPath);
-                itemsToUpdate.Add(item.FullPath, item);
 
                 foreach (string file in documentTracker.GetDocumentsBelow(item.FullPath))
                 {
@@ -399,13 +236,181 @@ namespace Ankh.Commands
                 e.GetService<IProgressRunner>().RunModal(title, pa,
                     delegate(object sender, ProgressWorkerArgs a)
                     {
-                        PerformUpdate(e, a, rev, allowUnversionedObstructions, updateExternals, setDepthInfinity, groups.Values, ih, out updateResult);
+                        PerformUpdate(e, a, rev, allowUnversionedObstructions, updateExternals, setDepthInfinity, plan.Groups, ih, out updateResult);
                     });
 
                 if (ci != null && updateResult != null && IsSolutionCommand(e.Command))
                 {
                     ci.OnLastChanged(new LastChangedEventArgs(CommandStrings.UpdatedToTitle, updateResult.Revision.ToString()));
                 }
+            }
+        }
+
+        sealed class UpdateExecutionSettings
+        {
+            public SvnRevision Revision { get; set; }
+            public bool AllowUnversionedObstructions { get; set; }
+            public bool UpdateExternals { get; set; }
+            public bool SetDepthInfinity { get; set; }
+            public Uri RepositoryRoot { get; set; }
+        }
+
+        static UpdateExecutionSettings SettingsFromDialog(
+            UpdateDialog dialog,
+            Uri repositoryRoot)
+        {
+            return new UpdateExecutionSettings
+            {
+                Revision = dialog.Revision,
+                AllowUnversionedObstructions = dialog.AllowUnversionedObstructions,
+                UpdateExternals = dialog.UpdateExternals,
+                SetDepthInfinity = dialog.SetDepthInfinty,
+                RepositoryRoot = repositoryRoot
+            };
+        }
+
+        static bool TryGetUpdateSettings(
+            CommandEventArgs e,
+            IAnkhSolutionSettings settings,
+            ISvnStatusCache cache,
+            IProjectFileMapper mapper,
+            out UpdateExecutionSettings result)
+        {
+            if (SolutionUpdateLogic.UsesImplicitHeadRevision(e.Command, e.DontPrompt))
+            {
+                result = new UpdateExecutionSettings
+                {
+                    Revision = SvnRevision.Head,
+                    UpdateExternals = true,
+                    SetDepthInfinity = true
+                };
+                return true;
+            }
+
+            switch (SolutionUpdateLogic.GetScope(e.Command))
+            {
+                case UpdateCommandScope.Solution:
+                    return TryGetSolutionUpdateSettings(e, settings, out result);
+
+                case UpdateCommandScope.Folder:
+                    return TryGetFolderUpdateSettings(e, out result);
+
+                default:
+                    return TryGetProjectUpdateSettings(e, cache, mapper, out result);
+            }
+        }
+
+        static bool TryGetSolutionUpdateSettings(
+            CommandEventArgs e,
+            IAnkhSolutionSettings settings,
+            out UpdateExecutionSettings result)
+        {
+            SvnItem projectItem = settings.ProjectRootSvnItem;
+            Debug.Assert(projectItem != null, "Has item");
+
+            using (UpdateDialog dialog = new UpdateDialog())
+            {
+                dialog.ItemToUpdate = projectItem;
+                dialog.Revision = SvnRevision.Head;
+
+                if (dialog.ShowDialog(e.Context) != DialogResult.OK)
+                {
+                    result = null;
+                    return false;
+                }
+
+                result = SettingsFromDialog(dialog, null);
+                return true;
+            }
+        }
+
+        static bool TryGetFolderUpdateSettings(
+            CommandEventArgs e,
+            out UpdateExecutionSettings result)
+        {
+            SvnItem dirItem = EnumTools.GetFirst(
+                e.Selection.GetSelectedSvnItems(false));
+
+            Debug.Assert(
+                dirItem != null && dirItem.IsDirectory && dirItem.IsVersioned);
+
+            using (UpdateDialog dialog = new UpdateDialog())
+            {
+                dialog.Text = CommandStrings.UpdateFolder;
+                dialog.FolderLabelText = CommandStrings.UpdateFolderLabel;
+                dialog.ItemToUpdate = dirItem;
+                dialog.Revision = SvnRevision.Head;
+
+                if (dialog.ShowDialog(e.Context) != DialogResult.OK)
+                {
+                    result = null;
+                    return false;
+                }
+
+                result = SettingsFromDialog(dialog, null);
+                return true;
+            }
+        }
+
+        static bool TryGetProjectUpdateSettings(
+            CommandEventArgs e,
+            ISvnStatusCache cache,
+            IProjectFileMapper mapper,
+            out UpdateExecutionSettings result)
+        {
+            SvnItem singleItem = null;
+            SvnOrigin origin = null;
+            Uri repositoryRoot = null;
+
+            foreach (SccProject project in GetSelectedProjects(e))
+            {
+                ISccProjectInfo projectInfo = mapper.GetProjectInfo(project);
+                if (projectInfo == null || projectInfo.ProjectDirectory == null)
+                    continue;
+
+                SvnItem item = cache[projectInfo.ProjectDirectory];
+                if (!item.IsVersioned)
+                    continue;
+
+                if (singleItem == null && origin == null)
+                {
+                    singleItem = item;
+                    origin = new SvnOrigin(item);
+                    repositoryRoot = item.WorkingCopy.RepositoryRoot;
+                }
+                else
+                {
+                    singleItem = null;
+                    origin = new SvnOrigin(
+                        SolutionUpdateLogic.GetCommonAncestorUri(origin.Uri, item.Uri),
+                        origin.RepositoryRoot);
+                }
+            }
+
+            Debug.Assert(origin != null);
+
+            using (UpdateDialog dialog = new UpdateDialog())
+            {
+                dialog.Text = CommandStrings.UpdateProject;
+
+                if (singleItem != null)
+                    dialog.ItemToUpdate = singleItem;
+                else
+                {
+                    dialog.SvnOrigin = origin;
+                    dialog.SetMultiple(true);
+                }
+
+                dialog.Revision = SvnRevision.Head;
+
+                if (dialog.ShowDialog(e.Context) != DialogResult.OK)
+                {
+                    result = null;
+                    return false;
+                }
+
+                result = SettingsFromDialog(dialog, repositoryRoot);
+                return true;
             }
         }
 

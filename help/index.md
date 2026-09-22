@@ -15,6 +15,7 @@ Help buttons include the dialog or control type in the URL so AnkhSVN can route 
 - [Annotate / Blame](annotate/)
 - [Commit and Pending Changes](commit/)
 - [Conflicts and Resolve](conflicts/)
+- [Unified Diff](diff/)
 - [Merge and merge tracking](merge/)
 - [Repository Explorer and checkout](repository/)
 - [Working-copy operations](working-copy/)
@@ -48,6 +49,8 @@ If a help button brought you here instead of a specific topic, the requested dia
 
   if (name.indexOf("annotate") >= 0 || name.indexOf("blame") >= 0) {
     route = "annotate/";
+  } else if (name.indexOf("commonfileselectordialog") >= 0 || name.indexOf("unifieddiff") >= 0) {
+    route = "diff/";
   } else if (name.indexOf("merge") >= 0) {
     route = "merge/";
   } else if (name.indexOf("commit") >= 0 || name.indexOf("pendingchanges") >= 0 || name.indexOf("changelist") >= 0) {

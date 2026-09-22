@@ -34,6 +34,7 @@ namespace Ankh.UI.PendingChanges
     {
         PendingCommitsView pendingCommits;
         IPendingChangeUI _ui;
+        bool _generatingCommitMessage;
 
         public PendingCommitsPage()
         {
@@ -371,6 +372,98 @@ namespace Ankh.UI.PendingChanges
             {
                 logMessageEditor.Clear(true);
                 issueNumberBox.Text = "";
+            }
+        }
+
+        internal bool CanGenerateCommitMessage()
+        {
+            return !_generatingCommitMessage
+                && UI != null
+                && UI.HasCheckedItems;
+        }
+
+        internal async void GenerateCommitMessage()
+        {
+            if (!CanGenerateCommitMessage())
+                return;
+
+            string originalMessage = logMessageEditor.Text;
+            _generatingCommitMessage = true;
+            UseWaitCursor = true;
+
+            IAnkhCommandService commandService = Context.GetService<IAnkhCommandService>();
+            if (commandService != null)
+                commandService.UpdateCommandUI(false);
+
+            try
+            {
+                List<PendingChange> changes = new List<PendingChange>(UI.CheckedItems);
+                IAnkhSolutionSettings settings = Context.GetService<IAnkhSolutionSettings>();
+
+                string context = CopilotCommitMessage.BuildChangeContext(
+                    changes,
+                    settings != null ? settings.ProjectRoot : null);
+
+                string generatedMessage = await CopilotCommitMessage.GenerateAsync(context);
+
+                if (IsDisposed || Disposing)
+                    return;
+
+                if (string.IsNullOrWhiteSpace(generatedMessage))
+                    throw new InvalidOperationException("GitHub Copilot returned an empty commit message.");
+
+                if (!string.Equals(logMessageEditor.Text, originalMessage, StringComparison.Ordinal))
+                {
+                    MessageBox.Show(
+                        this,
+                        "The commit message changed while Copilot was generating a suggestion. The generated message was not applied.",
+                        "GitHub Copilot",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                    return;
+                }
+
+                if (!string.IsNullOrWhiteSpace(originalMessage))
+                {
+                    DialogResult replace = MessageBox.Show(
+                        this,
+                        "Replace the existing commit message with the GitHub Copilot suggestion?",
+                        "GitHub Copilot",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (replace != DialogResult.Yes)
+                        return;
+                }
+
+                logMessageEditor.Text = generatedMessage;
+                logMessageEditor.Select();
+            }
+            catch (Exception ex)
+            {
+                if (!IsDisposed && !Disposing)
+                {
+                    MessageBox.Show(
+                        this,
+                        "GitHub Copilot could not generate a commit message.\r\n\r\n" +
+                        "Make sure GitHub Copilot is installed, enabled, and signed in inside Visual Studio, then try again.\r\n\r\n" +
+                        ex.Message,
+                        "GitHub Copilot",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            finally
+            {
+                _generatingCommitMessage = false;
+                UseWaitCursor = false;
+
+                if (Context != null)
+                {
+                    commandService = Context.GetService<IAnkhCommandService>();
+                    if (commandService != null)
+                        commandService.UpdateCommandUI(false);
+                }
             }
         }
 

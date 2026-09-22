@@ -22,6 +22,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -397,10 +398,33 @@ namespace Ankh.VSPackage
             protected set
             {
                 _toolWindow = value;
+                BitmapImageMoniker = GetToolWindowMoniker(value);
+
+                // Keep the historical strip as a fallback for shell paths that
+                // still ask for the legacy bitmap resource.
                 BitmapResourceID = VSVersion.VS2012OrLater ? 701 : 702;
                 BitmapIndex = (int)_toolWindow;
             }
         }
+        static Microsoft.VisualStudio.Imaging.Interop.ImageMoniker GetToolWindowMoniker(AnkhToolWindow toolWindow)
+        {
+            switch (toolWindow)
+            {
+                case AnkhToolWindow.RepositoryExplorer:
+                    return KnownMonikers.SourceControlExplorer;
+                case AnkhToolWindow.WorkingCopyExplorer:
+                    return KnownMonikers.FolderOpened;
+                case AnkhToolWindow.PendingChanges:
+                    return KnownMonikers.PendingChange;
+                case AnkhToolWindow.Log:
+                    return KnownMonikers.History;
+                case AnkhToolWindow.SvnInfo:
+                    return KnownMonikers.Property;
+                default:
+                    return default(Microsoft.VisualStudio.Imaging.Interop.ImageMoniker);
+            }
+        }
+
 
         protected AnkhToolWindowControl Control
         {

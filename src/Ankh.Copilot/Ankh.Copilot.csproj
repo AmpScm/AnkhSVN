@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>Ankh.Copilot</AssemblyName>
+    <RootNamespace>Ankh.Copilot</RootNamespace>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- The Copilot contract ships with Visual Studio, not NuGet. Compile only
+         against the public VS SDK and resolve Copilot's contract at runtime. -->
+    <PackageReference Include="Microsoft.VisualStudio.SDK" />
+  </ItemGroup>
+</Project>

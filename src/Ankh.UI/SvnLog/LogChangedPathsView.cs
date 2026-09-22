@@ -124,17 +124,17 @@ namespace Ankh.UI.SvnLog
 
             if (item != null && item.ChangedPaths != null)
             {
-                IAnkhCommandStates states = null;
-
-                if (Context != null)
-                    states = Context.GetService<IAnkhCommandStates>();
-
                 Color[] colorInfo = null;
 
-                if (!SystemInformation.HighContrast &&
-                    (states != null && (!states.ThemeDefined || states.ThemeLight)))
+                if (!SystemInformation.HighContrast)
                 {
-                    colorInfo = new Color[] { Color.Gray, Color.FromArgb(100, 0, 100), Color.DarkRed, Color.DarkBlue };
+                    colorInfo = new Color[] { AnkhThemePalette.Blend(ForeColor, BackColor, 0.70),
+                        Color.FromArgb(100, 0, 100), Color.DarkRed, Color.DarkBlue };
+                    for (int index = 0; index < colorInfo.Length; index++)
+                    {
+                        if (AnkhThemePalette.ContrastRatio(colorInfo[index], BackColor) < 4.5)
+                            colorInfo[index] = Color.Empty;
+                    }
                 }
 
                 List<PathListViewItem> paths = new List<PathListViewItem>();

@@ -42,6 +42,7 @@ using System.Collections;
 using Ankh.Diff.DiffUtils;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Ankh.UI;
 
 /*
  * Chad discovered that with lines over about 25000 characters long, that GDI+
@@ -84,6 +85,28 @@ namespace Ankh.Diff.DiffUtils.Controls
             DiffOptions.OptionsChanged += m_OptionsChangedHandler;
 
             Cursor = Cursors.IBeam;
+        }
+
+        private IWinFormsThemingService GetThemingService()
+        {
+            Control control = this;
+
+            while (control != null)
+            {
+                IContextControl contextControl = control as IContextControl;
+                if (contextControl != null && contextControl.Context != null)
+                {
+                    IWinFormsThemingService themer =
+                        contextControl.Context.GetService<IWinFormsThemingService>();
+
+                    if (themer != null)
+                        return themer;
+                }
+
+                control = control.Parent;
+            }
+
+            return null;
         }
 
         public void SetData(IList<string> StringList, EditScript Script, bool bUseA)
@@ -188,7 +211,7 @@ namespace Ankh.Diff.DiffUtils.Controls
 
         public bool Find(FindData Data)
         {
-            FindDlg Dlg = new FindDlg();
+            FindDlg Dlg = new FindDlg(GetThemingService());
 
             //If text is selected on a single line, then use that for the new Find text.
             string strOriginalFindText = Data.Text;
@@ -470,7 +493,7 @@ namespace Ankh.Diff.DiffUtils.Controls
                 int iMaxLineNumber = m_StringList.Count;
                 if (iMaxLineNumber > 0)
                 {
-                    GoToDlg Dlg = new GoToDlg();
+                    GoToDlg Dlg = new GoToDlg(GetThemingService());
                     int iLine;
                     if (Dlg.Execute(this, iMaxLineNumber, out iLine))
                     {
@@ -827,128 +850,39 @@ namespace Ankh.Diff.DiffUtils.Controls
         {
             base.OnKeyDown(e);
 
-            bool bCtrl = e.Modifiers == Keys.Control;
-            bool bShift = e.Modifiers == Keys.Shift;
-            bool bNormal = e.Modifiers == 0;
+            DiffViewKeyAction action = DiffViewKeyLogic.GetAction(
+                e.KeyCode,
+                e.Modifiers,
+                HasSelection,
+                Position.Line,
+                Position.Column,
+                LineCount,
+                GetLineLength(Position.Line),
+                GetLineLength(LineCount));
 
-            switch (e.KeyCode)
+            int lineDelta = action.LineDelta;
+            if (action.PageFactor != 0)
+                lineDelta += action.PageFactor * NativeMethods.GetScrollPage(this, false);
+
+            if (action.ScrollVertically)
+                VScrollPos += lineDelta;
+
+            switch (action.Operation)
             {
-                case Keys.C:
-                    if (bCtrl)
-                    {
-                        if (HasSelection)
-                        {
-                            Clipboard.SetDataObject(SelectedText, true);
-                        }
-                    }
+                case DiffViewKeyOperation.CopySelection:
+                    Clipboard.SetDataObject(SelectedText, true);
                     break;
-                case Keys.Up:
-                    if (bCtrl)
-                    {
-                        VScrollPos--;
-                        OffsetPosition(-1, 0);
-                    }
-                    else if (bShift)
-                    {
-                        ExtendSelection(-1, 0);
-                    }
-                    else if (bNormal)
-                    {
-                        OffsetPosition(-1, 0);
-                    }
+
+                case DiffViewKeyOperation.OffsetPosition:
+                    OffsetPosition(lineDelta, action.ColumnDelta);
                     break;
-                case Keys.Down:
-                    if (bCtrl)
-                    {
-                        VScrollPos++;
-                        OffsetPosition(1, 0);
-                    }
-                    else if (bShift)
-                    {
-                        ExtendSelection(1, 0);
-                    }
-                    else if (bNormal)
-                    {
-                        OffsetPosition(1, 0);
-                    }
+
+                case DiffViewKeyOperation.ExtendSelection:
+                    ExtendSelection(lineDelta, action.ColumnDelta);
                     break;
-                case Keys.Left:
-                    if (bShift)
-                    {
-                        ExtendSelection(0, -1);
-                    }
-                    else if (bNormal)
-                    {
-                        OffsetPosition(0, -1);
-                    }
-                    break;
-                case Keys.Right:
-                    if (bShift)
-                    {
-                        ExtendSelection(0, 1);
-                    }
-                    else if (bNormal)
-                    {
-                        OffsetPosition(0, 1);
-                    }
-                    break;
-                case Keys.PageUp:
-                    {
-                        int iPage = NativeMethods.GetScrollPage(this, false);
-                        if (bShift)
-                        {
-                            ExtendSelection(-iPage, 0);
-                        }
-                        else if (bNormal)
-                        {
-                            VScrollPos -= iPage;
-                            OffsetPosition(-iPage, 0);
-                        }
-                    }
-                    break;
-                case Keys.PageDown:
-                    {
-                        int iPage = NativeMethods.GetScrollPage(this, false);
-                        if (bShift)
-                        {
-                            ExtendSelection(iPage, 0);
-                        }
-                        else if (bNormal)
-                        {
-                            VScrollPos += iPage;
-                            OffsetPosition(iPage, 0);
-                        }
-                    }
-                    break;
-                case Keys.Home:
-                    if (bCtrl)
-                    {
-                        SetPosition(0, 0);
-                    }
-                    else if (bShift)
-                    {
-                        ExtendSelection(0, -Position.Column);
-                    }
-                    else if (bNormal)
-                    {
-                        SetPosition(Position.Line, 0);
-                    }
-                    break;
-                case Keys.End:
-                    if (bCtrl)
-                    {
-                        int iLine = LineCount;
-                        SetPosition(iLine, GetLineLength(iLine));
-                    }
-                    else if (bShift)
-                    {
-                        ExtendSelection(0, GetLineLength(Position.Line) - Position.Column);
-                    }
-                    else if (bNormal)
-                    {
-                        int iLine = Position.Line;
-                        SetPosition(iLine, GetLineLength(iLine));
-                    }
+
+                case DiffViewKeyOperation.SetPosition:
+                    SetPosition(action.TargetLine, action.TargetColumn);
                     break;
             }
         }

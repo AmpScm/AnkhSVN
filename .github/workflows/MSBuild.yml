@@ -3,6 +3,9 @@ name: MSBuild
 on:
   push:
     branches: [ main, stable/* ]
+    paths-ignore:
+      - 'badges/**'
+      - 'CoverageReport/SummaryGithub.md'
   pull_request:
     branches: [ main, stable/* ]
   workflow_dispatch:
@@ -13,6 +16,8 @@ permissions:
 
 env:
   SOLUTION_FILE_PATH: build/src/AnkhSvn.sln
+  SLIKSVN_VERSION: 1.14.5
+  SLIKSVN_SHA256: 77D4FE02999DDA3BDC3A20E86243AE6EDE99AAF072B4C12B0CDEDB54D88E954A
 
 jobs:
   build:
@@ -27,9 +32,162 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v3
 
-    - name: Add Subversion to PATH
-      uses: ampscm/setup-subversion@v1
+    - name: Cache portable Subversion
+      uses: actions/cache@v4
+      with:
+        path: ${{ runner.temp }}\sliksvn-${{ env.SLIKSVN_VERSION }}
+        key: sliksvn-v2-${{ runner.os }}-x64-${{ env.SLIKSVN_VERSION }}-${{ env.SLIKSVN_SHA256 }}
 
+    - name: Add Subversion to PATH
+      shell: pwsh
+      run: |
+        $ErrorActionPreference = "Stop"
+
+        $version = $env:SLIKSVN_VERSION
+        $expectedHash = $env:SLIKSVN_SHA256.ToUpperInvariant()
+        $svnRoot = Join-Path $env:RUNNER_TEMP "sliksvn-$version"
+
+        function Find-SvnBin([string]$root) {
+          if (-not (Test-Path $root)) { return $null }
+
+          $svn = Get-ChildItem $root -Recurse -Filter svn.exe -File -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($null -eq $svn) { return $null }
+
+          $svnadmin = Join-Path $svn.Directory.FullName "svnadmin.exe"
+          if (-not (Test-Path $svnadmin)) { return $null }
+
+          return $svn.Directory.FullName
+        }
+
+        function Activate-Svn([string]$bin) {
+          Write-Host "Using Subversion from: $bin"
+          $bin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+          & (Join-Path $bin "svn.exe") --version --quiet
+          if ($LASTEXITCODE -ne 0) { throw "svn.exe verification failed." }
+
+          & (Join-Path $bin "svnadmin.exe") --version --quiet
+          if ($LASTEXITCODE -ne 0) { throw "svnadmin.exe verification failed." }
+        }
+
+        $cachedBin = Find-SvnBin $svnRoot
+        if ($cachedBin) {
+          Write-Host "Using cached portable SlikSVN."
+          Activate-Svn $cachedBin
+          exit 0
+        }
+
+        $archive = Join-Path $env:RUNNER_TEMP "Slik-Subversion-$version-x64.zip"
+        $officialUrl = "https://sliksvn.com/pub/Slik-Subversion-$version-x64.zip"
+        $installed = $false
+
+        for ($attempt = 1; $attempt -le 3 -and -not $installed; $attempt++) {
+          try {
+            Write-Host "Downloading SlikSVN from the official source (attempt $attempt of 3)..."
+            Remove-Item $archive -Force -ErrorAction SilentlyContinue
+            Remove-Item $svnRoot -Recurse -Force -ErrorAction SilentlyContinue
+
+            Invoke-WebRequest -Uri $officialUrl -OutFile $archive -UseBasicParsing -TimeoutSec 90
+
+            $actualHash = (Get-FileHash $archive -Algorithm SHA256).Hash.ToUpperInvariant()
+            if ($actualHash -ne $expectedHash) {
+              throw "SlikSVN SHA256 mismatch. Expected $expectedHash but got $actualHash."
+            }
+
+            New-Item -ItemType Directory -Force -Path $svnRoot | Out-Null
+            Expand-Archive -Path $archive -DestinationPath $svnRoot -Force
+
+            # The official ZIP contains the signed MSI installer rather than a
+            # ready-to-run bin directory. Install it into the cached temp
+            # location so CI does not depend on Chocolatey being available.
+            $bin = Find-SvnBin $svnRoot
+            if (-not $bin) {
+              $msi = Get-ChildItem $svnRoot -Recurse -Filter "*.msi" -File -ErrorAction SilentlyContinue |
+                Select-Object -First 1
+
+              if (-not $msi) {
+                throw "The verified SlikSVN archive contained neither CLI binaries nor an MSI installer."
+              }
+
+              $installRoot = Join-Path $svnRoot "installed"
+              New-Item -ItemType Directory -Force -Path $installRoot | Out-Null
+
+              Write-Host "Installing verified official SlikSVN MSI into the Actions cache..."
+              $msiArgs = @(
+                "/i",
+                "`"$($msi.FullName)`"",
+                "/qn",
+                "/norestart",
+                "INSTALLLEVEL=300",
+                "INSTALLLOCATION=`"$installRoot`""
+              )
+
+              $msiProcess = Start-Process -FilePath "msiexec.exe" -ArgumentList $msiArgs -Wait -PassThru
+              if ($msiProcess.ExitCode -notin @(0, 3010)) {
+                throw "SlikSVN MSI installation failed with exit code $($msiProcess.ExitCode)."
+              }
+
+              $bin = Find-SvnBin $installRoot
+            }
+
+            if (-not $bin) {
+              throw "The verified SlikSVN package did not provision svn.exe and svnadmin.exe."
+            }
+
+            Activate-Svn $bin
+            $installed = $true
+          }
+          catch {
+            Write-Warning "Official SlikSVN download attempt $attempt failed: $($_.Exception.Message)"
+            if ($attempt -lt 3) { Start-Sleep -Seconds (5 * $attempt) }
+          }
+        }
+
+        if ($installed) { exit 0 }
+
+        Write-Warning "Official SlikSVN download failed; falling back to Chocolatey."
+
+        for ($attempt = 1; $attempt -le 3 -and -not $installed; $attempt++) {
+          Write-Host "Chocolatey SlikSVN install attempt $attempt of 3..."
+          & choco install sliksvn --version $version -y --no-progress
+
+          if ($LASTEXITCODE -eq 0) {
+            $knownRoots = @(
+              "C:\Program Files\SlikSvn\bin",
+              "C:\Program Files (x86)\SlikSvn\bin",
+              "C:\Program Files\Subversion\bin",
+              "C:\Program Files (x86)\Subversion\bin"
+            )
+
+            foreach ($candidate in $knownRoots) {
+              if ((Test-Path (Join-Path $candidate "svn.exe")) -and
+                  (Test-Path (Join-Path $candidate "svnadmin.exe"))) {
+                # Persist the fallback installation into the same Actions cache
+                # so a successful fallback is not needed again on later runs.
+                $fallbackRoot = Join-Path $svnRoot "chocolatey"
+                New-Item -ItemType Directory -Force -Path $fallbackRoot | Out-Null
+                Copy-Item (Join-Path $candidate "*") $fallbackRoot -Recurse -Force
+
+                $cachedFallback = Find-SvnBin $fallbackRoot
+                if (-not $cachedFallback) {
+                  throw "Chocolatey installed SlikSVN, but the cached copy could not be verified."
+                }
+
+                Activate-Svn $cachedFallback
+                $installed = $true
+                break
+              }
+            }
+          }
+
+          if (-not $installed -and $attempt -lt 3) {
+            Start-Sleep -Seconds (5 * $attempt)
+          }
+        }
+
+        if (-not $installed) {
+          throw "Unable to provision Subversion from the GitHub cache, official SlikSVN ZIP, or Chocolatey."
+        }
 
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v4.0
@@ -39,17 +197,19 @@ jobs:
       run: cmd.exe /C scripts\gh-version-setup ${{ github.run_number }}
 
     - name: Build 2022
+      id: build_2022
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: >
         msbuild /m /v:m /restore /t:rebuild
         /p:UseVsSdkVersion=17.0
         /p:Configuration=Release
+        "/p:AnkhHelpBaseUrl=https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/help/"
         ${{ env.SOLUTION_FILE_PATH }}
         @build\scripts\msbuild-version.rsp
 
     - name: Run Ankh.Tests with coverage
       id: ankh_tests
-      continue-on-error: true
+      if: always() && steps.build_2022.outcome == 'success'
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: >
         dotnet test build/src/Ankh.Tests/Ankh.Tests.csproj
@@ -58,12 +218,13 @@ jobs:
         --no-restore
         --collect:"XPlat Code Coverage"
         --results-directory "${{ github.workspace }}\TestResults\Ankh.Tests"
+        --logger "trx;LogFileName=Ankh.Tests.trx"
         --logger "console;verbosity=normal"
         -- RunConfiguration.TargetPlatform=x64 RunConfiguration.TreatNoTestsAsError=true
 
     - name: Run Ankh.VS.UnitTest with coverage
       id: ankh_vs_tests
-      continue-on-error: true
+      if: always() && steps.build_2022.outcome == 'success'
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: >
         dotnet test build/src/Ankh.VS.UnitTest/Ankh.VS.UnitTest.csproj
@@ -72,6 +233,7 @@ jobs:
         --no-restore
         --collect:"XPlat Code Coverage"
         --results-directory "${{ github.workspace }}\TestResults\Ankh.VS.UnitTest"
+        --logger "trx;LogFileName=Ankh.VS.UnitTest.trx"
         --logger "console;verbosity=normal"
         -- RunConfiguration.TargetPlatform=x64 RunConfiguration.TreatNoTestsAsError=true
 
@@ -86,7 +248,10 @@ jobs:
       run: |
         $coverageFiles = Get-ChildItem "${{ github.workspace }}\TestResults" -Recurse -Filter "coverage.cobertura.xml" -ErrorAction SilentlyContinue
         if (-not $coverageFiles) {
-          throw "No Coverlet coverage.cobertura.xml files were produced."
+          Write-Host "No coverage files were produced; this is expected when compilation fails before tests run."
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "### Coverage"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "Coverage was not generated because no test coverage files were produced."
+          exit 0
         }
 
         $reports = ($coverageFiles.FullName -join ";")
@@ -104,6 +269,204 @@ jobs:
           }
         }
 
+    - name: Generate README badges
+      id: readme_badges
+      if: always()
+      shell: pwsh
+      run: |
+        $badgeDir = "${{ github.workspace }}\ReadmeBadges"
+        $coveragePath = "${{ github.workspace }}\CoverageReport\Cobertura.xml"
+        $trxFiles = Get-ChildItem "${{ github.workspace }}\TestResults" -Recurse -Filter "*.trx" -ErrorAction SilentlyContinue
+
+        New-Item -ItemType Directory -Force -Path $badgeDir | Out-Null
+
+        $total = 0
+        $passed = 0
+        $failed = 0
+        $skipped = 0
+
+        foreach ($trxFile in $trxFiles) {
+          [xml]$trx = Get-Content -Raw $trxFile.FullName
+          $counters = $trx.SelectSingleNode("/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']")
+          if ($null -eq $counters) {
+            continue
+          }
+
+          $total += [int]$counters.GetAttribute("total")
+          $passed += [int]$counters.GetAttribute("passed")
+          $failed += [int]$counters.GetAttribute("failed")
+
+          $notExecuted = $counters.GetAttribute("notExecuted")
+          if ($notExecuted) {
+            $skipped += [int]$notExecuted
+          }
+        }
+
+        function Get-CoverageColor([double]$percent) {
+          if ($percent -ge 80) { return "#4c1" }
+          if ($percent -ge 60) { return "#97ca00" }
+          if ($percent -ge 40) { return "#dfb317" }
+          if ($percent -ge 20) { return "#fe7d37" }
+          return "#e05d44"
+        }
+
+        function Write-Badge(
+          [string]$path,
+          [string]$label,
+          [string]$message,
+          [string]$color) {
+
+          $safeLabel = [Security.SecurityElement]::Escape($label)
+          $safeMessage = [Security.SecurityElement]::Escape($message)
+          $labelWidth = [Math]::Max(60, ($label.Length * 7) + 14)
+          $valueWidth = [Math]::Max(55, ($message.Length * 7) + 14)
+          $width = $labelWidth + $valueWidth
+          $labelX = [Math]::Round($labelWidth / 2)
+          $valueX = $labelWidth + [Math]::Round($valueWidth / 2)
+
+          $svg = @"
+        <svg xmlns="http://www.w3.org/2000/svg" width="$width" height="20" role="img" aria-label="$($safeLabel): $safeMessage">
+          <title>$($safeLabel): $safeMessage</title>
+          <mask id="round"><rect width="$width" height="20" rx="3" fill="#fff"/></mask>
+          <g mask="url(#round)">
+            <rect width="$labelWidth" height="20" fill="#555"/>
+            <rect x="$labelWidth" width="$valueWidth" height="20" fill="$color"/>
+          </g>
+          <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">
+            <text x="$labelX" y="14">$safeLabel</text>
+            <text x="$valueX" y="14">$safeMessage</text>
+          </g>
+        </svg>
+        "@
+
+          Set-Content -Path $path -Value $svg -Encoding utf8
+        }
+
+        $compileOutcome = "${{ steps.build_2022.outcome }}"
+        $unitOutcome = "${{ steps.ankh_tests.outcome }}"
+        $vsUnitOutcome = "${{ steps.ankh_vs_tests.outcome }}"
+
+        $ciPassed =
+          $compileOutcome -eq "success" -and
+          $unitOutcome -eq "success" -and
+          $vsUnitOutcome -eq "success"
+
+        if ($ciPassed) {
+          $buildMessage = "passing"
+          $buildColor = "#4c1"
+        }
+        else {
+          $buildMessage = "failing"
+          $buildColor = "#e05d44"
+        }
+
+        # build.svg is the repository's overall CI badge: compile + both test suites.
+        Write-Badge (Join-Path $badgeDir "build.svg") "build" $buildMessage $buildColor
+
+        if ($failed -gt 0) {
+          $testMessage = "$passed passed, $failed failed"
+          $testColor = "#e05d44"
+        }
+        elseif ($trxFiles -and $skipped -gt 0) {
+          $testMessage = "$passed passed, $skipped skipped"
+          $testColor = "#4c1"
+        }
+        elseif ($trxFiles) {
+          $testMessage = "$passed passing"
+          $testColor = "#4c1"
+        }
+        else {
+          $testMessage = "not run"
+          $testColor = "#9f9f9f"
+        }
+
+        Write-Badge (Join-Path $badgeDir "tests.svg") "tests" $testMessage $testColor
+
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value ""
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "### CI status"
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Compile: $compileOutcome"
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Ankh.Tests: $unitOutcome"
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Ankh.VS.UnitTest: $vsUnitOutcome"
+
+        if (Test-Path $coveragePath) {
+          [xml]$coverage = Get-Content -Raw $coveragePath
+          $coverageRoot = $coverage.SelectSingleNode("/*[local-name()='coverage']")
+          if ($null -eq $coverageRoot) {
+            throw "Cobertura report does not contain a coverage root element."
+          }
+
+          $lineRate = [double]::Parse(
+            $coverageRoot.GetAttribute("line-rate"),
+            [Globalization.CultureInfo]::InvariantCulture)
+          $branchRate = [double]::Parse(
+            $coverageRoot.GetAttribute("branch-rate"),
+            [Globalization.CultureInfo]::InvariantCulture)
+
+          $linePercent = [Math]::Round($lineRate * 100, 1)
+          $branchPercent = [Math]::Round($branchRate * 100, 1)
+          $lineMessage = $linePercent.ToString("0.0", [Globalization.CultureInfo]::InvariantCulture) + "%"
+          $branchMessage = $branchPercent.ToString("0.0", [Globalization.CultureInfo]::InvariantCulture) + "%"
+
+          Write-Badge (Join-Path $badgeDir "coverage.svg") "line coverage" $lineMessage (Get-CoverageColor $linePercent)
+          Write-Badge (Join-Path $badgeDir "branches.svg") "branch coverage" $branchMessage (Get-CoverageColor $branchPercent)
+
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Tests: $passed passed / $total total"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Line coverage: $lineMessage"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Branch coverage: $branchMessage"
+        }
+        else {
+          Write-Host "Coverage is unavailable; publishing CI and test-status badges only."
+        }
+
+        "ready=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+    - name: Publish README badges
+      if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.readme_badges.outputs.ready == 'true'
+      shell: pwsh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        $remote = "https://x-access-token:$env:GITHUB_TOKEN@github.com/${{ github.repository }}.git"
+        $currentMain = (git ls-remote $remote refs/heads/main) -split "\s+" | Select-Object -First 1
+
+        if ($currentMain -ne "${{ github.sha }}") {
+          Write-Host "A newer main commit exists; skipping stale badge publication."
+          exit 0
+        }
+
+        $publishDir = Join-Path $env:RUNNER_TEMP "ankhsvn-readme-badges"
+        if (Test-Path $publishDir) {
+          Remove-Item -Recurse -Force $publishDir
+        }
+
+        git clone --quiet --branch main --single-branch $remote $publishDir
+        Set-Location $publishDir
+
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+        New-Item -ItemType Directory -Force -Path "badges" | Out-Null
+        Copy-Item "${{ github.workspace }}\ReadmeBadges\*.svg" "badges\" -Force
+
+        $summarySource = "${{ github.workspace }}\CoverageReport\SummaryGithub.md"
+        if (Test-Path $summarySource) {
+          New-Item -ItemType Directory -Force -Path "CoverageReport" | Out-Null
+          Copy-Item $summarySource "CoverageReport\SummaryGithub.md" -Force
+        }
+
+        git add badges/*.svg
+        if (Test-Path "CoverageReport\SummaryGithub.md") {
+          git add CoverageReport/SummaryGithub.md
+        }
+        git diff --cached --quiet
+        if ($LASTEXITCODE -eq 0) {
+          Write-Host "README badges and coverage summary are already current."
+          exit 0
+        }
+
+        git commit -m "Update README metrics for run #${{ github.run_number }}"
+        git push origin HEAD:main
+
     - name: Upload coverage report
       if: always()
       uses: actions/upload-artifact@v6
@@ -112,50 +475,106 @@ jobs:
         path: |
           TestResults
           CoverageReport
-        if-no-files-found: error
+        if-no-files-found: warn
 
-    - name: Verify VSIX contains Ankh.UI
+    - name: Verify VSIX Annotate MEF packaging (#7/#47)
+      if: always() && steps.build_2022.outcome == 'success'
       shell: pwsh
       run: |
+        # Regression guard for:
+        # https://github.com/AmpScm/AnkhSVN/issues/7
+        # https://github.com/AmpScm/AnkhSVN/issues/47
+        #
+        # The fixed Annotate viewer depends on Ankh.UI.dll being shipped as a
+        # Microsoft.VisualStudio.MefComponent. Merely packaging the DLL is not enough:
+        # without the MEF asset declaration Visual Studio will not discover the WPF margin.
         Add-Type -AssemblyName System.IO.Compression.FileSystem
         $vsix = "${{ github.workspace }}\build\src\Ankh.Package\bin\release\Ankh.Package.vsix"
         $archive = [System.IO.Compression.ZipFile]::OpenRead($vsix)
         try {
           $uiAssembly = $archive.Entries | Where-Object { $_.FullName -match '(^|/)Ankh\.UI\.dll$' } | Select-Object -First 1
           if (-not $uiAssembly) {
-            throw "Ankh.UI.dll was not included in the generated VSIX"
+            throw "Issues #7/#47 regression: Ankh.UI.dll was not included in the generated VSIX"
           }
-          Write-Host "Verified VSIX contains $($uiAssembly.FullName)"
+
+          $manifestEntry = $archive.Entries | Where-Object { $_.FullName -match '\.vsixmanifest$' } | Select-Object -First 1
+          if (-not $manifestEntry) {
+            throw "Issues #7/#47 regression: generated VSIX does not contain a VSIX manifest"
+          }
+
+          $stream = $manifestEntry.Open()
+          $reader = New-Object System.IO.StreamReader($stream)
+          try {
+            [xml]$manifest = $reader.ReadToEnd()
+          }
+          finally {
+            $reader.Dispose()
+            $stream.Dispose()
+          }
+
+          $namespaces = New-Object System.Xml.XmlNamespaceManager($manifest.NameTable)
+          $namespaces.AddNamespace("v", "http://schemas.microsoft.com/developer/vsx-schema/2011")
+          $namespaces.AddNamespace("d", "http://schemas.microsoft.com/developer/vsx-schema-design/2011")
+
+          # d:ProjectName is design-time metadata and may be stripped from the
+          # generated VSIX manifest. Validate the runtime MEF asset Visual Studio
+          # actually consumes, while still accepting the source-manifest form.
+          $mefAssets = $manifest.SelectNodes(
+            "//v:Asset[@Type='Microsoft.VisualStudio.MefComponent']",
+            $namespaces)
+
+          $mefAsset = $mefAssets | Where-Object {
+            $assetPath = $_.GetAttribute("Path")
+            $projectName = $_.GetAttribute(
+              "ProjectName",
+              "http://schemas.microsoft.com/developer/vsx-schema-design/2011")
+
+            $leafName = [System.IO.Path]::GetFileName($assetPath)
+            ($leafName -eq "Ankh.UI.dll") -or
+              ($assetPath -eq "|Ankh.UI|") -or
+              ($projectName -eq "Ankh.UI")
+          } | Select-Object -First 1
+
+          if (-not $mefAsset) {
+            $assetPaths = ($mefAssets | ForEach-Object { $_.GetAttribute("Path") }) -join ", "
+            throw "Issues #7/#47 regression: generated VSIX does not declare Ankh.UI as a Microsoft.VisualStudio.MefComponent. MEF paths: $assetPaths"
+          }
+
+          # The Copilot bridge is intentionally late-loaded. It resolves the
+          # Copilot contract from the installed Visual Studio at runtime, and the
+          # VSIX must not ship Microsoft's implementation or a second Copilot CLI.
+          $copilotBridge = $archive.Entries | Where-Object {
+            [System.IO.Path]::GetFileName($_.FullName) -eq "Ankh.Copilot.dll"
+          } | Select-Object -First 1
+
+          if (-not $copilotBridge) {
+            throw "Copilot packaging regression: Ankh.Copilot.dll is missing from the generated VSIX"
+          }
+
+          $forbiddenCopilotRuntime = $archive.Entries | Where-Object {
+            $leaf = [System.IO.Path]::GetFileName($_.FullName)
+            $leaf -eq "GitHub.Copilot.SDK.dll" -or
+            $leaf -eq "copilot-runtime.exe" -or
+            $leaf -eq "runtime.node"
+          }
+
+          if ($forbiddenCopilotRuntime) {
+            $forbiddenNames = ($forbiddenCopilotRuntime | ForEach-Object { $_.FullName }) -join ", "
+            throw "Copilot packaging regression: VSIX contains an embedded Copilot CLI runtime: $forbiddenNames"
+          }
+
+          Write-Host "Verified Copilot bridge: $($copilotBridge.FullName)"
         }
         finally {
           $archive.Dispose()
         }
 
     - name: Upload VSIX Artifact
+      if: always() && steps.build_2022.outcome == 'success'
       uses: actions/upload-artifact@v6
       with:
         name: Ankh-VSIX-2022-${{ github.run_number }}
         path: build/src/Ankh.Package/bin/release/Ankh.Package.vsix
-
-    - name: Verify test suites
-      if: always()
-      shell: pwsh
-      run: |
-        $failures = @()
-
-        if ("${{ steps.ankh_tests.outcome }}" -ne "success") {
-          $failures += "Ankh.Tests"
-        }
-
-        if ("${{ steps.ankh_vs_tests.outcome }}" -ne "success") {
-          $failures += "Ankh.VS.UnitTest"
-        }
-
-        if ($failures.Count -gt 0) {
-          throw ("Test suite failure(s): " + ($failures -join ", "))
-        }
-
-        Write-Host "Both test suites passed."
 
     - name: Prepare Release Files
       if: github.event_name != 'pull_request'
@@ -223,6 +642,31 @@ jobs:
         Write-Host "Publishing $($package.Name)"
         dotnet nuget push "$($package.FullName)" --api-key "$env:GITHUB_TOKEN" --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --skip-duplicate
 
+    - name: Generate detailed release notes
+      if: github.event_name != 'pull_request'
+      shell: pwsh
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        $version = "2.9.${{ github.run_number }}"
+        $tag = "v$version"
+        $notes = "${{ github.workspace }}\release\AnkhSVN-$version-ReleaseNotes.md"
+
+        & "${{ github.workspace }}\build\scripts\gh-release-notes.ps1" `
+          -Repository "${{ github.repository }}" `
+          -Version "$version" `
+          -Tag "$tag" `
+          -TargetCommit "${{ github.sha }}" `
+          -Workspace "${{ github.workspace }}" `
+          -OutputPath "$notes"
+
+        if ($LASTEXITCODE -ne 0) {
+          throw "Release note generation failed with exit code $LASTEXITCODE."
+        }
+
+        Write-Host "Generated release notes:"
+        Get-Content $notes | ForEach-Object { Write-Host $_ }
+
     - name: Create GitHub Release
       if: github.event_name != 'pull_request'
       shell: pwsh
@@ -233,6 +677,7 @@ jobs:
         $tag = "v$version"
         $vsix = "${{ github.workspace }}\release\AnkhSVN-$version-VS2022.vsix"
         $coverageZip = "${{ github.workspace }}\release\AnkhSVN-$version-Coverage.zip"
+        $releaseNotes = "${{ github.workspace }}\release\AnkhSVN-$version-ReleaseNotes.md"
         $nupkg = Get-ChildItem "${{ github.workspace }}\package\out\*.nupkg" | Select-Object -First 1
         Write-Host "Creating release $tag"
-        gh release create "$tag" "$vsix" "$($nupkg.FullName)" "$coverageZip" --repo "${{ github.repository }}" --target "${{ github.sha }}" --title "AnkhSVN $version" --generate-notes
+        gh release create "$tag" "$vsix" "$($nupkg.FullName)" "$coverageZip" --repo "${{ github.repository }}" --target "${{ github.sha }}" --title "AnkhSVN $version" --notes-file "$releaseNotes"

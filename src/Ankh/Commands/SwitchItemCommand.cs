@@ -86,86 +86,39 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            SvnItem theItem = null;
-            string path;
-            bool allowObstructions = false;
-
             string projectRoot = e.GetService<IAnkhSolutionSettings>().ProjectRoot;
 
-            if (e.Command == AnkhCommand.SolutionSwitchDialog)
-                path = projectRoot;
-            else if (e.Command == AnkhCommand.SwitchProject)
-            {
-                IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
-                path = null;
-
-                foreach (SccProject item in e.Selection.GetSelectedProjects(true))
-                {
-                    ISccProjectInfo pi = mapper.GetProjectInfo(item);
-
-                    if (pi == null)
-                        continue;
-
-                    path = pi.ProjectDirectory;
-                    break;
-                }
-
-                if (string.IsNullOrEmpty(path))
-                    return;
-            }
-            else
-            {
-                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-                {
-                    if (item.IsVersioned)
-                    {
-                        theItem = item;
-                        break;
-                    }
-                    return;
-                }
-                path = theItem.FullPath;
-            }
+            string path;
+            if (!TryGetSwitchPath(e, projectRoot, out path))
+                return;
 
             ISvnStatusCache statusCache = e.GetService<ISvnStatusCache>();
-
             SvnItem pathItem = statusCache[path];
             Uri uri = pathItem.Uri;
 
             if (uri == null)
-                return; // Should never happen on a real workingcopy
+                return; // Should never happen on a real working copy
 
             SvnUriTarget target;
-            SvnRevision revision = SvnRevision.None;
-
-            if (e.Argument is string)
+            SvnRevision revision;
+            bool allowObstructions;
+            if (!TryGetSwitchTarget(
+                    e,
+                    path,
+                    pathItem,
+                    uri,
+                    out target,
+                    out revision,
+                    out allowObstructions))
             {
-                target = SvnUriTarget.FromString((string)e.Argument, true);
-                revision = (target.Revision != SvnRevision.None) ? target.Revision : SvnRevision.Head;
+                return;
             }
-            else if (e.Argument is Uri)
-                target = (Uri)e.Argument;
-            else
-                using (SwitchDialog dlg = new SwitchDialog())
-                {
-                    dlg.Context = e.Context;
-
-                    dlg.LocalPath = path;
-                    dlg.RepositoryRoot = e.GetService<ISvnStatusCache>()[path].WorkingCopy.RepositoryRoot;
-                    dlg.SwitchToUri = uri;
-                    dlg.Revision = SvnRevision.Head;
-
-                    if (dlg.ShowDialog(e.Context) != DialogResult.OK)
-                        return;
-
-                    target = dlg.SwitchToUri;
-                    revision = dlg.Revision;
-                    allowObstructions = dlg.AllowUnversionedObstructions;
-                }
 
             // Get a list of all documents below the specified paths that are open in editors inside VS
-            HybridCollection<string> lockPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-            IAnkhOpenDocumentTracker documentTracker = e.GetService<IAnkhOpenDocumentTracker>();
+            HybridCollection<string> lockPaths =
+                new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+            IAnkhOpenDocumentTracker documentTracker =
+                e.GetService<IAnkhOpenDocumentTracker>();
 
             foreach (string file in documentTracker.GetDocumentsBelow(path))
             {
@@ -173,100 +126,283 @@ namespace Ankh.Commands
                     lockPaths.Add(file);
             }
 
-            documentTracker.SaveDocuments(lockPaths); // Make sure all files are saved before merging!
+            documentTracker.SaveDocuments(lockPaths);
 
-            using (DocumentLock lck = documentTracker.LockDocuments(lockPaths, DocumentLockType.NoReload))
+            using (DocumentLock lck =
+                documentTracker.LockDocuments(lockPaths, DocumentLockType.NoReload))
             using (lck.MonitorChangesForReload())
             {
-                Uri newRepositoryRoot = null;
-                e.GetService<IProgressRunner>().RunModal(CommandStrings.SwitchingTitle,
-                    delegate(object sender, ProgressWorkerArgs a)
-                    {
-                        SvnSwitchArgs args = new SvnSwitchArgs();
-                        args.AllowObstructions = allowObstructions;
-                        args.AddExpectedError(SvnErrorCode.SVN_ERR_WC_INVALID_SWITCH);
+                Uri newRepositoryRoot;
+                RunInitialSwitch(
+                    e,
+                    path,
+                    pathItem,
+                    target,
+                    revision,
+                    allowObstructions,
+                    out newRepositoryRoot);
 
-                        if (revision != SvnRevision.None)
-                            args.Revision = revision;
-
-                        e.GetService<IConflictHandler>().RegisterConflictHandler(args, a.Synchronizer);
-                        if (!a.Client.Switch(path, target, args))
-                        {
-                            if (args.LastException.SvnErrorCode != SvnErrorCode.SVN_ERR_WC_INVALID_SWITCH)
-                                return;
-
-                            // source/target repository is different, check if we can fix this by relocating
-                            SvnInfoEventArgs iea;
-                            if (a.Client.GetInfo(target, out iea))
-                            {
-                                if (pathItem.WorkingCopy.RepositoryId != iea.RepositoryId)
-                                {
-                                    e.Context.GetService<IAnkhDialogOwner>()
-                                        .MessageBox.Show("Cannot switch to different repository because the repository UUIDs are different",
-                                        "Cannot switch", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                }
-                                else if (pathItem.WorkingCopy.RepositoryRoot != iea.RepositoryRoot)
-                                {
-                                    newRepositoryRoot = iea.RepositoryRoot;
-                                }
-                                else if (pathItem.WorkingCopy.RepositoryId == Guid.Empty)
-                                {
-                                    // No UUIDs and RepositoryRoot equal. Throw/show error?
-
-                                    throw args.LastException;
-                                }
-                            }
-                        }
-                    });
-
-                if (newRepositoryRoot != null && DialogResult.Yes == e.Context.GetService<IAnkhDialogOwner>()
-                   .MessageBox.Show(string.Format("The repository root specified is different from the one in your " +
-                   "working copy. Would you like to relocate '{0}' from '{1}' to '{2}'?",
-                   pathItem.WorkingCopy.FullPath,
-                   pathItem.WorkingCopy.RepositoryRoot, newRepositoryRoot),
-                   "Relocate", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-                {
-                    // We can fix this by relocating
-                    string wcRoot = pathItem.WorkingCopy.FullPath;
-                    try
-                    {
-                        e.GetService<IProgressRunner>().RunModal(
-                            CommandStrings.RelocatingTitle,
-                            delegate(object sender, ProgressWorkerArgs a)
-                            {
-                                a.Client.Relocate(wcRoot, pathItem.WorkingCopy.RepositoryRoot, newRepositoryRoot);
-                            });
-                    }
-                    finally
-                    {
-                        statusCache.MarkDirtyRecursive(wcRoot);
-                        e.GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(statusCache.GetCachedBelow(wcRoot));
-                    }
-
-
-                    if (DialogResult.Yes == e.Context.GetService<IAnkhDialogOwner>()
-                        .MessageBox.Show(string.Format("Would you like to try to switch '{0}' to '{1}' again?",
-                        path, target),
-                        "Switch", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-                    {
-                        // Try to switch again
-                        e.GetService<IProgressRunner>().RunModal(
-                        CommandStrings.SwitchingTitle,
-                        delegate(object sender, ProgressWorkerArgs a)
-                        {
-                            SvnSwitchArgs args = new SvnSwitchArgs();
-
-                            if (revision != SvnRevision.None)
-                                args.Revision = revision;
-
-                            args.AllowObstructions = allowObstructions;
-
-                            e.GetService<IConflictHandler>().RegisterConflictHandler(args, a.Synchronizer);
-                            a.Client.Switch(path, target, args);
-                        });
-                    }
-                }
+                RelocateAndRetryIfRequested(
+                    e,
+                    statusCache,
+                    path,
+                    pathItem,
+                    target,
+                    revision,
+                    allowObstructions,
+                    newRepositoryRoot);
             }
         }
+
+        static bool TryGetSwitchPath(
+            CommandEventArgs e,
+            string projectRoot,
+            out string path)
+        {
+            if (e.Command == AnkhCommand.SolutionSwitchDialog)
+            {
+                path = projectRoot;
+                return true;
+            }
+
+            if (e.Command == AnkhCommand.SwitchProject)
+            {
+                IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+
+                foreach (SccProject project in
+                    e.Selection.GetSelectedProjects(true))
+                {
+                    ISccProjectInfo projectInfo =
+                        mapper.GetProjectInfo(project);
+
+                    if (projectInfo == null)
+                        continue;
+
+                    path = projectInfo.ProjectDirectory;
+                    return !string.IsNullOrEmpty(path);
+                }
+
+                path = null;
+                return false;
+            }
+
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            {
+                if (item.IsVersioned)
+                {
+                    path = item.FullPath;
+                    return true;
+                }
+
+                path = null;
+                return false;
+            }
+
+            path = null;
+            return false;
+        }
+
+        static bool TryGetSwitchTarget(
+            CommandEventArgs e,
+            string path,
+            SvnItem pathItem,
+            Uri currentUri,
+            out SvnUriTarget target,
+            out SvnRevision revision,
+            out bool allowObstructions)
+        {
+            allowObstructions = false;
+            revision = SvnRevision.None;
+
+            if (e.Argument is string)
+            {
+                target = SvnUriTarget.FromString(
+                    (string)e.Argument,
+                    true);
+                revision =
+                    target.Revision != SvnRevision.None
+                        ? target.Revision
+                        : SvnRevision.Head;
+                return true;
+            }
+
+            if (e.Argument is Uri)
+            {
+                target = (Uri)e.Argument;
+                return true;
+            }
+
+            using (SwitchDialog dialog = new SwitchDialog())
+            {
+                dialog.Context = e.Context;
+                dialog.LocalPath = path;
+                dialog.RepositoryRoot =
+                    pathItem.WorkingCopy.RepositoryRoot;
+                dialog.SwitchToUri = currentUri;
+                dialog.Revision = SvnRevision.Head;
+
+                if (dialog.ShowDialog(e.Context) != DialogResult.OK)
+                {
+                    target = null;
+                    return false;
+                }
+
+                target = dialog.SwitchToUri;
+                revision = dialog.Revision;
+                allowObstructions =
+                    dialog.AllowUnversionedObstructions;
+                return true;
+            }
+        }
+
+        static void RunInitialSwitch(
+            CommandEventArgs e,
+            string path,
+            SvnItem pathItem,
+            SvnUriTarget target,
+            SvnRevision revision,
+            bool allowObstructions,
+            out Uri newRepositoryRoot)
+        {
+            Uri repositoryRoot = null;
+
+            e.GetService<IProgressRunner>().RunModal(
+                CommandStrings.SwitchingTitle,
+                delegate(object sender, ProgressWorkerArgs a)
+                {
+                    SvnSwitchArgs args = new SvnSwitchArgs();
+                    args.AllowObstructions = allowObstructions;
+                    args.AddExpectedError(
+                        SvnErrorCode.SVN_ERR_WC_INVALID_SWITCH);
+
+                    if (revision != SvnRevision.None)
+                        args.Revision = revision;
+
+                    e.GetService<IConflictHandler>()
+                        .RegisterConflictHandler(
+                            args,
+                            a.Synchronizer);
+
+                    if (a.Client.Switch(path, target, args))
+                        return;
+
+                    if (args.LastException.SvnErrorCode
+                        != SvnErrorCode.SVN_ERR_WC_INVALID_SWITCH)
+                    {
+                        return;
+                    }
+
+                    SvnInfoEventArgs info;
+                    if (!a.Client.GetInfo(target, out info))
+                        return;
+
+                    if (pathItem.WorkingCopy.RepositoryId
+                        != info.RepositoryId)
+                    {
+                        e.Context.GetService<IAnkhDialogOwner>()
+                            .MessageBox.Show(
+                                "Cannot switch to different repository because the repository UUIDs are different",
+                                "Cannot switch",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                    }
+                    else if (pathItem.WorkingCopy.RepositoryRoot
+                        != info.RepositoryRoot)
+                    {
+                        repositoryRoot = info.RepositoryRoot;
+                    }
+                    else if (pathItem.WorkingCopy.RepositoryId
+                        == Guid.Empty)
+                    {
+                        throw args.LastException;
+                    }
+                });
+
+            newRepositoryRoot = repositoryRoot;
+        }
+
+        static void RelocateAndRetryIfRequested(
+            CommandEventArgs e,
+            ISvnStatusCache statusCache,
+            string path,
+            SvnItem pathItem,
+            SvnUriTarget target,
+            SvnRevision revision,
+            bool allowObstructions,
+            Uri newRepositoryRoot)
+        {
+            if (newRepositoryRoot == null)
+                return;
+
+            DialogResult relocate =
+                e.Context.GetService<IAnkhDialogOwner>()
+                    .MessageBox.Show(
+                        string.Format(
+                            "The repository root specified is different from the one in your "
+                            + "working copy. Would you like to relocate '{0}' from '{1}' to '{2}'?",
+                            pathItem.WorkingCopy.FullPath,
+                            pathItem.WorkingCopy.RepositoryRoot,
+                            newRepositoryRoot),
+                        "Relocate",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+            if (relocate != DialogResult.Yes)
+                return;
+
+            string wcRoot = pathItem.WorkingCopy.FullPath;
+            try
+            {
+                e.GetService<IProgressRunner>().RunModal(
+                    CommandStrings.RelocatingTitle,
+                    delegate(object sender, ProgressWorkerArgs a)
+                    {
+                        a.Client.Relocate(
+                            wcRoot,
+                            pathItem.WorkingCopy.RepositoryRoot,
+                            newRepositoryRoot);
+                    });
+            }
+            finally
+            {
+                statusCache.MarkDirtyRecursive(wcRoot);
+                e.GetService<IFileStatusMonitor>()
+                    .ScheduleGlyphUpdate(
+                        statusCache.GetCachedBelow(wcRoot));
+            }
+
+            DialogResult retry =
+                e.Context.GetService<IAnkhDialogOwner>()
+                    .MessageBox.Show(
+                        string.Format(
+                            "Would you like to try to switch '{0}' to '{1}' again?",
+                            path,
+                            target),
+                        "Switch",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+            if (retry != DialogResult.Yes)
+                return;
+
+            e.GetService<IProgressRunner>().RunModal(
+                CommandStrings.SwitchingTitle,
+                delegate(object sender, ProgressWorkerArgs a)
+                {
+                    SvnSwitchArgs args = new SvnSwitchArgs();
+
+                    if (revision != SvnRevision.None)
+                        args.Revision = revision;
+
+                    args.AllowObstructions = allowObstructions;
+
+                    e.GetService<IConflictHandler>()
+                        .RegisterConflictHandler(
+                            args,
+                            a.Synchronizer);
+                    a.Client.Switch(path, target, args);
+                });
+        }
+
     }
 }

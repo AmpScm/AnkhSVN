@@ -288,133 +288,98 @@ namespace Ankh.Scc.SccUI
 
         private void UpdateSettingTabs()
         {
-            string projectBase = null;
-            string relativePath = null;
-            string projectLocation = null;
-            bool first = true;
-            Uri projectUri = null;
+            List<ChangeSourceControlProjectBinding> bindings =
+                new List<ChangeSourceControlProjectBinding>();
 
-            foreach (SccProject p in SelectedProjects)
+            foreach (SccProject project in SelectedProjects)
             {
-                ISccProjectInfo info;
-                if (p.IsSolution ||
-                    null == (info = ProjectMapper.GetProjectInfo(p)) ||
-                    string.IsNullOrEmpty(info.ProjectDirectory))
-                {
-                    projectBase = null;
-                    break;
-                }
+                ISccProjectInfo info =
+                    project.IsSolution ? null : ProjectMapper.GetProjectInfo(project);
+                bool usable =
+                    info != null && !string.IsNullOrEmpty(info.ProjectDirectory);
 
-                string pBase = info.SccBaseDirectory;
-                string relPath = info.ProjectDirectory;
-                string pLoc = null;
-                Uri pUri;
-
-                if (relPath.StartsWith(info.SccBaseDirectory))
-                {
-                    int pdLen = info.ProjectDirectory.Length;
-                    int sccLen = info.SccBaseDirectory.Length;
-
-                    if (pdLen == sccLen)
-                        relPath = ".";
-                    else if (sccLen < pdLen && info.ProjectDirectory[sccLen] == Path.DirectorySeparatorChar)
-                        relPath = info.ProjectDirectory.Substring(sccLen + 1);
-                    else
-                        relPath = info.ProjectDirectory;
-                }
-
-                if (p.RawHandle != null)
-                {
-                    IVsProject2 ps = p.RawHandle as IVsProject2;
-
-                    if (ps != null)
-                    {
-                        string doc;
-                        if (VSErr.Succeeded(ps.GetMkDocument(VSItemId.Root, out doc)))
-                        {
-                            if (SvnItem.IsValidPath(doc))
-                                pLoc = SvnItem.MakeRelative(SolutionSettings.SolutionFilename, doc);
-                            else
-                                pLoc = doc;
-                        }
-                    }
-                }
-
-                pUri = info.SccBaseUri;
-
-                if (pUri == null && pBase != null)
-                {
-                    SvnItem pi = StatusCache[pBase];
-
-                    if (pi != null)
-                        pUri = pi.Uri;
-                }
-
-                KeepOneIgnoreCase(ref projectBase, pBase, first);
-                KeepOneIgnoreCase(ref relativePath, relPath, first);
-                KeepOneIgnoreCase(ref projectLocation, pLoc, first);
-
-                KeepOne(ref projectUri, pUri, first);
-
-                first = false;
+                bindings.Add(
+                    new ChangeSourceControlProjectBinding(
+                        usable,
+                        usable ? info.SccBaseDirectory : null,
+                        usable ? info.ProjectDirectory : null,
+                        usable ? GetProjectLocation(project) : null,
+                        usable ? GetProjectUri(info) : null));
             }
 
-            if (projectBase == null)
-            {
-                relativePath = null;
-                projectLocation = null;
-            }
+            ChangeSourceControlSelectionState state =
+                ChangeSourceControlLogic.BuildSelection(bindings);
 
-            shProjectLocation.Text = projectLocation ?? "";
-            shBindPath.Text = projectBase ?? "";
-            shRelativePath.Text = string.IsNullOrEmpty(relativePath) ? "." : relativePath;
-            shProjectUrl.Text = (projectUri != null) ? projectUri.ToString() : "";
+            shProjectLocation.Text = state.ProjectLocationText;
+            shBindPath.Text = state.ProjectBaseText;
+            shRelativePath.Text = state.RelativePathText;
+            shProjectUrl.Text = state.ProjectUrlText;
 
-            usProjectLocation.Text = projectLocation ?? "";
-            usBindPath.Text = projectBase ?? "";
-            usRelativePath.Text = string.IsNullOrEmpty(relativePath) ? "." : relativePath;
-            usProjectUrl.Text = (projectUri != null) ? projectUri.ToString() : "";
+            usProjectLocation.Text = state.ProjectLocationText;
+            usBindPath.Text = state.ProjectBaseText;
+            usRelativePath.Text = state.RelativePathText;
+            usProjectUrl.Text = state.ProjectUrlText;
 
             slnProjectLocation.Text = SolutionSettings.SolutionFilename;
             slnBindPath.Text = SolutionSettings.ProjectRoot;
 
-            string slRelativePath = Path.GetDirectoryName(SvnItem.MakeRelative(SolutionSettings.ProjectRoot, SolutionSettings.SolutionFilename));
+            string slRelativePath = Path.GetDirectoryName(
+                SvnItem.MakeRelative(
+                    SolutionSettings.ProjectRoot,
+                    SolutionSettings.SolutionFilename));
 
-            slnRelativePath.Text = string.IsNullOrEmpty(slRelativePath) ? "." : slRelativePath;
+            slnRelativePath.Text =
+                string.IsNullOrEmpty(slRelativePath) ? "." : slRelativePath;
 
-            slnBindUrl.Text = (SolutionSettings.ProjectRootUri != null) ? SolutionSettings.ProjectRootUri.ToString() : "";
+            slnBindUrl.Text =
+                (SolutionSettings.ProjectRootUri != null)
+                    ? SolutionSettings.ProjectRootUri.ToString()
+                    : "";
 
-            usProjectLocationBrowse.Visible = false;// enlistMode > SccEnlistMode.None;
-            usProjectLocationBrowse.Enabled = false;// enlistMode > SccEnlistMode.SvnStateOnly;
+            usProjectLocationBrowse.Visible = false;
+            usProjectLocationBrowse.Enabled = false;
 
-            sharedProjectUrlBrowse.Enabled = false;// sharedBasePathBrowse.Visible
+            sharedProjectUrlBrowse.Enabled = false;
             sharedProjectUrlBrowse.Visible = false;
-            //= (enlistMode > SccEnlistMode.None)
-            //&& (projectBase != null)
-            //&& (enlistMode > SccEnlistMode.SvnStateOnly || projectBase != SolutionSettings.ProjectRoot);
 
-            slnBindBrowse.Enabled = (SolutionSettings.ProjectRootSvnItem != null) && SolutionSettings.ProjectRootSvnItem.WorkingCopy != null;
+            slnBindBrowse.Enabled =
+                (SolutionSettings.ProjectRootSvnItem != null)
+                && SolutionSettings.ProjectRootSvnItem.WorkingCopy != null;
         }
 
-        private void KeepOneIgnoreCase(ref string result, string newValue, bool first)
+        private string GetProjectLocation(SccProject project)
         {
-            if (first)
-                result = newValue;
-            else if (result == null || string.Equals(result, newValue, StringComparison.OrdinalIgnoreCase))
-                return;
-            else
-                result = null;
+            if (project.RawHandle == null)
+                return null;
+
+            IVsProject2 vsProject = project.RawHandle as IVsProject2;
+            if (vsProject == null)
+                return null;
+
+            string document;
+            if (!VSErr.Succeeded(vsProject.GetMkDocument(VSItemId.Root, out document)))
+                return null;
+
+            if (SvnItem.IsValidPath(document))
+            {
+                return SvnItem.MakeRelative(
+                    SolutionSettings.SolutionFilename,
+                    document);
+            }
+
+            return document;
         }
 
-        void KeepOne<T>(ref T result, T value, bool first)
-            where T : class
+        private Uri GetProjectUri(ISccProjectInfo info)
         {
-            if (first)
-                result = value;
-            else if (result == null || result.Equals(value))
-                return;
-            else
-                result = null;
+            if (info.SccBaseUri != null)
+                return info.SccBaseUri;
+
+            if (info.SccBaseDirectory == null)
+                return null;
+
+            SvnItem item = StatusCache[info.SccBaseDirectory];
+            return item != null ? item.Uri : null;
         }
 
         private void slnBindBrowse_Click(object sender, EventArgs e)

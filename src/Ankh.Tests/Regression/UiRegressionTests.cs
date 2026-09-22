@@ -104,17 +104,10 @@ namespace Ankh.Tests.Regression
     [TestFixture]
     public class HistoryColorRegressionTests
     {
-        [TestCase(true, true, true, true, false, TestName = "HighContrastDoesNotUseDarkBlue")]
-        [TestCase(false, false, false, false, false, TestName = "MissingThemeStateDoesNotUseDarkBlue")]
-        [TestCase(false, true, false, false, true, TestName = "UndefinedThemeKeepsLegacyDarkBlue")]
-        [TestCase(false, true, true, true, true, TestName = "LightThemeKeepsLegacyDarkBlue")]
-        [TestCase(false, true, true, false, false, TestName = "DarkThemeUsesThemedForeground")]
-        public void CopyHistoryColorPolicyMatchesTheme(
-            bool highContrast,
-            bool hasThemeState,
-            bool themeDefined,
-            bool themeLight,
-            bool expected)
+        [TestCase(true, 245, false)]
+        [TestCase(false, 245, true)]
+        [TestCase(false, 30, false)]
+        public void CopyHistoryColorPolicyUsesActualBackground(bool highContrast, int gray, bool expected)
         {
             Type itemType = typeof(ProjectCommitDialog).Assembly.GetType("Ankh.UI.SvnLog.LogRevisionItem", true);
             MethodInfo method = itemType.GetMethod(
@@ -126,9 +119,7 @@ namespace Ankh.Tests.Regression
             bool actual = (bool)method.Invoke(null, new object[]
             {
                 highContrast,
-                hasThemeState,
-                themeDefined,
-                themeLight
+                System.Drawing.Color.FromArgb(gray, gray, gray)
             });
 
             Assert.AreEqual(expected, actual);

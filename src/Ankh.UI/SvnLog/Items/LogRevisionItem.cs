@@ -89,16 +89,7 @@ namespace Ankh.UI.SvnLog
             if (_args.ChangedPaths == null)
                 return;
 
-            IAnkhCommandStates states = null;
-
-            if (listView.Context != null)
-                states = listView.Context.GetService<IAnkhCommandStates>();
-
-            bool hasThemeState = states != null;
-            bool themeDefined = hasThemeState && states.ThemeDefined;
-            bool themeLight = hasThemeState && states.ThemeLight;
-
-            if (!ShouldUseCopyHistoryColor(SystemInformation.HighContrast, hasThemeState, themeDefined, themeLight))
+            if (!ShouldUseCopyHistoryColor(SystemInformation.HighContrast, listView.BackColor))
                 return;
 
             foreach (SvnChangeItem ci in _args.ChangedPaths)
@@ -111,12 +102,9 @@ namespace Ankh.UI.SvnLog
             }
         }
 
-        internal static bool ShouldUseCopyHistoryColor(bool highContrast, bool hasThemeState, bool themeDefined, bool themeLight)
+        internal static bool ShouldUseCopyHistoryColor(bool highContrast, Color background)
         {
-            if (highContrast || !hasThemeState)
-                return false;
-
-            return !themeDefined || themeLight;
+            return !highContrast && AnkhThemePalette.ContrastRatio(Color.DarkBlue, background) >= 4.5;
         }
 
         internal DateTime Date
