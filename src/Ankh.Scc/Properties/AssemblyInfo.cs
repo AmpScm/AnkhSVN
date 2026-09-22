@@ -30,3 +30,5 @@ using Ankh;
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
+
+[assembly: InternalsVisibleTo("Ankh.VS.UnitTest, PublicKey=0024000004800000940000000602000000240000525341310004000001000100b1926fb2e39111a4c15d986cb4b17ca59e7000ee33ded2863b7e25d0c8be9418f80f0999c49ab2f556afba4996199e2803bbf2d1f0e35dedf3b3e0a4c8cfcec3974490d8a7149d235a7ba6384012d4021de4823a2739f1d3a15941cfafe562bb8523982fc0e98489aff60ed8a4a4d18ff6ace0fabfe535741695e91ae2b35eaf")]

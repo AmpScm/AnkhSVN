@@ -88,35 +88,67 @@ namespace Ankh.Scc.ProjectMap
         [CLSCompliant(false)]
         public int OnItemAdded(uint itemidParent, uint itemidSiblingPrev, uint itemidAdded)
         {
-            string r;
-
+            string r = null;
             object var;
-            if (VSErr.Succeeded(ProjectHierarchy.GetProperty(itemidAdded, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
-                && (bool)var)
-            {
+            bool isNonMember =
+                VSErr.Succeeded(
+                    ProjectHierarchy.GetProperty(
+                        itemidAdded,
+                        (int)__VSHPROPID.VSHPROPID_IsNonMemberItem,
+                        out var))
+                && (bool)var;
+
+            if (isNonMember)
                 return VSErr.S_OK; // Extra item for show all files
-            }
 
-            if (_loaded)
+            bool hasValidPath =
+                VSErr.Succeeded(VsProject.GetMkDocument(itemidAdded, out r))
+                && SvnItem.IsValidPath(r);
+            bool pathExists = hasValidPath && SvnItem.PathExists(r);
+
+            if (ProjectGlyphRefreshLogic.ShouldNotifyNewItem(
+                _loaded,
+                isNonMember,
+                hasValidPath,
+                pathExists))
             {
-                if (VSErr.Succeeded(VsProject.GetMkDocument(itemidAdded, out r))
-                    && SvnItem.IsValidPath(r))
-                {
-                    // Check out VSHPROPID_IsNewUnsavedItem
-                    if (!SvnItem.PathExists(r))
-                    {
-                        SetPreCreatedItem(itemidAdded);
-                    }
-                    else
-                    {
-                        SetPreCreatedItem(VSItemId.Nil);
-
-                        SetDirty();
-                    }
-                }
+                SetPreCreatedItem(VSItemId.Nil);
+                SetDirty();
+                NotifyNewItemGlyph(itemidAdded, r);
+            }
+            else if (_loaded && hasValidPath && !pathExists)
+            {
+                // Check out VSHPROPID_IsNewUnsavedItem
+                SetPreCreatedItem(itemidAdded);
             }
 
             return VSErr.S_OK;
+        }
+
+        private void NotifyNewItemGlyph(uint itemId, string path)
+        {
+            if (ExcludedFromScc || DontAddToProjectWindow
+                || itemId == VSItemId.Nil || string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            try
+            {
+                string[] names = new string[] { path };
+                uint[] ids = new uint[] { itemId };
+                VsStateIcon[] glyphs = new VsStateIcon[1];
+                uint[] states = new uint[1];
+
+                if (VSErr.Succeeded(Map.GetSccGlyph(names, glyphs, states)))
+                    SccProject.SccGlyphChanged(1, ids, glyphs, states);
+            }
+            catch
+            {
+                // Project systems may reject SCC notifications while a node
+                // is still being created. The normal scheduled refresh remains
+                // as a fallback.
+            }
         }
 
         [CLSCompliant(false)]

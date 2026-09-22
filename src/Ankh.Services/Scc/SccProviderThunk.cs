@@ -43,16 +43,17 @@ namespace Ankh.Scc
 
         protected abstract void OnUnpublishedCommitsUIClicked(Point wr);
 
-        partial void CreateDummyTask(ref object task);
-
         protected virtual object RunTaskOnMainThread(SccAction action)
         {
-            object task = null;
+            if (action == null)
+                throw new ArgumentNullException("action");
 
             action();
-            CreateDummyTask(ref task);
 
-            return task;
+            // Legacy callers expect a Task-shaped result. Returning a completed
+            // task is critical: an unstarted Task can keep Visual Studio waiting
+            // for source-control work during shutdown.
+            return System.Threading.Tasks.Task.CompletedTask;
         }
 
         protected virtual string BranchName

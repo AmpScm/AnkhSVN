@@ -32,7 +32,7 @@ namespace Ankh.UI
     {
         IAnkhServiceProvider _context;
         IAnkhDialogOwner _dlgOwner;
-        bool _enableTheming;
+        bool _enableTheming = true;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VSContainerForm"/> class.
@@ -59,7 +59,7 @@ namespace Ankh.UI
                 container.Add(this);
         }
 
-        [DefaultValue(false), Localizable(false)]
+        [DefaultValue(true), Localizable(false)]
         public bool EnableTheming
         {
             get { return _enableTheming; }

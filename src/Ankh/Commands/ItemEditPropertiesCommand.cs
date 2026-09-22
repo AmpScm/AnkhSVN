@@ -110,143 +110,186 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            SvnItem firstVersioned = null;
+            SvnItem firstVersioned = GetFirstVersionedItem(e);
+            if (firstVersioned == null)
+                return;
+
+            using (PropertyEditorDialog dialog = new PropertyEditorDialog(firstVersioned))
+            {
+                dialog.Context = e.Context;
+
+                PropertyEditItem[] items;
+                if (!TryLoadProperties(e, firstVersioned, dialog, out items))
+                    return;
+
+                dialog.PropertyValues = items;
+
+                if (dialog.ShowDialog(e.Context) != DialogResult.OK)
+                    return;
+
+                items = dialog.PropertyValues;
+
+                List<bool> shouldPersist = new List<bool>(items.Length);
+                foreach (PropertyEditItem item in items)
+                    shouldPersist.Add(item.ShouldPersist);
+
+                if (!ItemEditPropertiesLogic.HasPersistableChanges(shouldPersist))
+                    return;
+
+                StoreProperties(e, firstVersioned, items);
+            }
+        }
+
+        private SvnItem GetFirstVersionedItem(CommandEventArgs e)
+        {
             ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
 
             switch (e.Command)
             {
                 case AnkhCommand.ItemEditProperties:
                 case AnkhCommand.ItemShowPropertyChanges:
-                    foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
+                    foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
                     {
-                        if (i.IsVersioned)
-                        {
-                            firstVersioned = i;
-                            break;
-                        }
+                        if (item.IsVersioned)
+                            return item;
                     }
-                    break;
-                case AnkhCommand.ProjectEditProperties: // use project folder
-                    foreach (SccProject p in e.Selection.GetSelectedProjects(false))
-                    {
-                        IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
-                        if (pfm != null)
-                        {
-                            ISccProjectInfo info = pfm.GetProjectInfo(p);
-                            if (info != null && info.ProjectDirectory != null)
-                            {
-                                firstVersioned = cache[info.ProjectDirectory];
-                            }
-                            if (firstVersioned != null)
-                            {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case AnkhCommand.SolutionEditProperties: // use solution folder
-                    IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
-                    if (solutionSettings != null)
-                    {
-                        firstVersioned = cache[solutionSettings.ProjectRoot];
-                    }
-                    break;
-            }
-            if (firstVersioned == null)
-                return; // exceptional case
+                    return null;
 
-            //using (SvnClient client = e.GetService<ISvnClientPool>().GetNoUIClient())
-            using (PropertyEditorDialog dialog = new PropertyEditorDialog(firstVersioned))
+                case AnkhCommand.ProjectEditProperties:
+                    IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+                    if (mapper == null)
+                        return null;
+
+                    foreach (SccProject project in e.Selection.GetSelectedProjects(false))
+                    {
+                        ISccProjectInfo info = mapper.GetProjectInfo(project);
+                        if (info == null || info.ProjectDirectory == null)
+                            continue;
+
+                        SvnItem item = cache[info.ProjectDirectory];
+                        if (item != null)
+                            return item;
+                    }
+                    return null;
+
+                case AnkhCommand.SolutionEditProperties:
+                    IAnkhSolutionSettings solutionSettings =
+                        e.GetService<IAnkhSolutionSettings>();
+
+                    return solutionSettings != null
+                        ? cache[solutionSettings.ProjectRoot]
+                        : null;
+
+                default:
+                    return null;
+            }
+        }
+
+        private bool TryLoadProperties(
+            CommandEventArgs e,
+            SvnItem firstVersioned,
+            PropertyEditorDialog dialog,
+            out PropertyEditItem[] items)
+        {
+            SortedList<string, PropertyEditItem> editItems =
+                new SortedList<string, PropertyEditItem>();
+
+            bool succeeded = e.GetService<IProgressRunner>()
+                .RunModal(
+                    CommandStrings.ReadingProperties,
+                    delegate(object sender, ProgressWorkerArgs wa)
+                    {
+                        wa.Client.PropertyList(
+                            new SvnPathTarget(
+                                firstVersioned.FullPath,
+                                SvnRevision.Base),
+                            delegate(object s, SvnPropertyListEventArgs la)
+                            {
+                                foreach (SvnPropertyValue property in la.Properties)
+                                {
+                                    PropertyEditItem item;
+                                    if (!editItems.TryGetValue(property.Key, out item))
+                                    {
+                                        item = new PropertyEditItem(
+                                            dialog.ListView,
+                                            property.Key);
+                                        editItems.Add(property.Key, item);
+                                    }
+
+                                    item.BaseValue = property;
+                                }
+                            });
+
+                        wa.Client.PropertyList(
+                            firstVersioned.FullPath,
+                            delegate(object s, SvnPropertyListEventArgs la)
+                            {
+                                foreach (SvnPropertyValue property in la.Properties)
+                                {
+                                    PropertyEditItem item;
+                                    if (!editItems.TryGetValue(property.Key, out item))
+                                    {
+                                        item = new PropertyEditItem(
+                                            dialog.ListView,
+                                            property.Key);
+                                        editItems.Add(property.Key, item);
+                                    }
+
+                                    item.OriginalValue = item.Value = property;
+                                }
+                            });
+                    })
+                .Succeeded;
+
+            if (!succeeded)
             {
-                dialog.Context = e.Context;
+                items = null;
+                return false;
+            }
 
-                SortedList<string, PropertyEditItem> editItems = new SortedList<string, PropertyEditItem>();
-                if (!e.GetService<IProgressRunner>().RunModal(CommandStrings.ReadingProperties,
-                    delegate(object Sender, ProgressWorkerArgs wa)
-                    {
-                        // Retrieve base properties
-                        wa.Client.PropertyList(new SvnPathTarget(firstVersioned.FullPath, SvnRevision.Base),
-                            delegate(object s, SvnPropertyListEventArgs la)
-                            {
-                                foreach (SvnPropertyValue pv in la.Properties)
-                                {
-                                    PropertyEditItem ei;
-                                    if (!editItems.TryGetValue(pv.Key, out ei))
-                                        editItems.Add(pv.Key, ei = new PropertyEditItem(dialog.ListView, pv.Key));
+            items = new PropertyEditItem[editItems.Count];
+            editItems.Values.CopyTo(items, 0);
+            return true;
+        }
 
-                                    ei.BaseValue = pv;
-                                }
-                            });
-                        //
-
-                        wa.Client.PropertyList(firstVersioned.FullPath,
-                            delegate(object s, SvnPropertyListEventArgs la)
-                            {
-                                foreach (SvnPropertyValue pv in la.Properties)
-                                {
-                                    PropertyEditItem ei;
-                                    if (!editItems.TryGetValue(pv.Key, out ei))
-                                        editItems.Add(pv.Key, ei = new PropertyEditItem(dialog.ListView, pv.Key));
-
-                                    ei.OriginalValue = ei.Value = pv;
-                                }
-                            });
-
-
-                    }).Succeeded)
+        private void StoreProperties(
+            CommandEventArgs e,
+            SvnItem firstVersioned,
+            PropertyEditItem[] items)
+        {
+            e.GetService<IProgressRunner>().RunModal(
+                CommandStrings.StoringPropertyValues,
+                delegate(object sender, ProgressWorkerArgs wa)
                 {
-                    return; // Canceled
-                }
-
-                PropertyEditItem[] items = new PropertyEditItem[editItems.Count];
-                editItems.Values.CopyTo(items, 0);
-                dialog.PropertyValues = items;
-
-                if (dialog.ShowDialog(e.Context) == DialogResult.OK)
-                {
-                    // Hack: Currently we save all properties, not only the in memory changed ones
-
-                    items = dialog.PropertyValues;
-
-                    bool hasChanges = false;
-                    foreach (PropertyEditItem i in items)
+                    foreach (PropertyEditItem item in items)
                     {
-                        if (i.ShouldPersist)
+                        switch (ItemEditPropertiesLogic.GetPersistenceAction(
+                            item.ShouldPersist,
+                            item.OriginalValue,
+                            item.Value))
                         {
-                            hasChanges = true;
-                            break;
+                            case PropertyPersistenceAction.Delete:
+                                wa.Client.DeleteProperty(
+                                    firstVersioned.FullPath,
+                                    item.PropertyName);
+                                break;
+
+                            case PropertyPersistenceAction.SetString:
+                                wa.Client.SetProperty(
+                                    firstVersioned.FullPath,
+                                    item.PropertyName,
+                                    item.Value.StringValue);
+                                break;
+
+                            case PropertyPersistenceAction.SetRaw:
+                                wa.Client.SetProperty(
+                                    firstVersioned.FullPath,
+                                    item.PropertyName,
+                                    item.Value.RawValue);
+                                break;
                         }
                     }
-
-                    if (!hasChanges)
-                        return;
-
-                    e.GetService<IProgressRunner>().RunModal(CommandStrings.StoringPropertyValues,
-                        delegate(object sender, ProgressWorkerArgs wa)
-                        {
-                            foreach (PropertyEditItem ei in items)
-                            {
-                                if (!ei.ShouldPersist)
-                                    continue;
-
-                                if (ei.Value == null)
-                                {
-                                    if (ei.OriginalValue != null)
-                                        wa.Client.DeleteProperty(firstVersioned.FullPath, ei.PropertyName);
-                                }
-                                else if (!ei.Value.ValueEquals(ei.OriginalValue))
-                                {
-                                    if (ei.Value.StringValue != null)
-                                        wa.Client.SetProperty(firstVersioned.FullPath, ei.PropertyName, ei.Value.StringValue);
-                                    else
-                                        wa.Client.SetProperty(firstVersioned.FullPath, ei.PropertyName, ei.Value.RawValue);
-                                }
-                            }
-                        });
-
-                } // if
-
-            }
+                });
         }
     }
 }

@@ -21,6 +21,7 @@ using Ankh.Scc;
 using SharpSvn;
 using System.IO;
 using System.Globalization;
+using System.Drawing.Drawing2D;
 
 namespace Ankh.VS.SolutionExplorer
 {
@@ -51,17 +52,40 @@ namespace Ankh.VS.SolutionExplorer
                 if (images == null)
                     return null;
 
-                Bitmap bitmap = (Bitmap)Image.FromStream(images, true);
-
-                ImageList imageList = new ImageList
+                using (Bitmap bitmap = (Bitmap)Image.FromStream(images, true))
                 {
-                    ImageSize = new Size(width, bitmap.Height)
-                };
-                bitmap.MakeTransparent(bitmap.GetPixel(0, 0));
+                    bitmap.MakeTransparent(bitmap.GetPixel(0, 0));
 
-                imageList.Images.AddStrip(bitmap);
+                    int dpi = FileIconMapperDpiLogic.GetCurrentDpi();
+                    int targetWidth = FileIconMapperDpiLogic.GetPixelSize(width, dpi);
+                    int targetHeight = FileIconMapperDpiLogic.GetPixelSize(bitmap.Height, dpi);
+                    int count = bitmap.Width / width;
 
-                return imageList;
+                    ImageList imageList = new ImageList
+                    {
+                        ColorDepth = ColorDepth.Depth32Bit,
+                        ImageSize = new Size(targetWidth, targetHeight)
+                    };
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        Bitmap glyph = new Bitmap(targetWidth, targetHeight);
+                        using (Graphics graphics = Graphics.FromImage(glyph))
+                        {
+                            graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                            graphics.PixelOffsetMode = PixelOffsetMode.Half;
+                            graphics.DrawImage(
+                                bitmap,
+                                new Rectangle(0, 0, targetWidth, targetHeight),
+                                new Rectangle(i * width, 0, width, bitmap.Height),
+                                GraphicsUnit.Pixel);
+                        }
+
+                        imageList.Images.Add(glyph);
+                    }
+
+                    return imageList;
+                }
             }
         }
 
@@ -70,68 +94,23 @@ namespace Ankh.VS.SolutionExplorer
             if (item == null)
                 throw new ArgumentNullException("item");
 
-            if (item.IsConflicted || item.IsObstructed || item.IsTreeConflicted)
-                return AnkhGlyph.InConflict;
-            else if (item.IsReadOnlyMustLock)
-                return AnkhGlyph.MustLock;
-            else if (!item.IsVersioned)
-            {
-                if (!item.Exists)
-                    return AnkhGlyph.FileMissing;
-                else if (item.IsIgnored)
-                    return AnkhGlyph.Ignored;
-                else if (item.IsVersionable)
-                {
-                    if (item.InSolution)
-                        return item.IsSccExcluded ? AnkhGlyph.Ignored : AnkhGlyph.ShouldBeAdded;
-                    else
-                        return AnkhGlyph.None;
-                }
-                else
-                    return AnkhGlyph.None;
-            }
-            
-			switch (item.Status.CombinedStatus)
-            {
-                case SvnStatus.Normal:
-                    if (item.IsDocumentDirty)
-                        return AnkhGlyph.FileDirty;
-                    else if (item.IsLocked)
-                        return AnkhGlyph.LockedNormal;
-                    else
-                        return AnkhGlyph.Normal;
-                case SvnStatus.Modified:
-                    return item.IsLocked ? AnkhGlyph.LockedModified : AnkhGlyph.Modified;
-                case SvnStatus.Replaced:
-                    return AnkhGlyph.CopiedOrMoved;
-                case SvnStatus.Added:
-                    return item.Status.IsCopied ? AnkhGlyph.CopiedOrMoved : AnkhGlyph.Added;
-
-                case SvnStatus.Missing:
-                    if (item.IsCasingConflicted)
-                        return AnkhGlyph.InConflict;
-                    else
-                        return AnkhGlyph.Deleted;
-                case SvnStatus.Deleted:
-                    if (item.Exists && item.InSolution)
-                        return item.IsSccExcluded ? AnkhGlyph.Ignored : AnkhGlyph.ShouldBeAdded;
-                    return AnkhGlyph.Deleted;
-
-                case SvnStatus.Conflicted: // Should have been handled above
-                case SvnStatus.Obstructed:
-                    return AnkhGlyph.InConflict;
-
-                case SvnStatus.Ignored: // Should have been handled above
-                    return AnkhGlyph.Ignored;
-
-                case SvnStatus.External:
-                case SvnStatus.Incomplete:
-                    return AnkhGlyph.InConflict;
-
-                case SvnStatus.Zero:
-                default:
-                    return AnkhGlyph.None;
-            }
+            return StatusImageMapperLogic.GetGlyph(
+                new StatusImageInfo(
+                    item.IsConflicted,
+                    item.IsObstructed,
+                    item.IsTreeConflicted,
+                    item.IsReadOnlyMustLock,
+                    item.IsVersioned,
+                    item.Exists,
+                    item.IsIgnored,
+                    item.IsVersionable,
+                    item.InSolution,
+                    item.IsSccExcluded,
+                    item.Status.CombinedStatus,
+                    item.IsDocumentDirty,
+                    item.IsLocked,
+                    item.Status.IsCopied,
+                    item.IsCasingConflicted));
         }
     }
 }

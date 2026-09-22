@@ -31,7 +31,7 @@ namespace Ankh.Scc
         SCC_STATUS_RESERVED_1 = 0x4000,
         SCC_STATUS_RESERVED_2 = 0x8000
     }
-    partial class SccProvider : IVsSccGlyphs
+    partial class SccProvider : IVsSccGlyphs, IVsSccGlyphs2
     {
         IStatusImageMapper _statusImages;
         protected IStatusImageMapper StatusImages
@@ -145,16 +145,15 @@ namespace Ankh.Scc
                         continue;
                     }
 
-                    AnkhGlyph glyph = GetPathGlyph(file);
+                    AnkhGlyph glyph = GetProjectNodeGlyph(file);
 
                     if (rgsiGlyphs != null)
                     {
-                        VsStateIcon icon = (VsStateIcon)glyph;
-
-                        if (icon == VsStateIcon.STATEICON_BLANK || icon == VsStateIcon.STATEICON_NOSTATEICON)
-                            rgsiGlyphs[i] = icon;
-                        else
-                            rgsiGlyphs[i] = (VsStateIcon)((int)icon + _glyphOffset);
+                        rgsiGlyphs[i] = SccGlyphDisplayLogic.GetStateIcon(
+                            glyph,
+                            _glyphOffset,
+                            VSVersion.VS2012OrLater,
+                            _glyphMonikerBaseIndex);
                     }
 
                     if (rgdwSccStatus != null)
@@ -170,6 +169,11 @@ namespace Ankh.Scc
             {
                 return VSErr.GetHRForException(e);
             }
+        }
+
+        protected virtual AnkhGlyph GetProjectNodeGlyph(string path)
+        {
+            return GetPathGlyph(path);
         }
 
         public abstract AnkhGlyph GetPathGlyph(string path);
@@ -188,9 +192,13 @@ namespace Ankh.Scc
             if (hier == null)
                 return;
 
-            int glyph = (int)GetPathGlyph(sf) + _glyphOffset;
+            VsStateIcon glyph = SccGlyphDisplayLogic.GetStateIcon(
+                GetPathGlyph(sf),
+                _glyphOffset,
+                VSVersion.VS2012OrLater,
+                _glyphMonikerBaseIndex);
 
-            hier.SetProperty(VSItemId.Root, (int)__VSHPROPID.VSHPROPID_StateIconIndex, glyph);
+            hier.SetProperty(VSItemId.Root, (int)__VSHPROPID.VSHPROPID_StateIconIndex, (int)glyph);
         }
 
         public void ClearSolutionGlyph()
@@ -204,8 +212,23 @@ namespace Ankh.Scc
         }
 
         int _glyphOffset;
+        int _glyphMonikerBaseIndex = -1;
         uint _baseIndex;
         System.Windows.Forms.ImageList _glyphList;
+        IVsImageMonikerImageList _glyphMonikerList;
+
+        /// <summary>
+        /// Supplies theme-aware Visual Studio Image Catalog glyphs to modern
+        /// Solution Explorer implementations.
+        /// </summary>
+        [CLSCompliant(false)]
+        public IVsImageMonikerImageList GetCustomGlyphMonikerList(uint baseIndex)
+        {
+            _glyphMonikerBaseIndex = unchecked((int)baseIndex);
+
+            return _glyphMonikerList
+                ?? (_glyphMonikerList = SccGlyphMonikerLogic.CreateImageList());
+        }
 
         protected void DisposeGlyphList()
         {
@@ -302,3 +325,4 @@ namespace Ankh.Scc
         }
     }
 }
+

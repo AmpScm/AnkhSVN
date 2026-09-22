@@ -28,11 +28,11 @@ Issue: https://github.com/AmpScm/AnkhSVN/issues/31
 
 Recommended tracker action: close as not planned / support question.
 
-## Fixed on ARMoir/main, pending upstream merge
+## Fixed on main
 
 ### #88 — Merge Branch UI Missing in latest Version
 
-**Status: Fixed and regression-tested on ARMoir/AnkhSVN main.**
+**Status: Fixed and regression-tested on main.**
 
 Root cause: the SDK-style project emitted `MergeWizard/WizardFramework/Wizard.resx` with a path-derived manifest resource name instead of the runtime name expected by `Ankh.UI.WizardFramework.Wizard`. That caused a `MissingManifestResourceException` and left the Merge wizard UI blank.
 
@@ -42,11 +42,9 @@ The fix explicitly emits the resource as:
 
 A regression test verifies the manifest resource and constructs the Wizard UI. CI is green.
 
-Fork merge commit: https://github.com/ARMoir/AnkhSVN/commit/16af7d2aa1dce5c18aab3d81825e50d2c352816c
-
 Issue: https://github.com/AmpScm/AnkhSVN/issues/88
 
-Recommended tracker action: keep open until the fix is merged upstream, then close as completed.
+Recommended tracker action: close once a release containing the fix is published or the fix is otherwise confirmed.
 
 ## Awaiting confirmation against the current upstream build
 
@@ -139,7 +137,7 @@ The following issue groups likely belong to the same engineering workstreams and
 
 ## Recent completed work not currently represented by an upstream issue
 
-The following work is complete on `ARMoir/AnkhSVN` `main` but does not currently map to a dedicated open AmpScm issue:
+The following work is complete on `main` but does not currently map to a dedicated open issue:
 
 - Branch Solution now rejects cross-repository destinations before SharpSvn throws a cross-repository copy exception.
 - In-app Help no longer uses the retired `svc.ankhsvn.net` service and now targets GitHub Pages documentation.

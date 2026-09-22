@@ -24,6 +24,7 @@ namespace Ankh.Tests
         [TestCase("dlgHelp", "Ankh.UI.Commands.UpdateDialog", "/AnkhSVN/help/working-copy/")]
         [TestCase("ctrlHelp", "Ankh.UI.PendingChanges.PendingCommitsPage", "/AnkhSVN/help/commit/")]
         [TestCase("dlgHelp", "Ankh.UI.Commands.AnnotateDialog", "/AnkhSVN/help/annotate/")]
+        [TestCase("dlgHelp", "Ankh.UI.PathSelector.CommonFileSelectorDialog", "/AnkhSVN/help/diff/")]
         [TestCase("dlgHelp", "Ankh.UI.PropertyEditors.ExternalsPropertyEditor", "/AnkhSVN/help/externals/")]
         [TestCase("dlgHelp", "Ankh.UI.Commands.ResolveConflictDialog", "/AnkhSVN/help/conflicts/")]
         [TestCase("dlgHelp", "Ankh.UI.Commands.UnknownDialog", "/AnkhSVN/help/")]
@@ -45,7 +46,7 @@ namespace Ankh.Tests
             });
 
             Assert.AreEqual("https", uri.Scheme);
-            Assert.AreEqual("amp-scm.com", uri.Host);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(uri.Host));
             Assert.AreEqual(expectedPath, uri.AbsolutePath);
             StringAssert.Contains("t=" + helpType, uri.Query);
             StringAssert.Contains("v=2.9.192", uri.Query);

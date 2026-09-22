@@ -57,7 +57,7 @@ namespace Ankh.UI.PendingChanges
             resources.ApplyResources(this.pendingChangesTabs, "pendingChangesTabs");
             this.pendingChangesTabs.GripMargin = new System.Windows.Forms.Padding(0, 2, 0, 2);
             this.pendingChangesTabs.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.pendingChangesTabs.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.pendingChangesTabs.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.pendingChangesTabs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileChangesButton,
             this.issuesButton,

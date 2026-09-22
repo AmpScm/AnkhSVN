@@ -82,8 +82,13 @@ namespace Ankh.Commands
                     endRev = SvnRevision.Working;
                     foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
                     {
-                        if (i.IsFile && i.IsVersioned && i.HasCopyableHistory)
+                        if (AnnotateCommandLogic.IsAnnotatableItem(
+                            i.IsFile,
+                            i.IsVersioned,
+                            i.HasCopyableHistory))
+                        {
                             targets.Add(new SvnOrigin(i));
+                        }
                     }
                     break;
                 case AnkhCommand.LogAnnotateRevision:
@@ -114,7 +119,10 @@ namespace Ankh.Commands
             bool retrieveMergeInfo = false;
             SvnOrigin target;
 
-            if ((!e.DontPrompt && !Shift) || e.PromptUser)
+            if (AnnotateCommandLogic.ShouldPrompt(
+                e.DontPrompt,
+                Shift,
+                e.PromptUser))
                 using (AnnotateDialog dlg = new AnnotateDialog())
                 {
                     dlg.SetTargets(targets);
@@ -141,11 +149,16 @@ namespace Ankh.Commands
                 target = new SvnOrigin(one);
             }
 
-            if (startRev == SvnRevision.Working || endRev == SvnRevision.Working && target.Target is SvnPathTarget)
+            SvnPathTarget pathTarget = target.Target as SvnPathTarget;
+            if (AnnotateCommandLogic.ShouldSaveDocument(
+                startRev == SvnRevision.Working,
+                endRev == SvnRevision.Working,
+                pathTarget != null))
             {
-                IAnkhOpenDocumentTracker tracker = e.GetService<IAnkhOpenDocumentTracker>();
+                IAnkhOpenDocumentTracker tracker =
+                    e.GetService<IAnkhOpenDocumentTracker>();
                 if (tracker != null)
-                    tracker.SaveDocument(((SvnPathTarget)target.Target).FullPath);
+                    tracker.SaveDocument(pathTarget.FullPath);
             }
 
             DoBlame(e, target, startRev, endRev, ignoreEols, ignoreSpacing, retrieveMergeInfo);

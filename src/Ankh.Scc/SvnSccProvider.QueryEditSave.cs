@@ -207,148 +207,57 @@ namespace Ankh.Scc
         /// <param name="pfEditVerdict">The pf edit verdict.</param>
         /// <param name="prgfMoreInfo">The PRGF more info.</param>
         /// <returns></returns>
+        sealed class QueryEditQueues
+        {
+            public HybridCollection<string> MustLockFiles;
+            public List<SvnItem> MustLockItems;
+            public HybridCollection<string> ReadOnlyFiles;
+            public List<SvnItem> ReadOnlyItems;
+        }
+
         public int QueryEditFiles(uint rgfQueryEdit, int cFiles, string[] rgpszMkDocuments, uint[] rgrgf, VSQEQS_FILE_ATTRIBUTE_DATA[] rgFileInfo, out uint pfEditVerdict, out uint prgfMoreInfo)
         {
             tagVSQueryEditFlags queryFlags = (tagVSQueryEditFlags)rgfQueryEdit;
             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
-            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags)0; // Must be 0 when verdict is QER_EditOK or you see failures like issue #624
-
-            bool allowUI = (queryFlags & (tagVSQueryEditFlags.QEF_SilentMode | tagVSQueryEditFlags.QEF_ReportOnly | tagVSQueryEditFlags.QEF_ForceEdit_NoPrompting)) == 0;
-
-            bool? allowReadOnlyNonSccWrites = null;
+            prgfMoreInfo = 0;
 
             if (rgpszMkDocuments == null)
                 return VSErr.E_POINTER;
 
             try
             {
-                // If the editor asks us to do anything in our power to make it editable
-                // without prompting, just make those files writable.
                 if ((queryFlags & tagVSQueryEditFlags.QEF_ForceEdit_NoPrompting) != 0)
                     return QueryEditForceWritable(rgpszMkDocuments);
 
-                HybridCollection<string> mustLockFiles = null;
-                HybridCollection<string> readOnlyEditFiles = null;
-                List<SvnItem> mustLockItems = null;
-                List<SvnItem> readOnlyItems = null;
+                bool? allowReadOnlyNonSccWrites = null;
+                QueryEditQueues queues = new QueryEditQueues();
 
-                for (int i = 0; i < cFiles; i++)
+                if (!CollectQueryEditItems(
+                        cFiles,
+                        rgpszMkDocuments,
+                        QueryEditLogic.AllowsUI(queryFlags),
+                        ref allowReadOnlyNonSccWrites,
+                        queues,
+                        out pfEditVerdict,
+                        out prgfMoreInfo))
                 {
-                    SvnItem item;
-                    {
-                        string file = rgpszMkDocuments[i];
-
-                        if (!IsSafeSccPath(file))
-                            continue; // Skip non scc paths (Includes %TEMP%\*)
-
-                        item = StatusCache[file];
-                    }
-
-                    Monitor.ScheduleDirtyCheck(item);
-
-                    if (item.IsReadOnlyMustLock && !item.IsDirectory)
-                    {
-                        if (!allowUI)
-                        {
-                            pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc
-                                                   | tagVSQueryEditResultFlags.QER_NoisyCheckoutRequired);
-
-                            return VSErr.S_OK;
-                        }
-
-                        if (mustLockItems == null)
-                        {
-                            mustLockFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-                            mustLockItems = new List<SvnItem>();
-                        }
-
-                        if (!mustLockFiles.Contains(item.FullPath))
-                        {
-                            mustLockFiles.Add(item.FullPath);
-                            mustLockItems.Add(item);
-                        }
-                    }
-                    else if (item.IsReadOnly)
-                    {
-                        if (!allowReadOnlyNonSccWrites.HasValue)
-                            allowReadOnlyNonSccWrites = AllowReadOnlyNonSccWrites();
-
-                        if (!allowReadOnlyNonSccWrites.Value)
-                        {
-                            if (!allowUI)
-                            {
-                                pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                                prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_InMemoryEditNotAllowed
-                                                       | tagVSQueryEditResultFlags.QER_ReadOnlyNotUnderScc
-                                                       | tagVSQueryEditResultFlags.QER_NoisyPromptRequired);
-
-                                return VSErr.S_OK;
-                            }
-
-                            if (readOnlyEditFiles == null)
-                            {
-                                readOnlyEditFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-                                readOnlyItems = new List<SvnItem>();
-                            }
-
-                            if (!readOnlyEditFiles.Contains(item.FullPath))
-                            {
-                                readOnlyEditFiles.Add(item.FullPath);
-                                readOnlyItems.Add(item);
-                            }
-                        }
-                        // else // allow editting
-                    }
+                    return VSErr.S_OK;
                 }
-                if (mustLockItems != null)
+
+                if (!TryLockQueryEditItems(queues))
                 {
-                    List<SvnItem> mustBeLocked = new List<SvnItem>(mustLockItems);
-
-                    // Look at all subfiles of the must be locked document and add these to the dialog
-                    // to make it easier to lock them too
-                    foreach (string lockFile in new List<string>(mustLockFiles))
-                    {
-                        foreach (string file in GetAllDocumentFiles(lockFile))
-                        {
-                            if (!mustLockFiles.Contains(file))
-                            {
-                                mustLockFiles.Add(file);
-                                mustLockItems.Add(StatusCache[file]);
-                            }
-                        }
-                    }
-
-                    CommandService.DirectlyExecCommand(AnkhCommand.SccLock, mustLockItems, CommandPrompt.DoDefault);
-                    // Only check the original list; the rest of the items in mustLockItems is optional
-                    foreach (SvnItem i in mustBeLocked)
-                    {
-                        if (i.IsReadOnlyMustLock)
-                        {
-                            // User has probably canceled the lock operation, or it failed.
-                            pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_CheckoutCanceledOrFailed
-                                | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
-                            break;
-                        }
-                    }
+                    pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                    prgfMoreInfo = (uint)(
+                        tagVSQueryEditResultFlags.QER_CheckoutCanceledOrFailed
+                        | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
                 }
-                if (readOnlyItems != null)
+
+                if (!TryMakeReadOnlyQueryEditItemWritable(queues))
                 {
-                    // TODO: Handle multiple items correctly
-                    // Is this only for non-scc items or also for scc items that are readonly for other reasons?
-                    CommandResult result =
-                        CommandService.DirectlyExecCommand(AnkhCommand.MakeNonSccFileWriteable, readOnlyItems[0], CommandPrompt.DoDefault);
-
-                    bool allowed = result.Result is bool ? (bool)result.Result : false;
-
-                    if (!allowed)
-                    {
-                        pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                        prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_InMemoryEditNotAllowed
-                                               | tagVSQueryEditResultFlags.QER_ReadOnlyNotUnderScc // TODO: Specialize to SCC?
-                                               );
-                    }
+                    pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                    prgfMoreInfo = (uint)(
+                        tagVSQueryEditResultFlags.QER_InMemoryEditNotAllowed
+                        | tagVSQueryEditResultFlags.QER_ReadOnlyNotUnderScc);
                 }
             }
             catch (Exception ex)
@@ -362,6 +271,178 @@ namespace Ankh.Scc
             }
 
             return VSErr.S_OK;
+        }
+
+        bool CollectQueryEditItems(
+            int cFiles,
+            string[] documents,
+            bool allowUI,
+            ref bool? allowReadOnlyNonSccWrites,
+            QueryEditQueues queues,
+            out uint editVerdict,
+            out uint moreInfo)
+        {
+            editVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
+            moreInfo = 0;
+
+            for (int i = 0; i < cFiles; i++)
+            {
+                string file = documents[i];
+                if (!IsSafeSccPath(file))
+                    continue;
+
+                SvnItem item = StatusCache[file];
+                Monitor.ScheduleDirtyCheck(item);
+
+                bool allowReadOnlyWrites = true;
+                if (QueryEditLogic.NeedsReadOnlyNonSccPolicy(
+                        item.IsReadOnlyMustLock,
+                        item.IsDirectory,
+                        item.IsReadOnly))
+                {
+                    if (!allowReadOnlyNonSccWrites.HasValue)
+                        allowReadOnlyNonSccWrites = AllowReadOnlyNonSccWrites();
+
+                    allowReadOnlyWrites = allowReadOnlyNonSccWrites.Value;
+                }
+
+                QueryEditFileAction action = QueryEditLogic.GetFileAction(
+                    item.IsReadOnlyMustLock,
+                    item.IsDirectory,
+                    item.IsReadOnly,
+                    allowUI,
+                    allowReadOnlyWrites);
+
+                if (!ApplyQueryEditAction(
+                        action,
+                        item,
+                        queues,
+                        out editVerdict,
+                        out moreInfo))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        static bool ApplyQueryEditAction(
+            QueryEditFileAction action,
+            SvnItem item,
+            QueryEditQueues queues,
+            out uint editVerdict,
+            out uint moreInfo)
+        {
+            editVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
+            moreInfo = 0;
+
+            switch (action)
+            {
+                case QueryEditFileAction.RejectMustLock:
+                    editVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                    moreInfo = (uint)(
+                        tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc
+                        | tagVSQueryEditResultFlags.QER_NoisyCheckoutRequired);
+                    return false;
+
+                case QueryEditFileAction.QueueMustLock:
+                    AddQueryEditItem(
+                        item,
+                        ref queues.MustLockFiles,
+                        ref queues.MustLockItems);
+                    return true;
+
+                case QueryEditFileAction.RejectReadOnly:
+                    editVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                    moreInfo = (uint)(
+                        tagVSQueryEditResultFlags.QER_InMemoryEditNotAllowed
+                        | tagVSQueryEditResultFlags.QER_ReadOnlyNotUnderScc
+                        | tagVSQueryEditResultFlags.QER_NoisyPromptRequired);
+                    return false;
+
+                case QueryEditFileAction.QueueReadOnly:
+                    AddQueryEditItem(
+                        item,
+                        ref queues.ReadOnlyFiles,
+                        ref queues.ReadOnlyItems);
+                    return true;
+
+                default:
+                    return true;
+            }
+        }
+
+        static void AddQueryEditItem(
+            SvnItem item,
+            ref HybridCollection<string> files,
+            ref List<SvnItem> items)
+        {
+            if (items == null)
+            {
+                files = new HybridCollection<string>(
+                    StringComparer.OrdinalIgnoreCase);
+                items = new List<SvnItem>();
+            }
+
+            if (files.Contains(item.FullPath))
+                return;
+
+            files.Add(item.FullPath);
+            items.Add(item);
+        }
+
+        bool TryLockQueryEditItems(QueryEditQueues queues)
+        {
+            if (queues.MustLockItems == null)
+                return true;
+
+            List<SvnItem> mustBeLocked =
+                new List<SvnItem>(queues.MustLockItems);
+
+            ExpandQueryEditLockItems(queues);
+
+            CommandService.DirectlyExecCommand(
+                AnkhCommand.SccLock,
+                queues.MustLockItems,
+                CommandPrompt.DoDefault);
+
+            foreach (SvnItem item in mustBeLocked)
+            {
+                if (item.IsReadOnlyMustLock)
+                    return false;
+            }
+
+            return true;
+        }
+
+        void ExpandQueryEditLockItems(QueryEditQueues queues)
+        {
+            foreach (string lockFile in new List<string>(queues.MustLockFiles))
+            {
+                foreach (string file in GetAllDocumentFiles(lockFile))
+                {
+                    if (queues.MustLockFiles.Contains(file))
+                        continue;
+
+                    queues.MustLockFiles.Add(file);
+                    queues.MustLockItems.Add(StatusCache[file]);
+                }
+            }
+        }
+
+        bool TryMakeReadOnlyQueryEditItemWritable(QueryEditQueues queues)
+        {
+            if (queues.ReadOnlyItems == null)
+                return true;
+
+            CommandResult result =
+                CommandService.DirectlyExecCommand(
+                    AnkhCommand.MakeNonSccFileWriteable,
+                    queues.ReadOnlyItems[0],
+                    CommandPrompt.DoDefault);
+
+            return result.Result is bool && (bool)result.Result;
         }
 
         private int QueryEditForceWritable(string[] rgpszMkDocuments)

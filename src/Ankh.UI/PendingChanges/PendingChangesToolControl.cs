@@ -61,6 +61,16 @@ namespace Ankh.UI.PendingChanges
             issuesButton.Image = VSVersion.VS2012OrLater ? PCResources.Issues : PCResources.IssuesOld;
             recentChangesButton.Image = VSVersion.VS2012OrLater ? PCResources.RecentChanges : PCResources.RecentChangesOld;
             conflictsButton.Image = VSVersion.VS2012OrLater ? PCResources.Conflicts : PCResources.ConflictsOld;
+
+            ApplyNavigationLayout();
+
+            pendingChangesTabs.BackColorChanged += delegate { RefreshNavigationIcons(); };
+            pendingChangesTabs.DpiChangedAfterParent += delegate
+            {
+                ApplyNavigationLayout();
+                RefreshNavigationIcons();
+            };
+            Disposed += delegate { DisposeNavigationIcons(); };
         }
 
         protected override void OnLoad(EventArgs e)
@@ -125,11 +135,13 @@ namespace Ankh.UI.PendingChanges
                 p.OnThemeChanged(e);
             }
 
+            RefreshNavigationIcons();
             pendingChangesTabs.Invalidate();
         }
 
         void OnSccShellActivate(object sender, EventArgs e)
         {
+            RefreshNavigationIcons();
             IAnkhCommandStates states = Context.GetService<IAnkhCommandStates>();
 
             if (states != null && states.SccProviderActive)
@@ -291,12 +303,59 @@ namespace Ankh.UI.PendingChanges
             else
                 pendingChangesTabs.Dock = DockStyle.Left;
 
+            ApplyNavigationLayout();
+
             if (Context != null)
             {
                 IVsUIShell ui = Context.GetService<IVsUIShell>(typeof(SVsUIShell));
                 if (ui != null)
                     ui.UpdateCommandUI(0);
             }
+        }
+
+        void ApplyNavigationLayout()
+        {
+            // Keep the navigation rail visually aligned with modern Visual
+            // Studio tool-window chrome. The strip must be wide enough for the
+            // rendered glyph plus both the item and outer insets; otherwise the
+            // checked-state border clips the right edge at common DPI scales.
+            int dpi = pendingChangesTabs.DeviceDpi;
+            int outerInset = ScaleNavigationMetric(3, dpi);
+            int itemInset = ScaleNavigationMetric(2, dpi);
+            int itemGap = ScaleNavigationMetric(2, dpi);
+            int stripThickness = GetNavigationStripThickness(dpi);
+
+            pendingChangesTabs.AutoSize = false;
+            pendingChangesTabs.Padding = new Padding(outerInset);
+
+            bool horizontal = pendingChangesTabs.Dock == DockStyle.Bottom;
+            if (horizontal)
+                pendingChangesTabs.Height = stripThickness;
+            else
+                pendingChangesTabs.Width = stripThickness;
+
+            Padding itemMargin = horizontal
+                ? new Padding(itemGap, 0, itemGap, 0)
+                : new Padding(0, itemGap, 0, itemGap);
+
+            foreach (ToolStripItem item in pendingChangesTabs.Items)
+            {
+                item.Padding = new Padding(itemInset);
+                item.Margin = itemMargin;
+            }
+        }
+
+        internal static int GetNavigationStripThickness(int dpi)
+        {
+            return ScaleNavigationMetric(36, dpi);
+        }
+
+        static int ScaleNavigationMetric(int logicalPixels, int dpi)
+        {
+            if (dpi <= 0)
+                dpi = 96;
+
+            return Math.Max(1, (logicalPixels * dpi + 48) / 96);
         }
 
         #region IAnkhHasVsTextView Members

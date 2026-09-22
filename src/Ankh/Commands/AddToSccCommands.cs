@@ -34,65 +34,70 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (!e.State.SolutionExists || (e.Command == AnkhCommand.FileSccAddProjectToSubversion && e.State.EmptySolution))
+            bool projectCommand =
+                e.Command == AnkhCommand.FileSccAddProjectToSubversion;
+
+            if (AddToSccLogic.ShouldDisableBeforeLookup(
+                e.State.SolutionExists,
+                projectCommand,
+                e.State.EmptySolution,
+                e.State.OtherSccProviderActive))
             {
                 e.Enabled = false;
                 return;
             }
 
-            if (e.State.OtherSccProviderActive)
-            {
-                e.Enabled = false;
-                return; // Only one scc provider can be active at a time
-            }
-
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
             ISvnStatusCache cache = e.GetService<ISvnStatusCache>();
-            if (scc == null || cache == null)
+            if (AddToSccLogic.ShouldDisableForMissingServices(scc != null, cache != null))
             {
                 e.Enabled = false;
                 return;
             }
 
             string solutionFilename = e.Selection.SolutionFilename;
-
-            if (string.IsNullOrEmpty(solutionFilename) || !SvnItem.IsValidPath(solutionFilename))
-                solutionFilename = null;
-
-            if (e.Command == AnkhCommand.FileSccAddSolutionToSubversion)
+            if (string.IsNullOrEmpty(solutionFilename)
+                || !SvnItem.IsValidPath(solutionFilename))
             {
-                if (solutionFilename == null || scc.IsSolutionManaged)
-                {
-                    e.Enabled = false; // Already handled
-                    return;
-                }
-                SvnItem item = cache[solutionFilename];
+                solutionFilename = null;
+            }
 
-                if (!item.Exists || !item.IsFile || item.ParentDirectory.NeedsWorkingCopyUpgrade)
+            if (!projectCommand)
+            {
+                if (AddToSccLogic.ShouldDisableSolutionCommand(
+                    solutionFilename != null,
+                    scc.IsSolutionManaged))
                 {
-                    // Decide where you store the .sln first
                     e.Enabled = false;
                     return;
                 }
 
-                if (!item.IsVersioned)
+                SvnItem item = cache[solutionFilename];
+                if (AddToSccLogic.ShouldDisableSolutionItem(
+                    item.Exists,
+                    item.IsFile,
+                    item.ParentDirectory.NeedsWorkingCopyUpgrade))
                 {
-                    // If the .sln is ignored hide it in the context menus
-                    // but don't hide it on the node itself
-                    e.HideOnContextMenu = item.IsIgnored && !e.Selection.IsSolutionSelected;
+                    e.Enabled = false;
+                    return;
                 }
+
+                e.HideOnContextMenu = AddToSccLogic.ShouldHideSolutionContext(
+                    item.IsVersioned,
+                    item.IsIgnored,
+                    e.Selection.IsSolutionSelected);
                 return;
             }
 
             IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
 
-            int n = 0;
+            int selectionPass = 0;
             bool foundOne = false;
             foreach (IEnumerable<SccProject> projects in
-                new IEnumerable<SccProject>[] 
-                { 
+                new IEnumerable<SccProject>[]
+                {
                     e.Selection.GetSelectedProjects(true),
-                    e.Selection.GetSelectedProjects(false) 
+                    e.Selection.GetSelectedProjects(false)
                 })
             {
                 foreach (SccProject p in projects)
@@ -100,24 +105,33 @@ namespace Ankh.Commands
                     foundOne = true;
 
                     ISccProjectInfo pi = pfm.GetProjectInfo(p);
+                    bool projectDirectoryVersioned =
+                        pi != null
+                        && pi.ProjectDirectory != null
+                        && cache[pi.ProjectDirectory].IsVersioned;
 
-                    if (pi == null || !pi.IsSccBindable)
-                        continue; // Not an SCC project
-
-                    // A project is managed if the file says its managed
-                    // and the project dir is managed
-                    if (pi.ProjectDirectory != null && cache[pi.ProjectDirectory].IsVersioned
-                        && scc.IsProjectManaged(p))
-                        continue; // Nothing to do here
+                    if (AddToSccLogic.ShouldSkipProjectUpdate(
+                        pi != null,
+                        pi != null && pi.IsSccBindable,
+                        projectDirectoryVersioned,
+                        scc.IsProjectManaged(p)))
+                    {
+                        continue;
+                    }
 
                     string projectFile = pi.ProjectFile;
-
-                    if (n > 1 && projectFile != null && cache[projectFile].IsIgnored)
+                    if (AddToSccLogic.ShouldHideProjectContext(
+                        selectionPass,
+                        projectFile != null,
+                        projectFile != null && cache[projectFile].IsIgnored))
+                    {
                         e.HideOnContextMenu = true;
+                    }
 
                     return;
                 }
-                n++;
+
+                selectionPass++;
                 if (foundOne)
                     break;
             }
@@ -456,15 +470,21 @@ namespace Ankh.Commands
                 {
                     ISccProjectInfo projInfo = mapper.GetProjectInfo(project);
 
-                    if (projInfo == null || projInfo.ProjectDirectory == null
-                        || !projInfo.IsSccBindable)
-                        continue; // Some projects can't be managed
+                    if (projInfo == null || projInfo.ProjectDirectory == null)
+                        continue;
 
                     SvnItem projectDir = cache[projInfo.ProjectDirectory];
+                    AddToSccProjectAction action = AddToSccLogic.GetProjectAction(
+                        projInfo.IsSccBindable,
+                        projectDir.WorkingCopy == slnItem.WorkingCopy,
+                        projectDir.IsVersioned,
+                        projectDir.IsVersionable);
 
-                    if (projectDir.WorkingCopy == slnItem.WorkingCopy)
+                    if (action == AddToSccProjectAction.Skip)
+                        continue;
+
+                    if (action == AddToSccProjectAction.ManageExisting)
                     {
-                        // This is a 'normal' project, part of the solution and in the same working copy
                         projectsToBeManaged.Add(project);
                         continue;
                     }
@@ -472,50 +492,50 @@ namespace Ankh.Commands
                     bool markAsManaged;
                     bool writeReference;
 
-                    if (projectDir.IsVersioned)
-                        continue; // We don't have to add this one
-                    if (projectDir.IsVersionable)
+                    if (action == AddToSccProjectAction.PromptAddOrCheckout)
                     {
                         SvnItem parentDir = GetVersionedParent(projectDir);
                         Debug.Assert(parentDir != null);
 
-                        DialogResult rslt = mb.Show(string.Format(CommandStrings.AddXToExistingWcY,
-                                                                  projInfo.ProjectName,
-                                                                  parentDir.FullPath), AnkhId.PlkProduct, MessageBoxButtons.YesNoCancel);
+                        DialogResult rslt = mb.Show(
+                            string.Format(
+                                CommandStrings.AddXToExistingWcY,
+                                projInfo.ProjectName,
+                                parentDir.FullPath),
+                            AnkhId.PlkProduct,
+                            MessageBoxButtons.YesNoCancel);
 
-                        switch (rslt)
+                        AddToSccPromptAction promptAction =
+                            AddToSccLogic.GetPromptAction(rslt);
+
+                        if (promptAction == AddToSccPromptAction.Cancel)
+                            return;
+
+                        if (promptAction == AddToSccPromptAction.AddToExisting)
                         {
-                            case DialogResult.Cancel:
-                                return;
-                            case DialogResult.No:
-                                if (CheckoutWorkingCopyForProject(e, project, projInfo, solutionReposRoot, out markAsManaged, out writeReference))
-                                {
-                                    if (markAsManaged)
-                                        scc.SetProjectManaged(project, true);
-                                    if (writeReference)
-                                        scc.EnsureCheckOutReference(project);
-
-                                    continue;
-                                }
-                                break;
-                            case DialogResult.Yes:
-                                projectsToBeManaged.Add(project);
-                                AddPathToSubversion(e, projInfo.ProjectFile ?? projInfo.ProjectDirectory);
-                                continue;
-                        }
-                    }
-                    else
-                    {
-                        // We have to checkout (and create repository location)
-                        if (CheckoutWorkingCopyForProject(e, project, projInfo, solutionReposRoot, out markAsManaged, out writeReference))
-                        {
-                            if (markAsManaged)
-                                scc.SetProjectManaged(project, true);
-                            if (writeReference)
-                                scc.EnsureCheckOutReference(project);
-
+                            projectsToBeManaged.Add(project);
+                            AddPathToSubversion(
+                                e,
+                                projInfo.ProjectFile ?? projInfo.ProjectDirectory);
                             continue;
                         }
+
+                        if (promptAction == AddToSccPromptAction.None)
+                            continue;
+                    }
+
+                    if (CheckoutWorkingCopyForProject(
+                        e,
+                        project,
+                        projInfo,
+                        solutionReposRoot,
+                        out markAsManaged,
+                        out writeReference))
+                    {
+                        if (markAsManaged)
+                            scc.SetProjectManaged(project, true);
+                        if (writeReference)
+                            scc.EnsureCheckOutReference(project);
                     }
                 }
             }

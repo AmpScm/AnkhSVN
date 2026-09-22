@@ -72,8 +72,33 @@ namespace Ankh.UI.PathSelector
 
             EnsureSelection();
             UpdateLayout();
+            ThemeLateVisibleControls();
 
             LoadItems(_items);
+        }
+
+        void ThemeLateVisibleControls()
+        {
+            if (!EnableTheming || Context == null)
+                return;
+
+            IWinFormsThemingService themer = GetService<IWinFormsThemingService>();
+            if (themer == null)
+                return;
+
+            // These revision selectors start hidden and are enabled by
+            // EnsureSelection() after VSDialogForm has already performed its
+            // initial recursive theme pass. Theme them once they are visible so
+            // their ComboBoxes don't keep the Windows light appearance.
+            if (fromPanel.Visible)
+                themer.ThemeRecursive(revisionPickerStart, true);
+
+            if (toPanel.Visible)
+                themer.ThemeRecursive(revisionPickerEnd, true);
+
+            // PendingCommitsView recreates its handle while switching between
+            // legacy/native header modes. Reapply its final state after layout.
+            themer.ThemeRecursive(pendingList, true);
         }
 
         class ItemLister : AnkhService, IEnumerable<PendingChange>

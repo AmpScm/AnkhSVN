@@ -293,149 +293,220 @@ namespace Ankh.VS.LanguageServices.Core
             cancelled = 0;
             int hr = VSErr.S_OK;
 
-            if (this.promptFlags == __PROMPTONLOADFLAGS.codepagePrompt && existingDocData != IntPtr.Zero)
+            if (AnkhEditorFactoryLogic.ShouldRejectEncodingPrompt(
+                    this.promptFlags == __PROMPTONLOADFLAGS.codepagePrompt,
+                    existingDocData != IntPtr.Zero))
             {
-                //since we are trying to open with encoding just return
                 hr = (int)VSConstants.VS_E_INCOMPATIBLEDOCDATA;
                 goto cleanup;
             }
 
             bool takeover = false;
+
             if (!string.IsNullOrEmpty(moniker))
             {
-                string ext = Path.GetExtension(moniker);
-                docData = IntPtr.Zero;
-                docView = IntPtr.Zero;
-                editorCaption = null;
+                string extension = Path.GetExtension(moniker);
+                bool openSpecific =
+                    (createDocFlags & (uint)__VSCREATEEDITORFLAGS2.CEF_OPENSPECIFIC) != 0;
+                bool isOurs = IsRegisteredExtension(extension);
+                bool isUserDefined =
+                    GetUserDefinedEditor(extension) == this.GetType().GUID;
 
-                bool openSpecific = (createDocFlags & (uint)__VSCREATEEDITORFLAGS2.CEF_OPENSPECIFIC) != 0;
+                bool canEditAnyway = true;
+                if (!isOurs && !isUserDefined)
+                    canEditAnyway = IsFileExtensionWeShouldEditAnyway(extension);
 
-                bool isOurs = IsRegisteredExtension(ext);
-                bool isUserDefined = (GetUserDefinedEditor(ext) == this.GetType().GUID);
+                EditorExtensionDecision extensionDecision =
+                    AnkhEditorFactoryLogic.EvaluateExtension(
+                        true,
+                        openSpecific,
+                        isOurs,
+                        isUserDefined,
+                        canEditAnyway,
+                        CheckAllFileTypes());
 
-                // If this file extension belongs to a different language service, then we should not open it,
-                // unless the user specifically requested our editor in the Open With... dialog.
-                if (!isOurs && !isUserDefined && !this.IsFileExtensionWeShouldEditAnyway(ext) && !openSpecific)
+                if (!extensionDecision.IsSupported)
+                    return VSConstants.VS_E_UNSUPPORTEDFORMAT;
+
+                takeover = extensionDecision.Takeover;
+
+                if (extensionDecision.RequiresFormatCheck
+                    && !IsOurFileFormat(moniker))
                 {
                     return VSConstants.VS_E_UNSUPPORTEDFORMAT;
-                }
-
-                takeover = (CheckAllFileTypes() && !isOurs);
-                if (takeover && !isOurs && !isUserDefined && !openSpecific)
-                {
-                    if (!IsOurFileFormat(moniker))
-                    {
-                        return VSConstants.VS_E_UNSUPPORTEDFORMAT;
-                    }
                 }
             }
 
             IVsTextLines buffer;
+            if (!TryGetTextBuffer(moniker, existingDocData, out buffer))
+            {
+                hr = VSConstants.VS_E_INCOMPATIBLEDOCDATA;
+                goto cleanup;
+            }
+
+            ConfigureEncodingPrompt(buffer);
+
+            if (!TryConfigureLanguageService(buffer, ref takeover))
+            {
+                hr = VSConstants.VS_E_INCOMPATIBLEDOCDATA;
+                goto cleanup;
+            }
+
+            if (takeover)
+                DisableAutomaticLanguageDetection(buffer);
+
+            docData = GetDocumentData(buffer, existingDocData);
+            docView = CreateEditorView(
+                moniker,
+                buffer,
+                physicalView,
+                out editorCaption,
+                out cmdUI);
+
+            if (docView == IntPtr.Zero)
+                hr = VSConstants.VS_E_UNSUPPORTEDFORMAT;
+
+        cleanup:
+            CleanupDocumentData(docView, existingDocData, ref docData);
+            return hr;
+        }
+
+        private bool TryGetTextBuffer(
+            string moniker,
+            IntPtr existingDocData,
+            out IVsTextLines buffer)
+        {
             if (existingDocData != IntPtr.Zero)
             {
                 object dataObject = Marshal.GetObjectForIUnknown(existingDocData);
                 buffer = dataObject as IVsTextLines;
-                if (buffer == null)
-                {
-                    if (dataObject is IVsTextBufferProvider bp)
-                    {
-                        Marshal.ThrowExceptionForHR(bp.GetTextBuffer(out buffer));
-                    }
-                }
-                if (buffer == null)
-                {
-                    // unknown docData type then, so we have to force VS to close the other editor.
-                    hr = VSConstants.VS_E_INCOMPATIBLEDOCDATA;
-                    goto cleanup;
-                }
 
+                if (buffer == null && dataObject is IVsTextBufferProvider provider)
+                    Marshal.ThrowExceptionForHR(provider.GetTextBuffer(out buffer));
+
+                return buffer != null;
             }
-            else
+
+            Type textLinesType = typeof(IVsTextLines);
+            Guid riid = textLinesType.GUID;
+            Guid clsid = typeof(VsTextBufferClass).GUID;
+            buffer = (IVsTextLines)package.CreateInstance(
+                ref clsid,
+                ref riid,
+                textLinesType);
+
+            if (!string.IsNullOrEmpty(moniker) && buffer is IVsUserData userData)
             {
-                // Create a new IVsTextLines buffer.
-                Type textLinesType = typeof(IVsTextLines);
-                Guid riid = textLinesType.GUID;
-                Guid clsid = typeof(VsTextBufferClass).GUID;
-                buffer = (IVsTextLines)package.CreateInstance(ref clsid, ref riid, textLinesType);
-                if (!string.IsNullOrEmpty(moniker))
-                {
-                    if (buffer is IVsUserData iud)
-                    {
-                        Guid GUID_VsBufferMoniker = typeof(IVsUserData).GUID;
-                        // Must be set in time for language service GetColorizer call in case the colorizer
-                        // is file name dependent.
-                        Marshal.ThrowExceptionForHR(iud.SetData(ref GUID_VsBufferMoniker, moniker));
-                    }
-                }
-                if (buffer is IObjectWithSite ows)
-                {
-                    ows.SetSite(this.site.GetService(typeof(IOleServiceProvider)));
-                }
+                Guid bufferMoniker = typeof(IVsUserData).GUID;
+                Marshal.ThrowExceptionForHR(
+                    userData.SetData(ref bufferMoniker, moniker));
             }
 
-            if (this.promptFlags == __PROMPTONLOADFLAGS.codepagePrompt && buffer is IVsUserData data)
+            if (buffer is IObjectWithSite objectWithSite)
             {
-                IVsUserData iud = data;
-                Guid GUID_VsBufferEncodingPromptOnLoad = new Guid(0x99ec03f0, 0xc843, 0x4c09, 0xbe, 0x74, 0xcd, 0xca, 0x51, 0x58, 0xd3, 0x6c);
-                Marshal.ThrowExceptionForHR(iud.SetData(ref GUID_VsBufferEncodingPromptOnLoad, (uint)this.CodePagePrompt));
+                objectWithSite.SetSite(
+                    this.site.GetService(typeof(IOleServiceProvider)));
             }
 
-            Guid langSid = GetLanguageServiceGuid();
-            if (langSid != Guid.Empty)
+            return true;
+        }
+
+        private void ConfigureEncodingPrompt(IVsTextLines buffer)
+        {
+            if (this.promptFlags != __PROMPTONLOADFLAGS.codepagePrompt)
+                return;
+
+            IVsUserData userData = buffer as IVsUserData;
+            if (userData == null)
+                return;
+
+            Guid encodingPrompt = new Guid(
+                0x99ec03f0,
+                0xc843,
+                0x4c09,
+                0xbe,
+                0x74,
+                0xcd,
+                0xca,
+                0x51,
+                0x58,
+                0xd3,
+                0x6c);
+
+            Marshal.ThrowExceptionForHR(
+                userData.SetData(
+                    ref encodingPrompt,
+                    (uint)this.CodePagePrompt));
+        }
+
+        private bool TryConfigureLanguageService(
+            IVsTextLines buffer,
+            ref bool takeover)
+        {
+            Guid languageService = GetLanguageServiceGuid();
+            if (languageService == Guid.Empty)
+                return true;
+
+            Guid defaultLanguageService =
+                new Guid("{8239bec4-ee87-11d0-8c98-00c04fc2ab22}");
+
+            Guid currentLanguageService;
+            Marshal.ThrowExceptionForHR(
+                buffer.GetLanguageServiceID(out currentLanguageService));
+
+            EditorLanguageDecision decision =
+                AnkhEditorFactoryLogic.EvaluateLanguageService(
+                    languageService,
+                    currentLanguageService,
+                    defaultLanguageService);
+
+            if (decision.Action == EditorLanguageAction.Incompatible)
+                return false;
+
+            if (decision.Action == EditorLanguageAction.SetRequested)
             {
-                Guid vsCoreSid = new Guid("{8239bec4-ee87-11d0-8c98-00c04fc2ab22}");
-                Marshal.ThrowExceptionForHR(buffer.GetLanguageServiceID(out Guid currentSid));
-                // If the language service is set to the default SID, then
-                // set it to our language
-                if (currentSid == vsCoreSid)
-                {
-                    Marshal.ThrowExceptionForHR(buffer.SetLanguageServiceID(ref langSid));
-                }
-                else if (currentSid != langSid)
-                {
-                    // Some other language service has it, so return VS_E_INCOMPATIBLEDOCDATA
-                    hr = VSConstants.VS_E_INCOMPATIBLEDOCDATA;
-                    goto cleanup;
-                }
-
-                takeover = true;
+                Marshal.ThrowExceptionForHR(
+                    buffer.SetLanguageServiceID(ref languageService));
             }
 
-            if (takeover)
-            {
-                IVsUserData vud = (IVsUserData)buffer;
-                Guid bufferDetectLang = GuidVSBufferDetectLangSid;
-                Marshal.ThrowExceptionForHR(vud.SetData(ref bufferDetectLang, false));
-            }
+            takeover = decision.Takeover;
+            return true;
+        }
 
+        private void DisableAutomaticLanguageDetection(IVsTextLines buffer)
+        {
+            IVsUserData userData = (IVsUserData)buffer;
+            Guid bufferDetectLanguage = GuidVSBufferDetectLangSid;
+            Marshal.ThrowExceptionForHR(
+                userData.SetData(ref bufferDetectLanguage, false));
+        }
+
+        private static IntPtr GetDocumentData(
+            IVsTextLines buffer,
+            IntPtr existingDocData)
+        {
             if (existingDocData != IntPtr.Zero)
             {
-                docData = existingDocData;
-                Marshal.AddRef(docData);
-            }
-            else
-            {
-                docData = Marshal.GetIUnknownForObject(buffer);
-            }
-            docView = CreateEditorView(moniker, buffer, physicalView, out editorCaption, out cmdUI);
-
-            if (docView == IntPtr.Zero)
-            {
-                // We couldn't create the view, so return this special error code so
-                // VS can try another editor factory.
-                hr = VSConstants.VS_E_UNSUPPORTEDFORMAT;
+                Marshal.AddRef(existingDocData);
+                return existingDocData;
             }
 
-        cleanup:
-            if (docView == IntPtr.Zero)
-            {
-                if (existingDocData != docData && docData != IntPtr.Zero)
-                {
-                    Marshal.Release(docData);
-                    docData = IntPtr.Zero;
-                }
-            }
-            return hr;
+            return Marshal.GetIUnknownForObject(buffer);
+        }
+
+        private static void CleanupDocumentData(
+            IntPtr docView,
+            IntPtr existingDocData,
+            ref IntPtr docData)
+        {
+            if (docView != IntPtr.Zero)
+                return;
+
+            if (existingDocData == docData || docData == IntPtr.Zero)
+                return;
+
+            Marshal.Release(docData);
+            docData = IntPtr.Zero;
         }
 
         /// <include file='doc\EditorFactory.uex' path='docs/doc[@for="EditorFactory.CreateEditorView"]/*' />

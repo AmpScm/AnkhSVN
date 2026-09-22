@@ -358,7 +358,12 @@ namespace Ankh.Scc.StatusCache
 
                 if (!statSelf)
                 {
-                    if (((ISvnItemUpdate)walkItem).ShouldRefresh())
+                    // Status can succeed without returning an item for a path that
+                    // does not exist. In that case walkItem remains null and the
+                    // fallback below must create a NotExisting cache entry.
+                    if (walkItem == null)
+                        statSelf = true;
+                    else if (((ISvnItemUpdate)walkItem).ShouldRefresh())
                         statSelf = true;
                     else if (walkingDirectory && !walkItem.IsVersioned)
                         statSelf = true;

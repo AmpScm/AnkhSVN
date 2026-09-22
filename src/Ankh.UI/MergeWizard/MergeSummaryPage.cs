@@ -41,90 +41,62 @@ namespace Ankh.UI.MergeWizard
 
         private void PopulateUI()
         {
-            if (!DesignMode)
+            if (DesignMode)
+                return;
+
+            MergeWizard.MergeType mergeType =
+                Wizard.GetPage<MergeTypePage>().SelectedMergeType;
+            MergeOptionsPage mergeOptions =
+                Wizard.GetPage<MergeOptionsPage>();
+
+            string sourceOne = null;
+            string sourceTwo = null;
+            bool hasSecondSource = false;
+            long fromRevision = -1;
+            long toRevision = -1;
+
+            if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
             {
-                MergeWizard.MergeType mergeType = Wizard.GetPage<MergeTypePage>().SelectedMergeType;
-                MergeOptionsPage mergeOptions = Wizard.GetPage<MergeOptionsPage>();
+                MergeSourceTwoDifferentTreesPage twoTreePage =
+                    Wizard.GetPage<MergeSourceTwoDifferentTreesPage>();
 
-                // Populate Merge Target
-                mergeTargetTextBox.Text = Wizard.MergeTarget.FullPath;
-                // Populate Merge Source 1
-                if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
-                    mergeSource1TextBox.Text = Wizard.GetPage<MergeSourceTwoDifferentTreesPage>().MergeSourceOne;
-                else
-                    mergeSource1TextBox.Text = Wizard.MergeSource.Target.ToString();
-
-                // Populate Merge Source 2
-                if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
-                    if (Wizard.GetPage<MergeSourceTwoDifferentTreesPage>().HasSecondMergeSourceUrl)
-                        mergeSource2TextBox.Text = Wizard.GetPage<MergeSourceTwoDifferentTreesPage>().MergeSourceTwo;
-                    else
-                        mergeSource2TextBox.Text = Wizard.GetPage<MergeSourceTwoDifferentTreesPage>().MergeSourceOne;
-                else
-                    mergeSource2TextBox.Text = MergeStrings.NotApplicableShort;
-
-                // Populate Revisions
-                if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
-                {
-                    MergeSourceTwoDifferentTreesPage tdtPage = Wizard.GetPage<MergeSourceTwoDifferentTreesPage>();
-
-                    revisionsTextBox.Text = (tdtPage.MergeFromRevision != -1 ? tdtPage.MergeFromRevision.ToString() : MergeStrings.HEAD) + "-" +
-                        (tdtPage.MergeToRevision != -1 ? tdtPage.MergeToRevision.ToString() : MergeStrings.HEAD);
-                }
-                else
-                    if (Wizard.MergeRevisions == null)
-                        revisionsTextBox.Text = MergeStrings.All;
-                    else
-                        revisionsTextBox.Text = MergeWizard.MergeRevisionsAsString(Wizard.MergeRevisions);
-
-                // Populate Binary Conflicts
-                if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.MARK)
-                    binaryConflictsTextBox.Text = MergeStrings.ConflictHandlingMark;
-                else if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.MINE)
-                    binaryConflictsTextBox.Text = MergeStrings.ConflictHandlingMine;
-                else if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.PROMPT)
-                    binaryConflictsTextBox.Text = MergeStrings.ConflictHandlingPrompt;
-                else if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.THEIRS)
-                    binaryConflictsTextBox.Text = MergeStrings.ConflictHandlingTheirs;
-                else if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.BASE)
-                    binaryConflictsTextBox.Text = MergeStrings.ConflictHandlingBase;
-
-                // Populate Text Conflicts
-                if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.MARK)
-                    textConflictsTextBox.Text = MergeStrings.ConflictHandlingMark;
-                else if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.MINE)
-                    textConflictsTextBox.Text = MergeStrings.ConflictHandlingMine;
-                else if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.PROMPT)
-                    textConflictsTextBox.Text = MergeStrings.ConflictHandlingPrompt;
-                else if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.THEIRS)
-                    textConflictsTextBox.Text = MergeStrings.ConflictHandlingTheirs;
-                else if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.BASE)
-                    textConflictsTextBox.Text = MergeStrings.ConflictHandlingBase;
-
-                // Populate Depth
-                if (mergeOptions.Depth == SharpSvn.SvnDepth.Children)
-                    depthTextBox.Text = MergeStrings.SvnDepthChildren;
-                else if (mergeOptions.Depth == SharpSvn.SvnDepth.Empty)
-                    depthTextBox.Text = MergeStrings.SvnDepthEmpty;
-                else if (mergeOptions.Depth == SharpSvn.SvnDepth.Files)
-                    depthTextBox.Text = MergeStrings.SvnDepthFiles;
-                else if (mergeOptions.Depth == SharpSvn.SvnDepth.Infinity)
-                    depthTextBox.Text = MergeStrings.SvnDepthInfinity;
-                else if (mergeOptions.Depth == SharpSvn.SvnDepth.Unknown)
-                    depthTextBox.Text = MergeStrings.SvnDepthUnknown;
-
-                // Populate Ignore Ancestry
-                if (mergeOptions.IgnoreAncestry)
-                    ignoreAncestryTextBox.Text = MergeStrings.Yes;
-                else
-                    ignoreAncestryTextBox.Text = MergeStrings.No;
-
-                // Populate Allow Unversioned Obstructions
-                if (mergeOptions.AllowUnversionedObstructions)
-                    unversionedObstructionsTextBox.Text = MergeStrings.Yes;
-                else
-                    unversionedObstructionsTextBox.Text = MergeStrings.No;
+                sourceOne = twoTreePage.MergeSourceOne;
+                sourceTwo = twoTreePage.MergeSourceTwo;
+                hasSecondSource = twoTreePage.HasSecondMergeSourceUrl;
+                fromRevision = twoTreePage.MergeFromRevision;
+                toRevision = twoTreePage.MergeToRevision;
             }
+
+            string mergeRevisions = null;
+            if (Wizard.MergeRevisions != null)
+                mergeRevisions = MergeWizard.MergeRevisionsAsString(Wizard.MergeRevisions);
+
+            MergeSummaryModel model = MergeSummaryLogic.Build(
+                new MergeSummaryInput(
+                    mergeType,
+                    Wizard.MergeTarget.FullPath,
+                    Wizard.MergeSource.Target.ToString(),
+                    sourceOne,
+                    sourceTwo,
+                    hasSecondSource,
+                    fromRevision,
+                    toRevision,
+                    mergeRevisions,
+                    mergeOptions.BinaryConflictResolution,
+                    mergeOptions.TextConflictResolution,
+                    mergeOptions.Depth,
+                    mergeOptions.IgnoreAncestry,
+                    mergeOptions.AllowUnversionedObstructions));
+
+            mergeTargetTextBox.Text = model.MergeTarget;
+            mergeSource1TextBox.Text = model.MergeSourceOne;
+            mergeSource2TextBox.Text = model.MergeSourceTwo;
+            revisionsTextBox.Text = model.Revisions;
+            binaryConflictsTextBox.Text = model.BinaryConflicts;
+            textConflictsTextBox.Text = model.TextConflicts;
+            depthTextBox.Text = model.Depth;
+            ignoreAncestryTextBox.Text = model.IgnoreAncestry;
+            unversionedObstructionsTextBox.Text = model.AllowUnversionedObstructions;
         }
 
         #region UI Events

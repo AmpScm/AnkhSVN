@@ -33,6 +33,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Ankh.UI;
 
 namespace Ankh.Diff
 {
@@ -57,12 +58,29 @@ namespace Ankh.Diff
         /// </summary>
         private System.ComponentModel.Container components = null;
 
+        readonly IWinFormsThemingService _themingService;
+
         public FindDlg()
+            : this(null)
         {
+        }
+
+        internal FindDlg(IWinFormsThemingService themingService)
+        {
+            _themingService = themingService;
+
             //
             // Required for Windows Form Designer support
             //
             InitializeComponent();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (_themingService != null)
+                _themingService.ThemeRecursive(this, true);
         }
 
         /// <summary>

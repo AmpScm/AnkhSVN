@@ -219,57 +219,50 @@ namespace Ankh.Selection
                     return VSErr.E_FAIL;
                 }
 
-                switch ((__VSHPROPID)propid)
+                switch (SelectionItemPropertyLogic.GetAction(propid))
                 {
-                    case __VSHPROPID.VSHPROPID_Parent:
-                    case __VSHPROPID.VSHPROPID_FirstChild:
-                    case __VSHPROPID.VSHPROPID_NextSibling:
-                    case __VSHPROPID.VSHPROPID_NextVisibleSibling:
+                    case SelectionItemPropertyAction.NilItemId:
                         pvar = VSItemId.Nil;
                         break;
-                    case __VSHPROPID.VSHPROPID_Root:
+
+                    case SelectionItemPropertyAction.RootItemId:
                         pvar = VSItemId.Root;
                         break;
-                    case __VSHPROPID.VSHPROPID_TypeGuid:
+
+                    case SelectionItemPropertyAction.TypeGuid:
                         pvar = typeof(SelectionItemMap).GUID;
                         break;
-                    case __VSHPROPID.VSHPROPID_CmdUIGuid:
+
+                    case SelectionItemPropertyAction.EmptyGuid:
                         pvar = Guid.Empty;
                         break;
-                    case __VSHPROPID.VSHPROPID_Caption:
-                    case __VSHPROPID.VSHPROPID_Name:
-                    case __VSHPROPID.VSHPROPID_TypeName:
-                        if (lv != null)
-                            pvar = _owner.GetText(lv);
-                        else
-                            pvar = ".";
+
+                    case SelectionItemPropertyAction.Text:
+                        pvar = lv != null ? _owner.GetText(lv) : ".";
                         break;
-                    case __VSHPROPID.VSHPROPID_IconImgList:
+
+                    case SelectionItemPropertyAction.ImageList:
                         pvar = (int)_owner.GetImageList();
                         break;
-                    case __VSHPROPID.VSHPROPID_IconIndex:
-                        if (lv != null)
-                            pvar = _owner.GetImageListIndex(lv);
-                        else
-                            pvar = -1;
+
+                    case SelectionItemPropertyAction.ImageIndex:
+                        pvar = lv != null
+                            ? _owner.GetImageListIndex(lv)
+                            : -1;
                         break;
-                    case __VSHPROPID.VSHPROPID_Expandable:
-                    case __VSHPROPID.VSHPROPID_Expanded:
-                    case __VSHPROPID.VSHPROPID_ExpandByDefault:
-                    case __VSHPROPID.VSHPROPID_HasEnumerationSideEffects:
-                    case (__VSHPROPID)__VSHPROPID2.VSHPROPID_Container:
+
+                    case SelectionItemPropertyAction.False:
                         pvar = false;
                         break;
-                    case __VSHPROPID.VSHPROPID_StateIconIndex:
+
+                    case SelectionItemPropertyAction.NoStateIcon:
                         pvar = (int)VsStateIcon.STATEICON_NOSTATEICON;
                         break;
-                    case __VSHPROPID.VSHPROPID_ParentHierarchy:
-                    case (__VSHPROPID)__VSHPROPID2.VSHPROPID_StatusBarClientText:
+
+                    case SelectionItemPropertyAction.Null:
                         pvar = null;
                         break;
-                    case __VSHPROPID.VSHPROPID_ParentHierarchyItemid:
-                        pvar = VSItemId.Nil;
-                        break;
+
                     default:
                         pvar = null;
                         return VSErr.E_FAIL;

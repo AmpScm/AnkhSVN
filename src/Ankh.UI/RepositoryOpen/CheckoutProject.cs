@@ -160,89 +160,27 @@ namespace Ankh.UI.RepositoryOpen
             {
                 checkOutFrom.Items.Clear();
 
-                Uri inner = ProjectTop ?? new Uri(ProjectUri, "./");
+                CheckoutProjectLoadPlan plan = CheckoutProjectLogic.BuildLoadPlan(
+                    RepositoryRootUri,
+                    ProjectUri,
+                    ProjectTop);
 
-                Uri info = RepositoryRootUri.MakeRelativeUri(inner);
+                RepositoryRootUri = plan.RepositoryRootUri;
 
-                if(info.IsAbsoluteUri || info.ToString().StartsWith("../", StringComparison.Ordinal))
-                    RepositoryRootUri = new Uri(inner, "/");
+                foreach (Uri uri in plan.Candidates)
+                    checkOutFrom.Items.Add(uri);
 
-                while(inner != RepositoryRootUri)
-                {
-                    checkOutFrom.Items.Add(inner);
-                    inner = new Uri(inner, "../");
-                }
-
-                checkOutFrom.Items.Add(inner);
-
-                // Ok, let's find some sensible default
-
-                // First use our generic guess algorithm as used by branching
                 RepositoryLayoutInfo li;
+                Uri guessedWorkingRoot = null;
                 if (RepositoryUrlUtils.TryGuessLayout(Context, ProjectUri, out li))
-                {
-                    foreach (Uri uri in checkOutFrom.Items)
-                    {
-                        if (uri == li.WorkingRoot)
-                        {
-                            checkOutFrom.SelectedItem = uri;
-                            break;
-                        }
-                    }
-                }
+                    guessedWorkingRoot = li.WorkingRoot;
 
-                if(checkOutFrom.SelectedIndex < 0)
-                    foreach (Uri uri in checkOutFrom.Items)
-                    {
-                        string txt = uri.ToString();
+                int selectedIndex = CheckoutProjectLogic.SelectDefaultIndex(
+                    plan.Candidates,
+                    guessedWorkingRoot);
 
-                        if (txt.EndsWith("/trunk/", StringComparison.OrdinalIgnoreCase))
-                        {
-                            checkOutFrom.SelectedItem = uri;
-                            break;
-                        }
-                    }
-
-                if (checkOutFrom.SelectedIndex < 0)
-                    foreach (Uri uri in checkOutFrom.Items)
-                    {
-                        string txt = uri.ToString();
-
-                        if (txt.EndsWith("/branches/", StringComparison.OrdinalIgnoreCase) ||
-                            txt.EndsWith("/tags/", StringComparison.OrdinalIgnoreCase) ||
-                            txt.EndsWith("/releases/", StringComparison.OrdinalIgnoreCase))
-                        {
-                            int nIndex = checkOutFrom.Items.IndexOf(uri);
-
-                            if (nIndex > 1)
-                            {
-                                checkOutFrom.SelectedIndex = nIndex - 1;
-                                break;
-                            }
-                        }
-                    }
-
-                if (checkOutFrom.SelectedIndex < 0)
-                    foreach (Uri uri in checkOutFrom.Items)
-                    {
-                        string txt = uri.ToString();
-
-                        if (txt.EndsWith("/src/", StringComparison.OrdinalIgnoreCase) ||
-                            txt.EndsWith("/source/", StringComparison.OrdinalIgnoreCase) ||
-                            txt.EndsWith("/sourcecode/", StringComparison.OrdinalIgnoreCase))
-                        {
-                            int nIndex = checkOutFrom.Items.IndexOf(uri);
-
-                            if (nIndex < checkOutFrom.Items.Count-1)
-                            {
-                                checkOutFrom.SelectedIndex = nIndex + 1;
-                                break;
-                            }
-                        }
-                    }
-
-                if (checkOutFrom.SelectedIndex < 0 && checkOutFrom.Items.Count > 0)
-                    checkOutFrom.SelectedIndex = 0;
+                if (selectedIndex >= 0)
+                    checkOutFrom.SelectedIndex = selectedIndex;
 
                 version.Context = Context;
             }

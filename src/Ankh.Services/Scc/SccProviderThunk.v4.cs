@@ -121,19 +121,27 @@ namespace Ankh.Scc
 
         public event EventHandler AddedToSourceControl;
 
-        protected Task RunOnMainThreadAsync(SccAction action)
+        protected async Task RunOnMainThreadAsync(
+            SccAction action,
+            CancellationToken cancellationToken)
         {
-            return (Task)RunTaskOnMainThread(action);
+            if (action == null)
+                throw new ArgumentNullException("action");
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await ThreadHelper.JoinableTaskFactory
+                .SwitchToMainThreadAsync(cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            action();
         }
 
-        partial void CreateDummyTask(ref object task)
+        System.Threading.Tasks.Task IVsSccPublish.BeginPublishWorkflowAsync(
+            CancellationToken cancellationToken)
         {
-            task = new Task(delegate { });
-        }
-
-        System.Threading.Tasks.Task IVsSccPublish.BeginPublishWorkflowAsync(CancellationToken cancellationToken)
-        {
-            return RunOnMainThreadAsync(OnPublishWorkflow);
+            return RunOnMainThreadAsync(
+                OnPublishWorkflow,
+                cancellationToken);
         }
 
         System.Drawing.Point GetPoint(ISccUIClickedEventArgs args)
@@ -144,17 +152,23 @@ namespace Ankh.Scc
 
         System.Threading.Tasks.Task IVsSccCurrentBranch.BranchUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            return RunOnMainThreadAsync(delegate { OnBranchUIClicked(GetPoint(args)); });
+            return RunOnMainThreadAsync(
+                delegate { OnBranchUIClicked(GetPoint(args)); },
+                cancellationToken);
         }
 
         System.Threading.Tasks.Task IVsSccChanges.PendingChangesUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            return RunOnMainThreadAsync(delegate { OnPendingChangesClicked(GetPoint(args)); });
+            return RunOnMainThreadAsync(
+                delegate { OnPendingChangesClicked(GetPoint(args)); },
+                cancellationToken);
         }
 
         System.Threading.Tasks.Task IVsSccCurrentRepository.RepositoryUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)
         {
-            return RunOnMainThreadAsync(delegate { OnRepositoryUIClicked(GetPoint(args)); });
+            return RunOnMainThreadAsync(
+                delegate { OnRepositoryUIClicked(GetPoint(args)); },
+                cancellationToken);
         }
 
         //System.Threading.Tasks.Task IVsSccUnpublishedCommits.UnpublishedCommitsUIClickedAsync(ISccUIClickedEventArgs args, CancellationToken cancellationToken)

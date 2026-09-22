@@ -14,6 +14,7 @@
 
 using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using Ankh.Services;
 using Microsoft.VisualStudio.Shell.Interop;
 
@@ -35,13 +36,25 @@ namespace Ankh.VS.Services
 
         public bool TryGetColor(__VSSYSCOLOREX vsColor, out Color color)
         {
-            uint rgb;
-            if (VSErr.Succeeded(UIShell.GetVSSysColorEx((int)vsColor, out rgb)))
-            {
-                color = ColorTranslator.FromWin32(unchecked((int)rgb));
-                return true;
-            }
             color = Color.Empty;
+
+            IVsUIShell2 uiShell = UIShell;
+            if (uiShell == null)
+                return false;
+
+            try
+            {
+                uint rgb;
+                if (VSErr.Succeeded(uiShell.GetVSSysColorEx((int)vsColor, out rgb)))
+                {
+                    color = ColorTranslator.FromWin32(unchecked((int)rgb));
+                    return true;
+                }
+            }
+            catch (COMException)
+            {
+            }
+
             return false;
         }
     }

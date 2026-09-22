@@ -14,8 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using SharpSvn;
 using Ankh.Configuration;
@@ -43,145 +41,195 @@ namespace Ankh.Commands
                 if (mustOnly && !item.IsReadOnlyMustLock)
                     continue;
 
-                if (item.IsFile && item.IsVersioned && !item.IsNewAddition && !item.IsLocked)
+                if (LockCommandLogic.IsLockCandidate(
+                        item.IsFile,
+                        item.IsVersioned,
+                        item.IsNewAddition,
+                        item.IsLocked))
+                {
                     return;
+                }
             }
             e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IEnumerable<SvnItem> items = e.Argument as IEnumerable<SvnItem>;
-
-            if (e.Command == AnkhCommand.SccLock && items == null)
-                return;
-
-            if (items == null)
-            {
-                List<SvnItem> choices = new List<SvnItem>();
-                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-                {
-                    if (item.IsFile && item.IsVersioned && !item.IsNewAddition && !item.IsLocked)
-                        choices.Add(item);
-                }
-
-                items = choices;
-            }
-
-            if (EnumTools.IsEmpty(items))
+            IEnumerable<SvnItem> items = GetRequestedItems(e);
+            if (items == null || EnumTools.IsEmpty(items))
                 return;
 
             bool stealLocks = false;
             string comment = "";
 
-            AnkhConfig config = e.GetService<IAnkhConfigurationService>().Instance;
+            AnkhConfig config =
+                e.GetService<IAnkhConfigurationService>().Instance;
 
-            if (!e.DontPrompt && (e.PromptUser || !(Shift || config.SuppressLockingUI)))
+            if (LockCommandLogic.ShouldPrompt(
+                    e.DontPrompt,
+                    e.PromptUser,
+                    Shift,
+                    config.SuppressLockingUI))
             {
-                using (LockDialog dlg = new LockDialog())
+                if (!TryPromptForLockOptions(
+                        e,
+                        items,
+                        out items,
+                        out stealLocks,
+                        out comment))
                 {
-                    dlg.Context = e.Context;
-                    dlg.LoadItems(items);
-
-                    if (dlg.ShowDialog(e.Context) != DialogResult.OK)
-                        return;
-
-                    items = new List<SvnItem>(dlg.GetCheckedItems());
-                    stealLocks = dlg.StealLocks;
-                    comment = dlg.Message;
+                    return;
                 }
             }
 
             ICollection<string> files = SvnItem.GetPaths(items);
-
             if (files.Count == 0)
                 return;
 
-            SortedList<string, string> alreadyLockedFiles = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
-            e.GetService<IProgressRunner>().RunModal(
-                CommandStrings.LockingTitle,
-                 delegate(object sender, ProgressWorkerArgs ee)
-                 {
-                     SvnLockArgs la = new SvnLockArgs();
-                     la.StealLock = stealLocks;
-                     la.Comment = comment;
-                     la.AddExpectedError(SvnErrorCode.SVN_ERR_FS_PATH_ALREADY_LOCKED);
-                     la.Notify += delegate(object nSender, SvnNotifyEventArgs notifyArgs)
-                                      {
-                                          if (notifyArgs.Action == SvnNotifyAction.LockFailedLock)
-                                          {
-                                              string userName;
-
-                                              if (notifyArgs.Lock != null && !string.IsNullOrEmpty(notifyArgs.Lock.Owner))
-                                                  userName = notifyArgs.Lock.Owner;
-                                              else
-                                                  userName = GuessUserFromError(notifyArgs.Error.Message) ?? "?";
-
-
-                                              alreadyLockedFiles.Add(notifyArgs.FullPath, userName);
-                                          }
-                                      };
-                     ee.Client.Lock(files, la);
-                 });
+            SortedList<string, string> alreadyLockedFiles =
+                RunLock(e, files, stealLocks, comment);
 
             if (alreadyLockedFiles.Count == 0)
                 return;
 
-            StringBuilder msg = new StringBuilder();
-            msg.AppendLine(CommandStrings.ItemsAlreadyLocked);
-            msg.AppendLine();
+            string message = LockCommandLogic.BuildAlreadyLockedMessage(
+                CommandStrings.ItemsAlreadyLocked,
+                CommandStrings.ItemFileLocked,
+                alreadyLockedFiles);
 
-            foreach (KeyValuePair<string, string> kv in alreadyLockedFiles)
-            {
-                if (!string.IsNullOrEmpty(kv.Value))
-                    msg.AppendFormat(CommandStrings.ItemFileLocked, kv.Key, kv.Value);
-                else
-                    msg.Append(kv.Key);
-                msg.AppendLine();
-            }
-
-            // TODO: Create a dialog where the user can select what locks to steal, and also what files are already locked.
-            AnkhMessageBox box = new AnkhMessageBox(e.Context);
-            DialogResult rslt = box.Show(
-                msg.ToString().TrimEnd(),
-                "",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question,
-                MessageBoxDefaultButton.Button2);
-
-            if (rslt == DialogResult.Yes)
-            {
-                e.GetService<IProgressRunner>().RunModal(
-                    CommandStrings.LockingTitle,
-                     delegate(object sender, ProgressWorkerArgs ee)
-                     {
-                         SvnLockArgs la = new SvnLockArgs();
-                         la.StealLock = true;
-                         la.Comment = comment;
-                         ee.Client.Lock(files, la);
-                     });
-            }
+            if (ConfirmStealLocks(e, message))
+                RunStealLock(e, files, comment);
         }
 
-        static Regex _guessRx;
-        private string GuessUserFromError(string message)
+        IEnumerable<SvnItem> GetRequestedItems(CommandEventArgs e)
         {
-            // Parses errors in the formats:
-            // "Path '%s' is already locked by user '%s' in filesystem '%s'" (Used by most languages)
-            // "Pfad »%s« ist bereits vom Benutzer »%s« im Dateisystem »%s« gesperrt" (German)
-            //
-            // Ordering is used in both FS backends and unlikely to change over versions
-            // but additional fields might be added later
-            if (_guessRx == null)
-                _guessRx = new Regex("^[^']+ ['»](?<path>.*?)['«][^']+ ['»](?<user>.*?)['«][^']+( ['»].*?['«][^']*)*$", RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Singleline);
+            IEnumerable<SvnItem> items =
+                e.Argument as IEnumerable<SvnItem>;
 
-            Match m = _guessRx.Match(message);
+            if (items != null)
+                return items;
 
-            string user = null;
-            if (m.Success)
-                user = m.Groups["user"].Value;
+            if (e.Command == AnkhCommand.SccLock)
+                return null;
 
-            return user;
+            List<SvnItem> choices = new List<SvnItem>();
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            {
+                if (LockCommandLogic.IsLockCandidate(
+                        item.IsFile,
+                        item.IsVersioned,
+                        item.IsNewAddition,
+                        item.IsLocked))
+                {
+                    choices.Add(item);
+                }
+            }
+
+            return choices;
         }
+
+        static bool TryPromptForLockOptions(
+            CommandEventArgs e,
+            IEnumerable<SvnItem> items,
+            out IEnumerable<SvnItem> selectedItems,
+            out bool stealLocks,
+            out string comment)
+        {
+            selectedItems = items;
+            stealLocks = false;
+            comment = "";
+
+            using (LockDialog dlg = new LockDialog())
+            {
+                dlg.Context = e.Context;
+                dlg.LoadItems(items);
+
+                if (dlg.ShowDialog(e.Context) != DialogResult.OK)
+                    return false;
+
+                selectedItems =
+                    new List<SvnItem>(dlg.GetCheckedItems());
+                stealLocks = dlg.StealLocks;
+                comment = dlg.Message;
+                return true;
+            }
+        }
+
+        SortedList<string, string> RunLock(
+            CommandEventArgs e,
+            ICollection<string> files,
+            bool stealLocks,
+            string comment)
+        {
+            SortedList<string, string> alreadyLockedFiles =
+                new SortedList<string, string>(
+                    StringComparer.OrdinalIgnoreCase);
+
+            e.GetService<IProgressRunner>().RunModal(
+                CommandStrings.LockingTitle,
+                delegate(object sender, ProgressWorkerArgs ee)
+                {
+                    SvnLockArgs args = new SvnLockArgs();
+                    args.StealLock = stealLocks;
+                    args.Comment = comment;
+                    args.AddExpectedError(
+                        SvnErrorCode.SVN_ERR_FS_PATH_ALREADY_LOCKED);
+                    args.Notify +=
+                        delegate(object nSender, SvnNotifyEventArgs notifyArgs)
+                        {
+                            if (notifyArgs.Action
+                                != SvnNotifyAction.LockFailedLock)
+                            {
+                                return;
+                            }
+
+                            string owner =
+                                LockCommandLogic.GetLockOwner(
+                                    notifyArgs.Lock != null
+                                        ? notifyArgs.Lock.Owner
+                                        : null,
+                                    notifyArgs.Error.Message);
+
+                            alreadyLockedFiles.Add(
+                                notifyArgs.FullPath,
+                                owner);
+                        };
+
+                    ee.Client.Lock(files, args);
+                });
+
+            return alreadyLockedFiles;
+        }
+
+        static bool ConfirmStealLocks(
+            CommandEventArgs e,
+            string message)
+        {
+            AnkhMessageBox box = new AnkhMessageBox(e.Context);
+            return box.Show(
+                    message,
+                    "",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button2)
+                == DialogResult.Yes;
+        }
+
+        static void RunStealLock(
+            CommandEventArgs e,
+            ICollection<string> files,
+            string comment)
+        {
+            e.GetService<IProgressRunner>().RunModal(
+                CommandStrings.LockingTitle,
+                delegate(object sender, ProgressWorkerArgs ee)
+                {
+                    SvnLockArgs args = new SvnLockArgs();
+                    args.StealLock = true;
+                    args.Comment = comment;
+                    ee.Client.Lock(files, args);
+                });
+        }
+
     }
 }

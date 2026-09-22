@@ -32,6 +32,25 @@ namespace Ankh.Scc
             return GetPathGlyph(path, true);
         }
 
+        protected override AnkhGlyph GetProjectNodeGlyph(string path)
+        {
+            AnkhGlyph glyph = GetPathGlyph(path);
+            if (glyph != AnkhGlyph.None)
+                return glyph;
+
+            SvnItem item = StatusCache[path];
+            if (item == null)
+                return glyph;
+
+            return ProjectNodeGlyphLogic.GetGlyph(
+                glyph,
+                item.Exists,
+                item.IsVersioned,
+                item.IsIgnored,
+                item.IsVersionable,
+                ProjectMap.IsSccExcluded(path));
+        }
+
         AnkhGlyph GetPathGlyph(string path, bool lookForChildren)
         {
             SvnItem item = StatusCache[path];
@@ -153,22 +172,33 @@ namespace Ankh.Scc
             {
                 SvnItem item = StatusCache[file];
 
-                if (i >= n) // This is a subitem!
-                {
-                    if (item.IsModified)
-                        sb.AppendFormat(format, item.Name, Resources.ToolTipModified).AppendLine();
-                }
+                GlyphTipIndicators indicators = GlyphTipLogic.GetIndicators(
+                    i >= n,
+                    item.IsModified,
+                    item.IsConflicted,
+                    item.IsObstructed,
+                    item.IsFile,
+                    item.Exists,
+                    item.IsVersioned,
+                    item.IsDeleteScheduled,
+                    item.IsLocked);
 
-                if (item.IsConflicted)
+                if ((indicators & GlyphTipIndicators.Modified) != 0)
+                    sb.AppendFormat(format, item.Name, Resources.ToolTipModified).AppendLine();
+
+                if ((indicators & GlyphTipIndicators.Conflict) != 0)
                     sb.AppendFormat(format, item.Name, Resources.ToolTipConflict).AppendLine();
 
-                if (item.IsObstructed)
-                    sb.AppendFormat(format, item.Name, item.IsFile ? Resources.ToolTipFileObstructed : Resources.ToolTipDirObstructed).AppendLine();
+                if ((indicators & GlyphTipIndicators.FileObstructed) != 0)
+                    sb.AppendFormat(format, item.Name, Resources.ToolTipFileObstructed).AppendLine();
 
-                if (!item.Exists && item.IsVersioned && !item.IsDeleteScheduled)
+                if ((indicators & GlyphTipIndicators.DirectoryObstructed) != 0)
+                    sb.AppendFormat(format, item.Name, Resources.ToolTipDirObstructed).AppendLine();
+
+                if ((indicators & GlyphTipIndicators.DoesNotExist) != 0)
                     sb.AppendFormat(format, item.Name, Resources.ToolTipDoesNotExist).AppendLine();
 
-                if (item.IsLocked)
+                if ((indicators & GlyphTipIndicators.Locked) != 0)
                     sb.AppendFormat(format, item.Name, Resources.ToolTipLocked).AppendLine();
                 i++;
 

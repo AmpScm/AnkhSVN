@@ -85,6 +85,17 @@ namespace Ankh.UI.RepositoryExplorer
                             if (!urlBox.Items.Contains(uri))
                                 urlBox.Items.Add(uri);
                         }
+
+                    IWinFormsThemingService themer = Context.GetService<IWinFormsThemingService>();
+                    if (themer != null)
+                    {
+                        // The repository browser and its native controls can
+                        // create/recreate handles while roots and image lists are
+                        // initialized. Reapply the whole dialog recursively after
+                        // initialization so every nested control gets the same
+                        // semantic Visual Studio palette.
+                        themer.ThemeRecursive(this, true);
+                    }
                 }
             }
         }

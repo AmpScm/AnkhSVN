@@ -59,8 +59,14 @@ namespace Ankh.Commands
 
                 contained.Add(i.FullPath);
 
-                if (i.IsModified || (i.IsVersioned && i.IsDocumentDirty) || i.IsConflicted)
+                if (RevertItemLogic.ShouldIncludePrimary(
+                        i.IsModified,
+                        i.IsVersioned,
+                        i.IsDocumentDirty,
+                        i.IsConflicted))
+                {
                     toRevert.Add(i);
+                }
             }
 
             Predicate<SvnItem> initialCheckedFilter = null;
@@ -81,8 +87,13 @@ namespace Ankh.Commands
 
                 contained.Add(i.FullPath);
 
-                if (i.IsModified || (i.IsVersioned && i.IsDocumentDirty))
+                if (RevertItemLogic.ShouldIncludeDescendant(
+                        i.IsModified,
+                        i.IsVersioned,
+                        i.IsDocumentDirty))
+                {
                     toRevert.Add(i);
+                }
             }
 
             if (e.PromptUser || (!e.DontPrompt && !Shift))
@@ -112,17 +123,11 @@ namespace Ankh.Commands
             // Revert items backwards to make sure we revert children before their ancestors
             toRevert.Sort(delegate(SvnItem i1, SvnItem i2)
                           {
-                              bool add1 = i1.IsAdded || i1.IsReplaced;
-                              bool add2 = i2.IsAdded || i2.IsReplaced;
-
-                              if (add1 && !add2)
-                                  return -1;
-                              else if (add2 && !add1)
-                                  return 1;
-                              else if (add1 && add2)
-                                  return -StringComparer.OrdinalIgnoreCase.Compare(i1.FullPath, i2.FullPath);
-                              
-                              return StringComparer.OrdinalIgnoreCase.Compare(i1.FullPath, i2.FullPath);
+                              return RevertItemLogic.CompareForRevert(
+                                  i1.IsAdded || i1.IsReplaced,
+                                  i1.FullPath,
+                                  i2.IsAdded || i2.IsReplaced,
+                                  i2.FullPath);
                           });
 
             // perform the actual revert 
@@ -169,23 +174,13 @@ namespace Ankh.Commands
                                         if (ee.FullPath == item.FullPath)
                                             return;
 
-                                        if (ee.Conflicted ||
-                                            (ee.LocalPropertyStatus != SvnStatus.Normal && ee.LocalPropertyStatus != SvnStatus.None))
+                                        if (RevertItemLogic.HasBlockingChildChange(
+                                                ee.Conflicted,
+                                                ee.LocalPropertyStatus,
+                                                ee.LocalNodeStatus))
                                         {
                                             ee.Cancel = modifications = true;
                                         }
-                                        else switch (ee.LocalNodeStatus)
-                                            {
-                                                case SvnStatus.None:
-                                                case SvnStatus.Normal:
-                                                case SvnStatus.Ignored:
-                                                case SvnStatus.External:
-                                                case SvnStatus.NotVersioned:
-                                                    break;
-                                                default:
-                                                    ee.Cancel = modifications = true;
-                                                    break;
-                                            }
                                     }))
                             {
                                 modifications = true;
