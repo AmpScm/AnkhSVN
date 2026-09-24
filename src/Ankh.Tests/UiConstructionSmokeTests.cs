@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using NUnit.Framework;
+using SharpSvn;
 
 namespace Ankh.Tests
 {
@@ -77,16 +78,40 @@ namespace Ankh.Tests
                     Assembly uiAssembly = typeof(Ankh.UI.AnkhUIModule).Assembly;
                     Type type = uiAssembly.GetType(typeName, true, false);
 
-                    ConstructorInfo constructor = type.GetConstructor(
-                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                        null,
-                        Type.EmptyTypes,
-                        null);
+                    ConstructorInfo constructor;
+                    object[] arguments;
+
+                    switch (typeName)
+                    {
+                        case "Ankh.UI.PropertyEditors.PropertyDialog":
+                            constructor = type.GetConstructor(new[] { typeof(SvnNodeKind) });
+                            arguments = new object[] { SvnNodeKind.File };
+                            break;
+
+                        case "Ankh.UI.PropertyEditors.PropertyEditorDialog":
+                            constructor = type.GetConstructor(new[] { typeof(string) });
+                            arguments = new object[] { "C:\\working-copy\\file.txt" };
+                            break;
+
+                        case "Ankh.UI.RepositoryExplorer.RepositoryWizard.RepositorySelectionWizard":
+                            constructor = type.GetConstructor(new[] { typeof(IAnkhServiceProvider) });
+                            arguments = new object[] { null };
+                            break;
+
+                        default:
+                            constructor = type.GetConstructor(
+                                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                                null,
+                                Type.EmptyTypes,
+                                null);
+                            arguments = null;
+                            break;
+                    }
 
                     Assert.That(constructor, Is.Not.Null,
-                        typeName + " should retain a parameterless constructor for designer/runtime activation.");
+                        typeName + " should retain its supported runtime constructor.");
 
-                    control = constructor.Invoke(null) as Control;
+                    control = constructor.Invoke(arguments) as Control;
                     Assert.That(control, Is.Not.Null,
                         typeName + " should construct as a WinForms Control.");
 
