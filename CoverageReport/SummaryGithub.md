@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 7:38:45 PM |
-| Coverage date: | 9/24/2026 - 7:38:30 PM - 9/24/2026 - 7:38:37 PM |
+| Generated on: | 9/24/2026 - 9:17:19 PM |
+| Coverage date: | 9/24/2026 - 9:16:57 PM - 9/24/2026 - 9:17:07 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 24.8% (11853 of 47689) |
-| Covered lines: | 11853 |
-| Uncovered lines: | 35836 |
+| **Line coverage:** | 24.9% (11909 of 47689) |
+| Covered lines: | 11909 |
+| Uncovered lines: | 35780 |
 | Coverable lines: | 47689 |
 | Total lines: | 133798 |
-| **Branch coverage:** | 20.2% (4634 of 22915) |
-| Covered branches: | 4634 |
+| **Branch coverage:** | 20.3% (4659 of 22915) |
+| Covered branches: | 4659 |
 | Total branches: | 22915 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -121,18 +121,18 @@
 |Ankh.Copilot.VisualStudioCopilot|29.4%|33.3%|
 
 </details>
-<details><summary>Ankh.Diff - 67.5%</summary>
+<details><summary>Ankh.Diff - 69.2%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Diff**|**67.5%**|**66.9%**|
+|**Ankh.Diff**|**69.2%**|**69%**|
 |Ankh.Diff.Caret|0%|0%|
 |Ankh.Diff.DiffUtils.AddCopyList|96.8%|96.4%|
 |Ankh.Diff.DiffUtils.BinaryDiff|100%|98%|
 |Ankh.Diff.DiffUtils.BinaryDiffLines|96.7%|87.5%|
 |Ankh.Diff.DiffUtils.Controls.DiffControl|73.9%|23%|
 |Ankh.Diff.DiffUtils.Controls.DiffLineClickEventArgs|100%||
-|Ankh.Diff.DiffUtils.Controls.DiffOptions|23.1%|11.1%|
+|Ankh.Diff.DiffUtils.Controls.DiffOptions|76.8%|100%|
 |Ankh.Diff.DiffUtils.Controls.DiffOverview|92.8%|91%|
 |Ankh.Diff.DiffUtils.Controls.DiffView|52.9%|48.3%|
 |Ankh.Diff.DiffUtils.Controls.DiffViewKeyAction|100%||
@@ -146,7 +146,7 @@
 |Ankh.Diff.DiffUtils.DirectoryDiff|88.7%|81%|
 |Ankh.Diff.DiffUtils.DirectoryDiffEntries|25%||
 |Ankh.Diff.DiffUtils.DirectoryDiffEntry|75%|100%|
-|Ankh.Diff.DiffUtils.DirectoryDiffFileFilter|51.2%|50%|
+|Ankh.Diff.DiffUtils.DirectoryDiffFileFilter|100%|100%|
 |Ankh.Diff.DiffUtils.DirectoryDiffResults|66.6%||
 |Ankh.Diff.DiffUtils.Edit|100%||
 |Ankh.Diff.DiffUtils.EditScript|75%|100%|
