@@ -190,15 +190,13 @@ namespace Ankh.Tests.Annotate
                 Is.Not.Null,
                 RegressionContext + ": the intercepted right-click must resolve the clicked blame region.");
 
-            MethodInfo selectRegionWithoutPublishing = marginType.GetMethods(declaredNonPublicInstance)
-                .SingleOrDefault(method =>
-                    method.Name == "SelectRegion" &&
-                    method.GetParameters().Length == 2 &&
-                    method.GetParameters()[1].ParameterType == typeof(bool));
+            MethodInfo scopedSelection = typeof(Ankh.Selection.ISelectionContextEx).GetMethod(
+                "PushSelectionContainer",
+                BindingFlags.Instance | BindingFlags.Public);
             Assert.That(
-                selectRegionWithoutPublishing,
+                scopedSelection,
                 Is.Not.Null,
-                RegressionContext + ": right-click must be able to highlight a revision without publishing selection until the deferred menu callback.");
+                RegressionContext + ": native Annotate context menus must be able to scope command selection to the clicked revision.");
 
             Type selectionContainerType = marginType.GetNestedType(
                 "AnnotationSelectionContainer",
@@ -212,6 +210,11 @@ namespace Ankh.Tests.Annotate
                 typeof(ISelectionContainer).IsAssignableFrom(selectionContainerType),
                 Is.True,
                 RegressionContext + ": Annotate commands must receive the clicked revision through Visual Studio's selection container.");
+
+            Assert.That(
+                selectionContainerType.IsDefined(typeof(System.Runtime.InteropServices.ComVisibleAttribute), false),
+                Is.True,
+                RegressionContext + ": the annotation selection container must remain explicitly COM-visible for IVsTrackSelectionEx.");
         }
 
         [Test]
