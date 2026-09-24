@@ -237,6 +237,69 @@ jobs:
         --logger "console;verbosity=normal"
         -- RunConfiguration.TargetPlatform=x64 RunConfiguration.TreatNoTestsAsError=true
 
+    - name: Verify 100% test pass rate
+      id: test_gate
+      if: always()
+      shell: pwsh
+      run: |
+        $ErrorActionPreference = "Stop"
+
+        if ("${{ steps.build_2022.outcome }}" -ne "success") {
+          throw "Compilation did not succeed, so the required test suites could not be validated."
+        }
+
+        if ("${{ steps.ankh_tests.outcome }}" -ne "success") {
+          throw "Ankh.Tests did not complete successfully."
+        }
+
+        if ("${{ steps.ankh_vs_tests.outcome }}" -ne "success") {
+          throw "Ankh.VS.UnitTest did not complete successfully."
+        }
+
+        $requiredSuites = @(
+          @{
+            Name = "Ankh.Tests"
+            Path = "${{ github.workspace }}\TestResults\Ankh.Tests\Ankh.Tests.trx"
+          },
+          @{
+            Name = "Ankh.VS.UnitTest"
+            Path = "${{ github.workspace }}\TestResults\Ankh.VS.UnitTest\Ankh.VS.UnitTest.trx"
+          }
+        )
+
+        foreach ($suite in $requiredSuites) {
+          if (-not (Test-Path $suite.Path)) {
+            throw "$($suite.Name) did not produce its required TRX results file."
+          }
+
+          [xml]$trx = Get-Content -Raw $suite.Path
+          $results = @($trx.SelectNodes("//*[local-name()='UnitTestResult']"))
+
+          if ($results.Count -eq 0) {
+            throw "$($suite.Name) produced no test results."
+          }
+
+          $nonPassing = @($results | Where-Object {
+            $_.GetAttribute("outcome") -ne "Passed"
+          })
+
+          $passed = $results.Count - $nonPassing.Count
+          Write-Host "$($suite.Name): $passed/$($results.Count) passed."
+
+          if ($nonPassing.Count -gt 0) {
+            Write-Host "$($suite.Name) non-passing tests:"
+            $nonPassing | ForEach-Object {
+              $name = $_.GetAttribute("testName")
+              $outcome = $_.GetAttribute("outcome")
+              Write-Host "  $outcome - $name"
+            }
+
+            throw "$($suite.Name) did not achieve a 100% pass rate: $passed/$($results.Count) passed."
+          }
+        }
+
+        Write-Host "All required tests ran and achieved a 100% pass rate."
+
     - name: Install ReportGenerator
       if: always()
       shell: pwsh
@@ -345,11 +408,13 @@ jobs:
         $compileOutcome = "${{ steps.build_2022.outcome }}"
         $unitOutcome = "${{ steps.ankh_tests.outcome }}"
         $vsUnitOutcome = "${{ steps.ankh_vs_tests.outcome }}"
+        $testGateOutcome = "${{ steps.test_gate.outcome }}"
 
         $ciPassed =
           $compileOutcome -eq "success" -and
           $unitOutcome -eq "success" -and
-          $vsUnitOutcome -eq "success"
+          $vsUnitOutcome -eq "success" -and
+          $testGateOutcome -eq "success"
 
         if ($ciPassed) {
           $buildMessage = "passing"
@@ -369,7 +434,7 @@ jobs:
         }
         elseif ($trxFiles -and $skipped -gt 0) {
           $testMessage = "$passed passed, $skipped skipped"
-          $testColor = "#4c1"
+          $testColor = "#e05d44"
         }
         elseif ($trxFiles) {
           $testMessage = "$passed passing"
@@ -387,6 +452,7 @@ jobs:
         Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Compile: $compileOutcome"
         Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Ankh.Tests: $unitOutcome"
         Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Ankh.VS.UnitTest: $vsUnitOutcome"
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- 100% test gate: $testGateOutcome"
 
         if (Test-Path $coveragePath) {
           [xml]$coverage = Get-Content -Raw $coveragePath

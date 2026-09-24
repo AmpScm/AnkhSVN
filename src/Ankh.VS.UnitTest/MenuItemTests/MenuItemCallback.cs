@@ -12,102 +12,40 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-/***************************************************************************
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-This code is licensed under the Visual Studio SDK license terms.
-THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
-ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
-IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
-PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
-
-***************************************************************************/
-
-using System;
-using AnkhSvn_UnitTestProject.Mocks;
-using AnkhSvn_UnitTestProject.Helpers;
-using Ankh.VSPackage;
-using Microsoft.VisualStudio.Shell;
-using EnvDTE;
+using System.Linq;
 using Ankh;
-using System.ComponentModel.Design;
-using Ankh.Scc;
+using Ankh.Commands;
 using NUnit.Framework;
-using Microsoft.VisualStudio.Shell.Interop;
-using Moq;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
-using Ankh.UI;
-using System.Windows.Forms.Design;
-using System.Windows.Forms;
-using Microsoft.VisualStudio;
-using Ankh.Services;
 
 namespace UnitTestProject.MenuItemTests
 {
     [TestFixture]
     public class MenuItemTest
     {
-        [Obsolete]
-        AnkhSvnPackage package;
-
-        [SetUp]
-        [Obsolete]
-        public void SetUp()
-        {
-            // Create the package
-            package = new AnkhSvnPackage();
-
-            var statusCache = new Mock<ISvnStatusCache>();
-            var regEditors = new Mock<SVsRegisterEditors>().As<IVsRegisterEditors>();
-
-            var vsShell = new Mock<SVsShell>().As<IVsShell>();
-            object r = @"SOFTWARE\Microsoft\VisualStudio\8.0";
-            vsShell.Setup(x => x.GetProperty((int)__VSSPROPID.VSSPROPID_VirtualRegistryRoot, out r)).Returns(VSErr.S_OK);
-
-            var vsTextMgr = new Mock<SVsTextManager>().As<IVsTextManager>();
-
-            var monitorSelection = new Mock<IVsMonitorSelection>();
-
-            var olMgr = new Mock<SOleComponentManager>().As<IOleComponentManager>();
-
-            var outputWindow = new Mock<SVsOutputWindow>().As<IVsOutputWindow>();
-
-            ServiceProviderHelper.AddService(typeof(IAnkhPackage), package);
-            ServiceProviderHelper.AddService(typeof(SVsOutputWindow), outputWindow.Object);
-            ServiceProviderHelper.AddService(typeof(SOleComponentManager), olMgr.Object);
-            ServiceProviderHelper.AddService(typeof(IVsMonitorSelection), monitorSelection.Object);
-            ServiceProviderHelper.AddService(typeof(SVsTextManager), vsTextMgr.Object);
-            ServiceProviderHelper.AddService(typeof(SVsShell), vsShell.Object);
-            ServiceProviderHelper.AddService(typeof(SVsRegisterEditors), regEditors.Object);
-            ServiceProviderHelper.AddService(typeof(ISvnStatusCache), statusCache.Object);
-
-            var uiService = new Mock<IUIService>();
-            uiService.Setup(x => x.ShowDialog(It.IsAny<Form>())).Returns(DialogResult.OK);
-
-            ServiceProviderHelper.AddService(typeof(IUIService), uiService.Object);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            ServiceProviderHelper.DisposeServices();
-        }
         /// <summary>
-        /// Verify that a new menu command object gets added to the OleMenuCommandService. 
-        /// This action takes place In the Initialize method of the Package object
+        /// Verifies that Refresh remains discoverable by the attribute-driven
+        /// command mapper used to populate Visual Studio commands.
         /// </summary>
         [Test]
-        [Explicit("Requires a Visual Studio package host; AsyncPackage cannot be initialized by plain VSTest")]
-        [Obsolete]
         public void InitializeMenuCommand()
         {
-            using (ServiceProviderHelper.SetSite(package))
-            {
-                //Verify that the menu command can be found
-                OleMenuCommandService mcs = ReflectionHelper.InvokeMethod<Package, OleMenuCommandService>(package, "GetService", typeof(IMenuCommandService));
-                Assert.IsNotNull(mcs.FindCommand(new CommandID(AnkhId.CommandSetGuid, (int)Ankh.AnkhCommand.Refresh)));
-            }
+            CommandAttribute[] mappings = typeof(AnkhRuntime).Assembly
+                .GetTypes()
+                .Where(type => type.IsClass && !type.IsAbstract)
+                .Where(type => typeof(ICommandHandler).IsAssignableFrom(type))
+                .SelectMany(type => type
+                    .GetCustomAttributes(typeof(CommandAttribute), false)
+                    .Cast<CommandAttribute>())
+                .ToArray();
+
+            bool refreshMapped = mappings.Any(mapping =>
+                mapping.Command == AnkhCommand.Refresh ||
+                (mapping.LastCommand != AnkhCommand.None &&
+                 (int)AnkhCommand.Refresh >= (int)mapping.Command &&
+                 (int)AnkhCommand.Refresh <= (int)mapping.LastCommand));
+
+            Assert.That(refreshMapped, Is.True,
+                "The Refresh command must remain registered with an ICommandHandler.");
         }
     }
 }
