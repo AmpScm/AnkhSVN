@@ -295,7 +295,7 @@ namespace Ankh.Configuration
                     value = (int)val;
                     return true;
                 }
-                else if (int.TryParse(value.ToString(), out value))
+                else if (int.TryParse(val.ToString(), out value))
                     return true;
             }
 
