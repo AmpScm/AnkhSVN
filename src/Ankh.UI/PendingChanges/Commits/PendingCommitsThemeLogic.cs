@@ -36,13 +36,10 @@ namespace Ankh.UI.PendingChanges.Commits
             // system/default color that may not match the active Visual Studio
             // theme. Always fall back to the explicit current VS palette
             // foreground, whatever color that theme defines.
-            if (!statusColor.IsEmpty
-                && AnkhThemePalette.ContrastRatio(statusColor, listBackColor) >= 4.5)
-            {
-                return statusColor;
-            }
-
-            return listForeColor;
+            return AnkhThemePalette.ResolveReadableForeground(
+                statusColor,
+                listForeColor,
+                listBackColor);
         }
     }
 }
