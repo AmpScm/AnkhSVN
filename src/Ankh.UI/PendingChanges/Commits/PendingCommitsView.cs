@@ -38,6 +38,7 @@ namespace Ankh.UI.PendingChanges.Commits
 
             StrictCheckboxesClick = true;
             AllowDarkNativeTheme = false;
+            PreserveItemForeColorWhenSelected = true;
             FullRowSelect = true;
             HideSelection = false;
             AllowColumnReorder = true;
