@@ -114,10 +114,7 @@ namespace Ankh.Scc
 
         public override bool Equals(object obj)
         {
-            if(!(obj is PendingChangeStatus))
-                return false;
-
-            return (PendingChangeStatus)obj == this;
+            return Equals(obj as PendingChangeStatus);
         }
 
         public override int GetHashCode()
