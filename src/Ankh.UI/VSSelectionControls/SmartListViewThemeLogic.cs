@@ -26,6 +26,13 @@ namespace Ankh.UI.VSSelectionControls
             return !themeCancelled && hasPalette && !highContrast;
         }
 
+        internal static Color ResolveSelectedItemForeground(
+            Color itemForeground,
+            Color listForeground)
+        {
+            return itemForeground.IsEmpty ? listForeground : itemForeground;
+        }
+
         internal static Color ResolveSelectionForeground(
             bool darkSurface,
             Color surfaceForeground,
