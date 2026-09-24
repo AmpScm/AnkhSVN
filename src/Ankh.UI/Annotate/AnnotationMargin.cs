@@ -55,15 +55,6 @@ namespace Ankh.UI.Annotate
             ClipToBounds = true;
             Background = SystemColors.ControlBrush;
 
-            // Intercept right-clicks at the margin level before Visual Studio's editor
-            // command routing can substitute the normal editor context menu. Use
-            // handledEventsToo so this remains reliable even if a child element or the
-            // editor host marks the mouse event handled first.
-            AddHandler(
-                Mouse.PreviewMouseDownEvent,
-                new MouseButtonEventHandler(OnPreviewMouseDown),
-                true);
-
             BuildRegions(document);
 
             PreviewMouseRightButtonDown += OnPreviewMouseRightButtonDown;
@@ -215,49 +206,6 @@ namespace Ankh.UI.Annotate
                 double height = region.Element.ActualHeight > 0
                     ? region.Element.ActualHeight
                     : region.Element.Height;
-
-                if (height > 0 && point.Y >= top && point.Y < top + height)
-                    return region;
-            }
-
-            return null;
-        }
-
-        void OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e == null || e.ChangedButton != MouseButton.Right)
-                return;
-
-            MarginRegion region = FindRegionAt(e.GetPosition(this));
-            if (region == null)
-                return;
-
-            // Claim the gesture before the native editor sees it. Otherwise Visual
-            // Studio can open its standard editor menu (outlining, breakpoints, etc.)
-            // instead of AnkhSVN's revision menu.
-            e.Handled = true;
-
-            SelectRegion(region);
-            ShowContextMenu(this, e);
-        }
-
-        MarginRegion FindRegionAt(Point point)
-        {
-            if (point.X < 0 || point.X > ActualWidth)
-                return null;
-
-            foreach (MarginRegion region in _regions)
-            {
-                if (region.Element.Visibility != Visibility.Visible)
-                    continue;
-
-                double top = GetTop(region.Element);
-                if (double.IsNaN(top))
-                    continue;
-
-                double height = region.Element.ActualHeight;
-                if (height <= 0)
-                    height = region.Element.Height;
 
                 if (height > 0 && point.Y >= top && point.Y < top + height)
                     return region;
@@ -490,9 +438,6 @@ namespace Ankh.UI.Annotate
             _textView.Closed -= OnTextViewClosed;
             Loaded -= OnLoaded;
             SizeChanged -= OnMarginSizeChanged;
-            RemoveHandler(
-                Mouse.PreviewMouseDownEvent,
-                new MouseButtonEventHandler(OnPreviewMouseDown));
             Children.Clear();
             GC.SuppressFinalize(this);
         }
