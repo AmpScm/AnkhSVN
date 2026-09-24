@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 1:02:45 AM |
-| Coverage date: | 9/24/2026 - 1:02:24 AM - 9/24/2026 - 1:02:35 AM |
+| Generated on: | 9/24/2026 - 1:10:53 AM |
+| Coverage date: | 9/24/2026 - 1:10:30 AM - 9/24/2026 - 1:10:42 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 10 |
 | Classes: | 609 |
 | Files: | 677 |
-| **Line coverage:** | 9.1% (4278 of 46874) |
-| Covered lines: | 4278 |
-| Uncovered lines: | 42596 |
-| Coverable lines: | 46874 |
-| Total lines: | 132271 |
-| **Branch coverage:** | 11.7% (2643 of 22495) |
-| Covered branches: | 2643 |
-| Total branches: | 22495 |
+| **Line coverage:** | 9.1% (4284 of 46885) |
+| Covered lines: | 4284 |
+| Uncovered lines: | 42601 |
+| Coverable lines: | 46885 |
+| Total lines: | 132294 |
+| **Branch coverage:** | 11.7% (2645 of 22501) |
+| Covered branches: | 2645 |
+| Total branches: | 22501 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -385,11 +385,11 @@
 |Ankh.VSVersion|0%|0%|
 
 </details>
-<details><summary>Ankh.UI - 7.3%</summary>
+<details><summary>Ankh.UI - 7.4%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**7.3%**|**9.1%**|
+|**Ankh.UI**|**7.4%**|**9.1%**|
 |Ankh.UI.AddRepositoryRootDialog|0%|0%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -484,7 +484,7 @@
 |Ankh.UI.PendingChanges.Commits.PendingCommitItem|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitItemCollection|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitsThemeLogic|100%|100%|
-|Ankh.UI.PendingChanges.Commits.PendingCommitsView|32.9%|4.7%|
+|Ankh.UI.PendingChanges.Commits.PendingCommitsView|33.1%|4.7%|
 |Ankh.UI.PendingChanges.ConfigureRecentChangesPageDialog|0%|0%|
 |Ankh.UI.PendingChanges.Conflicts.ConflictListItem|0%|0%|
 |Ankh.UI.PendingChanges.Conflicts.ConflictListView|0%|0%|
@@ -593,7 +593,7 @@
 |Ankh.UI.VSSelectionControls.ListViewWithSelection`1|4.5%|1.4%|
 |Ankh.UI.VSSelectionControls.SmartColumn|24%|5.5%|
 |Ankh.UI.VSSelectionControls.SmartGroup|0%|0%|
-|Ankh.UI.VSSelectionControls.SmartListView|8.9%|4.4%|
+|Ankh.UI.VSSelectionControls.SmartListView|9.5%|4.8%|
 |Ankh.UI.VSSelectionControls.SmartListViewItem|0%|0%|
 |Ankh.UI.VSSelectionControls.SmartListViewThemeLogic|100%|100%|
 |Ankh.UI.VSSelectionControls.SmartSplitContainer|31.5%|18.1%|
