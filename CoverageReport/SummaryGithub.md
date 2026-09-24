@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 6:00:47 PM |
-| Coverage date: | 9/24/2026 - 6:00:25 PM - 9/24/2026 - 6:00:37 PM |
+| Generated on: | 9/24/2026 - 6:20:13 PM |
+| Coverage date: | 9/24/2026 - 6:19:51 PM - 9/24/2026 - 6:20:03 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 24.2% (11585 of 47689) |
-| Covered lines: | 11585 |
-| Uncovered lines: | 36104 |
+| **Line coverage:** | 24.8% (11853 of 47689) |
+| Covered lines: | 11853 |
+| Uncovered lines: | 35836 |
 | Coverable lines: | 47689 |
 | Total lines: | 133798 |
-| **Branch coverage:** | 19.5% (4482 of 22915) |
-| Covered branches: | 4482 |
+| **Branch coverage:** | 20.2% (4634 of 22915) |
+| Covered branches: | 4634 |
 | Total branches: | 22915 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -275,11 +275,11 @@
 |Ankh.Scc.ThePendingChangeCollection|0%||
 
 </details>
-<details><summary>Ankh.Services - 28.8%</summary>
+<details><summary>Ankh.Services - 31.7%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Services**|**28.8%**|**26.8%**|
+|**Ankh.Services**|**31.7%**|**28.6%**|
 |Ankh.AnkhInstanceConditionalAttribute|46.6%|50%|
 |Ankh.AnkhRuntime|31.9%|24.3%|
 |Ankh.AnkhService|17.5%|9.6%|
@@ -290,8 +290,8 @@
 |Ankh.Collections.CollectionChangedEventArgs`1|73.3%||
 |Ankh.Collections.CollectionMonitor|71.4%|30%|
 |Ankh.Collections.ItemChangedEventArgs`1|0%|0%|
-|Ankh.Collections.KeyedWrapNotifyCollection`3|0%|0%|
-|Ankh.Collections.WrapNotifyCollection`2|0%|0%|
+|Ankh.Collections.KeyedWrapNotifyCollection`3|63.4%|51.8%|
+|Ankh.Collections.WrapNotifyCollection`2|94%|95%|
 |Ankh.Commands.BaseCommandEventArgs|52.3%|40%|
 |Ankh.Commands.CommandAttribute|70.9%|58.3%|
 |Ankh.Commands.CommandEventArgs|94.1%|75%|
@@ -308,16 +308,16 @@
 |Ankh.EnumTools|55.1%|50%|
 |Ankh.GlobalServiceAttribute|0%|0%|
 |Ankh.HybridCollection`1|72.7%|83.3%|
-|Ankh.KeyedNotifyCollection`2|67.5%|66.6%|
+|Ankh.KeyedNotifyCollection`2|85%|83.3%|
 |Ankh.LastChangedEventArgs|0%||
 |Ankh.Module|0%|0%|
-|Ankh.NotifyCollection`1|84.1%|80.5%|
+|Ankh.NotifyCollection`1|93%|91.6%|
 |Ankh.ProgressRunnerArgs|0%||
 |Ankh.ProgressRunnerResult|0%||
 |Ankh.ProgressWorkerArgs|0%|0%|
 |Ankh.ProgressWorkerDoneArgs|0%|0%|
-|Ankh.ReadOnlyKeyedNotifyCollection`2|33.3%||
-|Ankh.ReadOnlyNotifyCollection`1|67.8%|64.2%|
+|Ankh.ReadOnlyKeyedNotifyCollection`2|66.6%||
+|Ankh.ReadOnlyNotifyCollection`1|89.2%|85.7%|
 |Ankh.Scc.AnkhPropertyGridItem|0%|0%|
 |Ankh.Scc.BatchStartedEventArgs|0%|0%|
 |Ankh.Scc.DocumentLock|0%|0%|
@@ -630,11 +630,11 @@
 |Ankh.UI.WorkingCopyExplorer.WorkingCopyExplorerControl|0%|0%|
 
 </details>
-<details><summary>Ankh.VS - 11%</summary>
+<details><summary>Ankh.VS - 12.6%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.VS**|**11%**|**10.7%**|
+|**Ankh.VS**|**12.6%**|**13.9%**|
 |Ankh.VS.AnkhVSModule|0%||
 |Ankh.VS.Dialogs.AnkhDialogOwner|0%|0%|
 |Ankh.VS.Dialogs.ContextCommandHandler|0%|0%|
@@ -666,8 +666,8 @@
 |Ankh.VS.OutputPane.OutputPaneManager|0%|0%|
 |Ankh.VS.Selection.AnkhCommandService|0%|0%|
 |Ankh.VS.Selection.CachedEnumerable`1|0%|0%|
-|Ankh.VS.Selection.CmdUIContextChangeEventArgs|0%||
-|Ankh.VS.Selection.CommandState|0%|0%|
+|Ankh.VS.Selection.CmdUIContextChangeEventArgs|100%||
+|Ankh.VS.Selection.CommandState|40.5%|56.8%|
 |Ankh.VS.Selection.DelayData|0%|0%|
 |Ankh.VS.Selection.Disposer|0%||
 |Ankh.VS.Selection.SelectionContext|0%|0%|
