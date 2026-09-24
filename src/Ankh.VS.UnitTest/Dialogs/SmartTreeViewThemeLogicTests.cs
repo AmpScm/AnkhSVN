@@ -43,6 +43,17 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                 Is.EqualTo(expected));
         }
 
+        [TestCase(true, true)]
+        [TestCase(false, false)]
+        public void PaletteRenderingSuppressesNativeVsTheme(
+            bool usePaletteRendering,
+            bool expected)
+        {
+            Assert.That(
+                SmartTreeViewThemeLogic.ShouldSuppressNativeVsTheme(usePaletteRendering),
+                Is.EqualTo(expected));
+        }
+
         [Test, Apartment(ApartmentState.STA)]
         public void PaletteRenderingSwitchesTreeToOwnerDrawText()
         {
