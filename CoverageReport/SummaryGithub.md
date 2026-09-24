@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 3:24:44 PM |
-| Coverage date: | 9/24/2026 - 3:24:22 PM - 9/24/2026 - 3:24:33 PM |
+| Generated on: | 9/24/2026 - 3:33:29 PM |
+| Coverage date: | 9/24/2026 - 3:33:11 PM - 9/24/2026 - 3:33:20 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 10.5% (5046 of 47680) |
-| Covered lines: | 5046 |
-| Uncovered lines: | 42634 |
+| **Line coverage:** | 11% (5261 of 47680) |
+| Covered lines: | 5261 |
+| Uncovered lines: | 42419 |
 | Coverable lines: | 47680 |
 | Total lines: | 133776 |
-| **Branch coverage:** | 12.9% (2971 of 22911) |
-| Covered branches: | 2971 |
+| **Branch coverage:** | 13.3% (3050 of 22911) |
+| Covered branches: | 3050 |
 | Total branches: | 22911 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -275,20 +275,20 @@
 |Ankh.Scc.ThePendingChangeCollection|0%||
 
 </details>
-<details><summary>Ankh.Services - 14.7%</summary>
+<details><summary>Ankh.Services - 18.2%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Services**|**14.7%**|**13.6%**|
+|**Ankh.Services**|**18.2%**|**15.9%**|
 |Ankh.AnkhInstanceConditionalAttribute|46.6%|50%|
 |Ankh.AnkhRuntime|31.9%|24.3%|
 |Ankh.AnkhService|13.5%|6.4%|
 |Ankh.AnkhServiceContainer|100%||
 |Ankh.AnkhServiceEvents|26%|16.6%|
 |Ankh.AnkhServiceProviderWrapper|0%|0%|
-|Ankh.Collections.CollectionChangedEventArgs|0%|0%|
-|Ankh.Collections.CollectionChangedEventArgs`1|0%||
-|Ankh.Collections.CollectionMonitor|0%|0%|
+|Ankh.Collections.CollectionChangedEventArgs|50%|45.4%|
+|Ankh.Collections.CollectionChangedEventArgs`1|60%||
+|Ankh.Collections.CollectionMonitor|61.9%|10%|
 |Ankh.Collections.ItemChangedEventArgs`1|0%|0%|
 |Ankh.Collections.KeyedWrapNotifyCollection`3|0%|0%|
 |Ankh.Collections.WrapNotifyCollection`2|0%|0%|
@@ -298,7 +298,7 @@
 |Ankh.Commands.CommandMapItem|74%|50%|
 |Ankh.Commands.CommandMapper|50%|60%|
 |Ankh.Commands.CommandResult|0%|0%|
-|Ankh.Commands.CommandUpdateEventArgs|16.2%|0%|
+|Ankh.Commands.CommandUpdateEventArgs|83.7%|71.4%|
 |Ankh.Commands.SccCommandAttribute|50%||
 |Ankh.Commands.SvnCommandAttribute|50%||
 |Ankh.Configuration.AnkhConfig|0%|0%|
@@ -307,17 +307,17 @@
 |Ankh.ContextServices.GuidUtils|0%|0%|
 |Ankh.EnumTools|55.1%|50%|
 |Ankh.GlobalServiceAttribute|0%|0%|
-|Ankh.HybridCollection`1|36.3%|16.6%|
+|Ankh.HybridCollection`1|72.7%|83.3%|
 |Ankh.KeyedNotifyCollection`2|0%|0%|
 |Ankh.LastChangedEventArgs|0%||
 |Ankh.Module|0%|0%|
-|Ankh.NotifyCollection`1|0%|0%|
+|Ankh.NotifyCollection`1|84.1%|80.5%|
 |Ankh.ProgressRunnerArgs|0%||
 |Ankh.ProgressRunnerResult|0%||
 |Ankh.ProgressWorkerArgs|0%|0%|
 |Ankh.ProgressWorkerDoneArgs|0%|0%|
 |Ankh.ReadOnlyKeyedNotifyCollection`2|33.3%||
-|Ankh.ReadOnlyNotifyCollection`1|12.5%|0%|
+|Ankh.ReadOnlyNotifyCollection`1|67.8%|64.2%|
 |Ankh.Scc.AnkhPropertyGridItem|0%|0%|
 |Ankh.Scc.BatchStartedEventArgs|0%|0%|
 |Ankh.Scc.DocumentLock|0%|0%|
@@ -346,7 +346,7 @@
 |Ankh.Scc.SvnDirectory|58.3%|55.5%|
 |Ankh.Scc.SvnItemAnnotation|0%|0%|
 |Ankh.Scc.SvnItemData|0%|0%|
-|Ankh.Scc.SvnItemsEventArgs|0%|0%|
+|Ankh.Scc.SvnItemsEventArgs|100%|100%|
 |Ankh.Scc.SvnOrigin|17%|6.2%|
 |Ankh.Scc.SvnStatusData|63.7%|12.5%|
 |Ankh.Scc.SvnWorkingCopy|0%|0%|
