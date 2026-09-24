@@ -367,7 +367,7 @@ namespace Ankh.Diff
             //Allow float
             if (!m_bAllowFloat && Math.Round(dValue) != dValue)
             {
-                dValue = IntValue;
+                dValue = m_bRoundInt ? Math.Round(dValue) : (int)dValue;
                 bWasValid = false;
             }
 
