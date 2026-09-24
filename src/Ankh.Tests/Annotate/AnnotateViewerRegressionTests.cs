@@ -153,6 +153,30 @@ namespace Ankh.Tests.Annotate
                 Is.Not.Null,
                 RegressionContext + ": the WPF annotation margin must retain a right-click context-menu entry point.");
 
+            MethodInfo previewRightClick = marginType.GetMethod(
+                "OnPreviewMouseRightButtonDown",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(
+                previewRightClick,
+                Is.Not.Null,
+                RegressionContext + ": Annotate must intercept right-click before the native editor context menu handles it.");
+
+            MethodInfo suppressEditorContextMenu = marginType.GetMethod(
+                "OnContextMenuOpening",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(
+                suppressEditorContextMenu,
+                Is.Not.Null,
+                RegressionContext + ": Annotate must suppress the editor fallback context menu over the blame margin.");
+
+            MethodInfo findRegionAt = marginType.GetMethod(
+                "FindRegionAt",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(
+                findRegionAt,
+                Is.Not.Null,
+                RegressionContext + ": the intercepted right-click must resolve the clicked blame region.");
+
             Type selectionContainerType = marginType.GetNestedType(
                 "AnnotationSelectionContainer",
                 BindingFlags.NonPublic);
