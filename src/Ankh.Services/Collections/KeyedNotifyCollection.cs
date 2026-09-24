@@ -81,7 +81,7 @@ namespace Ankh
             TItem t = base[index];
             base.SetItem(index, item);
             RaisePropertyChanged(RaisePropertyItems.Items);
-            RaiseCollectionChanged(new CollectionChangedEventArgs<TItem>(CollectionChange.Replace, t, item, index));
+            RaiseCollectionChanged(new CollectionChangedEventArgs<TItem>(CollectionChange.Replace, item, t, index));
         }
 
         public void Move(int oldIndex, int newIndex)
