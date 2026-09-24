@@ -3,15 +3,15 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 10:38:10 PM |
-| Coverage date: | 9/24/2026 - 10:37:49 PM - 9/24/2026 - 10:38:00 PM |
+| Generated on: | 9/24/2026 - 10:41:33 PM |
+| Coverage date: | 9/24/2026 - 10:41:11 PM - 9/24/2026 - 10:41:22 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 25.1% (11985 of 47694) |
-| Covered lines: | 11985 |
-| Uncovered lines: | 35709 |
+| **Line coverage:** | 25.1% (11987 of 47694) |
+| Covered lines: | 11987 |
+| Uncovered lines: | 35707 |
 | Coverable lines: | 47694 |
 | Total lines: | 133815 |
 | **Branch coverage:** | 20.5% (4699 of 22911) |
@@ -290,7 +290,7 @@
 |Ankh.Collections.CollectionChangedEventArgs`1|73.3%||
 |Ankh.Collections.CollectionMonitor|71.4%|30%|
 |Ankh.Collections.ItemChangedEventArgs`1|0%|0%|
-|Ankh.Collections.KeyedWrapNotifyCollection`3|63.4%|51.8%|
+|Ankh.Collections.KeyedWrapNotifyCollection`3|64.2%|51.8%|
 |Ankh.Collections.WrapNotifyCollection`2|94%|95%|
 |Ankh.Commands.BaseCommandEventArgs|52.3%|40%|
 |Ankh.Commands.CommandAttribute|96.7%|91.6%|
@@ -316,7 +316,7 @@
 |Ankh.ProgressRunnerResult|0%||
 |Ankh.ProgressWorkerArgs|0%|0%|
 |Ankh.ProgressWorkerDoneArgs|0%|0%|
-|Ankh.ReadOnlyKeyedNotifyCollection`2|66.6%||
+|Ankh.ReadOnlyKeyedNotifyCollection`2|77.7%||
 |Ankh.ReadOnlyNotifyCollection`1|89.2%|85.7%|
 |Ankh.Scc.AnkhPropertyGridItem|0%|0%|
 |Ankh.Scc.BatchStartedEventArgs|0%|0%|
