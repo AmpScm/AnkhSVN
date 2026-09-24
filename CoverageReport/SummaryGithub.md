@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 2:55:22 AM |
-| Coverage date: | 9/24/2026 - 2:55:08 AM - 9/24/2026 - 2:55:14 AM |
+| Generated on: | 9/24/2026 - 3:14:55 AM |
+| Coverage date: | 9/24/2026 - 3:14:27 AM - 9/24/2026 - 3:14:44 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 10 |
 | Classes: | 609 |
 | Files: | 677 |
-| **Line coverage:** | 9.1% (4307 of 47068) |
+| **Line coverage:** | 9.1% (4307 of 47082) |
 | Covered lines: | 4307 |
-| Uncovered lines: | 42761 |
-| Coverable lines: | 47068 |
-| Total lines: | 132634 |
-| **Branch coverage:** | 11.7% (2648 of 22623) |
+| Uncovered lines: | 42775 |
+| Coverable lines: | 47082 |
+| Total lines: | 132663 |
+| **Branch coverage:** | 11.7% (2648 of 22625) |
 | Covered branches: | 2648 |
-| Total branches: | 22623 |
+| Total branches: | 22625 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -400,7 +400,7 @@
 |Ankh.UI.Annotate.AnnotationDocument|90.9%||
 |Ankh.UI.Annotate.AnnotationDocumentRegistry|80.6%|50%|
 |Ankh.UI.Annotate.AnnotationLayoutCalculator|93.7%|96.1%|
-|Ankh.UI.Annotate.AnnotationMargin|18.6%|6.3%|
+|Ankh.UI.Annotate.AnnotationMargin|18%|6.3%|
 |Ankh.UI.Annotate.AnnotationMarginProvider|84.6%|62.5%|
 |Ankh.UI.Annotate.AnnotationRegionLayout|100%||
 |Ankh.UI.Commands.AnnotateDialog|0%|0%|
@@ -593,7 +593,7 @@
 |Ankh.UI.VSSelectionControls.ListViewWithSelection`1|4.5%|1.4%|
 |Ankh.UI.VSSelectionControls.SmartColumn|24%|5.5%|
 |Ankh.UI.VSSelectionControls.SmartGroup|0%|0%|
-|Ankh.UI.VSSelectionControls.SmartListView|9.4%|4.6%|
+|Ankh.UI.VSSelectionControls.SmartListView|9.3%|4.6%|
 |Ankh.UI.VSSelectionControls.SmartListViewItem|0%|0%|
 |Ankh.UI.VSSelectionControls.SmartListViewThemeLogic|100%|100%|
 |Ankh.UI.VSSelectionControls.SmartSplitContainer|31.5%|18.1%|
