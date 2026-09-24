@@ -269,7 +269,9 @@ namespace Ankh.UI.VSSelectionControls
             public const Int32 HDS_OVERFLOW = 0x1000;
 
             
+            public const Int32 LVM_SETBKCOLOR = 0x1000 + 1;     // LVM_FIRST + 1
             public const Int32 LVM_GETHEADER = 0x1000 + 31;     // LVM_FIRST + 31
+            public const Int32 LVM_SETTEXTCOLOR = 0x1000 + 36;  // LVM_FIRST + 36
             public const Int32 LVM_SETITEMSTATE = 0x1000 + 43;  // LVM_FIRST + 43
             public const Int32 HDM_GETITEM = 0x1200 + 11;  // HDM_FIRST + 11
             public const Int32 HDM_SETITEM = 0x1200 + 12;  // HDM_FIRST + 12
@@ -277,6 +279,7 @@ namespace Ankh.UI.VSSelectionControls
             public const int WM_CONTEXTMENU = 0x007B;
             public const int WM_NOTIFY = 0x004E;
             public const int OCM_NOTIFY = 0x204E;
+            public const int WM_LBUTTONDBLCLK = 0x0203;
 
             public const int NM_CLICK = -2;
             public const int NM_DBLCLK = -3;
@@ -521,6 +524,33 @@ namespace Ankh.UI.VSSelectionControls
                 LVM_SETEXTENDEDLISTVIEWSTYLE,
                 (IntPtr)LVS_EX_DOUBLEBUFFER,
                 (IntPtr)LVS_EX_DOUBLEBUFFER);
+
+            // SetWindowTheme() can reset the native ListView colors even when
+            // the managed BackColor/ForeColor still contain the VS palette.
+            // Reapply them after every handle creation so selected rows do not
+            // fall back to black text on dark Visual Studio surfaces.
+            RestoreNativeColors(this);
+        }
+
+        internal static void RestoreNativeColors(ListView listView)
+        {
+            if (listView == null)
+                throw new ArgumentNullException("listView");
+
+            if (!listView.IsHandleCreated)
+                return;
+
+            NativeMethods.SendMessage(
+                listView.Handle,
+                NativeMethods.LVM_SETBKCOLOR,
+                IntPtr.Zero,
+                (IntPtr)ColorTranslator.ToWin32(listView.BackColor));
+            NativeMethods.SendMessage(
+                listView.Handle,
+                NativeMethods.LVM_SETTEXTCOLOR,
+                IntPtr.Zero,
+                (IntPtr)ColorTranslator.ToWin32(listView.ForeColor));
+            listView.Invalidate();
         }
 
         protected override void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
@@ -912,6 +942,31 @@ namespace Ankh.UI.VSSelectionControls
 
                             return;
                         }
+
+                    case NativeMethods.WM_LBUTTONDBLCLK:
+                        // Modern native ListView controls toggle a checkbox when
+                        // a checked row is double-clicked, even when the pointer
+                        // is nowhere near the state image. Intercept the raw
+                        // message before native processing so a row double-click
+                        // remains an open/diff gesture. Double-clicking the actual
+                        // checkbox is still left to the native control.
+                        if (CheckBoxes && StrictCheckboxesClick)
+                        {
+                            Point mp = PointToClient(MousePosition);
+                            ListViewHitTestInfo hi = HitTest(mp);
+
+                            if (hi != null
+                                && hi.Item != null
+                                && hi.Location != ListViewHitTestLocations.StateImage)
+                            {
+                                MouseEventArgs me = new MouseEventArgs(
+                                    MouseButtons.Left, 2, mp.X, mp.Y, 0);
+                                OnDoubleClick(me);
+                                OnMouseDoubleClick(me);
+                                return;
+                            }
+                        }
+                        break;
 
                     case NativeMethods.OCM_NOTIFY:
                         // Receives ListView notifications
