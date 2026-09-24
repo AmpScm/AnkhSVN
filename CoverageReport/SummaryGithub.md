@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 10:33:53 PM |
-| Coverage date: | 9/24/2026 - 10:33:31 PM - 9/24/2026 - 10:33:42 PM |
+| Generated on: | 9/24/2026 - 10:38:10 PM |
+| Coverage date: | 9/24/2026 - 10:37:49 PM - 9/24/2026 - 10:38:00 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 25.1% (11987 of 47696) |
-| Covered lines: | 11987 |
+| **Line coverage:** | 25.1% (11985 of 47694) |
+| Covered lines: | 11985 |
 | Uncovered lines: | 35709 |
-| Coverable lines: | 47696 |
-| Total lines: | 133818 |
-| **Branch coverage:** | 20.5% (4701 of 22913) |
-| Covered branches: | 4701 |
-| Total branches: | 22913 |
+| Coverable lines: | 47694 |
+| Total lines: | 133815 |
+| **Branch coverage:** | 20.5% (4699 of 22911) |
+| Covered branches: | 4699 |
+| Total branches: | 22911 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
