@@ -37,6 +37,7 @@ namespace Ankh.UI.PendingChanges.Commits
             OpenPendingChangeOnDoubleClick = false;
 
             StrictCheckboxesClick = true;
+            AllowDarkNativeTheme = false;
             FullRowSelect = true;
             HideSelection = false;
             AllowColumnReorder = true;
