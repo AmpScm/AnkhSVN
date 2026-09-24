@@ -29,7 +29,7 @@ namespace UnitTestProject.MenuItemTests
         [Test]
         public void InitializeMenuCommand()
         {
-            CommandAttribute[] mappings = typeof(AnkhRuntime).Assembly
+            CommandAttribute[] mappings = typeof(AnkhModule).Assembly
                 .GetTypes()
                 .Where(type => type.IsClass && !type.IsAbstract)
                 .Where(type => typeof(ICommandHandler).IsAssignableFrom(type))
