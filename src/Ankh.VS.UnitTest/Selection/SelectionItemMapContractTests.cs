@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Ankh;
 using Ankh.Selection;
 using Ankh.Services;
 using Microsoft.VisualStudio;
