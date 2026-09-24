@@ -237,11 +237,6 @@ namespace Ankh.UI.Annotate
 
         void SelectRegion(MarginRegion region)
         {
-            SelectRegion(region, true);
-        }
-
-        void SelectRegion(MarginRegion region, bool publishSelection)
-        {
             if (_selectedRegion != null)
             {
                 _selectedRegion.Element.Background = SystemColors.ControlBrush;
@@ -255,8 +250,7 @@ namespace Ankh.UI.Annotate
                 SetTextBrush(_selectedRegion.Element, SystemColors.HighlightTextBrush);
             }
 
-            if (publishSelection)
-                SelectSource(_selectedRegion != null ? _selectedRegion.Source : null);
+            SelectSource(_selectedRegion != null ? _selectedRegion.Source : null);
         }
 
         void SelectSource(AnnotateSource source)
