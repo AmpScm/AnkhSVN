@@ -346,10 +346,27 @@ namespace Ankh.UI.PendingChanges.Commits
                 // Re-enable after undoing theming
                 ShowSelectAllCheckBox = true;
 
+                RefreshThemeItemColors();
                 return;
             }
 
             base.OnThemeChange(sender, e);
+            RefreshThemeItemColors();
+        }
+
+        void RefreshThemeItemColors()
+        {
+            if (Context == null)
+                return;
+
+            foreach (ListViewItem item in Items)
+            {
+                PendingCommitItem pendingItem = item as PendingCommitItem;
+                if (pendingItem != null)
+                    pendingItem.RefreshText(Context);
+            }
+
+            Invalidate();
         }
 
         public void OnChange(string fullPath)
