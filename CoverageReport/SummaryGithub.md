@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 9:42:00 PM |
-| Coverage date: | 9/24/2026 - 9:41:37 PM - 9/24/2026 - 9:41:49 PM |
+| Generated on: | 9/24/2026 - 10:24:17 PM |
+| Coverage date: | 9/24/2026 - 10:23:52 PM - 9/24/2026 - 10:24:05 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 25% (11925 of 47689) |
+| **Line coverage:** | 25% (11925 of 47696) |
 | Covered lines: | 11925 |
-| Uncovered lines: | 35764 |
-| Coverable lines: | 47689 |
-| Total lines: | 133798 |
-| **Branch coverage:** | 20.3% (4666 of 22915) |
+| Uncovered lines: | 35771 |
+| Coverable lines: | 47696 |
+| Total lines: | 133818 |
+| **Branch coverage:** | 20.3% (4666 of 22913) |
 | Covered branches: | 4666 |
-| Total branches: | 22915 |
+| Total branches: | 22913 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -408,7 +408,7 @@
 |Ankh.UI.Annotate.AnnotationDocument|90.9%||
 |Ankh.UI.Annotate.AnnotationDocumentRegistry|80.6%|50%|
 |Ankh.UI.Annotate.AnnotationLayoutCalculator|93.7%|96.1%|
-|Ankh.UI.Annotate.AnnotationMargin|23.2%|7.9%|
+|Ankh.UI.Annotate.AnnotationMargin|22.8%|8%|
 |Ankh.UI.Annotate.AnnotationMarginProvider|84.6%|62.5%|
 |Ankh.UI.Annotate.AnnotationRegionLayout|100%||
 |Ankh.UI.Commands.AnnotateDialog|64.3%|13.6%|
@@ -482,7 +482,7 @@
 |Ankh.UI.PendingChanges.Commands.CommitPendingChanges|21.4%|15.3%|
 |Ankh.UI.PendingChanges.Commands.ConfigureRecentChangesPage|21%|12.5%|
 |Ankh.UI.PendingChanges.Commands.CreatePatch|15%|20%|
-|Ankh.UI.PendingChanges.Commands.GenerateCommitMessage|42.8%|33.3%|
+|Ankh.UI.PendingChanges.Commands.GenerateCommitMessage|33.3%|33.3%|
 |Ankh.UI.PendingChanges.Commands.OpenIssue|13.4%|7.6%|
 |Ankh.UI.PendingChanges.Commands.PasteToEditorList|10.3%|12.5%|
 |Ankh.UI.PendingChanges.Commands.PendingChangeLocationCombo|29.7%|36.3%|
