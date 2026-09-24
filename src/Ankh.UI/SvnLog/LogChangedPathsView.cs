@@ -142,8 +142,10 @@ namespace Ankh.UI.SvnLog
                         Color.FromArgb(100, 0, 100), Color.DarkRed, Color.DarkBlue };
                     for (int index = 0; index < colorInfo.Length; index++)
                     {
-                        if (AnkhThemePalette.ContrastRatio(colorInfo[index], BackColor) < 4.5)
-                            colorInfo[index] = Color.Empty;
+                        colorInfo[index] = AnkhThemePalette.ResolveReadableForeground(
+                            colorInfo[index],
+                            ForeColor,
+                            BackColor);
                     }
                 }
 
