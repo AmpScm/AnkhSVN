@@ -151,13 +151,12 @@ namespace Ankh.Tests.Annotate
             MethodInfo showContextMenu = marginType.GetMethods(declaredNonPublicInstance)
                 .SingleOrDefault(method =>
                     method.Name == "ShowContextMenu" &&
-                    method.GetParameters().Length == 2 &&
-                    method.GetParameters()[0].ParameterType == typeof(System.Windows.FrameworkElement) &&
-                    method.GetParameters()[1].ParameterType == typeof(System.Windows.Input.MouseButtonEventArgs));
+                    method.GetParameters().Length == 1 &&
+                    method.GetParameters()[0].ParameterType == typeof(System.Windows.Point));
             Assert.That(
                 showContextMenu,
                 Is.Not.Null,
-                RegressionContext + ": the WPF annotation margin must retain a right-click context-menu entry point.");
+                RegressionContext + ": the WPF annotation margin must retain a single deferred context-menu entry point.");
 
             MethodInfo previewRightClick = marginType.GetMethod(
                 "OnPreviewMouseRightButtonDown",
@@ -175,16 +174,6 @@ namespace Ankh.Tests.Annotate
                 Is.Not.Null,
                 RegressionContext + ": Annotate must open its revision menu on right-button release, matching the legacy click timing.");
 
-            MethodInfo deferredShowContextMenu = marginType.GetMethods(declaredNonPublicInstance)
-                .SingleOrDefault(method =>
-                    method.Name == "ShowContextMenu" &&
-                    method.GetParameters().Length == 1 &&
-                    method.GetParameters()[0].ParameterType == typeof(System.Windows.Point));
-            Assert.That(
-                deferredShowContextMenu,
-                Is.Not.Null,
-                RegressionContext + ": Annotate must defer menu display until the clicked revision has propagated through VS selection.");
-
             MethodInfo suppressEditorContextMenu = marginType.GetMethod(
                 "OnContextMenuOpening",
                 declaredNonPublicInstance);
@@ -200,6 +189,16 @@ namespace Ankh.Tests.Annotate
                 findRegionAt,
                 Is.Not.Null,
                 RegressionContext + ": the intercepted right-click must resolve the clicked blame region.");
+
+            MethodInfo selectRegionWithoutPublishing = marginType.GetMethods(declaredNonPublicInstance)
+                .SingleOrDefault(method =>
+                    method.Name == "SelectRegion" &&
+                    method.GetParameters().Length == 2 &&
+                    method.GetParameters()[1].ParameterType == typeof(bool));
+            Assert.That(
+                selectRegionWithoutPublishing,
+                Is.Not.Null,
+                RegressionContext + ": right-click must be able to highlight a revision without publishing selection until the deferred menu callback.");
 
             Type selectionContainerType = marginType.GetNestedType(
                 "AnnotationSelectionContainer",
