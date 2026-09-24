@@ -17,6 +17,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using Ankh.Commands;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
@@ -30,6 +33,9 @@ namespace Ankh.UI.Annotate
 
         readonly IWpfTextView _textView;
         readonly string _fileName;
+        readonly IAnkhServiceProvider _context;
+        readonly IVsTrackSelectionEx _selectionTracker;
+        readonly AnnotationSelectionContainer _selectionContainer;
         readonly List<MarginRegion> _regions = new List<MarginRegion>();
         bool _disposed;
         MarginRegion _selectedRegion;
@@ -40,6 +46,10 @@ namespace Ankh.UI.Annotate
             _fileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
             if (document == null)
                 throw new ArgumentNullException(nameof(document));
+
+            _context = document.Context;
+            _selectionTracker = _context.GetService<IVsTrackSelectionEx>(typeof(SVsTrackSelectionEx));
+            _selectionContainer = new AnnotationSelectionContainer(SelectSource);
 
             Width = 175;
             ClipToBounds = true;
@@ -74,6 +84,12 @@ namespace Ankh.UI.Annotate
                     newRegion.Element.MouseLeftButtonDown += delegate
                     {
                         SelectRegion(newRegion);
+                    };
+                    newRegion.Element.MouseRightButtonDown += delegate(object sender, MouseButtonEventArgs e)
+                    {
+                        SelectRegion(newRegion);
+                        ShowContextMenu(newRegion.Element, e);
+                        e.Handled = true;
                     };
                     _regions.Add(newRegion);
                     Children.Add(newRegion.Element);
@@ -169,6 +185,32 @@ namespace Ankh.UI.Annotate
                 _selectedRegion.Element.Background = SystemColors.HighlightBrush;
                 SetTextBrush(_selectedRegion.Element, SystemColors.HighlightTextBrush);
             }
+
+            SelectSource(_selectedRegion != null ? _selectedRegion.Source : null);
+        }
+
+        void SelectSource(AnnotateSource source)
+        {
+            _selectionContainer.Selected = source;
+
+            if (_selectionTracker != null)
+                _selectionTracker.OnSelectChange(_selectionContainer);
+        }
+
+        void ShowContextMenu(FrameworkElement element, MouseButtonEventArgs e)
+        {
+            if (_context == null || element == null || e == null)
+                return;
+
+            IAnkhCommandService commandService = _context.GetService<IAnkhCommandService>();
+            if (commandService == null)
+                return;
+
+            Point screenPoint = element.PointToScreen(e.GetPosition(element));
+            commandService.ShowContextMenu(
+                AnkhCommandMenu.AnnotateContextMenu,
+                (int)Math.Round(screenPoint.X),
+                (int)Math.Round(screenPoint.Y));
         }
 
         static void SetTextBrush(Border border, System.Windows.Media.Brush brush)
@@ -359,6 +401,58 @@ namespace Ankh.UI.Annotate
         {
             if (_disposed)
                 throw new ObjectDisposedException(MarginName);
+        }
+
+        sealed class AnnotationSelectionContainer : ISelectionContainer
+        {
+            readonly Action<AnnotateSource> _selectSource;
+
+            public AnnotationSelectionContainer(Action<AnnotateSource> selectSource)
+            {
+                _selectSource = selectSource ?? throw new ArgumentNullException(nameof(selectSource));
+            }
+
+            public AnnotateSource Selected { get; set; }
+
+            public int CountObjects(uint dwFlags, out uint pc)
+            {
+                pc = Selected != null ? 1u : 0u;
+                return 0;
+            }
+
+            public int GetObjects(uint dwFlags, uint cObjects, object[] apUnkObjects)
+            {
+                if (apUnkObjects == null)
+                    return unchecked((int)0x80004003); // E_POINTER
+
+                if (Selected == null)
+                    return cObjects == 0 ? 0 : unchecked((int)0x80004005); // E_FAIL
+
+                if (cObjects != 1 || apUnkObjects.Length < 1)
+                    return unchecked((int)0x80004005); // E_FAIL
+
+                apUnkObjects[0] = Selected;
+                return 0;
+            }
+
+            public int SelectObjects(uint cSelect, object[] apUnkSelect, uint dwFlags)
+            {
+                if (cSelect == 0)
+                {
+                    _selectSource(null);
+                    return 0;
+                }
+
+                if (cSelect != 1 || apUnkSelect == null || apUnkSelect.Length < 1)
+                    return unchecked((int)0x80004005); // E_FAIL
+
+                AnnotateSource source = apUnkSelect[0] as AnnotateSource;
+                if (source == null)
+                    return unchecked((int)0x80004002); // E_NOINTERFACE
+
+                _selectSource(source);
+                return 0;
+            }
         }
 
         sealed class MarginRegion
