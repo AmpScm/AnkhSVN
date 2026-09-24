@@ -322,6 +322,13 @@ namespace Ankh.UI.PendingChanges.Commits
         {
             IWinFormsThemingService themer = sender.GetService<IWinFormsThemingService>();
 
+            if (themer != null)
+            {
+                HideSelection = PendingCommitsThemeLogic.ShouldHideInactiveSelection(
+                    themer.ThemePalette.IsDarkSurface,
+                    SystemInformation.HighContrast);
+            }
+
             if (VSVersion.VS2012OrLater
                 && themer != null
                 && PendingCommitsThemeLogic.ShouldCancelVsHeaderTheming(
