@@ -3,30 +3,30 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 3:39:50 AM |
-| Coverage date: | 9/24/2026 - 3:39:28 AM - 9/24/2026 - 3:39:40 AM |
+| Generated on: | 9/24/2026 - 12:26:29 PM |
+| Coverage date: | 9/24/2026 - 12:23:13 PM - 9/24/2026 - 12:24:49 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 10 |
 | Classes: | 609 |
 | Files: | 677 |
-| **Line coverage:** | 9.1% (4307 of 47118) |
-| Covered lines: | 4307 |
-| Uncovered lines: | 42811 |
-| Coverable lines: | 47118 |
-| Total lines: | 132728 |
-| **Branch coverage:** | 11.6% (2648 of 22641) |
-| Covered branches: | 2648 |
-| Total branches: | 22641 |
+| **Line coverage:** | 9.2% (4344 of 47193) |
+| Covered lines: | 4344 |
+| Uncovered lines: | 42849 |
+| Coverable lines: | 47193 |
+| Total lines: | 132866 |
+| **Branch coverage:** | 11.7% (2660 of 22677) |
+| Covered branches: | 2660 |
+| Total branches: | 22677 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
 
 ## Coverage
-<details><summary>Ankh - 10.4%</summary>
+<details><summary>Ankh - 10.5%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh**|**10.4%**|**19.7%**|
+|**Ankh**|**10.5%**|**19.8%**|
 |Ankh.AnkhModule|0%||
 |Ankh.Commands.AddItemCommand|5.7%|14.7%|
 |Ankh.Commands.AddToSccCommands|3.1%|1%|
@@ -43,7 +43,7 @@
 |Ankh.Commands.DiffLocalItemLogic|96.1%|97.6%|
 |Ankh.Commands.DiffLocalItemSelectionInfo|70.2%|0%|
 |Ankh.Commands.ItemAddToPending|40%|39.2%|
-|Ankh.Commands.ItemAnnotateCommand|8.7%|28.9%|
+|Ankh.Commands.ItemAnnotateCommand|10.7%|29.7%|
 |Ankh.Commands.ItemCommitCommand|14.8%|33.3%|
 |Ankh.Commands.ItemConflictEdit|12.2%|18.4%|
 |Ankh.Commands.ItemDelete|7.1%|7.1%|
@@ -385,11 +385,11 @@
 |Ankh.VSVersion|0%|0%|
 
 </details>
-<details><summary>Ankh.UI - 7.4%</summary>
+<details><summary>Ankh.UI - 7.5%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**7.4%**|**9%**|
+|**Ankh.UI**|**7.5%**|**9%**|
 |Ankh.UI.AddRepositoryRootDialog|0%|0%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -400,7 +400,7 @@
 |Ankh.UI.Annotate.AnnotationDocument|90.9%||
 |Ankh.UI.Annotate.AnnotationDocumentRegistry|80.6%|50%|
 |Ankh.UI.Annotate.AnnotationLayoutCalculator|93.7%|96.1%|
-|Ankh.UI.Annotate.AnnotationMargin|17.6%|6%|
+|Ankh.UI.Annotate.AnnotationMargin|23.2%|7.9%|
 |Ankh.UI.Annotate.AnnotationMarginProvider|84.6%|62.5%|
 |Ankh.UI.Annotate.AnnotationRegionLayout|100%||
 |Ankh.UI.Commands.AnnotateDialog|0%|0%|
