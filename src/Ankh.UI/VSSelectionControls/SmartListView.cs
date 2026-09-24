@@ -539,6 +539,7 @@ namespace Ankh.UI.VSSelectionControls
         Color _selectionBackColor;
         Color _selectionForeColor;
         Color _hoverBackColor;
+        Color _hoverBackColor;
         bool _usePaletteSelectionColors;
         bool _preserveItemForeColorWhenSelected;
         bool _preserveItemForeColorWhenHot;
@@ -1197,14 +1198,18 @@ namespace Ankh.UI.VSSelectionControls
             if (hit == null || hit.Item == null)
                 return;
 
-            // A selected item is already repaired by RedrawSelectedItemText(),
-            // including its selection background. Repaint only an unselected
-            // hot row here so the native hover background remains untouched.
+            // A selected item is already repaired by RedrawSelectedItemText().
             if (hit.Item.Selected)
                 return;
 
+            if (_hoverBackColor.IsEmpty)
+                return;
+
+            // Clear the native hover text with the semantic VS hover background,
+            // then draw the row once using its resolved item foreground. Drawing
+            // only the foreground here causes visible double-text/ghosting.
             using (Graphics graphics = CreateGraphics())
-                RedrawItemText(graphics, hit.Item, Color.Empty);
+                RedrawItemText(graphics, hit.Item, _hoverBackColor);
         }
 
         void RedrawItemText(
@@ -1743,6 +1748,7 @@ namespace Ankh.UI.VSSelectionControls
                 _selectionBackColor = palette.SelectionBackground;
                 _selectionForeColor = palette.SelectionForeground;
                 _hoverBackColor = palette.HoverBackground;
+                _hoverBackColor = palette.HoverBackground;
                 _usePaletteSelectionColors = !SystemInformation.HighContrast;
             }
             else
@@ -1752,6 +1758,7 @@ namespace Ankh.UI.VSSelectionControls
                 _headerBorderColor = Color.Empty;
                 _selectionBackColor = Color.Empty;
                 _selectionForeColor = Color.Empty;
+                _hoverBackColor = Color.Empty;
                 _hoverBackColor = Color.Empty;
                 _usePaletteSelectionColors = false;
             }
