@@ -124,7 +124,11 @@ namespace Ankh.Commands
                         if (!AnnotateCommandLogic.TryGetPreviousRevision(section.Revision, out previousRevision))
                             continue;
 
-                        targets.Add(section.Origin);
+                        // Peg the URI at the selected revision so Subversion can
+                        // follow copy/rename history while asking for N-1.
+                        targets.Add(new SvnOrigin(
+                            new SvnUriTarget(section.Origin.Uri, section.Revision),
+                            section.Origin.RepositoryRoot));
                         endRev = previousRevision;
                     }
                     break;
