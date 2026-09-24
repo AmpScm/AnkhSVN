@@ -99,7 +99,7 @@ namespace Ankh.Tests
                 Assert.Multiple(() =>
                 {
                     Assert.That(page.Message.Message, Is.EqualTo("warning"));
-                    Assert.That(page.Message.MessageType, Is.EqualTo(WizardMessage.MessageType.Warning));
+                    Assert.That(page.Message.Type, Is.EqualTo(WizardMessage.MessageType.Warning));
                 });
             }
         }
