@@ -1566,7 +1566,10 @@ namespace Ankh.UI.VSSelectionControls
                 _headerForeColor = palette.SurfaceForeground;
                 _headerBorderColor = palette.Border;
                 _selectionBackColor = palette.SelectionBackground;
-                _selectionForeColor = palette.SelectionForeground;
+                _selectionForeColor = SmartListViewThemeLogic.ResolveSelectionForeground(
+                    palette.IsDarkSurface,
+                    palette.SurfaceForeground,
+                    palette.SelectionForeground);
                 _usePaletteSelectionColors = !SystemInformation.HighContrast;
             }
             else
