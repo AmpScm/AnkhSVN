@@ -57,6 +57,9 @@ namespace Ankh.UI.Annotate
 
             BuildRegions(document);
 
+            PreviewMouseRightButtonDown += OnPreviewMouseRightButtonDown;
+            ContextMenuOpening += OnContextMenuOpening;
+
             _textView.LayoutChanged += OnLayoutChanged;
             _textView.Closed += OnTextViewClosed;
             Loaded += OnLoaded;
@@ -84,12 +87,6 @@ namespace Ankh.UI.Annotate
                     newRegion.Element.MouseLeftButtonDown += delegate
                     {
                         SelectRegion(newRegion);
-                    };
-                    newRegion.Element.MouseRightButtonDown += delegate(object sender, MouseButtonEventArgs e)
-                    {
-                        SelectRegion(newRegion);
-                        ShowContextMenu(newRegion.Element, e);
-                        e.Handled = true;
                     };
                     _regions.Add(newRegion);
                     Children.Add(newRegion.Element);
@@ -169,6 +166,52 @@ namespace Ankh.UI.Annotate
                 text += "\n\n" + source.LogMessage;
 
             return text;
+        }
+
+        void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (_disposed || e == null)
+                return;
+
+            MarginRegion region = FindRegionAt(e.GetPosition(this));
+            if (region == null)
+                return;
+
+            // Intercept the click before the native editor sees it. Otherwise VS can
+            // open its normal editor context menu (Outlining/Breakpoints/etc.) over
+            // the annotation margin.
+            e.Handled = true;
+            SelectRegion(region);
+            ShowContextMenu(this, e);
+        }
+
+        void OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            // The annotation margin owns right-click behavior. Suppress the editor's
+            // fallback context menu if WPF subsequently raises ContextMenuOpening.
+            e.Handled = true;
+        }
+
+        MarginRegion FindRegionAt(Point point)
+        {
+            foreach (MarginRegion region in _regions)
+            {
+                if (region.Element.Visibility != Visibility.Visible)
+                    continue;
+
+                double top = GetTop(region.Element);
+                if (double.IsNaN(top))
+                    continue;
+
+                double height = region.Element.ActualHeight > 0
+                    ? region.Element.ActualHeight
+                    : region.Element.Height;
+
+                if (height > 0 && point.Y >= top && point.Y < top + height)
+                    return region;
+            }
+
+            return null;
         }
 
         void SelectRegion(MarginRegion region)
@@ -389,6 +432,8 @@ namespace Ankh.UI.Annotate
                 return;
 
             _disposed = true;
+            PreviewMouseRightButtonDown -= OnPreviewMouseRightButtonDown;
+            ContextMenuOpening -= OnContextMenuOpening;
             _textView.LayoutChanged -= OnLayoutChanged;
             _textView.Closed -= OnTextViewClosed;
             Loaded -= OnLoaded;
