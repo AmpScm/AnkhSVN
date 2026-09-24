@@ -21,8 +21,10 @@ if( pos == 0 )
         !/[\r\n]/.test(msitsTarget);
     if (isSafeMsitsTarget)
     {
-        var redirectURL = "ms-its:" + msitsTarget;
-        document.location.replace(redirectURL);
+        // Legacy HelpStudio CHM redirect disabled. Modern AnkhSVN help is
+        // served from GitHub Pages, and static analysis flags this redirect.
+        // var redirectURL = "ms-its:" + msitsTarget;
+        // document.location.replace(redirectURL);
     }
 }
 
