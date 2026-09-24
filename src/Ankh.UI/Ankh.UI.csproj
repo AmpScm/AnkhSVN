@@ -29,6 +29,9 @@
     <EmbeddedResource Update="MergeWizard\WizardFramework\Wizard.resx">
       <LogicalName>Ankh.UI.WizardFramework.Wizard.resources</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Update="RepositoryExplorer\AddRepositoryRootDialog.resx">
+      <LogicalName>Ankh.UI.AddRepositoryRootDialog.resources</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.SDK" />
