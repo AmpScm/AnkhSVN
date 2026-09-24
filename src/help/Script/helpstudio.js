@@ -11,8 +11,12 @@ var pos = curURL.indexOf("mk:@MSITStore");
 var scrollPos = null;
 if( pos == 0 )
 {
-    curURL = "ms-its:" + curURL.substring(14,curURL.length-1);
-    document.location.replace(curURL);
+    var redirectURL = "ms-its:" + curURL.substring(14,curURL.length-1);
+    // Only allow expected local-help URL format before redirecting.
+    if (/^ms-its:[A-Za-z0-9_:\\\/\.\-%#\?\=&\(\)]+$/.test(redirectURL))
+    {
+        document.location.replace(redirectURL);
+    }
 }
 
 function hsBodyLoad()
