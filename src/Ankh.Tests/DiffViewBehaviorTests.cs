@@ -199,6 +199,8 @@ namespace Ankh.Tests
                 SetSelectionEnd(view, 1, 3);
                 string forward = view.SelectedText;
 
+                // Move away first so assigning the reverse anchor clears the existing selection.
+                view.Position = new DiffViewPosition(2, 0);
                 view.Position = new DiffViewPosition(1, 3);
                 SetSelectionEnd(view, 0, 1);
                 string reverse = view.SelectedText;
@@ -210,7 +212,7 @@ namespace Ankh.Tests
                     Assert.That(view.HasSelection, Is.True);
                 });
 
-                view.Position = new DiffViewPosition(0, 1);
+                view.Position = new DiffViewPosition(2, 0);
                 Assert.That(view.HasSelection, Is.False);
                 Assert.That(view.SelectedText, Is.Empty);
             }
