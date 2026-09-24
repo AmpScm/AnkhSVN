@@ -11,10 +11,17 @@ var pos = curURL.indexOf("mk:@MSITStore");
 var scrollPos = null;
 if( pos == 0 )
 {
-    var redirectURL = "ms-its:" + curURL.substring(14,curURL.length-1);
-    // Only allow expected local-help URL format before redirecting.
-    if (/^ms-its:[A-Za-z0-9_:\\\/\.\-%#\?\=&\(\)]+$/.test(redirectURL))
+    var msitsTarget = curURL.substring(14,curURL.length-1);
+    // Only allow expected local-help CHM target format before redirecting.
+    // Reject protocol-like targets, traversal, and control characters.
+    var isSafeMsitsTarget =
+        /^[A-Za-z]:\\[A-Za-z0-9 _.\-\\]+\.chm(::\/[A-Za-z0-9 _.\-\/%]*)?(#[A-Za-z0-9 _.\-\/%]*)?(\?[A-Za-z0-9 _.\-\/%=&]*)?$/.test(msitsTarget) &&
+        msitsTarget.indexOf("://") === -1 &&
+        msitsTarget.indexOf("..") === -1 &&
+        !/[\r\n]/.test(msitsTarget);
+    if (isSafeMsitsTarget)
     {
+        var redirectURL = "ms-its:" + msitsTarget;
         document.location.replace(redirectURL);
     }
 }
