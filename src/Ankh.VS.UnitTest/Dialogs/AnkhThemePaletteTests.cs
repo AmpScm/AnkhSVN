@@ -70,5 +70,41 @@ namespace AnkhSvn_UnitTestProject.Dialogs
             Assert.That(AnkhThemePalette.ContrastRatio(Color.DarkBlue, Color.FromArgb(30, 30, 30)), Is.LessThan(4.5));
             Assert.That(AnkhThemePalette.ContrastRatio(Color.DarkBlue, Color.FromArgb(245, 245, 245)), Is.GreaterThan(4.5));
         }
+
+        [Test]
+        public void ReadableForegroundKeepsThemeSafeAccent()
+        {
+            Color background = Color.FromArgb(30, 30, 30);
+            Color accent = Color.FromArgb(190, 190, 190);
+            Color fallback = Color.White;
+
+            Assert.That(
+                AnkhThemePalette.ResolveReadableForeground(
+                    accent,
+                    fallback,
+                    background),
+                Is.EqualTo(accent));
+        }
+
+        [Test]
+        public void ReadableForegroundFallsBackFromUnsafeOrEmptyColor()
+        {
+            Color background = Color.FromArgb(30, 30, 30);
+            Color fallback = Color.FromArgb(241, 241, 241);
+
+            Assert.That(
+                AnkhThemePalette.ResolveReadableForeground(
+                    Color.Black,
+                    fallback,
+                    background),
+                Is.EqualTo(fallback));
+
+            Assert.That(
+                AnkhThemePalette.ResolveReadableForeground(
+                    Color.Empty,
+                    fallback,
+                    background),
+                Is.EqualTo(fallback));
+        }
     }
 }

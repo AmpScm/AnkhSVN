@@ -21,6 +21,7 @@ using Ankh.Scc;
 using Ankh.UI.Annotate;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Shell.Interop;
 using Moq;
 using NUnit.Framework;
 using SharpSvn;
@@ -133,6 +134,103 @@ namespace Ankh.Tests.Annotate
                 provider.CreateMargin(host.Object, null),
                 Is.Null,
                 RegressionContext + ": closing the editor must unregister the Annotate document.");
+        }
+
+        [Test]
+        public void Issue47_WpfMarginRetainsRevisionContextMenuSelectionBridge()
+        {
+            Type marginType = typeof(AnnotationDocumentRegistry).Assembly.GetType(
+                "Ankh.UI.Annotate.AnnotationMargin",
+                true);
+
+            Assert.That(marginType, Is.Not.Null, RegressionContext);
+
+            BindingFlags declaredNonPublicInstance =
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
+
+            MethodInfo showContextMenu = marginType.GetMethods(declaredNonPublicInstance)
+                .SingleOrDefault(method =>
+                    method.Name == "ShowContextMenu" &&
+                    method.GetParameters().Length == 1 &&
+                    method.GetParameters()[0].ParameterType == typeof(System.Windows.Point));
+            Assert.That(
+                showContextMenu,
+                Is.Not.Null,
+                RegressionContext + ": the WPF annotation margin must retain a single deferred context-menu entry point.");
+
+            MethodInfo previewRightClick = marginType.GetMethod(
+                "OnPreviewMouseRightButtonDown",
+                declaredNonPublicInstance);
+            Assert.That(
+                previewRightClick,
+                Is.Not.Null,
+                RegressionContext + ": Annotate must intercept right-click before the native editor context menu handles it.");
+
+            MethodInfo previewRightClickRelease = marginType.GetMethod(
+                "OnPreviewMouseRightButtonUp",
+                declaredNonPublicInstance);
+            Assert.That(
+                previewRightClickRelease,
+                Is.Not.Null,
+                RegressionContext + ": Annotate must open its revision menu on right-button release, matching the legacy click timing.");
+
+            MethodInfo suppressEditorContextMenu = marginType.GetMethod(
+                "OnContextMenuOpening",
+                declaredNonPublicInstance);
+            Assert.That(
+                suppressEditorContextMenu,
+                Is.Not.Null,
+                RegressionContext + ": Annotate must suppress the editor fallback context menu over the blame margin.");
+
+            MethodInfo findRegionAt = marginType.GetMethod(
+                "FindRegionAt",
+                declaredNonPublicInstance);
+            Assert.That(
+                findRegionAt,
+                Is.Not.Null,
+                RegressionContext + ": the intercepted right-click must resolve the clicked blame region.");
+
+            MethodInfo applyTheme = marginType.GetMethod(
+                "ApplyTheme",
+                declaredNonPublicInstance);
+            Assert.That(
+                applyTheme,
+                Is.Not.Null,
+                RegressionContext + ": the native Annotate margin must apply Visual Studio semantic theme colors.");
+
+            MethodInfo themeChanged = marginType.GetMethod(
+                "OnVsThemeChanged",
+                declaredNonPublicInstance);
+            Assert.That(
+                themeChanged,
+                Is.Not.Null,
+                RegressionContext + ": the Annotate margin must refresh when Visual Studio changes theme.");
+
+            MethodInfo scopedSelection = typeof(Ankh.Selection.ISelectionContextEx).GetMethod(
+                "PushSelectionContainer",
+                BindingFlags.Instance | BindingFlags.Public);
+            Assert.That(
+                scopedSelection,
+                Is.Not.Null,
+                RegressionContext + ": native Annotate context menus must be able to scope command selection to the clicked revision.");
+
+            Type selectionContainerType = marginType.GetNestedType(
+                "AnnotationSelectionContainer",
+                BindingFlags.NonPublic);
+            Assert.That(
+                selectionContainerType,
+                Is.Not.Null,
+                RegressionContext + ": the WPF annotation margin must publish the clicked revision into VS selection.");
+
+            Assert.That(
+                typeof(ISelectionContainer).IsAssignableFrom(selectionContainerType),
+                Is.True,
+                RegressionContext + ": Annotate commands must receive the clicked revision through Visual Studio's selection container.");
+
+            Assert.That(
+                selectionContainerType.IsDefined(typeof(System.Runtime.InteropServices.ComVisibleAttribute), false),
+                Is.True,
+                RegressionContext + ": the annotation selection container must remain explicitly COM-visible for IVsTrackSelectionEx.");
         }
 
         [Test]

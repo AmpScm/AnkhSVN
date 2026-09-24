@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Drawing;
 using Ankh.UI.PendingChanges.Commits;
 using NUnit.Framework;
 
@@ -34,6 +35,50 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                     darkSurface,
                     highContrast),
                 Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ItemForeColorFallsBackToExplicitListForeground()
+        {
+            Color listFore = Color.FromArgb(32, 180, 90);
+            Color listBack = Color.FromArgb(24, 28, 36);
+
+            Assert.That(
+                PendingCommitsThemeLogic.ResolveItemForeColor(
+                    Color.Empty,
+                    listFore,
+                    listBack),
+                Is.EqualTo(listFore));
+        }
+
+        [Test]
+        public void ItemForeColorRejectsLowContrastStatusColor()
+        {
+            Color listFore = Color.FromArgb(241, 241, 241);
+            Color listBack = Color.FromArgb(30, 30, 30);
+            Color lowContrastStatus = Color.DarkBlue;
+
+            Assert.That(
+                PendingCommitsThemeLogic.ResolveItemForeColor(
+                    lowContrastStatus,
+                    listFore,
+                    listBack),
+                Is.EqualTo(listFore));
+        }
+
+        [Test]
+        public void ItemForeColorKeepsReadableStatusColor()
+        {
+            Color listFore = Color.Black;
+            Color listBack = Color.White;
+            Color readableStatus = Color.DarkBlue;
+
+            Assert.That(
+                PendingCommitsThemeLogic.ResolveItemForeColor(
+                    readableStatus,
+                    listFore,
+                    listBack),
+                Is.EqualTo(readableStatus));
         }
     }
 }

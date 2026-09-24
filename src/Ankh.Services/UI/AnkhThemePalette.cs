@@ -72,6 +72,17 @@ namespace Ankh.UI
             return (Math.Max(first, second) + 0.05) / (Math.Min(first, second) + 0.05);
         }
 
+        public static Color ResolveReadableForeground(
+            Color preferred,
+            Color fallback,
+            Color background)
+        {
+            if (!preferred.IsEmpty && ContrastRatio(preferred, background) >= 4.5)
+                return preferred;
+
+            return fallback;
+        }
+
         static double RelativeLuminance(Color color)
         {
             return 0.2126 * LinearChannel(color.R)

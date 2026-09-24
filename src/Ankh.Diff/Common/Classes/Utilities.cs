@@ -209,7 +209,7 @@ namespace Ankh.Diff
                 iPreviousIndex = iCurrentIndex;
                 if ((iCurrentIndex + 1) < iTextLength)
                 {
-                    iCurrentIndex = strLowerText.IndexOf(strLowerOldValue, iCurrentIndex + 1);
+                    iCurrentIndex = strLowerText.IndexOf(strLowerOldValue, iCurrentIndex);
                 }
                 else
                 {

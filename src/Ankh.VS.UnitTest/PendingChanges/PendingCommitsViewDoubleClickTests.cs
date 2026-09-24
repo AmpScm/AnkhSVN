@@ -15,6 +15,7 @@
 using System.Windows.Forms;
 
 using Ankh.UI.PendingChanges.Commits;
+using Ankh.UI.VSSelectionControls;
 using NUnit.Framework;
 
 namespace AnkhSvn_UnitTestProject.PendingChanges
@@ -32,6 +33,29 @@ namespace AnkhSvn_UnitTestProject.PendingChanges
         {
             Assert.That(
                 PendingCommitsView.ShouldOpenPendingChangeOnDoubleClick(location),
+                Is.EqualTo(expected));
+        }
+
+        [TestCase(true, true, true, ListViewHitTestLocations.Label, true)]
+        [TestCase(true, true, true, ListViewHitTestLocations.Image, true)]
+        [TestCase(true, true, true, ListViewHitTestLocations.StateImage, false)]
+        [TestCase(true, true, false, ListViewHitTestLocations.Label, false)]
+        [TestCase(true, false, true, ListViewHitTestLocations.Label, false)]
+        [TestCase(false, true, true, ListViewHitTestLocations.Label, false)]
+        [TestCase(true, true, true, ListViewHitTestLocations.None, false)]
+        public void StrictCheckboxDoubleClick_SuppressesNativeToggleOnlyForRows(
+            bool checkBoxes,
+            bool strictCheckboxesClick,
+            bool hasItem,
+            ListViewHitTestLocations location,
+            bool expected)
+        {
+            Assert.That(
+                SmartListView.ShouldSuppressNativeCheckboxDoubleClick(
+                    checkBoxes,
+                    strictCheckboxesClick,
+                    hasItem,
+                    location),
                 Is.EqualTo(expected));
         }
     }

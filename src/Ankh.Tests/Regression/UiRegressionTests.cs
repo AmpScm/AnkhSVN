@@ -104,25 +104,44 @@ namespace Ankh.Tests.Regression
     [TestFixture]
     public class HistoryColorRegressionTests
     {
-        [TestCase(true, 245, false)]
-        [TestCase(false, 245, true)]
-        [TestCase(false, 30, false)]
-        public void CopyHistoryColorPolicyUsesActualBackground(bool highContrast, int gray, bool expected)
+        [Test]
+        public void HistoryAccentFallsBackOnDarkSurface()
         {
-            Type itemType = typeof(ProjectCommitDialog).Assembly.GetType("Ankh.UI.SvnLog.LogRevisionItem", true);
-            MethodInfo method = itemType.GetMethod(
-                "ShouldUseCopyHistoryColor",
-                BindingFlags.Static | BindingFlags.NonPublic);
+            System.Drawing.Color fallback = System.Drawing.Color.FromArgb(241, 241, 241);
+            System.Drawing.Color background = System.Drawing.Color.FromArgb(30, 30, 30);
 
-            Assert.NotNull(method);
+            Assert.AreEqual(
+                fallback,
+                Ankh.UI.AnkhThemePalette.ResolveReadableForeground(
+                    System.Drawing.Color.DarkBlue,
+                    fallback,
+                    background));
+        }
 
-            bool actual = (bool)method.Invoke(null, new object[]
-            {
-                highContrast,
-                System.Drawing.Color.FromArgb(gray, gray, gray)
-            });
+        [Test]
+        public void HistoryAccentIsKeptWhenReadable()
+        {
+            System.Drawing.Color background = System.Drawing.Color.FromArgb(245, 245, 245);
 
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(
+                System.Drawing.Color.DarkBlue,
+                Ankh.UI.AnkhThemePalette.ResolveReadableForeground(
+                    System.Drawing.Color.DarkBlue,
+                    System.Drawing.Color.Black,
+                    background));
+        }
+
+        [Test]
+        public void EmptyHistoryAccentUsesExplicitVsForeground()
+        {
+            System.Drawing.Color fallback = System.Drawing.Color.FromArgb(241, 241, 241);
+
+            Assert.AreEqual(
+                fallback,
+                Ankh.UI.AnkhThemePalette.ResolveReadableForeground(
+                    System.Drawing.Color.Empty,
+                    fallback,
+                    System.Drawing.Color.FromArgb(30, 30, 30)));
         }
     }
 
@@ -131,13 +150,21 @@ namespace Ankh.Tests.Regression
     public class FileIconMapperDpiRegressionTests
     {
         [Test]
-        public void ImageListUsesWindowsSmallIconSize()
+        public void ImageListUsesDpiScaledLogicalIconSize()
         {
             object mapper = CreateMapper();
             try
             {
                 ImageList images = GetImageList(mapper);
-                Assert.AreEqual(SystemInformation.SmallIconSize, images.ImageSize);
+                // Shell small-icon metrics can differ from the DPI used by the
+                // host window (notably in a DPI-unaware test process).
+                FieldInfo dpiField = mapper.GetType().GetField(
+                    "_imageDpi", BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.NotNull(dpiField);
+                int dpi = (int)dpiField.GetValue(mapper);
+                Assert.Greater(dpi, 0);
+                int pixels = (int)Math.Round(16 * dpi / 96.0, MidpointRounding.AwayFromZero);
+                Assert.AreEqual(new Size(pixels, pixels), images.ImageSize);
             }
             finally
             {

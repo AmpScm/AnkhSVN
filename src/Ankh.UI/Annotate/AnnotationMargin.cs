@@ -15,8 +15,18 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using Ankh.Commands;
+using Ankh.Selection;
+using Ankh.VS;
+using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.Shell.Interop;
+using DrawingColor = System.Drawing.Color;
+using MediaColor = System.Windows.Media.Color;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
@@ -30,9 +40,17 @@ namespace Ankh.UI.Annotate
 
         readonly IWpfTextView _textView;
         readonly string _fileName;
+        readonly IAnkhServiceProvider _context;
+        readonly IVsTrackSelectionEx _selectionTracker;
+        readonly AnnotationSelectionContainer _selectionContainer;
         readonly List<MarginRegion> _regions = new List<MarginRegion>();
         bool _disposed;
         MarginRegion _selectedRegion;
+        Brush _surfaceBackgroundBrush;
+        Brush _surfaceForegroundBrush;
+        Brush _borderBrush;
+        Brush _selectionBackgroundBrush;
+        Brush _selectionForegroundBrush;
 
         public AnnotationMargin(IWpfTextView textView, string fileName, AnnotationDocument document)
         {
@@ -41,11 +59,22 @@ namespace Ankh.UI.Annotate
             if (document == null)
                 throw new ArgumentNullException(nameof(document));
 
+            _context = document.Context;
+            _selectionTracker = _context.GetService<IVsTrackSelectionEx>(typeof(SVsTrackSelectionEx));
+            _selectionContainer = new AnnotationSelectionContainer(SelectSource);
+
             Width = 175;
             ClipToBounds = true;
-            Background = SystemColors.ControlBrush;
 
+            RefreshThemeBrushes();
             BuildRegions(document);
+            ApplyTheme();
+
+            VSColorTheme.ThemeChanged += OnVsThemeChanged;
+
+            PreviewMouseRightButtonDown += OnPreviewMouseRightButtonDown;
+            PreviewMouseRightButtonUp += OnPreviewMouseRightButtonUp;
+            ContextMenuOpening += OnContextMenuOpening;
 
             _textView.LayoutChanged += OnLayoutChanged;
             _textView.Closed += OnTextViewClosed;
@@ -114,8 +143,8 @@ namespace Ankh.UI.Annotate
 
             return new Border
             {
-                Background = SystemColors.ControlBrush,
-                BorderBrush = SystemColors.ControlDarkBrush,
+                Background = _surfaceBackgroundBrush,
+                BorderBrush = _borderBrush,
                 BorderThickness = new Thickness(0, 0, 0, 1),
                 Padding = new Thickness(3, 0, 3, 0),
                 ClipToBounds = true,
@@ -124,12 +153,12 @@ namespace Ankh.UI.Annotate
             };
         }
 
-        static TextBlock CreateTextBlock(string text)
+        TextBlock CreateTextBlock(string text)
         {
             return new TextBlock
             {
                 Text = text,
-                Foreground = SystemColors.ControlTextBrush,
+                Foreground = _surfaceForegroundBrush,
                 FontSize = 11,
                 VerticalAlignment = VerticalAlignment.Center,
                 TextTrimming = TextTrimming.CharacterEllipsis,
@@ -155,23 +184,194 @@ namespace Ankh.UI.Annotate
             return text;
         }
 
+        void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (_disposed || e == null)
+                return;
+
+            MarginRegion region = FindRegionAt(e.GetPosition(this));
+            if (region == null)
+                return;
+
+            // Claim the press before the native editor sees it. Selection is intentionally
+            // not published until button-up so one right-click produces one selection change
+            // before the menu is opened.
+            e.Handled = true;
+        }
+
+        void OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_disposed || e == null)
+                return;
+
+            MarginRegion region = FindRegionAt(e.GetPosition(this));
+            if (region == null)
+                return;
+
+            e.Handled = true;
+
+            // Publish the clicked revision once, on button-up, then open the menu while
+            // Ankh's selection context is scoped to this exact selection container.
+            // This prevents the native VS editor from replacing the logical Annotate
+            // selection while menu commands are queried or executed.
+            Point screenPoint = PointToScreen(e.GetPosition(this));
+            SelectRegion(region);
+            ShowContextMenu(screenPoint);
+        }
+
+        void OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            // The annotation margin owns right-click behavior. Suppress the editor's
+            // fallback context menu if WPF subsequently raises ContextMenuOpening.
+            e.Handled = true;
+        }
+
+        MarginRegion FindRegionAt(Point point)
+        {
+            foreach (MarginRegion region in _regions)
+            {
+                if (region.Element.Visibility != Visibility.Visible)
+                    continue;
+
+                double top = GetTop(region.Element);
+                if (double.IsNaN(top))
+                    continue;
+
+                double height = region.Element.ActualHeight > 0
+                    ? region.Element.ActualHeight
+                    : region.Element.Height;
+
+                if (height > 0 && point.Y >= top && point.Y < top + height)
+                    return region;
+            }
+
+            return null;
+        }
+
         void SelectRegion(MarginRegion region)
         {
             if (_selectedRegion != null)
             {
-                _selectedRegion.Element.Background = SystemColors.ControlBrush;
-                SetTextBrush(_selectedRegion.Element, SystemColors.ControlTextBrush);
+                _selectedRegion.Element.Background = _surfaceBackgroundBrush;
+                SetTextBrush(_selectedRegion.Element, _surfaceForegroundBrush);
             }
 
             _selectedRegion = region;
             if (_selectedRegion != null)
             {
-                _selectedRegion.Element.Background = SystemColors.HighlightBrush;
-                SetTextBrush(_selectedRegion.Element, SystemColors.HighlightTextBrush);
+                _selectedRegion.Element.Background = _selectionBackgroundBrush;
+                SetTextBrush(_selectedRegion.Element, _selectionForegroundBrush);
+            }
+
+            SelectSource(_selectedRegion != null ? _selectedRegion.Source : null);
+        }
+
+        void SelectSource(AnnotateSource source)
+        {
+            _selectionContainer.Selected = source;
+
+            if (_selectionTracker != null)
+                _selectionTracker.OnSelectChange(_selectionContainer);
+        }
+
+        void ShowContextMenu(Point screenPoint)
+        {
+            if (_context == null)
+                return;
+
+            IAnkhCommandService commandService = _context.GetService<IAnkhCommandService>();
+            if (commandService == null)
+                return;
+
+            ISelectionContextEx selectionContext =
+                _context.GetService<ISelectionContextEx>(typeof(ISelectionContext));
+
+            if (selectionContext == null)
+            {
+                commandService.ShowContextMenu(
+                    AnkhCommandMenu.AnnotateContextMenu,
+                    (int)Math.Round(screenPoint.X),
+                    (int)Math.Round(screenPoint.Y));
+                return;
+            }
+
+            using (selectionContext.PushSelectionContainer(_selectionContainer))
+            {
+                commandService.ShowContextMenu(
+                    AnkhCommandMenu.AnnotateContextMenu,
+                    (int)Math.Round(screenPoint.X),
+                    (int)Math.Round(screenPoint.Y));
             }
         }
 
-        static void SetTextBrush(Border border, System.Windows.Media.Brush brush)
+        void OnVsThemeChanged(ThemeChangedEventArgs e)
+        {
+            if (_disposed)
+                return;
+
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new Action(ApplyTheme));
+                return;
+            }
+
+            ApplyTheme();
+        }
+
+        void ApplyTheme()
+        {
+            if (_disposed)
+                return;
+
+            RefreshThemeBrushes();
+            Background = _surfaceBackgroundBrush;
+
+            foreach (MarginRegion region in _regions)
+            {
+                bool selected = ReferenceEquals(region, _selectedRegion);
+                region.Element.BorderBrush = _borderBrush;
+                region.Element.Background = selected
+                    ? _selectionBackgroundBrush
+                    : _surfaceBackgroundBrush;
+                SetTextBrush(
+                    region.Element,
+                    selected ? _selectionForegroundBrush : _surfaceForegroundBrush);
+            }
+        }
+
+        void RefreshThemeBrushes()
+        {
+            _surfaceBackgroundBrush = GetVsBrush(
+                __VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND,
+                SystemColors.ControlBrush);
+            _surfaceForegroundBrush = GetVsBrush(
+                __VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_TEXT,
+                SystemColors.ControlTextBrush);
+            _borderBrush = GetVsBrush(
+                (__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_COMBOBOX_BORDER,
+                SystemColors.ControlDarkBrush);
+            _selectionBackgroundBrush = GetVsBrush(
+                (__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_HIGHLIGHT,
+                SystemColors.HighlightBrush);
+            _selectionForegroundBrush = GetVsBrush(
+                (__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_HIGHLIGHTTEXT,
+                SystemColors.HighlightTextBrush);
+        }
+
+        Brush GetVsBrush(__VSSYSCOLOREX colorId, Brush fallback)
+        {
+            IAnkhVSColor colors = _context.GetService<IAnkhVSColor>();
+            DrawingColor color;
+            if (colors == null || !colors.TryGetColor(colorId, out color))
+                return fallback;
+
+            SolidColorBrush brush = new SolidColorBrush(
+                MediaColor.FromArgb(color.A, color.R, color.G, color.B));
+            brush.Freeze();
+            return brush;
+        }
+
+        static void SetTextBrush(Border border, Brush brush)
         {
             Grid grid = border.Child as Grid;
             if (grid == null)
@@ -347,6 +547,10 @@ namespace Ankh.UI.Annotate
                 return;
 
             _disposed = true;
+            VSColorTheme.ThemeChanged -= OnVsThemeChanged;
+            PreviewMouseRightButtonDown -= OnPreviewMouseRightButtonDown;
+            PreviewMouseRightButtonUp -= OnPreviewMouseRightButtonUp;
+            ContextMenuOpening -= OnContextMenuOpening;
             _textView.LayoutChanged -= OnLayoutChanged;
             _textView.Closed -= OnTextViewClosed;
             Loaded -= OnLoaded;
@@ -359,6 +563,72 @@ namespace Ankh.UI.Annotate
         {
             if (_disposed)
                 throw new ObjectDisposedException(MarginName);
+        }
+
+        [ComVisible(true)]
+        [ComDefaultInterface(typeof(ISelectionContainer))]
+        [ClassInterface(ClassInterfaceType.None)]
+        sealed class AnnotationSelectionContainer : ISelectionContainer
+        {
+            readonly Action<AnnotateSource> _selectSource;
+
+            public AnnotationSelectionContainer(Action<AnnotateSource> selectSource)
+            {
+                _selectSource = selectSource ?? throw new ArgumentNullException(nameof(selectSource));
+            }
+
+            public AnnotateSource Selected { get; set; }
+
+            public int CountObjects(uint dwFlags, out uint pc)
+            {
+                if (dwFlags != (uint)Constants.GETOBJS_SELECTED &&
+                    dwFlags != (uint)Constants.GETOBJS_ALL)
+                {
+                    pc = 0;
+                    return unchecked((int)0x80004005); // E_FAIL
+                }
+
+                pc = Selected != null ? 1u : 0u;
+                return 0;
+            }
+
+            public int GetObjects(uint dwFlags, uint cObjects, object[] apUnkObjects)
+            {
+                if (dwFlags != (uint)Constants.GETOBJS_SELECTED &&
+                    dwFlags != (uint)Constants.GETOBJS_ALL)
+                    return unchecked((int)0x80004005); // E_FAIL
+
+                if (apUnkObjects == null)
+                    return unchecked((int)0x80004003); // E_POINTER
+
+                if (cObjects == 0)
+                    return 0;
+
+                if (Selected == null || cObjects != 1 || apUnkObjects.Length < 1)
+                    return unchecked((int)0x80004005); // E_FAIL
+
+                apUnkObjects[0] = Selected;
+                return 0;
+            }
+
+            public int SelectObjects(uint cSelect, object[] apUnkSelect, uint dwFlags)
+            {
+                if (cSelect == 0)
+                {
+                    _selectSource(null);
+                    return 0;
+                }
+
+                if (cSelect != 1 || apUnkSelect == null || apUnkSelect.Length < 1)
+                    return unchecked((int)0x80004005); // E_FAIL
+
+                AnnotateSource source = apUnkSelect[0] as AnnotateSource;
+                if (source == null)
+                    return unchecked((int)0x80004002); // E_NOINTERFACE
+
+                _selectSource(source);
+                return 0;
+            }
         }
 
         sealed class MarginRegion

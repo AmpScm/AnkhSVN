@@ -23,5 +23,10 @@ namespace Ankh.UI.VSSelectionControls
         {
             return inVsTheming && darkSurface && !highContrast;
         }
+
+        internal static bool ShouldSuppressNativeVsTheme(bool usePaletteRendering)
+        {
+            return usePaletteRendering;
+        }
     }
 }

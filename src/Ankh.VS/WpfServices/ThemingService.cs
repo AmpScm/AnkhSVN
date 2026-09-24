@@ -356,17 +356,39 @@ namespace Ankh.WpfPackage.Services
             {
                 foreach (ListViewItem lvi in listView.Items)
                 {
-                    if (updateFore && lvi.ForeColor == oldFore)
-                        lvi.ForeColor = newFore;
+                    if (SystemInformation.HighContrast)
+                    {
+                        // Let Windows choose the item foreground in high-contrast
+                        // mode, preserving accessibility behavior.
+                        lvi.ForeColor = Color.Empty;
 
-                    if (updateBack && lvi.BackColor == oldBack)
+                        if (updateBack && lvi.BackColor == oldBack)
+                            lvi.BackColor = newBack;
+
+                        continue;
+                    }
+
+                    if (updateBack && (lvi.BackColor.IsEmpty || lvi.BackColor == oldBack))
                         lvi.BackColor = newBack;
 
-                    // A readable status accent on the previous background may
-                    // disappear after a theme switch. Inherit the VS text pair.
-                    if (SystemInformation.HighContrast
-                        || AnkhThemePalette.ContrastRatio(lvi.ForeColor, lvi.BackColor) < 4.5)
-                        lvi.ForeColor = Color.Empty;
+                    Color effectiveBack = lvi.BackColor.IsEmpty
+                        ? listView.BackColor
+                        : lvi.BackColor;
+
+                    Color preferredFore = lvi.ForeColor;
+                    if (preferredFore.IsEmpty || (updateFore && preferredFore == oldFore))
+                        preferredFore = newFore;
+
+                    // Never leave a normal themed row at Color.Empty. Native
+                    // ListView painting can resolve an empty item color through
+                    // Windows instead of the active VS palette (the History
+                    // Viewer exposed this as black text on a dark background).
+                    // Preserve readable status/accent colors, otherwise fall
+                    // back to the explicit semantic VS foreground.
+                    lvi.ForeColor = AnkhThemePalette.ResolveReadableForeground(
+                        preferredFore,
+                        newFore,
+                        effectiveBack);
                 }
             }
 

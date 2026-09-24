@@ -23,6 +23,7 @@ using Ankh.Selection;
 using Ankh.Services;
 using Ankh.UI;
 using Ankh.UI.Services;
+using Ankh.VS;
 using Ankh.VSPackage;
 using AnkhSvn_UnitTestProject.Helpers;
 using AnkhSvn_UnitTestProject.Mocks;
@@ -142,12 +143,17 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             Assert.Throws<InvalidOperationException>(() => CommandTester.TestExecution(AnkhCommand.WorkingCopyBrowse));
         }
 
-        [Test, Explicit("Requires a live working-copy UI path")]
+        [Test]
         public void AddWorkingCopyExplorerRootCommandWithPath()
         {
-            ISelectionContext selC = SelectionContextMock.EmptyContext();
+            ISelectionContext selC = new Mock<ISelectionContext>().Object;
+            var package = new Mock<IAnkhPackage>();
+
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
+            using (ServiceProviderHelper.AddService(typeof(IAnkhPackage), package.Object))
                 Assert.IsTrue(CommandTester.TestExecution(AnkhCommand.WorkingCopyBrowse, Path.GetTempPath()));
+
+            package.Verify(p => p.ShowToolWindow(AnkhToolWindow.WorkingCopyExplorer), Times.Once);
         }
 
         [Test]
@@ -251,20 +257,21 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
                     "Refresh is disabled when there are no selected files");
         }
 
-        [Test, Explicit("Requires repository explorer state")]
+        [Test]
         public void RemoveReposRoot()
         {
-            ISelectionContext selC = SelectionContextMock.EmptyContext();
+            ISelectionContext selC = new Mock<ISelectionContext>().Object;
+
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-                Assert.That(CommandTester.TestExecution(AnkhCommand.RemoveRepositoryRoot), Is.False);
+                Assert.That(CommandTester.TestEnabled(AnkhCommand.RemoveRepositoryRoot), Is.False,
+                    "Remove Repository Root must be disabled when no repository explorer root is selected.");
         }
 
-        [Test, Explicit("Requires working-copy explorer state")]
+        [Test]
         public void RemoveWorkingCopyRoot()
         {
-            ISelectionContext selC = SelectionContextMock.EmptyContext();
-            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-                Assert.That(CommandTester.TestExecution(AnkhCommand.RemoveWorkingCopyExplorerRoot), Is.False);
+            Assert.That(CommandTester.TestEnabled(AnkhCommand.RemoveWorkingCopyExplorerRoot), Is.False,
+                "Remove Working Copy Root must be disabled when no working-copy explorer root is selected.");
         }
 
         [Test]
@@ -284,28 +291,43 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
                 Assert.That(CommandTester.TestExecution(AnkhCommand.SaveToFile), Is.False);
         }
 
-        [Test, Explicit("Requires Visual Studio tool-window shell services")]
+        [Test]
         public void ShowCommitDialog()
         {
             var state = new Mock<IAnkhCommandStates>();
             state.SetupGet(x => x.SccProviderActive).Returns(true);
-            var uiShell = new Mock<SVsUIShell>().As<IVsUIShell>();
+            var package = new Mock<IAnkhPackage>();
 
-            using (ServiceProviderHelper.AddService(typeof(SVsUIShell), uiShell.Object))
             using (ServiceProviderHelper.AddService(typeof(IAnkhCommandStates), state.Object))
+            using (ServiceProviderHelper.AddService(typeof(IAnkhPackage), package.Object))
                 Assert.That(CommandTester.TestExecution(AnkhCommand.ShowPendingChanges), Is.True);
+
+            package.Verify(p => p.ShowToolWindow(AnkhToolWindow.PendingChanges), Times.Once);
         }
 
-        [Test, Explicit("Requires Visual Studio repository explorer tool window")]
+        [Test]
         public void ShowReposExplorer()
         {
-            CommandTester.TestExecution(AnkhCommand.ShowRepositoryExplorer);
+            var package = new Mock<IAnkhPackage>();
+            var settings = new Mock<IAnkhSolutionSettings>();
+            settings.SetupGet(x => x.ProjectRootUri).Returns((Uri)null);
+
+            using (ServiceProviderHelper.AddService(typeof(IAnkhPackage), package.Object))
+            using (ServiceProviderHelper.AddService(typeof(IAnkhSolutionSettings), settings.Object))
+                Assert.That(CommandTester.TestExecution(AnkhCommand.ShowRepositoryExplorer), Is.True);
+
+            package.Verify(p => p.ShowToolWindow(AnkhToolWindow.RepositoryExplorer), Times.Once);
         }
 
-        [Test, Explicit("Requires Visual Studio working-copy explorer tool window")]
+        [Test]
         public void ShowWorkingCopyExplorer()
         {
-            CommandTester.TestExecution(AnkhCommand.ShowWorkingCopyExplorer);
+            var package = new Mock<IAnkhPackage>();
+
+            using (ServiceProviderHelper.AddService(typeof(IAnkhPackage), package.Object))
+                Assert.That(CommandTester.TestExecution(AnkhCommand.ShowWorkingCopyExplorer), Is.True);
+
+            package.Verify(p => p.ShowToolWindow(AnkhToolWindow.WorkingCopyExplorer), Times.Once);
         }
 
         [Test]

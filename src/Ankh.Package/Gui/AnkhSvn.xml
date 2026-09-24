@@ -74,11 +74,11 @@
           </Group>
           <Group id="Grp_FileSccOpen" priority="0x01A0">
             <Button id="Cmd_FileSccOpenFromSubversion" text="Open &amp;from Subversion..." name="OpenFromSubversion" priority="0x100"
-                    toolTip="Open a Project or Solution from Subversion" dynamicVisibility="true">
+                    toolTip="Open a Project or Solution from Subversion" iconId="ImageCatalogGuid:Open" dynamicVisibility="true">
               <Visibility context="Ankh_SccProviderGuid" />
             </Button>
             <Button id="Cmd_FileSccAddFromSubversion" text="A&amp;dd Project from Subversion..." name="AddFromSubversion" priority="0x200"
-                    toolTip="Add an existing Project or Solution from Subversion" dynamicVisibility="true">
+                    toolTip="Add an existing Project or Solution from Subversion" iconId="ImageCatalogGuid:Add" dynamicVisibility="true">
               <!-- Only show Add when not debugging, etc -->
               <Visibility context="Ankh_SccProviderGuid" />
             </Button>
@@ -152,9 +152,9 @@
           </Group>
           <Group id="Grp_DocumentPending" priority="0x8000">
             <Button id="Cmd_DocumentAddToPending" name="SvnAddToPending" priority="0x3000" defaultInvisible="true"
-              text="Add to &amp;Pending Changes"/>
+              text="Add to &amp;Pending Changes" iconId="ImageCatalogGuid:PendingChange" />
             <Button id="Cmd_DocumentRemoveFromPending" name="SvnRemoveFromPending" priority="0x3000" defaultInvisible="true"
-                    text="Remove from Pendin&amp;g Changes"/>
+                    text="Remove from Pendin&amp;g Changes" iconId="ImageCatalogGuid:PendingChange" />
           </Group>
         </Menu>
       </Group>
@@ -264,7 +264,7 @@
       <ButtonRef id="Cmd_ShowPendingChanges" priority="0x800" />
       <Button id="Cmd_ShowSubversionInfo" name="ShowSubversionInfo" priority="0x801"
                 text="Source Control in&amp;fo"
-                toolTip="Show the Source Control Info Window." defaultInvisible="true">
+                toolTip="Show the Source Control Info Window." defaultInvisible="true" iconId="ImageCatalogGuid:Property">
       </Button>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_TOOLSB_NEWWINDOWS">
@@ -304,7 +304,7 @@
         <Group id="Grp_SccSlnChanges" priority="0x4000">
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x100" />
           <Button id="Cmd_UnifiedDiff" priority="0x200" name="UnifiedDiff"
-                  text="&amp;Unified Diff..." defaultInvisible="true" />
+                  text="&amp;Unified Diff..." defaultInvisible="true" iconId="ImageCatalogGuid:CompareFiles" />
           <Button id="Cmd_SolutionEditProperties" priority="0x300" defaultDisabled="true"
                   text="Solution Prop&amp;erties..."
                   toolTip="View/Edit Solution Subversion Properties"
@@ -442,21 +442,21 @@
                 toolTip="Show the Log Viewer for the selected item." iconId="ImageCatalogGuid:History" defaultInvisible="true"/>
       <Menu id="Menu_ItemResolve" priority="0x1A00" name="Resolve" text="Resol&amp;ve">
         <Group id="Grp_ItemResolveCommand" priority="0x100">
-          <Button id="Cmd_ItemResolveMerge" priority="0x10" text="Resolve &amp;Conflict" defaultInvisible="true" />
-          <Button id="Cmd_ItemResolveMergeTool" priority="0x20" text="Resolve using &amp;Tool" defaultInvisible="true" />
-          <Button id="Cmd_ItemResolveCasing" priority="0x30" text="Resolve Ca&amp;se Conflict" defaultInvisible="true" />
+          <Button id="Cmd_ItemResolveMerge" priority="0x10" text="Resolve &amp;Conflict" defaultInvisible="true" iconId="ImageCatalogGuid:Conflict" />
+          <Button id="Cmd_ItemResolveMergeTool" priority="0x20" text="Resolve using &amp;Tool" defaultInvisible="true" iconId="ImageCatalogGuid:Merge" />
+          <Button id="Cmd_ItemResolveCasing" priority="0x30" text="Resolve Ca&amp;se Conflict" defaultInvisible="true" iconId="ImageCatalogGuid:Conflict" />
         </Group>
         <Group id="Grp_ItemResolveFile" priority="0x200">
-          <Button id="Cmd_ItemResolveWorking" priority="0x10" text="Using &amp;Working copy file" defaultInvisible="true" />
-          <Button id="Cmd_ItemResolveBase" priority="0x20" text="Using &amp;Original file" defaultInvisible="true" />
+          <Button id="Cmd_ItemResolveWorking" priority="0x10" text="Using &amp;Working copy file" defaultInvisible="true" iconId="ImageCatalogGuid:Conflict" />
+          <Button id="Cmd_ItemResolveBase" priority="0x20" text="Using &amp;Original file" defaultInvisible="true" iconId="ImageCatalogGuid:Conflict" />
         </Group>
         <Group id="Grp_ItemResolveAutoConflict" priority="0x400">
-          <Button id="Cmd_ItemResolveMineConflict" priority="0x10" text="Using &amp;Mine on conflicts" defaultInvisible="true" />
-          <Button id="Cmd_ItemResolveTheirsConflict" priority="0x20" text="Using &amp;Their on conflicts" defaultInvisible="true" />
+          <Button id="Cmd_ItemResolveMineConflict" priority="0x10" text="Using &amp;Mine on conflicts" defaultInvisible="true" iconId="ImageCatalogGuid:Conflict" />
+          <Button id="Cmd_ItemResolveTheirsConflict" priority="0x20" text="Using &amp;Their on conflicts" defaultInvisible="true" iconId="ImageCatalogGuid:Conflict" />
         </Group>
         <Group id="Grp_ItemResolveAutoFull" priority="0x300">
-          <Button id="Cmd_ItemResolveMineFull" priority="0x10" text="Using M&amp;y File" defaultInvisible="true" />
-          <Button id="Cmd_ItemResolveTheirsFull" priority="0x20" text="Using T&amp;heir file" defaultInvisible="true" />
+          <Button id="Cmd_ItemResolveMineFull" priority="0x10" text="Using M&amp;y File" defaultInvisible="true" iconId="ImageCatalogGuid:Conflict" />
+          <Button id="Cmd_ItemResolveTheirsFull" priority="0x20" text="Using T&amp;heir file" defaultInvisible="true" iconId="ImageCatalogGuid:Conflict" />
         </Group>
       </Menu>
       <ButtonRef id="Cmd_RevertItem" priority="0x1B00" />
@@ -520,18 +520,18 @@
             </Group>
           </Menu>
           <Button id="Cmd_RemoveFromChangeList" name="SvnRemoveFromChangeList" priority="0x100"
-                      text="&amp;Remove from Change List" defaultInvisible="true"/>
+                      text="&amp;Remove from Change List" defaultInvisible="true" iconId="ImageCatalogGuid:MoveToFolder" />
           <Menu id="Menu_MoveToChangeList" text="Move to &amp;Change List" name="SvnMoveToChangeList" priority="0x100">
             <Group id="Cmd_MoveToNewChangeList" priority="0x100">
               <Button id="Cmd_MoveToNewChangeList" name="MoveToChangeList" priority="0x100"
-                      text="&lt;&amp;Change List&gt;" defaultInvisible="true"/>
+                      text="&lt;&amp;Change List&gt;" defaultInvisible="true" iconId="ImageCatalogGuid:MoveToFolder" />
             </Group>
             <Group id="Cmd_MoveToExistingChangeList0" priority="0x200">
               <Button id="Cmd_MoveToExistingChangeList0" priority="0x100" text="&#160;" dynamicItemStart="true" defaultInvisible="true" />
             </Group>
             <Group id="Cmd_MoveToIgnoreChangeList" priority="0xF00">
               <Button id="Cmd_MoveToIgnoreChangeList" name="IgnoreOnCommit" priority="0x100"
-                      text="&amp;ignore-on-commit" defaultInvisible="true"/>
+                      text="&amp;ignore-on-commit" defaultInvisible="true" iconId="ImageCatalogGuid:MoveToFolder" />
             </Group>
           </Menu>
         </Group>
@@ -546,9 +546,9 @@
         <GroupRef id="Grp_SccExplore" priority="0xF000" />
       </Menu>
       <Button id="Cmd_ItemAddToPending" name="SvnAddToPending" priority="0x3000" defaultInvisible="true"
-              text="Add to &amp;Pending Changes"/>
+              text="Add to &amp;Pending Changes" iconId="ImageCatalogGuid:PendingChange" />
       <Button id="Cmd_ItemRemoveFromPending" name="SvnRemoveFromPending" priority="0x3000" defaultInvisible="true"
-              text="Remove from Pendin&amp;g Changes"/>
+              text="Remove from Pendin&amp;g Changes" iconId="ImageCatalogGuid:PendingChange" />
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_EDITFILE">
       <!-- The 'Edit Project' group on unloaded projects -->
@@ -558,7 +558,7 @@
               text="Re-Checkout Failed &amp;Project from Subversion" defaultInvisible="true"
               iconId="ImageCatalogGuid:CheckOutForEdit" />
       <Button id="Cmd_SccEditFailedProjectLocation" name="SvnEditFailedProjectLocation" priority="0x8200"
-              text="Edit Failed Project &amp;Location" defaultInvisible="true"/>
+              text="Edit Failed Project &amp;Location" defaultInvisible="true" iconId="ImageCatalogGuid:Property" />
     </GroupRef>
     <GroupRef id="Menu_RepositoryExplorerToolBar">
       <!-- The Repository Explorer Toolbar -->
@@ -650,25 +650,25 @@
                 text="In Wi&amp;ndows" menuText="&amp;Standard Application"
                 toolTip="Have Windows launch the associated application." iconId="ImageCatalogGuid:Windows" defaultInvisible="true"/>
               <Button id="Cmd_ViewInVsText" name="ViewAsText" priority="0x300"
-                      text="As &amp;Text" defaultInvisible="true"/>
+                      text="As &amp;Text" defaultInvisible="true" iconId="ImageCatalogGuid:Open" />
             </Group>
             <Group id="Grp_OpenWith2" priority="0xF000">
               <Button id="Cmd_ViewInWindowsWith" name="ViewInWindowsWith" priority="0xF000"
-                    text="Choose Program..." defaultInvisible="true" />
+                    text="Choose Program..." defaultInvisible="true" iconId="ImageCatalogGuid:Windows" />
             </Group>
           </Menu>
         </Group>
         <Group id="Grp_RepositoryExplorerReview" priority="0x200">
           <Button id="Cmd_ReposExplorerLog" name="ReposExplorerLog" priority ="0x100"
                   text="View &amp;History"
-                  toolTip="View History." iconFile ="Scc/TfsHistory.png" dynamicVisibility="true"/>
+                  toolTip="View History." iconId="ImageCatalogGuid:History" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_SvnNodeAnnotate" priority="0x200" />
         </Group>
         <Group id="Grp_RepositoryExplorerEdit" priority="0x300">
           <ButtonRef id="guidVSStd97:cmdidCopy" priority="0x100" />
           <ButtonRef id="guidVSStd97:cmdidPaste" priority="0x200" />
           <Button id="Cmd_CopyToWorkingCopy" name="SvnCopyToWorkingCopy" priority="0x700"
-                  text="Copy to &amp;Working Copy..." dynamicVisibility="true" />
+                  text="Copy to &amp;Working Copy..." dynamicVisibility="true" iconId="ImageCatalogGuid:Copy" />
           <ButtonRef id="guidVSStd97:cmdidDelete" priority="0x800" />
           <ButtonRef id="guidVSStd97:cmdidRename" priority="0x900" />
         </Group>
@@ -835,7 +835,7 @@
         </Group>
         <Group id="Grp_LogViewerContextMenu" priority="0x1000">
           <Button id="Cmd_LogChangeLogMessage" name="LogChangeLogMessage" priority="0xB000"
-                  text="Change Log &amp;Message" dynamicVisibility="true"/>
+                  text="Change Log &amp;Message" dynamicVisibility="true" iconId="ImageCatalogGuid:Comment" />
           <Button id="Cmd_LogRevertTo" name="LogRevertTo" priority="0xB200"
                   text="&amp;Revert to this Revision" dynamicVisibility="true" iconId="ImageCatalogGuid:Undo"/>
           <Button id="Cmd_LogRevertThisRevisions" name="LogRevertChangesFrom" priority="0xB300"
@@ -845,11 +845,11 @@
           <Button id="Cmd_LogShowRevisionProperties" name="LogShowRevisionProperties" priority="0xB400"
                   text="Show Revision &amp;Properties" dynamicVisibility="true" iconId="ImageCatalogGuid:Property"/>
           <Button id="Cmd_LogOpenIssue" name="LogOpenIssue" priority="0xB500"
-                  text="Open &amp;Issue" dynamicVisibility="true"/>
+                  text="Open &amp;Issue" dynamicVisibility="true" iconId="ImageCatalogGuid:Link" />
         </Group>
         <Group id="Grp_LogViewerEdit" priority="0xE000">
           <Button id="Cmd_CopyRevisionNumber" name="CopyRevisionNumber" priority="0x100"
-                  text="Copy &amp;Revision" toolTip="Copy Revision number." />
+                  text="Copy &amp;Revision" toolTip="Copy Revision number." iconId="ImageCatalogGuid:Copy" />
           <ButtonRef id="guidVSStd97:cmdidCopy" priority="0x200" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
@@ -883,6 +883,10 @@
                   iconId="ImageCatalogGuid:History" dynamicVisibility="true"/>          
           <Button id="Cmd_SvnNodeAnnotate" priority="0x400" name="SvnNodeAnnotate" text="&amp;Annotate..."
                   iconId="ImageCatalogGuid:NewTextAnnotation" dynamicVisibility="true"/>
+          <Button id="Cmd_AnnotatePreviousRevision" priority="0x500" name="AnnotatePreviousRevision"
+                  text="Annotate &amp;Previous Revision"
+                  toolTip="Annotate the file as it existed immediately before the selected revision."
+                  iconId="ImageCatalogGuid:NewTextAnnotation" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_CopyToWorkingCopy" priority="0x800" />
         </Group>
         <GroupRef id="Grp_LogViewerEdit" priority="0x300" />
@@ -907,7 +911,7 @@
             <Group id="Grp_PendingChangesCommit2" priority="0x200">
               <Button id="Cmd_PendingChangesApplyWorkingCopy" name="ApplyWorkingCopy" priority="0x100"
                       text="Apply to &amp;Working Copy"
-                      toolTip="Create patch from selected pending changes" />
+                      toolTip="Create patch from selected pending changes" iconId="ImageCatalogGuid:ApplyCodeChanges" />
               <Button id="Cmd_PendingChangesCreatePatch" name="CreatePatch" priority="0x200"
                       text="Create &amp;Patch..."
                       toolTip="Create patch from selected pending changes"  iconId="ImageCatalogGuid:PatchPackage"/>
@@ -945,13 +949,13 @@
                   toolTip="Flat changes view" iconId="ImageCatalogGuid:FlatView" fixMenuController="true"/>
               <Button id="Cmd_PendingChangesViewProject" name="ViewProject" priority="0x200"
                   text="&amp;Project"
-                  toolTip="Project changes view" />
+                  toolTip="Project changes view" iconId="ImageCatalogGuid:Solution" />
               <Button id="Cmd_PendingChangesViewChangeList" name="ViewChangeList" priority="0x300"
                   text="&amp;ChangeList"
-                  toolTip="ChangeList changes view" />
+                  toolTip="ChangeList changes view" iconId="ImageCatalogGuid:CategorizedView" />
               <Button id="Cmd_PendingChangesViewFolder" name="ViewFolder" priority="0x400"
                   text="&amp;Folders"
-                  toolTip="Folder changes view" />
+                  toolTip="Folder changes view" iconId="ImageCatalogGuid:FolderOpened" />
             </Group>
           </Menu>
           <Button id="Cmd_PendingChangesViewAll" priority="0x200" name="ViewAll"
@@ -968,13 +972,13 @@
               <Button id="Cmd_ItemConflictEdit" name="ItemConflictEdit" priority="0x100" defaultInvisible="true"
                   text="&amp;Edit Conflicts" menuText="Edit Con&amp;flicts" iconId="ImageCatalogGuid:Conflict" fixMenuController="true"/>
               <Button id="Cmd_ItemConflictEditVisualStudio" name="ItemConflictEditVisualStudio" priority="0x200"
-                  text="Edit in &amp;Visual Studio" dynamicVisibility="true"/>
+                  text="Edit in &amp;Visual Studio" dynamicVisibility="true" iconId="ImageCatalogGuid:VisualStudio" />
               <Button id="Cmd_ItemConflictResolvedMerged" name="ItemConflictResolvedMerged" priority="0x300"
-                  text="Mark as &amp;Resolved" dynamicVisibility="true"/>
+                  text="Mark as &amp;Resolved" dynamicVisibility="true" iconId="ImageCatalogGuid:Conflict" />
               <Button id="Cmd_ItemConflictResolvedMineFull" name="ItemConflictResolvedMineFull" priority="0x400"
-                  text="Resolve using &amp;My Version" dynamicVisibility="true"/>
+                  text="Resolve using &amp;My Version" dynamicVisibility="true" iconId="ImageCatalogGuid:Conflict" />
               <Button id="Cmd_ItemConflictResolvedTheirsFull" name="ItemConflictResolvedTheirsFull" priority="0x500"
-                  text="Resolve using &amp;Their Version" dynamicVisibility="true"/>
+                  text="Resolve using &amp;Their Version" dynamicVisibility="true" iconId="ImageCatalogGuid:Conflict" />
             </Group>
           </Menu>
           <Menu id="Menu_ItemCompare" priority="0x200" name="Compare" type="MenuController" dynamicVisibility="true">
@@ -982,13 +986,13 @@
               <Button id="Cmd_ItemCompareBase" name="CompareBase" priority="0x100"
                   text="&amp;Compare to Original Version" fixMenuController="true" iconId="ImageCatalogGuid:CompareFiles"/>
               <Button id="Cmd_ItemCompareLatest" name="CompareLatest" priority="0x200"
-                  text="Compare to &amp;Latest Version" />
+                  text="Compare to &amp;Latest Version" iconId="ImageCatalogGuid:CompareFiles" />
               <Button id="Cmd_ItemCompareCommitted" name="ComparePrevious" priority="0x300"
-                  text="Compare to Co&amp;mmitted Version" />
+                  text="Compare to Co&amp;mmitted Version" iconId="ImageCatalogGuid:CompareFiles" />
               <Button id="Cmd_ItemComparePrevious" name="ComparePrevious" priority="0x400"
-                  text="Compare to &amp;Previous Version" />
+                  text="Compare to &amp;Previous Version" iconId="ImageCatalogGuid:CompareFiles" />
               <Button id="Cmd_ItemCompareSpecific" name="CompareSpecific" priority="0x500"
-                  text="Compare to a &amp;Specific Version..." />
+                  text="Compare to a &amp;Specific Version..." iconId="ImageCatalogGuid:CompareFiles" />
             </Group>
           </Menu>
           <Menu id="Menu_ItemOpen" priority="0x300" name="Open" type="MenuControllerLatched">
@@ -996,9 +1000,9 @@
               <Button id="Cmd_ItemOpenVisualStudio" name="OpenVisualStudio" priority="0x100"
                   text="&amp;Open in Visual Studio" fixMenuController="true" iconId="ImageCatalogGuid:Open"/>
               <Button id="Cmd_ItemOpenWindows" name="OpenWindows" priority="0x200"
-                  text="Open with &amp;Default Application" />
+                  text="Open with &amp;Default Application" iconId="ImageCatalogGuid:Windows" />
               <Button id="Cmd_ItemOpenTextEditor" name="OpenText" priority="0x300"
-                  text="Open as &amp;Text" />
+                  text="Open as &amp;Text" iconId="ImageCatalogGuid:Open" />
             </Group>
             <Group id="Grp_PendingChangesOpenEx" priority="0x200">
               <ButtonRef id="Cmd_ItemSelectInFileExplorer" priority="0x100" />
@@ -1093,7 +1097,7 @@
           <Button id="Cmd_PcLogEditorPasteFileList" name="PasteFiles" priority="0x100"
                   text="Paste &amp;Filename List" iconId="ImageCatalogGuid:Paste" dynamicVisibility="true"/>
           <Button id="Cmd_PcLogEditorPasteRecentLog" name="PasteRecent" priority="0x200"
-                  text="Paste &amp;Recent Message" dynamicVisibility="true" />
+                  text="Paste &amp;Recent Message" dynamicVisibility="true" iconId="ImageCatalogGuid:Paste" />
         </Group>
         <Group id="Grp_PendingChangesLogEditor" priority="0x300">
           <ButtonRef id="guidVSStd97:cmdidCut" priority="0x100"  />
@@ -1106,9 +1110,9 @@
         </Group>
         <Group id="Grp_PendingChangesLogEditor3" priority="0x500">
           <Button id="Cmd_PcLogEditorOpenIssue" name="OpenIssue" priority="0x100"
-                  text="Open &amp;Issue" dynamicVisibility="true"/>
+                  text="Open &amp;Issue" dynamicVisibility="true" iconId="ImageCatalogGuid:Link" />
           <Button id="Cmd_PcLogEditorOpenRevision" name="OpenRevision" priority="0x110"
-                  text="Open &amp;Revision" dynamicVisibility="true"/>
+                  text="Open &amp;Revision" dynamicVisibility="true" iconId="ImageCatalogGuid:History" />
         </Group>
       </Menu>
     </GroupRef>

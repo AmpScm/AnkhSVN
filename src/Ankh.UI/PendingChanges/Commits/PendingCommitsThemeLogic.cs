@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Drawing;
+
 namespace Ankh.UI.PendingChanges.Commits
 {
     internal static class PendingCommitsThemeLogic
@@ -23,6 +25,21 @@ namespace Ankh.UI.PendingChanges.Commits
             // The select-all header needs custom handling on ordinary light
             // surfaces. High contrast is left entirely to Visual Studio/Windows.
             return !darkSurface && !highContrast;
+        }
+
+        internal static Color ResolveItemForeColor(
+            Color statusColor,
+            Color listForeColor,
+            Color listBackColor)
+        {
+            // An empty ListViewItem.ForeColor lets the native control choose a
+            // system/default color that may not match the active Visual Studio
+            // theme. Always fall back to the explicit current VS palette
+            // foreground, whatever color that theme defines.
+            return AnkhThemePalette.ResolveReadableForeground(
+                statusColor,
+                listForeColor,
+                listBackColor);
         }
     }
 }

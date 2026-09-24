@@ -170,6 +170,13 @@ namespace Ankh.Selection
         IDisposable PushPopupContext(Control control);
 
         /// <summary>
+        /// Temporarily overrides the selection container used by Ankh command queries.
+        /// Intended for native/WPF popup surfaces whose Visual Studio editor selection
+        /// would otherwise replace the logical item the popup operates on.
+        /// </summary>
+        IDisposable PushSelectionContainer(ISelectionContainer selectionContainer);
+
+        /// <summary>
         /// Gets a selection tracker that is valid for the current popup context
         /// </summary>
         /// <returns></returns>

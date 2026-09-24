@@ -269,18 +269,31 @@ namespace Ankh.UI.VSSelectionControls
             public const Int32 HDS_OVERFLOW = 0x1000;
 
             
+            public const Int32 LVM_SETBKCOLOR = 0x1000 + 1;     // LVM_FIRST + 1
             public const Int32 LVM_GETHEADER = 0x1000 + 31;     // LVM_FIRST + 31
+            public const Int32 LVM_SETTEXTCOLOR = 0x1000 + 36;  // LVM_FIRST + 36
+            public const Int32 LVM_SETTEXTBKCOLOR = 0x1000 + 38; // LVM_FIRST + 38
             public const Int32 LVM_SETITEMSTATE = 0x1000 + 43;  // LVM_FIRST + 43
             public const Int32 HDM_GETITEM = 0x1200 + 11;  // HDM_FIRST + 11
             public const Int32 HDM_SETITEM = 0x1200 + 12;  // HDM_FIRST + 12
 
             public const int WM_CONTEXTMENU = 0x007B;
+            public const int WM_PAINT = 0x000F;
             public const int WM_NOTIFY = 0x004E;
             public const int OCM_NOTIFY = 0x204E;
+            public const int WM_LBUTTONDBLCLK = 0x0203;
 
             public const int NM_CLICK = -2;
             public const int NM_DBLCLK = -3;
             public const int NM_RETURN = -4;
+            public const int NM_CUSTOMDRAW = -12;
+
+            public const uint CDDS_PREPAINT = 0x00000001;
+            public const uint CDDS_ITEMPREPAINT = 0x00010001;
+            public const int CDRF_NEWFONT = 0x00000002;
+            public const int CDRF_NOTIFYITEMDRAW = 0x00000020;
+            public const uint CDIS_SELECTED = 0x0001;
+            public const uint CDIS_HOT = 0x0040;
 
             public const int HDN_ITEMSTATEICONCLICK = -316;
 
@@ -298,6 +311,27 @@ namespace Ankh.UI.VSSelectionControls
 
             [DllImport("user32.dll")]
             public static extern IntPtr SendMessage(IntPtr Handle, Int32 msg, IntPtr wParam, ref LVITEM lParam);
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct NMCUSTOMDRAW
+            {
+                public NMHDR hdr;
+                public uint dwDrawStage;
+                public IntPtr hdc;
+                public RECT rc;
+                public IntPtr dwItemSpec;
+                public uint uItemState;
+                public IntPtr lItemlParam;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct NMLVCUSTOMDRAW
+            {
+                public NMCUSTOMDRAW nmcd;
+                public int clrText;
+                public int clrTextBk;
+                public int iSubItem;
+            }
 
             [StructLayout(LayoutKind.Sequential)]
             public struct RECT
@@ -498,10 +532,61 @@ namespace Ankh.UI.VSSelectionControls
 
         bool _isThemed;
         bool _useDarkNativeTheme;
+        bool _allowDarkNativeTheme = true;
         bool _ownerDrawPaletteHeader;
         Color _headerBackColor;
         Color _headerForeColor;
         Color _headerBorderColor;
+        Color _selectionBackColor;
+        Color _selectionForeColor;
+        Color _hoverBackColor;
+        bool _usePaletteSelectionColors;
+        bool _preserveItemForeColorWhenSelected;
+        bool _preserveItemForeColorWhenHot;
+
+        [DefaultValue(false)]
+        public bool PreserveItemForeColorWhenHot
+        {
+            get { return _preserveItemForeColorWhenHot; }
+            set
+            {
+                if (_preserveItemForeColorWhenHot == value)
+                    return;
+
+                _preserveItemForeColorWhenHot = value;
+                Invalidate();
+            }
+        }
+
+        [DefaultValue(false)]
+        public bool PreserveItemForeColorWhenSelected
+        {
+            get { return _preserveItemForeColorWhenSelected; }
+            set
+            {
+                if (_preserveItemForeColorWhenSelected == value)
+                    return;
+
+                _preserveItemForeColorWhenSelected = value;
+                Invalidate();
+            }
+        }
+
+        [DefaultValue(true)]
+        public bool AllowDarkNativeTheme
+        {
+            get { return _allowDarkNativeTheme; }
+            set
+            {
+                if (_allowDarkNativeTheme == value)
+                    return;
+
+                _allowDarkNativeTheme = value;
+
+                if (IsHandleCreated)
+                    RecreateHandle();
+            }
+        }
 
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -512,7 +597,12 @@ namespace Ankh.UI.VSSelectionControls
             UpdateSortGlyphs();
 
             if (_useDarkNativeTheme)
-                NativeMethods.SetWindowTheme(Handle, "DarkMode_Explorer", null);
+            {
+                if (AllowDarkNativeTheme)
+                    NativeMethods.SetWindowTheme(Handle, "DarkMode_Explorer", null);
+                else
+                    NativeMethods.SetWindowTheme(Handle, "", "");
+            }
             else if (!OwnerDraw && !_isThemed)
                 NativeMethods.SetWindowTheme(Handle, "Explorer", null);
 
@@ -521,6 +611,38 @@ namespace Ankh.UI.VSSelectionControls
                 LVM_SETEXTENDEDLISTVIEWSTYLE,
                 (IntPtr)LVS_EX_DOUBLEBUFFER,
                 (IntPtr)LVS_EX_DOUBLEBUFFER);
+
+            // SetWindowTheme() can reset the native ListView colors even when
+            // the managed BackColor/ForeColor still contain the VS palette.
+            // Reapply them after every handle creation so selected rows do not
+            // fall back to black text on dark Visual Studio surfaces.
+            RestoreNativeColors(this);
+        }
+
+        internal static void RestoreNativeColors(ListView listView)
+        {
+            if (listView == null)
+                throw new ArgumentNullException("listView");
+
+            if (!listView.IsHandleCreated)
+                return;
+
+            NativeMethods.SendMessage(
+                listView.Handle,
+                NativeMethods.LVM_SETBKCOLOR,
+                IntPtr.Zero,
+                (IntPtr)ColorTranslator.ToWin32(listView.BackColor));
+            NativeMethods.SendMessage(
+                listView.Handle,
+                NativeMethods.LVM_SETTEXTCOLOR,
+                IntPtr.Zero,
+                (IntPtr)ColorTranslator.ToWin32(listView.ForeColor));
+            NativeMethods.SendMessage(
+                listView.Handle,
+                NativeMethods.LVM_SETTEXTBKCOLOR,
+                IntPtr.Zero,
+                (IntPtr)ColorTranslator.ToWin32(listView.BackColor));
+            listView.Invalidate();
         }
 
         protected override void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
@@ -878,6 +1000,19 @@ namespace Ankh.UI.VSSelectionControls
         }
 
 
+        internal static bool ShouldSuppressNativeCheckboxDoubleClick(
+            bool checkBoxes,
+            bool strictCheckboxesClick,
+            bool hasItem,
+            ListViewHitTestLocations location)
+        {
+            return checkBoxes
+                && strictCheckboxesClick
+                && hasItem
+                && location != ListViewHitTestLocations.None
+                && location != ListViewHitTestLocations.StateImage;
+        }
+
         public event MouseEventHandler ShowContextMenu;
         public virtual void OnShowContextMenu(MouseEventArgs e)
         {
@@ -896,6 +1031,19 @@ namespace Ankh.UI.VSSelectionControls
         /// <param name="m">The Windows <see cref="T:System.Windows.Forms.Message"/> to process.</param>
         protected override void WndProc(ref Message m)
         {
+            if (!DesignMode && m.Msg == NativeMethods.WM_PAINT)
+            {
+                base.WndProc(ref m);
+
+                if (PreserveItemForeColorWhenSelected)
+                {
+                    RedrawSelectedItemText();
+                    RedrawHotItemText();
+                }
+
+                return;
+            }
+
             if (!DesignMode)
             {
                 switch (m.Msg)
@@ -913,13 +1061,92 @@ namespace Ankh.UI.VSSelectionControls
                             return;
                         }
 
-                    case NativeMethods.OCM_NOTIFY:
-                        // Receives ListView notifications
+                    case NativeMethods.WM_LBUTTONDBLCLK:
+                        // Modern native ListView controls toggle a checkbox when
+                        // a checked row is double-clicked, even when the pointer
+                        // is nowhere near the state image. Intercept the raw
+                        // message before native processing so a row double-click
+                        // remains an open/diff gesture. Double-clicking the actual
+                        // checkbox is still left to the native control.
                         if (CheckBoxes && StrictCheckboxesClick)
                         {
-                            NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
+                            Point mp = PointToClient(MousePosition);
+                            ListViewHitTestInfo hi = HitTest(mp);
 
-                            if (hdr.code == NativeMethods.NM_DBLCLK)
+                            if (hi != null
+                                && ShouldSuppressNativeCheckboxDoubleClick(
+                                    CheckBoxes,
+                                    StrictCheckboxesClick,
+                                    hi.Item != null,
+                                    hi.Location))
+                            {
+                                MouseEventArgs me = new MouseEventArgs(
+                                    MouseButtons.Left, 2, mp.X, mp.Y, 0);
+                                OnDoubleClick(me);
+                                OnMouseDoubleClick(me);
+                                return;
+                            }
+                        }
+                        break;
+
+                    case NativeMethods.OCM_NOTIFY:
+                        // Receives ListView notifications
+                        NMHDR notifyHdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
+
+                        if (notifyHdr.code == NativeMethods.NM_CUSTOMDRAW
+                            && _usePaletteSelectionColors)
+                        {
+                            NativeMethods.NMLVCUSTOMDRAW draw =
+                                (NativeMethods.NMLVCUSTOMDRAW)Marshal.PtrToStructure(
+                                    m.LParam, typeof(NativeMethods.NMLVCUSTOMDRAW));
+
+                            if (draw.nmcd.dwDrawStage == NativeMethods.CDDS_PREPAINT)
+                            {
+                                m.Result = (IntPtr)NativeMethods.CDRF_NOTIFYITEMDRAW;
+                                return;
+                            }
+
+                            if (draw.nmcd.dwDrawStage == NativeMethods.CDDS_ITEMPREPAINT)
+                            {
+                                bool selected =
+                                    (draw.nmcd.uItemState & NativeMethods.CDIS_SELECTED) != 0;
+                                bool hot =
+                                    (draw.nmcd.uItemState & NativeMethods.CDIS_HOT) != 0;
+
+                                if (selected || hot)
+                                {
+                                    int itemIndex = unchecked((int)draw.nmcd.dwItemSpec.ToInt64());
+                                    Color itemForeColor = ForeColor;
+
+                                    if (itemIndex >= 0 && itemIndex < Items.Count)
+                                    {
+                                        itemForeColor =
+                                            SmartListViewThemeLogic.ResolveSelectedItemForeground(
+                                                Items[itemIndex].ForeColor,
+                                                ForeColor);
+                                    }
+
+                                    // Hovering or selecting a row must not replace the
+                                    // item's theme/status foreground. Let the native
+                                    // control keep drawing its interaction background,
+                                    // but preserve the resolved item text color.
+                                    draw.clrText = ColorTranslator.ToWin32(itemForeColor);
+
+                                    if (selected)
+                                        draw.clrTextBk =
+                                            ColorTranslator.ToWin32(_selectionBackColor);
+
+                                    Marshal.StructureToPtr(draw, m.LParam, false);
+                                    m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
+                                    return;
+                                }
+                            }
+                        }
+
+                        if (CheckBoxes && StrictCheckboxesClick)
+                        {
+
+                            if (notifyHdr.code == NativeMethods.NM_DBLCLK)
                             {
                                 Point mp = PointToClient(MousePosition);
                                 ListViewHitTestInfo hi = HitTest(mp);
@@ -961,6 +1188,113 @@ namespace Ankh.UI.VSSelectionControls
                 }
             }
             base.WndProc(ref m);
+        }
+
+        void RedrawHotItemText()
+        {
+            if (View != View.Details)
+                return;
+
+            Point mouse = PointToClient(MousePosition);
+            if (!ClientRectangle.Contains(mouse))
+                return;
+
+            ListViewHitTestInfo hit = HitTest(mouse);
+            if (hit == null || hit.Item == null)
+                return;
+
+            // A selected item is already repaired by RedrawSelectedItemText().
+            if (hit.Item.Selected)
+                return;
+
+            if (_hoverBackColor.IsEmpty)
+                return;
+
+            // Clear the native hover text with the semantic VS hover background,
+            // then draw the row once using its resolved item foreground. Drawing
+            // only the foreground here causes visible double-text/ghosting.
+            using (Graphics graphics = CreateGraphics())
+                RedrawItemText(graphics, hit.Item, _hoverBackColor);
+        }
+
+        void RedrawItemText(
+            Graphics graphics,
+            ListViewItem item,
+            Color background)
+        {
+            Color itemForeColor = SmartListViewThemeLogic.ResolveSelectedItemForeground(
+                item.ForeColor,
+                ForeColor);
+
+            int count = Math.Min(item.SubItems.Count, Columns.Count);
+            for (int i = 0; i < count; i++)
+            {
+                Rectangle bounds = i == 0
+                    ? item.GetBounds(ItemBoundsPortion.Label)
+                    : item.SubItems[i].Bounds;
+
+                bounds.Intersect(ClientRectangle);
+                if (bounds.Width <= 0 || bounds.Height <= 0)
+                    continue;
+
+                if (i > 0)
+                {
+                    bounds.X += 4;
+                    bounds.Width = Math.Max(0, bounds.Width - 8);
+                }
+
+                TextFormatFlags flags =
+                    TextFormatFlags.VerticalCenter
+                    | TextFormatFlags.SingleLine
+                    | TextFormatFlags.EndEllipsis
+                    | TextFormatFlags.NoPrefix
+                    | TextFormatFlags.PreserveGraphicsClipping;
+
+                HorizontalAlignment alignment = Columns[i].TextAlign;
+                if (alignment == HorizontalAlignment.Center)
+                    flags |= TextFormatFlags.HorizontalCenter;
+                else if (alignment == HorizontalAlignment.Right)
+                    flags |= TextFormatFlags.Right;
+
+                if (background.IsEmpty)
+                {
+                    TextRenderer.DrawText(
+                        graphics,
+                        item.SubItems[i].Text,
+                        item.Font ?? Font,
+                        bounds,
+                        itemForeColor,
+                        flags);
+                }
+                else
+                {
+                    TextRenderer.DrawText(
+                        graphics,
+                        item.SubItems[i].Text,
+                        item.Font ?? Font,
+                        bounds,
+                        itemForeColor,
+                        background,
+                        flags);
+                }
+            }
+        }
+
+        void RedrawSelectedItemText()
+        {
+            if (View != View.Details
+                || SelectedItems.Count == 0
+                || (!Focused && HideSelection)
+                || _selectionBackColor.IsEmpty)
+            {
+                return;
+            }
+
+            using (Graphics graphics = CreateGraphics())
+            {
+                foreach (ListViewItem item in SelectedItems)
+                    RedrawItemText(graphics, item, _selectionBackColor);
+            }
         }
 
         public IDictionary<string, int> GetColumnWidths()
@@ -1385,7 +1719,7 @@ namespace Ankh.UI.VSSelectionControls
                 throw new ArgumentNullException("i");
             else if (VirtualMode || !IsHandleCreated)
             {
-                i.Selected = true;
+                i.Selected = selected;
                 return;
             }
 
@@ -1416,12 +1750,22 @@ namespace Ankh.UI.VSSelectionControls
                 _headerBackColor = AnkhThemePalette.Blend(palette.SurfaceForeground, palette.SurfaceBackground, 0.08);
                 _headerForeColor = palette.SurfaceForeground;
                 _headerBorderColor = palette.Border;
+                _selectionBackColor = palette.SelectionBackground;
+                _selectionForeColor = palette.SelectionForeground;
+                _hoverBackColor = palette.HoverBackground;
+                _hoverBackColor = palette.HoverBackground;
+                _usePaletteSelectionColors = !SystemInformation.HighContrast;
             }
             else
             {
                 _headerBackColor = Color.Empty;
                 _headerForeColor = Color.Empty;
                 _headerBorderColor = Color.Empty;
+                _selectionBackColor = Color.Empty;
+                _selectionForeColor = Color.Empty;
+                _hoverBackColor = Color.Empty;
+                _hoverBackColor = Color.Empty;
+                _usePaletteSelectionColors = false;
             }
 
             _ownerDrawPaletteHeader = SmartListViewThemeLogic.ShouldOwnerDrawHeader(

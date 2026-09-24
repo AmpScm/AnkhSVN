@@ -25,6 +25,12 @@ namespace Ankh.UI.RepositoryExplorer
         public RepositoryFolderBrowserDialog()
         {
             InitializeComponent();
+
+            // This dialog is hosted inside themed VS UI but RepositoryTreeView is a
+            // native Win32 TreeView. Let SmartTreeView render the label/selection
+            // directly from the VS palette instead of mixing Windows Explorer colors
+            // with a Visual Studio dark surface.
+            reposBrowser.UsePaletteRendering = true;
         }
 
         protected override void OnContextChanged(EventArgs e)
@@ -95,9 +101,33 @@ namespace Ankh.UI.RepositoryExplorer
                         // initialization so every nested control gets the same
                         // semantic Visual Studio palette.
                         themer.ThemeRecursive(this, true);
+                        RestoreRepositoryTreeTheme(themer);
                     }
                 }
             }
+        }
+
+        void RestoreRepositoryTreeTheme(IWinFormsThemingService themer)
+        {
+            if (themer == null || reposBrowser == null || reposBrowser.IsDisposed)
+                return;
+
+            AnkhThemePalette palette = themer.ThemePalette;
+            reposBrowser.BackColor = palette.SurfaceBackground;
+            reposBrowser.ForeColor = palette.SurfaceForeground;
+
+            if (reposBrowser.IsHandleCreated)
+                Ankh.UI.VSSelectionControls.SmartTreeView.RestoreNativeColors(reposBrowser);
+        }
+
+        void RestoreRepositoryTreeThemeDeferred()
+        {
+            if (IsDisposed || Disposing || Context == null)
+                return;
+
+            IWinFormsThemingService themer = Context.GetService<IWinFormsThemingService>();
+            if (themer != null)
+                RestoreRepositoryTreeTheme(themer);
         }
 
         Uri _rootUri;
@@ -185,6 +215,13 @@ namespace Ankh.UI.RepositoryExplorer
                     _busy = false;
                     if (_overlay != null)
                         _overlay.Hide();
+
+                    // RepositoryTreeView is a native TreeView. Loading roots/files can
+                    // cause Windows to repaint it with default system colors after the
+                    // dialog has already been themed. Reassert the VS semantic colors
+                    // after the async retrieval has fully unwound.
+                    if (IsHandleCreated && !IsDisposed && !Disposing)
+                        BeginInvoke((MethodInvoker)RestoreRepositoryTreeThemeDeferred);
                 }
             }
         }

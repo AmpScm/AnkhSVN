@@ -77,5 +77,23 @@ namespace AnkhSvn_UnitTestProject.Commands
                     targetIsPath),
                 Is.EqualTo(expected));
         }
+
+        [TestCase(7, true, 6)]
+        [TestCase(1, true, 0)]
+        [TestCase(0, false, -1)]
+        [TestCase(-1, false, -1)]
+        public void TryGetPreviousRevision_ReblamesImmediatelyBeforeSelectedChange(
+            long revision,
+            bool expectedSuccess,
+            long expectedPreviousRevision)
+        {
+            long previousRevision;
+            bool success = AnnotateCommandLogic.TryGetPreviousRevision(
+                revision,
+                out previousRevision);
+
+            Assert.That(success, Is.EqualTo(expectedSuccess));
+            Assert.That(previousRevision, Is.EqualTo(expectedPreviousRevision));
+        }
     }
 }

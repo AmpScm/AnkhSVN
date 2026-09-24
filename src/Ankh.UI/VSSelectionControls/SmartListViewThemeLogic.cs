@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Drawing;
+
 namespace Ankh.UI.VSSelectionControls
 {
     internal static class SmartListViewThemeLogic
@@ -22,6 +24,13 @@ namespace Ankh.UI.VSSelectionControls
             bool highContrast)
         {
             return !themeCancelled && hasPalette && !highContrast;
+        }
+
+        internal static Color ResolveSelectedItemForeground(
+            Color itemForeground,
+            Color listForeground)
+        {
+            return itemForeground.IsEmpty ? listForeground : itemForeground;
         }
 
         internal static bool ShouldUseDarkNativeTheme(

@@ -28,6 +28,14 @@ namespace Ankh.UI.SvnLog
     {
         public LogChangedPathsView()
         {
+            // Match the revision list and Pending Changes interaction behavior.
+            // Keep the semantic VS/status foreground when a changed path is
+            // selected or hovered instead of letting the native ListView theme
+            // substitute a Windows interaction text color.
+            AllowDarkNativeTheme = false;
+            PreserveItemForeColorWhenSelected = true;
+            PreserveItemForeColorWhenHot = true;
+
             Init();
         }
 
@@ -94,6 +102,16 @@ namespace Ankh.UI.SvnLog
             }
         }
 
+        public override void OnThemeChange(IAnkhServiceProvider sender, CancelEventArgs e)
+        {
+            base.OnThemeChange(sender, e);
+
+            // Changed-path rows use status accents. Rebuild them after a theme
+            // switch so those colors are recalculated against the new VS surface.
+            if (ItemSource != null)
+                FocusChanged(this, EventArgs.Empty);
+        }
+
         #region ICurrentItemDestination<ISvnLogItem> Members
         ICurrentItemSource<ISvnLogItem> itemSource;
         public ICurrentItemSource<ISvnLogItem> ItemSource
@@ -132,8 +150,10 @@ namespace Ankh.UI.SvnLog
                         Color.FromArgb(100, 0, 100), Color.DarkRed, Color.DarkBlue };
                     for (int index = 0; index < colorInfo.Length; index++)
                     {
-                        if (AnkhThemePalette.ContrastRatio(colorInfo[index], BackColor) < 4.5)
-                            colorInfo[index] = Color.Empty;
+                        colorInfo[index] = AnkhThemePalette.ResolveReadableForeground(
+                            colorInfo[index],
+                            ForeColor,
+                            BackColor);
                     }
                 }
 

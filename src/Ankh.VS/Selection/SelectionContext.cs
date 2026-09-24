@@ -51,6 +51,8 @@ namespace Ankh.VS.Selection
         }
         HierarchySelection current;
         ISelectionContainer _currentContainer;
+        readonly Stack<ISelectionContainer> _selectionContainerOverrides =
+            new Stack<ISelectionContainer>();
         IVsSolution _solution;
 
         CachedEnumerable<SelectionItem> _selectionItems;
@@ -835,7 +837,9 @@ namespace Ankh.VS.Selection
         IEnumerable<T> InternalGetSelection<T>()
             where T : class
         {
-            ISelectionContainer sc = _currentContainer;
+            ISelectionContainer sc = _selectionContainerOverrides.Count > 0
+                ? _selectionContainerOverrides.Peek()
+                : _currentContainer;
 
             uint nItems;
             if (sc == null || !VSErr.Succeeded(sc.CountObjects((uint)ShellConstants.GETOBJS_SELECTED, out nItems)))
@@ -853,6 +857,56 @@ namespace Ankh.VS.Selection
                 }
             }
         }
+        public IDisposable PushSelectionContainer(ISelectionContainer selectionContainer)
+        {
+            if (selectionContainer == null)
+                throw new ArgumentNullException(nameof(selectionContainer));
+
+            _selectionContainerOverrides.Push(selectionContainer);
+            ClearCache();
+
+            return new SelectionContainerOverride(this, selectionContainer);
+        }
+
+        void PopSelectionContainer(ISelectionContainer selectionContainer)
+        {
+            if (_selectionContainerOverrides.Count == 0 ||
+                !ReferenceEquals(_selectionContainerOverrides.Peek(), selectionContainer))
+            {
+                throw new InvalidOperationException(
+                    "Selection container overrides must be disposed in LIFO order.");
+            }
+
+            _selectionContainerOverrides.Pop();
+            ClearCache();
+        }
+
+        sealed class SelectionContainerOverride : IDisposable
+        {
+            SelectionContext _context;
+            ISelectionContainer _selectionContainer;
+
+            public SelectionContainerOverride(
+                SelectionContext context,
+                ISelectionContainer selectionContainer)
+            {
+                _context = context;
+                _selectionContainer = selectionContainer;
+            }
+
+            public void Dispose()
+            {
+                SelectionContext context = _context;
+                if (context == null)
+                    return;
+
+                _context = null;
+                ISelectionContainer selectionContainer = _selectionContainer;
+                _selectionContainer = null;
+                context.PopSelectionContainer(selectionContainer);
+            }
+        }
+
         #endregion
 
 

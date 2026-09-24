@@ -134,7 +134,7 @@ namespace Ankh.UI.VSSelectionControls
                 SubItems[c].Text = value;
             }
 
-            if (_values == null || _values.Length < column)
+            if (_values == null || _values.Length <= column)
             {
                 string[] values = new string[column + 1];
 
@@ -171,7 +171,7 @@ namespace Ankh.UI.VSSelectionControls
             else if (ListView != null && ListView.Columns.Count <= column)
                 throw new ArgumentOutOfRangeException("column");
 
-            if (column < 0 || column > SubItems.Count)
+            if (column < 0 || column >= SubItems.Count)
                 return null;
 
             return SubItems[column].Text;
