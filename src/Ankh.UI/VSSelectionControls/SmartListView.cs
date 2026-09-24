@@ -277,6 +277,7 @@ namespace Ankh.UI.VSSelectionControls
             public const Int32 HDM_SETITEM = 0x1200 + 12;  // HDM_FIRST + 12
 
             public const int WM_CONTEXTMENU = 0x007B;
+            public const int WM_PAINT = 0x000F;
             public const int WM_NOTIFY = 0x004E;
             public const int OCM_NOTIFY = 0x204E;
             public const int WM_LBUTTONDBLCLK = 0x0203;
@@ -537,6 +538,21 @@ namespace Ankh.UI.VSSelectionControls
         Color _selectionBackColor;
         Color _selectionForeColor;
         bool _usePaletteSelectionColors;
+        bool _preserveItemForeColorWhenSelected;
+
+        [DefaultValue(false)]
+        public bool PreserveItemForeColorWhenSelected
+        {
+            get { return _preserveItemForeColorWhenSelected; }
+            set
+            {
+                if (_preserveItemForeColorWhenSelected == value)
+                    return;
+
+                _preserveItemForeColorWhenSelected = value;
+                Invalidate();
+            }
+        }
 
         [DefaultValue(true)]
         public bool AllowDarkNativeTheme
@@ -992,6 +1008,16 @@ namespace Ankh.UI.VSSelectionControls
         /// <param name="m">The Windows <see cref="T:System.Windows.Forms.Message"/> to process.</param>
         protected override void WndProc(ref Message m)
         {
+            if (!DesignMode && m.Msg == NativeMethods.WM_PAINT)
+            {
+                base.WndProc(ref m);
+
+                if (PreserveItemForeColorWhenSelected)
+                    RedrawSelectedItemText();
+
+                return;
+            }
+
             if (!DesignMode)
             {
                 switch (m.Msg)
@@ -1110,6 +1136,67 @@ namespace Ankh.UI.VSSelectionControls
                 }
             }
             base.WndProc(ref m);
+        }
+
+        void RedrawSelectedItemText()
+        {
+            if (View != View.Details
+                || SelectedItems.Count == 0
+                || (!Focused && HideSelection)
+                || _selectionBackColor.IsEmpty)
+            {
+                return;
+            }
+
+            using (Graphics graphics = CreateGraphics())
+            {
+                foreach (ListViewItem item in SelectedItems)
+                {
+                    Color itemForeColor = SmartListViewThemeLogic.ResolveSelectedItemForeground(
+                        item.ForeColor,
+                        ForeColor);
+
+                    int count = Math.Min(item.SubItems.Count, Columns.Count);
+                    for (int i = 0; i < count; i++)
+                    {
+                        Rectangle bounds = i == 0
+                            ? item.GetBounds(ItemBoundsPortion.Label)
+                            : item.SubItems[i].Bounds;
+
+                        bounds.Intersect(ClientRectangle);
+                        if (bounds.Width <= 0 || bounds.Height <= 0)
+                            continue;
+
+                        if (i > 0)
+                        {
+                            bounds.X += 4;
+                            bounds.Width = Math.Max(0, bounds.Width - 8);
+                        }
+
+                        TextFormatFlags flags =
+                            TextFormatFlags.VerticalCenter
+                            | TextFormatFlags.SingleLine
+                            | TextFormatFlags.EndEllipsis
+                            | TextFormatFlags.NoPrefix
+                            | TextFormatFlags.PreserveGraphicsClipping;
+
+                        HorizontalAlignment alignment = Columns[i].TextAlign;
+                        if (alignment == HorizontalAlignment.Center)
+                            flags |= TextFormatFlags.HorizontalCenter;
+                        else if (alignment == HorizontalAlignment.Right)
+                            flags |= TextFormatFlags.Right;
+
+                        TextRenderer.DrawText(
+                            graphics,
+                            item.SubItems[i].Text,
+                            item.Font ?? Font,
+                            bounds,
+                            itemForeColor,
+                            _selectionBackColor,
+                            flags);
+                    }
+                }
+            }
         }
 
         public IDictionary<string, int> GetColumnWidths()
