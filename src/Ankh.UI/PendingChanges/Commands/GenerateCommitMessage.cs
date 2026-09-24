@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using Ankh.Commands;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Threading;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
@@ -29,7 +31,11 @@ namespace Ankh.UI.PendingChanges.Commands
         {
             PendingCommitsPage page = e.Context.GetService<PendingCommitsPage>();
             if (page != null)
-                page.GenerateCommitMessage();
+            {
+                ThreadHelper.JoinableTaskFactory
+                    .RunAsync(page.GenerateCommitMessageAsync)
+                    .FileAndForget("AnkhSVN/PendingChanges/GenerateCommitMessage");
+            }
         }
     }
 }

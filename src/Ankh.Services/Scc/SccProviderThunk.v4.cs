@@ -119,7 +119,12 @@ namespace Ankh.Scc
             remove { AdvertisePublish -= value; }
         }*/
 
+        // IVsSccSolution requires this event, but Subversion has no separate
+        // "solution added" notification to raise here. Keep the interface contract
+        // without turning a required compatibility event into global warning noise.
+#pragma warning disable CS0067
         public event EventHandler AddedToSourceControl;
+#pragma warning restore CS0067
 
         protected async Task RunOnMainThreadAsync(
             SccAction action,

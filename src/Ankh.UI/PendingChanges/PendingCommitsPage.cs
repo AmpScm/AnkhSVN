@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualStudio;
 
@@ -382,7 +383,7 @@ namespace Ankh.UI.PendingChanges
                 && UI.HasCheckedItems;
         }
 
-        internal async void GenerateCommitMessage()
+        internal async Task GenerateCommitMessageAsync()
         {
             if (!CanGenerateCommitMessage())
                 return;

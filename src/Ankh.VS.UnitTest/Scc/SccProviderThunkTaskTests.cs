@@ -30,7 +30,7 @@ namespace AnkhSvn_UnitTestProject.Scc
             var thunk = new TestSccProviderThunk();
             int invocationCount = 0;
 
-            Task task = thunk.RunTask(
+            Task task = thunk.RunTaskAsync(
                 delegate { invocationCount++; });
 
             Assert.That(invocationCount, Is.EqualTo(1));
@@ -44,13 +44,13 @@ namespace AnkhSvn_UnitTestProject.Scc
         {
             var thunk = new TestSccProviderThunk();
 
-            Assert.Throws<ArgumentNullException>(
-                delegate { thunk.RunTask(null); });
+            Assert.ThrowsAsync<ArgumentNullException>(
+                async delegate { await thunk.RunTaskAsync(null); });
         }
 
         private sealed class TestSccProviderThunk : SccProviderThunk
         {
-            public Task RunTask(SccAction action)
+            public Task RunTaskAsync(SccAction action)
             {
                 return (Task)RunTaskOnMainThread(action);
             }
