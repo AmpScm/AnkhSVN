@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using NUnit.Framework;
+using Ankh;
 using SharpSvn;
 
 namespace Ankh.Tests
