@@ -33,18 +33,6 @@ namespace Ankh.UI.VSSelectionControls
             return itemForeground.IsEmpty ? listForeground : itemForeground;
         }
 
-        internal static Color ResolveSelectionForeground(
-            bool darkSurface,
-            Color surfaceForeground,
-            Color selectionForeground)
-        {
-            // Visual Studio can expose a dark selection foreground for native
-            // controls even when the containing surface is dark. That produces
-            // black selected-row text. Keep selected text on dark surfaces
-            // aligned with the normal VS foreground instead.
-            return darkSurface ? surfaceForeground : selectionForeground;
-        }
-
         internal static bool ShouldUseDarkNativeTheme(
             bool inVsTheming,
             bool darkSurface,
