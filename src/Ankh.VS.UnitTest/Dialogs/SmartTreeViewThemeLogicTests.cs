@@ -44,6 +44,23 @@ namespace AnkhSvn_UnitTestProject.Dialogs
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void PaletteRenderingSwitchesTreeToOwnerDrawText()
+        {
+            using (var tree = new SmartTreeView())
+            {
+                Assert.That(tree.DrawMode, Is.EqualTo(TreeViewDrawMode.Normal));
+
+                tree.UsePaletteRendering = true;
+
+                Assert.That(tree.DrawMode, Is.EqualTo(TreeViewDrawMode.OwnerDrawText));
+
+                tree.UsePaletteRendering = false;
+
+                Assert.That(tree.DrawMode, Is.EqualTo(TreeViewDrawMode.Normal));
+            }
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void RestoreNativeColorsReappliesManagedTreePalette()
         {
             const int TV_FIRST = 0x1100;
