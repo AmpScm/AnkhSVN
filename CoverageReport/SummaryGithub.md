@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 2:19:17 AM |
-| Coverage date: | 9/24/2026 - 2:19:00 AM - 9/24/2026 - 2:19:08 AM |
+| Generated on: | 9/24/2026 - 2:30:00 AM |
+| Coverage date: | 9/24/2026 - 2:29:38 AM - 9/24/2026 - 2:29:50 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 10 |
 | Classes: | 609 |
 | Files: | 677 |
-| **Line coverage:** | 9.1% (4296 of 46992) |
+| **Line coverage:** | 9.1% (4296 of 47005) |
 | Covered lines: | 4296 |
-| Uncovered lines: | 42696 |
-| Coverable lines: | 46992 |
-| Total lines: | 132482 |
-| **Branch coverage:** | 11.7% (2647 of 22575) |
+| Uncovered lines: | 42709 |
+| Coverable lines: | 47005 |
+| Total lines: | 132509 |
+| **Branch coverage:** | 11.7% (2647 of 22581) |
 | Covered branches: | 2647 |
-| Total branches: | 22575 |
+| Total branches: | 22581 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -593,7 +593,7 @@
 |Ankh.UI.VSSelectionControls.ListViewWithSelection`1|4.5%|1.4%|
 |Ankh.UI.VSSelectionControls.SmartColumn|24%|5.5%|
 |Ankh.UI.VSSelectionControls.SmartGroup|0%|0%|
-|Ankh.UI.VSSelectionControls.SmartListView|9.4%|4.6%|
+|Ankh.UI.VSSelectionControls.SmartListView|9.2%|4.6%|
 |Ankh.UI.VSSelectionControls.SmartListViewItem|0%|0%|
 |Ankh.UI.VSSelectionControls.SmartListViewThemeLogic|100%|100%|
 |Ankh.UI.VSSelectionControls.SmartSplitContainer|31.5%|18.1%|
