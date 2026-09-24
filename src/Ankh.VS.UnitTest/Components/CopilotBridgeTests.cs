@@ -19,7 +19,6 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
-using Ankh.Copilot;
 using NUnit.Framework;
 
 namespace AnkhSvn_UnitTestProject.Components
@@ -27,13 +26,15 @@ namespace AnkhSvn_UnitTestProject.Components
     [TestFixture]
     public class CopilotBridgeTests
     {
+        static readonly Lazy<Type> _copilotType = new Lazy<Type>(LoadCopilotType);
+
         [TestCase(null)]
         [TestCase("")]
         [TestCase("   ")]
         public void GenerateAsyncRejectsMissingPromptBeforeVisualStudioLookup(string prompt)
         {
             Assert.ThrowsAsync<ArgumentException>(
-                async () => await VisualStudioCopilot.GenerateAsync(prompt));
+                async () => await (Task)InvokePublic("GenerateAsync", prompt));
         }
 
         [Test]
@@ -159,9 +160,36 @@ namespace AnkhSvn_UnitTestProject.Components
             });
         }
 
+        static Type CopilotType
+        {
+            get { return _copilotType.Value; }
+        }
+
+        static Type LoadCopilotType()
+        {
+            string assemblyPath = Path.Combine(
+                TestContext.CurrentContext.TestDirectory,
+                "Ankh.Copilot.dll");
+            Assert.That(File.Exists(assemblyPath), Is.True, "Copilot bridge was not copied to the test output.");
+
+            Assembly assembly = Assembly.LoadFrom(assemblyPath);
+            Type type = assembly.GetType("Ankh.Copilot.VisualStudioCopilot", true, false);
+            Assert.That(type, Is.Not.Null);
+            return type;
+        }
+
+        static object InvokePublic(string name, params object[] arguments)
+        {
+            MethodInfo method = CopilotType.GetMethod(
+                name,
+                BindingFlags.Public | BindingFlags.Static);
+            Assert.That(method, Is.Not.Null, "Expected public bridge method '{0}'", name);
+            return method.Invoke(null, arguments);
+        }
+
         static object InvokePrivate(string name, params object[] arguments)
         {
-            MethodInfo method = typeof(VisualStudioCopilot).GetMethod(
+            MethodInfo method = CopilotType.GetMethod(
                 name,
                 BindingFlags.NonPublic | BindingFlags.Static);
             Assert.That(method, Is.Not.Null, "Expected private bridge method '{0}'", name);
