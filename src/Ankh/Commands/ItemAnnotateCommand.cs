@@ -33,6 +33,7 @@ namespace Ankh.Commands
     [SvnCommand(AnkhCommand.ItemAnnotate)]
     [SvnCommand(AnkhCommand.LogAnnotateRevision)]
     [SvnCommand(AnkhCommand.SvnNodeAnnotate)]
+    [SvnCommand(AnkhCommand.AnnotatePreviousRevision)]
     [SvnCommand(AnkhCommand.DocumentAnnotate)]
     class ItemAnnotateCommand : CommandBase
     {
@@ -44,6 +45,17 @@ namespace Ankh.Commands
                     ISvnRepositoryItem ri = EnumTools.GetSingle(e.Selection.GetSelection<ISvnRepositoryItem>());
                     if (ri != null && ri.Origin != null && ri.NodeKind != SvnNodeKind.Directory)
                         return;
+                    break;
+                case AnkhCommand.AnnotatePreviousRevision:
+                    IAnnotateSection section = EnumTools.GetSingle(e.Selection.GetSelection<IAnnotateSection>());
+                    long previousRevision;
+                    if (section != null &&
+                        section.Origin != null &&
+                        section.NodeKind != SvnNodeKind.Directory &&
+                        AnnotateCommandLogic.TryGetPreviousRevision(section.Revision, out previousRevision))
+                    {
+                        return;
+                    }
                     break;
                 case AnkhCommand.ItemAnnotate:
                     foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
@@ -105,6 +117,17 @@ namespace Ankh.Commands
                         endRev = item.Revision;
                     }
                     break;
+                case AnkhCommand.AnnotatePreviousRevision:
+                    foreach (IAnnotateSection section in e.Selection.GetSelection<IAnnotateSection>())
+                    {
+                        long previousRevision;
+                        if (!AnnotateCommandLogic.TryGetPreviousRevision(section.Revision, out previousRevision))
+                            continue;
+
+                        targets.Add(section.Origin);
+                        endRev = previousRevision;
+                    }
+                    break;
                 case AnkhCommand.DocumentAnnotate:
                     targets.Add(new SvnOrigin(e.GetService<ISvnStatusCache>()[e.Selection.ActiveDocumentFilename]));
                     endRev = SvnRevision.Working;
@@ -118,6 +141,24 @@ namespace Ankh.Commands
             SvnIgnoreSpacing ignoreSpacing = SvnIgnoreSpacing.IgnoreSpace;
             bool retrieveMergeInfo = false;
             SvnOrigin target;
+
+            // "Annotate Previous Revision" is the one-click re-blame action from the
+            // Annotate margin. It intentionally skips the options dialog and re-runs
+            // blame through N-1 so the user sees ownership immediately before the
+            // selected change.
+            if (e.Command == AnkhCommand.AnnotatePreviousRevision)
+            {
+                target = targets[0];
+                DoBlame(
+                    e,
+                    target,
+                    startRev,
+                    endRev,
+                    ignoreEols,
+                    ignoreSpacing,
+                    retrieveMergeInfo);
+                return;
+            }
 
             if (AnnotateCommandLogic.ShouldPrompt(
                 e.DontPrompt,
