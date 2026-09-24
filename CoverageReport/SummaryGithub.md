@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 4:09:52 PM |
-| Coverage date: | 9/24/2026 - 4:09:32 PM - 9/24/2026 - 4:09:42 PM |
+| Generated on: | 9/24/2026 - 4:16:33 PM |
+| Coverage date: | 9/24/2026 - 4:16:16 PM - 9/24/2026 - 4:16:25 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 13.9% (6636 of 47686) |
-| Covered lines: | 6636 |
-| Uncovered lines: | 41050 |
+| **Line coverage:** | 13.9% (6662 of 47686) |
+| Covered lines: | 6662 |
+| Uncovered lines: | 41024 |
 | Coverable lines: | 47686 |
 | Total lines: | 133791 |
-| **Branch coverage:** | 13.8% (3162 of 22911) |
-| Covered branches: | 3162 |
+| **Branch coverage:** | 13.8% (3163 of 22911) |
+| Covered branches: | 3163 |
 | Total branches: | 22911 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -393,12 +393,12 @@
 |Ankh.VSVersion|0%|0%|
 
 </details>
-<details><summary>Ankh.UI - 14.4%</summary>
+<details><summary>Ankh.UI - 14.6%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**14.4%**|**10.4%**|
-|Ankh.UI.AddRepositoryRootDialog|20.3%|12.5%|
+|**Ankh.UI**|**14.6%**|**10.4%**|
+|Ankh.UI.AddRepositoryRootDialog|64.4%|18.7%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
 |Ankh.UI.Annotate.AnnotateMarginControl|0%|0%|
