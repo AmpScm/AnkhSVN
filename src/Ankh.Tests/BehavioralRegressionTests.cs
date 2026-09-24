@@ -188,6 +188,7 @@ namespace Ankh.Tests
 
 
         [Test]
+        [Apartment(ApartmentState.STA)]
         public void WizardPage_DetachedStateUsesSafeDefaultsAndExplicitOverrides()
         {
             using (var page = new TrackingWizardPage())
