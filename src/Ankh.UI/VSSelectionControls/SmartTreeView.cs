@@ -132,9 +132,18 @@ namespace Ankh.UI.VSSelectionControls
 
             // SetWindowTheme() can reset the native TreeView colors even though
             // the managed BackColor/ForeColor still contain the VS palette.
-            // Reapply them to every newly-created handle so repository browser
-            // trees cannot fall back to a white Windows background.
+            // Reapply them immediately, then once more after the current WinForms/VS
+            // theming pass unwinds. IVsUIShell6.ThemeWindow/SetFixedThemeColors may
+            // update the native TreeView after OnHandleCreated returns, which otherwise
+            // leaves repository-browser trees with a white Windows background.
             RestoreNativeColors(this);
+
+            IntPtr createdHandle = Handle;
+            BeginInvoke((MethodInvoker)delegate
+            {
+                if (!IsDisposed && IsHandleCreated && Handle == createdHandle)
+                    RestoreNativeColors(this);
+            });
         }
 
         internal static void RestoreNativeColors(TreeView treeView)
