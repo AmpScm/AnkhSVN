@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 4:16:33 PM |
-| Coverage date: | 9/24/2026 - 4:16:16 PM - 9/24/2026 - 4:16:25 PM |
+| Generated on: | 9/24/2026 - 4:41:10 PM |
+| Coverage date: | 9/24/2026 - 4:40:48 PM - 9/24/2026 - 4:40:59 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 13.9% (6662 of 47686) |
-| Covered lines: | 6662 |
-| Uncovered lines: | 41024 |
+| **Line coverage:** | 20.7% (9879 of 47686) |
+| Covered lines: | 9879 |
+| Uncovered lines: | 37807 |
 | Coverable lines: | 47686 |
 | Total lines: | 133791 |
-| **Branch coverage:** | 13.8% (3163 of 22911) |
-| Covered branches: | 3163 |
+| **Branch coverage:** | 15.1% (3470 of 22911) |
+| Covered branches: | 3470 |
 | Total branches: | 22911 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -121,25 +121,25 @@
 |Ankh.Copilot.VisualStudioCopilot|29.4%|33.3%|
 
 </details>
-<details><summary>Ankh.Diff - 23.7%</summary>
+<details><summary>Ankh.Diff - 44.6%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Diff**|**23.7%**|**28.9%**|
+|**Ankh.Diff**|**44.6%**|**34.2%**|
 |Ankh.Diff.Caret|0%|0%|
 |Ankh.Diff.DiffUtils.AddCopyList|96.8%|96.4%|
 |Ankh.Diff.DiffUtils.BinaryDiff|100%|98%|
 |Ankh.Diff.DiffUtils.BinaryDiffLines|96.7%|87.5%|
-|Ankh.Diff.DiffUtils.Controls.DiffControl|0%|0%|
+|Ankh.Diff.DiffUtils.Controls.DiffControl|73.9%|23%|
 |Ankh.Diff.DiffUtils.Controls.DiffLineClickEventArgs|0%||
-|Ankh.Diff.DiffUtils.Controls.DiffOptions|0%|0%|
-|Ankh.Diff.DiffUtils.Controls.DiffOverview|0%|0%|
-|Ankh.Diff.DiffUtils.Controls.DiffView|0%|0%|
+|Ankh.Diff.DiffUtils.Controls.DiffOptions|20.2%|0%|
+|Ankh.Diff.DiffUtils.Controls.DiffOverview|23.2%|15.3%|
+|Ankh.Diff.DiffUtils.Controls.DiffView|18.5%|7.8%|
 |Ankh.Diff.DiffUtils.Controls.DiffViewKeyAction|100%||
 |Ankh.Diff.DiffUtils.Controls.DiffViewKeyLogic|100%|100%|
 |Ankh.Diff.DiffUtils.Controls.DiffViewLine|0%||
 |Ankh.Diff.DiffUtils.Controls.DiffViewLines|0%|0%|
-|Ankh.Diff.DiffUtils.Controls.DiffViewPosition|0%|0%|
+|Ankh.Diff.DiffUtils.Controls.DiffViewPosition|62.5%|100%|
 |Ankh.Diff.DiffUtils.Controls.GoToDlg|0%|0%|
 |Ankh.Diff.DiffUtils.DiagonalVector|100%||
 |Ankh.Diff.DiffUtils.DifferenceEventArgs|0%||
@@ -153,13 +153,13 @@
 |Ankh.Diff.DiffUtils.FileSystemInfoComparer|100%||
 |Ankh.Diff.DiffUtils.Functions|7.8%|10.6%|
 |Ankh.Diff.DiffUtils.MyersDiff|94.7%|92.9%|
-|Ankh.Diff.DiffUtils.Properties.Resources|0%|0%|
+|Ankh.Diff.DiffUtils.Properties.Resources|82%|100%|
 |Ankh.Diff.DiffUtils.StringHasher|97%|88.8%|
 |Ankh.Diff.DiffUtils.SubArray|72.2%|0%|
 |Ankh.Diff.DiffUtils.TextDiff|100%|100%|
-|Ankh.Diff.FindData|0%||
+|Ankh.Diff.FindData|25%||
 |Ankh.Diff.FindDlg|0%|0%|
-|Ankh.Diff.NativeMethods|0%|0%|
+|Ankh.Diff.NativeMethods|38.5%|37.5%|
 |Ankh.Diff.NumericTextBox|0%|0%|
 |Ankh.Diff.SettingsKey|0%|0%|
 |Ankh.Diff.Utilities|0%|0%|
@@ -275,26 +275,26 @@
 |Ankh.Scc.ThePendingChangeCollection|0%||
 
 </details>
-<details><summary>Ankh.Services - 18.3%</summary>
+<details><summary>Ankh.Services - 20.8%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Services**|**18.3%**|**16%**|
+|**Ankh.Services**|**20.8%**|**17.8%**|
 |Ankh.AnkhInstanceConditionalAttribute|46.6%|50%|
 |Ankh.AnkhRuntime|31.9%|24.3%|
 |Ankh.AnkhService|13.5%|6.4%|
 |Ankh.AnkhServiceContainer|100%||
 |Ankh.AnkhServiceEvents|26%|16.6%|
 |Ankh.AnkhServiceProviderWrapper|0%|0%|
-|Ankh.Collections.CollectionChangedEventArgs|50%|45.4%|
-|Ankh.Collections.CollectionChangedEventArgs`1|60%||
-|Ankh.Collections.CollectionMonitor|61.9%|10%|
+|Ankh.Collections.CollectionChangedEventArgs|77.6%|77.2%|
+|Ankh.Collections.CollectionChangedEventArgs`1|73.3%||
+|Ankh.Collections.CollectionMonitor|71.4%|30%|
 |Ankh.Collections.ItemChangedEventArgs`1|0%|0%|
 |Ankh.Collections.KeyedWrapNotifyCollection`3|0%|0%|
 |Ankh.Collections.WrapNotifyCollection`2|0%|0%|
 |Ankh.Commands.BaseCommandEventArgs|52.3%|40%|
 |Ankh.Commands.CommandAttribute|70.9%|58.3%|
-|Ankh.Commands.CommandEventArgs|17.6%|0%|
+|Ankh.Commands.CommandEventArgs|94.1%|75%|
 |Ankh.Commands.CommandMapItem|74%|50%|
 |Ankh.Commands.CommandMapper|50%|60%|
 |Ankh.Commands.CommandResult|0%|0%|
@@ -304,11 +304,11 @@
 |Ankh.Configuration.AnkhConfig|0%|0%|
 |Ankh.Configuration.RegistryLifoList|0%|0%|
 |Ankh.Configuration.RegistryUtils|0%|0%|
-|Ankh.ContextServices.GuidUtils|0%|0%|
+|Ankh.ContextServices.GuidUtils|100%|100%|
 |Ankh.EnumTools|55.1%|50%|
 |Ankh.GlobalServiceAttribute|0%|0%|
 |Ankh.HybridCollection`1|72.7%|83.3%|
-|Ankh.KeyedNotifyCollection`2|0%|0%|
+|Ankh.KeyedNotifyCollection`2|67.5%|66.6%|
 |Ankh.LastChangedEventArgs|0%||
 |Ankh.Module|0%|0%|
 |Ankh.NotifyCollection`1|84.1%|80.5%|
@@ -376,7 +376,7 @@
 |Ankh.UI.AnkhToolWindowControl|0%|0%|
 |Ankh.UI.VSCommandHandler|0%|0%|
 |Ankh.UI.VSContainerForm|4.7%|0%|
-|Ankh.UI.VSDialogForm|11.8%|3.6%|
+|Ankh.UI.VSDialogForm|16.4%|6.3%|
 |Ankh.UI.VSEditorControl|0%|0%|
 |Ankh.UI.VSTextEditor|16.9%|12.5%|
 |Ankh.UI.VSTextEditorScrollEventArgs|0%||
@@ -393,11 +393,11 @@
 |Ankh.VSVersion|0%|0%|
 
 </details>
-<details><summary>Ankh.UI - 14.6%</summary>
+<details><summary>Ankh.UI - 26.8%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**14.6%**|**10.4%**|
+|**Ankh.UI**|**26.8%**|**12.8%**|
 |Ankh.UI.AddRepositoryRootDialog|64.4%|18.7%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -411,26 +411,26 @@
 |Ankh.UI.Annotate.AnnotationMargin|23.2%|7.9%|
 |Ankh.UI.Annotate.AnnotationMarginProvider|84.6%|62.5%|
 |Ankh.UI.Annotate.AnnotationRegionLayout|100%||
-|Ankh.UI.Commands.AnnotateDialog|0%|0%|
-|Ankh.UI.Commands.CheckoutDialog|0%|0%|
+|Ankh.UI.Commands.AnnotateDialog|64.3%|13.6%|
+|Ankh.UI.Commands.CheckoutDialog|71.4%|37.5%|
 |Ankh.UI.Commands.CommandStrings|0%|0%|
 |Ankh.UI.Commands.CreateChangeListDialog|72.8%|13.6%|
-|Ankh.UI.Commands.ExportDialog|0%|0%|
+|Ankh.UI.Commands.ExportDialog|55.9%|5.5%|
 |Ankh.UI.Commands.RecentMessageDialog|70%|25%|
-|Ankh.UI.Commands.SwitchDialog|0%|0%|
-|Ankh.UI.Commands.UpdateDialog|0%|0%|
+|Ankh.UI.Commands.SwitchDialog|66.6%|16.6%|
+|Ankh.UI.Commands.UpdateDialog|68%|25%|
 |Ankh.UI.Controls.StatusContainer|0%|0%|
 |Ankh.UI.Controls.StatusContainerDesigner|0%|0%|
 |Ankh.UI.Controls.StatusPanel|0%|0%|
 |Ankh.UI.Controls.StatusPanelDesigner|0%|0%|
 |Ankh.UI.Controls.StatusPanelResources|0%|0%|
 |Ankh.UI.Controls.StatusPanelTestForm|0%|0%|
-|Ankh.UI.ErrorDialog|0%|0%|
+|Ankh.UI.ErrorDialog|75%|28.5%|
 |Ankh.UI.IssueTracker.IssueSelector|0%|0%|
 |Ankh.UI.IssueTracker.IssuesItem|0%|0%|
 |Ankh.UI.IssueTracker.IssuesView|0%|0%|
 |Ankh.UI.IssueTracker.IssuesViewItem|0%||
-|Ankh.UI.IssueTracker.IssueTrackerConfigDialog|0%|0%|
+|Ankh.UI.IssueTracker.IssueTrackerConfigDialog|24.7%|3.8%|
 |Ankh.UI.IssueTracker.IssueTrackerSetupCommand|18.4%|19%|
 |Ankh.UI.MergeWizard.BaseWizardPage|0%|0%|
 |Ankh.UI.MergeWizard.Commands.Merge|28.5%|39.1%|
@@ -438,12 +438,12 @@
 |Ankh.UI.MergeWizard.InteractiveConflictService|0%|0%|
 |Ankh.UI.MergeWizard.MergeBestPracticesPage|0%|0%|
 |Ankh.UI.MergeWizard.MergeConflictHandler|0%|0%|
-|Ankh.UI.MergeWizard.MergeConflictHandlerDialog|0%|0%|
+|Ankh.UI.MergeWizard.MergeConflictHandlerDialog|74.1%|21.4%|
 |Ankh.UI.MergeWizard.MergeNotificationInfo|68%|0%|
 |Ankh.UI.MergeWizard.MergeOptionsPage|0%|0%|
 |Ankh.UI.MergeWizard.MergePathResult|100%|100%|
 |Ankh.UI.MergeWizard.MergeResultModel|97.8%|96.1%|
-|Ankh.UI.MergeWizard.MergeResultsDialog|0%|0%|
+|Ankh.UI.MergeWizard.MergeResultsDialog|81%|30%|
 |Ankh.UI.MergeWizard.MergeRevisionsSelectionPage|0%|0%|
 |Ankh.UI.MergeWizard.MergeSourceBasePage|0%|0%|
 |Ankh.UI.MergeWizard.MergeSourceManuallyRecordPage|0%|0%|
@@ -451,7 +451,7 @@
 |Ankh.UI.MergeWizard.MergeSourceRangeOfRevisionsPage|0%|0%|
 |Ankh.UI.MergeWizard.MergeSourceReintegratePage|0%|0%|
 |Ankh.UI.MergeWizard.MergeSourceTwoDifferentTreesPage|0%|0%|
-|Ankh.UI.MergeWizard.MergeStrings|29.4%|100%|
+|Ankh.UI.MergeWizard.MergeStrings|31.5%|100%|
 |Ankh.UI.MergeWizard.MergeSummaryInput|100%||
 |Ankh.UI.MergeWizard.MergeSummaryLogic|100%|100%|
 |Ankh.UI.MergeWizard.MergeSummaryModel|100%||
@@ -470,14 +470,14 @@
 |Ankh.UI.OptionsPages.OptionsResources|0%|0%|
 |Ankh.UI.OptionsPages.SvnAuthenticationCacheEditor|0%|0%|
 |Ankh.UI.OptionsPages.SvnProxyEditor|65.2%|10%|
-|Ankh.UI.OptionsPages.ToolArgumentDialog|0%|0%|
+|Ankh.UI.OptionsPages.ToolArgumentDialog|66.6%|0%|
 |Ankh.UI.OptionsPages.UserToolSettingsControl|46.6%|6.2%|
 |Ankh.UI.PathSelector.CommonFileSelectorDialog|0%|0%|
 |Ankh.UI.PathSelector.DateSelector|71.7%|50%|
 |Ankh.UI.PathSelector.PendingChangeSelector|49.5%|11.1%|
 |Ankh.UI.PathSelector.RevisionSelector|56.3%|16.6%|
 |Ankh.UI.PathSelector.VersionResolverService|0%|0%|
-|Ankh.UI.PathSelector.VersionSelector|32.7%|3.3%|
+|Ankh.UI.PathSelector.VersionSelector|47.5%|21.1%|
 |Ankh.UI.PathSelector.VersionStrings|0%|0%|
 |Ankh.UI.PendingChanges.Commands.CommitPendingChanges|21.4%|15.3%|
 |Ankh.UI.PendingChanges.Commands.ConfigureRecentChangesPage|21%|12.5%|
@@ -511,18 +511,18 @@
 |Ankh.UI.PendingChanges.Synchronize.SynchronizeListView|0%|0%|
 |Ankh.UI.ProgressDialog|5.8%|35.1%|
 |Ankh.UI.Properties.Resources|0%|0%|
-|Ankh.UI.PropertyEditors.EolStylePropertyEditor|76.4%|63.6%|
-|Ankh.UI.PropertyEditors.ExecutablePropertyEditor|75.7%|66.6%|
-|Ankh.UI.PropertyEditors.ExternalsPropertyEditor|27.3%|3.4%|
-|Ankh.UI.PropertyEditors.IgnorePropertyEditor|66.6%|40%|
-|Ankh.UI.PropertyEditors.KeywordsPropertyEditor|42.8%|7.6%|
-|Ankh.UI.PropertyEditors.MimeTypePropertyEditor|64.1%|40%|
-|Ankh.UI.PropertyEditors.NeedsLockPropertyEditor|77.7%|80%|
+|Ankh.UI.PropertyEditors.EolStylePropertyEditor|78.6%|63.6%|
+|Ankh.UI.PropertyEditors.ExecutablePropertyEditor|81.8%|66.6%|
+|Ankh.UI.PropertyEditors.ExternalsPropertyEditor|27.7%|3.4%|
+|Ankh.UI.PropertyEditors.IgnorePropertyEditor|68.5%|40%|
+|Ankh.UI.PropertyEditors.KeywordsPropertyEditor|46.4%|7.6%|
+|Ankh.UI.PropertyEditors.MimeTypePropertyEditor|67.9%|40%|
+|Ankh.UI.PropertyEditors.NeedsLockPropertyEditor|83.3%|80%|
 |Ankh.UI.PropertyEditors.PlainPropertyEditor|76%|40%|
-|Ankh.UI.PropertyEditors.PropertyDialog|0%|0%|
+|Ankh.UI.PropertyEditors.PropertyDialog|55.6%|20%|
 |Ankh.UI.PropertyEditors.PropertyEditControl|19%|0%|
 |Ankh.UI.PropertyEditors.PropertyEditItem|0%|0%|
-|Ankh.UI.PropertyEditors.PropertyEditorDialog|0%|0%|
+|Ankh.UI.PropertyEditors.PropertyEditorDialog|47.6%|10.9%|
 |Ankh.UI.PropertyEditors.PropertyEditStrings|0%|0%|
 |Ankh.UI.RepositoryExplorer.BusyOverlay|0%|0%|
 |Ankh.UI.RepositoryExplorer.Commands.RemoveRepositoryRootCommand|50%|50%|
@@ -533,31 +533,31 @@
 |Ankh.UI.RepositoryExplorer.ListItemCollection|0%||
 |Ankh.UI.RepositoryExplorer.RepositoryExplorerControl|0%|0%|
 |Ankh.UI.RepositoryExplorer.RepositoryExplorerItem|0%|0%|
-|Ankh.UI.RepositoryExplorer.RepositoryFolderBrowserDialog|0%|0%|
+|Ankh.UI.RepositoryExplorer.RepositoryFolderBrowserDialog|39.8%|4.8%|
 |Ankh.UI.RepositoryExplorer.RepositoryListItem|0%|0%|
 |Ankh.UI.RepositoryExplorer.RepositoryListView|0%|0%|
 |Ankh.UI.RepositoryExplorer.RepositoryStrings|0%|0%|
 |Ankh.UI.RepositoryExplorer.RepositoryTreeNode|0%|0%|
-|Ankh.UI.RepositoryExplorer.RepositoryTreeView|0%|0%|
+|Ankh.UI.RepositoryExplorer.RepositoryTreeView|3.2%|0%|
 |Ankh.UI.RepositoryExplorer.RepositoryWizard.RepositoryProviderListViewItem|0%|0%|
-|Ankh.UI.RepositoryExplorer.RepositoryWizard.RepositoryProviderPage|0%|0%|
+|Ankh.UI.RepositoryExplorer.RepositoryWizard.RepositoryProviderPage|50%|4%|
 |Ankh.UI.RepositoryExplorer.RepositoryWizard.RepositorySelectionPage|0%|0%|
-|Ankh.UI.RepositoryExplorer.RepositoryWizard.RepositorySelectionWizard|0%|0%|
-|Ankh.UI.RepositoryExplorer.RepositoryWizard.RepositoryWizardResources|0%|0%|
+|Ankh.UI.RepositoryExplorer.RepositoryWizard.RepositorySelectionWizard|15.1%|4.8%|
+|Ankh.UI.RepositoryExplorer.RepositoryWizard.RepositoryWizardResources|56.2%|100%|
 |Ankh.UI.RepositoryOpen.CheckoutProject|0%|0%|
 |Ankh.UI.RepositoryOpen.CheckoutProjectLoadPlan|100%||
 |Ankh.UI.RepositoryOpen.CheckoutProjectLogic|100%|97.9%|
-|Ankh.UI.RepositoryOpen.ProjectAddInfoDialog|0%|0%|
-|Ankh.UI.RepositoryOpen.RepositoryOpenDialog|0%|0%|
-|Ankh.UI.SccManagement.AddProjectToSubversion|0%|0%|
-|Ankh.UI.SccManagement.AddToSubversion|0%|0%|
-|Ankh.UI.SccManagement.CopyToDialog|0%|0%|
-|Ankh.UI.SccManagement.CreateBranchDialog|0%|0%|
+|Ankh.UI.RepositoryOpen.ProjectAddInfoDialog|75.8%|9.3%|
+|Ankh.UI.RepositoryOpen.RepositoryOpenDialog|21.9%|1.6%|
+|Ankh.UI.SccManagement.AddProjectToSubversion|70.2%|37.5%|
+|Ankh.UI.SccManagement.AddToSubversion|52.9%|6.4%|
+|Ankh.UI.SccManagement.CopyToDialog|71.2%|25%|
+|Ankh.UI.SccManagement.CreateBranchDialog|72.6%|13.3%|
 |Ankh.UI.SccManagement.CreateDirectoryDialog|90.3%|100%|
-|Ankh.UI.SccManagement.ItemCompareDialog|0%|0%|
-|Ankh.UI.SccManagement.ItemUpdateDialog|0%|0%|
+|Ankh.UI.SccManagement.ItemCompareDialog|100%|100%|
+|Ankh.UI.SccManagement.ItemUpdateDialog|100%|100%|
 |Ankh.UI.SccManagement.LockDialog|50.3%|9%|
-|Ankh.UI.SccManagement.MultiWorkingCopyCommit|0%|0%|
+|Ankh.UI.SccManagement.MultiWorkingCopyCommit|61.1%|18.7%|
 |Ankh.UI.SccManagement.ProjectCommitDialog|47.7%|6%|
 |Ankh.UI.SccManagement.RepositoryLayoutInfo|100%|50%|
 |Ankh.UI.SccManagement.RepositoryUrlUtils|78%|72%|
@@ -580,17 +580,17 @@
 |Ankh.UI.SvnLog.Commands.ShowChanges|7%|6.5%|
 |Ankh.UI.SvnLog.Commands.ShowLogMessage|45.4%|50%|
 |Ankh.UI.SvnLog.Commands.ShowRevisionProperties|5.2%|6.2%|
-|Ankh.UI.SvnLog.EditLogMessageDialog|0%|0%|
-|Ankh.UI.SvnLog.LogChangedPathsView|23.1%|0%|
-|Ankh.UI.SvnLog.LogControl|0%|0%|
-|Ankh.UI.SvnLog.LogDataSource|0%|0%|
+|Ankh.UI.SvnLog.EditLogMessageDialog|94.2%|100%|
+|Ankh.UI.SvnLog.LogChangedPathsView|31.4%|6%|
+|Ankh.UI.SvnLog.LogControl|47.6%|18.7%|
+|Ankh.UI.SvnLog.LogDataSource|29.4%|33.3%|
 |Ankh.UI.SvnLog.LogItem|0%|0%|
 |Ankh.UI.SvnLog.LogRequest|0%|0%|
-|Ankh.UI.SvnLog.LogRevisionControl|12.7%|0.9%|
+|Ankh.UI.SvnLog.LogRevisionControl|15.6%|7.4%|
 |Ankh.UI.SvnLog.LogRevisionItem|0%|0%|
 |Ankh.UI.SvnLog.LogStrings|0%|0%|
 |Ankh.UI.SvnLog.LogToolWindowControl|0%|0%|
-|Ankh.UI.SvnLog.LogViewerDialog|0%|0%|
+|Ankh.UI.SvnLog.LogViewerDialog|53.1%|50%|
 |Ankh.UI.SvnLog.PathItem|0%|0%|
 |Ankh.UI.SvnLog.PathListViewItem|0%|0%|
 |Ankh.UI.VSSelectionControls.Commands.ListViewCommandBase|42.8%|33.3%|
@@ -601,18 +601,18 @@
 |Ankh.UI.VSSelectionControls.ListViewWithSelection`1|4.5%|1.4%|
 |Ankh.UI.VSSelectionControls.SmartColumn|28%|5.5%|
 |Ankh.UI.VSSelectionControls.SmartGroup|0%|0%|
-|Ankh.UI.VSSelectionControls.SmartListView|9.7%|4.6%|
+|Ankh.UI.VSSelectionControls.SmartListView|12%|7.9%|
 |Ankh.UI.VSSelectionControls.SmartListViewItem|0%|0%|
 |Ankh.UI.VSSelectionControls.SmartListViewThemeLogic|100%|100%|
 |Ankh.UI.VSSelectionControls.SmartSplitContainer|39.4%|18.1%|
-|Ankh.UI.VSSelectionControls.SmartTreeView|33.5%|27.7%|
+|Ankh.UI.VSSelectionControls.SmartTreeView|33.5%|28.8%|
 |Ankh.UI.VSSelectionControls.SmartTreeViewThemeLogic|100%|100%|
-|Ankh.UI.VSSelectionControls.TreeViewWithSelection`1|0%|0%|
-|Ankh.UI.WizardFramework.Wizard|42%|3.2%|
-|Ankh.UI.WizardFramework.WizardMessage|0%||
-|Ankh.UI.WizardFramework.WizardPage|0%|0%|
+|Ankh.UI.VSSelectionControls.TreeViewWithSelection`1|2.2%|0%|
+|Ankh.UI.WizardFramework.Wizard|42.8%|3.2%|
+|Ankh.UI.WizardFramework.WizardMessage|85.7%||
+|Ankh.UI.WizardFramework.WizardPage|68.2%|64.2%|
 |Ankh.UI.WizardFramework.WizardPageChangingEventArgs|0%||
-|Ankh.UI.WizardFramework.WizardPageCollection|17.3%|50%|
+|Ankh.UI.WizardFramework.WizardPageCollection|65.2%|50%|
 |Ankh.UI.WorkingCopyExplorer.AddWorkingCopyExplorerRootDialog|80.8%|0%|
 |Ankh.UI.WorkingCopyExplorer.Commands.AddWorkingCopyExplorerRootCommand|17.3%|11.1%|
 |Ankh.UI.WorkingCopyExplorer.Commands.WCExplorerLocation|38.4%|30%|
