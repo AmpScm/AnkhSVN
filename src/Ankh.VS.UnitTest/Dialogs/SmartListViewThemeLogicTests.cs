@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Drawing;
 using Ankh.UI.VSSelectionControls;
 using NUnit.Framework;
 
@@ -36,6 +37,34 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                     hasPalette,
                     highContrast),
                 Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void DarkSelectionUsesSurfaceForeground()
+        {
+            Color surfaceForeground = Color.FromArgb(241, 241, 241);
+            Color selectionForeground = Color.Black;
+
+            Assert.That(
+                SmartListViewThemeLogic.ResolveSelectionForeground(
+                    true,
+                    surfaceForeground,
+                    selectionForeground),
+                Is.EqualTo(surfaceForeground));
+        }
+
+        [Test]
+        public void LightSelectionKeepsSelectionForeground()
+        {
+            Color surfaceForeground = Color.Black;
+            Color selectionForeground = Color.White;
+
+            Assert.That(
+                SmartListViewThemeLogic.ResolveSelectionForeground(
+                    false,
+                    surfaceForeground,
+                    selectionForeground),
+                Is.EqualTo(selectionForeground));
         }
 
         [TestCase(true, true, false, true)]
