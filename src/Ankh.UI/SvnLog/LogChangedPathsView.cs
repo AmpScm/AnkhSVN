@@ -28,6 +28,14 @@ namespace Ankh.UI.SvnLog
     {
         public LogChangedPathsView()
         {
+            // Match the revision list and Pending Changes interaction behavior.
+            // Keep the semantic VS/status foreground when a changed path is
+            // selected or hovered instead of letting the native ListView theme
+            // substitute a Windows interaction text color.
+            AllowDarkNativeTheme = false;
+            PreserveItemForeColorWhenSelected = true;
+            PreserveItemForeColorWhenHot = true;
+
             Init();
         }
 

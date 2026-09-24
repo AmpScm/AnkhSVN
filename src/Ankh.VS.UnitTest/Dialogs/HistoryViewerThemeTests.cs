@@ -24,6 +24,17 @@ namespace AnkhSvn_UnitTestProject.Dialogs
     public class HistoryViewerThemeTests
     {
         [Test]
+        public void ChangedPathsListUsesPendingChangesInteractionTheming()
+        {
+            using (LogChangedPathsView view = new LogChangedPathsView())
+            {
+                Assert.That(view.AllowDarkNativeTheme, Is.False);
+                Assert.That(view.PreserveItemForeColorWhenSelected, Is.True);
+                Assert.That(view.PreserveItemForeColorWhenHot, Is.True);
+            }
+        }
+
+        [Test]
         public void RevisionListUsesPendingChangesInteractionTheming()
         {
             using (LogRevisionControl view = new LogRevisionControl())
