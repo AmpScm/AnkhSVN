@@ -26,6 +26,13 @@ namespace Ankh.Tests
             }
         }
 
+        sealed class TestWizard : Wizard
+        {
+            public TestWizard()
+            {
+            }
+        }
+
         sealed class TrackingWizardPage : WizardPage
         {
             public int BeforeAddCount { get; private set; }
@@ -248,7 +255,7 @@ namespace Ankh.Tests
             {
                 try
                 {
-                    using (var wizard = new Wizard())
+                    using (var wizard = new TestWizard())
                     using (var page = new TrackingWizardPage())
                     {
                         wizard.Pages.Add(page);
