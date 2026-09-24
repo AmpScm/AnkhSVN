@@ -179,12 +179,10 @@ namespace Ankh.UI.Annotate
             if (region == null)
                 return;
 
-            // Claim the press before the native editor sees it, but do not open the
-            // command menu until button-up. IMenuCommandService behaves like the old
-            // WinForms implementation here: opening it during the preview/down event
-            // can result in the menu being immediately dismissed.
+            // Claim the press before the native editor sees it. Selection is intentionally
+            // not published until button-up so one right-click produces one selection change
+            // before the menu is opened.
             e.Handled = true;
-            SelectRegion(region);
         }
 
         void OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
@@ -197,20 +195,25 @@ namespace Ankh.UI.Annotate
                 return;
 
             e.Handled = true;
-            SelectRegion(region);
 
-            // Let the VS selection notification raised by SelectRegion finish
-            // propagating before querying command status for the context menu.
-            // Opening the menu synchronously from the WPF mouse event causes all
-            // dynamic Ankh commands to be evaluated against the previous editor
-            // selection, leaving only static VS entries visible.
+            // Highlight immediately, but defer publication of the clicked source until
+            // after the current WPF input event unwinds. Capturing the exact source here
+            // prevents a later VS selection change from making the menu operate on the
+            // wrong revision.
+            AnnotateSource source = region.Source;
             Point screenPoint = PointToScreen(e.GetPosition(this));
+            SelectRegion(region, false);
+
             Dispatcher.BeginInvoke(
                 new Action(delegate
                 {
+                    if (_disposed)
+                        return;
+
+                    SelectSource(source);
                     ShowContextMenu(screenPoint);
                 }),
-                DispatcherPriority.ContextIdle);
+                DispatcherPriority.Input);
         }
 
         void OnContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -244,6 +247,11 @@ namespace Ankh.UI.Annotate
 
         void SelectRegion(MarginRegion region)
         {
+            SelectRegion(region, true);
+        }
+
+        void SelectRegion(MarginRegion region, bool publishSelection)
+        {
             if (_selectedRegion != null)
             {
                 _selectedRegion.Element.Background = SystemColors.ControlBrush;
@@ -257,7 +265,8 @@ namespace Ankh.UI.Annotate
                 SetTextBrush(_selectedRegion.Element, SystemColors.HighlightTextBrush);
             }
 
-            SelectSource(_selectedRegion != null ? _selectedRegion.Source : null);
+            if (publishSelection)
+                SelectSource(_selectedRegion != null ? _selectedRegion.Source : null);
         }
 
         void SelectSource(AnnotateSource source)
@@ -266,14 +275,6 @@ namespace Ankh.UI.Annotate
 
             if (_selectionTracker != null)
                 _selectionTracker.OnSelectChange(_selectionContainer);
-        }
-
-        void ShowContextMenu(FrameworkElement element, MouseButtonEventArgs e)
-        {
-            if (element == null || e == null)
-                return;
-
-            ShowContextMenu(element.PointToScreen(e.GetPosition(element)));
         }
 
         void ShowContextMenu(Point screenPoint)
@@ -285,9 +286,6 @@ namespace Ankh.UI.Annotate
             if (commandService == null)
                 return;
 
-            // Force dynamicVisibility commands to re-query the selection that was
-            // just published by the annotation margin.
-            commandService.UpdateCommandUI(true);
             commandService.ShowContextMenu(
                 AnkhCommandMenu.AnnotateContextMenu,
                 (int)Math.Round(screenPoint.X),
@@ -500,19 +498,30 @@ namespace Ankh.UI.Annotate
 
             public int CountObjects(uint dwFlags, out uint pc)
             {
+                if (dwFlags != (uint)Constants.GETOBJS_SELECTED &&
+                    dwFlags != (uint)Constants.GETOBJS_ALL)
+                {
+                    pc = 0;
+                    return unchecked((int)0x80004005); // E_FAIL
+                }
+
                 pc = Selected != null ? 1u : 0u;
                 return 0;
             }
 
             public int GetObjects(uint dwFlags, uint cObjects, object[] apUnkObjects)
             {
+                if (dwFlags != (uint)Constants.GETOBJS_SELECTED &&
+                    dwFlags != (uint)Constants.GETOBJS_ALL)
+                    return unchecked((int)0x80004005); // E_FAIL
+
                 if (apUnkObjects == null)
                     return unchecked((int)0x80004003); // E_POINTER
 
-                if (Selected == null)
-                    return cObjects == 0 ? 0 : unchecked((int)0x80004005); // E_FAIL
+                if (cObjects == 0)
+                    return 0;
 
-                if (cObjects != 1 || apUnkObjects.Length < 1)
+                if (Selected == null || cObjects != 1 || apUnkObjects.Length < 1)
                     return unchecked((int)0x80004005); // E_FAIL
 
                 apUnkObjects[0] = Selected;
