@@ -100,8 +100,10 @@ namespace Ankh.UI.PendingChanges.Commits
                 else if (item.IsModified)
                     clr = System.Drawing.Color.DarkBlue;
 
-                ForeColor = !clr.IsEmpty && AnkhThemePalette.ContrastRatio(clr, ListView.BackColor) >= 4.5
-                    ? clr : System.Drawing.Color.Empty;
+                ForeColor = PendingCommitsThemeLogic.ResolveItemForeColor(
+                    clr,
+                    ListView.ForeColor,
+                    ListView.BackColor);
             }
             else if (this.ListView != null)
             {
