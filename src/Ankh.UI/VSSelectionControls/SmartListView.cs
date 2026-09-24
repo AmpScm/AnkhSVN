@@ -538,6 +538,7 @@ namespace Ankh.UI.VSSelectionControls
         Color _headerBorderColor;
         Color _selectionBackColor;
         Color _selectionForeColor;
+        Color _hoverBackColor;
         bool _usePaletteSelectionColors;
         bool _preserveItemForeColorWhenSelected;
 
@@ -1014,7 +1015,10 @@ namespace Ankh.UI.VSSelectionControls
                 base.WndProc(ref m);
 
                 if (PreserveItemForeColorWhenSelected)
+                {
                     RedrawSelectedItemText();
+                    RedrawHotItemText();
+                }
 
                 return;
             }
@@ -1222,6 +1226,68 @@ namespace Ankh.UI.VSSelectionControls
                             _selectionBackColor,
                             flags);
                     }
+                }
+            }
+        }
+
+        void RedrawHotItemText()
+        {
+            if (View != View.Details || _hoverBackColor.IsEmpty)
+                return;
+
+            Point mouse = PointToClient(MousePosition);
+            if (!ClientRectangle.Contains(mouse))
+                return;
+
+            ListViewHitTestInfo hit = HitTest(mouse);
+            ListViewItem item = hit != null ? hit.Item : null;
+            if (item == null || item.Selected)
+                return;
+
+            Color itemForeColor = SmartListViewThemeLogic.ResolveSelectedItemForeground(
+                item.ForeColor,
+                ForeColor);
+
+            using (Graphics graphics = CreateGraphics())
+            {
+                int count = Math.Min(item.SubItems.Count, Columns.Count);
+                for (int i = 0; i < count; i++)
+                {
+                    Rectangle bounds = i == 0
+                        ? item.GetBounds(ItemBoundsPortion.Label)
+                        : item.SubItems[i].Bounds;
+
+                    bounds.Intersect(ClientRectangle);
+                    if (bounds.Width <= 0 || bounds.Height <= 0)
+                        continue;
+
+                    if (i > 0)
+                    {
+                        bounds.X += 4;
+                        bounds.Width = Math.Max(0, bounds.Width - 8);
+                    }
+
+                    TextFormatFlags flags =
+                        TextFormatFlags.VerticalCenter
+                        | TextFormatFlags.SingleLine
+                        | TextFormatFlags.EndEllipsis
+                        | TextFormatFlags.NoPrefix
+                        | TextFormatFlags.PreserveGraphicsClipping;
+
+                    HorizontalAlignment alignment = Columns[i].TextAlign;
+                    if (alignment == HorizontalAlignment.Center)
+                        flags |= TextFormatFlags.HorizontalCenter;
+                    else if (alignment == HorizontalAlignment.Right)
+                        flags |= TextFormatFlags.Right;
+
+                    TextRenderer.DrawText(
+                        graphics,
+                        item.SubItems[i].Text,
+                        item.Font ?? Font,
+                        bounds,
+                        itemForeColor,
+                        _hoverBackColor,
+                        flags);
                 }
             }
         }
@@ -1681,6 +1747,7 @@ namespace Ankh.UI.VSSelectionControls
                 _headerBorderColor = palette.Border;
                 _selectionBackColor = palette.SelectionBackground;
                 _selectionForeColor = palette.SelectionForeground;
+                _hoverBackColor = palette.HoverBackground;
                 _usePaletteSelectionColors = !SystemInformation.HighContrast;
             }
             else
@@ -1690,6 +1757,7 @@ namespace Ankh.UI.VSSelectionControls
                 _headerBorderColor = Color.Empty;
                 _selectionBackColor = Color.Empty;
                 _selectionForeColor = Color.Empty;
+                _hoverBackColor = Color.Empty;
                 _usePaletteSelectionColors = false;
             }
 
