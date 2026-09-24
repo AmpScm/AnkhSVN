@@ -1162,12 +1162,12 @@ namespace Ankh
             if (!path.StartsWith(root, StringComparison.OrdinalIgnoreCase))
                 return false;
 
-            int n = path.Length - path.Length;
+            int n = path.Length - root.Length;
 
             if (n > 0)
-                return (path[root.Length] == '\\');
+                return path[root.Length] == '\\';
 
-            return (n == 0);
+            return n == 0;
         }
 
         public static string SubPath(string path, string root)
