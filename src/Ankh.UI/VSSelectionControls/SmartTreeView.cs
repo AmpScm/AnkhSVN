@@ -116,7 +116,15 @@ namespace Ankh.UI.VSSelectionControls
 
             if (SmartListView.IsXPPlus)
             {
-                if (_useDarkNativeTheme)
+                if (UsePaletteRendering)
+                {
+                    // Native Explorer theming can paint the TreeView background and
+                    // selected text with Windows colors after Visual Studio has already
+                    // applied its palette. Disable native painting for palette-rendered
+                    // trees and draw the label/selection with VS semantic colors below.
+                    NativeMethods.SetWindowTheme(Handle, "", "");
+                }
+                else if (_useDarkNativeTheme)
                 {
                     NativeMethods.SetWindowTheme(Handle, "DarkMode_Explorer", null);
                 }
@@ -229,6 +237,42 @@ namespace Ankh.UI.VSSelectionControls
         }
 
 
+        protected override void OnDrawNode(DrawTreeNodeEventArgs e)
+        {
+            if (!UsePaletteRendering)
+            {
+                e.DrawDefault = true;
+                base.OnDrawNode(e);
+                return;
+            }
+
+            bool selected = e.Node == SelectedNode;
+            Color background = selected ? _selectionBackColor : BackColor;
+            Color foreground = selected ? _selectionForeColor : ForeColor;
+
+            using (SolidBrush brush = new SolidBrush(background))
+                e.Graphics.FillRectangle(brush, e.Bounds);
+
+            TextRenderer.DrawText(
+                e.Graphics,
+                e.Node.Text,
+                Font,
+                e.Bounds,
+                foreground,
+                background,
+                TextFormatFlags.Left |
+                TextFormatFlags.VerticalCenter |
+                TextFormatFlags.SingleLine |
+                TextFormatFlags.EndEllipsis |
+                TextFormatFlags.NoPrefix);
+
+            if (selected && Focused && ShowFocusCues)
+                ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds, foreground, background);
+
+            e.DrawDefault = false;
+            base.OnDrawNode(e);
+        }
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
@@ -256,6 +300,26 @@ namespace Ankh.UI.VSSelectionControls
 
         bool _inVSTheming;
         bool _useDarkNativeTheme;
+        bool _usePaletteRendering;
+        Color _selectionBackColor = SystemColors.Highlight;
+        Color _selectionForeColor = SystemColors.HighlightText;
+
+        [DefaultValue(false)]
+        public bool UsePaletteRendering
+        {
+            get { return _usePaletteRendering; }
+            set
+            {
+                if (_usePaletteRendering == value)
+                    return;
+
+                _usePaletteRendering = value;
+                DrawMode = value ? TreeViewDrawMode.OwnerDrawText : TreeViewDrawMode.Normal;
+
+                if (IsHandleCreated)
+                    RecreateHandle();
+            }
+        }
 
         void ISupportsVSTheming.OnThemeChange(IAnkhServiceProvider sender, CancelEventArgs e)
         {
@@ -276,6 +340,8 @@ namespace Ankh.UI.VSSelectionControls
             {
                 BackColor = palette.SurfaceBackground;
                 ForeColor = palette.SurfaceForeground;
+                _selectionBackColor = palette.SelectionBackground;
+                _selectionForeColor = palette.SelectionForeground;
             }
             else if (_inVSTheming && Parent != null)
             {
