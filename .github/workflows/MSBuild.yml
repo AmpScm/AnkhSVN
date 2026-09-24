@@ -350,18 +350,15 @@ jobs:
 
         foreach ($trxFile in $trxFiles) {
           [xml]$trx = Get-Content -Raw $trxFile.FullName
-          $counters = $trx.SelectSingleNode("/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']")
-          if ($null -eq $counters) {
-            continue
-          }
+          $results = @($trx.SelectNodes("//*[local-name()='UnitTestResult']"))
 
-          $total += [int]$counters.GetAttribute("total")
-          $passed += [int]$counters.GetAttribute("passed")
-          $failed += [int]$counters.GetAttribute("failed")
-
-          $notExecuted = $counters.GetAttribute("notExecuted")
-          if ($notExecuted) {
-            $skipped += [int]$notExecuted
+          foreach ($result in $results) {
+            $total++
+            switch ($result.GetAttribute("outcome")) {
+              "Passed" { $passed++ }
+              "Failed" { $failed++ }
+              default { $skipped++ }
+            }
           }
         }
 
