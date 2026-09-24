@@ -159,6 +159,204 @@ namespace Ankh.Tests
             Assert.That(item.IsVersioned, Is.True);
         }
 
+
+        [TestCase(SvnStatus.None, false, false, false)]
+        [TestCase(SvnStatus.NotVersioned, false, true, false)]
+        [TestCase(SvnStatus.Ignored, false, true, true)]
+        [TestCase(SvnStatus.Obstructed, false, true, false)]
+        public void UnmanagedStatusesPreserveExpectedVersioningAndIgnoreState(
+            SvnStatus status,
+            bool versioned,
+            bool exists,
+            bool ignored)
+        {
+            SvnItem item = Item(Status(status));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(item.IsVersioned, Is.EqualTo(versioned));
+                Assert.That(item.Exists, Is.EqualTo(exists));
+                Assert.That(item.IsIgnored, Is.EqualTo(ignored));
+            });
+        }
+
+        [TestCase(false, false)]
+        [TestCase(true, true)]
+        public void DeletedStatusReflectsWhetherTheScheduledDeleteStillExists(bool localFileExists, bool exists)
+        {
+            SvnItem item = Item(Status(
+                SvnStatus.Deleted,
+                localFileExists: localFileExists));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(item.IsVersioned, Is.True);
+                Assert.That(item.IsDeleteScheduled, Is.True);
+                Assert.That(item.Exists, Is.EqualTo(exists));
+            });
+        }
+
+        [TestCase(SvnStatus.Added, false, false)]
+        [TestCase(SvnStatus.Added, true, false)]
+        [TestCase(SvnStatus.Added, true, true)]
+        [TestCase(SvnStatus.Replaced, false, false)]
+        [TestCase(SvnStatus.Replaced, true, false)]
+        [TestCase(SvnStatus.Replaced, true, true)]
+        public void AddedAndReplacedStatesCoverCopyAndMoveCombinations(
+            SvnStatus nodeStatus,
+            bool copied,
+            bool moved)
+        {
+            SvnItem item = Item(Status(
+                nodeStatus,
+                text: SvnStatus.Normal,
+                copied: copied,
+                moved: moved));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(item.IsAdded, Is.EqualTo(nodeStatus == SvnStatus.Added));
+                Assert.That(item.IsReplaced, Is.EqualTo(nodeStatus == SvnStatus.Replaced));
+                Assert.That(item.HasCopyableHistory, Is.EqualTo(copied));
+                Assert.That(item.IsMoved, Is.EqualTo(copied && moved));
+                Assert.That(item.IsVersioned, Is.True);
+            });
+        }
+
+        [TestCase(SvnStatus.Modified, SvnStatus.Modified, true, false)]
+        [TestCase(SvnStatus.Modified, SvnStatus.Conflicted, false, true)]
+        [TestCase(SvnStatus.Modified, SvnStatus.Normal, false, false)]
+        [TestCase(SvnStatus.Conflicted, SvnStatus.Modified, true, false)]
+        [TestCase(SvnStatus.Conflicted, SvnStatus.Conflicted, false, true)]
+        [TestCase(SvnStatus.Conflicted, SvnStatus.Normal, false, false)]
+        public void ModifiedAndConflictedNodeStatesHonorTextStatus(
+            SvnStatus node,
+            SvnStatus text,
+            bool modified,
+            bool contentConflicted)
+        {
+            SvnItem item = Item(Status(
+                node,
+                text: text,
+                conflicted: contentConflicted));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(item.IsModified, Is.EqualTo(modified));
+                Assert.That(item.IsConflicted, Is.EqualTo(contentConflicted));
+                Assert.That(item.IsVersioned, Is.True);
+            });
+        }
+
+        [TestCase(SvnStatus.None, false)]
+        [TestCase(SvnStatus.Normal, false)]
+        [TestCase(SvnStatus.Modified, true)]
+        [TestCase(SvnStatus.Conflicted, true)]
+        public void PropertyStatusesCoverCleanModifiedAndConflictPaths(
+            SvnStatus propertyStatus,
+            bool propertyModified)
+        {
+            SvnItem item = Item(Status(
+                SvnStatus.Normal,
+                property: propertyStatus,
+                conflicted: propertyStatus == SvnStatus.Conflicted));
+
+            Assert.That(item.IsPropertyModified, Is.EqualTo(propertyModified));
+        }
+
+        [Test]
+        public void NoSccConstructorsCoverVersionableAndMissingStates()
+        {
+            ISvnStatusCache cache = MockRepository.GenerateStub<ISvnStatusCache>();
+
+            var notVersioned = new SvnItem(
+                cache, @"C:\wc\new.txt", NoSccStatus.NotVersioned, SvnNodeKind.File);
+            var notVersionable = new SvnItem(
+                cache, @"C:\wc\special", NoSccStatus.NotVersionable, SvnNodeKind.Unknown);
+            var missing = new SvnItem(
+                cache, @"C:\wc\gone.txt", NoSccStatus.NotExisting, SvnNodeKind.Unknown);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(notVersioned.IsVersioned, Is.False);
+                Assert.That(notVersioned.Exists, Is.True);
+                Assert.That(notVersionable.IsVersioned, Is.False);
+                Assert.That(missing.IsVersioned, Is.False);
+            });
+        }
+
+        [Test]
+        public void PathValidationRejectsWindowsInvalidCharactersOnlyWhenExtraChecksRequested()
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(SvnItem.IsValidPath(@"C:\wc\good.txt", true), Is.True);
+                Assert.That(SvnItem.IsValidPath(@"C:\wc\bad?.txt", true), Is.False);
+                Assert.That(SvnItem.IsValidPath(@"C:\wc\bad*.txt", true), Is.False);
+                Assert.That(SvnItem.IsValidPath(@"C:\wc\bad|.txt", true), Is.False);
+                Assert.That(SvnItem.IsValidPath(@"C:\wc\bad<.txt", true), Is.False);
+                Assert.That(SvnItem.IsValidPath(@"C:\wc\bad>.txt", true), Is.False);
+                Assert.That(SvnItem.IsValidPath("C:\\wc\\bad" + (char)1 + ".txt", true), Is.False);
+                Assert.That(SvnItem.IsValidPath(@"C:\wc\bad?.txt", false), Is.True);
+            });
+        }
+
+        [Test]
+        public void IsBelowRootRequiresAPathBoundaryAndHandlesExactRoot()
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(SvnItem.IsBelowRoot(@"C:\wc", @"C:\wc"), Is.True);
+                Assert.That(SvnItem.IsBelowRoot(@"C:\wc\file.txt", @"C:\wc"), Is.True);
+                Assert.That(SvnItem.IsBelowRoot(@"C:\WC\file.txt", @"c:\wc"), Is.True);
+                Assert.That(SvnItem.IsBelowRoot(@"C:\wc2\file.txt", @"C:\wc"), Is.False);
+                Assert.That(SvnItem.IsBelowRoot(@"D:\wc\file.txt", @"C:\wc"), Is.False);
+                Assert.Throws<ArgumentNullException>(() => SvnItem.IsBelowRoot(null, @"C:\wc"));
+                Assert.Throws<ArgumentNullException>(() => SvnItem.IsBelowRoot(@"C:\wc", null));
+            });
+        }
+
+        [Test]
+        public void SubPathCoversShortEqualChildAndPrefixCases()
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(SvnItem.SubPath(@"C:\wc", @"C:\working"), Is.Empty);
+                Assert.That(SvnItem.SubPath(@"C:\wc", @"C:\wc"), Is.EqualTo("."));
+                Assert.That(SvnItem.SubPath(@"C:\wc", @"C:\wc", true), Is.EqualTo(@"C:\wc"));
+                Assert.That(SvnItem.SubPath(@"C:\wc\dir\file.txt", @"C:\wc"), Is.EqualTo(@"dir\file.txt"));
+                Assert.That(SvnItem.SubPath(@"C:\wc2", @"C:\wc"), Is.EqualTo("2"));
+                Assert.Throws<ArgumentNullException>(() => SvnItem.SubPath(null, @"C:\wc"));
+                Assert.Throws<ArgumentNullException>(() => SvnItem.SubPath(@"C:\wc", null));
+            });
+        }
+
+        [Test]
+        public void StaticCollectionAndEqualityHelpersHandleNullsAndCase()
+        {
+            SvnItem one = Item(Status(SvnStatus.Normal));
+            SvnItem samePathDifferentCase = new SvnItem(
+                MockRepository.GenerateStub<ISvnStatusCache>(),
+                @"c:\WC\ITEM.TXT",
+                Status(SvnStatus.Normal));
+            SvnItem other = new SvnItem(
+                MockRepository.GenerateStub<ISvnStatusCache>(),
+                @"C:\wc\other.txt",
+                Status(SvnStatus.Normal));
+
+            Assert.Multiple(() =>
+            {
+                CollectionAssert.AreEqual(
+                    new[] { @"C:\wc\item.txt", @"C:\wc\other.txt" },
+                    SvnItem.GetPaths(new[] { one, null, other }));
+                Assert.That(one == samePathDifferentCase, Is.True);
+                Assert.That(one != other, Is.True);
+                Assert.That((SvnItem)null == null, Is.True);
+                Assert.That(one == null, Is.False);
+                Assert.Throws<ArgumentNullException>(() => SvnItem.GetPaths(null));
+            });
+        }
+
         [Test]
         public void ExternalStatusProvidesDirectoryShapeWithoutTreatingItAsFile()
         {
