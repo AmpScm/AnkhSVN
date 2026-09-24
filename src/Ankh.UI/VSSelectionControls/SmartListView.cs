@@ -541,6 +541,21 @@ namespace Ankh.UI.VSSelectionControls
         Color _hoverBackColor;
         bool _usePaletteSelectionColors;
         bool _preserveItemForeColorWhenSelected;
+        bool _preserveItemForeColorWhenHot;
+
+        [DefaultValue(false)]
+        public bool PreserveItemForeColorWhenHot
+        {
+            get { return _preserveItemForeColorWhenHot; }
+            set
+            {
+                if (_preserveItemForeColorWhenHot == value)
+                    return;
+
+                _preserveItemForeColorWhenHot = value;
+                Invalidate();
+            }
+        }
 
         [DefaultValue(false)]
         public bool PreserveItemForeColorWhenSelected
@@ -1169,6 +1184,92 @@ namespace Ankh.UI.VSSelectionControls
             base.WndProc(ref m);
         }
 
+        void RedrawHotItemText()
+        {
+            if (View != View.Details)
+                return;
+
+            Point mouse = PointToClient(MousePosition);
+            if (!ClientRectangle.Contains(mouse))
+                return;
+
+            ListViewHitTestInfo hit = HitTest(mouse);
+            if (hit == null || hit.Item == null)
+                return;
+
+            // A selected item is already repaired by RedrawSelectedItemText(),
+            // including its selection background. Repaint only an unselected
+            // hot row here so the native hover background remains untouched.
+            if (hit.Item.Selected)
+                return;
+
+            using (Graphics graphics = CreateGraphics())
+                RedrawItemText(graphics, hit.Item, Color.Empty);
+        }
+
+        void RedrawItemText(
+            Graphics graphics,
+            ListViewItem item,
+            Color background)
+        {
+            Color itemForeColor = SmartListViewThemeLogic.ResolveSelectedItemForeground(
+                item.ForeColor,
+                ForeColor);
+
+            int count = Math.Min(item.SubItems.Count, Columns.Count);
+            for (int i = 0; i < count; i++)
+            {
+                Rectangle bounds = i == 0
+                    ? item.GetBounds(ItemBoundsPortion.Label)
+                    : item.SubItems[i].Bounds;
+
+                bounds.Intersect(ClientRectangle);
+                if (bounds.Width <= 0 || bounds.Height <= 0)
+                    continue;
+
+                if (i > 0)
+                {
+                    bounds.X += 4;
+                    bounds.Width = Math.Max(0, bounds.Width - 8);
+                }
+
+                TextFormatFlags flags =
+                    TextFormatFlags.VerticalCenter
+                    | TextFormatFlags.SingleLine
+                    | TextFormatFlags.EndEllipsis
+                    | TextFormatFlags.NoPrefix
+                    | TextFormatFlags.PreserveGraphicsClipping;
+
+                HorizontalAlignment alignment = Columns[i].TextAlign;
+                if (alignment == HorizontalAlignment.Center)
+                    flags |= TextFormatFlags.HorizontalCenter;
+                else if (alignment == HorizontalAlignment.Right)
+                    flags |= TextFormatFlags.Right;
+
+                if (background.IsEmpty)
+                {
+                    TextRenderer.DrawText(
+                        graphics,
+                        item.SubItems[i].Text,
+                        item.Font ?? Font,
+                        bounds,
+                        itemForeColor,
+                        flags);
+                }
+                else
+                {
+                    TextRenderer.DrawText(
+                        graphics,
+                        item.SubItems[i].Text,
+                        item.Font ?? Font,
+                        bounds,
+                        itemForeColor,
+                        background,
+                        flags);
+                }
+            }
+        }
+
         void RedrawSelectedItemText()
         {
             if (View != View.Details
@@ -1182,113 +1283,7 @@ namespace Ankh.UI.VSSelectionControls
             using (Graphics graphics = CreateGraphics())
             {
                 foreach (ListViewItem item in SelectedItems)
-                {
-                    Color itemForeColor = SmartListViewThemeLogic.ResolveSelectedItemForeground(
-                        item.ForeColor,
-                        ForeColor);
-
-                    int count = Math.Min(item.SubItems.Count, Columns.Count);
-                    for (int i = 0; i < count; i++)
-                    {
-                        Rectangle bounds = i == 0
-                            ? item.GetBounds(ItemBoundsPortion.Label)
-                            : item.SubItems[i].Bounds;
-
-                        bounds.Intersect(ClientRectangle);
-                        if (bounds.Width <= 0 || bounds.Height <= 0)
-                            continue;
-
-                        if (i > 0)
-                        {
-                            bounds.X += 4;
-                            bounds.Width = Math.Max(0, bounds.Width - 8);
-                        }
-
-                        TextFormatFlags flags =
-                            TextFormatFlags.VerticalCenter
-                            | TextFormatFlags.SingleLine
-                            | TextFormatFlags.EndEllipsis
-                            | TextFormatFlags.NoPrefix
-                            | TextFormatFlags.PreserveGraphicsClipping;
-
-                        HorizontalAlignment alignment = Columns[i].TextAlign;
-                        if (alignment == HorizontalAlignment.Center)
-                            flags |= TextFormatFlags.HorizontalCenter;
-                        else if (alignment == HorizontalAlignment.Right)
-                            flags |= TextFormatFlags.Right;
-
-                        TextRenderer.DrawText(
-                            graphics,
-                            item.SubItems[i].Text,
-                            item.Font ?? Font,
-                            bounds,
-                            itemForeColor,
-                            _selectionBackColor,
-                            flags);
-                    }
-                }
-            }
-        }
-
-        void RedrawHotItemText()
-        {
-            if (View != View.Details || _hoverBackColor.IsEmpty)
-                return;
-
-            Point mouse = PointToClient(MousePosition);
-            if (!ClientRectangle.Contains(mouse))
-                return;
-
-            ListViewHitTestInfo hit = HitTest(mouse);
-            ListViewItem item = hit != null ? hit.Item : null;
-            if (item == null || item.Selected)
-                return;
-
-            Color itemForeColor = SmartListViewThemeLogic.ResolveSelectedItemForeground(
-                item.ForeColor,
-                ForeColor);
-
-            using (Graphics graphics = CreateGraphics())
-            {
-                int count = Math.Min(item.SubItems.Count, Columns.Count);
-                for (int i = 0; i < count; i++)
-                {
-                    Rectangle bounds = i == 0
-                        ? item.GetBounds(ItemBoundsPortion.Label)
-                        : item.SubItems[i].Bounds;
-
-                    bounds.Intersect(ClientRectangle);
-                    if (bounds.Width <= 0 || bounds.Height <= 0)
-                        continue;
-
-                    if (i > 0)
-                    {
-                        bounds.X += 4;
-                        bounds.Width = Math.Max(0, bounds.Width - 8);
-                    }
-
-                    TextFormatFlags flags =
-                        TextFormatFlags.VerticalCenter
-                        | TextFormatFlags.SingleLine
-                        | TextFormatFlags.EndEllipsis
-                        | TextFormatFlags.NoPrefix
-                        | TextFormatFlags.PreserveGraphicsClipping;
-
-                    HorizontalAlignment alignment = Columns[i].TextAlign;
-                    if (alignment == HorizontalAlignment.Center)
-                        flags |= TextFormatFlags.HorizontalCenter;
-                    else if (alignment == HorizontalAlignment.Right)
-                        flags |= TextFormatFlags.Right;
-
-                    TextRenderer.DrawText(
-                        graphics,
-                        item.SubItems[i].Text,
-                        item.Font ?? Font,
-                        bounds,
-                        itemForeColor,
-                        _hoverBackColor,
-                        flags);
-                }
+                    RedrawItemText(graphics, item, _selectionBackColor);
             }
         }
 
