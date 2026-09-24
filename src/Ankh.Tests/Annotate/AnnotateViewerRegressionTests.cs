@@ -190,6 +190,22 @@ namespace Ankh.Tests.Annotate
                 Is.Not.Null,
                 RegressionContext + ": the intercepted right-click must resolve the clicked blame region.");
 
+            MethodInfo applyTheme = marginType.GetMethod(
+                "ApplyTheme",
+                declaredNonPublicInstance);
+            Assert.That(
+                applyTheme,
+                Is.Not.Null,
+                RegressionContext + ": the native Annotate margin must apply Visual Studio semantic theme colors.");
+
+            MethodInfo themeChanged = marginType.GetMethod(
+                "OnVsThemeChanged",
+                declaredNonPublicInstance);
+            Assert.That(
+                themeChanged,
+                Is.Not.Null,
+                RegressionContext + ": the Annotate margin must refresh when Visual Studio changes theme.");
+
             MethodInfo scopedSelection = typeof(Ankh.Selection.ISelectionContextEx).GetMethod(
                 "PushSelectionContainer",
                 BindingFlags.Instance | BindingFlags.Public);
