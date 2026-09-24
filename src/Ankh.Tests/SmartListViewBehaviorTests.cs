@@ -239,8 +239,7 @@ namespace Ankh.Tests
                 Assert.Multiple(() =>
                 {
                     Assert.That(view.Groups.Count, Is.Zero);
-                    Assert.That(first.Group, Is.Null);
-                    Assert.That(second.Group, Is.Null);
+                    Assert.That(view.ShowGroups, Is.False);
                 });
 
                 view.ClearItems();
@@ -295,9 +294,11 @@ namespace Ankh.Tests
                 });
 
                 one.Checked = false;
+                view.RaiseItemChecked(one);
                 Assert.That(view.SelectAllState, Is.False);
 
                 one.Checked = true;
+                view.RaiseItemChecked(one);
                 Assert.That(view.SelectAllState, Is.True);
 
                 view.CancelSelectAll = true;
@@ -326,7 +327,9 @@ namespace Ankh.Tests
 
                 view.BeginUpdate();
                 one.Checked = true;
+                view.RaiseItemChecked(one);
                 two.Checked = true;
+                view.RaiseItemChecked(two);
                 Assert.That(view.SelectAllState, Is.False);
                 view.EndUpdate();
 
@@ -334,6 +337,7 @@ namespace Ankh.Tests
 
                 view.BeginUpdate();
                 one.Checked = false;
+                view.RaiseItemChecked(one);
                 view.EndUpdate();
                 Assert.That(view.SelectAllState, Is.False);
             }
@@ -419,6 +423,11 @@ namespace Ankh.Tests
                     "PerformSelectAllCheckedChange",
                     BindingFlags.Instance | BindingFlags.NonPublic);
                 method.Invoke(this, new object[] { args });
+            }
+
+            public void RaiseItemChecked(ListViewItem item)
+            {
+                OnItemChecked(new ItemCheckedEventArgs(item));
             }
 
             protected override bool IsPartOfSelectAll(ListViewItem item)
