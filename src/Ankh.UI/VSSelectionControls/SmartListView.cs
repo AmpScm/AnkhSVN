@@ -539,7 +539,6 @@ namespace Ankh.UI.VSSelectionControls
         Color _selectionBackColor;
         Color _selectionForeColor;
         Color _hoverBackColor;
-        Color _hoverBackColor;
         bool _usePaletteSelectionColors;
         bool _preserveItemForeColorWhenSelected;
         bool _preserveItemForeColorWhenHot;
