@@ -1719,7 +1719,7 @@ namespace Ankh.UI.VSSelectionControls
                 throw new ArgumentNullException("i");
             else if (VirtualMode || !IsHandleCreated)
             {
-                i.Selected = true;
+                i.Selected = selected;
                 return;
             }
 
