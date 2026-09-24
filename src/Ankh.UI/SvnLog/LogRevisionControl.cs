@@ -55,6 +55,13 @@ namespace Ankh.UI.SvnLog
             if (container != null)
                 container.Add(this);
 
+            // Keep History Viewer interaction states aligned with Pending Changes.
+            // The native dark ListView theme can replace the semantic VS foreground
+            // with a Windows interaction color for selected/hovered rows.
+            AllowDarkNativeTheme = false;
+            PreserveItemForeColorWhenSelected = true;
+            PreserveItemForeColorWhenHot = true;
+
             Sorting = SortOrder.None;
             Init();
             _logAction = new Action<SvnLogArgs>(DoFetch);
