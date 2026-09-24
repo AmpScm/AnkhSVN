@@ -172,6 +172,16 @@ namespace Ankh.Tests.Annotate
                 Is.Not.Null,
                 RegressionContext + ": Annotate must open its revision menu on right-button release, matching the legacy click timing.");
 
+            MethodInfo deferredShowContextMenu = marginType.GetMethods(declaredNonPublicInstance)
+                .SingleOrDefault(method =>
+                    method.Name == "ShowContextMenu" &&
+                    method.GetParameters().Length == 1 &&
+                    method.GetParameters()[0].ParameterType == typeof(System.Windows.Point));
+            Assert.That(
+                deferredShowContextMenu,
+                Is.Not.Null,
+                RegressionContext + ": Annotate must defer menu display until the clicked revision has propagated through VS selection.");
+
             MethodInfo suppressEditorContextMenu = marginType.GetMethod(
                 "OnContextMenuOpening",
                 declaredNonPublicInstance);
