@@ -108,6 +108,28 @@ namespace Ankh.Tests
         }
 
         [Test]
+        public void ReadOnlyNotifyCollectionRemovingUnknownHandlerDoesNotBreakFutureSubscriptions()
+        {
+            var inner = new NotifyCollection<string>();
+            var readOnly = new ReadOnlyNotifyCollection<string>(inner);
+            int events = 0;
+
+            EventHandler<CollectionChangedEventArgs<string>> unknown =
+                delegate { throw new InvalidOperationException("Unknown handler must never run."); };
+            EventHandler<CollectionChangedEventArgs<string>> actual =
+                delegate { events++; };
+
+            readOnly.CollectionChanged -= unknown;
+            readOnly.CollectionChanged += actual;
+
+            inner.Add("one");
+
+            Assert.That(events, Is.EqualTo(1));
+
+            readOnly.CollectionChanged -= actual;
+        }
+
+        [Test]
         public void HybridCollection_UniqueAddRange_UsesConfiguredComparer()
         {
             var collection = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
