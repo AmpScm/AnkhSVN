@@ -23,5 +23,12 @@ namespace Ankh.UI.VSSelectionControls
         {
             return inVsTheming && darkSurface && !highContrast;
         }
+
+        internal static bool ShouldOwnerDrawText(
+            bool inVsTheming,
+            bool highContrast)
+        {
+            return inVsTheming && !highContrast;
+        }
     }
 }
