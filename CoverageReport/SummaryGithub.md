@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 2:01:08 AM |
-| Coverage date: | 9/24/2026 - 2:00:47 AM - 9/24/2026 - 2:00:58 AM |
+| Generated on: | 9/24/2026 - 2:19:17 AM |
+| Coverage date: | 9/24/2026 - 2:19:00 AM - 9/24/2026 - 2:19:08 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 10 |
 | Classes: | 609 |
 | Files: | 677 |
-| **Line coverage:** | 9.1% (4298 of 47001) |
-| Covered lines: | 4298 |
-| Uncovered lines: | 42703 |
-| Coverable lines: | 47001 |
-| Total lines: | 132517 |
-| **Branch coverage:** | 11.7% (2651 of 22581) |
-| Covered branches: | 2651 |
-| Total branches: | 22581 |
+| **Line coverage:** | 9.1% (4296 of 46992) |
+| Covered lines: | 4296 |
+| Uncovered lines: | 42696 |
+| Coverable lines: | 46992 |
+| Total lines: | 132482 |
+| **Branch coverage:** | 11.7% (2647 of 22575) |
+| Covered branches: | 2647 |
+| Total branches: | 22575 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -389,7 +389,7 @@
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**7.4%**|**9.1%**|
+|**Ankh.UI**|**7.4%**|**9%**|
 |Ankh.UI.AddRepositoryRootDialog|0%|0%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -484,7 +484,7 @@
 |Ankh.UI.PendingChanges.Commits.PendingCommitItem|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitItemCollection|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitsThemeLogic|100%|100%|
-|Ankh.UI.PendingChanges.Commits.PendingCommitsView|32%|4.4%|
+|Ankh.UI.PendingChanges.Commits.PendingCommitsView|32.6%|4.5%|
 |Ankh.UI.PendingChanges.ConfigureRecentChangesPageDialog|0%|0%|
 |Ankh.UI.PendingChanges.Conflicts.ConflictListItem|0%|0%|
 |Ankh.UI.PendingChanges.Conflicts.ConflictListView|0%|0%|
