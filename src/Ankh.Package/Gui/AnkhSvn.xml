@@ -883,6 +883,10 @@
                   iconId="ImageCatalogGuid:History" dynamicVisibility="true"/>          
           <Button id="Cmd_SvnNodeAnnotate" priority="0x400" name="SvnNodeAnnotate" text="&amp;Annotate..."
                   iconId="ImageCatalogGuid:NewTextAnnotation" dynamicVisibility="true"/>
+          <Button id="Cmd_AnnotatePreviousRevision" priority="0x500" name="AnnotatePreviousRevision"
+                  text="Annotate &amp;Previous Revision"
+                  toolTip="Annotate the file as it existed immediately before the selected revision."
+                  iconId="ImageCatalogGuid:NewTextAnnotation" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_CopyToWorkingCopy" priority="0x800" />
         </Group>
         <GroupRef id="Grp_LogViewerEdit" priority="0x300" />
