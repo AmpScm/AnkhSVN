@@ -292,6 +292,7 @@ namespace Ankh.UI.VSSelectionControls
             public const int CDRF_NEWFONT = 0x00000002;
             public const int CDRF_NOTIFYITEMDRAW = 0x00000020;
             public const uint CDIS_SELECTED = 0x0001;
+            public const uint CDIS_HOT = 0x0040;
 
             public const int HDN_ITEMSTATEICONCLICK = -316;
 
@@ -1080,14 +1081,40 @@ namespace Ankh.UI.VSSelectionControls
                                 return;
                             }
 
-                            if (draw.nmcd.dwDrawStage == NativeMethods.CDDS_ITEMPREPAINT
-                                && (draw.nmcd.uItemState & NativeMethods.CDIS_SELECTED) != 0)
+                            if (draw.nmcd.dwDrawStage == NativeMethods.CDDS_ITEMPREPAINT)
                             {
-                                draw.clrText = ColorTranslator.ToWin32(_selectionForeColor);
-                                draw.clrTextBk = ColorTranslator.ToWin32(_selectionBackColor);
-                                Marshal.StructureToPtr(draw, m.LParam, false);
-                                m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
-                                return;
+                                bool selected =
+                                    (draw.nmcd.uItemState & NativeMethods.CDIS_SELECTED) != 0;
+                                bool hot =
+                                    (draw.nmcd.uItemState & NativeMethods.CDIS_HOT) != 0;
+
+                                if (selected || hot)
+                                {
+                                    int itemIndex = unchecked((int)draw.nmcd.dwItemSpec.ToInt64());
+                                    Color itemForeColor = ForeColor;
+
+                                    if (itemIndex >= 0 && itemIndex < Items.Count)
+                                    {
+                                        itemForeColor =
+                                            SmartListViewThemeLogic.ResolveSelectedItemForeground(
+                                                Items[itemIndex].ForeColor,
+                                                ForeColor);
+                                    }
+
+                                    // Hovering or selecting a row must not replace the
+                                    // item's theme/status foreground. Let the native
+                                    // control keep drawing its interaction background,
+                                    // but preserve the resolved item text color.
+                                    draw.clrText = ColorTranslator.ToWin32(itemForeColor);
+
+                                    if (selected)
+                                        draw.clrTextBk =
+                                            ColorTranslator.ToWin32(_selectionBackColor);
+
+                                    Marshal.StructureToPtr(draw, m.LParam, false);
+                                    m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
+                                    return;
+                                }
                             }
                         }
 
