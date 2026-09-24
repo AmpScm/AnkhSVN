@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 1:49:36 AM |
-| Coverage date: | 9/24/2026 - 1:49:17 AM - 9/24/2026 - 1:49:27 AM |
+| Generated on: | 9/24/2026 - 2:01:08 AM |
+| Coverage date: | 9/24/2026 - 2:00:47 AM - 9/24/2026 - 2:00:58 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 10 |
 | Classes: | 609 |
 | Files: | 677 |
-| **Line coverage:** | 9.1% (4291 of 46952) |
-| Covered lines: | 4291 |
-| Uncovered lines: | 42661 |
-| Coverable lines: | 46952 |
-| Total lines: | 132423 |
-| **Branch coverage:** | 11.7% (2650 of 22547) |
-| Covered branches: | 2650 |
-| Total branches: | 22547 |
+| **Line coverage:** | 9.1% (4298 of 47001) |
+| Covered lines: | 4298 |
+| Uncovered lines: | 42703 |
+| Coverable lines: | 47001 |
+| Total lines: | 132517 |
+| **Branch coverage:** | 11.7% (2651 of 22581) |
+| Covered branches: | 2651 |
+| Total branches: | 22581 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -397,10 +397,10 @@
 |Ankh.UI.Annotate.AnnotateRegion|0%|0%|
 |Ankh.UI.Annotate.AnnotateResources|0%|0%|
 |Ankh.UI.Annotate.AnnotateSource|0%|0%|
-|Ankh.UI.Annotate.AnnotationDocument|81.8%||
+|Ankh.UI.Annotate.AnnotationDocument|90.9%||
 |Ankh.UI.Annotate.AnnotationDocumentRegistry|80.6%|50%|
 |Ankh.UI.Annotate.AnnotationLayoutCalculator|93.7%|96.1%|
-|Ankh.UI.Annotate.AnnotationMargin|20.1%|9.7%|
+|Ankh.UI.Annotate.AnnotationMargin|18.5%|7.7%|
 |Ankh.UI.Annotate.AnnotationMarginProvider|84.6%|62.5%|
 |Ankh.UI.Annotate.AnnotationRegionLayout|100%||
 |Ankh.UI.Commands.AnnotateDialog|0%|0%|
