@@ -300,6 +300,9 @@ namespace Ankh.UI.VSSelectionControls
 
         bool _inVSTheming;
         bool _useDarkNativeTheme;
+        Color _selectionBackColor;
+        Color _selectionForeColor;
+        Color _disabledForeColor;
         bool _usePaletteRendering;
         Color _selectionBackColor = SystemColors.Highlight;
         Color _selectionForeColor = SystemColors.HighlightText;
@@ -352,8 +355,73 @@ namespace Ankh.UI.VSSelectionControls
             RecreateHandle();
         }
 
+        protected override void OnDrawNode(DrawTreeNodeEventArgs e)
+        {
+            if (DrawMode != TreeViewDrawMode.OwnerDrawText || e == null || e.Node == null)
+            {
+                base.OnDrawNode(e);
+                return;
+            }
+
+            bool selected = (e.State & TreeNodeStates.Selected) != 0;
+            Color backColor = selected
+                ? _selectionBackColor
+                : (e.Node.BackColor.IsEmpty ? BackColor : e.Node.BackColor);
+            Color foreColor = selected
+                ? _selectionForeColor
+                : (e.Node.ForeColor.IsEmpty ? ForeColor : e.Node.ForeColor);
+
+            if (!Enabled)
+                foreColor = _disabledForeColor.IsEmpty ? SystemColors.GrayText : _disabledForeColor;
+
+            using (SolidBrush background = new SolidBrush(backColor))
+                e.Graphics.FillRectangle(background, e.Bounds);
+
+            Font nodeFont = e.Node.NodeFont ?? Font;
+            TextRenderer.DrawText(
+                e.Graphics,
+                e.Node.Text,
+                nodeFont,
+                e.Bounds,
+                foreColor,
+                backColor,
+                TextFormatFlags.Left |
+                TextFormatFlags.VerticalCenter |
+                TextFormatFlags.EndEllipsis |
+                TextFormatFlags.NoPrefix |
+                TextFormatFlags.SingleLine);
+
+            if (selected && Focused)
+                ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds, foreColor, backColor);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            // DarkMode_Explorer can repaint a TreeView with Windows' light
+            // background while retaining dark selection visuals. Ensure the
+            // semantic VS colors are in the native control before each paint.
+            if (_inVSTheming && m.Msg == NativeMethods.WM_PAINT)
+                RestoreNativeColors(this);
+
+            base.WndProc(ref m);
+
+            if (_inVSTheming &&
+                (m.Msg == NativeMethods.WM_THEMECHANGED ||
+                 m.Msg == NativeMethods.WM_SYSCOLORCHANGE ||
+                 m.Msg == NativeMethods.WM_SETTINGCHANGE))
+            {
+                RestoreNativeColors(this);
+                Invalidate();
+            }
+        }
+
         static class NativeMethods
         {
+            public const int WM_PAINT = 0x000F;
+            public const int WM_SYSCOLORCHANGE = 0x0015;
+            public const int WM_SETTINGCHANGE = 0x001A;
+            public const int WM_THEMECHANGED = 0x031A;
+
             [DllImport("user32.dll")]
             public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
