@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 2:27:07 PM |
-| Coverage date: | 9/24/2026 - 2:26:45 PM - 9/24/2026 - 2:26:56 PM |
+| Generated on: | 9/24/2026 - 2:50:38 PM |
+| Coverage date: | 9/24/2026 - 2:50:16 PM - 9/24/2026 - 2:50:27 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 10 |
 | Classes: | 609 |
 | Files: | 677 |
-| **Line coverage:** | 9.2% (4360 of 47260) |
-| Covered lines: | 4360 |
-| Uncovered lines: | 42900 |
-| Coverable lines: | 47260 |
-| Total lines: | 132990 |
-| **Branch coverage:** | 11.7% (2671 of 22727) |
-| Covered branches: | 2671 |
-| Total branches: | 22727 |
+| **Line coverage:** | 9.2% (4362 of 47300) |
+| Covered lines: | 4362 |
+| Uncovered lines: | 42938 |
+| Coverable lines: | 47300 |
+| Total lines: | 133061 |
+| **Branch coverage:** | 11.7% (2669 of 22743) |
+| Covered branches: | 2669 |
+| Total branches: | 22743 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -271,7 +271,7 @@
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Services**|**14.7%**|**13.5%**|
+|**Ankh.Services**|**14.7%**|**13.6%**|
 |Ankh.AnkhInstanceConditionalAttribute|46.6%|50%|
 |Ankh.AnkhRuntime|31.9%|24.3%|
 |Ankh.AnkhService|13.5%|6.4%|
@@ -364,7 +364,7 @@
 |Ankh.SvnPoolRemoteSession|0%|0%|
 |Ankh.UI.AnkhCommandHook|0%|0%|
 |Ankh.UI.AnkhMessageBox|0%|0%|
-|Ankh.UI.AnkhThemePalette|39.3%|100%|
+|Ankh.UI.AnkhThemePalette|42.1%|100%|
 |Ankh.UI.AnkhToolWindowControl|0%|0%|
 |Ankh.UI.VSCommandHandler|0%|0%|
 |Ankh.UI.VSContainerForm|4.7%|0%|
@@ -389,7 +389,7 @@
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**7.6%**|**9.1%**|
+|**Ankh.UI**|**7.6%**|**9%**|
 |Ankh.UI.AddRepositoryRootDialog|0%|0%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -579,7 +579,7 @@
 |Ankh.UI.SvnLog.LogItem|0%|0%|
 |Ankh.UI.SvnLog.LogRequest|0%|0%|
 |Ankh.UI.SvnLog.LogRevisionControl|0%|0%|
-|Ankh.UI.SvnLog.LogRevisionItem|1.8%|6.2%|
+|Ankh.UI.SvnLog.LogRevisionItem|0%|0%|
 |Ankh.UI.SvnLog.LogStrings|0%|0%|
 |Ankh.UI.SvnLog.LogToolWindowControl|0%|0%|
 |Ankh.UI.SvnLog.LogViewerDialog|0%|0%|
@@ -687,7 +687,7 @@
 |Ankh.WpfPackage.Services.PaletteComboBoxPainter|0%|0%|
 |Ankh.WpfPackage.Services.PaletteNumericUpDownPainter|0%|0%|
 |Ankh.WpfPackage.Services.ThemeReflectionLogic|73.1%|70.8%|
-|Ankh.WpfPackage.Services.ThemingService|2.4%|0%|
+|Ankh.WpfPackage.Services.ThemingService|2.3%|0%|
 |Ankh.WpfPackage.Services.ThreadedWaitService|0%|0%|
 |Ankh.WpfPackage.Services.WinFormsNativeThemeLogic|100%|100%|
 
