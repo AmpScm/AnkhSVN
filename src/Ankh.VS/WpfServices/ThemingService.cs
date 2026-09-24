@@ -390,10 +390,30 @@ namespace Ankh.WpfPackage.Services
 
         void ThemeOne(TreeView treeView, bool forDialog)
         {
-            ApplyNativeControlTheme(
-                treeView.Handle,
-                WinFormsNativeThemeLogic.DarkExplorerTheme,
-                forDialog, ThemePalette.SurfaceBackground);
+            Ankh.UI.VSSelectionControls.SmartTreeView smartTree =
+                treeView as Ankh.UI.VSSelectionControls.SmartTreeView;
+            bool paletteRendered =
+                smartTree != null &&
+                smartTree.UsePaletteRendering &&
+                !SystemInformation.HighContrast;
+
+            if (paletteRendered)
+            {
+                // ThemeWindow/SetFixedThemeColors runs after ISupportsVSTheming and can
+                // re-enable Explorer visual styles on a SmartTreeView whose selection
+                // is intentionally owner-drawn from the VS palette. Apply the shell
+                // integration first, then explicitly disable the native Explorer theme
+                // so it cannot repaint a white background or dark selected text.
+                VSThemeWindow(treeView.Handle, forDialog);
+                NativeMethods.SetWindowTheme(treeView.Handle, "", "");
+            }
+            else
+            {
+                ApplyNativeControlTheme(
+                    treeView.Handle,
+                    WinFormsNativeThemeLogic.DarkExplorerTheme,
+                    forDialog, ThemePalette.SurfaceBackground);
+            }
 
             if (treeView.Font != DialogFont)
                 treeView.Font = DialogFont;
