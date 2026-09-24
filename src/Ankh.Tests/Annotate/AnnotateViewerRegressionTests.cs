@@ -161,6 +161,14 @@ namespace Ankh.Tests.Annotate
                 Is.Not.Null,
                 RegressionContext + ": Annotate must intercept right-click before the native editor context menu handles it.");
 
+            MethodInfo previewRightClickRelease = marginType.GetMethod(
+                "OnPreviewMouseRightButtonUp",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(
+                previewRightClickRelease,
+                Is.Not.Null,
+                RegressionContext + ": Annotate must open its revision menu on right-button release, matching the legacy click timing.");
+
             MethodInfo suppressEditorContextMenu = marginType.GetMethod(
                 "OnContextMenuOpening",
                 BindingFlags.Instance | BindingFlags.NonPublic);
