@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Drawing;
+
 namespace Ankh.UI.VSSelectionControls
 {
     internal static class SmartListViewThemeLogic
@@ -22,6 +24,18 @@ namespace Ankh.UI.VSSelectionControls
             bool highContrast)
         {
             return !themeCancelled && hasPalette && !highContrast;
+        }
+
+        internal static Color ResolveSelectionForeground(
+            bool darkSurface,
+            Color surfaceForeground,
+            Color selectionForeground)
+        {
+            // Visual Studio can expose a dark selection foreground for native
+            // controls even when the containing surface is dark. That produces
+            // black selected-row text. Keep selected text on dark surfaces
+            // aligned with the normal VS foreground instead.
+            return darkSurface ? surfaceForeground : selectionForeground;
         }
 
         internal static bool ShouldUseDarkNativeTheme(
