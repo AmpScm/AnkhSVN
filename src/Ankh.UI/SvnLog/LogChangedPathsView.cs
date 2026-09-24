@@ -94,6 +94,16 @@ namespace Ankh.UI.SvnLog
             }
         }
 
+        public override void OnThemeChange(IAnkhServiceProvider sender, CancelEventArgs e)
+        {
+            base.OnThemeChange(sender, e);
+
+            // Changed-path rows use status accents. Rebuild them after a theme
+            // switch so those colors are recalculated against the new VS surface.
+            if (ItemSource != null)
+                FocusChanged(this, EventArgs.Empty);
+        }
+
         #region ICurrentItemDestination<ISvnLogItem> Members
         ICurrentItemSource<ISvnLogItem> itemSource;
         public ICurrentItemSource<ISvnLogItem> ItemSource
