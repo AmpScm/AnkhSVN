@@ -19,9 +19,14 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using Ankh.Commands;
 using Ankh.Selection;
+using Ankh.VS;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell.Interop;
+using DrawingColor = System.Drawing.Color;
+using MediaColor = System.Windows.Media.Color;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
@@ -41,6 +46,11 @@ namespace Ankh.UI.Annotate
         readonly List<MarginRegion> _regions = new List<MarginRegion>();
         bool _disposed;
         MarginRegion _selectedRegion;
+        Brush _surfaceBackgroundBrush;
+        Brush _surfaceForegroundBrush;
+        Brush _borderBrush;
+        Brush _selectionBackgroundBrush;
+        Brush _selectionForegroundBrush;
 
         public AnnotationMargin(IWpfTextView textView, string fileName, AnnotationDocument document)
         {
@@ -55,9 +65,12 @@ namespace Ankh.UI.Annotate
 
             Width = 175;
             ClipToBounds = true;
-            Background = SystemColors.ControlBrush;
 
+            RefreshThemeBrushes();
             BuildRegions(document);
+            ApplyTheme();
+
+            VSColorTheme.ThemeChanged += OnVsThemeChanged;
 
             PreviewMouseRightButtonDown += OnPreviewMouseRightButtonDown;
             PreviewMouseRightButtonUp += OnPreviewMouseRightButtonUp;
@@ -130,8 +143,8 @@ namespace Ankh.UI.Annotate
 
             return new Border
             {
-                Background = SystemColors.ControlBrush,
-                BorderBrush = SystemColors.ControlDarkBrush,
+                Background = _surfaceBackgroundBrush,
+                BorderBrush = _borderBrush,
                 BorderThickness = new Thickness(0, 0, 0, 1),
                 Padding = new Thickness(3, 0, 3, 0),
                 ClipToBounds = true,
@@ -140,12 +153,12 @@ namespace Ankh.UI.Annotate
             };
         }
 
-        static TextBlock CreateTextBlock(string text)
+        TextBlock CreateTextBlock(string text)
         {
             return new TextBlock
             {
                 Text = text,
-                Foreground = SystemColors.ControlTextBrush,
+                Foreground = _surfaceForegroundBrush,
                 FontSize = 11,
                 VerticalAlignment = VerticalAlignment.Center,
                 TextTrimming = TextTrimming.CharacterEllipsis,
@@ -239,15 +252,15 @@ namespace Ankh.UI.Annotate
         {
             if (_selectedRegion != null)
             {
-                _selectedRegion.Element.Background = SystemColors.ControlBrush;
-                SetTextBrush(_selectedRegion.Element, SystemColors.ControlTextBrush);
+                _selectedRegion.Element.Background = _surfaceBackgroundBrush;
+                SetTextBrush(_selectedRegion.Element, _surfaceForegroundBrush);
             }
 
             _selectedRegion = region;
             if (_selectedRegion != null)
             {
-                _selectedRegion.Element.Background = SystemColors.HighlightBrush;
-                SetTextBrush(_selectedRegion.Element, SystemColors.HighlightTextBrush);
+                _selectedRegion.Element.Background = _selectionBackgroundBrush;
+                SetTextBrush(_selectedRegion.Element, _selectionForegroundBrush);
             }
 
             SelectSource(_selectedRegion != null ? _selectedRegion.Source : null);
@@ -291,7 +304,74 @@ namespace Ankh.UI.Annotate
             }
         }
 
-        static void SetTextBrush(Border border, System.Windows.Media.Brush brush)
+        void OnVsThemeChanged(ThemeChangedEventArgs e)
+        {
+            if (_disposed)
+                return;
+
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new Action(ApplyTheme));
+                return;
+            }
+
+            ApplyTheme();
+        }
+
+        void ApplyTheme()
+        {
+            if (_disposed)
+                return;
+
+            RefreshThemeBrushes();
+            Background = _surfaceBackgroundBrush;
+
+            foreach (MarginRegion region in _regions)
+            {
+                bool selected = ReferenceEquals(region, _selectedRegion);
+                region.Element.BorderBrush = _borderBrush;
+                region.Element.Background = selected
+                    ? _selectionBackgroundBrush
+                    : _surfaceBackgroundBrush;
+                SetTextBrush(
+                    region.Element,
+                    selected ? _selectionForegroundBrush : _surfaceForegroundBrush);
+            }
+        }
+
+        void RefreshThemeBrushes()
+        {
+            _surfaceBackgroundBrush = GetVsBrush(
+                __VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND,
+                SystemColors.ControlBrush);
+            _surfaceForegroundBrush = GetVsBrush(
+                __VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_TEXT,
+                SystemColors.ControlTextBrush);
+            _borderBrush = GetVsBrush(
+                (__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_COMBOBOX_BORDER,
+                SystemColors.ControlDarkBrush);
+            _selectionBackgroundBrush = GetVsBrush(
+                (__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_HIGHLIGHT,
+                SystemColors.HighlightBrush);
+            _selectionForegroundBrush = GetVsBrush(
+                (__VSSYSCOLOREX)__VSSYSCOLOREX3.VSCOLOR_HIGHLIGHTTEXT,
+                SystemColors.HighlightTextBrush);
+        }
+
+        Brush GetVsBrush(__VSSYSCOLOREX colorId, Brush fallback)
+        {
+            IAnkhVSColor colors = _context.GetService<IAnkhVSColor>();
+            DrawingColor color;
+            if (colors == null || !colors.TryGetColor(colorId, out color))
+                return fallback;
+
+            SolidColorBrush brush = new SolidColorBrush(
+                MediaColor.FromArgb(color.A, color.R, color.G, color.B));
+            brush.Freeze();
+            return brush;
+        }
+
+        static void SetTextBrush(Border border, Brush brush)
         {
             Grid grid = border.Child as Grid;
             if (grid == null)
@@ -467,6 +547,7 @@ namespace Ankh.UI.Annotate
                 return;
 
             _disposed = true;
+            VSColorTheme.ThemeChanged -= OnVsThemeChanged;
             PreviewMouseRightButtonDown -= OnPreviewMouseRightButtonDown;
             PreviewMouseRightButtonUp -= OnPreviewMouseRightButtonUp;
             ContextMenuOpening -= OnContextMenuOpening;
