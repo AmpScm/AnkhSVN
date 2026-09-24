@@ -284,6 +284,13 @@ namespace Ankh.UI.VSSelectionControls
             public const int NM_CLICK = -2;
             public const int NM_DBLCLK = -3;
             public const int NM_RETURN = -4;
+            public const int NM_CUSTOMDRAW = -12;
+
+            public const uint CDDS_PREPAINT = 0x00000001;
+            public const uint CDDS_ITEMPREPAINT = 0x00010001;
+            public const int CDRF_NEWFONT = 0x00000002;
+            public const int CDRF_NOTIFYITEMDRAW = 0x00000020;
+            public const uint CDIS_SELECTED = 0x0001;
 
             public const int HDN_ITEMSTATEICONCLICK = -316;
 
@@ -301,6 +308,27 @@ namespace Ankh.UI.VSSelectionControls
 
             [DllImport("user32.dll")]
             public static extern IntPtr SendMessage(IntPtr Handle, Int32 msg, IntPtr wParam, ref LVITEM lParam);
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct NMCUSTOMDRAW
+            {
+                public NMHDR hdr;
+                public uint dwDrawStage;
+                public IntPtr hdc;
+                public RECT rc;
+                public IntPtr dwItemSpec;
+                public uint uItemState;
+                public IntPtr lItemlParam;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct NMLVCUSTOMDRAW
+            {
+                public NMCUSTOMDRAW nmcd;
+                public int clrText;
+                public int clrTextBk;
+                public int iSubItem;
+            }
 
             [StructLayout(LayoutKind.Sequential)]
             public struct RECT
@@ -505,6 +533,9 @@ namespace Ankh.UI.VSSelectionControls
         Color _headerBackColor;
         Color _headerForeColor;
         Color _headerBorderColor;
+        Color _selectionBackColor;
+        Color _selectionForeColor;
+        bool _usePaletteSelectionColors;
 
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -986,9 +1017,34 @@ namespace Ankh.UI.VSSelectionControls
 
                     case NativeMethods.OCM_NOTIFY:
                         // Receives ListView notifications
+                        NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
+
+                        if (hdr.code == NativeMethods.NM_CUSTOMDRAW
+                            && _usePaletteSelectionColors)
+                        {
+                            NativeMethods.NMLVCUSTOMDRAW draw =
+                                (NativeMethods.NMLVCUSTOMDRAW)Marshal.PtrToStructure(
+                                    m.LParam, typeof(NativeMethods.NMLVCUSTOMDRAW));
+
+                            if (draw.nmcd.dwDrawStage == NativeMethods.CDDS_PREPAINT)
+                            {
+                                m.Result = (IntPtr)NativeMethods.CDRF_NOTIFYITEMDRAW;
+                                return;
+                            }
+
+                            if (draw.nmcd.dwDrawStage == NativeMethods.CDDS_ITEMPREPAINT
+                                && (draw.nmcd.uItemState & NativeMethods.CDIS_SELECTED) != 0)
+                            {
+                                draw.clrText = ColorTranslator.ToWin32(_selectionForeColor);
+                                draw.clrTextBk = ColorTranslator.ToWin32(_selectionBackColor);
+                                Marshal.StructureToPtr(draw, m.LParam, false);
+                                m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
+                                return;
+                            }
+                        }
+
                         if (CheckBoxes && StrictCheckboxesClick)
                         {
-                            NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
 
                             if (hdr.code == NativeMethods.NM_DBLCLK)
                             {
@@ -1487,12 +1543,18 @@ namespace Ankh.UI.VSSelectionControls
                 _headerBackColor = AnkhThemePalette.Blend(palette.SurfaceForeground, palette.SurfaceBackground, 0.08);
                 _headerForeColor = palette.SurfaceForeground;
                 _headerBorderColor = palette.Border;
+                _selectionBackColor = palette.SelectionBackground;
+                _selectionForeColor = palette.SelectionForeground;
+                _usePaletteSelectionColors = !SystemInformation.HighContrast;
             }
             else
             {
                 _headerBackColor = Color.Empty;
                 _headerForeColor = Color.Empty;
                 _headerBorderColor = Color.Empty;
+                _selectionBackColor = Color.Empty;
+                _selectionForeColor = Color.Empty;
+                _usePaletteSelectionColors = false;
             }
 
             _ownerDrawPaletteHeader = SmartListViewThemeLogic.ShouldOwnerDrawHeader(
