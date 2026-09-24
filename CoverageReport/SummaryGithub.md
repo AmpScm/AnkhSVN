@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 11:54:38 PM |
-| Coverage date: | 9/24/2026 - 11:54:09 PM - 9/24/2026 - 11:54:19 PM |
+| Generated on: | 9/24/2026 - 11:58:09 PM |
+| Coverage date: | 9/24/2026 - 11:57:53 PM - 9/24/2026 - 11:58:01 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 25.1% (12004 of 47710) |
-| Covered lines: | 12004 |
-| Uncovered lines: | 35706 |
+| **Line coverage:** | 25.1% (12005 of 47710) |
+| Covered lines: | 12005 |
+| Uncovered lines: | 35705 |
 | Coverable lines: | 47710 |
 | Total lines: | 133839 |
-| **Branch coverage:** | 20.5% (4708 of 22919) |
-| Covered branches: | 4708 |
+| **Branch coverage:** | 20.5% (4710 of 22919) |
+| Covered branches: | 4710 |
 | Total branches: | 22919 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -303,7 +303,7 @@
 |Ankh.Commands.SvnCommandAttribute|50%||
 |Ankh.Configuration.AnkhConfig|0%|0%|
 |Ankh.Configuration.RegistryLifoList|0%|0%|
-|Ankh.Configuration.RegistryUtils|81.8%|62.5%|
+|Ankh.Configuration.RegistryUtils|90.9%|87.5%|
 |Ankh.ContextServices.GuidUtils|100%|100%|
 |Ankh.EnumTools|55.1%|50%|
 |Ankh.GlobalServiceAttribute|0%|0%|
