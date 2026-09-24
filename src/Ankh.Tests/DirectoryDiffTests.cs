@@ -175,6 +175,48 @@ namespace Ankh.Tests
         }
 
         [Test]
+        public void FileFilterSupportsMultipleTrimmedPatternsWithoutDuplicates()
+        {
+            string directory = MakeDirectory("Filter");
+            File.WriteAllText(Path.Combine(directory, "b.cs"), "cs");
+            File.WriteAllText(Path.Combine(directory, "a.txt"), "txt");
+            File.WriteAllText(Path.Combine(directory, "ignored.md"), "md");
+
+            const string filterText = " *.txt ; *.cs ; *.txt ";
+            var filter = new DirectoryDiffFileFilter(filterText, true);
+
+            FileInfo[] files = filter.Filter(new DirectoryInfo(directory));
+            string[] names = Array.ConvertAll(files, file => file.Name);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(filter.Include, Is.True);
+                Assert.That(filter.FilterString, Is.EqualTo(filterText));
+                CollectionAssert.AreEqual(new[] { "a.txt", "b.cs" }, names);
+            });
+        }
+
+        [Test]
+        public void FileFilterExcludeModeReturnsFilesOutsideMatchingPatterns()
+        {
+            string directory = MakeDirectory("Filter");
+            File.WriteAllText(Path.Combine(directory, "keep.txt"), "keep");
+            File.WriteAllText(Path.Combine(directory, "skip.tmp"), "tmp");
+            File.WriteAllText(Path.Combine(directory, "skip.log"), "log");
+
+            var filter = new DirectoryDiffFileFilter("*.tmp; *.log", false);
+
+            FileInfo[] files = filter.Filter(new DirectoryInfo(directory));
+            string[] names = Array.ConvertAll(files, file => file.Name);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(filter.Include, Is.False);
+                CollectionAssert.AreEqual(new[] { "keep.txt" }, names);
+            });
+        }
+
+        [Test]
         public void ComparingDirectoryToItselfSkipsFileContentComparison()
         {
             string a = MakeDirectory("A");

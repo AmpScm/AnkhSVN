@@ -14,10 +14,12 @@
 
 using System;
 using System.Collections;
+using System.Drawing;
 using System.IO;
 using System.Text;
 
 using Ankh.Diff.DiffUtils;
+using Ankh.Diff.DiffUtils.Controls;
 using NUnit.Framework;
 
 namespace AnkhSvn_UnitTestProject.Diff
@@ -82,6 +84,88 @@ namespace AnkhSvn_UnitTestProject.Diff
                 Assert.That(normalizedScript.TotalEditLength, Is.Zero);
                 Assert.That(prefixScript.Count, Is.Zero);
                 Assert.That(prefixScript.TotalEditLength, Is.Zero);
+            });
+        }
+
+        [Test]
+        public void DiffOptionsBatchChangesRaiseOneNotificationAndMapEditColors()
+        {
+            Color originalInserted = DiffOptions.InsertedColor;
+            Color originalDeleted = DiffOptions.DeletedColor;
+            Color originalChanged = DiffOptions.ChangedColor;
+            int originalSpacesPerTab = DiffOptions.SpacesPerTab;
+
+            Color inserted = Color.FromArgb(originalInserted.ToArgb() ^ 0x00FFFFFF);
+            Color deleted = Color.FromArgb(originalDeleted.ToArgb() ^ 0x00FFFFFF);
+            Color changed = Color.FromArgb(originalChanged.ToArgb() ^ 0x00FFFFFF);
+            int spacesPerTab = originalSpacesPerTab == 7 ? 8 : 7;
+            int notifications = 0;
+            EventHandler handler = delegate { notifications++; };
+
+            DiffOptions.OptionsChanged += handler;
+            try
+            {
+                DiffOptions.BeginUpdate();
+                try
+                {
+                    DiffOptions.InsertedColor = inserted;
+                    DiffOptions.DeletedColor = deleted;
+                    DiffOptions.ChangedColor = changed;
+                    DiffOptions.SpacesPerTab = spacesPerTab;
+                }
+                finally
+                {
+                    DiffOptions.EndUpdate();
+                }
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(notifications, Is.EqualTo(1));
+                    Assert.That(DiffOptions.InsertedColor, Is.EqualTo(inserted));
+                    Assert.That(DiffOptions.DeletedColor, Is.EqualTo(deleted));
+                    Assert.That(DiffOptions.ChangedColor, Is.EqualTo(changed));
+                    Assert.That(DiffOptions.SpacesPerTab, Is.EqualTo(spacesPerTab));
+                    Assert.That(DiffOptions.GetColorForEditType(EditType.Insert), Is.EqualTo(inserted));
+                    Assert.That(DiffOptions.GetColorForEditType(EditType.Delete), Is.EqualTo(deleted));
+                    Assert.That(DiffOptions.GetColorForEditType(EditType.Change), Is.EqualTo(changed));
+                    Assert.That(DiffOptions.GetColorForEditType((EditType)int.MaxValue), Is.EqualTo(Color.Transparent));
+                });
+
+                DiffOptions.InsertedColor = inserted;
+                DiffOptions.DeletedColor = deleted;
+                DiffOptions.ChangedColor = changed;
+                DiffOptions.SpacesPerTab = spacesPerTab;
+
+                Assert.That(notifications, Is.EqualTo(1),
+                    "Reassigning identical values must not raise OptionsChanged.");
+            }
+            finally
+            {
+                DiffOptions.OptionsChanged -= handler;
+
+                DiffOptions.BeginUpdate();
+                try
+                {
+                    DiffOptions.InsertedColor = originalInserted;
+                    DiffOptions.DeletedColor = originalDeleted;
+                    DiffOptions.ChangedColor = originalChanged;
+                    DiffOptions.SpacesPerTab = originalSpacesPerTab;
+                }
+                finally
+                {
+                    DiffOptions.EndUpdate();
+                }
+            }
+        }
+
+        [Test]
+        public void DiffOptionsExposeStableDefaultColors()
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(DiffOptions.DefaultInsertedColor, Is.EqualTo(Color.PaleTurquoise));
+                Assert.That(DiffOptions.DefaultDeletedColor, Is.EqualTo(Color.Pink));
+                Assert.That(DiffOptions.DefaultChangedColor, Is.EqualTo(Color.PaleGreen));
             });
         }
 
