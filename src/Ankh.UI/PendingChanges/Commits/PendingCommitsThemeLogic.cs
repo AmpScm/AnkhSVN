@@ -27,6 +27,17 @@ namespace Ankh.UI.PendingChanges.Commits
             return !darkSurface && !highContrast;
         }
 
+        internal static bool ShouldHideInactiveSelection(
+            bool darkSurface,
+            bool highContrast)
+        {
+            // The native themed ListView can ignore custom foreground colors
+            // for an unfocused selected row and fall back to black text.
+            // On dark surfaces, hide that inactive native selection instead;
+            // when focus returns, the normal selected-row highlight reappears.
+            return darkSurface && !highContrast;
+        }
+
         internal static Color ResolveItemForeColor(
             Color statusColor,
             Color listForeColor,
