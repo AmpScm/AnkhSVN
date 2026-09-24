@@ -64,7 +64,7 @@ namespace Ankh.UI.WizardFramework
 			WizardPage oldItem = this[index];
 			oldItem.OnBeforeRemove(this);
 			base.RemoveItem(index);
-			oldItem.OnBeforeRemove(this);
+			oldItem.OnAfterRemove(this);
 		}
 
 		public Wizard Wizard
