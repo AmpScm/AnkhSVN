@@ -18,6 +18,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Ankh.Commands;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
@@ -197,7 +198,19 @@ namespace Ankh.UI.Annotate
 
             e.Handled = true;
             SelectRegion(region);
-            ShowContextMenu(this, e);
+
+            // Let the VS selection notification raised by SelectRegion finish
+            // propagating before querying command status for the context menu.
+            // Opening the menu synchronously from the WPF mouse event causes all
+            // dynamic Ankh commands to be evaluated against the previous editor
+            // selection, leaving only static VS entries visible.
+            Point screenPoint = PointToScreen(e.GetPosition(this));
+            Dispatcher.BeginInvoke(
+                new Action(delegate
+                {
+                    ShowContextMenu(screenPoint);
+                }),
+                DispatcherPriority.ContextIdle);
         }
 
         void OnContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -257,14 +270,24 @@ namespace Ankh.UI.Annotate
 
         void ShowContextMenu(FrameworkElement element, MouseButtonEventArgs e)
         {
-            if (_context == null || element == null || e == null)
+            if (element == null || e == null)
+                return;
+
+            ShowContextMenu(element.PointToScreen(e.GetPosition(element)));
+        }
+
+        void ShowContextMenu(Point screenPoint)
+        {
+            if (_context == null)
                 return;
 
             IAnkhCommandService commandService = _context.GetService<IAnkhCommandService>();
             if (commandService == null)
                 return;
 
-            Point screenPoint = element.PointToScreen(e.GetPosition(element));
+            // Force dynamicVisibility commands to re-query the selection that was
+            // just published by the annotation margin.
+            commandService.UpdateCommandUI(true);
             commandService.ShowContextMenu(
                 AnkhCommandMenu.AnnotateContextMenu,
                 (int)Math.Round(screenPoint.X),
