@@ -150,13 +150,21 @@ namespace Ankh.Tests.Regression
     public class FileIconMapperDpiRegressionTests
     {
         [Test]
-        public void ImageListUsesWindowsSmallIconSize()
+        public void ImageListUsesDpiScaledLogicalIconSize()
         {
             object mapper = CreateMapper();
             try
             {
                 ImageList images = GetImageList(mapper);
-                Assert.AreEqual(SystemInformation.SmallIconSize, images.ImageSize);
+                // Shell small-icon metrics can differ from the DPI used by the
+                // host window (notably in a DPI-unaware test process).
+                FieldInfo dpiField = mapper.GetType().GetField(
+                    "_imageDpi", BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.NotNull(dpiField);
+                int dpi = (int)dpiField.GetValue(mapper);
+                Assert.Greater(dpi, 0);
+                int pixels = (int)Math.Round(16 * dpi / 96.0, MidpointRounding.AwayFromZero);
+                Assert.AreEqual(new Size(pixels, pixels), images.ImageSize);
             }
             finally
             {

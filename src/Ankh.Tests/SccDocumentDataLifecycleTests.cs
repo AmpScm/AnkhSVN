@@ -158,7 +158,7 @@ namespace Ankh.Tests
                 var changeControl = persist.As<IVsDocDataFileChangeControl>();
 
                 int reloadable = 1;
-                persist.Setup(p => p.IsDocDataReloadable(out reloadable))
+                persist.As<IVsPersistDocData>().Setup(p => p.IsDocDataReloadable(out reloadable))
                     .Returns(VSConstants.S_OK);
 
                 int readOnly = 1;
@@ -325,6 +325,7 @@ namespace Ankh.Tests
             services.AddService(typeof(IProjectFileMapper), mapper.Object);
 
             fileChanges = new Mock<IVsFileChangeEx>();
+            fileChanges.As<SVsFileChangeEx>();
             uint cookie = 17;
             fileChanges.Setup(f => f.AdviseFileChange(
                     It.IsAny<string>(),

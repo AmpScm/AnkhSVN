@@ -67,6 +67,13 @@ namespace Ankh.UI.WizardFramework
 			oldItem.OnAfterRemove(this);
 		}
 
+		protected override void ClearItems()
+		{
+			// Keep page ownership consistent with individual removals.
+			while (Count > 0)
+				RemoveAt(Count - 1);
+		}
+
 		public Wizard Wizard
 		{
 			get { return _wizard; }

@@ -45,6 +45,24 @@ namespace Ankh.Tests
         }
 
         [Test]
+        public void ClearingPagesReleasesOwnershipForReuse()
+        {
+            using (var first = new TestWizard())
+            using (var second = new TestWizard())
+            {
+                var page = new TestPage("reusable");
+                first.Pages.Add(page);
+                first.Pages.Clear();
+
+                Assert.That(first.Pages, Is.Empty);
+                Assert.That(page.Wizard, Is.Null);
+                Assert.That(page.Container, Is.Null);
+                Assert.DoesNotThrow(() => second.Pages.Add(page));
+                Assert.That(page.Wizard, Is.SameAs(second));
+            }
+        }
+
+        [Test]
         public void PageCannotBelongToTwoWizardsAtTheSameTime()
         {
             using (var one = new TestWizard())
@@ -119,7 +137,7 @@ namespace Ankh.Tests
                 wizard.PageChanging += delegate(object sender, WizardPageChangingEventArgs e)
                 {
                     changing++;
-                    if (e.NewPage == second && wizard.CancelSecondPage)
+                    if (e.TargetPage == second && wizard.CancelSecondPage)
                         e.Cancel = true;
                 };
                 wizard.PageChanged += delegate { changed++; };
