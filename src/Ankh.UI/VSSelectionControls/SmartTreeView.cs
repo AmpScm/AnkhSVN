@@ -349,6 +349,13 @@ namespace Ankh.UI.VSSelectionControls
                 ForeColor = Parent.ForeColor;
             }
 
+            // Palette-rendered TreeViews intentionally own their client-area colors.
+            // Tell ThemeRecursive not to call IVsUIShell6.ThemeWindow afterward;
+            // that native pass is what was repainting the Select Url tree white
+            // and mixing Windows selection colors with the VS dark palette.
+            if (SmartTreeViewThemeLogic.ShouldSuppressNativeVsTheme(UsePaletteRendering))
+                e.Cancel = true;
+
             RecreateHandle();
         }
 
