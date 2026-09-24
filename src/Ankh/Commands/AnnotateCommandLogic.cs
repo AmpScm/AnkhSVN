@@ -39,5 +39,17 @@ namespace Ankh.Commands
         {
             return (startIsWorking || endIsWorking) && targetIsPath;
         }
+
+        public static bool TryGetPreviousRevision(long revision, out long previousRevision)
+        {
+            if (revision <= 0)
+            {
+                previousRevision = -1;
+                return false;
+            }
+
+            previousRevision = revision - 1;
+            return true;
+        }
     }
 }
