@@ -28,7 +28,15 @@ namespace Ankh.Tests
             "Ankh.UI.Commands.CreateChangeListDialog",
             "Ankh.UI.PathSelector.DateSelector",
             "Ankh.UI.PathSelector.RevisionSelector",
-            "Ankh.UI.PathSelector.VersionSelector"
+            "Ankh.UI.PathSelector.VersionSelector",
+            "Ankh.UI.RepositoryExplorer.Dialogs.RenameDialog",
+            "Ankh.UI.RepositoryExplorer.Dialogs.ConfirmDeleteDialog",
+            "Ankh.UI.AddRepositoryRootDialog",
+            "Ankh.UI.WorkingCopyExplorer.AddWorkingCopyExplorerRootDialog",
+            "Ankh.UI.SccManagement.CreateDirectoryDialog",
+            "Ankh.UI.SccManagement.LockDialog",
+            "Ankh.UI.SccManagement.UpdateAvailableDialog",
+            "Ankh.UI.Commands.RecentMessageDialog"
         };
 
         [TestCaseSource(nameof(UiTypes))]
