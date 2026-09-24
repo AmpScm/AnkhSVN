@@ -40,6 +40,19 @@ namespace AnkhSvn_UnitTestProject.Dialogs
         }
 
         [Test]
+        public void HoveredItemKeepsItsExistingForeground()
+        {
+            Color itemForeground = Color.FromArgb(32, 180, 90);
+            Color listForeground = Color.FromArgb(180, 60, 200);
+
+            Assert.That(
+                SmartListViewThemeLogic.ResolveSelectedItemForeground(
+                    itemForeground,
+                    listForeground),
+                Is.EqualTo(itemForeground));
+        }
+
+        [Test]
         public void SelectedItemKeepsItsExistingForeground()
         {
             Color itemForeground = Color.FromArgb(32, 180, 90); // e.g. custom-theme green
