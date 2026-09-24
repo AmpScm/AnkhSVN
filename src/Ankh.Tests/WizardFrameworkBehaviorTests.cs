@@ -170,6 +170,7 @@ namespace Ankh.Tests
                     Assert.That(wizard.NextIsFinish, Is.False);
                 });
 
+                wizard.ShowPage(first);
                 first.IsPageComplete = true;
                 second.IsPageComplete = true;
                 Assert.That(wizard.NextIsFinish, Is.True);
@@ -191,6 +192,7 @@ namespace Ankh.Tests
                 var second = new TestPage("second");
                 wizard.Pages.Add(first);
                 wizard.Pages.Add(second);
+                wizard.ShowPage(first);
 
                 Assert.That(first.CanFlipToNextPage, Is.False);
                 first.IsPageComplete = true;
