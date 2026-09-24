@@ -129,6 +129,53 @@ namespace Ankh.Tests
             Assert.Throws<NotSupportedException>(() => ((IList<SvnItem>)args.ChangedItems).Add(null));
         }
 
+
+        [TestCase(true, false, true)]
+        [TestCase(false, true, false)]
+        [TestCase(false, false, true)]
+        public void CommandEventArgs_ShouldPromptHonorsExplicitPromptPolicy(
+            bool promptUser,
+            bool dontPrompt,
+            bool expected)
+        {
+            var args = new CommandEventArgs(
+                default(AnkhCommand),
+                null,
+                "argument",
+                promptUser,
+                dontPrompt);
+
+            Assert.That(args.Argument, Is.EqualTo("argument"));
+            Assert.That(args.PromptUser, Is.EqualTo(promptUser));
+            Assert.That(args.DontPrompt, Is.EqualTo(dontPrompt));
+            Assert.That(args.ShouldPrompt(false), Is.EqualTo(expected));
+
+            args.Result = "result";
+            Assert.That(args.Result, Is.EqualTo("result"));
+        }
+
+        [Test]
+        public void CommandUpdateEventArgs_DefaultStateAddsNoOleFlags()
+        {
+            var args = new CommandUpdateEventArgs(default(AnkhCommand), null, TextQueryType.Name);
+            OLECMDF flags = 0;
+
+            args.UpdateFlags(ref flags);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(flags, Is.EqualTo((OLECMDF)0));
+                Assert.That(args.Enabled, Is.False);
+                Assert.That(args.Visible, Is.False);
+                Assert.That(args.Checked, Is.False);
+                Assert.That(args.Ninched, Is.False);
+                Assert.That(args.HideOnContextMenu, Is.False);
+                Assert.That(args.DynamicMenuEnd, Is.False);
+                Assert.That(args.Text, Is.Null);
+                Assert.That(args.TextQueryType, Is.EqualTo(TextQueryType.Name));
+            });
+        }
+
         [Test]
         public void CommandUpdateEventArgs_MapsStateToOleCommandFlags()
         {
