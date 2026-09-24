@@ -36,7 +36,32 @@ namespace Ankh.Tests
             "Ankh.UI.SccManagement.CreateDirectoryDialog",
             "Ankh.UI.SccManagement.LockDialog",
             "Ankh.UI.SccManagement.UpdateAvailableDialog",
-            "Ankh.UI.Commands.RecentMessageDialog"
+            "Ankh.UI.Commands.RecentMessageDialog",
+            "Ankh.UI.Commands.AnnotateDialog",
+            "Ankh.UI.Commands.CheckoutDialog",
+            "Ankh.UI.Commands.ExportDialog",
+            "Ankh.UI.Commands.SwitchDialog",
+            "Ankh.UI.Commands.UpdateDialog",
+            "Ankh.UI.ErrorDialog",
+            "Ankh.UI.IssueTracker.IssueTrackerConfigDialog",
+            "Ankh.UI.MergeWizard.MergeConflictHandlerDialog",
+            "Ankh.UI.MergeWizard.MergeResultsDialog",
+            "Ankh.UI.OptionsPages.ToolArgumentDialog",
+            "Ankh.UI.PropertyEditors.PropertyDialog",
+            "Ankh.UI.PropertyEditors.PropertyEditorDialog",
+            "Ankh.UI.RepositoryExplorer.RepositoryFolderBrowserDialog",
+            "Ankh.UI.RepositoryExplorer.RepositoryWizard.RepositorySelectionWizard",
+            "Ankh.UI.RepositoryOpen.ProjectAddInfoDialog",
+            "Ankh.UI.RepositoryOpen.RepositoryOpenDialog",
+            "Ankh.UI.SccManagement.AddProjectToSubversion",
+            "Ankh.UI.SccManagement.AddToSubversion",
+            "Ankh.UI.SccManagement.CopyToDialog",
+            "Ankh.UI.SccManagement.CreateBranchDialog",
+            "Ankh.UI.SccManagement.ItemCompareDialog",
+            "Ankh.UI.SccManagement.ItemUpdateDialog",
+            "Ankh.UI.SccManagement.MultiWorkingCopyCommit",
+            "Ankh.UI.SvnLog.EditLogMessageDialog",
+            "Ankh.UI.SvnLog.LogViewerDialog"
         };
 
         [TestCaseSource(nameof(UiTypes))]
