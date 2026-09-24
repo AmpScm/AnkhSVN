@@ -155,7 +155,7 @@ namespace Ankh.Tests
         }
 
         [Test]
-        public void CommandUpdateEventArgs_DefaultStateAddsNoOleFlags()
+        public void CommandUpdateEventArgs_DefaultStateIsEnabledAndVisible()
         {
             var args = new CommandUpdateEventArgs(default(AnkhCommand), null, TextQueryType.Name);
             OLECMDF flags = 0;
@@ -164,9 +164,9 @@ namespace Ankh.Tests
 
             Assert.Multiple(() =>
             {
-                Assert.That(flags, Is.EqualTo((OLECMDF)0));
-                Assert.That(args.Enabled, Is.False);
-                Assert.That(args.Visible, Is.False);
+                Assert.That(flags, Is.EqualTo(OLECMDF.OLECMDF_ENABLED));
+                Assert.That(args.Enabled, Is.True);
+                Assert.That(args.Visible, Is.True);
                 Assert.That(args.Checked, Is.False);
                 Assert.That(args.Ninched, Is.False);
                 Assert.That(args.HideOnContextMenu, Is.False);
