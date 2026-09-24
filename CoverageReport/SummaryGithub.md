@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 11:46:46 PM |
-| Coverage date: | 9/24/2026 - 11:46:24 PM - 9/24/2026 - 11:46:35 PM |
+| Generated on: | 9/24/2026 - 11:50:36 PM |
+| Coverage date: | 9/24/2026 - 11:50:14 PM - 9/24/2026 - 11:50:25 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 25.1% (11987 of 47694) |
-| Covered lines: | 11987 |
-| Uncovered lines: | 35707 |
-| Coverable lines: | 47694 |
-| Total lines: | 133815 |
-| **Branch coverage:** | 20.5% (4699 of 22911) |
-| Covered branches: | 4699 |
-| Total branches: | 22911 |
+| **Line coverage:** | 25.1% (11995 of 47710) |
+| Covered lines: | 11995 |
+| Uncovered lines: | 35715 |
+| Coverable lines: | 47710 |
+| Total lines: | 133839 |
+| **Branch coverage:** | 20.5% (4703 of 22919) |
+| Covered branches: | 4703 |
+| Total branches: | 22919 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -275,11 +275,11 @@
 |Ankh.Scc.ThePendingChangeCollection|0%||
 
 </details>
-<details><summary>Ankh.Services - 32.9%</summary>
+<details><summary>Ankh.Services - 33%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Services**|**32.9%**|**29.7%**|
+|**Ankh.Services**|**33%**|**29.7%**|
 |Ankh.AnkhInstanceConditionalAttribute|46.6%|50%|
 |Ankh.AnkhRuntime|31.9%|24.3%|
 |Ankh.AnkhService|17.5%|9.6%|
@@ -317,7 +317,7 @@
 |Ankh.ProgressWorkerArgs|0%|0%|
 |Ankh.ProgressWorkerDoneArgs|0%|0%|
 |Ankh.ReadOnlyKeyedNotifyCollection`2|77.7%||
-|Ankh.ReadOnlyNotifyCollection`1|89.2%|85.7%|
+|Ankh.ReadOnlyNotifyCollection`1|80.5%|72.7%|
 |Ankh.Scc.AnkhPropertyGridItem|0%|0%|
 |Ankh.Scc.BatchStartedEventArgs|0%|0%|
 |Ankh.Scc.DocumentLock|0%|0%|
