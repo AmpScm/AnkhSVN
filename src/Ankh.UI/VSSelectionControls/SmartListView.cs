@@ -908,6 +908,19 @@ namespace Ankh.UI.VSSelectionControls
         }
 
 
+        internal static bool ShouldSuppressNativeCheckboxDoubleClick(
+            bool checkBoxes,
+            bool strictCheckboxesClick,
+            bool hasItem,
+            ListViewHitTestLocations location)
+        {
+            return checkBoxes
+                && strictCheckboxesClick
+                && hasItem
+                && location != ListViewHitTestLocations.None
+                && location != ListViewHitTestLocations.StateImage;
+        }
+
         public event MouseEventHandler ShowContextMenu;
         public virtual void OnShowContextMenu(MouseEventArgs e)
         {
@@ -956,8 +969,11 @@ namespace Ankh.UI.VSSelectionControls
                             ListViewHitTestInfo hi = HitTest(mp);
 
                             if (hi != null
-                                && hi.Item != null
-                                && hi.Location != ListViewHitTestLocations.StateImage)
+                                && ShouldSuppressNativeCheckboxDoubleClick(
+                                    CheckBoxes,
+                                    StrictCheckboxesClick,
+                                    hi.Item != null,
+                                    hi.Location))
                             {
                                 MouseEventArgs me = new MouseEventArgs(
                                     MouseButtons.Left, 2, mp.X, mp.Y, 0);
