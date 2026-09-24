@@ -21,6 +21,7 @@ using Ankh.Scc;
 using Ankh.UI.Annotate;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Shell.Interop;
 using Moq;
 using NUnit.Framework;
 using SharpSvn;
@@ -133,6 +134,37 @@ namespace Ankh.Tests.Annotate
                 provider.CreateMargin(host.Object, null),
                 Is.Null,
                 RegressionContext + ": closing the editor must unregister the Annotate document.");
+        }
+
+        [Test]
+        public void Issue47_WpfMarginRetainsRevisionContextMenuSelectionBridge()
+        {
+            Type marginType = typeof(AnnotationDocumentRegistry).Assembly.GetType(
+                "Ankh.UI.Annotate.AnnotationMargin",
+                true);
+
+            Assert.That(marginType, Is.Not.Null, RegressionContext);
+
+            MethodInfo showContextMenu = marginType.GetMethod(
+                "ShowContextMenu",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(
+                showContextMenu,
+                Is.Not.Null,
+                RegressionContext + ": the WPF annotation margin must retain a right-click context-menu entry point.");
+
+            Type selectionContainerType = marginType.GetNestedType(
+                "AnnotationSelectionContainer",
+                BindingFlags.NonPublic);
+            Assert.That(
+                selectionContainerType,
+                Is.Not.Null,
+                RegressionContext + ": the WPF annotation margin must publish the clicked revision into VS selection.");
+
+            Assert.That(
+                typeof(ISelectionContainer).IsAssignableFrom(selectionContainerType),
+                Is.True,
+                RegressionContext + ": Annotate commands must receive the clicked revision through Visual Studio's selection container.");
         }
 
         [Test]
