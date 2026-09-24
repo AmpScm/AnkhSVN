@@ -86,35 +86,40 @@ namespace Ankh.UI.SvnLog
 
         internal void UpdateColors(LogRevisionControl listView)
         {
-            ForeColor = Color.Empty;
+            if (listView == null)
+                throw new ArgumentNullException("listView");
 
-            if (_args.ChangedPaths == null || SystemInformation.HighContrast)
-                return;
+            Color preferred = Color.Empty;
 
-            bool copied = false;
-            foreach (SvnChangeItem ci in _args.ChangedPaths)
+            if (_args.ChangedPaths != null && !SystemInformation.HighContrast)
             {
-                if (ci.CopyFromRevision >= 0)
+                foreach (SvnChangeItem ci in _args.ChangedPaths)
                 {
-                    copied = true;
-                    break;
+                    if (ci.CopyFromRevision >= 0)
+                    {
+                        IWinFormsThemingService themer =
+                            listView.Context != null
+                                ? listView.Context.GetService<IWinFormsThemingService>()
+                                : null;
+
+                        preferred = themer != null && themer.ThemePalette != null
+                            ? themer.ThemePalette.SecondaryText
+                            : AnkhThemePalette.Blend(
+                                listView.ForeColor,
+                                listView.BackColor,
+                                0.70);
+                        break;
+                    }
                 }
             }
 
-            if (!copied)
-                return;
-
-            IWinFormsThemingService themer =
-                listView.Context != null
-                    ? listView.Context.GetService<IWinFormsThemingService>()
-                    : null;
-
-            Color copyHistoryColor = themer != null && themer.ThemePalette != null
-                ? themer.ThemePalette.SecondaryText
-                : AnkhThemePalette.Blend(listView.ForeColor, listView.BackColor, 0.70);
-
-            if (AnkhThemePalette.ContrastRatio(copyHistoryColor, listView.BackColor) >= 4.5)
-                ForeColor = copyHistoryColor;
+            // Never leave a themed ListViewItem at Color.Empty: native ListView
+            // painting can resolve that through Windows rather than the active VS
+            // palette, producing dark-on-dark rows in History Viewer.
+            ForeColor = AnkhThemePalette.ResolveReadableForeground(
+                preferred,
+                listView.ForeColor,
+                listView.BackColor);
         }
 
         internal DateTime Date
