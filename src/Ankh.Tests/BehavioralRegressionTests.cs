@@ -179,6 +179,66 @@ namespace Ankh.Tests
             });
         }
 
+
+        [Test]
+        public void WizardPage_DetachedStateUsesSafeDefaultsAndExplicitOverrides()
+        {
+            using (var page = new TrackingWizardPage())
+            using (var previous = new TrackingWizardPage())
+            {
+                Assert.Multiple(() =>
+                {
+                    Assert.That(page.Name, Is.EqualTo(typeof(TrackingWizardPage).FullName));
+                    Assert.That(page.Context, Is.Null);
+                    Assert.That(page.NextPage, Is.Null);
+                    Assert.That(page.PreviousPage, Is.Null);
+                    Assert.That(page.Description, Is.EqualTo(string.Empty));
+                    Assert.That(page.MessageText, Is.EqualTo(string.Empty));
+                    Assert.That(page.MessageType, Is.EqualTo(WizardMessage.MessageType.None));
+                    Assert.That(page.Image, Is.Null);
+                    Assert.That(page.IsPageComplete, Is.False);
+                    Assert.That(page.CanFlipToNextPage, Is.False);
+                });
+
+                page.Name = "Custom";
+                page.Description = "Description";
+                page.Message = new WizardMessage("Warning", WizardMessage.MessageType.Warning);
+                page.PreviousPage = previous;
+                page.IsPageComplete = true;
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(page.Name, Is.EqualTo("Custom"));
+                    Assert.That(page.Description, Is.EqualTo("Description"));
+                    Assert.That(page.Message.Message, Is.EqualTo("Warning"));
+                    Assert.That(page.Message.Type, Is.EqualTo(WizardMessage.MessageType.Warning));
+                    Assert.That(page.PreviousPage, Is.SameAs(previous));
+                    Assert.That(page.IsPageComplete, Is.True);
+                    Assert.That(page.CanFlipToNextPage, Is.False);
+                });
+
+                page.Message = null;
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(page.MessageText, Is.EqualTo(string.Empty));
+                    Assert.That(page.MessageType, Is.EqualTo(WizardMessage.MessageType.None));
+                });
+            }
+        }
+
+        [TestCase(WizardMessage.MessageType.None)]
+        [TestCase(WizardMessage.MessageType.Information)]
+        [TestCase(WizardMessage.MessageType.Warning)]
+        [TestCase(WizardMessage.MessageType.Error)]
+        public void WizardMessage_PreservesMessageAndType(WizardMessage.MessageType type)
+        {
+            var message = new WizardMessage("message", type);
+
+            Assert.That(message.Message, Is.EqualTo("message"));
+            Assert.That(message.Type, Is.EqualTo(type));
+        }
+
         [Test]
         public void WizardPageCollection_Remove_CallsBalancedLifecycleHooksAndDetachesPage()
         {
