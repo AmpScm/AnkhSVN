@@ -529,6 +529,7 @@ namespace Ankh.UI.VSSelectionControls
 
         bool _isThemed;
         bool _useDarkNativeTheme;
+        bool _allowDarkNativeTheme = true;
         bool _ownerDrawPaletteHeader;
         Color _headerBackColor;
         Color _headerForeColor;
@@ -536,6 +537,22 @@ namespace Ankh.UI.VSSelectionControls
         Color _selectionBackColor;
         Color _selectionForeColor;
         bool _usePaletteSelectionColors;
+
+        [DefaultValue(true)]
+        public bool AllowDarkNativeTheme
+        {
+            get { return _allowDarkNativeTheme; }
+            set
+            {
+                if (_allowDarkNativeTheme == value)
+                    return;
+
+                _allowDarkNativeTheme = value;
+
+                if (IsHandleCreated)
+                    RecreateHandle();
+            }
+        }
 
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -546,7 +563,12 @@ namespace Ankh.UI.VSSelectionControls
             UpdateSortGlyphs();
 
             if (_useDarkNativeTheme)
-                NativeMethods.SetWindowTheme(Handle, "DarkMode_Explorer", null);
+            {
+                if (AllowDarkNativeTheme)
+                    NativeMethods.SetWindowTheme(Handle, "DarkMode_Explorer", null);
+                else
+                    NativeMethods.SetWindowTheme(Handle, "", "");
+            }
             else if (!OwnerDraw && !_isThemed)
                 NativeMethods.SetWindowTheme(Handle, "Explorer", null);
 
