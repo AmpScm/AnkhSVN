@@ -16,7 +16,6 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using Ankh.Configuration;
-using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
 
 namespace Ankh.UI.RepositoryExplorer
@@ -26,7 +25,6 @@ namespace Ankh.UI.RepositoryExplorer
         public RepositoryFolderBrowserDialog()
         {
             InitializeComponent();
-            reposBrowser.HandleCreated += reposBrowser_HandleCreated;
         }
 
         protected override void OnContextChanged(EventArgs e)
@@ -124,34 +122,6 @@ namespace Ankh.UI.RepositoryExplorer
             IWinFormsThemingService themer = Context.GetService<IWinFormsThemingService>();
             if (themer != null)
                 RestoreRepositoryTreeTheme(themer);
-        }
-
-        void reposBrowser_HandleCreated(object sender, EventArgs e)
-        {
-            if (!DesignMode)
-                ApplyRepositoryBrowserTheme();
-        }
-
-        void ApplyRepositoryBrowserTheme()
-        {
-            if (Context == null || reposBrowser == null || reposBrowser.IsDisposed)
-                return;
-
-            IWinFormsThemingService themer = Context.GetService<IWinFormsThemingService>();
-            if (themer == null)
-                return;
-
-            AnkhThemePalette palette = themer.ThemePalette;
-            if (palette == null)
-                return;
-
-            reposBrowser.BackColor = palette.SurfaceBackground;
-            reposBrowser.ForeColor = palette.SurfaceForeground;
-
-            // Native TreeView theming can reset the HWND colors after VS themes
-            // the dialog or after the repository browser recreates its handle.
-            // Reassert the managed palette at the native control boundary.
-            SmartTreeView.RestoreNativeColors(reposBrowser);
         }
 
         Uri _rootUri;
