@@ -131,6 +131,72 @@ namespace Ankh.Tests
         }
 
 
+        [Test]
+        public void KeyedWrapNotifyCollectionTracksSourceMutations()
+        {
+            var source = new TestInnerCollection();
+            source.Add(new TestInner("A", "one"));
+            source.Add(new TestInner("B", "two"));
+
+            var context = new object();
+            var wrapped = new TestWrappedCollection(source, context);
+            var changes = new List<CollectionChange>();
+            wrapped.CollectionChanged += (sender, e) => changes.Add(e.Action);
+
+            source.Add(new TestInner("C", "three"));
+            source[0] = new TestInner("A", "updated");
+            source.Move(2, 0);
+            source.RemoveAt(1);
+
+            TestWrapped c;
+            Assert.That(wrapped.TryGetValue("c", out c), Is.True);
+
+            Assert.Multiple(() =>
+            {
+                CollectionAssert.AreEqual(
+                    new[] { CollectionChange.Add, CollectionChange.Replace, CollectionChange.Move, CollectionChange.Remove },
+                    changes);
+                CollectionAssert.AreEqual(new[] { "C", "B" }, wrapped.Select(x => x.Key).ToArray());
+                Assert.That(c.Value, Is.EqualTo("three"));
+                Assert.That(wrapped.StoredContext, Is.SameAs(context));
+                Assert.That(wrapped.GetWrappedCollection(), Is.Not.SameAs(source));
+                Assert.That(wrapped.GetWrappedCollection().Count, Is.EqualTo(source.Count));
+            });
+
+            wrapped.Dispose();
+        }
+
+        [Test]
+        public void KeyedWrapNotifyCollectionResetPreservesExistingWrappersByKey()
+        {
+            var source = new TestInnerCollection();
+            source.Add(new TestInner("A", "one"));
+            source.Add(new TestInner("B", "two"));
+
+            var wrapped = new TestWrappedCollection(source, null);
+            TestWrapped a = wrapped["A"];
+            TestWrapped b = wrapped["B"];
+            var changes = new List<CollectionChange>();
+            wrapped.CollectionChanged += (sender, e) => changes.Add(e.Action);
+
+            using (source.BatchUpdate())
+            {
+                source.Move(1, 0);
+                source.Add(new TestInner("C", "three"));
+            }
+
+            Assert.Multiple(() =>
+            {
+                CollectionAssert.AreEqual(new[] { CollectionChange.Reset }, changes);
+                CollectionAssert.AreEqual(new[] { "B", "A", "C" }, wrapped.Select(x => x.Key).ToArray());
+                Assert.That(wrapped[0], Is.SameAs(b));
+                Assert.That(wrapped[1], Is.SameAs(a));
+                Assert.That(wrapped[2].Value, Is.EqualTo("three"));
+            });
+
+            wrapped.Dispose();
+        }
+
         [TestCase(true, false, true)]
         [TestCase(false, true, false)]
         [TestCase(false, false, true)]
@@ -363,6 +429,72 @@ namespace Ankh.Tests
             Assert.That(args.DynamicMenuEnd, Is.True);
             Assert.That(args.Text, Is.EqualTo("status"));
         }
+        sealed class TestInner
+        {
+            public TestInner(string key, string value)
+            {
+                Key = key;
+                Value = value;
+            }
+
+            public string Key { get; private set; }
+            public string Value { get; private set; }
+        }
+
+        sealed class TestWrapped
+        {
+            readonly TestInner _inner;
+
+            public TestWrapped(TestInner inner)
+            {
+                _inner = inner;
+            }
+
+            public string Key { get { return _inner.Key; } }
+            public string Value { get { return _inner.Value; } }
+        }
+
+        sealed class TestInnerCollection : KeyedNotifyCollection<string, TestInner>
+        {
+            public TestInnerCollection()
+                : base(StringComparer.OrdinalIgnoreCase)
+            {
+            }
+
+            protected override string GetKeyForItem(TestInner item)
+            {
+                return item.Key;
+            }
+        }
+
+        sealed class TestWrappedCollection : KeyedWrapNotifyCollection<string, TestInner, TestWrapped>
+        {
+            public TestWrappedCollection(IKeyedNotifyCollection<string, TestInner> source, object context)
+                : base(source, context)
+            {
+            }
+
+            public object StoredContext
+            {
+                get { return Context; }
+            }
+
+            protected override string GetKeyForItem(TestWrapped item)
+            {
+                return item.Key;
+            }
+
+            protected override string GetKeyForItem(TestInner inner)
+            {
+                return inner.Key;
+            }
+
+            protected override TestWrapped GetWrapItem(TestInner inner)
+            {
+                return new TestWrapped(inner);
+            }
+        }
+
         sealed class TestCommandMapItem : CommandMapItem
         {
             public TestCommandMapItem(AnkhCommand command)
