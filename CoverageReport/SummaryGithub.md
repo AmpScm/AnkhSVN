@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 2:50:38 PM |
-| Coverage date: | 9/24/2026 - 2:50:16 PM - 9/24/2026 - 2:50:27 PM |
+| Generated on: | 9/24/2026 - 3:09:59 PM |
+| Coverage date: | 9/24/2026 - 3:09:38 PM - 9/24/2026 - 3:09:49 PM |
 | Parser: | MultiReport (4x Cobertura) |
-| Assemblies: | 10 |
-| Classes: | 609 |
-| Files: | 677 |
-| **Line coverage:** | 9.2% (4362 of 47300) |
-| Covered lines: | 4362 |
-| Uncovered lines: | 42938 |
-| Coverable lines: | 47300 |
-| Total lines: | 133061 |
-| **Branch coverage:** | 11.7% (2669 of 22743) |
-| Covered branches: | 2669 |
-| Total branches: | 22743 |
+| Assemblies: | 11 |
+| Classes: | 610 |
+| Files: | 678 |
+| **Line coverage:** | 10.4% (4964 of 47680) |
+| Covered lines: | 4964 |
+| Uncovered lines: | 42716 |
+| Coverable lines: | 47680 |
+| Total lines: | 133776 |
+| **Branch coverage:** | 12.7% (2927 of 22911) |
+| Covered branches: | 2927 |
+| Total branches: | 22911 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -113,15 +113,23 @@
 |Ankh.Settings.SolutionSettings|13%|24.5%|
 
 </details>
-<details><summary>Ankh.Diff - 7.5%</summary>
+<details><summary>Ankh.Copilot - 0%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Diff**|**7.5%**|**9.7%**|
+|**Ankh.Copilot**|**0%**|**0%**|
+|Ankh.Copilot.VisualStudioCopilot|0%|0%|
+
+</details>
+<details><summary>Ankh.Diff - 23.7%</summary>
+
+|**Name**|**Line**|**Branch**|
+|:---|---:|---:|
+|**Ankh.Diff**|**23.7%**|**28.9%**|
 |Ankh.Diff.Caret|0%|0%|
-|Ankh.Diff.DiffUtils.AddCopyList|0%|0%|
-|Ankh.Diff.DiffUtils.BinaryDiff|0%|0%|
-|Ankh.Diff.DiffUtils.BinaryDiffLines|0%|0%|
+|Ankh.Diff.DiffUtils.AddCopyList|96.8%|96.4%|
+|Ankh.Diff.DiffUtils.BinaryDiff|100%|98%|
+|Ankh.Diff.DiffUtils.BinaryDiffLines|96.7%|87.5%|
 |Ankh.Diff.DiffUtils.Controls.DiffControl|0%|0%|
 |Ankh.Diff.DiffUtils.Controls.DiffLineClickEventArgs|0%||
 |Ankh.Diff.DiffUtils.Controls.DiffOptions|0%|0%|
@@ -133,22 +141,22 @@
 |Ankh.Diff.DiffUtils.Controls.DiffViewLines|0%|0%|
 |Ankh.Diff.DiffUtils.Controls.DiffViewPosition|0%|0%|
 |Ankh.Diff.DiffUtils.Controls.GoToDlg|0%|0%|
-|Ankh.Diff.DiffUtils.DiagonalVector|0%||
+|Ankh.Diff.DiffUtils.DiagonalVector|100%||
 |Ankh.Diff.DiffUtils.DifferenceEventArgs|0%||
 |Ankh.Diff.DiffUtils.DirectoryDiff|88.7%|81%|
 |Ankh.Diff.DiffUtils.DirectoryDiffEntries|25%||
 |Ankh.Diff.DiffUtils.DirectoryDiffEntry|75%|100%|
 |Ankh.Diff.DiffUtils.DirectoryDiffFileFilter|51.2%|50%|
 |Ankh.Diff.DiffUtils.DirectoryDiffResults|66.6%||
-|Ankh.Diff.DiffUtils.Edit|0%||
-|Ankh.Diff.DiffUtils.EditScript|0%|0%|
+|Ankh.Diff.DiffUtils.Edit|80%||
+|Ankh.Diff.DiffUtils.EditScript|62.5%|100%|
 |Ankh.Diff.DiffUtils.FileSystemInfoComparer|100%||
 |Ankh.Diff.DiffUtils.Functions|7.8%|10.6%|
-|Ankh.Diff.DiffUtils.MyersDiff|0%|0%|
+|Ankh.Diff.DiffUtils.MyersDiff|94.7%|92.9%|
 |Ankh.Diff.DiffUtils.Properties.Resources|0%|0%|
-|Ankh.Diff.DiffUtils.StringHasher|0%|0%|
-|Ankh.Diff.DiffUtils.SubArray|0%|0%|
-|Ankh.Diff.DiffUtils.TextDiff|0%|0%|
+|Ankh.Diff.DiffUtils.StringHasher|97%|88.8%|
+|Ankh.Diff.DiffUtils.SubArray|72.2%|0%|
+|Ankh.Diff.DiffUtils.TextDiff|100%|100%|
 |Ankh.Diff.FindData|0%||
 |Ankh.Diff.FindDlg|0%|0%|
 |Ankh.Diff.NativeMethods|0%|0%|
@@ -158,18 +166,18 @@
 |Ankh.UI.DiffWindow.DiffEditorControl|0%|0%|
 
 </details>
-<details><summary>Ankh.ExtensionPoints - 0%</summary>
+<details><summary>Ankh.ExtensionPoints - 34.8%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.ExtensionPoints**|**0%**|**0%**|
-|Ankh.ExtensionPoints.IssueTracker.CommitArgs|0%||
+|**Ankh.ExtensionPoints**|**34.8%**|**41.6%**|
+|Ankh.ExtensionPoints.IssueTracker.CommitArgs|100%||
 |Ankh.ExtensionPoints.IssueTracker.ConfigPageEventArgs|0%||
 |Ankh.ExtensionPoints.IssueTracker.IssueRepository|0%|0%|
 |Ankh.ExtensionPoints.IssueTracker.IssueRepositoryConfigurationPage|0%|0%|
-|Ankh.ExtensionPoints.IssueTracker.IssueRepositorySettings|0%|0%|
-|Ankh.ExtensionPoints.IssueTracker.PostCommitArgs|0%||
-|Ankh.ExtensionPoints.IssueTracker.PreCommitArgs|0%|0%|
+|Ankh.ExtensionPoints.IssueTracker.IssueRepositorySettings|65.7%|56.2%|
+|Ankh.ExtensionPoints.IssueTracker.PostCommitArgs|60%||
+|Ankh.ExtensionPoints.IssueTracker.PreCommitArgs|84.6%|100%|
 |Ankh.ExtensionPoints.RepositoryProvider.ScmRepositoryProvider|0%||
 |Ankh.ExtensionPoints.RepositoryProvider.ScmRepositorySelectionControl|0%|0%|
 |Ankh.ExtensionPoints.RepositoryProvider.ScmRepositorySelectionControlEventA<br/>rgs|0%||
@@ -177,19 +185,19 @@
 |Ankh.ExtensionPoints.UI.ApplyThemeEventArgs|0%|0%|
 
 </details>
-<details><summary>Ankh.Ids - 0%</summary>
+<details><summary>Ankh.Ids - 100%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Ids**|**0%**|****|
-|Ankh.AnkhId|0%||
+|**Ankh.Ids**|**100%**|****|
+|Ankh.AnkhId|100%||
 
 </details>
-<details><summary>Ankh.Package - 0%</summary>
+<details><summary>Ankh.Package - 3.1%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Package**|**0%**|**0%**|
+|**Ankh.Package**|**3.1%**|**0.5%**|
 |Ankh.VSPackage.AdvancedDiffUserToolsSettingsPage|0%|0%|
 |Ankh.VSPackage.AdvancedMergeUserToolsSettingsPage|0%|0%|
 |Ankh.VSPackage.AnkhDynamicEditorFactory|0%|0%|
@@ -199,13 +207,13 @@
 |Ankh.VSPackage.AnkhToolWindowPane|0%|0%|
 |Ankh.VSPackage.Attributes.ProvideAnkhExtensionRedirectAttribute|0%|0%|
 |Ankh.VSPackage.Attributes.ProvideLanguageSettingsAttribute|0%||
-|Ankh.VSPackage.Attributes.ProvideOutputWindowAttribute|0%|0%|
+|Ankh.VSPackage.Attributes.ProvideOutputWindowAttribute|46.1%|0%|
 |Ankh.VSPackage.Attributes.ProvideProjectTypeSettingsAttribute|0%|0%|
 |Ankh.VSPackage.Attributes.ProvideSolutionPropertiesAttribute|0%|0%|
-|Ankh.VSPackage.Attributes.ProvideSourceControlCommandAttribute|0%|0%|
+|Ankh.VSPackage.Attributes.ProvideSourceControlCommandAttribute|65.2%|50%|
 |Ankh.VSPackage.Attributes.ProvideSourceControlProviderAttribute|0%|0%|
 |Ankh.VSPackage.Attributes.ProvideTextMarkerAttribute|0%||
-|Ankh.VSPackage.Attributes.ProvideThemeInformationAttribute|0%|0%|
+|Ankh.VSPackage.Attributes.ProvideThemeInformationAttribute|46.1%|50%|
 |Ankh.VSPackage.Attributes.ProvideToolsOptionsPageVisibilityAttribute|0%||
 |Ankh.VSPackage.LogToolWindow|0%||
 |Ankh.VSPackage.OptionPages.IssueTrackerPage|0%||
