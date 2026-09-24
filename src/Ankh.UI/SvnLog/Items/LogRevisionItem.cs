@@ -84,27 +84,37 @@ namespace Ankh.UI.SvnLog
             return sb != null ? sb.ToString() : "";
         }
 
-        void UpdateColors(LogRevisionControl listView)
+        internal void UpdateColors(LogRevisionControl listView)
         {
-            if (_args.ChangedPaths == null)
+            ForeColor = Color.Empty;
+
+            if (_args.ChangedPaths == null || SystemInformation.HighContrast)
                 return;
 
-            if (!ShouldUseCopyHistoryColor(SystemInformation.HighContrast, listView.BackColor))
-                return;
-
+            bool copied = false;
             foreach (SvnChangeItem ci in _args.ChangedPaths)
             {
                 if (ci.CopyFromRevision >= 0)
                 {
-                    ForeColor = Color.DarkBlue;
+                    copied = true;
                     break;
                 }
             }
-        }
 
-        internal static bool ShouldUseCopyHistoryColor(bool highContrast, Color background)
-        {
-            return !highContrast && AnkhThemePalette.ContrastRatio(Color.DarkBlue, background) >= 4.5;
+            if (!copied)
+                return;
+
+            IWinFormsThemingService themer =
+                listView.Context != null
+                    ? listView.Context.GetService<IWinFormsThemingService>()
+                    : null;
+
+            Color copyHistoryColor = themer != null && themer.ThemePalette != null
+                ? themer.ThemePalette.SecondaryText
+                : AnkhThemePalette.Blend(listView.ForeColor, listView.BackColor, 0.70);
+
+            if (AnkhThemePalette.ContrastRatio(copyHistoryColor, listView.BackColor) >= 4.5)
+                ForeColor = copyHistoryColor;
         }
 
         internal DateTime Date
