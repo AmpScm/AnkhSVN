@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 9:17:19 PM |
-| Coverage date: | 9/24/2026 - 9:16:57 PM - 9/24/2026 - 9:17:07 PM |
+| Generated on: | 9/24/2026 - 9:30:41 PM |
+| Coverage date: | 9/24/2026 - 9:30:19 PM - 9/24/2026 - 9:30:31 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 24.9% (11909 of 47689) |
-| Covered lines: | 11909 |
-| Uncovered lines: | 35780 |
+| **Line coverage:** | 25% (11925 of 47689) |
+| Covered lines: | 11925 |
+| Uncovered lines: | 35764 |
 | Coverable lines: | 47689 |
 | Total lines: | 133798 |
-| **Branch coverage:** | 20.3% (4659 of 22915) |
-| Covered branches: | 4659 |
+| **Branch coverage:** | 20.3% (4666 of 22915) |
+| Covered branches: | 4666 |
 | Total branches: | 22915 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -121,11 +121,11 @@
 |Ankh.Copilot.VisualStudioCopilot|29.4%|33.3%|
 
 </details>
-<details><summary>Ankh.Diff - 69.2%</summary>
+<details><summary>Ankh.Diff - 69.4%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Diff**|**69.2%**|**69%**|
+|**Ankh.Diff**|**69.4%**|**69.2%**|
 |Ankh.Diff.Caret|0%|0%|
 |Ankh.Diff.DiffUtils.AddCopyList|96.8%|96.4%|
 |Ankh.Diff.DiffUtils.BinaryDiff|100%|98%|
@@ -143,11 +143,11 @@
 |Ankh.Diff.DiffUtils.Controls.GoToDlg|0%|0%|
 |Ankh.Diff.DiffUtils.DiagonalVector|100%||
 |Ankh.Diff.DiffUtils.DifferenceEventArgs|0%||
-|Ankh.Diff.DiffUtils.DirectoryDiff|88.7%|81%|
+|Ankh.Diff.DiffUtils.DirectoryDiff|88.7%|86.2%|
 |Ankh.Diff.DiffUtils.DirectoryDiffEntries|25%||
-|Ankh.Diff.DiffUtils.DirectoryDiffEntry|75%|100%|
+|Ankh.Diff.DiffUtils.DirectoryDiffEntry|80%|100%|
 |Ankh.Diff.DiffUtils.DirectoryDiffFileFilter|100%|100%|
-|Ankh.Diff.DiffUtils.DirectoryDiffResults|66.6%||
+|Ankh.Diff.DiffUtils.DirectoryDiffResults|100%||
 |Ankh.Diff.DiffUtils.Edit|100%||
 |Ankh.Diff.DiffUtils.EditScript|75%|100%|
 |Ankh.Diff.DiffUtils.FileSystemInfoComparer|100%||
@@ -275,11 +275,11 @@
 |Ankh.Scc.ThePendingChangeCollection|0%||
 
 </details>
-<details><summary>Ankh.Services - 31.7%</summary>
+<details><summary>Ankh.Services - 31.9%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Services**|**31.7%**|**28.6%**|
+|**Ankh.Services**|**31.9%**|**28.7%**|
 |Ankh.AnkhInstanceConditionalAttribute|46.6%|50%|
 |Ankh.AnkhRuntime|31.9%|24.3%|
 |Ankh.AnkhService|17.5%|9.6%|
@@ -293,13 +293,13 @@
 |Ankh.Collections.KeyedWrapNotifyCollection`3|63.4%|51.8%|
 |Ankh.Collections.WrapNotifyCollection`2|94%|95%|
 |Ankh.Commands.BaseCommandEventArgs|52.3%|40%|
-|Ankh.Commands.CommandAttribute|70.9%|58.3%|
+|Ankh.Commands.CommandAttribute|96.7%|91.6%|
 |Ankh.Commands.CommandEventArgs|94.1%|75%|
 |Ankh.Commands.CommandMapItem|81.4%|70%|
 |Ankh.Commands.CommandMapper|51.1%|60%|
 |Ankh.Commands.CommandResult|0%|0%|
 |Ankh.Commands.CommandUpdateEventArgs|83.7%|71.4%|
-|Ankh.Commands.SccCommandAttribute|50%||
+|Ankh.Commands.SccCommandAttribute|100%||
 |Ankh.Commands.SvnCommandAttribute|50%||
 |Ankh.Configuration.AnkhConfig|0%|0%|
 |Ankh.Configuration.RegistryLifoList|0%|0%|
