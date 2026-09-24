@@ -23,6 +23,7 @@ using Ankh.Selection;
 using Ankh.Services;
 using Ankh.UI;
 using Ankh.UI.Services;
+using Ankh.VS;
 using Ankh.VSPackage;
 using AnkhSvn_UnitTestProject.Helpers;
 using AnkhSvn_UnitTestProject.Mocks;
