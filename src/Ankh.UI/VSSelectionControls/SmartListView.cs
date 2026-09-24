@@ -1017,9 +1017,9 @@ namespace Ankh.UI.VSSelectionControls
 
                     case NativeMethods.OCM_NOTIFY:
                         // Receives ListView notifications
-                        NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
+                        NMHDR notifyHdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
 
-                        if (hdr.code == NativeMethods.NM_CUSTOMDRAW
+                        if (notifyHdr.code == NativeMethods.NM_CUSTOMDRAW
                             && _usePaletteSelectionColors)
                         {
                             NativeMethods.NMLVCUSTOMDRAW draw =
@@ -1046,7 +1046,7 @@ namespace Ankh.UI.VSSelectionControls
                         if (CheckBoxes && StrictCheckboxesClick)
                         {
 
-                            if (hdr.code == NativeMethods.NM_DBLCLK)
+                            if (notifyHdr.code == NativeMethods.NM_DBLCLK)
                             {
                                 Point mp = PointToClient(MousePosition);
                                 ListViewHitTestInfo hi = HitTest(mp);
