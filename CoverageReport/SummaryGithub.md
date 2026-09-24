@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 10:24:17 PM |
-| Coverage date: | 9/24/2026 - 10:23:52 PM - 9/24/2026 - 10:24:05 PM |
+| Generated on: | 9/24/2026 - 10:33:53 PM |
+| Coverage date: | 9/24/2026 - 10:33:31 PM - 9/24/2026 - 10:33:42 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 25% (11925 of 47696) |
-| Covered lines: | 11925 |
-| Uncovered lines: | 35771 |
+| **Line coverage:** | 25.1% (11987 of 47696) |
+| Covered lines: | 11987 |
+| Uncovered lines: | 35709 |
 | Coverable lines: | 47696 |
 | Total lines: | 133818 |
-| **Branch coverage:** | 20.3% (4666 of 22913) |
-| Covered branches: | 4666 |
+| **Branch coverage:** | 20.5% (4701 of 22913) |
+| Covered branches: | 4701 |
 | Total branches: | 22913 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -275,11 +275,11 @@
 |Ankh.Scc.ThePendingChangeCollection|0%||
 
 </details>
-<details><summary>Ankh.Services - 31.9%</summary>
+<details><summary>Ankh.Services - 32.9%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Services**|**31.9%**|**28.7%**|
+|**Ankh.Services**|**32.9%**|**29.7%**|
 |Ankh.AnkhInstanceConditionalAttribute|46.6%|50%|
 |Ankh.AnkhRuntime|31.9%|24.3%|
 |Ankh.AnkhService|17.5%|9.6%|
@@ -295,7 +295,7 @@
 |Ankh.Commands.BaseCommandEventArgs|52.3%|40%|
 |Ankh.Commands.CommandAttribute|96.7%|91.6%|
 |Ankh.Commands.CommandEventArgs|94.1%|75%|
-|Ankh.Commands.CommandMapItem|81.4%|70%|
+|Ankh.Commands.CommandMapItem|92.5%|100%|
 |Ankh.Commands.CommandMapper|51.1%|60%|
 |Ankh.Commands.CommandResult|0%|0%|
 |Ankh.Commands.CommandUpdateEventArgs|83.7%|71.4%|
@@ -328,8 +328,8 @@
 |Ankh.Scc.PendingChangeCollection|28.5%|0%|
 |Ankh.Scc.PendingChangeCommitArgs|0%||
 |Ankh.Scc.PendingChangeCreatePatchArgs|0%||
-|Ankh.Scc.PendingChangeStatus|0%|0%|
-|Ankh.Scc.PendingChangeText|0%|0%|
+|Ankh.Scc.PendingChangeStatus|100%|100%|
+|Ankh.Scc.PendingChangeText|76.6%|100%|
 |Ankh.Scc.ProjectIconReference|83.3%|71.4%|
 |Ankh.Scc.ProjectMap.ProjectGlyphRefreshLogic|100%|100%|
 |Ankh.Scc.ProjectMap.SccDocumentData|79.5%|70.3%|
