@@ -15,11 +15,12 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Ankh.Commands;
+using Ankh.Selection;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
@@ -196,24 +197,13 @@ namespace Ankh.UI.Annotate
 
             e.Handled = true;
 
-            // Highlight immediately, but defer publication of the clicked source until
-            // after the current WPF input event unwinds. Capturing the exact source here
-            // prevents a later VS selection change from making the menu operate on the
-            // wrong revision.
-            AnnotateSource source = region.Source;
+            // Publish the clicked revision once, on button-up, then open the menu while
+            // Ankh's selection context is scoped to this exact selection container.
+            // This prevents the native VS editor from replacing the logical Annotate
+            // selection while menu commands are queried or executed.
             Point screenPoint = PointToScreen(e.GetPosition(this));
-            SelectRegion(region, false);
-
-            Dispatcher.BeginInvoke(
-                new Action(delegate
-                {
-                    if (_disposed)
-                        return;
-
-                    SelectSource(source);
-                    ShowContextMenu(screenPoint);
-                }),
-                DispatcherPriority.Input);
+            SelectRegion(region);
+            ShowContextMenu(screenPoint);
         }
 
         void OnContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -286,10 +276,25 @@ namespace Ankh.UI.Annotate
             if (commandService == null)
                 return;
 
-            commandService.ShowContextMenu(
-                AnkhCommandMenu.AnnotateContextMenu,
-                (int)Math.Round(screenPoint.X),
-                (int)Math.Round(screenPoint.Y));
+            ISelectionContextEx selectionContext =
+                _context.GetService<ISelectionContextEx>(typeof(ISelectionContext));
+
+            if (selectionContext == null)
+            {
+                commandService.ShowContextMenu(
+                    AnkhCommandMenu.AnnotateContextMenu,
+                    (int)Math.Round(screenPoint.X),
+                    (int)Math.Round(screenPoint.Y));
+                return;
+            }
+
+            using (selectionContext.PushSelectionContainer(_selectionContainer))
+            {
+                commandService.ShowContextMenu(
+                    AnkhCommandMenu.AnnotateContextMenu,
+                    (int)Math.Round(screenPoint.X),
+                    (int)Math.Round(screenPoint.Y));
+            }
         }
 
         static void SetTextBrush(Border border, System.Windows.Media.Brush brush)
@@ -485,6 +490,9 @@ namespace Ankh.UI.Annotate
                 throw new ObjectDisposedException(MarginName);
         }
 
+        [ComVisible(true)]
+        [ComDefaultInterface(typeof(ISelectionContainer))]
+        [ClassInterface(ClassInterfaceType.None)]
         sealed class AnnotationSelectionContainer : ISelectionContainer
         {
             readonly Action<AnnotateSource> _selectSource;
