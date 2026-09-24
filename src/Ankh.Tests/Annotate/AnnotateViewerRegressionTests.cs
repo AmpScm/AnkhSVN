@@ -145,9 +145,12 @@ namespace Ankh.Tests.Annotate
 
             Assert.That(marginType, Is.Not.Null, RegressionContext);
 
+            BindingFlags declaredNonPublicInstance =
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
+
             MethodInfo showContextMenu = marginType.GetMethod(
                 "ShowContextMenu",
-                BindingFlags.Instance | BindingFlags.NonPublic);
+                declaredNonPublicInstance);
             Assert.That(
                 showContextMenu,
                 Is.Not.Null,
@@ -155,7 +158,7 @@ namespace Ankh.Tests.Annotate
 
             MethodInfo previewRightClick = marginType.GetMethod(
                 "OnPreviewMouseRightButtonDown",
-                BindingFlags.Instance | BindingFlags.NonPublic);
+                declaredNonPublicInstance);
             Assert.That(
                 previewRightClick,
                 Is.Not.Null,
@@ -163,7 +166,7 @@ namespace Ankh.Tests.Annotate
 
             MethodInfo previewRightClickRelease = marginType.GetMethod(
                 "OnPreviewMouseRightButtonUp",
-                BindingFlags.Instance | BindingFlags.NonPublic);
+                declaredNonPublicInstance);
             Assert.That(
                 previewRightClickRelease,
                 Is.Not.Null,
@@ -171,7 +174,7 @@ namespace Ankh.Tests.Annotate
 
             MethodInfo suppressEditorContextMenu = marginType.GetMethod(
                 "OnContextMenuOpening",
-                BindingFlags.Instance | BindingFlags.NonPublic);
+                declaredNonPublicInstance);
             Assert.That(
                 suppressEditorContextMenu,
                 Is.Not.Null,
@@ -179,7 +182,7 @@ namespace Ankh.Tests.Annotate
 
             MethodInfo findRegionAt = marginType.GetMethod(
                 "FindRegionAt",
-                BindingFlags.Instance | BindingFlags.NonPublic);
+                declaredNonPublicInstance);
             Assert.That(
                 findRegionAt,
                 Is.Not.Null,
