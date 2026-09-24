@@ -40,6 +40,31 @@ namespace AnkhSvn_UnitTestProject.Dialogs
         }
 
         [Test]
+        public void SelectedItemKeepsItsExistingForeground()
+        {
+            Color itemForeground = Color.FromArgb(241, 241, 241);
+            Color listForeground = Color.Black;
+
+            Assert.That(
+                SmartListViewThemeLogic.ResolveSelectedItemForeground(
+                    itemForeground,
+                    listForeground),
+                Is.EqualTo(itemForeground));
+        }
+
+        [Test]
+        public void SelectedItemFallsBackToListForegroundWhenUnset()
+        {
+            Color listForeground = Color.FromArgb(241, 241, 241);
+
+            Assert.That(
+                SmartListViewThemeLogic.ResolveSelectedItemForeground(
+                    Color.Empty,
+                    listForeground),
+                Is.EqualTo(listForeground));
+        }
+
+        [Test]
         public void DarkSelectionUsesSurfaceForeground()
         {
             Color surfaceForeground = Color.FromArgb(241, 241, 241);
