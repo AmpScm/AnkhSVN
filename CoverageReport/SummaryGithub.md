@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 12:23:11 AM |
-| Coverage date: | 9/24/2026 - 12:22:50 AM - 9/24/2026 - 12:23:01 AM |
+| Generated on: | 9/24/2026 - 12:53:16 AM |
+| Coverage date: | 9/24/2026 - 12:52:54 AM - 9/24/2026 - 12:53:06 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 10 |
 | Classes: | 609 |
 | Files: | 677 |
-| **Line coverage:** | 9.1% (4273 of 46842) |
-| Covered lines: | 4273 |
-| Uncovered lines: | 42569 |
-| Coverable lines: | 46842 |
-| Total lines: | 132167 |
-| **Branch coverage:** | 11.7% (2637 of 22481) |
-| Covered branches: | 2637 |
-| Total branches: | 22481 |
+| **Line coverage:** | 9.1% (4277 of 46869) |
+| Covered lines: | 4277 |
+| Uncovered lines: | 42592 |
+| Coverable lines: | 46869 |
+| Total lines: | 132253 |
+| **Branch coverage:** | 11.7% (2641 of 22491) |
+| Covered branches: | 2641 |
+| Total branches: | 22491 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -389,7 +389,7 @@
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**7.3%**|**9%**|
+|**Ankh.UI**|**7.3%**|**9.1%**|
 |Ankh.UI.AddRepositoryRootDialog|0%|0%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -593,7 +593,7 @@
 |Ankh.UI.VSSelectionControls.ListViewWithSelection`1|4.5%|1.4%|
 |Ankh.UI.VSSelectionControls.SmartColumn|24%|5.5%|
 |Ankh.UI.VSSelectionControls.SmartGroup|0%|0%|
-|Ankh.UI.VSSelectionControls.SmartListView|9.2%|4.5%|
+|Ankh.UI.VSSelectionControls.SmartListView|8.9%|4.4%|
 |Ankh.UI.VSSelectionControls.SmartListViewItem|0%|0%|
 |Ankh.UI.VSSelectionControls.SmartListViewThemeLogic|100%|100%|
 |Ankh.UI.VSSelectionControls.SmartSplitContainer|31.5%|18.1%|
