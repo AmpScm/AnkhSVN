@@ -146,7 +146,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [Test]
         public void AddWorkingCopyExplorerRootCommandWithPath()
         {
-            ISelectionContext selC = SelectionContextMock.EmptyContext();
+            ISelectionContext selC = new Mock<ISelectionContext>().Object;
             var package = new Mock<IAnkhPackage>();
 
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
@@ -260,8 +260,11 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         [Test]
         public void RemoveReposRoot()
         {
-            Assert.That(CommandTester.TestEnabled(AnkhCommand.RemoveRepositoryRoot), Is.False,
-                "Remove Repository Root must be disabled when no repository explorer root is selected.");
+            ISelectionContext selC = new Mock<ISelectionContext>().Object;
+
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
+                Assert.That(CommandTester.TestEnabled(AnkhCommand.RemoveRepositoryRoot), Is.False,
+                    "Remove Repository Root must be disabled when no repository explorer root is selected.");
         }
 
         [Test]
