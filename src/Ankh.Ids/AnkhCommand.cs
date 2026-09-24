@@ -319,5 +319,9 @@ namespace Ankh
         CopyRevisionNumber,
         PcLogEditorOpenRevision,
         PcGenerateCommitMessage,
+
+        // Annotate context menu: re-run blame through the revision immediately
+        // preceding the selected change.
+        AnnotatePreviousRevision,
     }
 }
