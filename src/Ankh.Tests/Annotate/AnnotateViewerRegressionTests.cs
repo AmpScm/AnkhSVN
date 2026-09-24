@@ -148,9 +148,12 @@ namespace Ankh.Tests.Annotate
             BindingFlags declaredNonPublicInstance =
                 BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
 
-            MethodInfo showContextMenu = marginType.GetMethod(
-                "ShowContextMenu",
-                declaredNonPublicInstance);
+            MethodInfo showContextMenu = marginType.GetMethods(declaredNonPublicInstance)
+                .SingleOrDefault(method =>
+                    method.Name == "ShowContextMenu" &&
+                    method.GetParameters().Length == 2 &&
+                    method.GetParameters()[0].ParameterType == typeof(System.Windows.FrameworkElement) &&
+                    method.GetParameters()[1].ParameterType == typeof(System.Windows.Input.MouseButtonEventArgs));
             Assert.That(
                 showContextMenu,
                 Is.Not.Null,
