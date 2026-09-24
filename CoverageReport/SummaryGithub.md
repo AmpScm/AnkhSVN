@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 2:30:00 AM |
-| Coverage date: | 9/24/2026 - 2:29:38 AM - 9/24/2026 - 2:29:50 AM |
+| Generated on: | 9/24/2026 - 2:40:49 AM |
+| Coverage date: | 9/24/2026 - 2:40:27 AM - 9/24/2026 - 2:40:39 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 10 |
 | Classes: | 609 |
 | Files: | 677 |
-| **Line coverage:** | 9.1% (4296 of 47005) |
-| Covered lines: | 4296 |
-| Uncovered lines: | 42709 |
-| Coverable lines: | 47005 |
-| Total lines: | 132509 |
-| **Branch coverage:** | 11.7% (2647 of 22581) |
-| Covered branches: | 2647 |
-| Total branches: | 22581 |
+| **Line coverage:** | 9.1% (4301 of 47038) |
+| Covered lines: | 4301 |
+| Uncovered lines: | 42737 |
+| Coverable lines: | 47038 |
+| Total lines: | 132573 |
+| **Branch coverage:** | 11.7% (2648 of 22597) |
+| Covered branches: | 2648 |
+| Total branches: | 22597 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -484,7 +484,7 @@
 |Ankh.UI.PendingChanges.Commits.PendingCommitItem|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitItemCollection|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitsThemeLogic|100%|100%|
-|Ankh.UI.PendingChanges.Commits.PendingCommitsView|32.6%|4.5%|
+|Ankh.UI.PendingChanges.Commits.PendingCommitsView|32.9%|4.5%|
 |Ankh.UI.PendingChanges.ConfigureRecentChangesPageDialog|0%|0%|
 |Ankh.UI.PendingChanges.Conflicts.ConflictListItem|0%|0%|
 |Ankh.UI.PendingChanges.Conflicts.ConflictListView|0%|0%|
@@ -593,7 +593,7 @@
 |Ankh.UI.VSSelectionControls.ListViewWithSelection`1|4.5%|1.4%|
 |Ankh.UI.VSSelectionControls.SmartColumn|24%|5.5%|
 |Ankh.UI.VSSelectionControls.SmartGroup|0%|0%|
-|Ankh.UI.VSSelectionControls.SmartListView|9.2%|4.6%|
+|Ankh.UI.VSSelectionControls.SmartListView|9.4%|4.6%|
 |Ankh.UI.VSSelectionControls.SmartListViewItem|0%|0%|
 |Ankh.UI.VSSelectionControls.SmartListViewThemeLogic|100%|100%|
 |Ankh.UI.VSSelectionControls.SmartSplitContainer|31.5%|18.1%|
