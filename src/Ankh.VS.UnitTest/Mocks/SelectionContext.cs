@@ -120,6 +120,12 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 return null;
             }
 
+            public IDisposable PushSelectionContainer(
+                Microsoft.VisualStudio.Shell.Interop.ISelectionContainer selectionContainer)
+            {
+                return null;
+            }
+
             #endregion
 
             #region ISelectionContext Members
