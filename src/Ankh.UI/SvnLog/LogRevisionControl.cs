@@ -100,6 +100,14 @@ namespace Ankh.UI.SvnLog
             }
         }
 
+        public override void OnThemeChange(IAnkhServiceProvider sender, CancelEventArgs e)
+        {
+            base.OnThemeChange(sender, e);
+
+            foreach (LogRevisionItem item in Items)
+                item.UpdateColors(this);
+        }
+
         private void OnUpdateCopy(object sender, CommandUpdateEventArgs e)
         {
             if (SelectedIndices.Count == 0)
