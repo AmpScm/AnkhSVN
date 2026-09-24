@@ -106,7 +106,7 @@ namespace AnkhSvn_UnitTestProject.Components
             };
 
             Assert.That(
-                InvokePrivate("SelectCommitMessageModelFamily", models),
+                InvokePrivate("SelectCommitMessageModelFamily", (object)models),
                 Is.EqualTo("gpt-4o-mini"));
         }
 
@@ -120,7 +120,7 @@ namespace AnkhSvn_UnitTestProject.Components
                 null
             };
 
-            Assert.That(InvokePrivate("SelectCommitMessageModelFamily", models), Is.Null);
+            Assert.That(InvokePrivate("SelectCommitMessageModelFamily", (object)models), Is.Null);
         }
 
         [Test]
