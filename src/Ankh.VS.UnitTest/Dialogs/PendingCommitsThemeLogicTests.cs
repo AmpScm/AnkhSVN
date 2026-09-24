@@ -37,6 +37,22 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                 Is.EqualTo(expected));
         }
 
+        [TestCase(true, false, true)]
+        [TestCase(false, false, false)]
+        [TestCase(true, true, false)]
+        [TestCase(false, true, false)]
+        public void InactiveSelectionIsHiddenOnlyOnDarkNonHighContrastSurfaces(
+            bool darkSurface,
+            bool highContrast,
+            bool expected)
+        {
+            Assert.That(
+                PendingCommitsThemeLogic.ShouldHideInactiveSelection(
+                    darkSurface,
+                    highContrast),
+                Is.EqualTo(expected));
+        }
+
         [Test]
         public void ItemForeColorFallsBackToExplicitListForeground()
         {
