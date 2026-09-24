@@ -33,25 +33,25 @@ namespace Ankh.Tests
             public int BeforeRemoveCount { get; private set; }
             public int AfterRemoveCount { get; private set; }
 
-            protected internal override void OnBeforeAdd(WizardPageCollection collection)
+            protected override void OnBeforeAdd(WizardPageCollection collection)
             {
                 BeforeAddCount++;
                 base.OnBeforeAdd(collection);
             }
 
-            protected internal override void OnAfterAdd(WizardPageCollection collection)
+            protected override void OnAfterAdd(WizardPageCollection collection)
             {
                 AfterAddCount++;
                 base.OnAfterAdd(collection);
             }
 
-            protected internal override void OnBeforeRemove(WizardPageCollection collection)
+            protected override void OnBeforeRemove(WizardPageCollection collection)
             {
                 BeforeRemoveCount++;
                 base.OnBeforeRemove(collection);
             }
 
-            protected internal override void OnAfterRemove(WizardPageCollection collection)
+            protected override void OnAfterRemove(WizardPageCollection collection)
             {
                 AfterRemoveCount++;
                 base.OnAfterRemove(collection);
