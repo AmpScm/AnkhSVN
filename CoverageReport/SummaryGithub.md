@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/24/2026 - 3:33:29 PM |
-| Coverage date: | 9/24/2026 - 3:33:11 PM - 9/24/2026 - 3:33:20 PM |
+| Generated on: | 9/24/2026 - 3:39:30 PM |
+| Coverage date: | 9/24/2026 - 3:39:11 PM - 9/24/2026 - 3:39:21 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 11% (5261 of 47680) |
-| Covered lines: | 5261 |
-| Uncovered lines: | 42419 |
+| **Line coverage:** | 11% (5291 of 47680) |
+| Covered lines: | 5291 |
+| Uncovered lines: | 42389 |
 | Coverable lines: | 47680 |
 | Total lines: | 133776 |
-| **Branch coverage:** | 13.3% (3050 of 22911) |
-| Covered branches: | 3050 |
+| **Branch coverage:** | 13.3% (3062 of 22911) |
+| Covered branches: | 3062 |
 | Total branches: | 22911 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -113,12 +113,12 @@
 |Ankh.Settings.SolutionSettings|13%|24.5%|
 
 </details>
-<details><summary>Ankh.Copilot - 21.5%</summary>
+<details><summary>Ankh.Copilot - 29.4%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Copilot**|**21.5%**|**26.1%**|
-|Ankh.Copilot.VisualStudioCopilot|21.5%|26.1%|
+|**Ankh.Copilot**|**29.4%**|**33.3%**|
+|Ankh.Copilot.VisualStudioCopilot|29.4%|33.3%|
 
 </details>
 <details><summary>Ankh.Diff - 23.7%</summary>
