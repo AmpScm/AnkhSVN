@@ -272,6 +272,7 @@ namespace Ankh.UI.VSSelectionControls
             public const Int32 LVM_SETBKCOLOR = 0x1000 + 1;     // LVM_FIRST + 1
             public const Int32 LVM_GETHEADER = 0x1000 + 31;     // LVM_FIRST + 31
             public const Int32 LVM_SETTEXTCOLOR = 0x1000 + 36;  // LVM_FIRST + 36
+            public const Int32 LVM_SETTEXTBKCOLOR = 0x1000 + 38; // LVM_FIRST + 38
             public const Int32 LVM_SETITEMSTATE = 0x1000 + 43;  // LVM_FIRST + 43
             public const Int32 HDM_GETITEM = 0x1200 + 11;  // HDM_FIRST + 11
             public const Int32 HDM_SETITEM = 0x1200 + 12;  // HDM_FIRST + 12
@@ -636,6 +637,11 @@ namespace Ankh.UI.VSSelectionControls
                 NativeMethods.LVM_SETTEXTCOLOR,
                 IntPtr.Zero,
                 (IntPtr)ColorTranslator.ToWin32(listView.ForeColor));
+            NativeMethods.SendMessage(
+                listView.Handle,
+                NativeMethods.LVM_SETTEXTBKCOLOR,
+                IntPtr.Zero,
+                (IntPtr)ColorTranslator.ToWin32(listView.BackColor));
             listView.Invalidate();
         }
 
