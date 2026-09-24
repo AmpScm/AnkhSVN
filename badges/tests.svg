@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="151" height="20" role="img" aria-label="tests: 925 passing">
-  <title>tests: 925 passing</title>
-  <mask id="round"><rect width="151" height="20" rx="3" fill="#fff"/></mask>
+<svg xmlns="http://www.w3.org/2000/svg" width="214" height="20" role="img" aria-label="tests: 925 passed, 1 failed">
+  <title>tests: 925 passed, 1 failed</title>
+  <mask id="round"><rect width="214" height="20" rx="3" fill="#fff"/></mask>
   <g mask="url(#round)">
     <rect width="60" height="20" fill="#555"/>
-    <rect x="60" width="91" height="20" fill="#4c1"/>
+    <rect x="60" width="154" height="20" fill="#e05d44"/>
   </g>
   <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">
     <text x="30" y="14">tests</text>
-    <text x="106" y="14">925 passing</text>
+    <text x="137" y="14">925 passed, 1 failed</text>
   </g>
 </svg>
