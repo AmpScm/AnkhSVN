@@ -217,6 +217,79 @@ namespace Ankh.Tests
         }
 
         [Test]
+        public void NonRecursiveDiffTreatsMatchingDirectoriesAsSameWithoutInspectingChildren()
+        {
+            string a = MakeDirectory("A");
+            string b = MakeDirectory("B");
+            string aSub = Path.Combine(a, "sub");
+            string bSub = Path.Combine(b, "sub");
+            Directory.CreateDirectory(aSub);
+            Directory.CreateDirectory(bSub);
+
+            File.WriteAllText(Path.Combine(aSub, "child.txt"), "left");
+            File.WriteAllText(Path.Combine(bSub, "child.txt"), "right");
+
+            var diff = new DirectoryDiff(true, true, true, true, false, false, null);
+            DirectoryDiffResults result = diff.Execute(a, b);
+
+            DirectoryDiffEntry sub = Find(result.Entries, "sub");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(sub, Is.Not.Null);
+                Assert.That(sub.IsFile, Is.False);
+                Assert.That(sub.Different, Is.False);
+                Assert.That(sub.SubEntries, Is.Empty);
+                Assert.That(result.Recursive, Is.False);
+            });
+        }
+
+        [Test]
+        public void DirectoryDiffEntriesAndResultsPreserveComparisonMetadata()
+        {
+            string a = MakeDirectory("A");
+            string b = MakeDirectory("B");
+            var filter = new DirectoryDiffFileFilter("*.txt", true);
+            var directory = new DirectoryDiffEntry("sub", false, true, true, false);
+            var file = new DirectoryDiffEntry("file.txt", true, true, false, true);
+
+            DirectoryDiffEntries children = directory.SubEntries;
+            file.Error = "read failed";
+            directory.Different = true;
+
+            var results = new DirectoryDiffResults(
+                new DirectoryInfo(a),
+                new DirectoryInfo(b),
+                children,
+                true,
+                filter);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(directory.Name, Is.EqualTo("sub"));
+                Assert.That(directory.IsFile, Is.False);
+                Assert.That(directory.InA, Is.True);
+                Assert.That(directory.InB, Is.True);
+                Assert.That(directory.Different, Is.True);
+                Assert.That(directory.SubEntries, Is.SameAs(children));
+
+                Assert.That(file.Name, Is.EqualTo("file.txt"));
+                Assert.That(file.IsFile, Is.True);
+                Assert.That(file.InA, Is.True);
+                Assert.That(file.InB, Is.False);
+                Assert.That(file.Different, Is.True);
+                Assert.That(file.Error, Is.EqualTo("read failed"));
+                Assert.That(file.SubEntries, Is.Null);
+
+                Assert.That(results.A.FullName, Is.EqualTo(new DirectoryInfo(a).FullName));
+                Assert.That(results.B.FullName, Is.EqualTo(new DirectoryInfo(b).FullName));
+                Assert.That(results.Entries, Is.SameAs(children));
+                Assert.That(results.Recursive, Is.True);
+                Assert.That(results.Filter, Is.SameAs(filter));
+            });
+        }
+
+        [Test]
         public void ComparingDirectoryToItselfSkipsFileContentComparison()
         {
             string a = MakeDirectory("A");

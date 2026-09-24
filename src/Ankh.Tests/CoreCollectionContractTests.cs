@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using Ankh;
 using Ankh.Collections;
 using Ankh.Commands;
@@ -152,6 +153,79 @@ namespace Ankh.Tests
 
             args.Result = "result";
             Assert.That(args.Result, Is.EqualTo("result"));
+        }
+
+        [Test]
+        public void CommandAttributesPreserveRoutingMetadataAndEnforceRangeRules()
+        {
+            var attribute = new CommandAttribute(AnkhCommand.ListViewSort0, AnkhCommandContext.Global)
+            {
+                LastCommand = (AnkhCommand)((int)AnkhCommand.ListViewSort0 + 2),
+                CommandTarget = CommandTarget.SelectedPathsRecursive,
+                HideWhenDisabled = false,
+                ArgumentDefinition = "d|p *"
+            };
+
+            MethodInfo getAllCommands = typeof(CommandAttribute).GetMethod(
+                "GetAllCommands",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+
+            var commands = ((IEnumerable<AnkhCommand>)getAllCommands.Invoke(attribute, null)).ToArray();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(attribute.Command, Is.EqualTo(AnkhCommand.ListViewSort0));
+                Assert.That(attribute.Context, Is.EqualTo(AnkhCommandContext.Global));
+                Assert.That(attribute.CommandTarget, Is.EqualTo(CommandTarget.SelectedPathsRecursive));
+                Assert.That(attribute.HideWhenDisabled, Is.False);
+                Assert.That(attribute.ArgumentDefinition, Is.EqualTo("d|p *"));
+                Assert.That(commands, Is.EqualTo(new[]
+                {
+                    AnkhCommand.ListViewSort0,
+                    (AnkhCommand)((int)AnkhCommand.ListViewSort0 + 1),
+                    (AnkhCommand)((int)AnkhCommand.ListViewSort0 + 2)
+                }));
+            });
+
+            var single = new CommandAttribute(AnkhCommand.Refresh);
+            var singleCommands = ((IEnumerable<AnkhCommand>)getAllCommands.Invoke(single, null)).ToArray();
+            Assert.That(singleCommands, Is.EqualTo(new[] { AnkhCommand.Refresh }));
+
+            var reversed = new CommandAttribute(AnkhCommand.ListViewSort0)
+            {
+                LastCommand = (AnkhCommand)((int)AnkhCommand.ListViewSort0 - 1)
+            };
+            Assert.Throws<InvalidOperationException>(() =>
+                ((IEnumerable<AnkhCommand>)getAllCommands.Invoke(reversed, null)).ToArray());
+
+            var tooWide = new CommandAttribute(AnkhCommand.ListViewSort0)
+            {
+                LastCommand = (AnkhCommand)((int)AnkhCommand.ListViewSort0 + 257)
+            };
+            Assert.Throws<InvalidOperationException>(() =>
+                ((IEnumerable<AnkhCommand>)getAllCommands.Invoke(tooWide, null)).ToArray());
+        }
+
+        [Test]
+        public void CommandAttributesExposeSvnAvailabilityAndProtectAlwaysAvailableState()
+        {
+            var svn = new SvnCommandAttribute(AnkhCommand.Refresh);
+            var scc = new SccCommandAttribute(AnkhCommand.Refresh, AnkhCommandContext.Global);
+            var always = new CommandAttribute(AnkhCommand.Refresh);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(svn.Availability, Is.EqualTo(CommandAvailability.SvnActive));
+                Assert.That(scc.Availability, Is.EqualTo(CommandAvailability.SvnActive));
+                Assert.That(scc.Context, Is.EqualTo(AnkhCommandContext.Global));
+                Assert.That(always.HideWhenDisabled, Is.True);
+                Assert.That(always.AlwaysAvailable, Is.False);
+            });
+
+            always.AlwaysAvailable = true;
+
+            Assert.That(always.AlwaysAvailable, Is.True);
+            Assert.Throws<InvalidOperationException>(() => always.AlwaysAvailable = false);
         }
 
         [Test]
