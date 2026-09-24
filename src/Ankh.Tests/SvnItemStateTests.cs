@@ -163,7 +163,7 @@ namespace Ankh.Tests
         [TestCase(SvnStatus.None, false, false, false)]
         [TestCase(SvnStatus.NotVersioned, false, true, false)]
         [TestCase(SvnStatus.Ignored, false, true, true)]
-        [TestCase(SvnStatus.Obstructed, false, true, false)]
+        [TestCase(SvnStatus.Obstructed, false, false, false)]
         public void UnmanagedStatusesPreserveExpectedVersioningAndIgnoreState(
             SvnStatus status,
             bool versioned,
@@ -224,10 +224,10 @@ namespace Ankh.Tests
         }
 
         [TestCase(SvnStatus.Modified, SvnStatus.Modified, true, false)]
-        [TestCase(SvnStatus.Modified, SvnStatus.Conflicted, false, true)]
+        [TestCase(SvnStatus.Modified, SvnStatus.Conflicted, true, true)]
         [TestCase(SvnStatus.Modified, SvnStatus.Normal, false, false)]
         [TestCase(SvnStatus.Conflicted, SvnStatus.Modified, true, false)]
-        [TestCase(SvnStatus.Conflicted, SvnStatus.Conflicted, false, true)]
+        [TestCase(SvnStatus.Conflicted, SvnStatus.Conflicted, true, true)]
         [TestCase(SvnStatus.Conflicted, SvnStatus.Normal, false, false)]
         public void ModifiedAndConflictedNodeStatesHonorTextStatus(
             SvnStatus node,
