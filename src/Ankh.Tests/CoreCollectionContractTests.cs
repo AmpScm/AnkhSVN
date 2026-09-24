@@ -229,6 +229,93 @@ namespace Ankh.Tests
         }
 
         [Test]
+        public void CommandMapItemDispatchesHandlerBeforeExecuteEventAndSharesArguments()
+        {
+            var order = new List<string>();
+            var map = new TestCommandMapItem(AnkhCommand.Refresh);
+            var handler = new RecordingCommandHandler(order);
+            map.ICommand = handler;
+
+            var args = new CommandEventArgs(AnkhCommand.Refresh, null);
+            map.Execute += delegate(object sender, CommandEventArgs e)
+            {
+                order.Add("event");
+                Assert.That(sender, Is.SameAs(map));
+                Assert.That(e, Is.SameAs(args));
+                Assert.That(e.Result, Is.EqualTo("handler"));
+                e.Result = "event";
+            };
+
+            Assert.That(map.IsHandled, Is.True);
+
+            map.RaiseExecute(args);
+
+            Assert.Multiple(() =>
+            {
+                CollectionAssert.AreEqual(new[] { "handler", "event" }, order);
+                Assert.That(handler.ExecuteCount, Is.EqualTo(1));
+                Assert.That(args.Result, Is.EqualTo("event"));
+                Assert.That(map.Command, Is.EqualTo(AnkhCommand.Refresh));
+            });
+        }
+
+        [Test]
+        public void CommandMapItemDispatchesUpdateHandlerBeforeUpdateEvent()
+        {
+            var order = new List<string>();
+            var map = new TestCommandMapItem(AnkhCommand.Refresh);
+            var handler = new RecordingCommandHandler(order);
+            map.ICommand = handler;
+
+            var args = new CommandUpdateEventArgs(AnkhCommand.Refresh, null);
+            map.Update += delegate(object sender, CommandUpdateEventArgs e)
+            {
+                order.Add("event");
+                Assert.That(sender, Is.SameAs(map));
+                Assert.That(e, Is.SameAs(args));
+                Assert.That(e.Enabled, Is.False);
+                e.Visible = false;
+            };
+
+            map.RaiseUpdate(args);
+
+            Assert.Multiple(() =>
+            {
+                CollectionAssert.AreEqual(new[] { "handler", "event" }, order);
+                Assert.That(handler.UpdateCount, Is.EqualTo(1));
+                Assert.That(args.Enabled, Is.False);
+                Assert.That(args.Visible, Is.False);
+            });
+        }
+
+        [Test]
+        public void CommandMapItemHandledStateTracksExecutableSources()
+        {
+            var map = new TestCommandMapItem(AnkhCommand.Refresh);
+
+            Assert.That(map.IsHandled, Is.False);
+
+            EventHandler<CommandUpdateEventArgs> update = delegate { };
+            map.Update += update;
+            Assert.That(map.IsHandled, Is.False,
+                "Update-only observers do not provide an executable command.");
+
+            EventHandler<CommandEventArgs> execute = delegate { };
+            map.Execute += execute;
+            Assert.That(map.IsHandled, Is.True);
+
+            map.Execute -= execute;
+            Assert.That(map.IsHandled, Is.False);
+
+            map.ICommand = new RecordingCommandHandler(new List<string>());
+            Assert.That(map.IsHandled, Is.True);
+
+            map.ICommand = null;
+            map.Update -= update;
+            Assert.That(map.IsHandled, Is.False);
+        }
+
+        [Test]
         public void CommandUpdateEventArgs_DefaultStateIsEnabledAndVisible()
         {
             var args = new CommandUpdateEventArgs(default(AnkhCommand), null, TextQueryType.Name);
@@ -276,5 +363,50 @@ namespace Ankh.Tests
             Assert.That(args.DynamicMenuEnd, Is.True);
             Assert.That(args.Text, Is.EqualTo("status"));
         }
+        sealed class TestCommandMapItem : CommandMapItem
+        {
+            public TestCommandMapItem(AnkhCommand command)
+                : base(command)
+            {
+            }
+
+            public void RaiseExecute(CommandEventArgs e)
+            {
+                OnExecute(e);
+            }
+
+            public void RaiseUpdate(CommandUpdateEventArgs e)
+            {
+                OnUpdate(e);
+            }
+        }
+
+        sealed class RecordingCommandHandler : ICommandHandler
+        {
+            readonly IList<string> _order;
+
+            public RecordingCommandHandler(IList<string> order)
+            {
+                _order = order;
+            }
+
+            public int ExecuteCount { get; private set; }
+            public int UpdateCount { get; private set; }
+
+            public void OnExecute(CommandEventArgs e)
+            {
+                ExecuteCount++;
+                _order.Add("handler");
+                e.Result = "handler";
+            }
+
+            public void OnUpdate(CommandUpdateEventArgs e)
+            {
+                UpdateCount++;
+                _order.Add("handler");
+                e.Enabled = false;
+            }
+        }
+
     }
 }

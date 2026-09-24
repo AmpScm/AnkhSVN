@@ -37,6 +37,46 @@ namespace Ankh.Tests
         }
 
         [Test]
+        public void PendingChangeStatusExposesConsistentTextForEveryKind()
+        {
+            foreach (PendingChangeKind kind in Enum.GetValues(typeof(PendingChangeKind)))
+            {
+                var status = new PendingChangeStatus(kind);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(status.State, Is.EqualTo(kind));
+                    Assert.That(status.Text, Is.Not.Null.And.Not.Empty, kind.ToString());
+                    Assert.That(status.PendingCommitText, Is.EqualTo(status.Text), kind.ToString());
+                    Assert.That(status.ExplorerText, Is.EqualTo(status.Text), kind.ToString());
+                    Assert.That(status.ToString(), Is.EqualTo(status.Text), kind.ToString());
+                    Assert.That(status.Text, Is.SameAs(status.Text), kind.ToString());
+                });
+            }
+        }
+
+        [Test]
+        public void PendingChangeStatusEqualityDependsOnStateAndTextContract()
+        {
+            var modified = new PendingChangeStatus(PendingChangeKind.Modified);
+            var modifiedAgain = new PendingChangeStatus(PendingChangeKind.Modified);
+            var added = new PendingChangeStatus(PendingChangeKind.Added);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(modified.Equals(modifiedAgain), Is.True);
+                Assert.That(modified.Equals((object)modifiedAgain), Is.True);
+                Assert.That(modified.GetHashCode(), Is.EqualTo(modifiedAgain.GetHashCode()));
+
+                Assert.That(modified.Equals(added), Is.False);
+                Assert.That(modified.Equals((object)added), Is.False);
+                Assert.That(modified.Equals((PendingChangeStatus)null), Is.False);
+                Assert.That(modified.Equals((object)"Modified"), Is.False);
+                Assert.That(modified.Equals((object)null), Is.False);
+            });
+        }
+
+        [Test]
         public void CombineStatusRejectsInvalidNodeStatus()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
