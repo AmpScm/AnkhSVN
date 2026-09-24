@@ -78,6 +78,43 @@ namespace AnkhSvn_UnitTestProject.Dialogs
             }
         }
 
+        [Test, Apartment(ApartmentState.STA)]
+        public void HandleCreatedQueuesSecondNativeColorRestore()
+        {
+            const int TV_FIRST = 0x1100;
+            const int TVM_SETBKCOLOR = TV_FIRST + 29;
+            const int TVM_SETTEXTCOLOR = TV_FIRST + 30;
+            const int TVM_GETBKCOLOR = TV_FIRST + 31;
+            const int TVM_GETTEXTCOLOR = TV_FIRST + 32;
+
+            using (var tree = new SmartTreeView())
+            {
+                Color expectedBack = Color.FromArgb(31, 31, 31);
+                Color expectedFore = Color.FromArgb(241, 241, 241);
+                tree.BackColor = expectedBack;
+                tree.ForeColor = expectedFore;
+
+                IntPtr handle = tree.Handle;
+
+                // Simulate Visual Studio/native theming resetting the TreeView after
+                // OnHandleCreated has already applied the managed palette.
+                SendMessage(handle, TVM_SETBKCOLOR, IntPtr.Zero,
+                    (IntPtr)ColorTranslator.ToWin32(Color.White));
+                SendMessage(handle, TVM_SETTEXTCOLOR, IntPtr.Zero,
+                    (IntPtr)ColorTranslator.ToWin32(Color.Black));
+
+                Application.DoEvents();
+
+                Color actualBack = ColorTranslator.FromWin32(
+                    unchecked((int)SendMessage(handle, TVM_GETBKCOLOR, IntPtr.Zero, IntPtr.Zero).ToInt64()));
+                Color actualFore = ColorTranslator.FromWin32(
+                    unchecked((int)SendMessage(handle, TVM_GETTEXTCOLOR, IntPtr.Zero, IntPtr.Zero).ToInt64()));
+
+                Assert.That(actualBack.ToArgb(), Is.EqualTo(expectedBack.ToArgb()));
+                Assert.That(actualFore.ToArgb(), Is.EqualTo(expectedFore.ToArgb()));
+            }
+        }
+
         [DllImport("user32.dll")]
         static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
     }
