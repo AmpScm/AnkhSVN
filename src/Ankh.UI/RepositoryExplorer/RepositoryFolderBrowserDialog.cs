@@ -25,6 +25,12 @@ namespace Ankh.UI.RepositoryExplorer
         public RepositoryFolderBrowserDialog()
         {
             InitializeComponent();
+
+            // This dialog is hosted inside themed VS UI but RepositoryTreeView is a
+            // native Win32 TreeView. Let SmartTreeView render the label/selection
+            // directly from the VS palette instead of mixing Windows Explorer colors
+            // with a Visual Studio dark surface.
+            reposBrowser.UsePaletteRendering = true;
         }
 
         protected override void OnContextChanged(EventArgs e)
