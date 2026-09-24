@@ -74,13 +74,13 @@
           </Group>
           <Group id="Grp_FileSccOpen" priority="0x01A0">
             <Button id="Cmd_FileSccOpenFromSubversion" text="Open &amp;from Subversion..." name="OpenFromSubversion" priority="0x100"
-                    toolTip="Open a Project or Solution from Subversion" dynamicVisibility="true">
-              <Visibility context="Ankh_SccProviderGuid" iconId="ImageCatalogGuid:Open" />
+                    toolTip="Open a Project or Solution from Subversion" iconId="ImageCatalogGuid:Open" dynamicVisibility="true">
+              <Visibility context="Ankh_SccProviderGuid" />
             </Button>
             <Button id="Cmd_FileSccAddFromSubversion" text="A&amp;dd Project from Subversion..." name="AddFromSubversion" priority="0x200"
-                    toolTip="Add an existing Project or Solution from Subversion" dynamicVisibility="true">
+                    toolTip="Add an existing Project or Solution from Subversion" iconId="ImageCatalogGuid:Add" dynamicVisibility="true">
               <!-- Only show Add when not debugging, etc -->
-              <Visibility context="Ankh_SccProviderGuid" iconId="ImageCatalogGuid:Add" />
+              <Visibility context="Ankh_SccProviderGuid" />
             </Button>
           </Group>
           <Group id="Grp_FileSccAdd" priority="0x01B0">
@@ -443,7 +443,7 @@
       <Menu id="Menu_ItemResolve" priority="0x1A00" name="Resolve" text="Resol&amp;ve">
         <Group id="Grp_ItemResolveCommand" priority="0x100">
           <Button id="Cmd_ItemResolveMerge" priority="0x10" text="Resolve &amp;Conflict" defaultInvisible="true" iconId="ImageCatalogGuid:Conflict" />
-          <Button id="Cmd_ItemResolveMergeTool" priority="0x20" text="Resolve using &amp;Tool" defaultInvisible="true" iconId="ImageCatalogGuid:Conflict" />
+          <Button id="Cmd_ItemResolveMergeTool" priority="0x20" text="Resolve using &amp;Tool" defaultInvisible="true" iconId="ImageCatalogGuid:Merge" />
           <Button id="Cmd_ItemResolveCasing" priority="0x30" text="Resolve Ca&amp;se Conflict" defaultInvisible="true" iconId="ImageCatalogGuid:Conflict" />
         </Group>
         <Group id="Grp_ItemResolveFile" priority="0x200">
@@ -1153,10 +1153,10 @@
         <Button id="Cmd_MakeNonSccFileWriteable" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" postExec="false" defaultInvisible="true" defaultDisabled="false" />
 
         <!-- Temp no UI -->
-        <Button id="Cmd_ItemDelete" name="SvnNodeDelete" priority="0" text="&amp;Delete..." dynamicVisibility="true"/>
+        <Button id="Cmd_ItemDelete" name="SvnNodeDelete" priority="0" text="&amp;Delete..." iconId="ImageCatalogGuid:Delete" dynamicVisibility="true"/>
         <Button id="Cmd_ItemRename" name="Rename" priority="0"
                 text="&amp;Rename..." dynamicVisibility="true" allowParams="true" />
-        <Button id="Cmd_SvnNodeDelete" name="SvnNodeDelete" priority="0" text="&amp;Delete..." dynamicVisibility="true" />
+        <Button id="Cmd_SvnNodeDelete" name="SvnNodeDelete" priority="0" text="&amp;Delete..." iconId="ImageCatalogGuid:Delete" dynamicVisibility="true" />
         <Button id="Cmd_RenameRepositoryItem" name="Rename" priority="0"
                 text="&amp;Rename..." dynamicVisibility="true" allowParams="true" />
       </Group>
