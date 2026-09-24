@@ -58,6 +58,7 @@ namespace Ankh.UI.Annotate
             BuildRegions(document);
 
             PreviewMouseRightButtonDown += OnPreviewMouseRightButtonDown;
+            PreviewMouseRightButtonUp += OnPreviewMouseRightButtonUp;
             ContextMenuOpening += OnContextMenuOpening;
 
             _textView.LayoutChanged += OnLayoutChanged;
@@ -177,9 +178,23 @@ namespace Ankh.UI.Annotate
             if (region == null)
                 return;
 
-            // Intercept the click before the native editor sees it. Otherwise VS can
-            // open its normal editor context menu (Outlining/Breakpoints/etc.) over
-            // the annotation margin.
+            // Claim the press before the native editor sees it, but do not open the
+            // command menu until button-up. IMenuCommandService behaves like the old
+            // WinForms implementation here: opening it during the preview/down event
+            // can result in the menu being immediately dismissed.
+            e.Handled = true;
+            SelectRegion(region);
+        }
+
+        void OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_disposed || e == null)
+                return;
+
+            MarginRegion region = FindRegionAt(e.GetPosition(this));
+            if (region == null)
+                return;
+
             e.Handled = true;
             SelectRegion(region);
             ShowContextMenu(this, e);
@@ -433,6 +448,7 @@ namespace Ankh.UI.Annotate
 
             _disposed = true;
             PreviewMouseRightButtonDown -= OnPreviewMouseRightButtonDown;
+            PreviewMouseRightButtonUp -= OnPreviewMouseRightButtonUp;
             ContextMenuOpening -= OnContextMenuOpening;
             _textView.LayoutChanged -= OnLayoutChanged;
             _textView.Closed -= OnTextViewClosed;
