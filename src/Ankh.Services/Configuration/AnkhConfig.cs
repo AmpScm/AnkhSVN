@@ -36,6 +36,7 @@ namespace Ankh.Configuration
         bool _noDashComment;
         bool _pcDoubleClickShowsChanges;
         int _recentChangesRefreshInterval;
+        int _recentChangesHistoryLimit = 25;
         bool _disableUpdateCheck;
         bool _enableTsvnHooks;
         bool _dontHookSlnRefresh;
@@ -150,6 +151,13 @@ namespace Ankh.Configuration
         {
             get { return _recentChangesRefreshInterval; }
             set { _recentChangesRefreshInterval = value; }
+        }
+
+        [DefaultValue(25)]
+        public int RecentChangesHistoryLimit
+        {
+            get { return _recentChangesHistoryLimit; }
+            set { _recentChangesHistoryLimit = Math.Max(1, Math.Min(1000, value)); }
         }
 
         [DefaultValue(false)]
