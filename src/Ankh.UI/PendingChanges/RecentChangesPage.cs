@@ -45,9 +45,13 @@ namespace Ankh.UI.PendingChanges
             updateTime.Enabled = true;
             updateTime.Dock = DockStyle.Fill;
             // Keep repository-history order until the user explicitly sorts a
-            // column. SmartListView's sorter remains installed so column clicks
-            // and the standard header menu can sort on demand.
+            // column. WinForms clears ListViewItemSorter when Sorting is set to
+            // None, so preserve and restore SmartListView's comparer explicitly.
+            // This keeps insertion order by default while allowing later header
+            // clicks / Sort By commands to call Sort() through the smart comparer.
+            System.Collections.IComparer historySorter = syncView.ListViewItemSorter;
             syncView.Sorting = SortOrder.None;
+            syncView.ListViewItemSorter = historySorter;
             syncView.ShowItemToolTips = true;
             syncView.AllowColumnReorder = true;
 
