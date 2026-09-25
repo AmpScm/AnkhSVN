@@ -353,6 +353,22 @@ namespace Ankh.Configuration
             SaveNumberValues("WindowPlacements", controlType.FullName, placement);
         }
 
+        public IDictionary<string, int> GetColumnVisibility(Type controlType)
+        {
+            if (controlType == null)
+                throw new ArgumentNullException("controlType");
+
+            return GetNumberValues("ColumnVisibility", controlType.FullName);
+        }
+
+        public void SaveColumnVisibility(Type controlType, IDictionary<string, int> visibility)
+        {
+            if (controlType == null)
+                throw new ArgumentNullException("controlType");
+
+            SaveNumberValues("ColumnVisibility", controlType.FullName, visibility);
+        }
+
         public IDictionary<string, int> GetWindowPlacement(Type controlType)
         {
             if (controlType == null)

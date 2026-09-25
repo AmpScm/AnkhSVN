@@ -53,38 +53,7 @@ namespace Ankh.UI.VSSelectionControls.Commands
             int n = (int)(e.Command - AnkhCommand.ListViewShow0);
 
             SmartColumn sc = list.AllColumns[n];
-            int col = sc.Index;
-            if (col > 0)
-            {
-                list.Columns.Remove(sc);
-
-                if (!list.VirtualMode)
-                {
-                    Debug.Assert(sc.Index < 0);
-
-                    foreach (ListViewItem li in list.Items)
-                    {
-                        if (li.SubItems.Count > col)
-                            li.SubItems.RemoveAt(col);
-                    }
-                }
-            }
-            else
-            {
-                list.Columns.Add(sc);
-
-                if (!list.VirtualMode)
-                {
-                    col = sc.Index;
-                    foreach (ListViewItem li in list.Items)
-                    {
-                        SmartListViewItem si = li as SmartListViewItem;
-
-                        if (si != null)
-                            si.SetValue(sc.AllColumnsIndex, si.GetValue(sc.AllColumnsIndex));
-                    }
-                }
-            }            
+            list.SetColumnVisible(sc, !list.Columns.Contains(sc));
         }
 
     }

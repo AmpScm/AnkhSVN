@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -162,6 +163,49 @@ namespace Ankh.Tests
                     Assert.That(second.Width, Is.EqualTo(92));
                     Assert.That(unnamed.Width, Is.EqualTo(70));
                 });
+            }
+        }
+
+        [Test]
+        public void ColumnVisibilitySurvivesRecreationAndKeepsRowValues()
+        {
+            IDictionary<string, int> saved;
+            using (var view = new TestSmartListView())
+            {
+                var path = new SmartColumn(view, "Path", 100, "Path") { Hideable = false };
+                var project = new SmartColumn(view, "Project", 80, "Project");
+                var modified = new SmartColumn(view, "Modified", 90, "Modified");
+                view.AllColumns.Add(path);
+                view.AllColumns.Add(project);
+                view.AllColumns.Add(modified);
+                view.Columns.AddRange(new ColumnHeader[] { path, project });
+                var item = new SmartListViewItem(view);
+                item.SetValues("file.txt", "project", "today");
+                view.Items.Add(item);
+                int notifications = 0;
+                view.ColumnVisibilityChanged += (sender, args) => notifications++;
+                view.SetColumnVisible(modified, true);
+                view.SetColumnVisible(project, false);
+                view.SetColumnVisible(path, false);
+                view.SetColumnVisible(modified, true);
+                Assert.That(notifications, Is.EqualTo(2));
+                Assert.That(item.SubItems[1].Text, Is.EqualTo("today"));
+                saved = view.GetColumnVisibility();
+            }
+            using (var view = new TestSmartListView())
+            {
+                var path = new SmartColumn(view, "Path", 100, "Path") { Hideable = false };
+                var project = new SmartColumn(view, "Project", 80, "Project");
+                var modified = new SmartColumn(view, "Modified", 90, "Modified");
+                view.AllColumns.Add(path);
+                view.AllColumns.Add(project);
+                view.AllColumns.Add(modified);
+                view.Columns.AddRange(new ColumnHeader[] { path, project });
+                view.SetColumnVisibility(saved);
+                Assert.That(view.Columns.Cast<ColumnHeader>().Select(c => c.Name), Is.EqualTo(new[] { "Path", "Modified" }));
+                view.SetColumnVisibility(new Dictionary<string, int> { { "Path", 0 }, { "Modified", 9 }, { "Unknown", 1 } });
+                Assert.That(view.Columns.Contains(path), Is.True);
+                Assert.That(view.Columns.Contains(modified), Is.True);
             }
         }
 

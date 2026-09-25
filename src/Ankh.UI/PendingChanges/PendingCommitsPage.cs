@@ -129,9 +129,11 @@ namespace Ankh.UI.PendingChanges
                 pendingCommits.Context = Context;
                 pendingCommits.OpenPendingChangeOnDoubleClick = true;
                 pendingCommits.HookCommands();
-                pendingCommits.ColumnWidthChanged += new ColumnWidthChangedEventHandler(PendingCommits_ColumnWidthChanged);
                 IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
                 pendingCommits.SetColumnWidths(widths);
+                pendingCommits.SetColumnVisibility(ConfigurationService.GetColumnVisibility(GetType()));
+                pendingCommits.ColumnWidthChanged += new ColumnWidthChangedEventHandler(PendingCommits_ColumnWidthChanged);
+                pendingCommits.ColumnVisibilityChanged += PendingCommits_ColumnVisibilityChanged;
 
             logMessageEditor.PendingChangeUI = this.pendingCommits;
 
@@ -163,6 +165,11 @@ namespace Ankh.UI.PendingChanges
         {
             IDictionary<string, int> widths = pendingCommits.GetColumnWidths();
             ConfigurationService.SaveColumnsWidths(GetType(), widths);
+        }
+
+        void PendingCommits_ColumnVisibilityChanged(object sender, EventArgs e)
+        {
+            ConfigurationService.SaveColumnVisibility(GetType(), pendingCommits.GetColumnVisibility());
         }
 
         IPendingChangesManager _manager;

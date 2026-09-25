@@ -79,6 +79,9 @@ namespace Ankh.Configuration
         /// <param name="widths">Dictionary of column names and widths</param>
         void SaveColumnsWidths(Type controlType, IDictionary<string, int> widths);
 
+        IDictionary<string, int> GetColumnVisibility(Type controlType);
+        void SaveColumnVisibility(Type controlType, IDictionary<string, int> visibility);
+
         /// <summary>
         /// Get SmartColumns widths from registry
         /// </summary>

@@ -789,34 +789,7 @@ namespace Ankh.UI.VSSelectionControls
             get { return IsXPPlus; }
         }
 
-        public static bool SupportsSortGlypgs
-        {
-            get { return IsXPPlus; }
-        }
-
-        internal void UpdateSortGlyphs()
-        {
-            if (!IsHandleCreated || !SupportsSortGlypgs || DesignMode || View != View.Details)
-                return;
-
-            foreach (ColumnHeader ch in Columns)
-            {
-                SmartColumn sc = ch as SmartColumn;
-
-                if (sc != null)
-                {
-                    if (SortColumns.Contains(sc))
-                    {
-                        SetSortIcon(sc.Index, sc.ReverseSort ? SortIcon.Descending : SortIcon.Ascending);
-                    }
-                    else
-                        SetSortIcon(sc.Index, SortIcon.None);
-                }
-
-            }
-        }
-
-        protected override void OnColumnClick(ColumnClickEventArgs e)
+        public static bool SupportsSortG…207 tokens truncated… e)
         {
             if (!DesignMode && View == View.Details && !VirtualMode)
             {
@@ -1310,6 +1283,75 @@ namespace Ankh.UI.VSSelectionControls
             }
 
             return widths;
+        }
+
+        public event EventHandler ColumnVisibilityChanged;
+
+        public IDictionary<string, int> GetColumnVisibility()
+        {
+            var visibility = new Dictionary<string, int>();
+            foreach (SmartColumn column in AllColumns)
+            {
+                if (!string.IsNullOrEmpty(column.Name))
+                    visibility[column.Name] = Columns.Contains(column) ? 1 : 0;
+            }
+            return visibility;
+        }
+
+        public void SetColumnVisibility(IDictionary<string, int> visibility)
+        {
+            if (visibility == null)
+                return;
+
+            foreach (SmartColumn column in AllColumns)
+            {
+                int visible;
+                if (!string.IsNullOrEmpty(column.Name)
+                    && visibility.TryGetValue(column.Name, out visible)
+                    && (visible == 0 || visible == 1))
+                {
+                    SetColumnVisible(column, visible == 1);
+                }
+            }
+        }
+
+        public void SetColumnVisible(SmartColumn column, bool visible)
+        {
+            if (column == null || !AllColumns.Contains(column))
+                throw new ArgumentException("Column must belong to this list", "column");
+
+            int index = column.Index;
+            if (visible == Columns.Contains(column) || (!visible && (!column.Hideable || index == 0)))
+                return;
+
+            if (visible)
+            {
+                Columns.Add(column);
+                if (!VirtualMode)
+                {
+                    foreach (ListViewItem item in Items)
+                    {
+                        SmartListViewItem smartItem = item as SmartListViewItem;
+                        if (smartItem != null)
+                            smartItem.SetValue(column.AllColumnsIndex, smartItem.GetValue(column.AllColumnsIndex));
+                    }
+                }
+            }
+            else
+            {
+                Columns.Remove(column);
+                if (!VirtualMode)
+                {
+                    foreach (ListViewItem item in Items)
+                    {
+                        if (item.SubItems.Count > index)
+                            item.SubItems.RemoveAt(index);
+                    }
+                }
+            }
+
+            if (ColumnVisibilityChanged != null)
+                ColumnVisibilityChanged(this, EventArgs.Empty);
         }
 
         public void SetColumnWidths(IDictionary<string, int> widths)

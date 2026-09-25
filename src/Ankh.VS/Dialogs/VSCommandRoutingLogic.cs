@@ -52,13 +52,18 @@ namespace Ankh.VS.Dialogs
         const int WM_SYSKEYDOWN = 0x0104;
         const int WM_SYSKEYUP = 0x0105;
 
+        internal static bool IsKeyboardMessage(int message)
+        {
+            return message >= WM_KEYFIRST && message <= WM_IME_KEYLAST;
+        }
+
         public static VSCommandRoutingKeyPlan BuildKeyPlan(
             int message,
             Keys key,
             Keys modifiers,
             VSContainerMode mode)
         {
-            if (message < WM_KEYFIRST || message > WM_IME_KEYLAST)
+            if (!IsKeyboardMessage(message))
                 return Plan(false, false, mode);
 
             bool bypassRouting = false;

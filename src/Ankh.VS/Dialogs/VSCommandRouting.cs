@@ -193,6 +193,11 @@ namespace Ankh.VS.Dialogs
             if (!Enabled)
                 return false;
 
+            // Non-keyboard messages can carry a pointer-sized timer id or HWND.
+            // Filter them before converting wParam to a 32-bit virtual-key code.
+            if (!VSCommandRoutingLogic.IsKeyboardMessage(m.Msg))
+                return false;
+
             VSCommandRoutingKeyPlan plan =
                 VSCommandRoutingLogic.BuildKeyPlan(
                     m.Msg,
