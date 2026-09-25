@@ -46,6 +46,8 @@ namespace Ankh.UI.PendingChanges
             syncView.Sorting = SortOrder.None;
             syncView.ListViewItemSorter = null;
             syncView.ShowItemToolTips = true;
+            syncView.HideSelection = false;
+            syncView.PreserveItemForeColorWhenSelected = true;
             string[] names = { "Revision", "Author", "Date", "Message", "Repository" };
             int[] widths = { 85, 120, 155, 400, 250 };
             for (int i = 0; i < names.Length; i++)
@@ -189,7 +191,16 @@ namespace Ankh.UI.PendingChanges
                 _details.Clear();
                 foreach (var entry in entries)
                 {
-                    var item = new SmartListViewItem(syncView) { Tag = entry, ToolTipText = entry.Message };
+                    var item = new SmartListViewItem(syncView)
+                    {
+                        Tag = entry,
+                        ToolTipText = entry.Message,
+                        // SmartListView preserves item-level foreground colors for
+                        // hover/selection. Explicitly inherit the semantic list
+                        // foreground so a newly-created history row never falls
+                        // back to SystemColors.WindowText (black in dark themes).
+                        ForeColor = syncView.ForeColor
+                    };
                     item.SetValues("r" + entry.Revision, entry.Author, entry.Time.ToLocalTime().ToString("g"),
                         entry.Message.Replace("\r", " ").Replace("\n", " "), entry.Repository);
                     syncView.Items.Add(item);
@@ -254,6 +265,15 @@ namespace Ankh.UI.PendingChanges
                 syncView.BorderStyle = BorderStyle.None;
                 borderPanel.BorderStyle = BorderStyle.None;
             }
+
+            // History items are created after the page is initially themed.
+            // Keep their explicit item foreground synchronized when Visual
+            // Studio changes themes so hover, active selection, and inactive
+            // selection all use the same semantic foreground as the list.
+            foreach (ListViewItem item in syncView.Items)
+                item.ForeColor = syncView.ForeColor;
+
+            syncView.Invalidate();
         }
     }
 }
