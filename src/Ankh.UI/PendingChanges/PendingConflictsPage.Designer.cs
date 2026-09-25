@@ -123,7 +123,6 @@ namespace Ankh.UI.PendingChanges
             // resolvePanel
             // 
             resources.ApplyResources(this.resolvePanel, "resolvePanel");
-            this.resolvePanel.BackColor = System.Drawing.Color.SkyBlue;
             this.resolvePanel.Controls.Add(this.resolveButton0);
             this.resolvePanel.Controls.Add(this.resolveButton1);
             this.resolvePanel.Controls.Add(this.resolveButton2);

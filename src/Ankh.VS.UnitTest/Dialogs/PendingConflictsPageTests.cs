@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -130,6 +131,8 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                     .GetField("resolveTopLabel", flags).GetValue(page);
                 var bottom = (Label)typeof(PendingConflictsPage)
                     .GetField("resolveBottomLabel", flags).GetValue(page);
+                var resolvePanel = (FlowLayoutPanel)typeof(PendingConflictsPage)
+                    .GetField("resolvePanel", flags).GetValue(page);
 
                 Button[] buttons = Enumerable.Range(0, 8)
                     .Select(i => (Button)typeof(PendingConflictsPage)
@@ -142,6 +145,7 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                     Assert.That(top.Text, Is.EqualTo("Conflict"));
                     Assert.That(bottom.Text, Does.Not.Contain("label3"));
                     Assert.That(bottom.Text, Does.Not.Contain("resolveBottomLabel"));
+                    Assert.That(resolvePanel.BackColor, Is.Not.EqualTo(Color.SkyBlue));
                     Assert.That(buttons.All(b => !string.IsNullOrWhiteSpace(b.Text)), Is.True);
                     Assert.That(buttons.All(b => b.Tag is AnkhCommand), Is.True);
                 });

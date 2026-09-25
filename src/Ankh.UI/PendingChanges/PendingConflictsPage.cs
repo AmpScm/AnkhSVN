@@ -56,26 +56,7 @@ namespace Ankh.UI.PendingChanges
             conflictView.SelectedIndexChanged += conflictView_SelectedIndexChanged;
             conflictView.DoubleClick += conflictView_DoubleClick;
 
-            IAnkhVSColor clr = Context.GetService<IAnkhVSColor>();
-            if (clr != null)
-            {
-                Color c;
-                if (clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TITLEBAR_INACTIVE, out c))
-                    resolvePanel.BackColor = c;
-
-                if (clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TITLEBAR_INACTIVE_TEXT, out c))
-                    resolvePanel.ForeColor = c;
-
-                if (clr.TryGetColor((__VSSYSCOLOREX)(-207) /* VS2010: VSCOLOR_INFOBACKGROUND */, out c))
-                    conflictHeader.BackColor = c;
-                else
-                    conflictHeader.BackColor = SystemColors.Info;
-
-                if (clr.TryGetColor((__VSSYSCOLOREX)(-208) /* VS2010: VSCOLOR_INFOTEXT */, out c))
-                    conflictHeader.ForeColor = c;
-                else
-                    conflictHeader.ForeColor = SystemColors.InfoText;
-            }
+            ApplyPageTheme();
 
             conflictView.ColumnWidthChanged += conflictView_ColumnWidthChanged;
             IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
@@ -403,11 +384,70 @@ namespace Ankh.UI.PendingChanges
         public override void OnThemeChanged(EventArgs e)
         {
             base.OnThemeChanged(e);
+
+            ApplyPageTheme();
+
             if (VSVersion.VS2012OrLater)
             {
                 borderPanel.BorderStyle = BorderStyle.None;
                 conflictView.BorderStyle = BorderStyle.None;
             }
+
+            conflictView.Invalidate();
+            resolvePanel.Invalidate(true);
+        }
+
+        void ApplyPageTheme()
+        {
+            if (Context == null)
+                return;
+
+            // Use the same semantic WinForms palette as the rest of Pending
+            // Changes. In particular, do not treat the resolution surface as
+            // an inactive title bar; doing so produced mismatched buttons and
+            // stale colors after a Visual Studio theme switch.
+            if (VSVersion.VS2012OrLater)
+            {
+                IWinFormsThemingService theming =
+                    Context.GetService<IWinFormsThemingService>();
+                if (theming != null)
+                    theming.ThemeRecursive(this, false);
+            }
+
+            ApplyConflictHeaderTheme();
+        }
+
+        void ApplyConflictHeaderTheme()
+        {
+            if (Context == null || SystemInformation.HighContrast)
+            {
+                conflictHeader.BackColor = SystemColors.Info;
+                conflictHeader.ForeColor = SystemColors.InfoText;
+                return;
+            }
+
+            IAnkhVSColor colors = Context.GetService<IAnkhVSColor>();
+            Color color;
+
+            if (colors != null
+                && colors.TryGetColor(
+                    (__VSSYSCOLOREX)(-207) /* VS2010: VSCOLOR_INFOBACKGROUND */,
+                    out color))
+            {
+                conflictHeader.BackColor = color;
+            }
+            else
+                conflictHeader.BackColor = SystemColors.Info;
+
+            if (colors != null
+                && colors.TryGetColor(
+                    (__VSSYSCOLOREX)(-208) /* VS2010: VSCOLOR_INFOTEXT */,
+                    out color))
+            {
+                conflictHeader.ForeColor = color;
+            }
+            else
+                conflictHeader.ForeColor = SystemColors.InfoText;
         }
 
         public override bool CanRefreshList
