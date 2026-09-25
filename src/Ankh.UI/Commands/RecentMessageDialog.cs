@@ -26,6 +26,10 @@ namespace Ankh.UI.Commands
         {
             InitializeComponent();
 
+            // SmartListView supplies VS semantic selection/hover colors. Keep
+            // the original recent-message ordering instead of its sort model.
+            logMessageList.Sorting = SortOrder.None;
+            logMessageList.ListViewItemSorter = null;
             logMessageList.Columns.Clear();
             column = new ColumnHeader();
             logMessageList.Columns.Add(column);

@@ -78,7 +78,7 @@ namespace Ankh.UI.MergeWizard
             this.propertyConflictedLabel = new System.Windows.Forms.Label();
             this.propertyMergedLabel = new System.Windows.Forms.Label();
             this.propertyUpdatedLabel = new System.Windows.Forms.Label();
-            this.modifiedPathsListView = new System.Windows.Forms.ListView();
+            this.modifiedPathsListView = new Ankh.UI.VSSelectionControls.SmartListView();
             this.changedPathColumn = new System.Windows.Forms.ColumnHeader();
             this.contentColumn = new System.Windows.Forms.ColumnHeader();
             this.propertiesColumn = new System.Windows.Forms.ColumnHeader();
@@ -396,7 +396,7 @@ namespace Ankh.UI.MergeWizard
         private System.Windows.Forms.Label propertyConflictedLabel;
         private System.Windows.Forms.Label propertyMergedLabel;
         private System.Windows.Forms.Label propertyUpdatedLabel;
-        private System.Windows.Forms.ListView modifiedPathsListView;
+        private Ankh.UI.VSSelectionControls.SmartListView modifiedPathsListView;
         private System.Windows.Forms.ColumnHeader changedPathColumn;
         private System.Windows.Forms.ColumnHeader contentColumn;
         private System.Windows.Forms.ColumnHeader propertiesColumn;

@@ -8,6 +8,8 @@ using System.Threading;
 using System.Windows.Forms;
 using Ankh;
 using Ankh.UI;
+using Ankh.UI.Commands;
+using Ankh.UI.MergeWizard;
 using Ankh.UI.VSSelectionControls;
 using NUnit.Framework;
 
@@ -17,6 +19,45 @@ namespace Ankh.Tests
     [Apartment(ApartmentState.STA)]
     public class SmartListViewBehaviorTests
     {
+        [Test]
+        public void SmartListViewDefaultsToVisualStudioInteractionTheming()
+        {
+            using (var view = new SmartListView())
+            {
+                Assert.Multiple(() =>
+                {
+                    Assert.That(view.AllowDarkNativeTheme, Is.False);
+                    Assert.That(view.PreserveItemForeColorWhenSelected, Is.True);
+                    Assert.That(view.PreserveItemForeColorWhenHot, Is.True);
+                    Assert.That(view.HideSelection, Is.False);
+                    Assert.That(view.FullRowSelect, Is.True);
+                });
+            }
+        }
+
+        [Test]
+        public void LegacyListDialogsUseSmartListViewWithoutChangingRowOrder()
+        {
+            using (var recent = new RecentMessageDialog())
+            using (var merge = new MergeResultsDialog())
+            {
+                var recentList = recent.Controls.Find("logMessageList", true).Single() as SmartListView;
+                var mergeList = merge.Controls.Find("modifiedPathsListView", true).Single() as SmartListView;
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(recentList, Is.Not.Null);
+                    Assert.That(mergeList, Is.Not.Null);
+                    Assert.That(recentList.Sorting, Is.EqualTo(SortOrder.None));
+                    Assert.That(recentList.ListViewItemSorter, Is.Null);
+                    Assert.That(mergeList.Sorting, Is.EqualTo(SortOrder.None));
+                    Assert.That(mergeList.ListViewItemSorter, Is.Null);
+                    Assert.That(recentList.AllowDarkNativeTheme, Is.False);
+                    Assert.That(mergeList.AllowDarkNativeTheme, Is.False);
+                });
+            }
+        }
+
         [Test]
         public void SmartColumnComparisonCoversNullPlainSmartCustomAndReversePaths()
         {

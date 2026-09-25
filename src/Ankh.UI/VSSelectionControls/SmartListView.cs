@@ -47,6 +47,7 @@ namespace Ankh.UI.VSSelectionControls
         {
             View = View.Details;
             FullRowSelect = true;
+            HideSelection = false;
             this.ListViewItemSorter = new SmartListSorter(this);
             _groups = new SortedList<SmartGroup, ListViewGroup>(new SmartGroupSorter(this));
             Sorting = SortOrder.Ascending;
@@ -532,7 +533,7 @@ namespace Ankh.UI.VSSelectionControls
 
         bool _isThemed;
         bool _useDarkNativeTheme;
-        bool _allowDarkNativeTheme = true;
+        bool _allowDarkNativeTheme;
         bool _ownerDrawPaletteHeader;
         Color _headerBackColor;
         Color _headerForeColor;
@@ -541,10 +542,10 @@ namespace Ankh.UI.VSSelectionControls
         Color _selectionForeColor;
         Color _hoverBackColor;
         bool _usePaletteSelectionColors;
-        bool _preserveItemForeColorWhenSelected;
-        bool _preserveItemForeColorWhenHot;
+        bool _preserveItemForeColorWhenSelected = true;
+        bool _preserveItemForeColorWhenHot = true;
 
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool PreserveItemForeColorWhenHot
         {
             get { return _preserveItemForeColorWhenHot; }
@@ -558,7 +559,7 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool PreserveItemForeColorWhenSelected
         {
             get { return _preserveItemForeColorWhenSelected; }
@@ -572,7 +573,7 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool AllowDarkNativeTheme
         {
             get { return _allowDarkNativeTheme; }
