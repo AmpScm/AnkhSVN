@@ -3,30 +3,30 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/25/2026 - 12:13:41 AM |
-| Coverage date: | 9/25/2026 - 12:13:19 AM - 9/25/2026 - 12:13:30 AM |
+| Generated on: | 9/25/2026 - 4:20:00 PM |
+| Coverage date: | 9/25/2026 - 4:19:31 PM - 9/25/2026 - 4:19:44 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 25.2% (12055 of 47710) |
-| Covered lines: | 12055 |
-| Uncovered lines: | 35655 |
-| Coverable lines: | 47710 |
-| Total lines: | 133839 |
-| **Branch coverage:** | 20.7% (4758 of 22919) |
-| Covered branches: | 4758 |
-| Total branches: | 22919 |
+| **Line coverage:** | 25.4% (12128 of 47744) |
+| Covered lines: | 12128 |
+| Uncovered lines: | 35616 |
+| Coverable lines: | 47744 |
+| Total lines: | 133910 |
+| **Branch coverage:** | 20.9% (4818 of 22955) |
+| Covered branches: | 4818 |
+| Total branches: | 22955 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
 
 ## Coverage
-<details><summary>Ankh - 10.7%</summary>
+<details><summary>Ankh - 10.6%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh**|**10.7%**|**19.9%**|
+|**Ankh**|**10.6%**|**19.9%**|
 |Ankh.AnkhModule|0%||
 |Ankh.Commands.AddItemCommand|5.7%|14.7%|
 |Ankh.Commands.AddToSccCommands|3.1%|1%|
@@ -393,11 +393,11 @@
 |Ankh.VSVersion|0%|0%|
 
 </details>
-<details><summary>Ankh.UI - 29.2%</summary>
+<details><summary>Ankh.UI - 29.4%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**29.2%**|**16.8%**|
+|**Ankh.UI**|**29.4%**|**17.3%**|
 |Ankh.UI.AddRepositoryRootDialog|64.4%|18.7%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -601,8 +601,8 @@
 |Ankh.UI.VSSelectionControls.ListViewWithSelection`1|4.5%|1.4%|
 |Ankh.UI.VSSelectionControls.SmartColumn|76%|66.6%|
 |Ankh.UI.VSSelectionControls.SmartGroup|56%|68.7%|
-|Ankh.UI.VSSelectionControls.SmartListView|36.9%|32.9%|
-|Ankh.UI.VSSelectionControls.SmartListViewItem|83.1%|80.3%|
+|Ankh.UI.VSSelectionControls.SmartListView|39.4%|38.3%|
+|Ankh.UI.VSSelectionControls.SmartListViewItem|85.7%|81.8%|
 |Ankh.UI.VSSelectionControls.SmartListViewThemeLogic|100%|100%|
 |Ankh.UI.VSSelectionControls.SmartSplitContainer|39.4%|18.1%|
 |Ankh.UI.VSSelectionControls.SmartTreeView|33.5%|28.8%|
@@ -630,16 +630,16 @@
 |Ankh.UI.WorkingCopyExplorer.WorkingCopyExplorerControl|0%|0%|
 
 </details>
-<details><summary>Ankh.VS - 12.6%</summary>
+<details><summary>Ankh.VS - 13.4%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.VS**|**12.6%**|**13.9%**|
+|**Ankh.VS**|**13.4%**|**14.5%**|
 |Ankh.VS.AnkhVSModule|0%||
 |Ankh.VS.Dialogs.AnkhDialogOwner|0%|0%|
 |Ankh.VS.Dialogs.ContextCommandHandler|0%|0%|
 |Ankh.VS.Dialogs.VSCommandInstaller|0%|0%|
-|Ankh.VS.Dialogs.VSCommandRouting|0%|0%|
+|Ankh.VS.Dialogs.VSCommandRouting|17.8%|13.2%|
 |Ankh.VS.Dialogs.VSCommandRoutingKeyPlan|100%||
 |Ankh.VS.Dialogs.VSCommandRoutingLogic|100%|100%|
 |Ankh.VS.Dialogs.VSDocumentFormPane|0%|0%|
