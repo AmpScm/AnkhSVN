@@ -143,7 +143,7 @@ namespace Ankh.Scc
                 {
                     // High priority on the text
                     case SvnStatus.Conflicted:
-                        return _localPropertyStatus;
+                        return _localTextStatus;
                 }
 
                 switch(_localPropertyStatus)
