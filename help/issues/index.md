@@ -4,42 +4,52 @@ title: Issue Tracking Integration
 
 # Issue Tracking Integration
 
-AnkhSVN can associate source-control work with external issue-tracking information when the project/repository is configured for it.
+AnkhSVN can associate a versioned solution with an external issue repository when an issue-tracker connector is installed and available.
 
-The issue tracker remains the system that owns the issue. AnkhSVN supplies integration around commit workflow and references.
+## Configure an issue repository
 
-## Typical workflow
+1. In **Solution Explorer**, right-click the **solution** node.
+2. Choose **Issue Tracker Setup**.
+3. Select the issue-tracker connector you want to use.
+4. Enter the repository/project URL and any provider-specific settings requested by that connector.
+5. Choose **OK**.
+6. Return to **Pending Changes > Issues**. The issue repository's view should replace the setup message.
 
-1. Open **Pending Changes**.
-2. Review the files included in the commit.
-3. Select or enter the appropriate issue reference when the integration is configured.
-4. Make sure the log message and issue association describe the same logical change.
-5. Commit.
-6. Verify the external issue tracker reflects the expected reference/state when your integration performs that action.
+AnkhSVN stores the association as Subversion properties on the solution root. Setting or changing the association therefore creates local property changes. **Commit those property changes** if the issue-repository association should be shared with other users of the working copy.
 
-## Repository/project configuration
+## If "Issue Tracker Setup" is missing
 
-Issue integration can depend on repository properties, project configuration, or an AnkhSVN issue-tracker provider.
+The command is only enabled when:
 
-If issue controls are missing or empty for one project but not another, compare the repository/project configuration rather than only Visual Studio settings.
+- the solution root is versioned in Subversion, and
+- AnkhSVN has at least one issue-tracker connector available.
 
-## Issue references are not a replacement for log messages
+If the command is missing, first verify the solution itself is under source control. Then verify that the intended issue-tracker connector is installed and loads successfully.
 
-Even when an issue ID is recorded, write a useful commit message.
+## Remove or change an association
 
-Repository history should remain understandable when the external issue tracker is offline, renamed, migrated, or inaccessible to a future developer.
+Open **Issue Tracker Setup** again from the solution node. Select another connector to change the association, or select **None** to remove it.
 
-## Troubleshooting issue integration
+Removing the association deletes the corresponding issue-repository SVN properties. Commit those property changes if the removal should be shared with the repository.
 
-If the issue selector does not show expected issues:
+## Using the Issues tab
 
-- verify the project is configured for the intended provider,
+Once configured, the **Issues** tab hosts the UI supplied by the selected issue-tracker connector. The exact fields, authentication behavior, filters, and available actions depend on that connector.
+
+The issue tracker remains the system that owns the issue. AnkhSVN supplies integration around the working-copy and commit workflow.
+
+## Troubleshooting
+
+If the Issues tab remains empty or does not show the expected repository:
+
+- reopen **Issue Tracker Setup** and verify the selected connector and repository URL,
 - verify authentication to the external issue system,
-- check whether the issue query/filter excludes the item,
-- confirm you are operating in the intended repository/project,
-- test whether the issue system itself is reachable outside AnkhSVN.
+- confirm the solution root has the expected issue-repository SVN properties,
+- check whether those property changes were committed and updated into this working copy,
+- confirm the connector itself is installed and enabled,
+- test whether the issue system is reachable outside AnkhSVN.
 
-If source control succeeds but issue updates fail, treat them as separate systems when diagnosing the problem.
+If source-control operations succeed but issue updates fail, diagnose the SVN repository and issue tracker as separate systems.
 
 [Commit and Pending Changes](../commit/)
 
