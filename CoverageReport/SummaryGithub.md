@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/25/2026 - 12:05:42 AM |
-| Coverage date: | 9/25/2026 - 12:05:20 AM - 9/25/2026 - 12:05:31 AM |
+| Generated on: | 9/25/2026 - 12:09:44 AM |
+| Coverage date: | 9/25/2026 - 12:09:24 AM - 9/25/2026 - 12:09:34 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 610 |
 | Files: | 678 |
-| **Line coverage:** | 25.2% (12049 of 47710) |
-| Covered lines: | 12049 |
-| Uncovered lines: | 35661 |
+| **Line coverage:** | 25.2% (12055 of 47710) |
+| Covered lines: | 12055 |
+| Uncovered lines: | 35655 |
 | Coverable lines: | 47710 |
 | Total lines: | 133839 |
-| **Branch coverage:** | 20.7% (4749 of 22919) |
-| Covered branches: | 4749 |
+| **Branch coverage:** | 20.7% (4758 of 22919) |
+| Covered branches: | 4758 |
 | Total branches: | 22919 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -275,11 +275,11 @@
 |Ankh.Scc.ThePendingChangeCollection|0%||
 
 </details>
-<details><summary>Ankh.Services - 33.8%</summary>
+<details><summary>Ankh.Services - 33.9%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Services**|**33.8%**|**31.1%**|
+|**Ankh.Services**|**33.9%**|**31.3%**|
 |Ankh.AnkhInstanceConditionalAttribute|46.6%|50%|
 |Ankh.AnkhRuntime|31.9%|24.3%|
 |Ankh.AnkhService|17.5%|9.6%|
@@ -348,7 +348,7 @@
 |Ankh.Scc.SvnItemData|0%|0%|
 |Ankh.Scc.SvnItemsEventArgs|100%|100%|
 |Ankh.Scc.SvnOrigin|17%|6.2%|
-|Ankh.Scc.SvnStatusData|65.5%|12.5%|
+|Ankh.Scc.SvnStatusData|75.8%|50%|
 |Ankh.Scc.SvnWorkingCopy|0%|0%|
 |Ankh.Scc.UI.AnkhDiffArgs|90.9%|0%|
 |Ankh.Scc.UI.AnkhDiffArgumentDefinition|0%|0%|
