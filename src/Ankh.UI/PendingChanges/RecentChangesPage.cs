@@ -46,8 +46,15 @@ namespace Ankh.UI.PendingChanges
             syncView.Sorting = SortOrder.None;
             syncView.ListViewItemSorter = null;
             syncView.ShowItemToolTips = true;
-            syncView.HideSelection = false;
+
+            // Match PendingCommitsView (Local File Changes) so this list uses
+            // the same Visual Studio semantic selection/hover colors instead
+            // of the native Explorer dark-theme highlight.
+            syncView.AllowDarkNativeTheme = false;
             syncView.PreserveItemForeColorWhenSelected = true;
+            syncView.PreserveItemForeColorWhenHot = true;
+            syncView.FullRowSelect = true;
+            syncView.HideSelection = false;
             string[] names = { "Revision", "Author", "Date", "Message", "Repository" };
             int[] widths = { 85, 120, 155, 400, 250 };
             for (int i = 0; i < names.Length; i++)
