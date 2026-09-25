@@ -120,6 +120,52 @@ namespace AnkhSvn_UnitTestProject.Dialogs
         }
 
         [Test, Apartment(ApartmentState.STA)]
+        public void ResolutionButtonsMapToExpectedCommandsAndCaptions()
+        {
+            using (var page = new PendingConflictsPage())
+            {
+                BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                Button[] buttons = Enumerable.Range(0, 8)
+                    .Select(i => (Button)typeof(PendingConflictsPage)
+                        .GetField("resolveButton" + i, flags).GetValue(page))
+                    .ToArray();
+
+                string[] expectedCaptions =
+                {
+                    "Edit Conflict...",
+                    "Mark Resolved",
+                    "Working Copy",
+                    "Original",
+                    "Mine",
+                    "Theirs",
+                    "Mine on Conflicts",
+                    "Theirs on Conflicts"
+                };
+                AnkhCommand[] expectedCommands =
+                {
+                    AnkhCommand.ItemConflictEdit,
+                    AnkhCommand.ItemResolveMerge,
+                    AnkhCommand.ItemResolveWorking,
+                    AnkhCommand.ItemResolveBase,
+                    AnkhCommand.ItemResolveMineFull,
+                    AnkhCommand.ItemResolveTheirsFull,
+                    AnkhCommand.ItemResolveMineConflict,
+                    AnkhCommand.ItemResolveTheirsConflict
+                };
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(
+                        buttons.Select(button => button.Text),
+                        Is.EqualTo(expectedCaptions));
+                    Assert.That(
+                        buttons.Select(button => (AnkhCommand)button.Tag),
+                        Is.EqualTo(expectedCommands));
+                });
+            }
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
         public void PageStartsCollapsedAndContainsNoDesignerPlaceholderControls()
         {
             using (var page = new PendingConflictsPage())
