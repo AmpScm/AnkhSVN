@@ -114,6 +114,33 @@ namespace Ankh.UI.PendingChanges.Conflicts
             return item.PendingChange.FullPath;
         }
 
+        protected override void OnRetrieveSelection(
+            ListViewWithSelection<ConflictListItem>.RetrieveSelectionEventArgs e)
+        {
+            e.SelectionItem = e.Item.PendingChange;
+        }
+
+        protected override void OnResolveItem(
+            ListViewWithSelection<ConflictListItem>.ResolveItemEventArgs e)
+        {
+            PendingChange change = e.SelectionItem as PendingChange;
+            if (change != null)
+            {
+                foreach (ConflictListItem item in Items)
+                {
+                    if (StringComparer.OrdinalIgnoreCase.Equals(
+                        item.FullPath,
+                        change.FullPath))
+                    {
+                        e.Item = item;
+                        break;
+                    }
+                }
+            }
+
+            base.OnResolveItem(e);
+        }
+
         public override void OnShowContextMenu(MouseEventArgs e)
         {
             base.OnShowContextMenu(e);

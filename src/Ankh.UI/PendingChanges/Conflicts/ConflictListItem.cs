@@ -13,17 +13,17 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Ankh.UI.VSSelectionControls;
 using Ankh.Scc;
+using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
+using SharpSvn;
 
 namespace Ankh.UI.PendingChanges.Conflicts
 {
     class ConflictListItem : SmartListViewItem
     {
         readonly PendingChange _change;
+
         public ConflictListItem(ConflictListView view, PendingChange change)
             : base(view)
         {
@@ -44,27 +44,50 @@ namespace Ankh.UI.PendingChanges.Conflicts
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            ISvnStatusCache cache = context.GetService<ISvnStatusCache>();
-
             ImageIndex = PendingChange.IconIndex;
-            SvnItem item = cache[FullPath];
-
+            SvnItem item = PendingChange.SvnItem;
             if (item == null)
-                throw new InvalidOperationException(); // Item no longer valued
-            PendingChangeStatus pcs = PendingChange.Change ?? new PendingChangeStatus(PendingChangeKind.None);
+                throw new InvalidOperationException();
 
+            bool textConflict =
+                item.Status != null
+                && item.Status.LocalTextStatus == SvnStatus.Conflicted;
+            bool propertyConflict =
+                item.Status != null
+                && item.Status.LocalPropertyStatus == SvnStatus.Conflicted;
+
+            string conflictType = PendingConflictLogic.GetConflictType(
+                PendingChange.Kind,
+                textConflict,
+                propertyConflict);
+            string description = PendingConflictLogic.GetConflictDescription(
+                PendingChange.Kind,
+                textConflict,
+                propertyConflict);
+
+            PendingChangeStatus pcs =
+                PendingChange.Change
+                ?? new PendingChangeStatus(PendingChangeKind.None);
+
+            // SetValues follows AllColumns order, not visible-column order.
+            // The old unfinished conflict page omitted the two conflict fields,
+            // shifting every value after ChangeList into the wrong column.
             SetValues(
-                pcs.PendingCommitText,
-                PendingChange.ChangeList,
-                GetDirectory(item),
-                PendingChange.FullPath,
-                item.IsLocked ? PCResources.LockedValue : "", // Locked
-                SafeDate(item.Modified), // Modified
-                PendingChange.Name,
-                PendingChange.RelativePath,
-                PendingChange.Project,
-                context.GetService<IFileIconMapper>().GetFileType(item),
-                SafeWorkingCopy(item));
+                pcs.PendingCommitText,                                      // Change
+                PendingChange.ChangeList,                                  // ChangeList
+                conflictType,                                              // ConflictType
+                description,                                               // ConflictDescription
+                GetDirectory(item),                                        // Folder
+                PendingChange.FullPath,                                    // FullPath
+                item.IsLocked ? PCResources.LockedValue : "",              // Locked
+                SafeDate(item.Modified),                                   // Modified
+                PendingChange.Name,                                        // Name
+                string.IsNullOrEmpty(PendingChange.RelativePath)
+                    ? PendingChange.Name
+                    : PendingChange.RelativePath,                          // Path
+                PendingChange.Project,                                     // Project
+                PendingChange.FileType,                                    // Type
+                SafeWorkingCopy(item));                                    // WorkingCopy
         }
 
         private string SafeDate(DateTime dateTime)
@@ -76,31 +99,21 @@ namespace Ankh.UI.PendingChanges.Conflicts
 
             if (n < DateTime.Now - new TimeSpan(24, 0, 0))
                 return n.ToString("d");
-            else
-                return n.ToString("T");
+
+            return n.ToString("T");
         }
 
         private string GetDirectory(SvnItem svnItem)
         {
-            if (svnItem.IsDirectory)
-                return svnItem.FullPath;
-            else
-                return svnItem.Directory;
+            return svnItem.IsDirectory ? svnItem.FullPath : svnItem.Directory;
         }
 
         static string SafeWorkingCopy(SvnItem svnItem)
         {
             SvnWorkingCopy wc = svnItem.WorkingCopy;
-            if (wc == null)
-                return "";
-
-            return wc.FullPath;
+            return wc == null ? "" : wc.FullPath;
         }
 
-        /// <summary>
-        /// Gets the full path.
-        /// </summary>
-        /// <value>The full path.</value>
         public string FullPath
         {
             get { return _change.FullPath; }

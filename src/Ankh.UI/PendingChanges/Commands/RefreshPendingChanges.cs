@@ -49,6 +49,11 @@ namespace Ankh.UI.PendingChanges.Commands
             if (page != null && page.Visible)
                 return page;
 
+            page = e.Context.GetService<PendingConflictsPage>();
+
+            if (page != null && page.Visible)
+                return page;
+
             return null;
         }
 
