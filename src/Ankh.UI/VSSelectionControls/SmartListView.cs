@@ -789,7 +789,34 @@ namespace Ankh.UI.VSSelectionControls
             get { return IsXPPlus; }
         }
 
-        public static bool SupportsSortG…207 tokens truncated… e)
+        public static bool SupportsSortGlypgs
+        {
+            get { return IsXPPlus; }
+        }
+
+        internal void UpdateSortGlyphs()
+        {
+            if (!IsHandleCreated || !SupportsSortGlypgs || DesignMode || View != View.Details)
+                return;
+
+            foreach (ColumnHeader ch in Columns)
+            {
+                SmartColumn sc = ch as SmartColumn;
+
+                if (sc != null)
+                {
+                    if (SortColumns.Contains(sc))
+                    {
+                        SetSortIcon(sc.Index, sc.ReverseSort ? SortIcon.Descending : SortIcon.Ascending);
+                    }
+                    else
+                        SetSortIcon(sc.Index, SortIcon.None);
+                }
+
+            }
+        }
+
+        protected override void OnColumnClick(ColumnClickEventArgs e)
         {
             if (!DesignMode && View == View.Details && !VirtualMode)
             {
