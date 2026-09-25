@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/25/2026 - 11:32:01 PM |
-| Coverage date: | 9/25/2026 - 11:31:42 PM - 9/25/2026 - 11:31:53 PM |
+| Generated on: | 9/25/2026 - 11:37:45 PM |
+| Coverage date: | 9/25/2026 - 11:37:18 PM - 9/25/2026 - 11:37:34 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
-| Classes: | 613 |
-| Files: | 680 |
-| **Line coverage:** | 26.2% (12626 of 48109) |
-| Covered lines: | 12626 |
-| Uncovered lines: | 35483 |
-| Coverable lines: | 48109 |
-| Total lines: | 134404 |
-| **Branch coverage:** | 21.1% (4901 of 23119) |
-| Covered branches: | 4901 |
-| Total branches: | 23119 |
+| Classes: | 614 |
+| Files: | 681 |
+| **Line coverage:** | 26.2% (12629 of 48100) |
+| Covered lines: | 12629 |
+| Uncovered lines: | 35471 |
+| Coverable lines: | 48100 |
+| Total lines: | 134411 |
+| **Branch coverage:** | 21.2% (4905 of 23111) |
+| Covered branches: | 4905 |
+| Total branches: | 23111 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -489,6 +489,7 @@
 |Ankh.UI.PendingChanges.Commands.RefreshPendingChanges|57.1%|45.4%|
 |Ankh.UI.PendingChanges.Commands.SpacerHider|60%|50%|
 |Ankh.UI.PendingChanges.Commands.ViewLogMessage|40%|37.5%|
+|Ankh.UI.PendingChanges.Commits.PendingChangeDisplayLogic|100%|100%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitItem|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitItemCollection|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitsThemeLogic|100%|100%|
