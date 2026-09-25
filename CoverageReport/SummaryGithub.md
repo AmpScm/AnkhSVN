@@ -3,17 +3,17 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/25/2026 - 11:42:58 PM |
-| Coverage date: | 9/25/2026 - 11:42:30 PM - 9/25/2026 - 11:42:47 PM |
+| Generated on: | 9/25/2026 - 11:54:44 PM |
+| Coverage date: | 9/25/2026 - 11:54:12 PM - 9/25/2026 - 11:54:33 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 614 |
 | Files: | 681 |
-| **Line coverage:** | 26.2% (12630 of 48100) |
-| Covered lines: | 12630 |
+| **Line coverage:** | 26.2% (12632 of 48102) |
+| Covered lines: | 12632 |
 | Uncovered lines: | 35470 |
-| Coverable lines: | 48100 |
-| Total lines: | 134414 |
+| Coverable lines: | 48102 |
+| Total lines: | 134418 |
 | **Branch coverage:** | 21.2% (4906 of 23111) |
 | Covered branches: | 4906 |
 | Total branches: | 23111 |
@@ -509,7 +509,7 @@
 |Ankh.UI.PendingChanges.PendingCommitsPage|0%|0%|
 |Ankh.UI.PendingChanges.PendingConflictsPage|46.3%|6.4%|
 |Ankh.UI.PendingChanges.PendingIssuesPage|0%|0%|
-|Ankh.UI.PendingChanges.RecentChangesPage|47.6%|17.4%|
+|Ankh.UI.PendingChanges.RecentChangesPage|47.9%|17.4%|
 |Ankh.UI.PendingChanges.Synchronize.SynchronizeItem|0%|0%|
 |Ankh.UI.PendingChanges.Synchronize.SynchronizeListItem|0%|0%|
 |Ankh.UI.PendingChanges.Synchronize.SynchronizeListView|0%|0%|
