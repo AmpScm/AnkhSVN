@@ -121,7 +121,7 @@ namespace Ankh.Configuration
 
                 nPos++;
 
-                if (nPos > nSize)
+                if (nPos >= nSize)
                     nPos = 0;
 
                 key.SetValue("_pos", nPos);
