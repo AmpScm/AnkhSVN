@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using Ankh.Configuration;
 using Ankh.UI.PendingChanges;
+using Ankh.UI.VSSelectionControls;
 using NUnit.Framework;
 using SharpSvn;
 
@@ -28,8 +29,84 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                 Assert.That(limit.Value, Is.EqualTo(25));
                 Assert.That(list.Columns.Cast<ColumnHeader>().Select(c => c.Text),
                     Is.EqualTo(new[] { "Revision", "Author", "Date", "Message", "Repository" }));
+
+                var smartList = (SmartListView)list;
+                Assert.Multiple(() =>
+                {
+                    Assert.That(smartList.AllowColumnReorder, Is.True);
+                    Assert.That(smartList.ListViewItemSorter, Is.Not.Null);
+                    Assert.That(smartList.SortColumns, Is.Empty);
+                    Assert.That(smartList.AllColumns.Select(c => c.Text),
+                        Is.EqualTo(new[] { "Revision", "Author", "Date", "Message", "Repository", "Changed Paths" }));
+                    Assert.That(smartList.AllColumns.All(c => c.Sortable), Is.True);
+                    Assert.That(smartList.AllColumns.Single(c => c.Text == "Revision").Hideable, Is.False);
+                    Assert.That(smartList.Columns.Cast<ColumnHeader>().Any(c => c.Text == "Changed Paths"), Is.False);
+                });
+
                 Assert.That(list.Bottom, Is.LessThanOrEqualTo(details.Top));
                 Assert.That(list.Parent.Parent.Top, Is.GreaterThanOrEqualTo(limit.Parent.Bottom));
+            }
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void HistoryRevisionAndDateColumnsSortByUnderlyingValues()
+        {
+            using (var page = new RecentChangesPage())
+            {
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                var list = (SmartListView)typeof(RecentChangesPage)
+                    .GetField("syncView", flags).GetValue(page);
+
+                var older = new CommittedHistoryEntry
+                {
+                    Revision = 99,
+                    Time = new DateTime(2026, 1, 1),
+                    Author = "z"
+                };
+                var newer = new CommittedHistoryEntry
+                {
+                    Revision = 100,
+                    Time = new DateTime(2026, 2, 1),
+                    Author = "a"
+                };
+
+                var olderItem = new SmartListViewItem(list) { Tag = older };
+                var newerItem = new SmartListViewItem(list) { Tag = newer };
+                olderItem.SetValues("r99", "z", "1/1/2026", "", "", "");
+                newerItem.SetValues("r100", "a", "2/1/2026", "", "", "");
+
+                var revision = (ISmartValueComparer)list.AllColumns
+                    .Single(c => c.Name == "Revision");
+                var date = (ISmartValueComparer)list.AllColumns
+                    .Single(c => c.Name == "Date");
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(revision.Compare(olderItem, newerItem, false), Is.LessThan(0),
+                        "Revision sorting must be numeric rather than comparing r99/r100 as text.");
+                    Assert.That(date.Compare(olderItem, newerItem, false), Is.LessThan(0),
+                        "Date sorting must use the commit timestamp rather than localized display text.");
+                });
+            }
+        }
+
+        [Test, Apartment(ApartmentState.STA)]
+        public void OptionalChangedPathsColumnCanBeShownAndHidden()
+        {
+            using (var page = new RecentChangesPage())
+            {
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                var list = (SmartListView)typeof(RecentChangesPage)
+                    .GetField("syncView", flags).GetValue(page);
+                SmartColumn changedPaths = list.AllColumns.Single(c => c.Name == "ChangedPaths");
+
+                Assert.That(list.Columns.Contains(changedPaths), Is.False);
+
+                list.SetColumnVisible(changedPaths, true);
+                Assert.That(list.Columns.Contains(changedPaths), Is.True);
+
+                list.SetColumnVisible(changedPaths, false);
+                Assert.That(list.Columns.Contains(changedPaths), Is.False);
             }
         }
 

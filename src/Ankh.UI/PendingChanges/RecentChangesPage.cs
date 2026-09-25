@@ -15,6 +15,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using Ankh.Commands;
@@ -43,9 +44,12 @@ namespace Ankh.UI.PendingChanges
             updateTime.Visible = true;
             updateTime.Enabled = true;
             updateTime.Dock = DockStyle.Fill;
+            // Keep repository-history order until the user explicitly sorts a
+            // column. SmartListView's sorter remains installed so column clicks
+            // and the standard header menu can sort on demand.
             syncView.Sorting = SortOrder.None;
-            syncView.ListViewItemSorter = null;
             syncView.ShowItemToolTips = true;
+            syncView.AllowColumnReorder = true;
 
             // Match PendingCommitsView (Local File Changes) so this list uses
             // the same Visual Studio semantic selection/hover colors instead
@@ -55,10 +59,40 @@ namespace Ankh.UI.PendingChanges
             syncView.PreserveItemForeColorWhenHot = true;
             syncView.FullRowSelect = true;
             syncView.HideSelection = false;
-            string[] names = { "Revision", "Author", "Date", "Message", "Repository" };
-            int[] widths = { 85, 120, 155, 400, 250 };
-            for (int i = 0; i < names.Length; i++)
-                syncView.Columns.Add(new SmartColumn(syncView, names[i], widths[i], names[i]) { Sortable = false });
+            SmartColumn revision = new SmartColumn(syncView, "Revision", 85, "Revision");
+            SmartColumn author = new SmartColumn(syncView, "Author", 120, "Author");
+            SmartColumn date = new SmartColumn(syncView, "Date", 155, "Date");
+            SmartColumn message = new SmartColumn(syncView, "Message", 400, "Message");
+            SmartColumn repository = new SmartColumn(syncView, "Repository", 250, "Repository");
+            SmartColumn changedPaths = new SmartColumn(syncView, "Changed Paths", 350, "ChangedPaths");
+
+            revision.Hideable = false;
+            author.Groupable = true;
+            repository.Groupable = true;
+
+            revision.Sorter = new HistoryEntryComparer(HistorySortField.Revision);
+            date.Sorter = new HistoryEntryComparer(HistorySortField.Date);
+
+            syncView.Columns.AddRange(new ColumnHeader[]
+            {
+                revision,
+                author,
+                date,
+                message,
+                repository
+            });
+
+            // AllColumns drives the standard SmartListView header menu. Changed
+            // Paths is useful when requested but stays hidden by default because
+            // the detail pane already shows it.
+            syncView.AllColumns.Add(revision);
+            syncView.AllColumns.Add(author);
+            syncView.AllColumns.Add(date);
+            syncView.AllColumns.Add(message);
+            syncView.AllColumns.Add(repository);
+            syncView.AllColumns.Add(changedPaths);
+
+            syncView.ShowContextMenu += SyncView_ShowContextMenu;
 
             var settings = new FlowLayoutPanel { Dock = DockStyle.Top, AutoSize = true, WrapContents = false };
             settings.Controls.Add(new Label { Text = "Commits to show:", AutoSize = true, Margin = new Padding(3, 6, 3, 3) });
@@ -89,8 +123,12 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnLoad(e);
             syncView.SetColumnWidths(ConfigurationService.GetColumnWidths(GetType()));
+            syncView.SetColumnVisibility(ConfigurationService.GetColumnVisibility(GetType()));
             syncView.ColumnWidthChanged += delegate {
                 ConfigurationService.SaveColumnsWidths(GetType(), syncView.GetColumnWidths());
+            };
+            syncView.ColumnVisibilityChanged += delegate {
+                ConfigurationService.SaveColumnVisibility(GetType(), syncView.GetColumnVisibility());
             };
             _events = Context.GetService<AnkhServiceEvents>();
             if (_events != null)
@@ -208,12 +246,72 @@ namespace Ankh.UI.PendingChanges
                         // back to SystemColors.WindowText (black in dark themes).
                         ForeColor = syncView.ForeColor
                     };
-                    item.SetValues("r" + entry.Revision, entry.Author, entry.Time.ToLocalTime().ToString("g"),
-                        entry.Message.Replace("\r", " ").Replace("\n", " "), entry.Repository);
+                    item.SetValues(
+                        "r" + entry.Revision,
+                        entry.Author,
+                        entry.Time.ToLocalTime().ToString("g"),
+                        entry.Message.Replace("\r", " ").Replace("\n", " "),
+                        entry.Repository,
+                        entry.ChangedPaths.Replace("\r", " ").Replace("\n", "; "));
                     syncView.Items.Add(item);
                 }
             }
             finally { syncView.EndUpdate(); }
+        }
+
+        void SyncView_ShowContextMenu(object sender, MouseEventArgs e)
+        {
+            if (Context == null || e.Location == new Point(-1, -1))
+                return;
+
+            Point screenPoint = e.Location;
+            if (syncView.PointToClient(screenPoint).Y >= syncView.HeaderHeight)
+                return;
+
+            IAnkhCommandService commands = Context.GetService<IAnkhCommandService>();
+            if (commands != null)
+                commands.ShowContextMenu(AnkhCommandMenu.ListViewHeader, screenPoint);
+        }
+
+        enum HistorySortField
+        {
+            Revision,
+            Date
+        }
+
+        sealed class HistoryEntryComparer : IComparer<ListViewItem>
+        {
+            readonly HistorySortField _field;
+
+            public HistoryEntryComparer(HistorySortField field)
+            {
+                _field = field;
+            }
+
+            public int Compare(ListViewItem x, ListViewItem y)
+            {
+                CommittedHistoryEntry left = x == null ? null : x.Tag as CommittedHistoryEntry;
+                CommittedHistoryEntry right = y == null ? null : y.Tag as CommittedHistoryEntry;
+
+                if (ReferenceEquals(left, right))
+                    return 0;
+                if (left == null)
+                    return -1;
+                if (right == null)
+                    return 1;
+
+                switch (_field)
+                {
+                    case HistorySortField.Revision:
+                        return left.Revision.CompareTo(right.Revision);
+
+                    case HistorySortField.Date:
+                        return left.Time.CompareTo(right.Time);
+
+                    default:
+                        return 0;
+                }
+            }
         }
 
         void HistoryLimitChanged(object sender, EventArgs e)
