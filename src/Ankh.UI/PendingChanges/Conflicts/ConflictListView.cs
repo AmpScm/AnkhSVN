@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using Ankh.UI.PendingChanges.Commits;
 using System.Drawing;
 using Ankh.Commands;
+using Ankh.Scc;
 
 namespace Ankh.UI.PendingChanges.Conflicts
 {
