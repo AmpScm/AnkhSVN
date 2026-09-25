@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/25/2026 - 7:27:27 PM |
-| Coverage date: | 9/25/2026 - 7:26:50 PM - 9/25/2026 - 7:27:13 PM |
+| Generated on: | 9/25/2026 - 7:53:04 PM |
+| Coverage date: | 9/25/2026 - 7:52:38 PM - 9/25/2026 - 7:52:53 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 612 |
 | Files: | 679 |
-| **Line coverage:** | 25.7% (12312 of 47749) |
-| Covered lines: | 12312 |
-| Uncovered lines: | 35437 |
-| Coverable lines: | 47749 |
-| Total lines: | 133760 |
-| **Branch coverage:** | 21.1% (4841 of 22933) |
-| Covered branches: | 4841 |
+| **Line coverage:** | 25.7% (12315 of 47755) |
+| Covered lines: | 12315 |
+| Uncovered lines: | 35440 |
+| Coverable lines: | 47755 |
+| Total lines: | 133770 |
+| **Branch coverage:** | 21.1% (4840 of 22933) |
+| Covered branches: | 4840 |
 | Total branches: | 22933 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -416,7 +416,7 @@
 |Ankh.UI.Commands.CommandStrings|0%|0%|
 |Ankh.UI.Commands.CreateChangeListDialog|72.8%|13.6%|
 |Ankh.UI.Commands.ExportDialog|55.9%|5.5%|
-|Ankh.UI.Commands.RecentMessageDialog|70%|25%|
+|Ankh.UI.Commands.RecentMessageDialog|70.6%|25%|
 |Ankh.UI.Commands.SwitchDialog|66.6%|16.6%|
 |Ankh.UI.Commands.UpdateDialog|68%|25%|
 |Ankh.UI.Controls.StatusContainer|0%|0%|
@@ -443,7 +443,7 @@
 |Ankh.UI.MergeWizard.MergeOptionsPage|0%|0%|
 |Ankh.UI.MergeWizard.MergePathResult|100%|100%|
 |Ankh.UI.MergeWizard.MergeResultModel|97.8%|96.1%|
-|Ankh.UI.MergeWizard.MergeResultsDialog|81%|30%|
+|Ankh.UI.MergeWizard.MergeResultsDialog|81.2%|30%|
 |Ankh.UI.MergeWizard.MergeRevisionsSelectionPage|0%|0%|
 |Ankh.UI.MergeWizard.MergeSourceBasePage|0%|0%|
 |Ankh.UI.MergeWizard.MergeSourceManuallyRecordPage|0%|0%|
@@ -603,7 +603,7 @@
 |Ankh.UI.VSSelectionControls.ListViewWithSelection`1|4.5%|1.4%|
 |Ankh.UI.VSSelectionControls.SmartColumn|76%|66.6%|
 |Ankh.UI.VSSelectionControls.SmartGroup|56%|68.7%|
-|Ankh.UI.VSSelectionControls.SmartListView|39.4%|38.3%|
+|Ankh.UI.VSSelectionControls.SmartListView|39.1%|38.1%|
 |Ankh.UI.VSSelectionControls.SmartListViewItem|85.7%|81.8%|
 |Ankh.UI.VSSelectionControls.SmartListViewThemeLogic|100%|100%|
 |Ankh.UI.VSSelectionControls.SmartSplitContainer|42.1%|18.1%|
