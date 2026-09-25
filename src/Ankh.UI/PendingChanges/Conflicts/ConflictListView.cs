@@ -47,7 +47,7 @@ namespace Ankh.UI.PendingChanges.Conflicts
             SmartColumn changeList = new SmartColumn(this, PCResources.ChangeListColumn, 76, "ChangeList");
             SmartColumn folder = new SmartColumn(this, PCResources.FolderColumn, 196, "Folder");
             SmartColumn locked = new SmartColumn(this, PCResources.LockedColumn, 38, "Locked");
-            SmartColumn modified = new SmartColumn(this, PCResources.ModifiedColumn, 76, "Modified");
+            SmartColumn modified = new SmartColumn(this, PCResources.ModifiedColumn, 145, "Modified");
             SmartColumn name = new SmartColumn(this, PCResources.NameColumn, 76, "Name");
             SmartColumn type = new SmartColumn(this, PCResources.TypeColumn, 76, "Type");
             SmartColumn workingCopy = new SmartColumn(this, PCResources.WorkingCopyColumn, 76, "WorkingCopy");

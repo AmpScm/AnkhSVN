@@ -15,6 +15,7 @@
 using System;
 using Ankh.Scc;
 using Ankh.UI.VSSelectionControls;
+using Ankh.UI.PendingChanges.Commits;
 using Ankh.VS;
 using SharpSvn;
 
@@ -80,7 +81,7 @@ namespace Ankh.UI.PendingChanges.Conflicts
                 GetDirectory(item),                                        // Folder
                 PendingChange.FullPath,                                    // FullPath
                 item.IsLocked ? PCResources.LockedValue : "",              // Locked
-                SafeDate(item.Modified),                                   // Modified
+                PendingChangeDisplayLogic.FormatModifiedDate(item.Modified),                                   // Modified
                 PendingChange.Name,                                        // Name
                 string.IsNullOrEmpty(PendingChange.RelativePath)
                     ? PendingChange.Name
@@ -88,19 +89,6 @@ namespace Ankh.UI.PendingChanges.Conflicts
                 PendingChange.Project,                                     // Project
                 PendingChange.FileType,                                    // Type
                 SafeWorkingCopy(item));                                    // WorkingCopy
-        }
-
-        private string SafeDate(DateTime dateTime)
-        {
-            if (dateTime.Ticks == 0 || dateTime.Ticks == 1)
-                return "";
-
-            DateTime n = dateTime.ToLocalTime();
-
-            if (n < DateTime.Now - new TimeSpan(24, 0, 0))
-                return n.ToString("d");
-
-            return n.ToString("T");
         }
 
         private string GetDirectory(SvnItem svnItem)
