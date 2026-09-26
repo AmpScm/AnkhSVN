@@ -66,9 +66,10 @@ namespace AnkhSvn_UnitTestProject.Dialogs
 
             Assert.Multiple(() =>
             {
-                Assert.That(noConnector, Does.Contain("separate connector extension"));
-                Assert.That(noConnector, Does.Contain("Issue Tracker Setup is unavailable"));
+                Assert.That(noConnector, Does.Contain("Generic Bugtraq"));
+                Assert.That(noConnector, Does.Contain("Local SVN Issues"));
                 Assert.That(notConfigured, Does.Contain("Issue Tracker Setup"));
+                Assert.That(notConfigured, Does.Contain("Generic Bugtraq"));
                 Assert.That(unavailable, Does.Contain("could not be loaded"));
                 Assert.That(noConnector, Does.Contain(IssueTrackerAvailabilityLogic.HelpLinkText));
                 Assert.That(notConfigured, Does.Contain(IssueTrackerAvailabilityLogic.HelpLinkText));

@@ -1,0 +1,173 @@
+// Copyright 2026 The AnkhSVN Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.IO;
+using System.Linq;
+using Ankh.ExtensionPoints.IssueTracker;
+using Ankh.UI.IssueTracker;
+using NUnit.Framework;
+
+namespace AnkhSvn_UnitTestProject.Dialogs
+{
+    [TestFixture]
+    public class BuiltInIssueTrackerTests
+    {
+        [Test]
+        public void BuiltInConnectorsIncludeGenericBugtraqAndLocalSvnIssues()
+        {
+            string[] names = BuiltInIssueTrackerConnectors.Create(null)
+                .Select(c => c.Name)
+                .ToArray();
+
+            Assert.That(
+                names,
+                Is.EqualTo(new[]
+                {
+                    "Generic Bugtraq",
+                    "Local SVN Issues"
+                }));
+        }
+
+        [TestCase("", false)]
+        [TestCase("https://tracker.example/issues/", false)]
+        [TestCase("https://tracker.example/issues/%BUGID%", true)]
+        [TestCase("^/issues/%BUGID%", true)]
+        public void GenericBugtraqRequiresBugIdPlaceholder(
+            string url,
+            bool expected)
+        {
+            var settings = new GenericBugtraqSettings
+            {
+                UrlTemplate = url
+            };
+
+            Assert.That(settings.IsComplete, Is.EqualTo(expected));
+        }
+
+        [TestCase(".ankh/issues.xml", true)]
+        [TestCase("issues.xml", true)]
+        [TestCase("folder/issues.xml", true)]
+        [TestCase("../issues.xml", false)]
+        [TestCase(@"C:\issues.xml", false)]
+        [TestCase("", false)]
+        public void LocalIssuePathMustStayRelativeToWorkingCopy(
+            string path,
+            bool expected)
+        {
+            Assert.That(
+                LocalIssueStore.IsValidRelativePath(path),
+                Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void LocalIssueStoreRoundTripsIssueData()
+        {
+            string directory = Path.Combine(
+                Path.GetTempPath(),
+                "AnkhLocalIssues-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(directory);
+
+            try
+            {
+                string file = Path.Combine(directory, "issues.xml");
+                DateTime created = new DateTime(
+                    2026, 9, 25, 20, 0, 0, DateTimeKind.Utc);
+                DateTime updated = created.AddMinutes(15);
+
+                LocalIssueStore.SaveFile(
+                    file,
+                    new[]
+                    {
+                        new LocalIssueRecord
+                        {
+                            Id = 7,
+                            Status = "Open",
+                            Title = "Theme the history list",
+                            Description = "Keep semantic colors after selection.",
+                            CreatedUtc = created,
+                            UpdatedUtc = updated
+                        }
+                    });
+
+                LocalIssueRecord issue =
+                    LocalIssueStore.LoadFile(file).Single();
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(issue.Id, Is.EqualTo(7));
+                    Assert.That(issue.Status, Is.EqualTo("Open"));
+                    Assert.That(issue.Title, Is.EqualTo("Theme the history list"));
+                    Assert.That(
+                        issue.Description,
+                        Is.EqualTo("Keep semantic colors after selection."));
+                    Assert.That(issue.CreatedUtc, Is.EqualTo(created));
+                    Assert.That(issue.UpdatedUtc, Is.EqualTo(updated));
+                });
+            }
+            finally
+            {
+                Directory.Delete(directory, true);
+            }
+        }
+
+        [Test]
+        public void LocalIssueCommitAddsReferenceOnlyOnce()
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    LocalSvnIssuesRepository.AppendIssueReference(
+                        "Fix the thing",
+                        "12"),
+                    Is.EqualTo(
+                        "Fix the thing"
+                        + Environment.NewLine
+                        + "Issue #12"));
+
+                Assert.That(
+                    LocalSvnIssuesRepository.AppendIssueReference(
+                        "Fix the thing"
+                        + Environment.NewLine
+                        + "Issue #12",
+                        "12"),
+                    Is.EqualTo(
+                        "Fix the thing"
+                        + Environment.NewLine
+                        + "Issue #12"));
+            });
+        }
+
+        [Test]
+        public void BuiltInRepositoriesUseDistinctPersistentConnectorNames()
+        {
+            IssueRepository generic =
+                new GenericBugtraqConnector(null).Create(
+                    new GenericBugtraqSettings
+                    {
+                        UrlTemplate = "https://tracker.example/%BUGID%"
+                    });
+            IssueRepository local =
+                new LocalSvnIssuesConnector(null).Create(
+                    new LocalSvnIssuesSettings(".ankh/issues.xml"));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(generic.ConnectorName, Is.EqualTo("Generic Bugtraq"));
+                Assert.That(local.ConnectorName, Is.EqualTo("Local SVN Issues"));
+                Assert.That(generic.RepositoryUri, Is.Not.EqualTo(local.RepositoryUri));
+            });
+        }
+    }
+}

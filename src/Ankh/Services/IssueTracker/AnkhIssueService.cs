@@ -15,6 +15,7 @@
 using Ankh.ExtensionPoints.IssueTracker;
 using Ankh.IssueTracker;
 using Ankh.UI;
+using Ankh.UI.IssueTracker;
 using Ankh.VS;
 using Microsoft.Win32;
 using System;
@@ -369,7 +370,21 @@ namespace Ankh.Services.IssueTracker
         {
             base.OnPreInitialize();
             _repository = null;
+
+            // Keep the original registry-discovered connector mechanism intact,
+            // then add built-in fallbacks only when an external provider has not
+            // already registered the same connector name.
             ReadConnectorRegistry();
+
+            foreach (IssueRepositoryConnector connector
+                in BuiltInIssueTrackerConnectors.Create(this))
+            {
+                if (connector != null
+                    && !_nameConnectorMap.ContainsKey(connector.Name))
+                {
+                    _nameConnectorMap.Add(connector.Name, connector);
+                }
+            }
         }
 
         protected override void OnInitialize()

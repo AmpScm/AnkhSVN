@@ -20,6 +20,7 @@ using Ankh.ExtensionPoints.IssueTracker;
 using Ankh.VS;
 using Ankh.Scc;
 using Ankh.IssueTracker;
+using Ankh.UI.PendingChanges;
 
 namespace Ankh.UI.IssueTracker
 {
@@ -68,16 +69,45 @@ namespace Ankh.UI.IssueTracker
                     IIssueTrackerSettings currentSettings = e.GetService<IIssueTrackerSettings>();
 
                     IssueRepository newRepository = dialog.NewIssueRepository;
+                    bool succeeded;
+
                     if (newRepository == null
                         || string.IsNullOrEmpty(newRepository.ConnectorName)
                         || newRepository.RepositoryUri == null)
                     {
-                        DeleteIssueRepositoryProperties(e.Context, firstVersioned);
+                        succeeded = DeleteIssueRepositoryProperties(
+                            e.Context,
+                            firstVersioned);
                     }
-                    else if (currentSettings == null
-                        || currentSettings.ShouldPersist(newRepository))
+                    else
                     {
-                        SetIssueRepositoryProperties(e.Context, firstVersioned, newRepository);
+                        IBuiltInIssueRepositoryPersistence builtIn =
+                            newRepository as IBuiltInIssueRepositoryPersistence;
+                        if (builtIn != null)
+                            builtIn.Persist(firstVersioned);
+
+                        succeeded = currentSettings == null
+                            || currentSettings.ShouldPersist(newRepository)
+                            ? SetIssueRepositoryProperties(
+                                e.Context,
+                                firstVersioned,
+                                newRepository)
+                            : true;
+                    }
+
+                    if (succeeded)
+                    {
+                        cache.MarkDirty(firstVersioned.FullPath);
+
+                        IAnkhIssueService service =
+                            e.GetService<IAnkhIssueService>();
+                        if (service != null)
+                            service.CurrentIssueRepository = newRepository;
+
+                        PendingCommitsPage commits =
+                            e.GetService<PendingCommitsPage>();
+                        if (commits != null)
+                            commits.RefreshIssueSettings();
                     }
                 }
             }

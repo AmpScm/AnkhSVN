@@ -4,64 +4,88 @@ title: Issue Tracking Integration
 
 # Issue Tracking Integration
 
-AnkhSVN has an extension API for associating a versioned solution with an external issue repository. **The current AnkhSVN VSIX does not include an issue-tracker connector implementation**, so the Issues tab cannot be configured by the stock VSIX alone.
+AnkhSVN supports issue tracking through two built-in options plus the original external connector extension API.
 
-A separate extension must register an AnkhSVN `IssueRepositoryConnector` before **Issue Tracker Setup** becomes available.
+## Built-in options
 
-## What the Issues tab means
+### Generic Bugtraq
 
-The Issues tab now distinguishes these states:
+**Generic Bugtraq** uses the standard Subversion `bugtraq:*` properties also understood by TortoiseSVN.
 
-- **No connector installed** — AnkhSVN has the integration framework, but no provider is available. **Issue Tracker Setup** is intentionally unavailable.
-- **Connector installed, not configured** — right-click the solution in **Solution Explorer** and choose **Issue Tracker Setup**.
-- **Configured repository cannot load** — verify that the configured connector is still installed and that its repository settings are valid.
-- **Configured and available** — the Issues tab hosts the UI supplied by the connector.
+Use it when your tracker can open an issue from a URL such as:
+
+`https://example/issues/%BUGID%`
+
+The setup page lets you configure the URL, commit-message pattern, label, issue-ID type, reminder behavior, append behavior, and log-message regular expression. These are written as normal SVN `bugtraq:*` properties on the solution working-copy root, so TortoiseSVN and other compatible clients can use the same configuration.
+
+The Issues tab provides an **Open Issue** field rather than attempting to enumerate issues from a service that has no listing API.
+
+### Local SVN Issues
+
+**Local SVN Issues** is a small tracker stored directly in the working copy. By default it uses:
+
+`.ankh/issues.xml`
+
+The file is added to Subversion so issue records can be committed and shared like any other project data. The Issues tab can:
+
+- create issues,
+- edit titles and descriptions,
+- mark issues closed or reopen them,
+- sort the issue list,
+- open an issue by ID.
+
+When Local SVN Issues is active, AnkhSVN also exposes an **Issue** field in the commit UI. Entering an issue ID appends `Issue #<id>` to the commit message.
+
+The local tracker is intentionally small. SVN remains responsible for history, branching, merging, and synchronization of the issue file.
 
 ## Configure an issue repository
-
-These steps apply only after a compatible issue-tracker connector has been installed and registered:
 
 1. Make sure the solution root is versioned in Subversion.
 2. In **Solution Explorer**, right-click the **solution** node.
 3. Choose **Issue Tracker Setup**.
-4. Select the issue-tracker connector.
-5. Enter the repository/project URL and any provider-specific settings requested by that connector.
-6. Choose **OK**.
-7. Return to **Pending Changes > Issues**.
+4. Choose **Generic Bugtraq**, **Local SVN Issues**, or an installed external connector.
+5. Configure the selected provider and choose **OK**.
+6. Return to **Pending Changes > Issues**.
 
-AnkhSVN stores the association as Subversion properties on the solution root. Setting or changing the association therefore creates local property changes. **Commit those property changes** if the issue-repository association should be shared with other users of the working copy.
+The AnkhSVN association itself is stored as SVN properties on the solution root. Commit those property changes if the selection should be shared with other users.
 
-## If "Issue Tracker Setup" is missing
+For Generic Bugtraq, the standard `bugtraq:*` properties are also written to the solution root. For Local SVN Issues, the configured issue file is created and scheduled for addition to SVN.
 
-The command is visible only when:
+## Existing TortoiseSVN bugtraq properties
 
-- the solution root is versioned in Subversion, and
-- at least one AnkhSVN issue-tracker connector is registered.
+If you already configured `bugtraq:*` properties with TortoiseSVN, choose **Generic Bugtraq** in **Issue Tracker Setup**. AnkhSVN pre-populates the built-in configuration from the project commit settings it already reads.
 
-A stock installation of this VSIX currently has no connector implementation, so not seeing the command is expected until a compatible connector extension is installed.
+This keeps the generic integration compatible with existing working copies instead of introducing a second URL/message format.
+
+## External connectors are still supported
+
+No existing connector mechanism has been removed. Extensions deriving from `Ankh.ExtensionPoints.IssueTracker.IssueRepositoryConnector` are still discovered through the original registration mechanism and appear alongside the two built-in options.
+
+If an external connector uses the same registered name as a built-in connector, the externally registered connector takes precedence.
 
 ## Remove or change an association
 
-When a connector is available, open **Issue Tracker Setup** again from the solution node. Select another connector to change the association, or select **None** to remove it.
+Open **Issue Tracker Setup** again. Select a different provider to change the association, or choose **None** to remove the AnkhSVN issue-repository association.
 
-Removing the association deletes the corresponding issue-repository SVN properties. Commit those property changes if the removal should be shared with the repository.
-
-## Connector developers
-
-Connector integrations derive from `Ankh.ExtensionPoints.IssueTracker.IssueRepositoryConnector` and provide both repository creation and a configuration page. AnkhSVN discovers registered connectors at startup and exposes **Issue Tracker Setup** only when at least one is available.
+Removing the association does not delete a Local SVN Issues data file and does not erase standard `bugtraq:*` properties. Those are ordinary versioned project data/properties and can be changed separately.
 
 ## Troubleshooting
 
-If a previously configured Issues tab stops working:
+If **Issue Tracker Setup** is missing, verify that the solution root is versioned in Subversion.
 
-- verify the connector extension is still installed and loads successfully,
-- reopen **Issue Tracker Setup** when the command is available and verify the repository settings,
-- confirm the solution root has the expected issue-repository SVN properties,
-- check whether those property changes were committed and updated into this working copy,
-- verify authentication to the external issue system,
-- test whether the issue system is reachable outside AnkhSVN.
+If Generic Bugtraq cannot open an issue:
 
-If source-control operations succeed but issue updates fail, diagnose the SVN repository and issue tracker as separate systems.
+- verify that the URL contains `%BUGID%`,
+- verify the resulting URL is reachable,
+- inspect the inherited/direct `bugtraq:*` properties.
+
+If Local SVN Issues cannot save:
+
+- verify the configured path is relative to the working-copy root,
+- verify the working copy is writable,
+- check Pending Changes for the issue file or its parent directory.
+
+If an external connector stops working, verify that its extension is still installed and registered.
 
 [Commit and Pending Changes](../commit/)
 

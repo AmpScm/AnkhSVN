@@ -183,6 +183,11 @@ namespace Ankh.UI.IssueTracker
             if (_configPage != null)
             {
                 _configPage.OnPageEvent += new EventHandler<ConfigPageEventArgs>(_configPage_OnPageEvent);
+
+                IValidatingIssueConfigurationPage validating =
+                    _configPage as IValidatingIssueConfigurationPage;
+                if (validating != null)
+                    okButton.Enabled = validating.IsComplete;
             }
 
             configPagePanel.Controls.Add(newControl);

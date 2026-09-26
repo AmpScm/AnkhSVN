@@ -48,18 +48,18 @@ namespace Ankh.UI.IssueTracker
             {
                 case IssueTrackerEmptyState.NoConnectors:
                     return
-                        "No issue tracker connector is installed.\r\n\r\n"
-                        + "The Issues tab requires a separate connector extension. "
-                        + "This AnkhSVN VSIX provides the integration framework but "
-                        + "does not include an issue tracker connector, so Issue Tracker "
-                        + "Setup is unavailable.\r\n\r\n"
+                        "No issue tracker connectors are available.\r\n\r\n"
+                        + "AnkhSVN normally includes Generic Bugtraq and Local SVN "
+                        + "Issues. If neither is available, repair or reinstall the "
+                        + "extension.\r\n\r\n"
                         + "Click here for more information.";
 
                 case IssueTrackerEmptyState.NotConfigured:
                     return
                         "This solution is not associated with an Issue Repository.\r\n\r\n"
                         + "Right-click the solution in Solution Explorer and choose "
-                        + "Issue Tracker Setup.\r\n\r\n"
+                        + "Issue Tracker Setup. You can use Generic Bugtraq, Local SVN "
+                        + "Issues, or an installed external connector.\r\n\r\n"
                         + "Click here for more information.";
 
                 case IssueTrackerEmptyState.ConfigurationUnavailable:
