@@ -15,6 +15,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Ankh.Commands;
 using Ankh.ExtensionPoints.IssueTracker;
 using Ankh.UI.IssueTracker;
 
@@ -99,9 +100,20 @@ namespace Ankh.UI.PendingChanges
                         control.Dock = DockStyle.Fill;
                         Controls.Add(control);
 
+                        FlowLayoutPanel management =
+                            CreateTrackerManagementBar(repository);
+                        Controls.Add(management);
+                        management.BringToFront();
+                        control.BringToFront();
+                        management.BringToFront();
+
                         IssueTrackerThemeLogic.ThemeEmbeddedControl(
                             Context,
                             control,
+                            false);
+                        IssueTrackerThemeLogic.ThemeEmbeddedControl(
+                            Context,
+                            management,
                             false);
                         return;
                     }
@@ -125,6 +137,97 @@ namespace Ankh.UI.PendingChanges
             }
 
             Controls.Add(pleaseConfigureLabel);
+        }
+
+        internal FlowLayoutPanel CreateTrackerManagementBar(
+            IssueRepository repository)
+        {
+            FlowLayoutPanel panel = new FlowLayoutPanel
+            {
+                Name = "issueTrackerManagementBar",
+                Dock = DockStyle.Top,
+                AutoSize = true,
+                WrapContents = false,
+                Padding = new Padding(6, 4, 6, 4)
+            };
+
+            Label current = new Label
+            {
+                Name = "currentIssueTrackerLabel",
+                AutoSize = true,
+                Text = "Tracker: "
+                    + (repository == null
+                        ? "(none)"
+                        : repository.ConnectorName),
+                Margin = new Padding(3, 7, 12, 3)
+            };
+
+            Button change = new Button
+            {
+                Name = "changeIssueTrackerButton",
+                Text = "Change Tracker...",
+                AutoSize = true
+            };
+            change.Click += changeIssueTrackerButton_Click;
+
+            Button remove = new Button
+            {
+                Name = "removeIssueTrackerButton",
+                Text = "Remove Tracker",
+                AutoSize = true,
+                Enabled = repository != null
+            };
+            remove.Click += removeIssueTrackerButton_Click;
+
+            panel.Controls.Add(current);
+            panel.Controls.Add(change);
+            panel.Controls.Add(remove);
+            return panel;
+        }
+
+        void changeIssueTrackerButton_Click(object sender, EventArgs e)
+        {
+            if (Context == null)
+                return;
+
+            IAnkhCommandService commands =
+                Context.GetService<IAnkhCommandService>();
+            if (commands != null)
+            {
+                commands.ExecCommand(
+                    AnkhCommand.SolutionIssueTrackerSetup,
+                    true);
+            }
+        }
+
+        void removeIssueTrackerButton_Click(object sender, EventArgs e)
+        {
+            if (Context == null)
+                return;
+
+            IAnkhIssueService service =
+                Context.GetService<IAnkhIssueService>();
+            IssueRepository repository =
+                service == null ? null : service.CurrentIssueRepository;
+
+            string trackerName = repository == null
+                ? "the current issue tracker"
+                : repository.ConnectorName;
+
+            DialogResult result = MessageBox.Show(
+                this,
+                "Remove the AnkhSVN association with "
+                    + trackerName
+                    + "?\r\n\r\n"
+                    + "This will not delete Local SVN Issues data and will "
+                    + "not erase standard bugtraq:* properties.",
+                "Remove Issue Tracker",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2);
+
+            if (result == DialogResult.Yes)
+                IssueTrackerAssociationManager.Apply(Context, null);
         }
 
         void ShowEmptyState(IssueTrackerEmptyState state)

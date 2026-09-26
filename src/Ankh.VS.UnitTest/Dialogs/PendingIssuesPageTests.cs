@@ -15,6 +15,7 @@
 using Ankh.UI.IssueTracker;
 using System;
 using System.Reflection;
+using System.Linq;
 using System.Windows.Forms;
 using NUnit.Framework;
 
@@ -137,6 +138,53 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                         "Switching pages must not alter navigation enablement.");
                 }
             }
+        }
+
+        [Test, Apartment(System.Threading.ApartmentState.STA)]
+        public void ConfiguredIssueTrackerExposesChangeAndRemoveActions()
+        {
+            using (var page = new PendingIssuesPage())
+            {
+                var repository = new LocalSvnIssuesRepository(
+                    null,
+                    new LocalSvnIssuesSettings(".ankh/issues.xml"));
+
+                using (FlowLayoutPanel bar =
+                    page.CreateTrackerManagementBar(repository))
+                {
+                    Button change = bar.Controls
+                        .OfType<Button>()
+                        .Single(b => b.Name == "changeIssueTrackerButton");
+                    Button remove = bar.Controls
+                        .OfType<Button>()
+                        .Single(b => b.Name == "removeIssueTrackerButton");
+                    Label current = bar.Controls
+                        .OfType<Label>()
+                        .Single(l => l.Name == "currentIssueTrackerLabel");
+
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(change.Text, Is.EqualTo("Change Tracker..."));
+                        Assert.That(remove.Text, Is.EqualTo("Remove Tracker"));
+                        Assert.That(remove.Enabled, Is.True);
+                        Assert.That(current.Text, Does.Contain("Local SVN Issues"));
+                    });
+                }
+            }
+        }
+
+        [Test]
+        public void RemovingTrackerKeepsProviderDataByDesign()
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    IssueTrackerAssociationManager.DeleteLocalIssueDataOnRemove,
+                    Is.False);
+                Assert.That(
+                    IssueTrackerAssociationManager.DeleteBugtraqPropertiesOnRemove,
+                    Is.False);
+            });
         }
 
         [Test]

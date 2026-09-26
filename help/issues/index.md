@@ -77,9 +77,14 @@ If an external connector uses the same registered name as a built-in connector, 
 
 ## Remove or change an association
 
-Open **Issue Tracker Setup** again. Select a different provider to change the association, or choose **None** to remove the AnkhSVN issue-repository association.
+When a tracker is configured, the **Issues** tab shows the active provider and two management actions:
 
-Removing the association does not delete a Local SVN Issues data file and does not erase standard `bugtraq:*` properties. Those are ordinary versioned project data/properties and can be changed separately.
+- **Change Tracker...** opens **Issue Tracker Setup** with the current provider selected. Choose another built-in or external connector and save it.
+- **Remove Tracker** asks for confirmation and removes the AnkhSVN issue-repository association from the solution.
+
+The older **None** choice in **Issue Tracker Setup** remains supported for compatibility, so no existing workflow is removed.
+
+Removing an association is intentionally non-destructive. It does **not** delete a Local SVN Issues data file and does **not** erase standard `bugtraq:*` properties. Those remain ordinary versioned project data/properties and can be reused, edited, or removed separately.
 
 ## Troubleshooting
 
