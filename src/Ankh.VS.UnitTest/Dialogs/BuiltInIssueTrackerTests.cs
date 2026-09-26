@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using Ankh.UI;
 using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
+using Ankh;
 using Ankh.ExtensionPoints.IssueTracker;
 using Ankh.UI.IssueTracker;
 using NUnit.Framework;
@@ -274,10 +275,16 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                 ForDialog = forDialog;
             }
 
-            public bool TryApplyTheme(Control control, bool forDialog)
+            public bool TryGetIcon(string path, out IntPtr hIcon)
             {
-                ThemeRecursive(control, forDialog);
-                return true;
+                hIcon = IntPtr.Zero;
+                return false;
+            }
+
+            public bool GetCurrentTheme(out Guid themeGuid)
+            {
+                themeGuid = Guid.Empty;
+                return false;
             }
         }
 
