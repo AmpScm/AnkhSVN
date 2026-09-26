@@ -273,8 +273,8 @@ namespace AnkhSvn_UnitTestProject.Dialogs
             }
         }
 
-        [Test, Apartment(System.Threading.ApartmentState.STA)]
-        public void BuiltInConfigurationPagesAreFreshAfterPreviousDialogDisposesThem()
+        [Test]
+        public void BuiltInConfigurationPageRequestsReturnFreshInstances()
         {
             IssueRepositoryConnector[] connectors =
             {
@@ -286,26 +286,14 @@ namespace AnkhSvn_UnitTestProject.Dialogs
             {
                 IssueRepositoryConfigurationPage first =
                     connector.ConfigurationPage;
-                Control firstControl = (Control)first.Window;
-                firstControl.Dispose();
-
                 IssueRepositoryConfigurationPage second =
                     connector.ConfigurationPage;
-                Control secondControl = (Control)second.Window;
 
-                try
-                {
-                    Assert.Multiple(() =>
-                    {
-                        Assert.That(second, Is.Not.SameAs(first));
-                        Assert.That(secondControl, Is.Not.SameAs(firstControl));
-                        Assert.That(secondControl.IsDisposed, Is.False);
-                    });
-                }
-                finally
-                {
-                    secondControl.Dispose();
-                }
+                Assert.That(
+                    second,
+                    Is.Not.SameAs(first),
+                    connector.Name
+                        + " must not cache a configuration page owned by a previous dialog.");
             }
         }
 

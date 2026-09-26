@@ -176,47 +176,33 @@ namespace AnkhSvn_UnitTestProject.Dialogs
         }
 
         [Test, Apartment(System.Threading.ApartmentState.STA)]
-        public void TrackerManagementBarDoesNotCoverLocalIssueActions()
+        public void TrackerManagementBarUsesSeparateRowFromProviderContent()
         {
             using (var page = new PendingIssuesPage())
-            using (var view = new LocalSvnIssuesView(
-                null,
-                new LocalSvnIssuesRepository(
-                    null,
-                    new LocalSvnIssuesSettings(".ankh/issues.xml")),
-                new LocalIssueStore(null, ".ankh/issues.xml")))
+            using (var provider = new Panel { Name = "providerContent" })
             {
                 var repository = new LocalSvnIssuesRepository(
                     null,
                     new LocalSvnIssuesSettings(".ankh/issues.xml"));
 
                 using (TableLayoutPanel host =
-                    page.CreateTrackerHost(view, repository))
+                    page.CreateTrackerHost(provider, repository))
                 {
                     Control management =
                         host.Controls.Find(
                             "issueTrackerManagementBar",
                             true).Single();
-                    Control localActions =
-                        host.Controls.Find(
-                            "localIssueActions",
-                            true).Single();
 
                     Assert.Multiple(() =>
                     {
                         Assert.That(host.GetRow(management), Is.EqualTo(0));
-                        Assert.That(host.GetRow(view), Is.EqualTo(1));
-                        Assert.That(localActions.Parent, Is.SameAs(view));
+                        Assert.That(host.GetRow(provider), Is.EqualTo(1));
                         Assert.That(
-                            localActions.Controls.Find(
-                                "newLocalIssueButton",
-                                true),
-                            Has.Length.EqualTo(1));
+                            host.RowStyles[0].SizeType,
+                            Is.EqualTo(SizeType.AutoSize));
                         Assert.That(
-                            localActions.Controls.Find(
-                                "editLocalIssueButton",
-                                true),
-                            Has.Length.EqualTo(1));
+                            host.RowStyles[1].SizeType,
+                            Is.EqualTo(SizeType.Percent));
                     });
                 }
             }

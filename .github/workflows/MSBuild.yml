@@ -235,6 +235,8 @@ jobs:
         --results-directory "${{ github.workspace }}\TestResults\Ankh.VS.UnitTest"
         --logger "trx;LogFileName=Ankh.VS.UnitTest.trx"
         --logger "console;verbosity=normal"
+        --blame-hang
+        --blame-hang-timeout 2m
         -- RunConfiguration.TargetPlatform=x64 RunConfiguration.TreatNoTestsAsError=true
 
     - name: Verify 100% test pass rate
