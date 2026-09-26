@@ -97,23 +97,14 @@ namespace Ankh.UI.PendingChanges
                     Control control = Control.FromHandle(window.Handle);
                     if (control != null)
                     {
-                        control.Dock = DockStyle.Fill;
-                        Controls.Add(control);
-
-                        FlowLayoutPanel management =
-                            CreateTrackerManagementBar(repository);
-                        Controls.Add(management);
-                        management.BringToFront();
-                        control.BringToFront();
-                        management.BringToFront();
-
-                        IssueTrackerThemeLogic.ThemeEmbeddedControl(
-                            Context,
+                        Control host = CreateTrackerHost(
                             control,
-                            false);
+                            repository);
+                        Controls.Add(host);
+
                         IssueTrackerThemeLogic.ThemeEmbeddedControl(
                             Context,
-                            management,
+                            host,
                             false);
                         return;
                     }
@@ -127,16 +118,112 @@ namespace Ankh.UI.PendingChanges
                     settings != null
                     && !string.IsNullOrEmpty(settings.ConnectorName);
 
-                ShowEmptyState(IssueTrackerAvailabilityLogic.GetEmptyState(
-                    connectorCount,
-                    hasConfiguredRepository));
-            }
-            else
-            {
-                ShowEmptyState(IssueTrackerEmptyState.NoConnectors);
+                IssueTrackerEmptyState state =
+                    IssueTrackerAvailabilityLogic.GetEmptyState(
+                        connectorCount,
+                        hasConfiguredRepository);
+
+                Control emptyHost = CreateEmptyTrackerHost(
+                    state,
+                    connectorCount > 0);
+                Controls.Add(emptyHost);
+                IssueTrackerThemeLogic.ThemeEmbeddedControl(
+                    Context,
+                    emptyHost,
+                    false);
+                return;
             }
 
-            Controls.Add(pleaseConfigureLabel);
+            Control noConnectorHost = CreateEmptyTrackerHost(
+                IssueTrackerEmptyState.NoConnectors,
+                false);
+            Controls.Add(noConnectorHost);
+            IssueTrackerThemeLogic.ThemeEmbeddedControl(
+                Context,
+                noConnectorHost,
+                false);
+        }
+
+        internal TableLayoutPanel CreateTrackerHost(
+            Control providerControl,
+            IssueRepository repository)
+        {
+            if (providerControl == null)
+                throw new ArgumentNullException("providerControl");
+
+            FlowLayoutPanel management =
+                CreateTrackerManagementBar(repository);
+
+            TableLayoutPanel host = new TableLayoutPanel
+            {
+                Name = "issueTrackerHost",
+                Dock = DockStyle.Fill,
+                ColumnCount = 1,
+                RowCount = 2,
+                Margin = Padding.Empty,
+                Padding = Padding.Empty
+            };
+            host.ColumnStyles.Add(
+                new ColumnStyle(SizeType.Percent, 100F));
+            host.RowStyles.Add(
+                new RowStyle(SizeType.AutoSize));
+            host.RowStyles.Add(
+                new RowStyle(SizeType.Percent, 100F));
+
+            management.Dock = DockStyle.Fill;
+            providerControl.Dock = DockStyle.Fill;
+
+            host.Controls.Add(management, 0, 0);
+            host.Controls.Add(providerControl, 0, 1);
+            return host;
+        }
+
+        internal TableLayoutPanel CreateEmptyTrackerHost(
+            IssueTrackerEmptyState state,
+            bool canConfigure)
+        {
+            ShowEmptyState(state);
+
+            TableLayoutPanel host = new TableLayoutPanel
+            {
+                Name = "emptyIssueTrackerHost",
+                Dock = DockStyle.Fill,
+                ColumnCount = 1,
+                RowCount = 2,
+                Margin = Padding.Empty,
+                Padding = Padding.Empty
+            };
+            host.ColumnStyles.Add(
+                new ColumnStyle(SizeType.Percent, 100F));
+            host.RowStyles.Add(
+                new RowStyle(SizeType.Percent, 100F));
+            host.RowStyles.Add(
+                new RowStyle(SizeType.AutoSize));
+
+            pleaseConfigureLabel.Dock = DockStyle.Fill;
+            host.Controls.Add(pleaseConfigureLabel, 0, 0);
+
+            FlowLayoutPanel actions = new FlowLayoutPanel
+            {
+                Name = "emptyIssueTrackerActions",
+                Dock = DockStyle.Fill,
+                AutoSize = true,
+                WrapContents = false,
+                Padding = new Padding(6, 4, 6, 6)
+            };
+
+            Button add = new Button
+            {
+                Name = "addIssueTrackerButton",
+                Text = "Add Tracker...",
+                AutoSize = true,
+                Enabled = canConfigure
+            };
+            add.Click += changeIssueTrackerButton_Click;
+            actions.Controls.Add(add);
+
+            host.Controls.Add(actions, 0, 1);
+            return host;
         }
 
         internal FlowLayoutPanel CreateTrackerManagementBar(

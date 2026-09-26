@@ -145,7 +145,6 @@ namespace Ankh.UI.IssueTracker
     internal sealed class GenericBugtraqConnector : IssueRepositoryConnector
     {
         readonly IAnkhServiceProvider _context;
-        GenericBugtraqConfigurationPage _page;
 
         internal GenericBugtraqConnector(IAnkhServiceProvider context)
         {
@@ -159,7 +158,10 @@ namespace Ankh.UI.IssueTracker
 
         public override IssueRepositoryConfigurationPage ConfigurationPage
         {
-            get { return _page ?? (_page = new GenericBugtraqConfigurationPage(_context)); }
+            // Configuration controls are owned/disposed by each setup dialog.
+            // Return a fresh page so reopening or switching back to this
+            // connector never reuses a disposed WinForms control.
+            get { return new GenericBugtraqConfigurationPage(_context); }
         }
 
         public override IssueRepository Create(IssueRepositorySettings settings)
@@ -543,7 +545,6 @@ namespace Ankh.UI.IssueTracker
     internal sealed class LocalSvnIssuesConnector : IssueRepositoryConnector
     {
         readonly IAnkhServiceProvider _context;
-        LocalSvnIssuesConfigurationPage _page;
 
         internal LocalSvnIssuesConnector(IAnkhServiceProvider context)
         {
@@ -557,7 +558,9 @@ namespace Ankh.UI.IssueTracker
 
         public override IssueRepositoryConfigurationPage ConfigurationPage
         {
-            get { return _page ?? (_page = new LocalSvnIssuesConfigurationPage()); }
+            // Configuration controls are owned/disposed by each setup dialog.
+            // Return a fresh page so Change Tracker can be reopened safely.
+            get { return new LocalSvnIssuesConfigurationPage(); }
         }
 
         public override IssueRepository Create(IssueRepositorySettings settings)
@@ -1031,18 +1034,31 @@ namespace Ankh.UI.IssueTracker
 
             FlowLayoutPanel actions = new FlowLayoutPanel
             {
+                Name = "localIssueActions",
                 Dock = DockStyle.Top,
                 AutoSize = true,
                 WrapContents = false,
                 Padding = new Padding(4)
             };
 
-            Button add = new Button { Text = "New Issue...", AutoSize = true };
+            Button add = new Button
+            {
+                Name = "newLocalIssueButton",
+                Text = "New Issue...",
+                AutoSize = true
+            };
+            _edit.Name = "editLocalIssueButton";
             _edit.Text = "Edit...";
             _edit.AutoSize = true;
+            _toggle.Name = "toggleLocalIssueButton";
             _toggle.Text = "Close";
             _toggle.AutoSize = true;
-            Button refresh = new Button { Text = "Refresh", AutoSize = true };
+            Button refresh = new Button
+            {
+                Name = "refreshLocalIssuesButton",
+                Text = "Refresh",
+                AutoSize = true
+            };
 
             add.Click += delegate { AddIssue(); };
             _edit.Click += delegate { EditIssue(); };

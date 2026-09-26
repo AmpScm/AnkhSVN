@@ -26,12 +26,12 @@ The Issues tab provides an **Open Issue** field rather than attempting to enumer
 
 `.ankh/issues.xml`
 
-The file is added to Subversion so issue records can be committed and shared like any other project data. The Issues tab can:
+The file is added to Subversion so issue records can be committed and shared like any other project data. The Issues tab keeps a dedicated **New Issue... / Edit... / Close or Reopen / Refresh** toolbar below the tracker-management bar, and can:
 
 - create issues,
 - edit titles and descriptions,
 - mark issues closed or reopen them,
-- sort the issue list,
+- refresh and sort the issue list,
 - open an issue by ID.
 
 When Local SVN Issues is active, AnkhSVN also exposes an **Issue** field in the commit UI. Entering an issue ID appends `Issue #<id>` to the commit message.
@@ -79,8 +79,10 @@ If an external connector uses the same registered name as a built-in connector, 
 
 When a tracker is configured, the **Issues** tab shows the active provider and two management actions:
 
-- **Change Tracker...** opens **Issue Tracker Setup** with the current provider selected. Choose another built-in or external connector and save it.
+- **Change Tracker...** opens **Issue Tracker Setup** with the current provider selected. Each setup session receives a fresh provider configuration page, so reopening setup or switching away and back does not reuse disposed controls.
 - **Remove Tracker** asks for confirmation and removes the AnkhSVN issue-repository association from the solution.
+
+After removal, the Issues tab returns to its unconfigured state and shows **Add Tracker...**, which opens **Issue Tracker Setup** again. For Local SVN Issues, the issue-management toolbar remains separate from the tracker-management toolbar so **New Issue...**, **Edit...**, **Close/Reopen**, and **Refresh** remain available.
 
 The older **None** choice in **Issue Tracker Setup** remains supported for compatibility, so no existing workflow is removed.
 

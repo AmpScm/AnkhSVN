@@ -273,6 +273,74 @@ namespace AnkhSvn_UnitTestProject.Dialogs
             }
         }
 
+        [Test, Apartment(System.Threading.ApartmentState.STA)]
+        public void BuiltInConfigurationPagesAreFreshAfterPreviousDialogDisposesThem()
+        {
+            IssueRepositoryConnector[] connectors =
+            {
+                new GenericBugtraqConnector(null),
+                new LocalSvnIssuesConnector(null)
+            };
+
+            foreach (IssueRepositoryConnector connector in connectors)
+            {
+                IssueRepositoryConfigurationPage first =
+                    connector.ConfigurationPage;
+                Control firstControl = (Control)first.Window;
+                firstControl.Dispose();
+
+                IssueRepositoryConfigurationPage second =
+                    connector.ConfigurationPage;
+                Control secondControl = (Control)second.Window;
+
+                try
+                {
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(second, Is.Not.SameAs(first));
+                        Assert.That(secondControl, Is.Not.SameAs(firstControl));
+                        Assert.That(secondControl.IsDisposed, Is.False);
+                    });
+                }
+                finally
+                {
+                    secondControl.Dispose();
+                }
+            }
+        }
+
+        [Test, Apartment(System.Threading.ApartmentState.STA)]
+        public void LocalIssuesViewKeepsItsIssueActionToolbar()
+        {
+            using (var view = new LocalSvnIssuesView(
+                null,
+                new LocalSvnIssuesRepository(
+                    null,
+                    new LocalSvnIssuesSettings(".ankh/issues.xml")),
+                new LocalIssueStore(null, ".ankh/issues.xml")))
+            {
+                Control[] bars =
+                    view.Controls.Find("localIssueActions", true);
+
+                Assert.That(bars, Has.Length.EqualTo(1));
+
+                string[] buttonNames = bars[0].Controls
+                    .OfType<Button>()
+                    .Select(b => b.Name)
+                    .ToArray();
+
+                Assert.That(
+                    buttonNames,
+                    Is.EquivalentTo(new[]
+                    {
+                        "newLocalIssueButton",
+                        "editLocalIssueButton",
+                        "toggleLocalIssueButton",
+                        "refreshLocalIssuesButton"
+                    }));
+            }
+        }
+
         [Test]
         public void BuiltInRepositoriesUseDistinctPersistentConnectorNames()
         {

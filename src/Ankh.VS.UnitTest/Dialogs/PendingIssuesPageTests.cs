@@ -175,6 +175,75 @@ namespace AnkhSvn_UnitTestProject.Dialogs
             }
         }
 
+        [Test, Apartment(System.Threading.ApartmentState.STA)]
+        public void TrackerManagementBarDoesNotCoverLocalIssueActions()
+        {
+            using (var page = new PendingIssuesPage())
+            using (var view = new LocalSvnIssuesView(
+                null,
+                new LocalSvnIssuesRepository(
+                    null,
+                    new LocalSvnIssuesSettings(".ankh/issues.xml")),
+                new LocalIssueStore(null, ".ankh/issues.xml")))
+            {
+                var repository = new LocalSvnIssuesRepository(
+                    null,
+                    new LocalSvnIssuesSettings(".ankh/issues.xml"));
+
+                using (TableLayoutPanel host =
+                    page.CreateTrackerHost(view, repository))
+                {
+                    Control management =
+                        host.Controls.Find(
+                            "issueTrackerManagementBar",
+                            true).Single();
+                    Control localActions =
+                        host.Controls.Find(
+                            "localIssueActions",
+                            true).Single();
+
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(host.GetRow(management), Is.EqualTo(0));
+                        Assert.That(host.GetRow(view), Is.EqualTo(1));
+                        Assert.That(localActions.Parent, Is.SameAs(view));
+                        Assert.That(
+                            localActions.Controls.Find(
+                                "newLocalIssueButton",
+                                true),
+                            Has.Length.EqualTo(1));
+                        Assert.That(
+                            localActions.Controls.Find(
+                                "editLocalIssueButton",
+                                true),
+                            Has.Length.EqualTo(1));
+                    });
+                }
+            }
+        }
+
+        [Test, Apartment(System.Threading.ApartmentState.STA)]
+        public void UnconfiguredIssuesPageOffersAddTracker()
+        {
+            using (var page = new PendingIssuesPage())
+            using (TableLayoutPanel host =
+                page.CreateEmptyTrackerHost(
+                    IssueTrackerEmptyState.NotConfigured,
+                    true))
+            {
+                Button add = host.Controls
+                    .Find("addIssueTrackerButton", true)
+                    .OfType<Button>()
+                    .Single();
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(add.Text, Is.EqualTo("Add Tracker..."));
+                    Assert.That(add.Enabled, Is.True);
+                });
+            }
+        }
+
         [Test]
         public void RemovingTrackerKeepsProviderDataByDesign()
         {
