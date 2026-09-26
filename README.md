@@ -18,7 +18,7 @@ AnkhSVN is actively maintained with ongoing modernization, documentation, regres
 - Work with Subversion working copies from inside Visual Studio.
 - Review pending changes, diff files, commit, update, revert, switch, and resolve conflicts.
 - Browse repositories and check out projects through Repository Explorer.
-- Use Annotate / Blame, merge tracking, properties, externals, and issue-tracker integration.
+- Use Annotate / Blame, merge tracking, properties, externals, Local SVN Issues, Generic Bugtraq, and external issue-tracker connectors.
 - Build and test against the current Visual Studio 2022+ toolchain.
 - Run regression tests and merged line/branch coverage on every CI build.
 
@@ -66,7 +66,7 @@ See [Building AnkhSVN](src/BUILD.md) for prerequisites, build commands, test com
 - [Commit and Pending Changes](help/commit/index.md) — reviewing and committing working-copy changes.
 - [Conflicts and Resolve](help/conflicts/index.md) — text, property, and tree conflicts.
 - [Subversion Externals](help/externals/index.md) — external working copies and reproducible definitions.
-- [Issue Tracking Integration](help/issues/index.md) — associating source-control work with external issues.
+- [Issue Tracking Integration](help/issues/index.md) — Local SVN Issues, Generic Bugtraq, changing/removing trackers, and external connector integration.
 - [Merge and Merge Tracking](help/merge/index.md) — sync merges, revision ranges, mergeinfo, and review workflow.
 - [Subversion Properties](help/properties/index.md) — common versioned properties and property changes.
 - [Repository Explorer and Checkout](help/repository/index.md) — repository URLs, history, checkout, and export.

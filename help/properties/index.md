@@ -58,6 +58,31 @@ Stores merge-tracking history.
 
 Subversion normally maintains `svn:mergeinfo` automatically during merges. Manual edits should be avoided unless you understand how the merge history is being represented.
 
+
+### bugtraq:* issue-tracker properties
+
+The `bugtraq:*` property family is a widely used client convention for connecting Subversion commits to an issue tracker. TortoiseSVN and AnkhSVN's **Generic Bugtraq** provider can share the same settings.
+
+Common values include:
+
+- `bugtraq:url` — issue URL template containing `%BUGID%`,
+- `bugtraq:message` — commit-message pattern,
+- `bugtraq:label` — label shown beside the issue field,
+- `bugtraq:number` — whether IDs are numeric,
+- `bugtraq:warnifnoissue` — whether to remind the user when no ID is entered,
+- `bugtraq:append` — whether the generated issue text is appended or inserted at the top,
+- `bugtraq:logregex` — regular-expression rules for finding issue IDs in log messages.
+
+These are normal versioned SVN properties. Changing them creates local property modifications that must be committed to share them with other working copies.
+
+See [Issue Tracking Integration](../issues/).
+
+### AnkhSVN issue-repository association properties
+
+AnkhSVN also stores its selected issue-provider association as SVN properties on the solution working-copy root. Those properties identify which connector/provider AnkhSVN should host in the **Issues** tab.
+
+Removing an AnkhSVN tracker association removes only that association metadata. It intentionally does not delete a Local SVN Issues file and does not erase standard `bugtraq:*` properties.
+
 ## Directory properties can affect descendants
 
 Properties such as `svn:ignore` and `svn:externals` are commonly placed on directories. Some Subversion configurations also use inherited properties.
