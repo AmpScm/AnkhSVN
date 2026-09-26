@@ -64,7 +64,7 @@ The built-in issue-tracker UI uses AnkhSVN's shared Visual Studio semantic WinFo
 - **Issue Tracker Setup** re-themes a provider's configuration page immediately when you switch providers.
 - The **Issues** tab re-themes the active provider UI when Visual Studio changes theme at runtime.
 - **Local SVN Issues** uses the shared `SmartListView` selection, hover, header, and high-contrast behavior.
-- The local issue editor uses `VSDialogForm`, so its caption, text boxes, combo box, buttons, labels, and high-contrast behavior follow the same dialog theme path as other AnkhSVN dialogs.
+- The local issue editor uses `VSDialogForm`, so its caption, text boxes, combo box, buttons, labels, and high-contrast behavior follow the same dialog theme path as other AnkhSVN dialogs. It also performs a second recursive theme pass after the dialog is shown, when all native child handles exist, preventing default light WinForms controls from leaking into dark or mixed Visual Studio themes.
 - Generic Bugtraq uses standard WinForms controls and is themed recursively by the same service.
 
 External connectors remain supported. AnkhSVN applies the shared recursive theme service to the connector control it hosts; custom owner-drawn content supplied by an external connector remains that connector's responsibility.

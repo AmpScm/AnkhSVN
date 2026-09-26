@@ -1355,6 +1355,26 @@ namespace Ankh.UI.IssueTracker
                 _issue.UpdatedUtc = DateTime.UtcNow;
             };
         }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            // VSDialogForm themes during OnLoad, but some native child controls
+            // do not have handles until the dialog is actually shown. Apply a
+            // second recursive pass here so text boxes, combo boxes, buttons,
+            // labels and the native caption all receive the current VS theme.
+            ApplyVisibleTheme();
+        }
+
+        internal bool ApplyVisibleTheme()
+        {
+            return IssueTrackerThemeLogic.ThemeEmbeddedControl(
+                Context,
+                this,
+                true);
+        }
+
     }
 
     #endregion

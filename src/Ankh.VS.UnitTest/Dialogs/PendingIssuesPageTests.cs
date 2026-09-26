@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Ankh.UI.IssueTracker;
+using Ankh.UI.PendingChanges;
 using System;
 using System.Reflection;
 using System.Linq;

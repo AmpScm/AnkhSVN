@@ -237,6 +237,42 @@ namespace AnkhSvn_UnitTestProject.Dialogs
             }
         }
 
+        [Test, Apartment(System.Threading.ApartmentState.STA)]
+        public void LocalIssueEditorAppliesThemeAgainAfterHandlesExist()
+        {
+            using (var services = new AnkhServiceContainer())
+            using (var editor = new LocalIssueEditDialog(
+                new LocalIssueRecord
+                {
+                    Id = 3,
+                    Status = "Open",
+                    Title = "Theme the issue editor"
+                }))
+            {
+                var themer = new RecordingThemer();
+                services.AddService(typeof(IWinFormsThemingService), themer);
+                editor.Context = services;
+
+                // Force the form and child control tree to exist as it does at
+                // display time, then exercise the explicit visible-theme pass.
+                IntPtr handle = editor.Handle;
+                foreach (Control child in editor.Controls)
+                    child.CreateControl();
+
+                bool themed = editor.ApplyVisibleTheme();
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(themed, Is.True);
+                    Assert.That(themer.CallCount, Is.EqualTo(1));
+                    Assert.That(themer.Control, Is.SameAs(editor));
+                    Assert.That(themer.ForDialog, Is.True);
+                    Assert.That(editor.IsHandleCreated, Is.True);
+                    Assert.That(editor.Controls.Count, Is.GreaterThan(0));
+                });
+            }
+        }
+
         [Test]
         public void BuiltInRepositoriesUseDistinctPersistentConnectorNames()
         {
