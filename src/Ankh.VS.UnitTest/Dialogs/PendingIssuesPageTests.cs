@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Ankh;
 using Ankh.UI.IssueTracker;
 using Ankh.UI.PendingChanges;
 using System;
@@ -93,7 +92,7 @@ namespace AnkhSvn_UnitTestProject.Dialogs
         public void RepeatedIssuePageNavigationDoesNotDisableTabs()
         {
             using (var tool = new PendingChangesToolControl())
-            using (var services = new AnkhServiceContainer())
+            using (var other = new PendingChangesPage())
             {
                 MethodInfo show = typeof(PendingChangesToolControl).GetMethod(
                     "ShowPanel",
@@ -116,11 +115,12 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                 ToolStrip tabs = (ToolStrip)tabsField.GetValue(tool);
                 Panel panel = (Panel)panelField.GetValue(tool);
                 var issues = (PendingIssuesPage)issuesField.GetValue(tool);
-                var other = new PendingChangesPage();
 
-                issues.Context = services;
-                other.Context = services;
-
+                // Keep Context null intentionally. This is a navigation/z-order
+                // regression test, not a service-integration test. Giving a
+                // synthetic service container to a generic PendingChangesPage
+                // causes it to register a null PageType and can block the STA
+                // test runner instead of testing tab switching.
                 panel.Controls.Add(issues);
                 panel.Controls.Add(other);
                 tabs.Enabled = true;
