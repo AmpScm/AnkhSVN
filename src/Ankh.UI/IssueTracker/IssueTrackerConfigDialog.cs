@@ -192,6 +192,15 @@ namespace Ankh.UI.IssueTracker
 
             configPagePanel.Controls.Add(newControl);
 
+            // The dialog itself is themed on load, but changing connectors can
+            // create and insert a configuration page afterward. Theme that page
+            // immediately so switching providers never flashes or leaves a
+            // light control tree inside a dark Visual Studio dialog.
+            IssueTrackerThemeLogic.ThemeEmbeddedControl(
+                Context,
+                newControl,
+                true);
+
             if (_configPage != null && needsCurrentSettings)
             {
                 BeginInvoke((DoSomething)delegate()

@@ -13,8 +13,13 @@
 // limitations under the License.
 
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
+using Ankh.UI;
+using Ankh.UI.VSSelectionControls;
+using Ankh.VS;
 using Ankh.ExtensionPoints.IssueTracker;
 using Ankh.UI.IssueTracker;
 using NUnit.Framework;
@@ -150,6 +155,88 @@ namespace AnkhSvn_UnitTestProject.Dialogs
         }
 
         [Test]
+        public void EmbeddedIssueControlsUseSharedThemingService()
+        {
+            using (var services = new AnkhServiceContainer())
+            using (var control = new Panel())
+            {
+                var themer = new RecordingThemer();
+                services.AddService(typeof(IWinFormsThemingService), themer);
+
+                bool themed = IssueTrackerThemeLogic.ThemeEmbeddedControl(
+                    services,
+                    control,
+                    true);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(themed, Is.True);
+                    Assert.That(themer.Control, Is.SameAs(control));
+                    Assert.That(themer.ForDialog, Is.True);
+                    Assert.That(themer.CallCount, Is.EqualTo(1));
+                });
+            }
+        }
+
+        [Test]
+        public void EmbeddedIssueThemeHelperIsSafeWithoutServices()
+        {
+            using (var control = new Panel())
+            {
+                Assert.Multiple(() =>
+                {
+                    Assert.That(
+                        IssueTrackerThemeLogic.ThemeEmbeddedControl(
+                            null,
+                            control,
+                            false),
+                        Is.False);
+                    Assert.That(
+                        IssueTrackerThemeLogic.ThemeEmbeddedControl(
+                            new AnkhServiceContainer(),
+                            null,
+                            false),
+                        Is.False);
+                });
+            }
+        }
+
+        [Test, Apartment(System.Threading.ApartmentState.STA)]
+        public void LocalIssueUiUsesVisualStudioThemeInfrastructure()
+        {
+            using (var editor = new LocalIssueEditDialog(
+                new LocalIssueRecord
+                {
+                    Id = 1,
+                    Status = "Open",
+                    Title = "Theme test"
+                }))
+            using (var view = new LocalSvnIssuesView(
+                null,
+                new LocalSvnIssuesRepository(
+                    null,
+                    new LocalSvnIssuesSettings(".ankh/issues.xml")),
+                new LocalIssueStore(null, ".ankh/issues.xml")))
+            {
+                var listField = typeof(LocalSvnIssuesView).GetField(
+                    "_list",
+                    System.Reflection.BindingFlags.Instance
+                        | System.Reflection.BindingFlags.NonPublic);
+                var list = (SmartListView)listField.GetValue(view);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(editor, Is.InstanceOf<VSDialogForm>());
+                    Assert.That(editor.EnableTheming, Is.True);
+                    Assert.That(list.AllowDarkNativeTheme, Is.False);
+                    Assert.That(list.PreserveItemForeColorWhenSelected, Is.True);
+                    Assert.That(list.PreserveItemForeColorWhenHot, Is.True);
+                    Assert.That(list.HideSelection, Is.False);
+                });
+            }
+        }
+
+        [Test]
         public void BuiltInRepositoriesUseDistinctPersistentConnectorNames()
         {
             IssueRepository generic =
@@ -169,5 +256,30 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                 Assert.That(generic.RepositoryUri, Is.Not.EqualTo(local.RepositoryUri));
             });
         }
+        sealed class RecordingThemer : IWinFormsThemingService
+        {
+            public int CallCount { get; private set; }
+            public Control Control { get; private set; }
+            public bool ForDialog { get; private set; }
+
+            public AnkhThemePalette ThemePalette
+            {
+                get { return null; }
+            }
+
+            public void ThemeRecursive(Control control, bool forDialog)
+            {
+                CallCount++;
+                Control = control;
+                ForDialog = forDialog;
+            }
+
+            public bool TryApplyTheme(Control control, bool forDialog)
+            {
+                ThemeRecursive(control, forDialog);
+                return true;
+            }
+        }
+
     }
 }

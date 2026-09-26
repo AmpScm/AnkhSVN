@@ -65,6 +65,14 @@ namespace Ankh.UI.PendingChanges
 
             if (VSVersion.VS2012OrLater)
                 pleaseConfigureLabel.BorderStyle = BorderStyle.None;
+
+            // Hosted issue-provider controls are inserted dynamically, so they
+            // must be re-themed when Visual Studio changes theme at runtime.
+            foreach (Control control in Controls)
+                IssueTrackerThemeLogic.ThemeEmbeddedControl(
+                    Context,
+                    control,
+                    false);
         }
 
         void issueService_IssueRepositoryChanged(object sender, EventArgs e)
@@ -91,13 +99,10 @@ namespace Ankh.UI.PendingChanges
                         control.Dock = DockStyle.Fill;
                         Controls.Add(control);
 
-                        if (VSVersion.VS2012OrLater && Context != null)
-                        {
-                            IWinFormsThemingService wts = Context.GetService<IWinFormsThemingService>();
-
-                            if (wts != null)
-                                wts.ThemeRecursive(control, false);
-                        }
+                        IssueTrackerThemeLogic.ThemeEmbeddedControl(
+                            Context,
+                            control,
+                            false);
                         return;
                     }
                 }

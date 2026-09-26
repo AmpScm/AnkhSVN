@@ -1180,14 +1180,11 @@ namespace Ankh.UI.IssueTracker
             using (LocalIssueEditDialog dialog = new LocalIssueEditDialog(issue))
             {
                 if (_context != null)
-                {
-                    IWinFormsThemingService theme =
-                        _context.GetService<IWinFormsThemingService>();
-                    if (theme != null)
-                        theme.ThemeRecursive(dialog, true);
-                }
+                    return dialog.ShowDialog(_context, this) == DialogResult.OK;
 
-                return dialog.ShowDialog(this) == DialogResult.OK;
+                // Unit-test/design-time fallback. Runtime instances are hosted
+                // by Ankh and therefore have a service context.
+                return ((Form)dialog).ShowDialog(this) == DialogResult.OK;
             }
         }
 
@@ -1266,7 +1263,7 @@ namespace Ankh.UI.IssueTracker
         }
     }
 
-    internal sealed class LocalIssueEditDialog : Form
+    internal sealed class LocalIssueEditDialog : VSDialogForm
     {
         readonly LocalIssueRecord _issue;
         readonly TextBox _title = new TextBox();
