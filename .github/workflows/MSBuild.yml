@@ -236,7 +236,7 @@ jobs:
         --logger "trx;LogFileName=Ankh.VS.UnitTest.trx"
         --logger "console;verbosity=normal"
         --blame-hang
-        --blame-hang-timeout 2m
+        --blame-hang-timeout 45s
         -- RunConfiguration.TargetPlatform=x64 RunConfiguration.TreatNoTestsAsError=true
 
     - name: Verify 100% test pass rate

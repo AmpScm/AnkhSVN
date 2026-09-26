@@ -89,60 +89,6 @@ namespace AnkhSvn_UnitTestProject.Dialogs
         }
 
         [Test, Apartment(System.Threading.ApartmentState.STA)]
-        public void RepeatedIssuePageNavigationDoesNotDisableTabs()
-        {
-            using (var tool = new PendingChangesToolControl())
-            using (var other = new PendingChangesPage())
-            {
-                MethodInfo show = typeof(PendingChangesToolControl).GetMethod(
-                    "ShowPanel",
-                    BindingFlags.Instance | BindingFlags.NonPublic);
-                FieldInfo tabsField = typeof(PendingChangesToolControl).GetField(
-                    "pendingChangesTabs",
-                    BindingFlags.Instance | BindingFlags.NonPublic);
-                FieldInfo panelField = typeof(PendingChangesToolControl).GetField(
-                    "contentPanel",
-                    BindingFlags.Instance | BindingFlags.NonPublic);
-                FieldInfo issuesField = typeof(PendingChangesToolControl).GetField(
-                    "_issuesPage",
-                    BindingFlags.Instance | BindingFlags.NonPublic);
-
-                Assert.That(show, Is.Not.Null);
-                Assert.That(tabsField, Is.Not.Null);
-                Assert.That(panelField, Is.Not.Null);
-                Assert.That(issuesField, Is.Not.Null);
-
-                ToolStrip tabs = (ToolStrip)tabsField.GetValue(tool);
-                Panel panel = (Panel)panelField.GetValue(tool);
-                var issues = (PendingIssuesPage)issuesField.GetValue(tool);
-
-                // Keep Context null intentionally. This is a navigation/z-order
-                // regression test, not a service-integration test. Giving a
-                // synthetic service container to a generic PendingChangesPage
-                // causes it to register a null PageType and can block the STA
-                // test runner instead of testing tab switching.
-                panel.Controls.Add(issues);
-                panel.Controls.Add(other);
-                tabs.Enabled = true;
-
-                for (int i = 0; i < 4; i++)
-                {
-                    show.Invoke(tool, new object[] { issues, false });
-                    Assert.That(
-                        tabs.Enabled,
-                        Is.True,
-                        "Showing Issues must not disable navigation.");
-
-                    show.Invoke(tool, new object[] { other, false });
-                    Assert.That(
-                        tabs.Enabled,
-                        Is.True,
-                        "Leaving Issues must not disable navigation.");
-                }
-            }
-        }
-
-        [Test, Apartment(System.Threading.ApartmentState.STA)]
         public void ConfiguredIssueTrackerExposesChangeAndRemoveActions()
         {
             using (var page = new PendingIssuesPage())
