@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/25/2026 - 11:54:44 PM |
-| Coverage date: | 9/25/2026 - 11:54:12 PM - 9/25/2026 - 11:54:33 PM |
+| Generated on: | 9/26/2026 - 12:04:29 AM |
+| Coverage date: | 9/26/2026 - 12:04:02 AM - 9/26/2026 - 12:04:18 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
-| Classes: | 614 |
-| Files: | 681 |
-| **Line coverage:** | 26.2% (12632 of 48102) |
-| Covered lines: | 12632 |
-| Uncovered lines: | 35470 |
-| Coverable lines: | 48102 |
-| Total lines: | 134418 |
-| **Branch coverage:** | 21.2% (4906 of 23111) |
-| Covered branches: | 4906 |
-| Total branches: | 23111 |
+| Classes: | 615 |
+| Files: | 682 |
+| **Line coverage:** | 26.2% (12658 of 48157) |
+| Covered lines: | 12658 |
+| Uncovered lines: | 35499 |
+| Coverable lines: | 48157 |
+| Total lines: | 134544 |
+| **Branch coverage:** | 21.2% (4914 of 23129) |
+| Covered branches: | 4914 |
+| Total branches: | 23129 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -393,11 +393,11 @@
 |Ankh.VSVersion|0%|0%|
 
 </details>
-<details><summary>Ankh.UI - 31.2%</summary>
+<details><summary>Ankh.UI - 31.3%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**31.2%**|**18.1%**|
+|**Ankh.UI**|**31.3%**|**18.2%**|
 |Ankh.UI.AddRepositoryRootDialog|64.4%|18.7%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -430,8 +430,9 @@
 |Ankh.UI.IssueTracker.IssuesItem|0%|0%|
 |Ankh.UI.IssueTracker.IssuesView|0%|0%|
 |Ankh.UI.IssueTracker.IssuesViewItem|0%||
+|Ankh.UI.IssueTracker.IssueTrackerAvailabilityLogic|95.8%|90%|
 |Ankh.UI.IssueTracker.IssueTrackerConfigDialog|24.7%|3.8%|
-|Ankh.UI.IssueTracker.IssueTrackerSetupCommand|18.4%|19%|
+|Ankh.UI.IssueTracker.IssueTrackerSetupCommand|21%|17.5%|
 |Ankh.UI.MergeWizard.BaseWizardPage|0%|0%|
 |Ankh.UI.MergeWizard.Commands.Merge|28.5%|39.1%|
 |Ankh.UI.MergeWizard.Handler|0%|0%|
