@@ -16,6 +16,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Ankh.ExtensionPoints.IssueTracker;
+using Ankh.UI.IssueTracker;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -24,6 +25,7 @@ namespace Ankh.UI.PendingChanges
         public PendingIssuesPage()
         {
             InitializeComponent();
+            Disposed += PendingIssuesPage_Disposed;
         }
 
         protected override Type PageType
@@ -45,11 +47,16 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnLoad(e);
 
+            RefreshPageContents();
+
             if (IssueService != null)
-            {
-                RefreshPageContents();
-                IssueService.IssueRepositoryChanged += new EventHandler(issueService_IssueRepositoryChanged);
-            }
+                IssueService.IssueRepositoryChanged += issueService_IssueRepositoryChanged;
+        }
+
+        void PendingIssuesPage_Disposed(object sender, EventArgs e)
+        {
+            if (_issueService != null)
+                _issueService.IssueRepositoryChanged -= issueService_IssueRepositoryChanged;
         }
 
         public override void OnThemeChanged(EventArgs e)
@@ -69,9 +76,10 @@ namespace Ankh.UI.PendingChanges
         {
             Controls.Clear();
 
-            if (IssueService != null)
+            IAnkhIssueService service = IssueService;
+            if (service != null)
             {
-                IssueRepository repository = IssueService.CurrentIssueRepository;
+                IssueRepository repository = service.CurrentIssueRepository;
                 IWin32Window window = null;
 
                 if (repository != null
@@ -93,8 +101,40 @@ namespace Ankh.UI.PendingChanges
                         return;
                     }
                 }
+
+                int connectorCount = service.Connectors == null
+                    ? 0
+                    : service.Connectors.Count;
+                IssueRepositorySettings settings = service.CurrentIssueRepositorySettings;
+                bool hasConfiguredRepository =
+                    settings != null
+                    && !string.IsNullOrEmpty(settings.ConnectorName);
+
+                ShowEmptyState(IssueTrackerAvailabilityLogic.GetEmptyState(
+                    connectorCount,
+                    hasConfiguredRepository));
             }
+            else
+            {
+                ShowEmptyState(IssueTrackerEmptyState.NoConnectors);
+            }
+
             Controls.Add(pleaseConfigureLabel);
+        }
+
+        void ShowEmptyState(IssueTrackerEmptyState state)
+        {
+            string text = IssueTrackerAvailabilityLogic.GetMessage(state);
+            pleaseConfigureLabel.Text = text;
+
+            int linkStart = text.LastIndexOf(
+                IssueTrackerAvailabilityLogic.HelpLinkText,
+                StringComparison.Ordinal);
+            pleaseConfigureLabel.LinkArea = linkStart >= 0
+                ? new LinkArea(
+                    linkStart,
+                    IssueTrackerAvailabilityLogic.HelpLinkText.Length)
+                : new LinkArea(0, 0);
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -106,8 +146,9 @@ namespace Ankh.UI.PendingChanges
 
         private void pleaseConfigureLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            IAnkhHelpService help = Context.GetService<IAnkhHelpService>();
-            
+            IAnkhHelpService help =
+                Context == null ? null : Context.GetService<IAnkhHelpService>();
+
             if (help != null)
                 help.RunHelp(this);
         }

@@ -30,14 +30,22 @@ namespace Ankh.UI.IssueTracker
 
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            IAnkhIssueService service = null;
-            SvnItem item = null;
-            e.Enabled = true
-                && (item = GetRoot(e)) != null
-                && item.IsVersioned // ensure solution (project root) is versioned
-                && (service = e.GetService<IAnkhIssueService>())!= null
-                && service.Connectors != null
-                && service.Connectors.Count > 0;
+            SvnItem item = GetRoot(e);
+            IAnkhIssueService service = e.GetService<IAnkhIssueService>();
+            int connectorCount =
+                service == null || service.Connectors == null
+                    ? 0
+                    : service.Connectors.Count;
+
+            bool available = IssueTrackerAvailabilityLogic.CanConfigure(
+                item != null && item.IsVersioned,
+                connectorCount);
+
+            // The command is registered as defaultInvisible. Explicitly drive
+            // visibility as well as enablement so it appears when a connector
+            // is genuinely available and stays out of the menu otherwise.
+            e.Enabled = available;
+            e.Visible = available;
         }
 
         public void OnExecute(CommandEventArgs e)
