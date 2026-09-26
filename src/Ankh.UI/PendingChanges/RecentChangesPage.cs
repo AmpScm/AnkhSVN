@@ -12,489 +12,377 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
-using SharpSvn;
-using Ankh.Scc;
-using Ankh.UI.PendingChanges.Synchronize;
-using Ankh.UI.RepositoryExplorer;
 using Ankh.Commands;
 using Ankh.Configuration;
+using Ankh.Scc;
+using Ankh.UI.VSSelectionControls;
 
 namespace Ankh.UI.PendingChanges
 {
     partial class RecentChangesPage : PendingChangesPage
     {
-        AnkhAction _recentChangesAction;
+        static readonly int[] Intervals = { 1, 5, 10, 15, 30, 60, 120 };
+        readonly NumericUpDown _historyLimit;
+        readonly TextBox _details;
+        readonly System.Windows.Forms.Timer _refreshTimer;
         bool _solutionExists;
-        BusyOverlay _busyOverlay;
-        private double _initialRefreshInterval = TimeSpan.FromSeconds(5).TotalMilliseconds;
-        private double _refreshInterval;
-
-        /// <summary>
-        /// supported refresh intervals
-        /// </summary>
-        private static readonly int[] _intervals = new int[] {
-            1, // 1 min
-            5, // 5 mins
-            10, // 10 mins
-            15, // 15 mins
-            30, // 30 mins
-            60, // 1 hr
-            120, // 2 hrs
-        };
+        bool _updatingSettings;
+        bool _loading;
+        int _generation;
+        AnkhServiceEvents _events;
 
         public RecentChangesPage()
         {
             InitializeComponent();
-        }
+            label1.Text = "Commits:";
+            updateTime.Visible = true;
+            updateTime.Enabled = true;
+            updateTime.Dock = DockStyle.Fill;
+            // Keep repository-history order until the user explicitly sorts a
+            // column. WinForms clears ListViewItemSorter when Sorting is set to
+            // None, so preserve and restore SmartListView's comparer explicitly.
+            // This keeps insertion order by default while allowing later header
+            // clicks / Sort By commands to call Sort() through the smart comparer.
+            System.Collections.IComparer historySorter = syncView.ListViewItemSorter;
+            syncView.Sorting = SortOrder.None;
+            syncView.ListViewItemSorter = historySorter;
+            syncView.ShowItemToolTips = true;
+            syncView.AllowColumnReorder = true;
 
-        #region PendingChangePage overrides
+            // Match PendingCommitsView (Local File Changes) so this list uses
+            // the same Visual Studio semantic selection/hover colors instead
+            // of the native Explorer dark-theme highlight.
+            syncView.AllowDarkNativeTheme = false;
+            syncView.PreserveItemForeColorWhenSelected = true;
+            syncView.PreserveItemForeColorWhenHot = true;
+            syncView.FullRowSelect = true;
+            syncView.HideSelection = false;
+            SmartColumn revision = new SmartColumn(syncView, "Revision", 85, "Revision");
+            SmartColumn author = new SmartColumn(syncView, "Author", 120, "Author");
+            SmartColumn date = new SmartColumn(syncView, "Date", 155, "Date");
+            SmartColumn message = new SmartColumn(syncView, "Message", 400, "Message");
+            SmartColumn repository = new SmartColumn(syncView, "Repository", 250, "Repository");
+            SmartColumn changedPaths = new SmartColumn(syncView, "Changed Paths", 350, "ChangedPaths");
 
-        protected override Type PageType
-        {
-            get
+            revision.Hideable = false;
+            author.Groupable = true;
+            repository.Groupable = true;
+
+            revision.Sorter = new HistoryEntryComparer(HistorySortField.Revision);
+            date.Sorter = new HistoryEntryComparer(HistorySortField.Date);
+
+            syncView.Columns.AddRange(new ColumnHeader[]
             {
-                return typeof(RecentChangesPage);
-            }
+                revision,
+                author,
+                date,
+                message,
+                repository
+            });
+
+            // AllColumns drives the standard SmartListView header menu. Changed
+            // Paths is useful when requested but stays hidden by default because
+            // the detail pane already shows it.
+            syncView.AllColumns.Add(revision);
+            syncView.AllColumns.Add(author);
+            syncView.AllColumns.Add(date);
+            syncView.AllColumns.Add(message);
+            syncView.AllColumns.Add(repository);
+            syncView.AllColumns.Add(changedPaths);
+
+            syncView.ShowContextMenu += SyncView_ShowContextMenu;
+
+            var settings = new FlowLayoutPanel { Dock = DockStyle.Top, AutoSize = true, WrapContents = false };
+            settings.Controls.Add(new Label { Text = "Commits to show:", AutoSize = true, Margin = new Padding(3, 6, 3, 3) });
+            _historyLimit = new NumericUpDown { Minimum = 1, Maximum = 1000, Value = 25, Width = 75 };
+            settings.Controls.Add(_historyLimit);
+            Controls.Add(settings);
+            splitContainer1.BringToFront();
+            _historyLimit.ValueChanged += HistoryLimitChanged;
+
+            _details = new TextBox { Dock = DockStyle.Bottom, Height = 100, Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Both };
+            splitContainer1.Panel2.Controls.Add(_details);
+            syncView.BringToFront();
+            syncView.SelectedIndexChanged += delegate {
+                var entry = syncView.SelectedItems.Count == 0 ? null : syncView.SelectedItems[0].Tag as CommittedHistoryEntry;
+                _details.Text = entry == null ? "" : entry.Message + Environment.NewLine + Environment.NewLine + entry.ChangedPaths;
+            };
+            _refreshTimer = new System.Windows.Forms.Timer(components);
+            _refreshTimer.Tick += delegate { RefreshList(); };
+            checkBox1.CheckedChanged += OnRefreshIntervalModified;
+            refreshCombo.SelectedIndexChanged += OnRefreshIntervalModified;
         }
+
+        protected override Type PageType { get { return typeof(RecentChangesPage); } }
+        AnkhConfig Config { get { return ConfigurationService.Instance; } }
+        public override bool CanRefreshList { get { return _solutionExists && !_loading; } }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            syncView.Context = Context;
-            syncView.ColumnWidthChanged += new ColumnWidthChangedEventHandler(syncView_ColumnWidthChanged);
-            IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
-            syncView.SetColumnWidths(widths);
-
-            _recentChangesAction = new AnkhAction(DoRefresh);
-
-            // if solution is not open, don't auto-refresh
-            IAnkhCommandStates commandState = Context.GetService<IAnkhCommandStates>();
-            _solutionExists = (commandState != null && commandState.SolutionExists);
+            syncView.SetColumnWidths(ConfigurationService.GetColumnWidths(GetType()));
+            syncView.SetColumnVisibility(ConfigurationService.GetColumnVisibility(GetType()));
+            syncView.ColumnWidthChanged += delegate {
+                ConfigurationService.SaveColumnsWidths(GetType(), syncView.GetColumnWidths());
+            };
+            syncView.ColumnVisibilityChanged += delegate {
+                ConfigurationService.SaveColumnVisibility(GetType(), syncView.GetColumnVisibility());
+            };
+            _events = Context.GetService<AnkhServiceEvents>();
+            if (_events != null)
+            {
+                _events.SolutionOpened += OnSolutionOpened;
+                _events.SolutionClosed += OnSolutionClosed;
+            }
+            var states = Context.GetService<IAnkhCommandStates>();
+            _solutionExists = states != null && states.SolutionExists;
             RefreshIntervalConfigModified();
-            HookHandlers();
+            RefreshList();
         }
 
-        protected void syncView_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        void OnSolutionOpened(object sender, EventArgs e)
         {
-            IDictionary<string, int> widths = syncView.GetColumnWidths();
-            ConfigurationService.SaveColumnsWidths(GetType(), widths);
+            _generation++;
+            _loading = false;
+            _solutionExists = true;
+            syncView.Items.Clear();
+            ConfigureTimer();
+            RefreshList();
         }
 
-        /// <summary>
-        /// Populates Refresh checkbox and Refresh combo based on the settings
-        /// </summary>
-        private void ShowRecentChangeRefreshSettings()
+        void OnSolutionClosed(object sender, EventArgs e)
         {
-            checkBox1.CheckedChanged -= new EventHandler(OnRefreshIntervalModified);
-            refreshCombo.SelectedIndexChanged -= new EventHandler(OnRefreshIntervalModified);
-            // ensure current setting is read
-            if (ReadRecentChangesRefreshInterval())
+            _generation++;
+            _loading = false;
+            _solutionExists = false;
+            _refreshTimer.Stop();
+            syncView.Items.Clear();
+            _details.Clear();
+            updateTime.Text = "Open a versioned solution to view commits.";
+        }
+
+        internal void ReleaseHistoryResources()
+        {
+            _generation++;
+            if (_events != null)
             {
-                checkBox1.Checked = _refreshInterval > 0;
-                if (_refreshInterval > 0)
-                {
-                    int ri_min = (int)TimeSpan.FromMilliseconds(_refreshInterval).TotalMinutes;
-                    int index = 0;
-                    int new_min = _intervals[index];
-                    for (int i = 0; i < _intervals.Length; i++)
-                    {
-                        if (_intervals[i] <= ri_min)
-                        {
-                            new_min = _intervals[i];
-                            index = i;
-                        }
-                    }
-                    refreshCombo.SelectedIndex = index;
-
-                    // if the current settings is not one of the offical settings, set it to the closest official setting
-                    if (ri_min != new_min)
-                    {
-                        SaveRecentChangesRefreshInterval(Math.Max(new_min * 60, 0));
-                    }
-                }
+                _events.SolutionOpened -= OnSolutionOpened;
+                _events.SolutionClosed -= OnSolutionClosed;
+                _events = null;
             }
-            checkBox1.CheckedChanged += new EventHandler(OnRefreshIntervalModified);
-            refreshCombo.SelectedIndexChanged += new EventHandler(OnRefreshIntervalModified);
-        }
-
-        private void HookHandlers()
-        {
-            AnkhServiceEvents ev = Context.GetService<AnkhServiceEvents>();
-            if (ev != null)
-            {
-                ev.SolutionClosed += new EventHandler(OnSolutionClosed);
-                ev.SolutionOpened += new EventHandler(OnSolutionOpened);
-            }
-        }
-
-        public override bool CanRefreshList
-        {
-            get { return true; }
         }
 
         public override void RefreshList()
         {
+            if (!_solutionExists || _loading || IsDisposed || !IsHandleCreated)
+                return;
+            var layout = Context.GetService<ISvnSolutionLayout>();
+            var roots = new List<string>(SvnItem.GetPaths(layout.GetUpdateRoots(null)));
+            if (roots.Count == 0)
+            {
+                syncView.Items.Clear();
+                _details.Clear();
+                updateTime.Text = "No versioned paths in this solution.";
+                return;
+            }
+            var pool = Context.GetService<ISvnClientPool>();
+            pool.EnsureClient();
+            int generation = _generation;
+            int limit = Config.RecentChangesHistoryLimit;
+            _loading = true;
+            _refreshTimer.Stop();
+            updateTime.Text = "Loading committed history...";
+            ThreadPool.QueueUserWorkItem(delegate {
+                List<CommittedHistoryEntry> entries = null;
+                Exception error = null;
+                try
+                {
+                    using (var client = pool.GetClient())
+                        entries = CommittedHistory.Fetch(client, roots, limit);
+                }
+                catch (Exception ex) { error = ex; }
+                try
+                {
+                    if (!IsDisposed && IsHandleCreated)
+                        BeginInvoke(new Action(delegate {
+                            if (IsDisposed || generation != _generation) return;
+                            _loading = false;
+                            if (error == null)
+                            {
+                                ShowEntries(entries);
+                                updateTime.Text = entries.Count == 0 ? "No commits found." : "Updated " + DateTime.Now.ToShortTimeString();
+                            }
+                            else
+                            {
+                                // Keep already displayed commits if an offline refresh fails.
+                                updateTime.Text = "Unable to load history; refresh to retry.";
+                                _details.Text = error.Message;
+                            }
+                            ConfigureTimer();
+                        }));
+                }
+                catch (InvalidOperationException) { } // Window closed while the request completed.
+            });
+        }
+
+        void ShowEntries(IEnumerable<CommittedHistoryEntry> entries)
+        {
+            syncView.BeginUpdate();
             try
             {
-                DoRefresh(true);
+                syncView.Items.Clear();
+                _details.Clear();
+                foreach (var entry in entries)
+                {
+                    var item = new SmartListViewItem(syncView)
+                    {
+                        Tag = entry,
+                        ToolTipText = entry.Message,
+                        // SmartListView preserves item-level foreground colors for
+                        // hover/selection. Explicitly inherit the semantic list
+                        // foreground so a newly-created history row never falls
+                        // back to SystemColors.WindowText (black in dark themes).
+                        ForeColor = syncView.ForeColor
+                    };
+                    item.SetValues(
+                        "r" + entry.Revision,
+                        entry.Author,
+                        entry.Time.ToLocalTime().ToString("g"),
+                        entry.Message.Replace("\r", " ").Replace("\n", " "),
+                        entry.Repository,
+                        entry.ChangedPaths.Replace("\r", " ").Replace("\n", "; "));
+                    syncView.Items.Add(item);
+                }
             }
-            catch (Exception ex)
+            finally { syncView.EndUpdate(); }
+        }
+
+        void SyncView_ShowContextMenu(object sender, MouseEventArgs e)
+        {
+            if (Context == null || e.Location == new Point(-1, -1))
+                return;
+
+            Point screenPoint = e.Location;
+            if (syncView.PointToClient(screenPoint).Y >= syncView.HeaderHeight)
+                return;
+
+            IAnkhCommandService commands = Context.GetService<IAnkhCommandService>();
+            if (commands != null)
+                commands.ShowContextMenu(AnkhCommandMenu.ListViewHeader, screenPoint);
+        }
+
+        enum HistorySortField
+        {
+            Revision,
+            Date
+        }
+
+        sealed class HistoryEntryComparer : IComparer<ListViewItem>
+        {
+            readonly HistorySortField _field;
+
+            public HistoryEntryComparer(HistorySortField field)
             {
-                IAnkhErrorHandler eh = Context.GetService<IAnkhErrorHandler>();
-                if (eh != null && eh.IsEnabled(ex))
-                    eh.OnError(ex);
-                else
-                    throw;
+                _field = field;
+            }
+
+            public int Compare(ListViewItem x, ListViewItem y)
+            {
+                CommittedHistoryEntry left = x == null ? null : x.Tag as CommittedHistoryEntry;
+                CommittedHistoryEntry right = y == null ? null : y.Tag as CommittedHistoryEntry;
+
+                if (ReferenceEquals(left, right))
+                    return 0;
+                if (left == null)
+                    return -1;
+                if (right == null)
+                    return 1;
+
+                switch (_field)
+                {
+                    case HistorySortField.Revision:
+                        return left.Revision.CompareTo(right.Revision);
+
+                    case HistorySortField.Date:
+                        return left.Time.CompareTo(right.Time);
+
+                    default:
+                        return 0;
+                }
             }
         }
 
-        #endregion
+        void HistoryLimitChanged(object sender, EventArgs e)
+        {
+            if (_updatingSettings || Context == null) return;
+            var config = Config;
+            config.RecentChangesHistoryLimit = (int)_historyLimit.Value;
+            ConfigurationService.SaveConfig(config);
+            _generation++;
+            _loading = false;
+            RefreshList();
+        }
+
+        internal void RefreshIntervalConfigModified()
+        {
+            _updatingSettings = true;
+            try
+            {
+                _historyLimit.Value = Config.RecentChangesHistoryLimit;
+                checkBox1.Checked = Config.RecentChangesRefreshInterval > 0;
+                int minutes = Config.RecentChangesRefreshInterval / 60;
+                int index = Array.FindLastIndex(Intervals, value => value <= minutes);
+                refreshCombo.SelectedIndex = Math.Max(0, index);
+                refreshCombo.Enabled = checkBox1.Checked;
+            }
+            finally { _updatingSettings = false; }
+            ConfigureTimer();
+        }
+
+        void OnRefreshIntervalModified(object sender, EventArgs e)
+        {
+            if (_updatingSettings || Context == null || refreshCombo.SelectedIndex < 0) return;
+            var config = Config;
+            config.RecentChangesRefreshInterval = checkBox1.Checked ? Intervals[refreshCombo.SelectedIndex] * 60 : 0;
+            ConfigurationService.SaveConfig(config);
+            refreshCombo.Enabled = checkBox1.Checked;
+            ConfigureTimer();
+        }
+
+        void ConfigureTimer()
+        {
+            _refreshTimer.Stop();
+            int seconds = Config.RecentChangesRefreshInterval;
+            if (_solutionExists && !_loading && seconds > 0)
+            {
+                _refreshTimer.Interval = (int)Math.Min(int.MaxValue, (long)seconds * 1000);
+                _refreshTimer.Start();
+            }
+        }
 
         public override void OnThemeChanged(EventArgs e)
         {
             base.OnThemeChanged(e);
-
             if (VSVersion.VS2012OrLater)
             {
                 syncView.BorderStyle = BorderStyle.None;
                 borderPanel.BorderStyle = BorderStyle.None;
             }
-        }
 
-        void DoRefresh()
-        {
-            DoRefresh(false);
-        }
+            // History items are created after the page is initially themed.
+            // Keep their explicit item foreground synchronized when Visual
+            // Studio changes themes so hover, active selection, and inactive
+            // selection all use the same semantic foreground as the list.
+            foreach (ListViewItem item in syncView.Items)
+                item.ForeColor = syncView.ForeColor;
 
-        void DoRefresh(bool showProgressDialog)
-        {
-            ISvnSolutionLayout pls = Context.GetService<ISvnSolutionLayout>();
-            List<SvnStatusEventArgs> resultList = new List<SvnStatusEventArgs>();
-            List<string> roots = new List<string>(SvnItem.GetPaths(pls.GetUpdateRoots(null)));
-            Dictionary<string, string> found = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            bool refreshFromList = false;
-            try
-            {
-                if (showProgressDialog)
-                {
-                    IProgressRunner pr = Context.GetService<IProgressRunner>();
-                    if (pr.RunModal(PCResources.RetrievingRemoteStatus,
-                        delegate(object sender, ProgressWorkerArgs e)
-                        {
-                            SvnStatusArgs sa = new SvnStatusArgs();
-                            sa.RetrieveRemoteStatus = true;
-                            DoFetchRecentChanges(e.Client, sa, roots, resultList, found);
-                        }).Succeeded)
-                    {
-                        refreshFromList = true;
-                    }
-                }
-                else
-                {
-                    ShowBusyIndicator();
-                    using (SvnClient client = Context.GetService<ISvnClientPool>().GetClient())
-                    {
-                        SvnStatusArgs sa = new SvnStatusArgs();
-                        sa.RetrieveRemoteStatus = true;
-                        // don't throw error
-                        // list is cleared in case of an error
-                        // show a label in the list view???
-                        sa.ThrowOnError = false;
-                        DoFetchRecentChanges(client, sa, roots, resultList, found);
-                        refreshFromList = true;
-                    }
-                }
-            }
-            finally
-            {
-                if (refreshFromList)
-                {
-                    OnRecentChangesFetched(resultList);
-                }
-                if (!showProgressDialog)
-                {
-                    HideBusyIndicator();
-                }
-            }
-        }
-
-        private void DoFetchRecentChanges(SvnClient client,
-            SvnStatusArgs sa,
-            List<string> roots,
-            List<SvnStatusEventArgs> resultList,
-            Dictionary<string, string> found)
-        {
-            foreach (string path in roots)
-            {
-                if (IsWorkingCopy(client, path) || !IgnoreStatus(SvnStatus.NotVersioned, SvnStatus.None))
-                {
-                    // TODO: Find some way to get this information safely in the status cache
-                    // (Might not be possible because of delays in network check)
-                    client.Status(path, sa,
-                        delegate(object s, SvnStatusEventArgs stat)
-                        {
-                            if (IgnoreStatus(stat))
-                                return; // Not a synchronization item
-                            else if (found.ContainsKey(stat.FullPath))
-                                return; // Already reported
-
-                            stat.Detach();
-                            resultList.Add(stat);
-                            found.Add(stat.FullPath, "");
-                        });
-                }
-            }
-        }
-
-        private bool IsWorkingCopy(SvnClient client, string aRoot)
-        {
-            Guid repoId;
-            return client.TryGetRepositoryId(aRoot, out repoId) && repoId != Guid.Empty;
-        }
-
-        void ShowBusyIndicator()
-        {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new AnkhAction(ShowBusyIndicator));
-                return;
-            }
-
-            if (_busyOverlay == null)
-                _busyOverlay = new BusyOverlay(syncView, AnchorStyles.Bottom | AnchorStyles.Right);
-            _busyOverlay.Show();
-        }
-
-        void HideBusyIndicator()
-        {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new AnkhAction(HideBusyIndicator));
-                return;
-            }
-
-            if (_busyOverlay != null)
-                _busyOverlay.Hide();
-        }
-
-        static bool IgnoreStatus(SvnStatusEventArgs stat)
-        {
-            return IgnoreStatus(stat.LocalContentStatus, stat.RemoteContentStatus);
-        }
-
-        static bool IgnoreStatus(SvnStatus localContentStatus, SvnStatus remoteContentStatus)
-        {
-            switch (localContentStatus)
-            {
-                case SvnStatus.NotVersioned:
-                case SvnStatus.Ignored:
-                case SvnStatus.External: // External root will be handled inside
-                    return (remoteContentStatus == SvnStatus.None);
-                case SvnStatus.None:
-                    // Hide remote locked files
-                    return (remoteContentStatus == SvnStatus.None);
-                default:
-                    return false;
-            }
-        }
-
-        private void RefreshFromList(List<SvnStatusEventArgs> resultList)
-        {
-            syncView.Items.Clear();
-            if (resultList != null && resultList.Count > 0)
-            {
-                ISvnStatusCache fs = Context.GetService<ISvnStatusCache>();
-                List<SynchronizeListItem> items = new List<SynchronizeListItem>(resultList.Count);
-                foreach (SvnStatusEventArgs s in resultList)
-                {
-                    SvnItem item = fs[s.FullPath];
-
-                    if (item == null)
-                        return;
-
-                    items.Add(new SynchronizeListItem(syncView, item, s));
-                }
-
-                syncView.Items.AddRange(items.ToArray());
-            }
-            updateTime.Text = string.Format(PCResources.RefreshTimeX, DateTime.Now.ToShortTimeString());
-        }
-
-        /// <summary>
-        /// Re-reads the refresh interval setting,
-        /// Schedules a refresh if a sol is open and new setting is greater than 0,
-        /// Unschedules otherwise.
-        /// </summary>
-        void ResetRefreshSchedule()
-        {
-            ReadRecentChangesRefreshInterval();
-            double nextRefreshInterval = 0;
-            if (_solutionExists // if a solution is not open, don't auto-refresh
-                && _refreshInterval > 0
-                )
-            {
-                nextRefreshInterval = _scheduledActionId > 0
-                    ? _refreshInterval // cancel the scheduled refresh and reschedule
-                    : _initialRefreshInterval; // refresh is enabled, schedule initial refresh
-            }
-            ScheduleRefresh(nextRefreshInterval);
-        }
-
-        int _scheduledActionId;
-
-        /// <summary>
-        /// Reschedules the refresh if auto-refresh is enabled (i.e. the given <paramref name="interval"/> is greater than 0).
-        /// </summary>
-        void ScheduleRefresh(double interval)
-        {
-            if (_scheduledActionId > 0)
-            {
-                Scheduler.RemoveTask(_scheduledActionId);
-                _scheduledActionId = -1;
-            }
-            if (interval > 0)
-            {
-                _scheduledActionId = Scheduler.Schedule(TimeSpan.FromMilliseconds(interval), new AnkhAction(DoDoRefresh));
-            }
-        }
-
-        /// <summary>
-        /// Asynch refresh action execution
-        /// </summary>
-        void DoDoRefresh()
-        {
-            _recentChangesAction.BeginInvoke(null, null);
-        }
-
-        void OnRecentChangesFetched(List<SvnStatusEventArgs> resultList)
-        {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new Action<List<SvnStatusEventArgs>>(OnRecentChangesFetched), resultList);
-                return;
-            }
-
-            try
-            {
-                RefreshFromList(resultList);
-            }
-            finally
-            {
-                // schedule the next refresh
-                ScheduleRefresh(_refreshInterval);
-            }
-        }
-
-        /// <summary>
-        /// Update the <c>_solutionExists</c> flag,
-        /// Schedule a refresh if there is a global setting
-        /// </summary>
-        void OnSolutionOpened(object sender, EventArgs e)
-        {
-            _solutionExists = true;
-            ResetRefreshSchedule();
-        }
-
-        /// <summary>
-        /// Update the <c>_solutionExists</c> flag,
-        /// Unschedule refresh if it is scheduled
-        /// </summary>
-        void OnSolutionClosed(object sender, EventArgs e)
-        {
-            _solutionExists = false;
-
-            // clear the list
-            RefreshFromList(null);
-            ResetRefreshSchedule();
-        }
-
-        /// <summary>
-        /// Handles Refresh checkbox "checked" and Refresh combo "selection" events
-        /// </summary>
-        void OnRefreshIntervalModified(object sender, EventArgs e)
-        {
-            bool enabled = checkBox1.Checked;
-            int selectedIndex = refreshCombo.SelectedIndex;
-            enabled &= selectedIndex > -1;
-            bool resetSchedule = false;
-            if (enabled)
-            {
-                int selected = 60 * ((selectedIndex >= 0 && selectedIndex < _intervals.Length) ? _intervals[selectedIndex] : _intervals[_intervals.Length - 1]);
-                if ((selected * 1000) != _refreshInterval)
-                {
-                    SaveRecentChangesRefreshInterval(selected);
-                    resetSchedule = true;
-                }
-            }
-            else
-            {
-                if (_refreshInterval > 0)
-                {
-                    SaveRecentChangesRefreshInterval(0);
-                    resetSchedule = true;
-                }
-            }
-            if (resetSchedule)
-            {
-                ResetRefreshSchedule();
-            }
-        }
-
-        /// <summary>
-        /// Updates the Refresh interval UI with the current configuration and
-        /// resets the schedule
-        /// </summary>
-        internal void RefreshIntervalConfigModified()
-        {
-            ShowRecentChangeRefreshSettings();
-            ResetRefreshSchedule();
-        }
-
-        /// <summary>
-        /// Reads configuration setting into <code>_refreshInterval</code> member
-        /// </summary>
-        /// <returns>true if config is changed, false otherwise</returns>
-        bool ReadRecentChangesRefreshInterval()
-        {
-            double newInterval = Config.RecentChangesRefreshInterval * 1000.0;
-            newInterval = Math.Max(0, newInterval);
-            if (newInterval != _refreshInterval)
-            {
-                _refreshInterval = newInterval;
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// saves the new setting into configuration
-        /// </summary>
-        /// <param name="seconds">new refresh interval in seconds</param>
-        private void SaveRecentChangesRefreshInterval(int seconds)
-        {
-            AnkhConfig cfg = Config;
-            cfg.RecentChangesRefreshInterval = seconds;
-            ConfigSvc.SaveConfig(cfg);
-        }
-
-        private IAnkhScheduler _scheduler;
-        IAnkhScheduler Scheduler
-        {
-            get { return _scheduler ?? (_scheduler = Context.GetService<IAnkhScheduler>()); }
-        }
-
-        private IAnkhConfigurationService _configSvc;
-        IAnkhConfigurationService ConfigSvc
-        {
-            get { return _configSvc ?? (_configSvc = Context.GetService<IAnkhConfigurationService>()); }
-        }
-
-        Ankh.Configuration.AnkhConfig Config
-        {
-            get { return ConfigSvc.Instance; }
+            syncView.Invalidate();
         }
     }
 }

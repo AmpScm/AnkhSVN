@@ -47,6 +47,7 @@ namespace Ankh.UI.VSSelectionControls
         {
             View = View.Details;
             FullRowSelect = true;
+            HideSelection = false;
             this.ListViewItemSorter = new SmartListSorter(this);
             _groups = new SortedList<SmartGroup, ListViewGroup>(new SmartGroupSorter(this));
             Sorting = SortOrder.Ascending;
@@ -532,7 +533,7 @@ namespace Ankh.UI.VSSelectionControls
 
         bool _isThemed;
         bool _useDarkNativeTheme;
-        bool _allowDarkNativeTheme = true;
+        bool _allowDarkNativeTheme;
         bool _ownerDrawPaletteHeader;
         Color _headerBackColor;
         Color _headerForeColor;
@@ -541,10 +542,10 @@ namespace Ankh.UI.VSSelectionControls
         Color _selectionForeColor;
         Color _hoverBackColor;
         bool _usePaletteSelectionColors;
-        bool _preserveItemForeColorWhenSelected;
-        bool _preserveItemForeColorWhenHot;
+        bool _preserveItemForeColorWhenSelected = true;
+        bool _preserveItemForeColorWhenHot = true;
 
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool PreserveItemForeColorWhenHot
         {
             get { return _preserveItemForeColorWhenHot; }
@@ -558,7 +559,7 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool PreserveItemForeColorWhenSelected
         {
             get { return _preserveItemForeColorWhenSelected; }
@@ -572,7 +573,7 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool AllowDarkNativeTheme
         {
             get { return _allowDarkNativeTheme; }
@@ -1310,6 +1311,75 @@ namespace Ankh.UI.VSSelectionControls
             }
 
             return widths;
+        }
+
+        public event EventHandler ColumnVisibilityChanged;
+
+        public IDictionary<string, int> GetColumnVisibility()
+        {
+            var visibility = new Dictionary<string, int>();
+            foreach (SmartColumn column in AllColumns)
+            {
+                if (!string.IsNullOrEmpty(column.Name))
+                    visibility[column.Name] = Columns.Contains(column) ? 1 : 0;
+            }
+            return visibility;
+        }
+
+        public void SetColumnVisibility(IDictionary<string, int> visibility)
+        {
+            if (visibility == null)
+                return;
+
+            foreach (SmartColumn column in AllColumns)
+            {
+                int visible;
+                if (!string.IsNullOrEmpty(column.Name)
+                    && visibility.TryGetValue(column.Name, out visible)
+                    && (visible == 0 || visible == 1))
+                {
+                    SetColumnVisible(column, visible == 1);
+                }
+            }
+        }
+
+        public void SetColumnVisible(SmartColumn column, bool visible)
+        {
+            if (column == null || !AllColumns.Contains(column))
+                throw new ArgumentException("Column must belong to this list", "column");
+
+            int index = column.Index;
+            if (visible == Columns.Contains(column) || (!visible && (!column.Hideable || index == 0)))
+                return;
+
+            if (visible)
+            {
+                Columns.Add(column);
+                if (!VirtualMode)
+                {
+                    foreach (ListViewItem item in Items)
+                    {
+                        SmartListViewItem smartItem = item as SmartListViewItem;
+                        if (smartItem != null)
+                            smartItem.SetValue(column.AllColumnsIndex, smartItem.GetValue(column.AllColumnsIndex));
+                    }
+                }
+            }
+            else
+            {
+                Columns.Remove(column);
+                if (!VirtualMode)
+                {
+                    foreach (ListViewItem item in Items)
+                    {
+                        if (item.SubItems.Count > index)
+                            item.SubItems.RemoveAt(index);
+                    }
+                }
+            }
+
+            if (ColumnVisibilityChanged != null)
+                ColumnVisibilityChanged(this, EventArgs.Empty);
         }
 
         public void SetColumnWidths(IDictionary<string, int> widths)

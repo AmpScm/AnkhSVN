@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualStudio;
 
@@ -25,6 +26,7 @@ using Ankh.Commands;
 using Ankh.Configuration;
 using Ankh.Scc;
 using Ankh.UI.PendingChanges.Commits;
+using Ankh.UI.IssueTracker;
 using Ankh.VS;
 using Ankh.Collections;
 
@@ -128,9 +130,11 @@ namespace Ankh.UI.PendingChanges
                 pendingCommits.Context = Context;
                 pendingCommits.OpenPendingChangeOnDoubleClick = true;
                 pendingCommits.HookCommands();
-                pendingCommits.ColumnWidthChanged += new ColumnWidthChangedEventHandler(PendingCommits_ColumnWidthChanged);
                 IDictionary<string, int> widths = ConfigurationService.GetColumnWidths(GetType());
                 pendingCommits.SetColumnWidths(widths);
+                pendingCommits.SetColumnVisibility(ConfigurationService.GetColumnVisibility(GetType()));
+                pendingCommits.ColumnWidthChanged += new ColumnWidthChangedEventHandler(PendingCommits_ColumnWidthChanged);
+                pendingCommits.ColumnVisibilityChanged += PendingCommits_ColumnVisibilityChanged;
 
             logMessageEditor.PendingChangeUI = this.pendingCommits;
 
@@ -162,6 +166,11 @@ namespace Ankh.UI.PendingChanges
         {
             IDictionary<string, int> widths = pendingCommits.GetColumnWidths();
             ConfigurationService.SaveColumnsWidths(GetType(), widths);
+        }
+
+        void PendingCommits_ColumnVisibilityChanged(object sender, EventArgs e)
+        {
+            ConfigurationService.SaveColumnVisibility(GetType(), pendingCommits.GetColumnVisibility());
         }
 
         IPendingChangesManager _manager;
@@ -214,30 +223,47 @@ namespace Ankh.UI.PendingChanges
 
         void OnSolutionRefresh(object sender, EventArgs e)
         {
+            RefreshIssueSettings();
+        }
+
+        internal void RefreshIssueSettings()
+        {
             bool showIssueBox = false;
+            string label = PCResources.IssueLabelText;
+            bool numeric = true;
 
             if (Context != null)
             {
-                IProjectCommitSettings pcs = Context.GetService<IProjectCommitSettings>();
+                IProjectCommitSettings pcs =
+                    Context.GetService<IProjectCommitSettings>();
 
                 if (pcs != null)
                 {
                     showIssueBox = pcs.ShowIssueBox;
+                    label = pcs.IssueLabel ?? PCResources.IssueLabelText;
+                    numeric = pcs.NummericIssueIds;
+                }
 
-                    if (showIssueBox)
-                    {
-                        issueLabel.Text = pcs.IssueLabel ?? PCResources.IssueLabelText;
-                    }
+                IAnkhIssueService issues =
+                    Context.GetService<IAnkhIssueService>();
+                IIssueRepositoryCommitUi repositoryUi =
+                    issues == null
+                        ? null
+                        : issues.CurrentIssueRepository as IIssueRepositoryCommitUi;
 
-                    _issueNummeric = pcs.NummericIssueIds;
+                if (repositoryUi != null)
+                {
+                    showIssueBox = repositoryUi.ShowIssueBox;
+                    label = repositoryUi.IssueLabel ?? label;
+                    numeric = repositoryUi.NumericIssueIds;
                 }
             }
 
-            if (showIssueBox != issueNumberBox.Visible)
-            {
-                issueNumberBox.Enabled = issueNumberBox.Visible =
-                    issueLabel.Enabled = issueLabel.Visible = showIssueBox;
-            }
+            issueLabel.Text = label;
+            _issueNummeric = numeric;
+
+            issueNumberBox.Enabled = issueNumberBox.Visible =
+                issueLabel.Enabled = issueLabel.Visible = showIssueBox;
         }
 
         protected IPendingChangesManager Manager
@@ -382,7 +408,7 @@ namespace Ankh.UI.PendingChanges
                 && UI.HasCheckedItems;
         }
 
-        internal async void GenerateCommitMessage()
+        internal async Task GenerateCommitMessageAsync()
         {
             if (!CanGenerateCommitMessage())
                 return;

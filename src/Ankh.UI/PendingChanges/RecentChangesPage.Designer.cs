@@ -27,6 +27,7 @@ namespace Ankh.UI.PendingChanges
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
+            if (disposing) ReleaseHistoryResources();
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -44,7 +45,7 @@ namespace Ankh.UI.PendingChanges
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RecentChangesPage));
-            this.syncView = new Ankh.UI.PendingChanges.Synchronize.SynchronizeListView();
+            this.syncView = new Ankh.UI.VSSelectionControls.SmartListView();
             this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.updateTime = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -64,7 +65,7 @@ namespace Ankh.UI.PendingChanges
             // 
             // syncView
             // 
-            this.syncView.Context = null;
+
             resources.ApplyResources(this.syncView, "syncView");
             this.syncView.Name = "syncView";
             // 
@@ -157,7 +158,7 @@ namespace Ankh.UI.PendingChanges
 
         #endregion
 
-        private Ankh.UI.PendingChanges.Synchronize.SynchronizeListView syncView;
+        private Ankh.UI.VSSelectionControls.SmartListView syncView;
         private System.Windows.Forms.TableLayoutPanel topLayoutPanel;
 		private System.Windows.Forms.Label label1;
         private Ankh.UI.VSSelectionControls.SmartSplitContainer splitContainer1;

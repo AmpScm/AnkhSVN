@@ -124,7 +124,7 @@ namespace AnkhSvn_UnitTestProject.Components
         }
 
         [Test]
-        public async Task ConfigureCommitMessageRequestSetsGuidanceAndNonInteractiveIntent()
+        public async Task ConfigureCommitMessageRequestSetsGuidanceAndNonInteractiveIntentAsync()
         {
             var request = new FakeRequest { Intent = FakeIntent.Auto };
 

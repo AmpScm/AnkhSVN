@@ -65,6 +65,18 @@ Changelists:
 - are not shared with other developers,
 - do not allow two unrelated changes to the same file to be separated automatically.
 
+## Issue references
+
+AnkhSVN can integrate issue IDs into the commit workflow.
+
+With **Local SVN Issues**, the Pending Changes window shows an **Issue** field. Entering a local issue number adds `Issue #<id>` to the commit message.
+
+With **Generic Bugtraq**, AnkhSVN uses the standard Subversion `bugtraq:*` properties. Depending on the configured properties, the commit UI can show an issue field, validate numeric IDs, remind you when no issue is entered, and build the configured issue reference into the log message.
+
+Issue references become ordinary repository log-message text. They do not automatically change an issue's status unless a connector explicitly implements that behavior.
+
+See [Issue Tracking Integration](../issues/) for setup, Local SVN Issues, Generic Bugtraq, changing/removing trackers, and external connectors.
+
 ## Before committing a merge
 
 A merge changes your working copy first. Before committing a merge:

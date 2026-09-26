@@ -133,10 +133,10 @@
     <value>0</value>
   </data>
   <data name="pleaseConfigureLabel.Text" xml:space="preserve">
-    <value>This solution is not associated with an Issue Repository.
+    <value>No issue tracker connector is installed.
 
-Configure an association on the Solution node in the Solution explorer
-or click here for more information.</value>
+The Issues tab requires a separate connector extension.
+Click here for more information.</value>
   </data>
   <data name="pleaseConfigureLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleCenter</value>

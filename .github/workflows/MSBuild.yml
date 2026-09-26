@@ -33,7 +33,7 @@ jobs:
       uses: microsoft/setup-msbuild@v3
 
     - name: Cache portable Subversion
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ${{ runner.temp }}\sliksvn-${{ env.SLIKSVN_VERSION }}
         key: sliksvn-v2-${{ runner.os }}-x64-${{ env.SLIKSVN_VERSION }}-${{ env.SLIKSVN_SHA256 }}
@@ -235,6 +235,8 @@ jobs:
         --results-directory "${{ github.workspace }}\TestResults\Ankh.VS.UnitTest"
         --logger "trx;LogFileName=Ankh.VS.UnitTest.trx"
         --logger "console;verbosity=normal"
+        --blame-hang
+        --blame-hang-timeout 45s
         -- RunConfiguration.TargetPlatform=x64 RunConfiguration.TreatNoTestsAsError=true
 
     - name: Verify 100% test pass rate

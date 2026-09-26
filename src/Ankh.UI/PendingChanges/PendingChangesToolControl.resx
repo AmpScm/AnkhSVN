@@ -159,7 +159,7 @@
     <value>30, 4</value>
   </data>
   <data name="conflictsButton.Text" xml:space="preserve">
-    <value>Conflicts and Merges</value>
+    <value>Conflicts</value>
   </data>
   <data name="pendingChangesTabs.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>

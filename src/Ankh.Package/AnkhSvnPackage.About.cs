@@ -29,7 +29,11 @@ namespace Ankh.VSPackage
 {
     // This attribute is used to register the informations needed to show the this package
     // in the Help/About dialog of Visual Studio.
+    // Keep the legacy interface-backed registration so About can continue to
+    // report the live AnkhSVN/SharpSvn version details implemented below.
+#pragma warning disable CS0618
     [InstalledProductRegistration(true, null, null, null)]
+#pragma warning restore CS0618
     public partial class AnkhSvnPackage : IVsInstalledProduct
     {
         Version _packageVersion;

@@ -153,15 +153,62 @@ namespace Ankh.UI.PendingChanges
 
         void OnSccProviderDeactivated(object sender, EventArgs e)
         {
-            _activatePage.ShowMessage = true;
-            ShowPanel(_activatePage, false);
-            pendingChangesTabs.Enabled = false;
+            // Visual Studio can briefly raise provider deactivation while other
+            // source-control state is being refreshed. Disabling the whole
+            // navigation strip synchronously can strand Pending Changes on the
+            // current page until the tool window is recreated.
+            //
+            // Defer one UI turn so command state has settled, then trust the
+            // actual SccProviderActive value instead of the transient event.
+            if (IsHandleCreated && !IsDisposed && !Disposing)
+            {
+                BeginInvoke((MethodInvoker)delegate
+                {
+                    ApplySccProviderState(false);
+                });
+            }
+            else
+            {
+                ApplySccProviderState(false);
+            }
         }
 
         void OnSccProviderActivated(object sender, EventArgs e)
         {
-            ShowPanel(_lastPage, false);
-            pendingChangesTabs.Enabled = true;
+            ApplySccProviderState(true);
+        }
+
+        void ApplySccProviderState(bool eventSaysActive)
+        {
+            bool active = eventSaysActive;
+
+            if (Context != null)
+            {
+                IAnkhCommandStates states =
+                    Context.GetService<IAnkhCommandStates>();
+
+                if (states != null && states.UIShellAvailable)
+                    active = states.SccProviderActive;
+            }
+
+            ApplyNavigationProviderState(active);
+        }
+
+        internal void ApplyNavigationProviderState(bool active)
+        {
+            if (active)
+            {
+                pendingChangesTabs.Enabled = true;
+
+                if (_currentPage == _activatePage && _lastPage != null)
+                    ShowPanel(_lastPage, false);
+            }
+            else
+            {
+                _activatePage.ShowMessage = true;
+                ShowPanel(_activatePage, false);
+                pendingChangesTabs.Enabled = false;
+            }
         }
 
         protected override void OnFrameCreated(EventArgs e)
@@ -177,8 +224,17 @@ namespace Ankh.UI.PendingChanges
         {
             if (page == null)
                 throw new ArgumentNullException("page");
-            else if (page == _currentPage)
+
+            if (page == _currentPage)
+            {
+                page.Enabled = page.Visible = true;
+                page.BringToFront();
+                UpdateNavigationChecks();
+
+                if (select)
+                    page.Select();
                 return;
+            }
 
             bool foundPage = false;
             foreach (PendingChangesPage p in contentPanel.Controls)
@@ -206,10 +262,8 @@ namespace Ankh.UI.PendingChanges
             if (page != _activatePage)
                 _lastPage = page;
 
-            fileChangesButton.Checked = (_lastPage == _commitsPage);
-            issuesButton.Checked = (_lastPage == _issuesPage);
-            recentChangesButton.Checked = (_lastPage == _changesPage);
-            conflictsButton.Checked = (_lastPage == _conflictsPage);
+            page.BringToFront();
+            UpdateNavigationChecks();
 
             if (select)
                 page.Select();
@@ -223,6 +277,14 @@ namespace Ankh.UI.PendingChanges
 
                 UpdateCaption();
             }
+        }
+
+        void UpdateNavigationChecks()
+        {
+            fileChangesButton.Checked = (_lastPage == _commitsPage);
+            issuesButton.Checked = (_lastPage == _issuesPage);
+            recentChangesButton.Checked = (_lastPage == _changesPage);
+            conflictsButton.Checked = (_lastPage == _conflictsPage);
         }
 
         private void ThemePage(PendingChangesPage page)

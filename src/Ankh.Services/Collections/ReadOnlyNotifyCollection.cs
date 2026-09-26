@@ -97,19 +97,37 @@ namespace Ankh
         public event EventHandler<CollectionChangedEventArgs<T>> CollectionChanged
         {
             add { _collectionChanged += value; HookChanges(); }
-            remove { _collectionChanged -= value; UnhookChanges(); }
+            remove
+            {
+                EventHandler<CollectionChangedEventArgs<T>> previous = _collectionChanged;
+                _collectionChanged -= value;
+                if (!ReferenceEquals(previous, _collectionChanged))
+                    UnhookChanges();
+            }
         }
 
         event EventHandler<CollectionChangedEventArgs> INotifyCollection.CollectionChanged
         {
             add { _collectionChangedUntyped += value; HookChanges(); }
-            remove { _collectionChangedUntyped -= value; UnhookChanges(); }
+            remove
+            {
+                EventHandler<CollectionChangedEventArgs> previous = _collectionChangedUntyped;
+                _collectionChangedUntyped -= value;
+                if (!ReferenceEquals(previous, _collectionChangedUntyped))
+                    UnhookChanges();
+            }
         }
 
         public event EventHandler Disposed
         {
             add { _disposed += value; HookChanges(); }
-            remove { _disposed -= value; UnhookChanges(); }
+            remove
+            {
+                EventHandler previous = _disposed;
+                _disposed -= value;
+                if (!ReferenceEquals(previous, _disposed))
+                    UnhookChanges();
+            }
         }
 
         public virtual IDisposable BatchUpdate()
@@ -120,7 +138,13 @@ namespace Ankh
         public event PropertyChangedEventHandler PropertyChanged
         {
             add { _propertyChanged += value; HookChanges(); }
-            remove { _propertyChanged -= value; UnhookChanges(); }
+            remove
+            {
+                PropertyChangedEventHandler previous = _propertyChanged;
+                _propertyChanged -= value;
+                if (!ReferenceEquals(previous, _propertyChanged))
+                    UnhookChanges();
+            }
         }
 
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)

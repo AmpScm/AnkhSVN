@@ -53,6 +53,10 @@ If a help button brought you here instead of a specific topic, the requested dia
     route = "diff/";
   } else if (name.indexOf("merge") >= 0) {
     route = "merge/";
+  } else if (name.indexOf("issue") >= 0) {
+    // PendingIssuesPage also contains "pendingchanges" in its full type name,
+    // so issue help must win before the generic Pending Changes route.
+    route = "issues/";
   } else if (name.indexOf("commit") >= 0 || name.indexOf("pendingchanges") >= 0 || name.indexOf("changelist") >= 0) {
     route = "commit/";
   } else if (name.indexOf("conflict") >= 0 || name.indexOf("resolve") >= 0) {
@@ -69,8 +73,6 @@ If a help button brought you here instead of a specific topic, the requested dia
     route = "source-control/";
   } else if (name.indexOf("property") >= 0) {
     route = "properties/";
-  } else if (name.indexOf("issue") >= 0) {
-    route = "issues/";
   } else if (name.indexOf("proxy") >= 0 || name.indexOf("authentication") >= 0 || name.indexOf("tool") >= 0 ||
              name.indexOf("option") >= 0 || name.indexOf("setting") >= 0) {
     route = "settings/";

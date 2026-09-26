@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using Ankh.UI.PendingChanges.Commits;
 using System.Drawing;
 using Ankh.Commands;
+using Ankh.Scc;
 
 namespace Ankh.UI.PendingChanges.Conflicts
 {
@@ -46,7 +47,7 @@ namespace Ankh.UI.PendingChanges.Conflicts
             SmartColumn changeList = new SmartColumn(this, PCResources.ChangeListColumn, 76, "ChangeList");
             SmartColumn folder = new SmartColumn(this, PCResources.FolderColumn, 196, "Folder");
             SmartColumn locked = new SmartColumn(this, PCResources.LockedColumn, 38, "Locked");
-            SmartColumn modified = new SmartColumn(this, PCResources.ModifiedColumn, 76, "Modified");
+            SmartColumn modified = new SmartColumn(this, PCResources.ModifiedColumn, 145, "Modified");
             SmartColumn name = new SmartColumn(this, PCResources.NameColumn, 76, "Name");
             SmartColumn type = new SmartColumn(this, PCResources.TypeColumn, 76, "Type");
             SmartColumn workingCopy = new SmartColumn(this, PCResources.WorkingCopyColumn, 76, "WorkingCopy");
@@ -112,6 +113,33 @@ namespace Ankh.UI.PendingChanges.Conflicts
         protected override string GetCanonicalName(ConflictListItem item)
         {
             return item.PendingChange.FullPath;
+        }
+
+        protected override void OnRetrieveSelection(
+            ListViewWithSelection<ConflictListItem>.RetrieveSelectionEventArgs e)
+        {
+            e.SelectionItem = e.Item.PendingChange;
+        }
+
+        protected override void OnResolveItem(
+            ListViewWithSelection<ConflictListItem>.ResolveItemEventArgs e)
+        {
+            PendingChange change = e.SelectionItem as PendingChange;
+            if (change != null)
+            {
+                foreach (ConflictListItem item in Items)
+                {
+                    if (StringComparer.OrdinalIgnoreCase.Equals(
+                        item.FullPath,
+                        change.FullPath))
+                    {
+                        e.Item = item;
+                        break;
+                    }
+                }
+            }
+
+            base.OnResolveItem(e);
         }
 
         public override void OnShowContextMenu(MouseEventArgs e)

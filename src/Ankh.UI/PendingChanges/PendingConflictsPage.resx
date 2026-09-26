@@ -151,7 +151,7 @@
     <value>0</value>
   </data>
   <data name="conflictHeader.Text" xml:space="preserve">
-    <value>0 Conflicts: 0 Version, 0 Tree Conflicts; 0 Automatic merges.</value>
+    <value>No conflicts.</value>
   </data>
   <data name="conflictHeader.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -568,7 +568,7 @@
     <value>8</value>
   </data>
   <data name="resolveTopLabel.Text" xml:space="preserve">
-    <value>resolveTopLabel</value>
+    <value>Conflict</value>
   </data>
   <data name="&gt;&gt;resolveTopLabel.Name" xml:space="preserve">
     <value>resolveTopLabel</value>
@@ -595,7 +595,7 @@
     <value>9</value>
   </data>
   <data name="resolveBottomLabel.Text" xml:space="preserve">
-    <value>label3</value>
+    <value>Choose a resolution strategy. Actions apply immediately.</value>
   </data>
   <data name="&gt;&gt;resolveBottomLabel.Name" xml:space="preserve">
     <value>resolveBottomLabel</value>
@@ -736,7 +736,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>Conflicts and Merges</value>
+    <value>Conflicts</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>PendingConflictsPage</value>

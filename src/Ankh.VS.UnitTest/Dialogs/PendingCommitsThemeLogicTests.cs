@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Drawing;
 using Ankh.UI.PendingChanges.Commits;
 using NUnit.Framework;
@@ -35,6 +36,26 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                     darkSurface,
                     highContrast),
                 Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ModifiedDateAlwaysIncludesDateAndTime()
+        {
+            DateTime recentUtc = DateTime.UtcNow.AddMinutes(-5);
+            DateTime olderUtc = DateTime.UtcNow.AddDays(-10);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    PendingChangeDisplayLogic.FormatModifiedDate(recentUtc),
+                    Is.EqualTo(recentUtc.ToLocalTime().ToString("g")));
+                Assert.That(
+                    PendingChangeDisplayLogic.FormatModifiedDate(olderUtc),
+                    Is.EqualTo(olderUtc.ToLocalTime().ToString("g")));
+                Assert.That(
+                    PendingChangeDisplayLogic.FormatModifiedDate(DateTime.MinValue),
+                    Is.EqualTo(""));
+            });
         }
 
         [Test]

@@ -23,6 +23,8 @@ namespace Ankh.Tests
     {
         [TestCase("dlgHelp", "Ankh.UI.Commands.UpdateDialog", "/AnkhSVN/help/working-copy/")]
         [TestCase("ctrlHelp", "Ankh.UI.PendingChanges.PendingCommitsPage", "/AnkhSVN/help/commit/")]
+        [TestCase("ctrlHelp", "Ankh.UI.PendingChanges.PendingIssuesPage", "/AnkhSVN/help/issues/")]
+        [TestCase("dlgHelp", "Ankh.UI.IssueTracker.IssueTrackerConfigDialog", "/AnkhSVN/help/issues/")]
         [TestCase("dlgHelp", "Ankh.UI.Commands.AnnotateDialog", "/AnkhSVN/help/annotate/")]
         [TestCase("dlgHelp", "Ankh.UI.PathSelector.CommonFileSelectorDialog", "/AnkhSVN/help/diff/")]
         [TestCase("dlgHelp", "Ankh.UI.PropertyEditors.ExternalsPropertyEditor", "/AnkhSVN/help/externals/")]

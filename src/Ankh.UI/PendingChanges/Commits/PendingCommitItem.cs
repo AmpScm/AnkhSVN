@@ -67,7 +67,7 @@ namespace Ankh.UI.PendingChanges.Commits
                 GetDirectory(item),
                 PendingChange.FullPath,
                 item.IsLocked ? PCResources.LockedValue : "", // Locked
-                SafeDate(item.Modified), // Modified
+                PendingChangeDisplayLogic.FormatModifiedDate(item.Modified), // Modified
                 PendingChange.Name,
                 PendingChange.RelativePath,
                 PendingChange.Project,
@@ -117,19 +117,6 @@ namespace Ankh.UI.PendingChanges.Commits
                 return PendingChange.Revision.ToString();
             else
                 return "";
-        }
-
-        private string SafeDate(DateTime dateTime)
-        {
-            if (dateTime.Ticks == 0 || dateTime.Ticks == 1)
-                return "";
-
-            DateTime n = dateTime.ToLocalTime();
-
-            if (n < DateTime.Now - new TimeSpan(24, 0, 0))
-                return n.ToString("d");
-            else
-                return n.ToString("T");
         }
 
         private string GetDirectory(SvnItem svnItem)

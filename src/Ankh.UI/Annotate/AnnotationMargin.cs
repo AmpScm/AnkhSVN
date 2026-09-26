@@ -24,7 +24,9 @@ using Ankh.Commands;
 using Ankh.Selection;
 using Ankh.VS;
 using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Threading;
 using DrawingColor = System.Drawing.Color;
 using MediaColor = System.Windows.Media.Color;
 using Microsoft.VisualStudio.Text;
@@ -309,13 +311,15 @@ namespace Ankh.UI.Annotate
             if (_disposed)
                 return;
 
-            if (!Dispatcher.CheckAccess())
-            {
-                Dispatcher.BeginInvoke(new Action(ApplyTheme));
-                return;
-            }
+            ThreadHelper.JoinableTaskFactory
+                .RunAsync(async delegate
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            ApplyTheme();
+                    if (!_disposed)
+                        ApplyTheme();
+                })
+                .FileAndForget("AnkhSVN/AnnotationMargin/ApplyTheme");
         }
 
         void ApplyTheme()

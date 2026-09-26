@@ -64,6 +64,11 @@ namespace Ankh.Services
                 return "diff/";
             if (name.Contains("merge"))
                 return "merge/";
+            // PendingIssuesPage also contains "pendingchanges" in its full
+            // type name, so issue-specific help must win before the generic
+            // Pending Changes/commit route.
+            if (name.Contains("issue"))
+                return "issues/";
             if (name.Contains("commit") || name.Contains("pendingchanges") || name.Contains("changelist"))
                 return "commit/";
             if (name.Contains("conflict") || name.Contains("resolve"))
@@ -80,8 +85,6 @@ namespace Ankh.Services
                 return "source-control/";
             if (name.Contains("property"))
                 return "properties/";
-            if (name.Contains("issue"))
-                return "issues/";
             if (name.Contains("proxy") || name.Contains("authentication") || name.Contains("tool") ||
                 name.Contains("option") || name.Contains("setting"))
                 return "settings/";

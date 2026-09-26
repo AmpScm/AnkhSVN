@@ -26,6 +26,11 @@ namespace Ankh.UI.MergeWizard
         public MergeResultsDialog()
         {
             InitializeComponent();
+
+            // Preserve the original merge-result ordering while using the
+            // shared VS interaction palette from SmartListView.
+            modifiedPathsListView.Sorting = SortOrder.None;
+            modifiedPathsListView.ListViewItemSorter = null;
         }
 
         public MergeResultsDialog(List<SvnNotifyEventArgs> mergeActions, Dictionary<string, List<SvnConflictType>> resolvedConflicts)

@@ -5,30 +5,35 @@ window.onload = hsBodyLoad;
 /* Set body initially hidden unless we are printing */
 document.write("<style media='screen'>div#hsbody{display: none}</style>");
 
-/* This is required for user data support in .chms */
-var curURL = document.location + ".";
-var pos = curURL.indexOf("mk:@MSITStore");
+// Legacy HelpStudio CHM user-data/redirect support is intentionally disabled.
+// Modern AnkhSVN help is served from GitHub Pages.
+//
+// /* This is required for user data support in .chms */
+// var curURL = document.location + ".";
+// var pos = curURL.indexOf("mk:@MSITStore");
+// var scrollPos = null;
+// if( pos == 0 )
+// {
+//     var msitsTarget = curURL.substring(14,curURL.length-1);
+//     // Only allow expected local-help CHM target format before redirecting.
+//     // Reject protocol-like targets, traversal, and control characters.
+//     var isSafeMsitsTarget =
+//         /^[A-Za-z]:\\[A-Za-z0-9 _.\-\\]+\.chm(::\/[A-Za-z0-9 _.\-\/%]*)?(#[A-Za-z0-9 _.\-\/%]*)?(\?[A-Za-z0-9 _.\-\/%=&]*)?$/.test(msitsTarget) &&
+//         msitsTarget.indexOf("://") === -1 &&
+//         msitsTarget.indexOf("..") === -1 &&
+//         !/[\r\n]/.test(msitsTarget);
+//     if (isSafeMsitsTarget)
+//     {
+//         var redirectURL = "ms-its:" + msitsTarget;
+//         document.location.replace(redirectURL);
+//     }
+// }
+
 var scrollPos = null;
-if( pos == 0 )
-{
-    var msitsTarget = curURL.substring(14,curURL.length-1);
-    // Only allow expected local-help CHM target format before redirecting.
-    // Reject protocol-like targets, traversal, and control characters.
-    var isSafeMsitsTarget =
-        /^[A-Za-z]:\\[A-Za-z0-9 _.\-\\]+\.chm(::\/[A-Za-z0-9 _.\-\/%]*)?(#[A-Za-z0-9 _.\-\/%]*)?(\?[A-Za-z0-9 _.\-\/%=&]*)?$/.test(msitsTarget) &&
-        msitsTarget.indexOf("://") === -1 &&
-        msitsTarget.indexOf("..") === -1 &&
-        !/[\r\n]/.test(msitsTarget);
-    if (isSafeMsitsTarget)
-    {
-        var redirectURL = "ms-its:" + msitsTarget;
-        document.location.replace(redirectURL);
-    }
-}
 
 function hsBodyLoad()
 {
-	if (scrollPos == null && curURL.indexOf("#") != -1)
+	if (scrollPos == null && window.location.hash)
 	{
 		var oBanner= documentElement("pagetop");
 		scrollPos = document.body.scrollTop - oBanner.offsetHeight;

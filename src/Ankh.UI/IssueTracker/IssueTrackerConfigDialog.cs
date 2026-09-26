@@ -183,9 +183,23 @@ namespace Ankh.UI.IssueTracker
             if (_configPage != null)
             {
                 _configPage.OnPageEvent += new EventHandler<ConfigPageEventArgs>(_configPage_OnPageEvent);
+
+                IValidatingIssueConfigurationPage validating =
+                    _configPage as IValidatingIssueConfigurationPage;
+                if (validating != null)
+                    okButton.Enabled = validating.IsComplete;
             }
 
             configPagePanel.Controls.Add(newControl);
+
+            // The dialog itself is themed on load, but changing connectors can
+            // create and insert a configuration page afterward. Theme that page
+            // immediately so switching providers never flashes or leaves a
+            // light control tree inside a dark Visual Studio dialog.
+            IssueTrackerThemeLogic.ThemeEmbeddedControl(
+                Context,
+                newControl,
+                true);
 
             if (_configPage != null && needsCurrentSettings)
             {
