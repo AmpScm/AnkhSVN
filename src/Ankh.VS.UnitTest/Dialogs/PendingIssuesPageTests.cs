@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Ankh;
 using Ankh.UI.IssueTracker;
 using Ankh.UI.PendingChanges;
 using System;
