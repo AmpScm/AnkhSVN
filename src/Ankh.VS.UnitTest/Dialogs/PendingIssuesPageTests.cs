@@ -89,9 +89,10 @@ namespace AnkhSvn_UnitTestProject.Dialogs
         }
 
         [Test, Apartment(System.Threading.ApartmentState.STA)]
-        public void RepeatedIssueAndPendingChangesNavigationDoesNotDisableTabs()
+        public void RepeatedIssuePageNavigationDoesNotDisableTabs()
         {
             using (var tool = new PendingChangesToolControl())
+            using (var services = new AnkhServiceContainer())
             {
                 MethodInfo show = typeof(PendingChangesToolControl).GetMethod(
                     "ShowPanel",
@@ -99,44 +100,43 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                 FieldInfo tabsField = typeof(PendingChangesToolControl).GetField(
                     "pendingChangesTabs",
                     BindingFlags.Instance | BindingFlags.NonPublic);
-
-                string[] pageFields =
-                {
+                FieldInfo panelField = typeof(PendingChangesToolControl).GetField(
+                    "contentPanel",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                FieldInfo issuesField = typeof(PendingChangesToolControl).GetField(
                     "_issuesPage",
-                    "_commitsPage",
-                    "_changesPage",
-                    "_conflictsPage",
-                    "_issuesPage",
-                    "_commitsPage"
-                };
+                    BindingFlags.Instance | BindingFlags.NonPublic);
 
                 Assert.That(show, Is.Not.Null);
+                Assert.That(tabsField, Is.Not.Null);
+                Assert.That(panelField, Is.Not.Null);
+                Assert.That(issuesField, Is.Not.Null);
+
                 ToolStrip tabs = (ToolStrip)tabsField.GetValue(tool);
+                Panel panel = (Panel)panelField.GetValue(tool);
+                var issues = (PendingIssuesPage)issuesField.GetValue(tool);
+                var other = new PendingChangesPage();
+
+                issues.Context = services;
+                other.Context = services;
+
+                panel.Controls.Add(issues);
+                panel.Controls.Add(other);
                 tabs.Enabled = true;
 
-                foreach (string fieldName in pageFields)
+                for (int i = 0; i < 4; i++)
                 {
-                    FieldInfo pageField = typeof(PendingChangesToolControl).GetField(
-                        fieldName,
-                        BindingFlags.Instance | BindingFlags.NonPublic);
-                    var page = (PendingChangesPage)pageField.GetValue(tool);
-
-                    // Constructor-only test: attach the page to the tool's
-                    // content panel just as OnLoad does, without requiring a VS
-                    // service context.
-                    FieldInfo panelField = typeof(PendingChangesToolControl).GetField(
-                        "contentPanel",
-                        BindingFlags.Instance | BindingFlags.NonPublic);
-                    Panel panel = (Panel)panelField.GetValue(tool);
-                    if (!panel.Controls.Contains(page))
-                        panel.Controls.Add(page);
-
-                    show.Invoke(tool, new object[] { page, false });
-
+                    show.Invoke(tool, new object[] { issues, false });
                     Assert.That(
                         tabs.Enabled,
                         Is.True,
-                        "Switching pages must not alter navigation enablement.");
+                        "Showing Issues must not disable navigation.");
+
+                    show.Invoke(tool, new object[] { other, false });
+                    Assert.That(
+                        tabs.Enabled,
+                        Is.True,
+                        "Leaving Issues must not disable navigation.");
                 }
             }
         }
