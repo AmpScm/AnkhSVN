@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/26/2026 - 12:37:51 AM |
-| Coverage date: | 9/26/2026 - 12:37:26 AM - 9/26/2026 - 12:37:40 AM |
+| Generated on: | 9/26/2026 - 1:33:42 AM |
+| Coverage date: | 9/26/2026 - 1:32:43 AM - 9/26/2026 - 1:33:24 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
-| Classes: | 632 |
-| Files: | 684 |
-| **Line coverage:** | 26.4% (12944 of 48974) |
-| Covered lines: | 12944 |
-| Uncovered lines: | 36030 |
-| Coverable lines: | 48974 |
-| Total lines: | 136025 |
-| **Branch coverage:** | 21.2% (4970 of 23391) |
-| Covered branches: | 4970 |
-| Total branches: | 23391 |
+| Classes: | 633 |
+| Files: | 685 |
+| **Line coverage:** | 27.3% (13454 of 49147) |
+| Covered lines: | 13454 |
+| Uncovered lines: | 35693 |
+| Coverable lines: | 49147 |
+| Total lines: | 136313 |
+| **Branch coverage:** | 21.8% (5129 of 23437) |
+| Covered branches: | 5129 |
+| Total branches: | 23437 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -275,11 +275,11 @@
 |Ankh.Scc.ThePendingChangeCollection|0%||
 
 </details>
-<details><summary>Ankh.Services - 34.3%</summary>
+<details><summary>Ankh.Services - 35%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Services**|**34.3%**|**31.3%**|
+|**Ankh.Services**|**35%**|**32%**|
 |Ankh.AnkhInstanceConditionalAttribute|46.6%|50%|
 |Ankh.AnkhRuntime|31.9%|24.3%|
 |Ankh.AnkhService|17.5%|9.6%|
@@ -373,12 +373,12 @@
 |Ankh.UI.AnkhCommandHook|0%|0%|
 |Ankh.UI.AnkhMessageBox|0%|0%|
 |Ankh.UI.AnkhThemePalette|98.4%|100%|
-|Ankh.UI.AnkhToolWindowControl|0%|0%|
+|Ankh.UI.AnkhToolWindowControl|6.6%|5.5%|
 |Ankh.UI.VSCommandHandler|0%|0%|
 |Ankh.UI.VSContainerForm|4.7%|0%|
-|Ankh.UI.VSDialogForm|16.4%|6.3%|
+|Ankh.UI.VSDialogForm|21%|11.8%|
 |Ankh.UI.VSEditorControl|0%|0%|
-|Ankh.UI.VSTextEditor|16.9%|12.5%|
+|Ankh.UI.VSTextEditor|33.9%|27.5%|
 |Ankh.UI.VSTextEditorScrollEventArgs|0%||
 |Ankh.UI.WithDPIAwareness|0%|0%|
 |Ankh.VS.AnkhBrowserArgs|0%||
@@ -390,14 +390,14 @@
 |Ankh.VS.WpfServices.UI.VSWpfDialog|0%|0%|
 |Ankh.VS.WpfServices.UI.VSWpfDialogBase|0%|0%|
 |Ankh.VSAssemblies|0%|0%|
-|Ankh.VSVersion|0%|0%|
+|Ankh.VSVersion|10.7%|9.5%|
 
 </details>
-<details><summary>Ankh.UI - 31.4%</summary>
+<details><summary>Ankh.UI - 33.4%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**31.4%**|**18.3%**|
+|**Ankh.UI**|**33.4%**|**19.9%**|
 |Ankh.UI.AddRepositoryRootDialog|64.4%|18.7%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -437,11 +437,12 @@
 |Ankh.UI.IssueTracker.IssuesItem|0%|0%|
 |Ankh.UI.IssueTracker.IssuesView|0%|0%|
 |Ankh.UI.IssueTracker.IssuesViewItem|0%||
+|Ankh.UI.IssueTracker.IssueTrackerAssociationManager|0%|0%|
 |Ankh.UI.IssueTracker.IssueTrackerAvailabilityLogic|95.8%|90%|
 |Ankh.UI.IssueTracker.IssueTrackerConfigDialog|23.7%|3.7%|
-|Ankh.UI.IssueTracker.IssueTrackerSetupCommand|17.3%|14.5%|
+|Ankh.UI.IssueTracker.IssueTrackerSetupCommand|64.5%|50%|
 |Ankh.UI.IssueTracker.IssueTrackerThemeLogic|87.5%|83.3%|
-|Ankh.UI.IssueTracker.LocalIssueEditDialog|81%|40%|
+|Ankh.UI.IssueTracker.LocalIssueEditDialog|79%|40%|
 |Ankh.UI.IssueTracker.LocalIssueRecord|85.7%||
 |Ankh.UI.IssueTracker.LocalIssueStore|61.2%|38.8%|
 |Ankh.UI.IssueTracker.LocalSvnIssuesConfigControl|0%|0%|
@@ -511,7 +512,7 @@
 |Ankh.UI.PendingChanges.Commits.PendingCommitItem|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitItemCollection|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitsThemeLogic|100%|100%|
-|Ankh.UI.PendingChanges.Commits.PendingCommitsView|32.9%|4.5%|
+|Ankh.UI.PendingChanges.Commits.PendingCommitsView|36.6%|6.3%|
 |Ankh.UI.PendingChanges.CommittedHistory|100%|78.5%|
 |Ankh.UI.PendingChanges.CommittedHistoryEntry|100%||
 |Ankh.UI.PendingChanges.ConfigureRecentChangesPageDialog|0%|0%|
@@ -520,13 +521,13 @@
 |Ankh.UI.PendingChanges.Conflicts.PendingConflictLogic|94.8%|95.4%|
 |Ankh.UI.PendingChanges.CopilotCommitMessage|55.2%|55.1%|
 |Ankh.UI.PendingChanges.LogMessageEditor|40%||
-|Ankh.UI.PendingChanges.PCResources|40%|100%|
-|Ankh.UI.PendingChanges.PendingActivationPage|0%|0%|
-|Ankh.UI.PendingChanges.PendingChangesPage|30.1%|15%|
-|Ankh.UI.PendingChanges.PendingChangesToolControl|8%|3.6%|
-|Ankh.UI.PendingChanges.PendingCommitsPage|0%|0%|
+|Ankh.UI.PendingChanges.PCResources|57.7%|100%|
+|Ankh.UI.PendingChanges.PendingActivationPage|70%|50%|
+|Ankh.UI.PendingChanges.PendingChangesPage|60.3%|45%|
+|Ankh.UI.PendingChanges.PendingChangesToolControl|51.9%|27.6%|
+|Ankh.UI.PendingChanges.PendingCommitsPage|30.9%|3.9%|
 |Ankh.UI.PendingChanges.PendingConflictsPage|46.3%|6.4%|
-|Ankh.UI.PendingChanges.PendingIssuesPage|0%|0%|
+|Ankh.UI.PendingChanges.PendingIssuesPage|48.2%|22.9%|
 |Ankh.UI.PendingChanges.RecentChangesPage|47.9%|17.4%|
 |Ankh.UI.PendingChanges.Synchronize.SynchronizeItem|0%|0%|
 |Ankh.UI.PendingChanges.Synchronize.SynchronizeListItem|0%|0%|
@@ -620,10 +621,10 @@
 |Ankh.UI.VSSelectionControls.Commands.ListViewShow|0%|0%|
 |Ankh.UI.VSSelectionControls.Commands.ListViewSort|0%|0%|
 |Ankh.UI.VSSelectionControls.Commands.ListViewSortOrder|0%|0%|
-|Ankh.UI.VSSelectionControls.ListViewWithSelection`1|6.8%|4.2%|
+|Ankh.UI.VSSelectionControls.ListViewWithSelection`1|12.2%|8.5%|
 |Ankh.UI.VSSelectionControls.SmartColumn|76%|66.6%|
 |Ankh.UI.VSSelectionControls.SmartGroup|56%|68.7%|
-|Ankh.UI.VSSelectionControls.SmartListView|39.1%|38.1%|
+|Ankh.UI.VSSelectionControls.SmartListView|49.7%|52.8%|
 |Ankh.UI.VSSelectionControls.SmartListViewItem|85.7%|81.8%|
 |Ankh.UI.VSSelectionControls.SmartListViewThemeLogic|100%|100%|
 |Ankh.UI.VSSelectionControls.SmartSplitContainer|42.1%|18.1%|
