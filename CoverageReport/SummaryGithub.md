@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/26/2026 - 12:32:18 AM |
-| Coverage date: | 9/26/2026 - 12:31:55 AM - 9/26/2026 - 12:32:07 AM |
+| Generated on: | 9/26/2026 - 12:37:51 AM |
+| Coverage date: | 9/26/2026 - 12:37:26 AM - 9/26/2026 - 12:37:40 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
-| Classes: | 631 |
-| Files: | 683 |
-| **Line coverage:** | 26.1% (12796 of 48960) |
-| Covered lines: | 12796 |
-| Uncovered lines: | 36164 |
-| Coverable lines: | 48960 |
-| Total lines: | 135976 |
-| **Branch coverage:** | 21.1% (4953 of 23391) |
-| Covered branches: | 4953 |
+| Classes: | 632 |
+| Files: | 684 |
+| **Line coverage:** | 26.4% (12944 of 48974) |
+| Covered lines: | 12944 |
+| Uncovered lines: | 36030 |
+| Coverable lines: | 48974 |
+| Total lines: | 136025 |
+| **Branch coverage:** | 21.2% (4970 of 23391) |
+| Covered branches: | 4970 |
 | Total branches: | 23391 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -393,11 +393,11 @@
 |Ankh.VSVersion|0%|0%|
 
 </details>
-<details><summary>Ankh.UI - 30.7%</summary>
+<details><summary>Ankh.UI - 31.4%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**30.7%**|**18.1%**|
+|**Ankh.UI**|**31.4%**|**18.3%**|
 |Ankh.UI.AddRepositoryRootDialog|64.4%|18.7%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -438,17 +438,18 @@
 |Ankh.UI.IssueTracker.IssuesView|0%|0%|
 |Ankh.UI.IssueTracker.IssuesViewItem|0%||
 |Ankh.UI.IssueTracker.IssueTrackerAvailabilityLogic|95.8%|90%|
-|Ankh.UI.IssueTracker.IssueTrackerConfigDialog|24.2%|3.7%|
+|Ankh.UI.IssueTracker.IssueTrackerConfigDialog|23.7%|3.7%|
 |Ankh.UI.IssueTracker.IssueTrackerSetupCommand|17.3%|14.5%|
-|Ankh.UI.IssueTracker.LocalIssueEditDialog|0%|0%|
+|Ankh.UI.IssueTracker.IssueTrackerThemeLogic|87.5%|83.3%|
+|Ankh.UI.IssueTracker.LocalIssueEditDialog|81%|40%|
 |Ankh.UI.IssueTracker.LocalIssueRecord|85.7%||
-|Ankh.UI.IssueTracker.LocalIssueStore|56.5%|36.1%|
+|Ankh.UI.IssueTracker.LocalIssueStore|61.2%|38.8%|
 |Ankh.UI.IssueTracker.LocalSvnIssuesConfigControl|0%|0%|
 |Ankh.UI.IssueTracker.LocalSvnIssuesConfigurationPage|0%|0%|
 |Ankh.UI.IssueTracker.LocalSvnIssuesConnector|70%|16.6%|
 |Ankh.UI.IssueTracker.LocalSvnIssuesRepository|36.8%|38.8%|
 |Ankh.UI.IssueTracker.LocalSvnIssuesSettings|87.5%|50%|
-|Ankh.UI.IssueTracker.LocalSvnIssuesView|0%|0%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesView|42.5%|12.5%|
 |Ankh.UI.MergeWizard.BaseWizardPage|0%|0%|
 |Ankh.UI.MergeWizard.Commands.Merge|28.5%|39.1%|
 |Ankh.UI.MergeWizard.Handler|0%|0%|
