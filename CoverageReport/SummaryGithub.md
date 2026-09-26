@@ -3,90 +3,90 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/26/2026 - 2:44:42 AM |
-| Coverage date: | 9/26/2026 - 2:41:48 AM - 9/26/2026 - 2:44:31 AM |
+| Generated on: | 9/26/2026 - 2:52:02 AM |
+| Coverage date: | 9/26/2026 - 2:51:27 AM - 9/26/2026 - 2:51:42 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 633 |
 | Files: | 685 |
-| **Line coverage:** | 17% (8416 of 49229) |
-| Covered lines: | 8416 |
-| Uncovered lines: | 40813 |
+| **Line coverage:** | 27.3% (13478 of 49229) |
+| Covered lines: | 13478 |
+| Uncovered lines: | 35751 |
 | Coverable lines: | 49229 |
 | Total lines: | 136416 |
-| **Branch coverage:** | 10.7% (2520 of 23435) |
-| Covered branches: | 2520 |
+| **Branch coverage:** | 21.4% (5033 of 23435) |
+| Covered branches: | 5033 |
 | Total branches: | 23435 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
 
 ## Coverage
-<details><summary>Ankh - 2.8%</summary>
+<details><summary>Ankh - 10.6%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh**|**2.8%**|**7.4%**|
+|**Ankh**|**10.6%**|**19.9%**|
 |Ankh.AnkhModule|0%||
-|Ankh.Commands.AddItemCommand|0%|0%|
-|Ankh.Commands.AddToSccCommands|0%|0%|
-|Ankh.Commands.AddToSccLogic|0%|0%|
-|Ankh.Commands.AnnotateCommandLogic|0%|0%|
-|Ankh.Commands.ApplyPatch|0%|0%|
-|Ankh.Commands.BranchSolutionCommand|0%|0%|
-|Ankh.Commands.CheckForUpdates|0%|0%|
-|Ankh.Commands.Cleanup|0%|0%|
-|Ankh.Commands.CommandBase|0%||
+|Ankh.Commands.AddItemCommand|5.7%|14.7%|
+|Ankh.Commands.AddToSccCommands|3.1%|1%|
+|Ankh.Commands.AddToSccLogic|100%|100%|
+|Ankh.Commands.AnnotateCommandLogic|100%|100%|
+|Ankh.Commands.ApplyPatch|20%|50%|
+|Ankh.Commands.BranchSolutionCommand|19.5%|37.9%|
+|Ankh.Commands.CheckForUpdates|0.8%|0%|
+|Ankh.Commands.Cleanup|12.1%|11.1%|
+|Ankh.Commands.CommandBase|50%||
 |Ankh.Commands.CommandStrings|0%|0%|
-|Ankh.Commands.CreatePatch|0%|0%|
-|Ankh.Commands.DiffLocalItem|0%|0%|
-|Ankh.Commands.DiffLocalItemLogic|0%|0%|
-|Ankh.Commands.DiffLocalItemSelectionInfo|0%|0%|
-|Ankh.Commands.ItemAddToPending|0%|0%|
-|Ankh.Commands.ItemAnnotateCommand|0%|0%|
-|Ankh.Commands.ItemCommitCommand|0%|0%|
-|Ankh.Commands.ItemConflictEdit|0%|0%|
-|Ankh.Commands.ItemDelete|0%|0%|
-|Ankh.Commands.ItemEditPropertiesCommand|0%|0%|
-|Ankh.Commands.ItemEditPropertiesLogic|0%|0%|
-|Ankh.Commands.ItemIgnore|0%|0%|
-|Ankh.Commands.ItemMoveToChangeList|0%|0%|
-|Ankh.Commands.ItemResolveCasing|0%|0%|
-|Ankh.Commands.ItemResolveCommand|0%|0%|
+|Ankh.Commands.CreatePatch|8.1%|12.5%|
+|Ankh.Commands.DiffLocalItem|5.9%|11.2%|
+|Ankh.Commands.DiffLocalItemLogic|96.1%|97.6%|
+|Ankh.Commands.DiffLocalItemSelectionInfo|70.2%|0%|
+|Ankh.Commands.ItemAddToPending|40%|39.2%|
+|Ankh.Commands.ItemAnnotateCommand|10.7%|29.7%|
+|Ankh.Commands.ItemCommitCommand|14.8%|33.3%|
+|Ankh.Commands.ItemConflictEdit|12.2%|18.4%|
+|Ankh.Commands.ItemDelete|7.1%|7.1%|
+|Ankh.Commands.ItemEditPropertiesCommand|10.6%|25%|
+|Ankh.Commands.ItemEditPropertiesLogic|100%|100%|
+|Ankh.Commands.ItemIgnore|3.8%|6%|
+|Ankh.Commands.ItemMoveToChangeList|21%|22%|
+|Ankh.Commands.ItemResolveCasing|6.6%|10%|
+|Ankh.Commands.ItemResolveCommand|8.7%|7.6%|
 |Ankh.Commands.LocalDiffCommandBase|0%|0%|
-|Ankh.Commands.LockCommand|0%|0%|
-|Ankh.Commands.LockCommandLogic|0%|0%|
-|Ankh.Commands.LogCommand|0%|0%|
-|Ankh.Commands.OpenFromSubversion|0%|0%|
-|Ankh.Commands.OpenInVisualStudio|0%|0%|
-|Ankh.Commands.OpenInXExplorer|0%|0%|
-|Ankh.Commands.RepositoryExplorer.CheckoutCommand|0%|0%|
-|Ankh.Commands.RepositoryExplorer.CopyReposExplorerUrl|0%|0%|
-|Ankh.Commands.RepositoryExplorer.CopyToOrMove|0%|0%|
-|Ankh.Commands.RepositoryExplorer.CopyToWorkingCopy|0%|0%|
-|Ankh.Commands.RepositoryExplorer.CreateDirectoryCommand|0%|0%|
-|Ankh.Commands.RepositoryExplorer.DeleteRepositoryItemCommand|0%|0%|
-|Ankh.Commands.RepositoryExplorer.RefreshRepositoryItemCommand|0%|0%|
-|Ankh.Commands.RepositoryExplorer.RenameNode|0%|0%|
+|Ankh.Commands.LockCommand|4.6%|13.1%|
+|Ankh.Commands.LockCommandLogic|100%|100%|
+|Ankh.Commands.LogCommand|25.5%|35.7%|
+|Ankh.Commands.OpenFromSubversion|1.6%|6.6%|
+|Ankh.Commands.OpenInVisualStudio|8.4%|10.5%|
+|Ankh.Commands.OpenInXExplorer|12.9%|12.9%|
+|Ankh.Commands.RepositoryExplorer.CheckoutCommand|13.7%|33.3%|
+|Ankh.Commands.RepositoryExplorer.CopyReposExplorerUrl|28%|29.1%|
+|Ankh.Commands.RepositoryExplorer.CopyToOrMove|6.6%|10.4%|
+|Ankh.Commands.RepositoryExplorer.CopyToWorkingCopy|5.6%|8.8%|
+|Ankh.Commands.RepositoryExplorer.CreateDirectoryCommand|21.8%|35.7%|
+|Ankh.Commands.RepositoryExplorer.DeleteRepositoryItemCommand|8.3%|12.5%|
+|Ankh.Commands.RepositoryExplorer.RefreshRepositoryItemCommand|33.3%|25%|
+|Ankh.Commands.RepositoryExplorer.RenameNode|12.5%|20%|
 |Ankh.Commands.RepositoryExplorer.SaveToFileCommand|0%|0%|
-|Ankh.Commands.RepositoryExplorer.ShowRepositoryItemChanges|0%|0%|
-|Ankh.Commands.RepositoryExplorer.ViewInVSNetCommand|0%|0%|
-|Ankh.Commands.RevertItemCommand|0%|0%|
-|Ankh.Commands.RevertItemLogic|0%|0%|
-|Ankh.Commands.SolutionCommitCommand|0%|0%|
-|Ankh.Commands.SolutionUpdateCommand|0%|0%|
-|Ankh.Commands.SolutionUpdateLogic|0%|0%|
-|Ankh.Commands.SolutionUpdatePlan|0%|0%|
-|Ankh.Commands.SwitchItemCommand|0%|0%|
-|Ankh.Commands.UI.RefreshCommand|0%|0%|
-|Ankh.Commands.UI.ShowToolWindows|0%|0%|
-|Ankh.Commands.UnifiedDiffCommand|0%|0%|
-|Ankh.Commands.UnlockCommand|0%|0%|
-|Ankh.Commands.UpdateFiles|0%|0%|
-|Ankh.Commands.UpdateGroup|0%|0%|
-|Ankh.Commands.UpgradeWorkingCopy|0%|0%|
-|Ankh.Commands.ViewRepositoryFileCommand|0%|0%|
-|Ankh.Commands.WorkingCopyExplorer.ExportCommand|0%|0%|
+|Ankh.Commands.RepositoryExplorer.ShowRepositoryItemChanges|9.5%|10.7%|
+|Ankh.Commands.RepositoryExplorer.ViewInVSNetCommand|7.5%|15.3%|
+|Ankh.Commands.RevertItemCommand|3.4%|8.6%|
+|Ankh.Commands.RevertItemLogic|100%|100%|
+|Ankh.Commands.SolutionCommitCommand|42.3%|36.3%|
+|Ankh.Commands.SolutionUpdateCommand|13.4%|21.9%|
+|Ankh.Commands.SolutionUpdateLogic|100%|100%|
+|Ankh.Commands.SolutionUpdatePlan|100%|100%|
+|Ankh.Commands.SwitchItemCommand|8.2%|30.4%|
+|Ankh.Commands.UI.RefreshCommand|30%|100%|
+|Ankh.Commands.UI.ShowToolWindows|76.4%|58.3%|
+|Ankh.Commands.UnifiedDiffCommand|3.3%|11.5%|
+|Ankh.Commands.UnlockCommand|8.3%|9%|
+|Ankh.Commands.UpdateFiles|13%|22%|
+|Ankh.Commands.UpdateGroup|87.5%|50%|
+|Ankh.Commands.UpgradeWorkingCopy|10.9%|10.7%|
+|Ankh.Commands.ViewRepositoryFileCommand|23.5%|50%|
+|Ankh.Commands.WorkingCopyExplorer.ExportCommand|19%|37.5%|
 |Ankh.Configuration.ConfigService|0%|0%|
 |Ankh.ProgressRunnerException|0%||
 |Ankh.ProgressRunnerService|0%|0%|
@@ -96,7 +96,7 @@
 |Ankh.Services.AnkhErrorMessage|0%|0%|
 |Ankh.Services.AnkhHelpService|47.8%|59.1%|
 |Ankh.Services.AnkhScheduler|0%|0%|
-|Ankh.Services.DiffToolTemplateLogic|0%|0%|
+|Ankh.Services.DiffToolTemplateLogic|100%|100%|
 |Ankh.Services.IssueTracker.AnkhIssueService|0%|0%|
 |Ankh.Services.IssueTracker.IssueRepositoryConnectorProxy|0%|0%|
 |Ankh.Services.IssueTracker.IssueRepositorySettingsProxy|0%|0%|
@@ -113,30 +113,30 @@
 |Ankh.Settings.SolutionSettings|13%|24.5%|
 
 </details>
-<details><summary>Ankh.Copilot - 0%</summary>
+<details><summary>Ankh.Copilot - 29.4%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Copilot**|**0%**|**0%**|
-|Ankh.Copilot.VisualStudioCopilot|0%|0%|
+|**Ankh.Copilot**|**29.4%**|**33.3%**|
+|Ankh.Copilot.VisualStudioCopilot|29.4%|33.3%|
 
 </details>
-<details><summary>Ankh.Diff - 54%</summary>
+<details><summary>Ankh.Diff - 69.4%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Diff**|**54%**|**51.9%**|
+|**Ankh.Diff**|**69.4%**|**69.2%**|
 |Ankh.Diff.Caret|0%|0%|
-|Ankh.Diff.DiffUtils.AddCopyList|0%|0%|
-|Ankh.Diff.DiffUtils.BinaryDiff|0%|0%|
-|Ankh.Diff.DiffUtils.BinaryDiffLines|0%|0%|
+|Ankh.Diff.DiffUtils.AddCopyList|96.8%|96.4%|
+|Ankh.Diff.DiffUtils.BinaryDiff|100%|98%|
+|Ankh.Diff.DiffUtils.BinaryDiffLines|96.7%|87.5%|
 |Ankh.Diff.DiffUtils.Controls.DiffControl|73.9%|23%|
 |Ankh.Diff.DiffUtils.Controls.DiffLineClickEventArgs|100%||
-|Ankh.Diff.DiffUtils.Controls.DiffOptions|23.1%|11.1%|
+|Ankh.Diff.DiffUtils.Controls.DiffOptions|76.8%|100%|
 |Ankh.Diff.DiffUtils.Controls.DiffOverview|92.8%|91%|
 |Ankh.Diff.DiffUtils.Controls.DiffView|52.9%|48.3%|
-|Ankh.Diff.DiffUtils.Controls.DiffViewKeyAction|0%||
-|Ankh.Diff.DiffUtils.Controls.DiffViewKeyLogic|0%|0%|
+|Ankh.Diff.DiffUtils.Controls.DiffViewKeyAction|100%||
+|Ankh.Diff.DiffUtils.Controls.DiffViewKeyLogic|100%|100%|
 |Ankh.Diff.DiffUtils.Controls.DiffViewLine|100%||
 |Ankh.Diff.DiffUtils.Controls.DiffViewLines|100%|100%|
 |Ankh.Diff.DiffUtils.Controls.DiffViewPosition|93.7%|100%|
@@ -149,12 +149,12 @@
 |Ankh.Diff.DiffUtils.DirectoryDiffFileFilter|100%|100%|
 |Ankh.Diff.DiffUtils.DirectoryDiffResults|100%||
 |Ankh.Diff.DiffUtils.Edit|100%||
-|Ankh.Diff.DiffUtils.EditScript|62.5%|100%|
+|Ankh.Diff.DiffUtils.EditScript|75%|100%|
 |Ankh.Diff.DiffUtils.FileSystemInfoComparer|100%||
 |Ankh.Diff.DiffUtils.Functions|80.3%|87.8%|
-|Ankh.Diff.DiffUtils.MyersDiff|63.5%|62.5%|
+|Ankh.Diff.DiffUtils.MyersDiff|95.8%|94.5%|
 |Ankh.Diff.DiffUtils.Properties.Resources|82%|100%|
-|Ankh.Diff.DiffUtils.StringHasher|27.9%|50%|
+|Ankh.Diff.DiffUtils.StringHasher|97%|88.8%|
 |Ankh.Diff.DiffUtils.SubArray|72.2%|0%|
 |Ankh.Diff.DiffUtils.TextDiff|100%|100%|
 |Ankh.Diff.FindData|100%||
@@ -166,18 +166,18 @@
 |Ankh.UI.DiffWindow.DiffEditorControl|0%|0%|
 
 </details>
-<details><summary>Ankh.ExtensionPoints - 0%</summary>
+<details><summary>Ankh.ExtensionPoints - 36.3%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.ExtensionPoints**|**0%**|**0%**|
-|Ankh.ExtensionPoints.IssueTracker.CommitArgs|0%||
+|**Ankh.ExtensionPoints**|**36.3%**|**41.6%**|
+|Ankh.ExtensionPoints.IssueTracker.CommitArgs|100%||
 |Ankh.ExtensionPoints.IssueTracker.ConfigPageEventArgs|0%||
-|Ankh.ExtensionPoints.IssueTracker.IssueRepository|0%|0%|
+|Ankh.ExtensionPoints.IssueTracker.IssueRepository|8.6%|0%|
 |Ankh.ExtensionPoints.IssueTracker.IssueRepositoryConfigurationPage|0%|0%|
-|Ankh.ExtensionPoints.IssueTracker.IssueRepositorySettings|0%|0%|
-|Ankh.ExtensionPoints.IssueTracker.PostCommitArgs|0%||
-|Ankh.ExtensionPoints.IssueTracker.PreCommitArgs|0%|0%|
+|Ankh.ExtensionPoints.IssueTracker.IssueRepositorySettings|65.7%|56.2%|
+|Ankh.ExtensionPoints.IssueTracker.PostCommitArgs|60%||
+|Ankh.ExtensionPoints.IssueTracker.PreCommitArgs|84.6%|100%|
 |Ankh.ExtensionPoints.RepositoryProvider.ScmRepositoryProvider|0%||
 |Ankh.ExtensionPoints.RepositoryProvider.ScmRepositorySelectionControl|0%|0%|
 |Ankh.ExtensionPoints.RepositoryProvider.ScmRepositorySelectionControlEventA<br/>rgs|0%||
@@ -185,19 +185,19 @@
 |Ankh.ExtensionPoints.UI.ApplyThemeEventArgs|0%|0%|
 
 </details>
-<details><summary>Ankh.Ids - 0%</summary>
+<details><summary>Ankh.Ids - 100%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Ids**|**0%**|****|
-|Ankh.AnkhId|0%||
+|**Ankh.Ids**|**100%**|****|
+|Ankh.AnkhId|100%||
 
 </details>
-<details><summary>Ankh.Package - 0%</summary>
+<details><summary>Ankh.Package - 3.1%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Package**|**0%**|**0%**|
+|**Ankh.Package**|**3.1%**|**0.5%**|
 |Ankh.VSPackage.AdvancedDiffUserToolsSettingsPage|0%|0%|
 |Ankh.VSPackage.AdvancedMergeUserToolsSettingsPage|0%|0%|
 |Ankh.VSPackage.AnkhDynamicEditorFactory|0%|0%|
@@ -207,13 +207,13 @@
 |Ankh.VSPackage.AnkhToolWindowPane|0%|0%|
 |Ankh.VSPackage.Attributes.ProvideAnkhExtensionRedirectAttribute|0%|0%|
 |Ankh.VSPackage.Attributes.ProvideLanguageSettingsAttribute|0%||
-|Ankh.VSPackage.Attributes.ProvideOutputWindowAttribute|0%|0%|
+|Ankh.VSPackage.Attributes.ProvideOutputWindowAttribute|46.1%|0%|
 |Ankh.VSPackage.Attributes.ProvideProjectTypeSettingsAttribute|0%|0%|
 |Ankh.VSPackage.Attributes.ProvideSolutionPropertiesAttribute|0%|0%|
-|Ankh.VSPackage.Attributes.ProvideSourceControlCommandAttribute|0%|0%|
+|Ankh.VSPackage.Attributes.ProvideSourceControlCommandAttribute|65.2%|50%|
 |Ankh.VSPackage.Attributes.ProvideSourceControlProviderAttribute|0%|0%|
 |Ankh.VSPackage.Attributes.ProvideTextMarkerAttribute|0%||
-|Ankh.VSPackage.Attributes.ProvideThemeInformationAttribute|0%|0%|
+|Ankh.VSPackage.Attributes.ProvideThemeInformationAttribute|46.1%|50%|
 |Ankh.VSPackage.Attributes.ProvideToolsOptionsPageVisibilityAttribute|0%||
 |Ankh.VSPackage.LogToolWindow|0%||
 |Ankh.VSPackage.OptionPages.IssueTrackerPage|0%||
@@ -227,47 +227,47 @@
 |Ankh.VSPackage.WorkingCopyExplorerToolWindow|0%||
 
 </details>
-<details><summary>Ankh.Scc - 0%</summary>
+<details><summary>Ankh.Scc - 8%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Scc**|**0%**|**0%**|
+|**Ankh.Scc**|**8%**|**7.4%**|
 |Ankh.Scc.AnkhSccModule|0%||
-|Ankh.Scc.Commands.MarkProjectDirty|0%|0%|
-|Ankh.Scc.Commands.PendingChangeTicker|0%|0%|
-|Ankh.Scc.Commands.ProjectFileFilter|0%|0%|
-|Ankh.Scc.Commands.SccCheckoutFailedProject|0%|0%|
-|Ankh.Scc.Commands.TaskFinisher|0%|0%|
-|Ankh.Scc.Commands.UnsupportedWcVersion|0%|0%|
-|Ankh.Scc.GlyphTipLogic|0%|0%|
+|Ankh.Scc.Commands.MarkProjectDirty|12.5%|0%|
+|Ankh.Scc.Commands.PendingChangeTicker|14.2%|0%|
+|Ankh.Scc.Commands.ProjectFileFilter|42.8%|43.7%|
+|Ankh.Scc.Commands.SccCheckoutFailedProject|29.4%|15.3%|
+|Ankh.Scc.Commands.TaskFinisher|9%|0%|
+|Ankh.Scc.Commands.UnsupportedWcVersion|7.6%|0%|
+|Ankh.Scc.GlyphTipLogic|100%|100%|
 |Ankh.Scc.Native.PropertyBag|0%|0%|
 |Ankh.Scc.OpenDocumentTracker|0%|0%|
 |Ankh.Scc.PendingChangeManager|0%|0%|
 |Ankh.Scc.ProjectMap.SccSvnOrigin|0%|0%|
 |Ankh.Scc.ProjectMap.SccSvnProject|0%||
-|Ankh.Scc.ProjectNodeGlyphLogic|0%|0%|
+|Ankh.Scc.ProjectNodeGlyphLogic|100%|100%|
 |Ankh.Scc.ProjectNotifier|0%|0%|
 |Ankh.Scc.ProjectTracker|0%|0%|
-|Ankh.Scc.ProjectTrackerOriginLogic|0%|0%|
-|Ankh.Scc.QueryEditLogic|0%|0%|
+|Ankh.Scc.ProjectTrackerOriginLogic|86.3%|85.7%|
+|Ankh.Scc.QueryEditLogic|100%|100%|
 |Ankh.Scc.Resources|0%|0%|
 |Ankh.Scc.SccUI.ChangeSolutionRoot|0%|0%|
 |Ankh.Scc.SccUI.ChangeSourceControl|0%|0%|
-|Ankh.Scc.SccUI.ChangeSourceControlLogic|0%|0%|
-|Ankh.Scc.SccUI.ChangeSourceControlProjectBinding|0%||
+|Ankh.Scc.SccUI.ChangeSourceControlLogic|100%|100%|
+|Ankh.Scc.SccUI.ChangeSourceControlProjectBinding|100%||
 |Ankh.Scc.SccUI.ChangeSourceControlRow|0%|0%|
-|Ankh.Scc.SccUI.ChangeSourceControlSelectionState|0%|0%|
-|Ankh.Scc.SccUI.Commands.ChangeSourceControlCommand|0%|0%|
-|Ankh.Scc.SccUI.Commands.MakeNonSccFileWritableCommand|0%|0%|
+|Ankh.Scc.SccUI.ChangeSourceControlSelectionState|100%|100%|
+|Ankh.Scc.SccUI.Commands.ChangeSourceControlCommand|6%|10%|
+|Ankh.Scc.SccUI.Commands.MakeNonSccFileWritableCommand|6.6%|0%|
 |Ankh.Scc.SccUI.EditReadOnlyFileDialog|0%|0%|
 |Ankh.Scc.SccUI.SccFilesystemWarningDialog|0%|0%|
 |Ankh.Scc.SccUI.SccManagementResources|0%|0%|
 |Ankh.Scc.SccUI.SccQuerySaveReadonlyDialog|0%|0%|
 |Ankh.Scc.SettingMap.SccTranslatePathInfo|0%|0%|
 |Ankh.Scc.SolutionExplorerClipboardItem|0%|0%|
-|Ankh.Scc.StatusCache.Commands.FileStatusCleanup|0%|0%|
-|Ankh.Scc.StatusCache.SvnStatusCache|0%|0%|
-|Ankh.Scc.SvnConflictArtifactLogic|0%|0%|
+|Ankh.Scc.StatusCache.Commands.FileStatusCleanup|10%|0%|
+|Ankh.Scc.StatusCache.SvnStatusCache|39.6%|34.1%|
+|Ankh.Scc.SvnConflictArtifactLogic|90.1%|81.5%|
 |Ankh.Scc.SvnSccContext|0%|0%|
 |Ankh.Scc.SvnSccProjectMap|0%|0%|
 |Ankh.Scc.SvnSccProvider|0%|0%|
@@ -275,16 +275,16 @@
 |Ankh.Scc.ThePendingChangeCollection|0%||
 
 </details>
-<details><summary>Ankh.Services - 23.2%</summary>
+<details><summary>Ankh.Services - 34.6%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Services**|**23.2%**|**20.3%**|
-|Ankh.AnkhInstanceConditionalAttribute|13.3%|0%|
-|Ankh.AnkhRuntime|0%|0%|
-|Ankh.AnkhService|13.5%|9.6%|
-|Ankh.AnkhServiceContainer|62.5%||
-|Ankh.AnkhServiceEvents|0%|0%|
+|**Ankh.Services**|**34.6%**|**31.7%**|
+|Ankh.AnkhInstanceConditionalAttribute|46.6%|50%|
+|Ankh.AnkhRuntime|31.9%|24.3%|
+|Ankh.AnkhService|17.5%|9.6%|
+|Ankh.AnkhServiceContainer|100%||
+|Ankh.AnkhServiceEvents|26%|16.6%|
 |Ankh.AnkhServiceProviderWrapper|0%|0%|
 |Ankh.Collections.CollectionChangedEventArgs|77.6%|77.2%|
 |Ankh.Collections.CollectionChangedEventArgs`1|73.3%||
@@ -292,20 +292,20 @@
 |Ankh.Collections.ItemChangedEventArgs`1|0%|0%|
 |Ankh.Collections.KeyedWrapNotifyCollection`3|64.2%|51.8%|
 |Ankh.Collections.WrapNotifyCollection`2|94%|95%|
-|Ankh.Commands.BaseCommandEventArgs|19%|0%|
+|Ankh.Commands.BaseCommandEventArgs|52.3%|40%|
 |Ankh.Commands.CommandAttribute|96.7%|91.6%|
 |Ankh.Commands.CommandEventArgs|94.1%|75%|
-|Ankh.Commands.CommandMapItem|62.9%|100%|
-|Ankh.Commands.CommandMapper|0%|0%|
+|Ankh.Commands.CommandMapItem|92.5%|100%|
+|Ankh.Commands.CommandMapper|51.1%|60%|
 |Ankh.Commands.CommandResult|0%|0%|
 |Ankh.Commands.CommandUpdateEventArgs|83.7%|71.4%|
-|Ankh.Commands.SccCommandAttribute|50%||
+|Ankh.Commands.SccCommandAttribute|100%||
 |Ankh.Commands.SvnCommandAttribute|50%||
-|Ankh.Configuration.AnkhConfig|0%|0%|
+|Ankh.Configuration.AnkhConfig|45%|0%|
 |Ankh.Configuration.RegistryLifoList|46.8%|52.7%|
 |Ankh.Configuration.RegistryUtils|90.9%|87.5%|
 |Ankh.ContextServices.GuidUtils|100%|100%|
-|Ankh.EnumTools|0%|0%|
+|Ankh.EnumTools|55.1%|50%|
 |Ankh.GlobalServiceAttribute|0%|0%|
 |Ankh.HybridCollection`1|72.7%|83.3%|
 |Ankh.KeyedNotifyCollection`2|85%|83.3%|
@@ -321,34 +321,34 @@
 |Ankh.Scc.AnkhPropertyGridItem|0%|0%|
 |Ankh.Scc.BatchStartedEventArgs|0%|0%|
 |Ankh.Scc.DocumentLock|0%|0%|
-|Ankh.Scc.Engine.SccDirectory`1|0%|0%|
+|Ankh.Scc.Engine.SccDirectory`1|88.8%|75%|
 |Ankh.Scc.Engine.SccItem|28.5%|18%|
-|Ankh.Scc.Engine.SccItem`1|28.5%|0%|
+|Ankh.Scc.Engine.SccItem`1|57.1%|50%|
 |Ankh.Scc.PendingChange|15.4%|29.5%|
-|Ankh.Scc.PendingChangeCollection|0%|0%|
+|Ankh.Scc.PendingChangeCollection|28.5%|0%|
 |Ankh.Scc.PendingChangeCommitArgs|0%||
 |Ankh.Scc.PendingChangeCreatePatchArgs|0%||
 |Ankh.Scc.PendingChangeStatus|100%|100%|
 |Ankh.Scc.PendingChangeText|76.6%|100%|
-|Ankh.Scc.ProjectIconReference|0%|0%|
-|Ankh.Scc.ProjectMap.ProjectGlyphRefreshLogic|0%|0%|
+|Ankh.Scc.ProjectIconReference|83.3%|71.4%|
+|Ankh.Scc.ProjectMap.ProjectGlyphRefreshLogic|100%|100%|
 |Ankh.Scc.ProjectMap.SccDocumentData|79.5%|70.3%|
 |Ankh.Scc.ProjectMap.SccProjectData|0%|0%|
 |Ankh.Scc.ProjectMap.SccProjectFile|0%|0%|
 |Ankh.Scc.ProjectMap.SccProjectFileCollection|0%|0%|
 |Ankh.Scc.ProjectMap.SccProjectFileReference|0%|0%|
-|Ankh.Scc.SccFileSystemNode|0%|0%|
-|Ankh.Scc.SccGlyphDisplayLogic|0%|0%|
-|Ankh.Scc.SccGlyphMonikerLogic|0%|0%|
+|Ankh.Scc.SccFileSystemNode|85.1%|82.1%|
+|Ankh.Scc.SccGlyphDisplayLogic|90.9%|95.6%|
+|Ankh.Scc.SccGlyphMonikerLogic|90.6%|50%|
 |Ankh.Scc.SccProjectMap|0%|0%|
 |Ankh.Scc.SccProvider|0%|0%|
-|Ankh.Scc.SccProviderThunk|0%|0%|
-|Ankh.Scc.SvnDirectory|0%|0%|
+|Ankh.Scc.SccProviderThunk|7.8%|25%|
+|Ankh.Scc.SvnDirectory|58.3%|55.5%|
 |Ankh.Scc.SvnItemAnnotation|0%|0%|
 |Ankh.Scc.SvnItemData|0%|0%|
 |Ankh.Scc.SvnItemsEventArgs|100%|100%|
 |Ankh.Scc.SvnOrigin|17%|6.2%|
-|Ankh.Scc.SvnStatusData|31%|0%|
+|Ankh.Scc.SvnStatusData|75.8%|50%|
 |Ankh.Scc.SvnWorkingCopy|0%|0%|
 |Ankh.Scc.UI.AnkhDiffArgs|90.9%|0%|
 |Ankh.Scc.UI.AnkhDiffArgumentDefinition|0%|0%|
@@ -359,45 +359,45 @@
 |Ankh.Scc.UI.AnkhRevisionType|0%|0%|
 |Ankh.Scc.UI.FrameEventArgs|0%||
 |Ankh.Selection.SccHierarchy|0%|0%|
-|Ankh.Selection.SccProject|0%|0%|
-|Ankh.Selection.SelectionItemMap|0%|0%|
-|Ankh.Selection.SelectionItemPropertyLogic|0%|0%|
-|Ankh.Services.AnkhContext|0%|0%|
+|Ankh.Selection.SccProject|16.6%|11.1%|
+|Ankh.Selection.SelectionItemMap|69.2%|71.6%|
+|Ankh.Selection.SelectionItemPropertyLogic|100%|100%|
+|Ankh.Services.AnkhContext|40.9%|42.8%|
 |Ankh.Services.VSErr|7.6%|0%|
 |Ankh.Services.XCastInt32|0%||
 |Ankh.Services.XCastUInt32|0%||
 |Ankh.SvnClientAction|0%|0%|
-|Ankh.SvnItem|40.9%|40.8%|
+|Ankh.SvnItem|50.4%|44.8%|
 |Ankh.SvnPoolClient|0%|0%|
 |Ankh.SvnPoolRemoteSession|0%|0%|
 |Ankh.UI.AnkhCommandHook|0%|0%|
 |Ankh.UI.AnkhMessageBox|0%|0%|
-|Ankh.UI.AnkhThemePalette|96.8%|75%|
-|Ankh.UI.AnkhToolWindowControl|0%|0%|
+|Ankh.UI.AnkhThemePalette|98.4%|100%|
+|Ankh.UI.AnkhToolWindowControl|6.6%|5.5%|
 |Ankh.UI.VSCommandHandler|0%|0%|
 |Ankh.UI.VSContainerForm|4.7%|0%|
-|Ankh.UI.VSDialogForm|15.7%|6.3%|
+|Ankh.UI.VSDialogForm|21%|11.8%|
 |Ankh.UI.VSEditorControl|0%|0%|
-|Ankh.UI.VSTextEditor|16.9%|12.5%|
+|Ankh.UI.VSTextEditor|18.9%|13.7%|
 |Ankh.UI.VSTextEditorScrollEventArgs|0%||
 |Ankh.UI.WithDPIAwareness|0%|0%|
 |Ankh.VS.AnkhBrowserArgs|0%||
 |Ankh.VS.AnkhBrowserResults|0%||
-|Ankh.VS.AnkhIdleArgs|0%|0%|
+|Ankh.VS.AnkhIdleArgs|50%|16.6%|
 |Ankh.VS.ComStreamWrapper|0%|0%|
 |Ankh.VS.ImageReference|0%||
 |Ankh.VS.TextMarker|0%|0%|
 |Ankh.VS.WpfServices.UI.VSWpfDialog|0%|0%|
 |Ankh.VS.WpfServices.UI.VSWpfDialogBase|0%|0%|
 |Ankh.VSAssemblies|0%|0%|
-|Ankh.VSVersion|0%|0%|
+|Ankh.VSVersion|10.7%|9.5%|
 
 </details>
-<details><summary>Ankh.UI - 23.5%</summary>
+<details><summary>Ankh.UI - 33.5%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**23.5%**|**10.3%**|
+|**Ankh.UI**|**33.5%**|**18.8%**|
 |Ankh.UI.AddRepositoryRootDialog|64.4%|18.7%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -426,42 +426,42 @@
 |Ankh.UI.Controls.StatusPanelResources|0%|0%|
 |Ankh.UI.Controls.StatusPanelTestForm|0%|0%|
 |Ankh.UI.ErrorDialog|75%|28.5%|
-|Ankh.UI.IssueTracker.BuiltInIssueTrackerConnectors|0%||
-|Ankh.UI.IssueTracker.GenericBugtraqConfigControl|0%|0%|
-|Ankh.UI.IssueTracker.GenericBugtraqConfigurationPage|0%|0%|
-|Ankh.UI.IssueTracker.GenericBugtraqConnector|0%|0%|
-|Ankh.UI.IssueTracker.GenericBugtraqRepository|0%|0%|
-|Ankh.UI.IssueTracker.GenericBugtraqSettings|0%|0%|
+|Ankh.UI.IssueTracker.BuiltInIssueTrackerConnectors|100%||
+|Ankh.UI.IssueTracker.GenericBugtraqConfigControl|85.7%|75%|
+|Ankh.UI.IssueTracker.GenericBugtraqConfigurationPage|36.8%|0%|
+|Ankh.UI.IssueTracker.GenericBugtraqConnector|88.8%|50%|
+|Ankh.UI.IssueTracker.GenericBugtraqRepository|10.6%|2.7%|
+|Ankh.UI.IssueTracker.GenericBugtraqSettings|44.1%|16.6%|
 |Ankh.UI.IssueTracker.GenericBugtraqView|0%|0%|
 |Ankh.UI.IssueTracker.IssueSelector|0%|0%|
 |Ankh.UI.IssueTracker.IssuesItem|0%|0%|
 |Ankh.UI.IssueTracker.IssuesView|0%|0%|
 |Ankh.UI.IssueTracker.IssuesViewItem|0%||
 |Ankh.UI.IssueTracker.IssueTrackerAssociationManager|0%|0%|
-|Ankh.UI.IssueTracker.IssueTrackerAvailabilityLogic|0%|0%|
+|Ankh.UI.IssueTracker.IssueTrackerAvailabilityLogic|95.8%|90%|
 |Ankh.UI.IssueTracker.IssueTrackerConfigDialog|23.7%|3.7%|
-|Ankh.UI.IssueTracker.IssueTrackerSetupCommand|0%|0%|
-|Ankh.UI.IssueTracker.IssueTrackerThemeLogic|0%|0%|
-|Ankh.UI.IssueTracker.LocalIssueEditDialog|0%|0%|
-|Ankh.UI.IssueTracker.LocalIssueRecord|0%||
-|Ankh.UI.IssueTracker.LocalIssueStore|0%|0%|
-|Ankh.UI.IssueTracker.LocalSvnIssuesConfigControl|0%|0%|
-|Ankh.UI.IssueTracker.LocalSvnIssuesConfigurationPage|0%|0%|
-|Ankh.UI.IssueTracker.LocalSvnIssuesConnector|0%|0%|
-|Ankh.UI.IssueTracker.LocalSvnIssuesRepository|0%|0%|
-|Ankh.UI.IssueTracker.LocalSvnIssuesSettings|0%|0%|
-|Ankh.UI.IssueTracker.LocalSvnIssuesView|0%|0%|
+|Ankh.UI.IssueTracker.IssueTrackerSetupCommand|64.5%|50%|
+|Ankh.UI.IssueTracker.IssueTrackerThemeLogic|87.5%|83.3%|
+|Ankh.UI.IssueTracker.LocalIssueEditDialog|79%|40%|
+|Ankh.UI.IssueTracker.LocalIssueRecord|85.7%||
+|Ankh.UI.IssueTracker.LocalIssueStore|61.2%|38.8%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesConfigControl|95.7%|50%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesConfigurationPage|41.1%|0%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesConnector|80%|25%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesRepository|36.8%|38.8%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesSettings|87.5%|50%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesView|46.6%|12.5%|
 |Ankh.UI.MergeWizard.BaseWizardPage|0%|0%|
-|Ankh.UI.MergeWizard.Commands.Merge|0%|0%|
+|Ankh.UI.MergeWizard.Commands.Merge|28.5%|39.1%|
 |Ankh.UI.MergeWizard.Handler|0%|0%|
 |Ankh.UI.MergeWizard.InteractiveConflictService|0%|0%|
 |Ankh.UI.MergeWizard.MergeBestPracticesPage|0%|0%|
 |Ankh.UI.MergeWizard.MergeConflictHandler|0%|0%|
 |Ankh.UI.MergeWizard.MergeConflictHandlerDialog|74.1%|21.4%|
-|Ankh.UI.MergeWizard.MergeNotificationInfo|0%|0%|
+|Ankh.UI.MergeWizard.MergeNotificationInfo|68%|0%|
 |Ankh.UI.MergeWizard.MergeOptionsPage|0%|0%|
-|Ankh.UI.MergeWizard.MergePathResult|0%|0%|
-|Ankh.UI.MergeWizard.MergeResultModel|0%|0%|
+|Ankh.UI.MergeWizard.MergePathResult|100%|100%|
+|Ankh.UI.MergeWizard.MergeResultModel|97.8%|96.1%|
 |Ankh.UI.MergeWizard.MergeResultsDialog|81.2%|30%|
 |Ankh.UI.MergeWizard.MergeRevisionsSelectionPage|0%|0%|
 |Ankh.UI.MergeWizard.MergeSourceBasePage|0%|0%|
@@ -470,10 +470,10 @@
 |Ankh.UI.MergeWizard.MergeSourceRangeOfRevisionsPage|0%|0%|
 |Ankh.UI.MergeWizard.MergeSourceReintegratePage|0%|0%|
 |Ankh.UI.MergeWizard.MergeSourceTwoDifferentTreesPage|0%|0%|
-|Ankh.UI.MergeWizard.MergeStrings|12.6%|100%|
-|Ankh.UI.MergeWizard.MergeSummaryInput|0%||
-|Ankh.UI.MergeWizard.MergeSummaryLogic|0%|0%|
-|Ankh.UI.MergeWizard.MergeSummaryModel|0%||
+|Ankh.UI.MergeWizard.MergeStrings|37.8%|100%|
+|Ankh.UI.MergeWizard.MergeSummaryInput|100%||
+|Ankh.UI.MergeWizard.MergeSummaryLogic|100%|100%|
+|Ankh.UI.MergeWizard.MergeSummaryModel|100%||
 |Ankh.UI.MergeWizard.MergeSummaryPage|0%|0%|
 |Ankh.UI.MergeWizard.MergeTypePage|0%|0%|
 |Ankh.UI.MergeWizard.MergeUtils|0%|0%|
@@ -498,37 +498,37 @@
 |Ankh.UI.PathSelector.VersionResolverService|0%|0%|
 |Ankh.UI.PathSelector.VersionSelector|47.5%|21.1%|
 |Ankh.UI.PathSelector.VersionStrings|0%|0%|
-|Ankh.UI.PendingChanges.Commands.CommitPendingChanges|0%|0%|
-|Ankh.UI.PendingChanges.Commands.ConfigureRecentChangesPage|0%|0%|
-|Ankh.UI.PendingChanges.Commands.CreatePatch|0%|0%|
-|Ankh.UI.PendingChanges.Commands.GenerateCommitMessage|0%|0%|
-|Ankh.UI.PendingChanges.Commands.OpenIssue|0%|0%|
-|Ankh.UI.PendingChanges.Commands.PasteToEditorList|0%|0%|
-|Ankh.UI.PendingChanges.Commands.PendingChangeLocationCombo|0%|0%|
-|Ankh.UI.PendingChanges.Commands.RefreshPendingChanges|0%|0%|
-|Ankh.UI.PendingChanges.Commands.SpacerHider|0%|0%|
-|Ankh.UI.PendingChanges.Commands.ViewLogMessage|0%|0%|
-|Ankh.UI.PendingChanges.Commits.PendingChangeDisplayLogic|0%|0%|
+|Ankh.UI.PendingChanges.Commands.CommitPendingChanges|21.4%|15.3%|
+|Ankh.UI.PendingChanges.Commands.ConfigureRecentChangesPage|21%|12.5%|
+|Ankh.UI.PendingChanges.Commands.CreatePatch|15%|20%|
+|Ankh.UI.PendingChanges.Commands.GenerateCommitMessage|33.3%|33.3%|
+|Ankh.UI.PendingChanges.Commands.OpenIssue|13.4%|7.6%|
+|Ankh.UI.PendingChanges.Commands.PasteToEditorList|10.3%|12.5%|
+|Ankh.UI.PendingChanges.Commands.PendingChangeLocationCombo|29.7%|36.3%|
+|Ankh.UI.PendingChanges.Commands.RefreshPendingChanges|57.1%|45.4%|
+|Ankh.UI.PendingChanges.Commands.SpacerHider|60%|50%|
+|Ankh.UI.PendingChanges.Commands.ViewLogMessage|40%|37.5%|
+|Ankh.UI.PendingChanges.Commits.PendingChangeDisplayLogic|100%|100%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitItem|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitItemCollection|0%|0%|
-|Ankh.UI.PendingChanges.Commits.PendingCommitsThemeLogic|0%|0%|
-|Ankh.UI.PendingChanges.Commits.PendingCommitsView|32%|2.7%|
-|Ankh.UI.PendingChanges.CommittedHistory|0%|0%|
-|Ankh.UI.PendingChanges.CommittedHistoryEntry|0%||
+|Ankh.UI.PendingChanges.Commits.PendingCommitsThemeLogic|100%|100%|
+|Ankh.UI.PendingChanges.Commits.PendingCommitsView|32.9%|4.5%|
+|Ankh.UI.PendingChanges.CommittedHistory|100%|78.5%|
+|Ankh.UI.PendingChanges.CommittedHistoryEntry|100%||
 |Ankh.UI.PendingChanges.ConfigureRecentChangesPageDialog|0%|0%|
 |Ankh.UI.PendingChanges.Conflicts.ConflictListItem|0%|0%|
-|Ankh.UI.PendingChanges.Conflicts.ConflictListView|0%|0%|
-|Ankh.UI.PendingChanges.Conflicts.PendingConflictLogic|0%|0%|
-|Ankh.UI.PendingChanges.CopilotCommitMessage|0%|0%|
+|Ankh.UI.PendingChanges.Conflicts.ConflictListView|63.2%|5.5%|
+|Ankh.UI.PendingChanges.Conflicts.PendingConflictLogic|94.8%|95.4%|
+|Ankh.UI.PendingChanges.CopilotCommitMessage|55.2%|55.1%|
 |Ankh.UI.PendingChanges.LogMessageEditor|40%||
-|Ankh.UI.PendingChanges.PCResources|35.5%|100%|
-|Ankh.UI.PendingChanges.PendingActivationPage|0%|0%|
-|Ankh.UI.PendingChanges.PendingChangesPage|0%|0%|
-|Ankh.UI.PendingChanges.PendingChangesToolControl|0%|0%|
-|Ankh.UI.PendingChanges.PendingCommitsPage|0%|0%|
-|Ankh.UI.PendingChanges.PendingConflictsPage|0%|0%|
-|Ankh.UI.PendingChanges.PendingIssuesPage|0%|0%|
-|Ankh.UI.PendingChanges.RecentChangesPage|0%|0%|
+|Ankh.UI.PendingChanges.PCResources|57.7%|100%|
+|Ankh.UI.PendingChanges.PendingActivationPage|70%|50%|
+|Ankh.UI.PendingChanges.PendingChangesPage|30.1%|15%|
+|Ankh.UI.PendingChanges.PendingChangesToolControl|48.7%|21.5%|
+|Ankh.UI.PendingChanges.PendingCommitsPage|22.4%|1.3%|
+|Ankh.UI.PendingChanges.PendingConflictsPage|46.3%|6.4%|
+|Ankh.UI.PendingChanges.PendingIssuesPage|54.8%|14%|
+|Ankh.UI.PendingChanges.RecentChangesPage|47.9%|17.4%|
 |Ankh.UI.PendingChanges.Synchronize.SynchronizeItem|0%|0%|
 |Ankh.UI.PendingChanges.Synchronize.SynchronizeListItem|0%|0%|
 |Ankh.UI.PendingChanges.Synchronize.SynchronizeListView|0%|0%|
@@ -548,9 +548,9 @@
 |Ankh.UI.PropertyEditors.PropertyEditorDialog|47.6%|10.9%|
 |Ankh.UI.PropertyEditors.PropertyEditStrings|0%|0%|
 |Ankh.UI.RepositoryExplorer.BusyOverlay|0%|0%|
-|Ankh.UI.RepositoryExplorer.Commands.RemoveRepositoryRootCommand|0%|0%|
-|Ankh.UI.RepositoryExplorer.Commands.RepositoryBrowseCommand|0%|0%|
-|Ankh.UI.RepositoryExplorer.Commands.RepositoryExplorerLocation|0%|0%|
+|Ankh.UI.RepositoryExplorer.Commands.RemoveRepositoryRootCommand|50%|50%|
+|Ankh.UI.RepositoryExplorer.Commands.RepositoryBrowseCommand|3.5%|0%|
+|Ankh.UI.RepositoryExplorer.Commands.RepositoryExplorerLocation|33.3%|25%|
 |Ankh.UI.RepositoryExplorer.Dialogs.ConfirmDeleteDialog|72.3%|40%|
 |Ankh.UI.RepositoryExplorer.Dialogs.RenameDialog|91.6%|100%|
 |Ankh.UI.RepositoryExplorer.ListItemCollection|0%||
@@ -568,8 +568,8 @@
 |Ankh.UI.RepositoryExplorer.RepositoryWizard.RepositorySelectionWizard|15.1%|4.8%|
 |Ankh.UI.RepositoryExplorer.RepositoryWizard.RepositoryWizardResources|56.2%|100%|
 |Ankh.UI.RepositoryOpen.CheckoutProject|0%|0%|
-|Ankh.UI.RepositoryOpen.CheckoutProjectLoadPlan|0%||
-|Ankh.UI.RepositoryOpen.CheckoutProjectLogic|0%|0%|
+|Ankh.UI.RepositoryOpen.CheckoutProjectLoadPlan|100%||
+|Ankh.UI.RepositoryOpen.CheckoutProjectLogic|100%|97.9%|
 |Ankh.UI.RepositoryOpen.ProjectAddInfoDialog|75.8%|9.3%|
 |Ankh.UI.RepositoryOpen.RepositoryOpenDialog|21.9%|1.6%|
 |Ankh.UI.SccManagement.AddProjectToSubversion|70.2%|37.5%|
@@ -583,53 +583,53 @@
 |Ankh.UI.SccManagement.MultiWorkingCopyCommit|61.1%|18.7%|
 |Ankh.UI.SccManagement.ProjectCommitDialog|47.7%|6%|
 |Ankh.UI.SccManagement.RepositoryLayoutInfo|100%|50%|
-|Ankh.UI.SccManagement.RepositoryUrlUtils|74.7%|69.1%|
+|Ankh.UI.SccManagement.RepositoryUrlUtils|78%|72%|
 |Ankh.UI.SccManagement.UpdateAvailableDialog|87.2%|30%|
-|Ankh.UI.SvnInfoGrid.Commands.SvnInfoComboCommand|0%|0%|
-|Ankh.UI.SvnInfoGrid.Commands.SvnInfoTbCommands|0%|0%|
+|Ankh.UI.SvnInfoGrid.Commands.SvnInfoComboCommand|12.8%|6.2%|
+|Ankh.UI.SvnInfoGrid.Commands.SvnInfoTbCommands|25%|16.6%|
 |Ankh.UI.SvnInfoGrid.SvnInfoGridControl|0%|0%|
 |Ankh.UI.SvnInfoGrid.SvnInfoStrings|0%|0%|
 |Ankh.UI.SvnLog.BatchFinishedEventArgs|0%||
-|Ankh.UI.SvnLog.Commands.ChangeLogMessage|0%|0%|
-|Ankh.UI.SvnLog.Commands.CompareWithWorkingCopy|0%|0%|
-|Ankh.UI.SvnLog.Commands.CopyRevision|0%|0%|
-|Ankh.UI.SvnLog.Commands.FetchAll|0%|0%|
-|Ankh.UI.SvnLog.Commands.IncludeMergedRevisions|0%|0%|
-|Ankh.UI.SvnLog.Commands.LogComboBox|0%|0%|
-|Ankh.UI.SvnLog.Commands.LogFollowCopies|0%|0%|
-|Ankh.UI.SvnLog.Commands.LogOpenIssue|0%|0%|
-|Ankh.UI.SvnLog.Commands.RevertChanges|0%|0%|
-|Ankh.UI.SvnLog.Commands.ShowChangedPaths|0%|0%|
-|Ankh.UI.SvnLog.Commands.ShowChanges|0%|0%|
-|Ankh.UI.SvnLog.Commands.ShowLogMessage|0%|0%|
-|Ankh.UI.SvnLog.Commands.ShowRevisionProperties|0%|0%|
+|Ankh.UI.SvnLog.Commands.ChangeLogMessage|9.3%|10%|
+|Ankh.UI.SvnLog.Commands.CompareWithWorkingCopy|14.2%|37.5%|
+|Ankh.UI.SvnLog.Commands.CopyRevision|21.4%|25%|
+|Ankh.UI.SvnLog.Commands.FetchAll|55.5%|66.6%|
+|Ankh.UI.SvnLog.Commands.IncludeMergedRevisions|45.4%|50%|
+|Ankh.UI.SvnLog.Commands.LogComboBox|12.8%|8.8%|
+|Ankh.UI.SvnLog.Commands.LogFollowCopies|45.4%|50%|
+|Ankh.UI.SvnLog.Commands.LogOpenIssue|17.3%|16.6%|
+|Ankh.UI.SvnLog.Commands.RevertChanges|6.4%|2.3%|
+|Ankh.UI.SvnLog.Commands.ShowChangedPaths|45.4%|50%|
+|Ankh.UI.SvnLog.Commands.ShowChanges|7%|6.5%|
+|Ankh.UI.SvnLog.Commands.ShowLogMessage|45.4%|50%|
+|Ankh.UI.SvnLog.Commands.ShowRevisionProperties|5.2%|6.2%|
 |Ankh.UI.SvnLog.EditLogMessageDialog|94.2%|100%|
 |Ankh.UI.SvnLog.LogChangedPathsView|31.4%|6%|
 |Ankh.UI.SvnLog.LogControl|47.6%|18.7%|
 |Ankh.UI.SvnLog.LogDataSource|29.4%|33.3%|
 |Ankh.UI.SvnLog.LogItem|0%|0%|
 |Ankh.UI.SvnLog.LogRequest|0%|0%|
-|Ankh.UI.SvnLog.LogRevisionControl|14.9%|7.4%|
+|Ankh.UI.SvnLog.LogRevisionControl|15.6%|7.4%|
 |Ankh.UI.SvnLog.LogRevisionItem|0%|0%|
 |Ankh.UI.SvnLog.LogStrings|0%|0%|
 |Ankh.UI.SvnLog.LogToolWindowControl|0%|0%|
 |Ankh.UI.SvnLog.LogViewerDialog|53.1%|50%|
 |Ankh.UI.SvnLog.PathItem|0%|0%|
 |Ankh.UI.SvnLog.PathListViewItem|0%|0%|
-|Ankh.UI.VSSelectionControls.Commands.ListViewCommandBase|0%|0%|
-|Ankh.UI.VSSelectionControls.Commands.ListViewGroup|0%|0%|
+|Ankh.UI.VSSelectionControls.Commands.ListViewCommandBase|42.8%|33.3%|
+|Ankh.UI.VSSelectionControls.Commands.ListViewGroup|14.2%|15%|
 |Ankh.UI.VSSelectionControls.Commands.ListViewShow|0%|0%|
 |Ankh.UI.VSSelectionControls.Commands.ListViewSort|0%|0%|
 |Ankh.UI.VSSelectionControls.Commands.ListViewSortOrder|0%|0%|
-|Ankh.UI.VSSelectionControls.ListViewWithSelection`1|4.5%|1.4%|
+|Ankh.UI.VSSelectionControls.ListViewWithSelection`1|6.8%|4.2%|
 |Ankh.UI.VSSelectionControls.SmartColumn|76%|66.6%|
 |Ankh.UI.VSSelectionControls.SmartGroup|56%|68.7%|
 |Ankh.UI.VSSelectionControls.SmartListView|39.1%|38.1%|
 |Ankh.UI.VSSelectionControls.SmartListViewItem|85.7%|81.8%|
-|Ankh.UI.VSSelectionControls.SmartListViewThemeLogic|66.6%|66.6%|
-|Ankh.UI.VSSelectionControls.SmartSplitContainer|39.4%|18.1%|
-|Ankh.UI.VSSelectionControls.SmartTreeView|11.3%|8.8%|
-|Ankh.UI.VSSelectionControls.SmartTreeViewThemeLogic|0%|0%|
+|Ankh.UI.VSSelectionControls.SmartListViewThemeLogic|100%|100%|
+|Ankh.UI.VSSelectionControls.SmartSplitContainer|42.1%|18.1%|
+|Ankh.UI.VSSelectionControls.SmartTreeView|33.5%|28.8%|
+|Ankh.UI.VSSelectionControls.SmartTreeViewThemeLogic|100%|100%|
 |Ankh.UI.VSSelectionControls.TreeViewWithSelection`1|2.2%|0%|
 |Ankh.UI.WizardFramework.Wizard|90.4%|82.7%|
 |Ankh.UI.WizardFramework.WizardMessage|85.7%||
@@ -637,8 +637,8 @@
 |Ankh.UI.WizardFramework.WizardPageChangingEventArgs|100%||
 |Ankh.UI.WizardFramework.WizardPageCollection|100%|100%|
 |Ankh.UI.WorkingCopyExplorer.AddWorkingCopyExplorerRootDialog|80.8%|0%|
-|Ankh.UI.WorkingCopyExplorer.Commands.AddWorkingCopyExplorerRootCommand|0%|0%|
-|Ankh.UI.WorkingCopyExplorer.Commands.WCExplorerLocation|0%|0%|
+|Ankh.UI.WorkingCopyExplorer.Commands.AddWorkingCopyExplorerRootCommand|56.5%|50%|
+|Ankh.UI.WorkingCopyExplorer.Commands.WCExplorerLocation|38.4%|30%|
 |Ankh.UI.WorkingCopyExplorer.FileSystemDetailsView|0%|0%|
 |Ankh.UI.WorkingCopyExplorer.FileSystemListViewItem|0%|0%|
 |Ankh.UI.WorkingCopyExplorer.FileSystemTreeNode|0%|0%|
@@ -653,18 +653,18 @@
 |Ankh.UI.WorkingCopyExplorer.WorkingCopyExplorerControl|0%|0%|
 
 </details>
-<details><summary>Ankh.VS - 1.4%</summary>
+<details><summary>Ankh.VS - 13.4%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.VS**|**1.4%**|**1.1%**|
+|**Ankh.VS**|**13.4%**|**14.5%**|
 |Ankh.VS.AnkhVSModule|0%||
 |Ankh.VS.Dialogs.AnkhDialogOwner|0%|0%|
 |Ankh.VS.Dialogs.ContextCommandHandler|0%|0%|
 |Ankh.VS.Dialogs.VSCommandInstaller|0%|0%|
-|Ankh.VS.Dialogs.VSCommandRouting|0%|0%|
-|Ankh.VS.Dialogs.VSCommandRoutingKeyPlan|0%||
-|Ankh.VS.Dialogs.VSCommandRoutingLogic|0%|0%|
+|Ankh.VS.Dialogs.VSCommandRouting|17.8%|13.2%|
+|Ankh.VS.Dialogs.VSCommandRoutingKeyPlan|100%||
+|Ankh.VS.Dialogs.VSCommandRoutingLogic|100%|100%|
 |Ankh.VS.Dialogs.VSDocumentFormPane|0%|0%|
 |Ankh.VS.Dialogs.VSDocumentHost|0%|0%|
 |Ankh.VS.Dialogs.VSDocumentHostService|0%|0%|
@@ -674,13 +674,13 @@
 |Ankh.VS.LanguageServices.Core.AnkhCodeWindowManager|0%|0%|
 |Ankh.VS.LanguageServices.Core.AnkhColorizer|0%|0%|
 |Ankh.VS.LanguageServices.Core.AnkhEditorFactory|0%|0%|
-|Ankh.VS.LanguageServices.Core.AnkhEditorFactoryLogic|0%|0%|
+|Ankh.VS.LanguageServices.Core.AnkhEditorFactoryLogic|100%|100%|
 |Ankh.VS.LanguageServices.Core.AnkhLanguage|0%|0%|
 |Ankh.VS.LanguageServices.Core.AnkhLanguageDropDownBar|0%|0%|
 |Ankh.VS.LanguageServices.Core.AnkhLanguagePreferences|0%|0%|
 |Ankh.VS.LanguageServices.Core.AnkhViewFilter|0%|0%|
-|Ankh.VS.LanguageServices.Core.EditorExtensionDecision|0%||
-|Ankh.VS.LanguageServices.Core.EditorLanguageDecision|0%||
+|Ankh.VS.LanguageServices.Core.EditorExtensionDecision|100%||
+|Ankh.VS.LanguageServices.Core.EditorLanguageDecision|100%||
 |Ankh.VS.LanguageServices.LogMessages.LogMessageColorizer|0%|0%|
 |Ankh.VS.LanguageServices.LogMessages.LogMessageLanguage|0%||
 |Ankh.VS.LanguageServices.UnifiedDiff.UnifiedDiffColorizer|0%|0%|
@@ -689,24 +689,24 @@
 |Ankh.VS.OutputPane.OutputPaneManager|0%|0%|
 |Ankh.VS.Selection.AnkhCommandService|0%|0%|
 |Ankh.VS.Selection.CachedEnumerable`1|0%|0%|
-|Ankh.VS.Selection.CmdUIContextChangeEventArgs|0%||
-|Ankh.VS.Selection.CommandState|0%|0%|
+|Ankh.VS.Selection.CmdUIContextChangeEventArgs|100%||
+|Ankh.VS.Selection.CommandState|40.5%|56.8%|
 |Ankh.VS.Selection.DelayData|0%|0%|
 |Ankh.VS.Selection.Disposer|0%||
 |Ankh.VS.Selection.SelectionContext|0%|0%|
 |Ankh.VS.Selection.SelectionItem|0%|0%|
-|Ankh.VS.Selection.SelectionUtils|0%|0%|
+|Ankh.VS.Selection.SelectionUtils|32.2%|33.5%|
 |Ankh.VS.Services.AnkhVSColor|0%|0%|
 |Ankh.VS.Services.DiffMergeInstance|0%|0%|
 |Ankh.VS.Services.GlobalCommandHook|0%|0%|
 |Ankh.VS.Services.InternalDiff|0%|0%|
-|Ankh.VS.Services.StartupRefreshService|0%|0%|
-|Ankh.VS.SolutionExplorer.FileIconMapper|21.1%|24.5%|
-|Ankh.VS.SolutionExplorer.FileIconMapperDpiLogic|56%|50%|
+|Ankh.VS.Services.StartupRefreshService|92.6%|86.6%|
+|Ankh.VS.SolutionExplorer.FileIconMapper|65.2%|68.4%|
+|Ankh.VS.SolutionExplorer.FileIconMapperDpiLogic|60%|60%|
 |Ankh.VS.SolutionExplorer.SolutionExplorerStrings|0%|0%|
-|Ankh.VS.SolutionExplorer.StatusImageInfo|0%||
+|Ankh.VS.SolutionExplorer.StatusImageInfo|100%||
 |Ankh.VS.SolutionExplorer.StatusImageMapper|0%|0%|
-|Ankh.VS.SolutionExplorer.StatusImageMapperLogic|0%|0%|
+|Ankh.VS.SolutionExplorer.StatusImageMapperLogic|100%|100%|
 |Ankh.VS.SolutionExplorer.Win32TreeView|0%|0%|
 |Ankh.VS.TextEditor.CodeEditorWindow|0%|0%|
 |Ankh.VS.TextEditor.TextEditorFactory|0%||
@@ -717,10 +717,10 @@
 |Ankh.VS.WpfServices.WpfEditorInfoService|0%|0%|
 |Ankh.WpfPackage.Services.PaletteComboBoxPainter|0%|0%|
 |Ankh.WpfPackage.Services.PaletteNumericUpDownPainter|0%|0%|
-|Ankh.WpfPackage.Services.ThemeReflectionLogic|0%|0%|
-|Ankh.WpfPackage.Services.ThemingService|0%|0%|
+|Ankh.WpfPackage.Services.ThemeReflectionLogic|73.1%|70.8%|
+|Ankh.WpfPackage.Services.ThemingService|2.3%|0%|
 |Ankh.WpfPackage.Services.ThreadedWaitService|0%|0%|
-|Ankh.WpfPackage.Services.WinFormsNativeThemeLogic|0%|0%|
+|Ankh.WpfPackage.Services.WinFormsNativeThemeLogic|100%|100%|
 
 </details>
 <details><summary>TestUtils - 0%</summary>
