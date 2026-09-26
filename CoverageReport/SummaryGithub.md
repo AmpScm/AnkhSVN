@@ -3,30 +3,30 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/26/2026 - 12:04:29 AM |
-| Coverage date: | 9/26/2026 - 12:04:02 AM - 9/26/2026 - 12:04:18 AM |
+| Generated on: | 9/26/2026 - 12:32:18 AM |
+| Coverage date: | 9/26/2026 - 12:31:55 AM - 9/26/2026 - 12:32:07 AM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
-| Classes: | 615 |
-| Files: | 682 |
-| **Line coverage:** | 26.2% (12658 of 48157) |
-| Covered lines: | 12658 |
-| Uncovered lines: | 35499 |
-| Coverable lines: | 48157 |
-| Total lines: | 134544 |
-| **Branch coverage:** | 21.2% (4914 of 23129) |
-| Covered branches: | 4914 |
-| Total branches: | 23129 |
+| Classes: | 631 |
+| Files: | 683 |
+| **Line coverage:** | 26.1% (12796 of 48960) |
+| Covered lines: | 12796 |
+| Uncovered lines: | 36164 |
+| Coverable lines: | 48960 |
+| Total lines: | 135976 |
+| **Branch coverage:** | 21.1% (4953 of 23391) |
+| Covered branches: | 4953 |
+| Total branches: | 23391 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
 
 ## Coverage
-<details><summary>Ankh - 10.7%</summary>
+<details><summary>Ankh - 10.6%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh**|**10.7%**|**19.9%**|
+|**Ankh**|**10.6%**|**19.9%**|
 |Ankh.AnkhModule|0%||
 |Ankh.Commands.AddItemCommand|5.7%|14.7%|
 |Ankh.Commands.AddToSccCommands|3.1%|1%|
@@ -166,14 +166,14 @@
 |Ankh.UI.DiffWindow.DiffEditorControl|0%|0%|
 
 </details>
-<details><summary>Ankh.ExtensionPoints - 34.8%</summary>
+<details><summary>Ankh.ExtensionPoints - 36.3%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.ExtensionPoints**|**34.8%**|**41.6%**|
+|**Ankh.ExtensionPoints**|**36.3%**|**41.6%**|
 |Ankh.ExtensionPoints.IssueTracker.CommitArgs|100%||
 |Ankh.ExtensionPoints.IssueTracker.ConfigPageEventArgs|0%||
-|Ankh.ExtensionPoints.IssueTracker.IssueRepository|0%|0%|
+|Ankh.ExtensionPoints.IssueTracker.IssueRepository|8.6%|0%|
 |Ankh.ExtensionPoints.IssueTracker.IssueRepositoryConfigurationPage|0%|0%|
 |Ankh.ExtensionPoints.IssueTracker.IssueRepositorySettings|65.7%|56.2%|
 |Ankh.ExtensionPoints.IssueTracker.PostCommitArgs|60%||
@@ -393,11 +393,11 @@
 |Ankh.VSVersion|0%|0%|
 
 </details>
-<details><summary>Ankh.UI - 31.3%</summary>
+<details><summary>Ankh.UI - 30.7%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**31.3%**|**18.2%**|
+|**Ankh.UI**|**30.7%**|**18.1%**|
 |Ankh.UI.AddRepositoryRootDialog|64.4%|18.7%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -426,13 +426,29 @@
 |Ankh.UI.Controls.StatusPanelResources|0%|0%|
 |Ankh.UI.Controls.StatusPanelTestForm|0%|0%|
 |Ankh.UI.ErrorDialog|75%|28.5%|
+|Ankh.UI.IssueTracker.BuiltInIssueTrackerConnectors|100%||
+|Ankh.UI.IssueTracker.GenericBugtraqConfigControl|0%|0%|
+|Ankh.UI.IssueTracker.GenericBugtraqConfigurationPage|0%|0%|
+|Ankh.UI.IssueTracker.GenericBugtraqConnector|77.7%|25%|
+|Ankh.UI.IssueTracker.GenericBugtraqRepository|10.6%|2.7%|
+|Ankh.UI.IssueTracker.GenericBugtraqSettings|32.5%|11.1%|
+|Ankh.UI.IssueTracker.GenericBugtraqView|0%|0%|
 |Ankh.UI.IssueTracker.IssueSelector|0%|0%|
 |Ankh.UI.IssueTracker.IssuesItem|0%|0%|
 |Ankh.UI.IssueTracker.IssuesView|0%|0%|
 |Ankh.UI.IssueTracker.IssuesViewItem|0%||
 |Ankh.UI.IssueTracker.IssueTrackerAvailabilityLogic|95.8%|90%|
-|Ankh.UI.IssueTracker.IssueTrackerConfigDialog|24.7%|3.8%|
-|Ankh.UI.IssueTracker.IssueTrackerSetupCommand|21%|17.5%|
+|Ankh.UI.IssueTracker.IssueTrackerConfigDialog|24.2%|3.7%|
+|Ankh.UI.IssueTracker.IssueTrackerSetupCommand|17.3%|14.5%|
+|Ankh.UI.IssueTracker.LocalIssueEditDialog|0%|0%|
+|Ankh.UI.IssueTracker.LocalIssueRecord|85.7%||
+|Ankh.UI.IssueTracker.LocalIssueStore|56.5%|36.1%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesConfigControl|0%|0%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesConfigurationPage|0%|0%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesConnector|70%|16.6%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesRepository|36.8%|38.8%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesSettings|87.5%|50%|
+|Ankh.UI.IssueTracker.LocalSvnIssuesView|0%|0%|
 |Ankh.UI.MergeWizard.BaseWizardPage|0%|0%|
 |Ankh.UI.MergeWizard.Commands.Merge|28.5%|39.1%|
 |Ankh.UI.MergeWizard.Handler|0%|0%|
