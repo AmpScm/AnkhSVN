@@ -69,7 +69,7 @@ Common values include:
 - `bugtraq:message` — commit-message pattern,
 - `bugtraq:label` — label shown beside the issue field,
 - `bugtraq:number` — whether IDs are numeric,
-- `bugtraq:warnifnoissue` — whether to remind the user when no ID is entered,
+- `bugtraq:warnifnoissue` — retained for compatibility; AnkhSVN does not prompt when the issue ID is blank,
 - `bugtraq:append` — whether the generated issue text is appended or inserted at the top,
 - `bugtraq:logregex` — regular-expression rules for finding issue IDs in log messages.
 

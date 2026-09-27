@@ -397,31 +397,6 @@ namespace Ankh.Services.PendingChanges
 
             string msg = sb.ToString();
 
-            // no need to check for issue id if issue tracker integration already did it.
-            if (CommitSettings.WarnIfNoIssue && !state.SkipIssueVerify)
-            {
-                bool haveIssue = false;
-                // Use the project commit settings class to add an issue number (if available)
-
-                if (CommitSettings.ShowIssueBox && !string.IsNullOrEmpty(state.IssueText))
-                    haveIssue = true;
-
-                IEnumerable<TextMarker> markers;
-                if (!haveIssue
-                    && !string.IsNullOrEmpty(state.LogMessage)
-                    && IssueService.TryGetIssues(state.LogMessage, out markers)
-                    && !EnumTools.IsEmpty(markers))
-                {
-                    haveIssue = true;
-                }
-
-                if (!haveIssue &&
-                    state.MessageBox.Show(PccStrings.NoIssueNumber, "",
-                                          MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-                {
-                    return false;
-                }
-            }
             msg = CommitSettings.BuildLogMessage(msg, state.IssueText);
 
             // And make sure the log message ends with a single newline
