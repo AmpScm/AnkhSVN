@@ -3,30 +3,30 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/26/2026 - 2:52:02 AM |
-| Coverage date: | 9/26/2026 - 2:51:27 AM - 9/26/2026 - 2:51:42 AM |
+| Generated on: | 9/27/2026 - 8:17:11 PM |
+| Coverage date: | 9/27/2026 - 8:16:53 PM - 9/27/2026 - 8:17:03 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 633 |
 | Files: | 685 |
-| **Line coverage:** | 27.3% (13478 of 49229) |
-| Covered lines: | 13478 |
-| Uncovered lines: | 35751 |
-| Coverable lines: | 49229 |
-| Total lines: | 136416 |
-| **Branch coverage:** | 21.4% (5033 of 23435) |
-| Covered branches: | 5033 |
-| Total branches: | 23435 |
+| **Line coverage:** | 27.4% (13505 of 49215) |
+| Covered lines: | 13505 |
+| Uncovered lines: | 35710 |
+| Coverable lines: | 49215 |
+| Total lines: | 136381 |
+| **Branch coverage:** | 21.5% (5042 of 23415) |
+| Covered branches: | 5042 |
+| Total branches: | 23415 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
 
 ## Coverage
-<details><summary>Ankh - 10.6%</summary>
+<details><summary>Ankh - 11%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh**|**10.6%**|**19.9%**|
+|**Ankh**|**11%**|**20.2%**|
 |Ankh.AnkhModule|0%||
 |Ankh.Commands.AddItemCommand|5.7%|14.7%|
 |Ankh.Commands.AddToSccCommands|3.1%|1%|
@@ -103,8 +103,8 @@
 |Ankh.Services.MigrationService|0%|0%|
 |Ankh.Services.OwnerWrapper|0%|0%|
 |Ankh.Services.PendingChanges.PccStrings|0%|0%|
-|Ankh.Services.PendingChanges.PendingChangeHandler|0%|0%|
-|Ankh.Services.PendingChanges.PendingCommitState|0%|0%|
+|Ankh.Services.PendingChanges.PendingChangeHandler|2.6%|2.1%|
+|Ankh.Services.PendingChanges.PendingCommitState|42.1%|28.5%|
 |Ankh.Services.RepositoryProvider.AnkhRepositoryProviderService|0%|0%|
 |Ankh.Services.RepositoryProvider.ScmRepositoryProviderProxy|0%|0%|
 |Ankh.Services.ServiceStrings|0%|0%|
