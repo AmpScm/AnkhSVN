@@ -3,30 +3,30 @@
 
 |||
 |:---|:---|
-| Generated on: | 9/27/2026 - 8:17:11 PM |
-| Coverage date: | 9/27/2026 - 8:16:53 PM - 9/27/2026 - 8:17:03 PM |
+| Generated on: | 10/23/2026 - 7:41:25 PM |
+| Coverage date: | 10/23/2026 - 7:41:00 PM - 10/23/2026 - 7:41:14 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 633 |
 | Files: | 685 |
-| **Line coverage:** | 27.4% (13505 of 49215) |
-| Covered lines: | 13505 |
-| Uncovered lines: | 35710 |
-| Coverable lines: | 49215 |
-| Total lines: | 136381 |
-| **Branch coverage:** | 21.5% (5042 of 23415) |
-| Covered branches: | 5042 |
-| Total branches: | 23415 |
+| **Line coverage:** | 27.5% (13558 of 49230) |
+| Covered lines: | 13558 |
+| Uncovered lines: | 35672 |
+| Coverable lines: | 49230 |
+| Total lines: | 136419 |
+| **Branch coverage:** | 21.6% (5082 of 23437) |
+| Covered branches: | 5082 |
+| Total branches: | 23437 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
 
 ## Coverage
-<details><summary>Ankh - 11%</summary>
+<details><summary>Ankh - 11.3%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh**|**11%**|**20.2%**|
+|**Ankh**|**11.3%**|**20.7%**|
 |Ankh.AnkhModule|0%||
 |Ankh.Commands.AddItemCommand|5.7%|14.7%|
 |Ankh.Commands.AddToSccCommands|3.1%|1%|
@@ -102,9 +102,9 @@
 |Ankh.Services.IssueTracker.IssueRepositorySettingsProxy|0%|0%|
 |Ankh.Services.MigrationService|0%|0%|
 |Ankh.Services.OwnerWrapper|0%|0%|
-|Ankh.Services.PendingChanges.PccStrings|0%|0%|
-|Ankh.Services.PendingChanges.PendingChangeHandler|2.6%|2.1%|
-|Ankh.Services.PendingChanges.PendingCommitState|42.1%|28.5%|
+|Ankh.Services.PendingChanges.PccStrings|17.2%|100%|
+|Ankh.Services.PendingChanges.PendingChangeHandler|6.1%|11.3%|
+|Ankh.Services.PendingChanges.PendingCommitState|50%|42.8%|
 |Ankh.Services.RepositoryProvider.AnkhRepositoryProviderService|0%|0%|
 |Ankh.Services.RepositoryProvider.ScmRepositoryProviderProxy|0%|0%|
 |Ankh.Services.ServiceStrings|0%|0%|
@@ -275,14 +275,14 @@
 |Ankh.Scc.ThePendingChangeCollection|0%||
 
 </details>
-<details><summary>Ankh.Services - 34.6%</summary>
+<details><summary>Ankh.Services - 35.1%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Services**|**34.6%**|**31.7%**|
+|**Ankh.Services**|**35.1%**|**32.1%**|
 |Ankh.AnkhInstanceConditionalAttribute|46.6%|50%|
 |Ankh.AnkhRuntime|31.9%|24.3%|
-|Ankh.AnkhService|17.5%|9.6%|
+|Ankh.AnkhService|18.2%|9.6%|
 |Ankh.AnkhServiceContainer|100%||
 |Ankh.AnkhServiceEvents|26%|16.6%|
 |Ankh.AnkhServiceProviderWrapper|0%|0%|
@@ -305,7 +305,7 @@
 |Ankh.Configuration.RegistryLifoList|46.8%|52.7%|
 |Ankh.Configuration.RegistryUtils|90.9%|87.5%|
 |Ankh.ContextServices.GuidUtils|100%|100%|
-|Ankh.EnumTools|55.1%|50%|
+|Ankh.EnumTools|62%|55.5%|
 |Ankh.GlobalServiceAttribute|0%|0%|
 |Ankh.HybridCollection`1|72.7%|83.3%|
 |Ankh.KeyedNotifyCollection`2|85%|83.3%|
@@ -371,7 +371,7 @@
 |Ankh.SvnPoolClient|0%|0%|
 |Ankh.SvnPoolRemoteSession|0%|0%|
 |Ankh.UI.AnkhCommandHook|0%|0%|
-|Ankh.UI.AnkhMessageBox|0%|0%|
+|Ankh.UI.AnkhMessageBox|36%|26.8%|
 |Ankh.UI.AnkhThemePalette|98.4%|100%|
 |Ankh.UI.AnkhToolWindowControl|6.6%|5.5%|
 |Ankh.UI.VSCommandHandler|0%|0%|
@@ -386,7 +386,7 @@
 |Ankh.VS.AnkhIdleArgs|50%|16.6%|
 |Ankh.VS.ComStreamWrapper|0%|0%|
 |Ankh.VS.ImageReference|0%||
-|Ankh.VS.TextMarker|0%|0%|
+|Ankh.VS.TextMarker|55.5%|0%|
 |Ankh.VS.WpfServices.UI.VSWpfDialog|0%|0%|
 |Ankh.VS.WpfServices.UI.VSWpfDialogBase|0%|0%|
 |Ankh.VSAssemblies|0%|0%|
