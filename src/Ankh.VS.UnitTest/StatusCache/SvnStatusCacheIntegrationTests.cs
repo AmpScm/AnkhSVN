@@ -14,6 +14,9 @@
 
 using System;
 using System.IO;
+using System.Reflection;
+using System.Collections.Generic;
+using System.Linq;
 using Ankh;
 using Ankh.Commands;
 using Ankh.Scc;
@@ -36,6 +39,7 @@ namespace AnkhSvn_UnitTestProject.StatusCache
         string _trackedFile;
         SvnClient _client;
         SvnStatusCache _cache;
+        Mock<IFileStatusMonitor> _monitor;
 
         [SetUp]
         public void SetUp()
@@ -73,6 +77,8 @@ namespace AnkhSvn_UnitTestProject.StatusCache
                 typeof(IAnkhCommandService),
                 new Mock<IAnkhCommandService>().Object);
 
+            _monitor = new Mock<IFileStatusMonitor>();
+            services.AddService(typeof(IFileStatusMonitor), _monitor.Object);
             _cache = new SvnStatusCache(services);
         }
 
@@ -139,6 +145,63 @@ namespace AnkhSvn_UnitTestProject.StatusCache
             Assert.That(outside.IsVersioned, Is.False);
             Assert.That(outside.IsVersionable, Is.False);
             Assert.That(outside.Exists, Is.True);
+        }
+
+        [Test]
+        public void ExternalPropertyChangeQueuesGlyphUpdateWithoutClearingCache()
+        {
+            SvnItem item = _cache[_trackedFile];
+            Assert.That(item.IsModified, Is.False);
+            _client.SetProperty(_trackedFile, "test:property", "changed");
+            ShellChange(0x2000, _trackedFile, null); // SHCNE_UPDATEITEM
+            Assert.That(_cache[_trackedFile], Is.SameAs(item));
+            Assert.That(item.IsModified, Is.True);
+            _monitor.Verify(m => m.ScheduleGlyphUpdate(It.Is<IEnumerable<string>>(
+                paths => paths.Count() == 1 && paths.Contains(_trackedFile))), Times.Once);
+
+            _client.Revert(_trackedFile);
+            ShellChange(0x2000, _trackedFile, null);
+            Assert.That(item.IsModified, Is.False);
+        }
+
+        [Test]
+        public void DirectoryNotificationInvalidatesCachedDescendantsEvenWhenParentIsNotCached()
+        {
+            SvnItem item = _cache[_trackedFile];
+            Assert.That(item.IsModified, Is.False);
+            File.AppendAllText(_trackedFile, "external edit");
+            ShellChange(0x1000, _workingCopyPath, null); // SHCNE_UPDATEDIR
+            Assert.That(item.IsModified, Is.True);
+            _monitor.Verify(m => m.ScheduleGlyphUpdate(It.Is<IEnumerable<string>>(
+                paths => paths.Contains(_trackedFile))), Times.Once);
+        }
+
+        [Test]
+        public void RenameRefreshesBothPathsAndUnrelatedNotificationsDoNothing()
+        {
+            string renamed = Path.Combine(_workingCopyPath, "renamed.txt");
+            SvnItem oldItem = _cache[_trackedFile];
+            SvnItem newItem = _cache[renamed];
+            Assert.That(oldItem.Exists, Is.True);
+            Assert.That(newItem.Exists, Is.False);
+            File.Move(_trackedFile, renamed);
+            ShellChange(0x0001, _trackedFile, renamed);
+            Assert.That(oldItem.Exists, Is.False);
+            Assert.That(newItem.Exists, Is.True);
+            _monitor.Verify(m => m.ScheduleGlyphUpdate(It.Is<IEnumerable<string>>(
+                paths => paths.Contains(_trackedFile) && paths.Contains(renamed))), Times.Once);
+            _monitor.Invocations.Clear();
+            ShellChange(0x1000, Path.Combine(_root, "unrelated"), null);
+            ShellChange(0x2000, null, null);
+            _monitor.VerifyNoOtherCalls();
+        }
+
+        void ShellChange(int flags, string first, string second)
+        {
+            typeof(SvnStatusCache).GetMethod("OnShellChange",
+                BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new[] { typeof(int), typeof(int), typeof(string), typeof(string) }, null)
+                .Invoke(_cache, new object[] { flags, 0, first, second });
         }
 
         static void NormalizeAttributes(string path)

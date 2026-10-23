@@ -6,6 +6,7 @@ using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.Services;
 using Ankh.UI;
+using Ankh.Selection;
 using Ankh.VS;
 using Ankh.VS.Services;
 using Ankh.VS.SolutionExplorer;
@@ -37,147 +38,227 @@ namespace AnkhSvn_UnitTestProject.Dialogs
             public Events(IAnkhServiceProvider context) : base(context) { }
         }
 
-        [Test]
-        public void StartupWaitsForShellThenRefreshesOnceAndCoalescesSolutionEvents()
+        sealed class Harness : IDisposable
         {
-            using (var context = new TestContext())
+            public readonly TestContext Context = new TestContext();
+            public readonly Mock<IAnkhCommandStates> States = new Mock<IAnkhCommandStates>();
+            public readonly Mock<IVsShell> Shell = new Mock<IVsShell>();
+            public readonly Mock<IVsMonitorSelection> Selection = new Mock<IVsMonitorSelection>(MockBehavior.Strict);
+            public readonly Mock<IAnkhPackage> Package = new Mock<IAnkhPackage>();
+            public readonly Mock<IPendingChangesManager> Pending = new Mock<IPendingChangesManager>();
+            public readonly Mock<IFileStatusMonitor> Monitor = new Mock<IFileStatusMonitor>();
+            public readonly Mock<IAnkhOpenDocumentTracker> Documents = new Mock<IAnkhOpenDocumentTracker>();
+            public readonly Events Events;
+            public readonly StartupRefreshService Service;
+            public readonly string[] Files = { @"C:\solution\one.cs", @"D:\other-wc\two.cs" };
+            public long Now;
+            public int Themes;
+
+            public Harness()
             {
-                var events = new Events(context);
-                context.AddService(typeof(AnkhServiceEvents), events);
-                context.AddService(typeof(IAnkhServiceEvents), events);
-                var package = new Mock<IAnkhPackage>();
-                context.AddService(typeof(IAnkhPackage), package.Object);
-                var states = new Mock<IAnkhCommandStates>();
-                states.SetupGet(x => x.UIShellAvailable).Returns(true);
-                states.SetupGet(x => x.SccProviderActive).Returns(false);
-                context.AddService(typeof(IAnkhCommandStates), states.Object);
-                var shell = new Mock<IVsShell>();
-                object initialized = false;
-                shell.Setup(x => x.GetProperty(-9053, out initialized)).Returns(0);
-                context.Shell = shell.Object;
-                var selectionMonitor = new Mock<IVsMonitorSelection>();
-                uint selectionCookie = 23;
-                selectionMonitor
-                    .Setup(x => x.AdviseSelectionEvents(It.IsAny<IVsSelectionEvents>(), out selectionCookie))
-                    .Returns(0);
-                context.SelectionMonitor = selectionMonitor.Object;
+                Events = new Events(Context);
+                Context.AddService(typeof(AnkhServiceEvents), Events);
+                Context.AddService(typeof(IAnkhServiceEvents), Events);
+                Context.AddService(typeof(IAnkhPackage), Package.Object);
+                States.SetupGet(x => x.UIShellAvailable).Returns(true);
+                States.SetupGet(x => x.SccProviderActive).Returns(true);
+                States.SetupGet(x => x.SolutionExists).Returns(true);
+                Context.AddService(typeof(IAnkhCommandStates), States.Object);
+                Context.Shell = Shell.Object;
+                Context.SelectionMonitor = Selection.Object;
+                uint cookie = 23;
+                Shell.Setup(x => x.AdviseBroadcastMessages(It.IsAny<IVsBroadcastMessageEvents>(), out cookie)).Returns(0);
+                SetInitialized(true);
                 var mapper = new Mock<IProjectFileMapper>();
-                var files = new[] { "C:\\solution\\one.cs", "C:\\solution\\two.cs" };
-                mapper.Setup(x => x.GetAllFilesOfAllProjects()).Returns(files);
-                context.AddService(typeof(IProjectFileMapper), mapper.Object);
-                var monitor = new Mock<IFileStatusMonitor>();
-                context.AddService(typeof(IFileStatusMonitor), monitor.Object);
-                var pending = new Mock<IPendingChangesManager>();
-                context.AddService(typeof(IPendingChangesManager), pending.Object);
-                var documents = new Mock<IAnkhOpenDocumentTracker>();
-                context.AddService(typeof(IAnkhOpenDocumentTracker), documents.Object);
-                int themes = 0;
-                events.ThemeChanged += delegate { themes++; };
-                using (var service = new StartupRefreshService(context))
-                {
-                    ((IAnkhServiceImplementation)service).OnInitialize();
-                    selectionMonitor.Verify(
-                        x => x.AdviseSelectionEvents(service, out selectionCookie),
-                        Times.Once);
-                    var idle = new AnkhIdleArgs(context, 0);
-                    service.OnIdle(idle);
-                    Assert.That(themes, Is.Zero);
-                    ((IAnkhServiceEvents)events).OnRuntimeStarted(EventArgs.Empty);
-                    service.OnIdle(idle);
-                    Assert.That(themes, Is.Zero);
-                    initialized = true;
-                    shell.Setup(x => x.GetProperty(-9053, out initialized)).Returns(0);
-                    service.OnIdle(idle);
-                    Assert.That(themes, Is.EqualTo(1));
-                    pending.Verify(x => x.FullRefresh(true), Times.Never);
-                    states.SetupGet(x => x.SccProviderActive).Returns(true);
-                    service.OnIdle(idle);
-                    service.OnIdle(idle);
-                    Assert.That(themes, Is.EqualTo(1));
-                    monitor.Verify(x => x.ScheduleSvnStatus(files), Times.Once);
-                    documents.Verify(x => x.RefreshDirtyState(), Times.Once);
-                    pending.Verify(x => x.FullRefresh(true), Times.Once);
-                    ((IAnkhServiceEvents)events).OnSolutionOpened(EventArgs.Empty);
-                    ((IAnkhServiceEvents)events).OnSolutionOpened(EventArgs.Empty);
-                    service.OnIdle(idle);
-                    pending.Verify(x => x.FullRefresh(true), Times.Exactly(2));
+                mapper.Setup(x => x.GetAllFilesOfAllProjects()).Returns(Files);
+                mapper.Setup(x => x.GetAllSccProjects()).Returns(new SccProject[0]);
+                Context.AddService(typeof(IProjectFileMapper), mapper.Object);
+                Context.AddService(typeof(IFileStatusMonitor), Monitor.Object);
+                Context.AddService(typeof(IPendingChangesManager), Pending.Object);
+                Context.AddService(typeof(IAnkhOpenDocumentTracker), Documents.Object);
+                Events.ThemeChanged += delegate { Themes++; };
+                Service = new StartupRefreshService(Context, () => Now);
+                ((IAnkhServiceImplementation)Service).OnInitialize();
+            }
 
-                    Guid solutionExplorerGuid = new Guid(ToolWindowGuids.SolutionExplorer);
-                    var solutionExplorerFrame = new Mock<IVsWindowFrame>();
-                    solutionExplorerFrame
-                        .Setup(x => x.GetGuidProperty(
-                            (int)__VSFPROPID.VSFPROPID_GuidPersistenceSlot,
-                            out solutionExplorerGuid))
-                        .Returns(0);
+            public void SetInitialized(bool value)
+            {
+                object initialized = value;
+                Shell.Setup(x => x.GetProperty(-9053, out initialized)).Returns(0);
+            }
+            public void Start() { ((IAnkhServiceEvents)Events).OnRuntimeStarted(EventArgs.Empty); Idle(); }
+            public void Idle() { Service.OnIdle(new AnkhIdleArgs(Context, 0)); }
+            public void Activate(bool active) { Service.OnBroadcastMessage(0x001C, active ? new IntPtr(1) : IntPtr.Zero, IntPtr.Zero); }
+            public void Dispose() { ((IDisposable)Service).Dispose(); Context.Dispose(); }
+        }
 
-                    // Multiple activation notifications before idle must collapse
-                    // into a single full refresh.
-                    service.OnElementValueChanged(
-                        (uint)VSConstants.VSSELELEMID.SEID_WindowFrame,
-                        null,
-                        solutionExplorerFrame.Object);
-                    service.OnElementValueChanged(
-                        (uint)VSConstants.VSSELELEMID.SEID_WindowFrame,
-                        null,
-                        solutionExplorerFrame.Object);
-                    service.OnIdle(idle);
-                    pending.Verify(x => x.FullRefresh(true), Times.Exactly(3));
-                    monitor.Verify(x => x.ScheduleSvnStatus(files), Times.Exactly(3));
-                    documents.Verify(x => x.RefreshDirtyState(), Times.Exactly(3));
-
-                    Guid otherGuid = Guid.NewGuid();
-                    var otherFrame = new Mock<IVsWindowFrame>();
-                    otherFrame
-                        .Setup(x => x.GetGuidProperty(
-                            (int)__VSFPROPID.VSFPROPID_GuidPersistenceSlot,
-                            out otherGuid))
-                        .Returns(0);
-                    service.OnElementValueChanged(
-                        (uint)VSConstants.VSSELELEMID.SEID_WindowFrame,
-                        null,
-                        otherFrame.Object);
-                    service.OnIdle(idle);
-                    pending.Verify(x => x.FullRefresh(true), Times.Exactly(3));
-                }
-                selectionMonitor.Verify(
-                    x => x.UnadviseSelectionEvents(selectionCookie),
-                    Times.Once);
-                package.Verify(x => x.UnregisterIdleProcessor(It.IsAny<IAnkhIdleProcessor>()), Times.Once);
+        [Test]
+        public void StartupWaitsForShellAndProviderAndCoalescesLifecycleEvents()
+        {
+            using (var h = new Harness())
+            {
+                h.SetInitialized(false);
+                h.States.SetupGet(x => x.SccProviderActive).Returns(false);
+                h.Idle();
+                h.Start();
+                Assert.That(h.Themes, Is.Zero);
+                h.SetInitialized(true);
+                h.Idle();
+                Assert.That(h.Themes, Is.EqualTo(1));
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Never);
+                h.States.SetupGet(x => x.SccProviderActive).Returns(true);
+                h.Idle();
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+                ((IAnkhServiceEvents)h.Events).OnSolutionOpened(EventArgs.Empty);
+                ((IAnkhServiceEvents)h.Events).OnSccProviderActivated(EventArgs.Empty);
+                h.Idle();
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(2));
+                h.Monitor.Verify(x => x.ScheduleSvnStatus(h.Files), Times.Exactly(2));
+                h.Documents.Verify(x => x.RefreshDirtyState(), Times.Exactly(2));
+                Assert.That(h.Themes, Is.EqualTo(1));
             }
         }
 
+        [Test]
+        public void NavigationAndDuplicateActivationNeverScheduleFullScans()
+        {
+            using (var h = new Harness())
+            {
+                h.Start();
+                Assert.That(h.Service, Is.Not.InstanceOf<IVsSelectionEvents>());
+                for (int i = 0; i < 100; i++)
+                {
+                    h.Now += 1000;
+                    h.Activate(true);
+                    h.Service.OnBroadcastMessage(0x0006, new IntPtr(1), IntPtr.Zero); // WM_ACTIVATE, not app activation
+                    h.Idle();
+                }
+                h.Selection.VerifyNoOtherCalls();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+                h.Monitor.Verify(x => x.ScheduleSvnStatus(h.Files), Times.Once);
+            }
+        }
 
         [Test]
-        public void SolutionExplorerFrameDetectionRejectsNullFailuresAndOtherWindows()
+        public void ReturningFromExternalToolRefreshesAllProjectsOnceAfterSettling()
         {
-            Assert.That(StartupRefreshService.IsSolutionExplorerFrame(null), Is.False);
+            using (var h = new Harness())
+            {
+                h.Start();
+                h.Now = 10000;
+                h.Activate(false);
+                h.Idle();
+                h.Activate(true);
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+                h.Now += StartupRefreshService.ActivationDelayMilliseconds;
+                h.Idle();
+                h.Activate(true);
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(2));
+                h.Monitor.Verify(x => x.ScheduleSvnStatus(h.Files), Times.Exactly(2));
+                h.Monitor.Verify(x => x.ScheduleGlyphOnlyUpdate(It.IsAny<System.Collections.Generic.IEnumerable<SccProject>>()), Times.Exactly(2));
+                h.Documents.Verify(x => x.RefreshDirtyState(), Times.Exactly(2));
+            }
+        }
 
-            Guid failedGuid = Guid.Empty;
-            var failedFrame = new Mock<IVsWindowFrame>();
-            failedFrame
-                .Setup(x => x.GetGuidProperty(
-                    (int)__VSFPROPID.VSFPROPID_GuidPersistenceSlot,
-                    out failedGuid))
-                .Returns(-1);
-            Assert.That(StartupRefreshService.IsSolutionExplorerFrame(failedFrame.Object), Is.False);
+        [Test]
+        public void RapidSwitchingDefersButNeverDropsFinalRefresh()
+        {
+            using (var h = new Harness())
+            {
+                h.Start();
+                h.Now = 100;
+                h.Activate(false);
+                h.Activate(true);
+                h.Now = 700;
+                h.Idle(); // within minimum interval
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+                h.Activate(false);
+                h.Now = 3000;
+                h.Idle(); // must not catch up while inactive
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+                h.Activate(true);
+                h.Now += StartupRefreshService.ActivationDelayMilliseconds;
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(2));
+                h.Now += 100;
+                h.Activate(false);
+                h.Activate(true);
+                h.Now += StartupRefreshService.ActivationDelayMilliseconds;
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(2));
+                h.Now += StartupRefreshService.RefreshIntervalMilliseconds;
+                h.Idle(); // no new event needed to flush the deferred request
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(3));
+            }
+        }
 
-            Guid otherGuid = Guid.NewGuid();
-            var otherFrame = new Mock<IVsWindowFrame>();
-            otherFrame
-                .Setup(x => x.GetGuidProperty(
-                    (int)__VSFPROPID.VSFPROPID_GuidPersistenceSlot,
-                    out otherGuid))
-                .Returns(0);
-            Assert.That(StartupRefreshService.IsSolutionExplorerFrame(otherFrame.Object), Is.False);
+        [Test]
+        public void UnavailableProviderRetainsCatchupAndSolutionCloseCancelsIt()
+        {
+            using (var h = new Harness())
+            {
+                h.Start();
+                h.Activate(false);
+                h.Activate(true);
+                h.Now = 10000;
+                h.States.SetupGet(x => x.SccProviderActive).Returns(false);
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+                h.States.SetupGet(x => x.SccProviderActive).Returns(true);
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(2));
+                h.Activate(false);
+                h.Activate(true);
+                ((IAnkhServiceEvents)h.Events).OnSolutionClosed(EventArgs.Empty);
+                h.Now += 10000;
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(2));
+            }
+        }
 
-            Guid solutionExplorerGuid = new Guid(ToolWindowGuids.SolutionExplorer);
-            var solutionExplorerFrame = new Mock<IVsWindowFrame>();
-            solutionExplorerFrame
-                .Setup(x => x.GetGuidProperty(
-                    (int)__VSFPROPID.VSFPROPID_GuidPersistenceSlot,
-                    out solutionExplorerGuid))
-                .Returns(0);
-            Assert.That(StartupRefreshService.IsSolutionExplorerFrame(solutionExplorerFrame.Object), Is.True);
+        [Test]
+        public void LifecycleRefreshSubsumesPendingApplicationCatchup()
+        {
+            using (var h = new Harness())
+            {
+                h.Start();
+                h.Activate(false);
+                h.Activate(true);
+                ((IAnkhServiceEvents)h.Events).OnSolutionOpened(EventArgs.Empty);
+                h.Idle();
+                h.Now = 10000;
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(2));
+            }
+        }
+
+        [Test]
+        public void ApplicationActivationWithoutSolutionDoesNotScan()
+        {
+            using (var h = new Harness())
+            {
+                h.Start();
+                h.States.SetupGet(x => x.SolutionExists).Returns(false);
+                h.Activate(false);
+                h.Activate(true);
+                h.Now = 10000;
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+            }
+        }
+
+        [Test]
+        public void BroadcastSubscriptionIsReleased()
+        {
+            var h = new Harness();
+            h.Start();
+            h.Dispose();
+            h.Shell.Verify(x => x.UnadviseBroadcastMessages(23), Times.Once);
+            h.Package.Verify(x => x.UnregisterIdleProcessor(h.Service), Times.Once);
         }
 
         [Test]
