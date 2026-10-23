@@ -156,6 +156,10 @@
   <data name="YouCanDownloadAnkh" xml:space="preserve">
     <value>You can download the latest AnkhSVN release on http://ankhsvn.net/downloads</value>
   </data>
+  <data name="NoIssueNumber" xml:space="preserve">
+    <value>You haven't entered an issue number.
+Are you sure you want to commit without an issue number?</value>
+  </data>
   <data name="OneOrMoreItemsConflicted" xml:space="preserve">
     <value>You are trying to commit conflicted items. Please review the conflicted files and resolve them, or remove the check when retrying the commit.</value>
   </data>

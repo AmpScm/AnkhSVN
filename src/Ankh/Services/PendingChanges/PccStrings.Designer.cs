@@ -169,6 +169,16 @@ namespace Ankh.Services.PendingChanges {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You haven&apos;t entered an issue number.
+        ///Are you sure you want to commit without an issue number?.
+        /// </summary>
+        internal static string NoIssueNumber {
+            get {
+                return ResourceManager.GetString("NoIssueNumber", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to You are trying to commit conflicted items. Please review the conflicted files and resolve them, or remove the check when retrying the commit..
         /// </summary>
         internal static string OneOrMoreItemsConflicted {
