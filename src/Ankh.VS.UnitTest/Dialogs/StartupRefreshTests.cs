@@ -310,6 +310,49 @@ namespace AnkhSvn_UnitTestProject.Dialogs
         }
 
         [Test]
+        public void DeferredExternalRefreshSurvivesBusyShellAndPriorityIdle()
+        {
+            using (var h = new Harness())
+            {
+                h.Start();
+                h.Now = 10000;
+                h.Activate(false);
+                h.Activate(true);
+                h.Now += StartupRefreshService.ActivationDelayMilliseconds;
+                h.States.SetupGet(x => x.UIShellAvailable).Returns(false);
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+                h.States.SetupGet(x => x.UIShellAvailable).Returns(true);
+                h.Service.OnIdle(new AnkhIdleArgs(h.Context,
+                    (int)Microsoft.VisualStudio.OLE.Interop._OLEIDLEF.oleidlefPriority));
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+                h.Idle();
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(2));
+            }
+        }
+
+        [Test]
+        public void ClosingAndReopeningSolutionDoesNotReplayOldActivation()
+        {
+            using (var h = new Harness())
+            {
+                h.Start();
+                h.Activate(false);
+                h.Activate(true);
+                ((IAnkhServiceEvents)h.Events).OnSolutionClosed(EventArgs.Empty);
+                h.Now = 10000;
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+                ((IAnkhServiceEvents)h.Events).OnSolutionOpened(EventArgs.Empty);
+                h.Idle();
+                h.Now += StartupRefreshService.RefreshIntervalMilliseconds;
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(2));
+            }
+        }
+
+        [Test]
         public void BroadcastSubscriptionIsReleased()
         {
             var h = new Harness();

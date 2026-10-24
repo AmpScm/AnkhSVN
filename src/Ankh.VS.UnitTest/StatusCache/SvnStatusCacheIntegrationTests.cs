@@ -22,6 +22,8 @@ using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.Scc.Engine;
 using Ankh.Scc.StatusCache;
+using Ankh.VS;
+using Ankh.Selection;
 using AnkhSvn_UnitTestProject.Helpers;
 using Moq;
 using NUnit.Framework;
@@ -40,6 +42,7 @@ namespace AnkhSvn_UnitTestProject.StatusCache
         SvnClient _client;
         SvnStatusCache _cache;
         Mock<IFileStatusMonitor> _monitor;
+        AnkhServiceProvider _services;
 
         [SetUp]
         public void SetUp()
@@ -73,6 +76,7 @@ namespace AnkhSvn_UnitTestProject.StatusCache
             Assert.That(_client.Commit(_trackedFile, commitArgs), Is.True);
 
             AnkhServiceProvider services = new AnkhServiceProvider();
+            _services = services;
             services.AddService(
                 typeof(IAnkhCommandService),
                 new Mock<IAnkhCommandService>().Object);
@@ -238,6 +242,79 @@ namespace AnkhSvn_UnitTestProject.StatusCache
             _monitor.Verify(m => m.ScheduleGlyphUpdate(It.Is<IEnumerable<string>>(
                 paths => paths.Contains(_trackedFile) && paths.Contains(secondPath)
                     && paths.Count() == paths.Distinct(StringComparer.OrdinalIgnoreCase).Count())), Times.Once);
+        }
+
+        PendingChangeManager CreatePendingManager(List<string> files)
+        {
+            var mapper = new Mock<IProjectFileMapper>();
+            mapper.Setup(x => x.GetAllFilesOfAllProjects()).Returns(files);
+            mapper.Setup(x => x.GetAllProjectsContaining(It.IsAny<string>())).Returns(new SccProject[0]);
+            var settings = new Mock<IAnkhSolutionSettings>();
+            settings.SetupGet(x => x.ProjectRoot).Returns(_workingCopyPath);
+            _services.AddService(typeof(ISvnStatusCache), _cache);
+            _services.AddService(typeof(IProjectFileMapper), mapper.Object);
+            _services.AddService(typeof(IFileIconMapper), new Mock<IFileIconMapper>().Object);
+            _services.AddService(typeof(IAnkhSolutionSettings), settings.Object);
+            return new PendingChangeManager(_services);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void FullRefreshUpdatesPendingCollectionAfterExternalEditAndRevert(bool propertyOnly)
+        {
+            using (var manager = CreatePendingManager(new List<string> { _trackedFile }))
+            {
+                manager.FullRefresh(true);
+                manager.OnTickRefresh();
+                Assert.That(manager.Contains(_trackedFile), Is.False);
+
+                // No shell notification: exercise the catch-up used when returning to VS.
+                if (propertyOnly)
+                    Assert.That(_client.SetProperty(_trackedFile, "test:external", "value"), Is.True);
+                else
+                    File.AppendAllText(_trackedFile, "external edit");
+                manager.FullRefresh(true);
+                manager.OnTickRefresh();
+                Assert.That(manager.Contains(_trackedFile), Is.True);
+                Assert.That(manager[_trackedFile].Kind, Is.EqualTo(propertyOnly
+                    ? PendingChangeKind.PropertyModified : PendingChangeKind.Modified));
+
+                Assert.That(_client.Revert(_trackedFile), Is.True);
+                manager.FullRefresh(true);
+                manager.OnTickRefresh();
+                Assert.That(manager.Contains(_trackedFile), Is.False);
+                Assert.That(((IPendingChangesManager)manager).PendingChanges.Count, Is.Zero);
+            }
+        }
+
+        [Test]
+        public void FullRefreshDiscoversPreviouslyUncachedAddedFileAndMissingFile()
+        {
+            var files = new List<string> { _trackedFile };
+            using (var manager = CreatePendingManager(files))
+            {
+                manager.FullRefresh(true);
+                manager.OnTickRefresh();
+                string added = Path.Combine(_workingCopyPath, "external-add.txt");
+                File.WriteAllText(added, "new file");
+                Assert.That(_client.Add(added), Is.True);
+                // Model VS reporting the new project file; never prepopulate the cache.
+                files.Add(added);
+                File.Delete(_trackedFile);
+
+                manager.FullRefresh(true);
+                manager.OnTickRefresh();
+                Assert.That(manager[added], Is.Not.Null);
+                Assert.That(manager[added].Kind, Is.EqualTo(PendingChangeKind.Added));
+                Assert.That(manager[_trackedFile].Kind, Is.EqualTo(PendingChangeKind.Missing));
+                Assert.That(((IPendingChangesManager)manager).PendingChanges.Count, Is.EqualTo(2));
+
+                Assert.That(_client.Revert(_trackedFile), Is.True);
+                manager.FullRefresh(true);
+                manager.OnTickRefresh();
+                Assert.That(manager.Contains(_trackedFile), Is.False);
+                Assert.That(manager.Contains(added), Is.True);
+            }
         }
 
         void ShellChange(int flags, string first, string second)
