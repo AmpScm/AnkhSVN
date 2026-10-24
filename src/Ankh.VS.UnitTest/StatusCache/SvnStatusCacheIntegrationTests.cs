@@ -196,6 +196,50 @@ namespace AnkhSvn_UnitTestProject.StatusCache
             _monitor.VerifyNoOtherCalls();
         }
 
+        [Test]
+        public void ExternalDeleteAndRecreateUpdateCachedFileWithoutApplicationSwitch()
+        {
+            SvnItem item = _cache[_trackedFile];
+            Assert.That(item.Exists, Is.True);
+            File.Delete(_trackedFile);
+            ShellChange(0x0004, _trackedFile, null); // SHCNE_DELETE
+            Assert.That(item.Exists, Is.False);
+            _monitor.Verify(m => m.ScheduleGlyphUpdate(It.Is<IEnumerable<string>>(
+                paths => paths.Contains(_trackedFile))), Times.Once);
+
+            _monitor.Invocations.Clear();
+            File.WriteAllText(_trackedFile, "replacement contents");
+            ShellChange(0x0002, _trackedFile, null); // SHCNE_CREATE
+            Assert.That(_cache[_trackedFile], Is.SameAs(item));
+            Assert.That(item.Exists, Is.True);
+            Assert.That(item.IsModified, Is.True);
+            _monitor.Verify(m => m.ScheduleGlyphUpdate(It.Is<IEnumerable<string>>(
+                paths => paths.Contains(_trackedFile))), Times.Once);
+        }
+
+        [Test]
+        public void DirectoryNotificationRefreshesDeletedAndModifiedChildrenTogether()
+        {
+            string secondPath = Path.Combine(_workingCopyPath, "second.txt");
+            File.WriteAllText(secondPath, "initial");
+            Assert.That(_client.Add(secondPath), Is.True);
+            Assert.That(_client.Commit(secondPath, new SvnCommitArgs { LogMessage = "Add second file" }), Is.True);
+            SvnItem deleted = _cache[_trackedFile];
+            SvnItem modified = _cache[secondPath];
+            Assert.That(deleted.Exists, Is.True);
+            Assert.That(modified.IsModified, Is.False);
+
+            File.Delete(_trackedFile);
+            File.AppendAllText(secondPath, "external edit");
+            ShellChange(0x1000, _workingCopyPath, null);
+
+            Assert.That(deleted.Exists, Is.False);
+            Assert.That(modified.IsModified, Is.True);
+            _monitor.Verify(m => m.ScheduleGlyphUpdate(It.Is<IEnumerable<string>>(
+                paths => paths.Contains(_trackedFile) && paths.Contains(secondPath)
+                    && paths.Count() == paths.Distinct(StringComparer.OrdinalIgnoreCase).Count())), Times.Once);
+        }
+
         void ShellChange(int flags, string first, string second)
         {
             typeof(SvnStatusCache).GetMethod("OnShellChange",

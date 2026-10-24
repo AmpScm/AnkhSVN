@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Ankh;
@@ -47,6 +49,7 @@ namespace AnkhSvn_UnitTestProject.Dialogs
             public readonly Mock<IAnkhPackage> Package = new Mock<IAnkhPackage>();
             public readonly Mock<IPendingChangesManager> Pending = new Mock<IPendingChangesManager>();
             public readonly Mock<IFileStatusMonitor> Monitor = new Mock<IFileStatusMonitor>();
+            public readonly Mock<IProjectFileMapper> Mapper = new Mock<IProjectFileMapper>();
             public readonly Mock<IAnkhOpenDocumentTracker> Documents = new Mock<IAnkhOpenDocumentTracker>();
             public readonly Events Events;
             public readonly StartupRefreshService Service;
@@ -69,7 +72,7 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                 uint cookie = 23;
                 Shell.Setup(x => x.AdviseBroadcastMessages(It.IsAny<IVsBroadcastMessageEvents>(), out cookie)).Returns(0);
                 SetInitialized(true);
-                var mapper = new Mock<IProjectFileMapper>();
+                var mapper = Mapper;
                 mapper.Setup(x => x.GetAllFilesOfAllProjects()).Returns(Files);
                 mapper.Setup(x => x.GetAllSccProjects()).Returns(new SccProject[0]);
                 Context.AddService(typeof(IProjectFileMapper), mapper.Object);
@@ -138,6 +141,61 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                 h.Selection.VerifyNoOtherCalls();
                 h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
                 h.Monitor.Verify(x => x.ScheduleSvnStatus(h.Files), Times.Once);
+            }
+        }
+
+        [TestCase(10)]
+        [TestCase(100000)]
+        public void NavigationDoesNotEnumerateSolutionFilesAndExternalReturnScansOnce(int fileCount)
+        {
+            using (var h = new Harness())
+            {
+                var files = Enumerable.Range(0, fileCount)
+                    .Select(i => @"C:\solution\project" + (i % 100) + @"\file" + i + ".cs").ToArray();
+                h.Mapper.Setup(x => x.GetAllFilesOfAllProjects()).Returns(files);
+                long visited = 0;
+                h.Monitor.Setup(x => x.ScheduleSvnStatus(It.IsAny<IEnumerable<string>>()))
+                    .Callback<IEnumerable<string>>(paths =>
+                    {
+                        foreach (string path in paths)
+                            visited++;
+                    });
+                h.Start();
+                Assert.That(visited, Is.EqualTo(fileCount));
+                h.Mapper.Invocations.Clear();
+                h.Monitor.Invocations.Clear();
+                h.Pending.Invocations.Clear();
+                h.Documents.Invocations.Clear();
+
+                // Advance beyond the throttle on every iteration: a broken trigger
+                // must not pass merely because a refresh is temporarily delayed.
+                for (int i = 0; i < 1000; i++)
+                {
+                    h.Now += StartupRefreshService.RefreshIntervalMilliseconds + 1;
+                    h.Activate(true);
+                    h.Service.OnBroadcastMessage(0x0006, new IntPtr(1), IntPtr.Zero);
+                    h.Idle();
+                }
+                h.Mapper.VerifyNoOtherCalls();
+                h.Monitor.VerifyNoOtherCalls();
+                h.Pending.VerifyNoOtherCalls();
+                h.Documents.VerifyNoOtherCalls();
+                Assert.That(visited, Is.EqualTo(fileCount));
+
+                // The optimization must retain the catch-up needed by #65/#80.
+                h.Activate(false);
+                h.Activate(true);
+                h.Now += StartupRefreshService.ActivationDelayMilliseconds;
+                h.Idle();
+                for (int i = 0; i < 20; i++)
+                {
+                    h.Now += StartupRefreshService.RefreshIntervalMilliseconds + 1;
+                    h.Idle();
+                }
+                h.Mapper.Verify(x => x.GetAllFilesOfAllProjects(), Times.Once);
+                h.Monitor.Verify(x => x.ScheduleSvnStatus(files), Times.Once);
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+                Assert.That(visited, Is.EqualTo(2L * fileCount));
             }
         }
 
