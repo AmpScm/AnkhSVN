@@ -397,8 +397,11 @@ namespace Ankh.Services.PendingChanges
 
             string msg = sb.ToString();
 
-            // no need to check for issue id if issue tracker integration already did it.
-            if (CommitSettings.WarnIfNoIssue && !state.SkipIssueVerify)
+            // Removing a tracker leaves bugtraq properties intact. Only an active
+            // association should enable the warning; re-read it for every commit.
+            // The connector can also opt out after doing its own validation.
+            if (CommitSettings.WarnIfNoIssue && !state.SkipIssueVerify
+                && IssueService.CurrentIssueRepositorySettings != null)
             {
                 bool haveIssue = false;
                 // Use the project commit settings class to add an issue number (if available)

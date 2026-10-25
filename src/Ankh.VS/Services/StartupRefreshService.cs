@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.Services;
@@ -9,19 +10,34 @@ using Microsoft.VisualStudio.Shell.Interop;
 namespace Ankh.VS.Services
 {
     [GlobalService(typeof(StartupRefreshService))]
-    sealed class StartupRefreshService : AnkhService, IAnkhIdleProcessor, IVsSelectionEvents
+    sealed class StartupRefreshService : AnkhService, IAnkhIdleProcessor, IVsBroadcastMessageEvents
     {
         bool _started;
         bool _themeRefreshed;
         bool _statusPending = true;
         AnkhServiceEvents _events;
         IAnkhPackage _package;
-        IVsMonitorSelection _selectionMonitor;
-        uint _selectionCookie;
-        bool _selectionEventsAdvised;
-        static readonly Guid SolutionExplorerGuid = new Guid(ToolWindowGuids.SolutionExplorer);
+        IVsShell _shell;
+        uint _broadcastCookie;
+        bool _broadcastAdvised;
+        bool _applicationInactive;
+        bool _activationPending;
+        long _activationDue;
+        long _lastRefresh = long.MinValue;
+        readonly Func<long> _milliseconds;
 
-        public StartupRefreshService(IAnkhServiceProvider context) : base(context) { }
+        // Coalesce rapid application switches without losing the final catch-up.
+        internal const long ActivationDelayMilliseconds = 500;
+        internal const long RefreshIntervalMilliseconds = 2000;
+
+        public StartupRefreshService(IAnkhServiceProvider context)
+            : this(context, () => (long)(Stopwatch.GetTimestamp() * (1000.0 / Stopwatch.Frequency))) { }
+
+        internal StartupRefreshService(IAnkhServiceProvider context, Func<long> milliseconds)
+            : base(context)
+        {
+            _milliseconds = milliseconds;
+        }
 
         protected override void OnInitialize()
         {
@@ -30,74 +46,55 @@ namespace Ankh.VS.Services
             _events.RuntimeStarted += OnStarted;
             _events.SolutionOpened += OnStatusNeeded;
             _events.SccProviderActivated += OnStatusNeeded;
+            _events.SolutionClosed += OnSolutionClosed;
             _package = GetService<IAnkhPackage>();
             _package.RegisterIdleProcessor(this);
-            EnsureSelectionEvents();
+            EnsureBroadcastEvents();
         }
 
         void OnStarted(object sender, EventArgs e) { _started = true; }
         void OnStatusNeeded(object sender, EventArgs e) { _statusPending = true; }
 
-        void EnsureSelectionEvents()
+        void OnSolutionClosed(object sender, EventArgs e)
         {
-            if (_selectionEventsAdvised)
+            _statusPending = false;
+            _activationPending = false;
+        }
+
+        void EnsureBroadcastEvents()
+        {
+            if (_broadcastAdvised)
                 return;
-
-            if (_selectionMonitor == null)
-                _selectionMonitor = GetService<IVsMonitorSelection>(typeof(SVsShellMonitorSelection));
-
-            if (_selectionMonitor == null)
+            if (_shell == null)
+                _shell = GetService<IVsShell>(typeof(SVsShell));
+            if (_shell == null)
                 return;
-
             uint cookie;
-            if (VSErr.Succeeded(_selectionMonitor.AdviseSelectionEvents(this, out cookie)))
+            if (VSErr.Succeeded(_shell.AdviseBroadcastMessages(this, out cookie)))
             {
-                _selectionCookie = cookie;
-                _selectionEventsAdvised = true;
+                _broadcastCookie = cookie;
+                _broadcastAdvised = true;
             }
         }
 
-        internal static bool IsSolutionExplorerFrame(IVsWindowFrame frame)
+        public int OnBroadcastMessage(uint msg, IntPtr wParam, IntPtr lParam)
         {
-            if (frame == null)
-                return false;
+            // Only crossing the application boundary needs a conservative catch-up:
+            // an external SVN client can change properties/status without changing
+            // file contents or sending shell notifications. Tool-window selection
+            // inside VS must never invalidate the whole working-copy cache.
+            const uint WM_ACTIVATEAPP = 0x001C;
+            if (msg != WM_ACTIVATEAPP)
+                return VSConstants.S_OK;
 
-            Guid persistenceSlot;
-            return VSErr.Succeeded(frame.GetGuidProperty(
-                       (int)__VSFPROPID.VSFPROPID_GuidPersistenceSlot,
-                       out persistenceSlot))
-                   && persistenceSlot == SolutionExplorerGuid;
-        }
-
-        public int OnElementValueChanged(uint elementid, object varValueOld, object varValueNew)
-        {
-            if (elementid == (uint)VSConstants.VSSELELEMID.SEID_WindowFrame
-                && IsSolutionExplorerFrame(varValueNew as IVsWindowFrame))
+            if (wParam == IntPtr.Zero)
+                _applicationInactive = true;
+            else if (_applicationInactive)
             {
-                // Defer the work to idle so merely activating Solution Explorer
-                // never blocks the shell, and repeated activation notifications
-                // before idle naturally coalesce into one refresh.
-                _statusPending = true;
+                _applicationInactive = false;
+                _activationPending = true;
+                _activationDue = _milliseconds() + ActivationDelayMilliseconds;
             }
-
-            return VSConstants.S_OK;
-        }
-
-        public int OnSelectionChanged(
-            IVsHierarchy pHierOld,
-            uint itemidOld,
-            IVsMultiItemSelect pMISOld,
-            ISelectionContainer pSCOld,
-            IVsHierarchy pHierNew,
-            uint itemidNew,
-            IVsMultiItemSelect pMISNew,
-            ISelectionContainer pSCNew)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnCmdUIContextChanged(uint dwCmdUICookie, int fActive)
-        {
             return VSConstants.S_OK;
         }
 
@@ -106,9 +103,9 @@ namespace Ankh.VS.Services
             if (!_started || e.Priority)
                 return;
 
-            EnsureSelectionEvents();
+            EnsureBroadcastEvents();
 
-            if (_themeRefreshed && !_statusPending)
+            if (_themeRefreshed && !_statusPending && !_activationPending)
                 return;
 
             IAnkhCommandStates states = GetService<IAnkhCommandStates>();
@@ -135,8 +132,23 @@ namespace Ankh.VS.Services
                 events.OnUIShellActivate(EventArgs.Empty);
             }
 
-            if (!_statusPending || !states.SccProviderActive)
+            if (!states.SccProviderActive)
                 return;
+
+            if (!_statusPending)
+            {
+                if (!_activationPending || _applicationInactive)
+                    return;
+                if (!states.SolutionExists)
+                {
+                    _activationPending = false;
+                    return;
+                }
+                long now = _milliseconds();
+                if (now < _activationDue
+                    || (_lastRefresh != long.MinValue && now - _lastRefresh < RefreshIntervalMilliseconds))
+                    return;
+            }
 
             IProjectFileMapper mapper = GetService<IProjectFileMapper>();
             IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
@@ -146,6 +158,8 @@ namespace Ankh.VS.Services
                 return;
 
             _statusPending = false;
+            _activationPending = false;
+            _lastRefresh = _milliseconds();
             // Refresh the entire solution, independent of the current selection.
             // The monitor schedules status work and its dependent glyph updates.
             pending.FullRefresh(true);
@@ -163,13 +177,14 @@ namespace Ankh.VS.Services
                     _events.RuntimeStarted -= OnStarted;
                     _events.SolutionOpened -= OnStatusNeeded;
                     _events.SccProviderActivated -= OnStatusNeeded;
+                    _events.SolutionClosed -= OnSolutionClosed;
                 }
-                if (_selectionEventsAdvised && _selectionMonitor != null)
+                if (_broadcastAdvised && _shell != null)
                 {
-                    _selectionMonitor.UnadviseSelectionEvents(_selectionCookie);
-                    _selectionEventsAdvised = false;
+                    _shell.UnadviseBroadcastMessages(_broadcastCookie);
+                    _broadcastAdvised = false;
                 }
-                _selectionMonitor = null;
+                _shell = null;
                 if (_package != null)
                     _package.UnregisterIdleProcessor(this);
             }

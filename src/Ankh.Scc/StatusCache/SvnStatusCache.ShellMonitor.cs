@@ -73,16 +73,37 @@ namespace Ankh.Scc.StatusCache
 
         private void OnShellChange(int lEvent, int process, string path1, string path2)
         {
+            var changed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            bool recursive = (lEvent & (int)(NativeMethods.SHCNE.SHCNE_UPDATEDIR
+                | NativeMethods.SHCNE.SHCNE_RENAMEFOLDER | NativeMethods.SHCNE.SHCNE_RMDIR)) != 0;
             lock (_lock)
             {
-                SvnItem item;
-
-                if (!string.IsNullOrEmpty(path1) && _map.TryGetValue(path1, out item))
-                    item.MarkDirty();
-
-                if (!string.IsNullOrEmpty(path2) && _map.TryGetValue(path2, out item))
-                    item.MarkDirty();
+                CollectShellChanges(path1, recursive, changed);
+                CollectShellChanges(path2, recursive, changed);
             }
+
+            // Marking the cache dirty alone does not repaint Solution Explorer.
+            // Queue the normal, coalesced glyph/pending-change path outside the lock.
+            if (changed.Count != 0)
+                GetService<IFileStatusMonitor>()?.ScheduleGlyphUpdate(changed);
+        }
+
+        void CollectShellChanges(string path, bool recursive, HashSet<string> changed)
+        {
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            SvnItem item;
+            if (_map.TryGetValue(path, out item))
+            {
+                item.MarkDirty();
+                changed.Add(item.FullPath);
+            }
+
+            if (recursive)
+                foreach (SvnItem child in _map.Values)
+                    if (child.IsBelowPath(path) && changed.Add(child.FullPath))
+                        child.MarkDirty();
         }
 
         static bool SHGetPathFromIDList(IntPtr pidl, StringBuilder sb)
