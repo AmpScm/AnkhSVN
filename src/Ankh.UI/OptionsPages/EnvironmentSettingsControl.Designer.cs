@@ -56,6 +56,8 @@ namespace Ankh.UI.OptionsPages
             this.label3 = new System.Windows.Forms.Label();
             this.pcDefaultDoubleClick = new System.Windows.Forms.ComboBox();
             this.preferPutty = new System.Windows.Forms.CheckBox();
+            this.refreshStatusOnFocus = new System.Windows.Forms.CheckBox();
+            this.focusRefreshDescription = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -149,6 +151,14 @@ namespace Ankh.UI.OptionsPages
             // EnvironmentSettingsControl
             // 
             resources.ApplyResources(this, "$this");
+            resources.ApplyResources(this.refreshStatusOnFocus, "refreshStatusOnFocus");
+            this.refreshStatusOnFocus.Name = "refreshStatusOnFocus";
+            this.refreshStatusOnFocus.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.focusRefreshDescription, "focusRefreshDescription");
+            this.focusRefreshDescription.Name = "focusRefreshDescription";
+            this.Controls.Add(this.refreshStatusOnFocus);
+            this.Controls.Add(this.focusRefreshDescription);
+            this.AutoScroll = true;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.autoAddFiles);
             this.Controls.Add(this.autoLockFiles);
@@ -180,5 +190,7 @@ namespace Ankh.UI.OptionsPages
         private System.Windows.Forms.ComboBox pcDefaultDoubleClick;
         private System.Windows.Forms.CheckBox clientSideHooks;
         private System.Windows.Forms.CheckBox preferPutty;
+        private System.Windows.Forms.CheckBox refreshStatusOnFocus;
+        private System.Windows.Forms.Label focusRefreshDescription;
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Ankh.Configuration;
 using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.Services;
@@ -92,10 +93,20 @@ namespace Ankh.VS.Services
             else if (_applicationInactive)
             {
                 _applicationInactive = false;
+                if (!RefreshStatusOnFocus)
+                {
+                    _activationPending = false;
+                    return VSConstants.S_OK;
+                }
                 _activationPending = true;
                 _activationDue = _milliseconds() + ActivationDelayMilliseconds;
             }
             return VSConstants.S_OK;
+        }
+
+        bool RefreshStatusOnFocus
+        {
+            get { return GetService<IAnkhConfigurationService>()?.Instance.RefreshStatusOnFocus ?? true; }
         }
 
         public void OnIdle(AnkhIdleArgs e)
@@ -104,6 +115,10 @@ namespace Ankh.VS.Services
                 return;
 
             EnsureBroadcastEvents();
+
+            // Also cancel a catch-up queued before the user disabled the option.
+            if (_activationPending && !RefreshStatusOnFocus)
+                _activationPending = false;
 
             if (_themeRefreshed && !_statusPending && !_activationPending)
                 return;

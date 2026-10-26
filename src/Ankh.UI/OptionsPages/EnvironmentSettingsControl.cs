@@ -37,6 +37,7 @@ namespace Ankh.UI.OptionsPages
             Config.AutoAddEnabled = autoAddFiles.Checked;
             Config.SuppressLockingUI = autoLockFiles.Checked;
             Config.FlashWindowWhenOperationCompletes = flashWindowAfterOperation.Checked;
+            Config.RefreshStatusOnFocus = refreshStatusOnFocus.Checked;
             Config.PCDoubleClickShowsChanges = pcDefaultDoubleClick.SelectedIndex == 1;
             Config.EnableTortoiseSvnHooks = clientSideHooks.Checked;
             Config.PreferPuttyAsSSH = preferPutty.Checked;
@@ -55,6 +56,7 @@ namespace Ankh.UI.OptionsPages
             autoAddFiles.Checked = Config.AutoAddEnabled;
             autoLockFiles.Checked = Config.SuppressLockingUI;
             flashWindowAfterOperation.Checked = Config.FlashWindowWhenOperationCompletes;
+            refreshStatusOnFocus.Checked = Config.RefreshStatusOnFocus;
             pcDefaultDoubleClick.SelectedIndex = Config.PCDoubleClickShowsChanges ? 1 : 0;
             clientSideHooks.Checked = Config.EnableTortoiseSvnHooks;
             preferPutty.Checked = Config.PreferPuttyAsSSH;
