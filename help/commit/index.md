@@ -22,6 +22,12 @@ A commit publishes selected working-copy changes as one repository revision. Unt
 8. Commit.
 9. Check Pending Changes afterward for anything you expected to include but did not.
 
+## Checking and unchecking changes
+
+Use **All Changes** above the Pending Changes file list to clear every checked item, including items in other changelist groups. A mixed selection is also cleared in one click. Click again to check all eligible changes; items in the `ignore-on-commit` changelist remain unchecked.
+
+The checkbox reflects individual file selections and is disabled when the list is empty. It is available across the supported Visual Studio versions (2022 and later, including 2026) independently of the list header's theme.
+
 ## What happens during commit
 
 Subversion sends your selected working-copy changes to the repository as a transaction. A successful repository commit is **atomic**: the selected changes become one new repository revision together. A failed commit does not partially publish some of the selected changes as a normal successful revision.

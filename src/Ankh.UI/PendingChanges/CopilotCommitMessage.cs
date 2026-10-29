@@ -62,6 +62,7 @@ namespace Ankh.UI.PendingChanges
                 return string.Empty;
 
             string text = StripOuterMarkdownFence(response.Trim());
+            text = ExtractFinalAnswer(text);
 
             const string startTag = "<commit-message>";
             const string endTag = "</commit-message>";
@@ -97,6 +98,9 @@ namespace Ankh.UI.PendingChanges
                 }
             }
 
+            // Some responders put their final-answer wrapper inside our envelope.
+            text = StripOuterMarkdownFence(ExtractFinalAnswer(text));
+
             // VS 2022's generic Copilot chat responder can occasionally answer
             // with instructions to add editor/file/error context instead of
             // performing this headless request. Never put that chat guidance in
@@ -114,6 +118,31 @@ namespace Ankh.UI.PendingChanges
 
             text = text.Replace("\r\n", "\n").Replace('\r', '\n');
             return FormatCommitMessage(text);
+        }
+
+        static string ExtractFinalAnswer(string text)
+        {
+            const string startTag = "<final_answer>";
+            const string endTag = "</final_answer>";
+            int start = text.IndexOf(startTag, StringComparison.OrdinalIgnoreCase);
+            int end = text.IndexOf(endTag, StringComparison.OrdinalIgnoreCase);
+            if (start < 0 && end < 0)
+                return text;
+
+            int contentStart = start + startTag.Length;
+            if (start < 0 || end < contentStart)
+                throw new InvalidOperationException(
+                    "Visual Studio Copilot returned an incomplete final answer. Please try generating the commit message again.");
+
+            string answer = text.Substring(contentStart, end - contentStart).Trim();
+            if (answer.Length == 0 ||
+                answer.IndexOf(startTag, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                text.IndexOf(startTag, end + endTag.Length, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                throw new InvalidOperationException(
+                    "Visual Studio Copilot returned an empty or invalid final answer. Please try generating the commit message again.");
+            }
+            return StripOuterMarkdownFence(answer);
         }
 
         static string StripOuterMarkdownFence(string text)

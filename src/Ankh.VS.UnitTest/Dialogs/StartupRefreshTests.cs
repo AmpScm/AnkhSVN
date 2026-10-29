@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Threading;
 using Ankh;
 using Ankh.Commands;
+using Ankh.Configuration;
+using Ankh.UI.OptionsPages;
 using Ankh.Scc;
 using Ankh.Services;
 using Ankh.UI;
@@ -52,6 +54,7 @@ namespace AnkhSvn_UnitTestProject.Dialogs
             public readonly Mock<IProjectFileMapper> Mapper = new Mock<IProjectFileMapper>();
             public readonly Mock<IAnkhOpenDocumentTracker> Documents = new Mock<IAnkhOpenDocumentTracker>();
             public readonly Events Events;
+            public readonly AnkhConfig Config = new AnkhConfig();
             public readonly StartupRefreshService Service;
             public readonly string[] Files = { @"C:\solution\one.cs", @"D:\other-wc\two.cs" };
             public long Now;
@@ -59,6 +62,9 @@ namespace AnkhSvn_UnitTestProject.Dialogs
 
             public Harness()
             {
+                var configuration = new Mock<IAnkhConfigurationService>();
+                configuration.SetupGet(x => x.Instance).Returns(Config);
+                Context.AddService(typeof(IAnkhConfigurationService), configuration.Object);
                 Events = new Events(Context);
                 Context.AddService(typeof(AnkhServiceEvents), Events);
                 Context.AddService(typeof(IAnkhServiceEvents), Events);
@@ -349,6 +355,77 @@ namespace AnkhSvn_UnitTestProject.Dialogs
                 h.Now += StartupRefreshService.RefreshIntervalMilliseconds;
                 h.Idle();
                 h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(2));
+            }
+        }
+
+        [Test]
+        public void DisabledFocusRefreshPreservesStartupAndSolutionRefreshAndCanBeReenabled()
+        {
+            using (var h = new Harness())
+            {
+                Assert.That(h.Config.RefreshStatusOnFocus, Is.True);
+                h.Config.RefreshStatusOnFocus = false;
+                h.Start();
+                for (int i = 0; i < 10; i++)
+                {
+                    h.Activate(false);
+                    h.Activate(true);
+                    h.Now += 10000;
+                    h.Idle();
+                }
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+                h.Monitor.Verify(x => x.ScheduleSvnStatus(h.Files), Times.Once);
+                ((IAnkhServiceEvents)h.Events).OnSolutionOpened(EventArgs.Empty);
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(2));
+                h.Config.RefreshStatusOnFocus = true;
+                h.Activate(false);
+                h.Activate(true);
+                h.Now += 10000;
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Exactly(3));
+            }
+        }
+
+        [Test]
+        public void DisablingFocusRefreshCancelsAlreadyQueuedCatchup()
+        {
+            using (var h = new Harness())
+            {
+                h.Start();
+                h.Activate(false);
+                h.Activate(true);
+                h.Config.RefreshStatusOnFocus = false;
+                h.Now = 10000;
+                h.Idle();
+                h.Config.RefreshStatusOnFocus = true;
+                h.Idle();
+                h.Pending.Verify(x => x.FullRefresh(true), Times.Once);
+            }
+        }
+
+        [Test]
+        public void FocusRefreshOptionLoadsSavesAndRetainsDefaultMetadata()
+        {
+            using (var h = new Harness())
+            using (var page = new EnvironmentSettingsControl())
+            {
+                h.Context.AddService(typeof(ISvnClientPool), new Mock<ISvnClientPool>().Object);
+                page.Context = h.Context;
+                page.LoadSettings();
+                var checkbox = (System.Windows.Forms.CheckBox)page.Controls.Find("refreshStatusOnFocus", true).Single();
+                Assert.That(checkbox.Checked, Is.True);
+                checkbox.Checked = false;
+                page.SaveSettings();
+                Assert.That(h.Config.RefreshStatusOnFocus, Is.False);
+                checkbox.Checked = true;
+                page.LoadSettings();
+                Assert.That(checkbox.Checked, Is.False);
+                var property = System.ComponentModel.TypeDescriptor.GetProperties(h.Config)["RefreshStatusOnFocus"];
+                Assert.That(property.ShouldSerializeValue(h.Config), Is.True);
+                property.ResetValue(h.Config);
+                Assert.That(h.Config.RefreshStatusOnFocus, Is.True);
+                Assert.That(property.ShouldSerializeValue(h.Config), Is.False);
             }
         }
 

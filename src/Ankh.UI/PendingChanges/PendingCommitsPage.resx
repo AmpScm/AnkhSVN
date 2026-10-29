@@ -510,4 +510,7 @@
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>Ankh.UI.PendingChanges.PendingChangesPage, Ankh.UI, Version=2.5.5571.20748, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
+  <data name="selectAllChanges.Text" xml:space="preserve">
+    <value>&amp;All Changes</value>
+  </data>
 </root>

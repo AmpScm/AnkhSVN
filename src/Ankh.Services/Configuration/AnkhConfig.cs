@@ -31,6 +31,7 @@ namespace Ankh.Configuration
         string _patchExePath;
         bool _interactiveMergeOnConflict;
         bool _flashWindow;
+        bool _refreshStatusOnFocus = true;
         bool _autoAddEnabled;
         bool _autoLockEnabled;
         bool _noDashComment;
@@ -113,6 +114,13 @@ namespace Ankh.Configuration
         {
             get { return _flashWindow; }
             set { _flashWindow = value; }
+        }
+
+        [DefaultValue(true)]
+        public bool RefreshStatusOnFocus
+        {
+            get { return _refreshStatusOnFocus; }
+            set { _refreshStatusOnFocus = value; }
         }
 
         [DefaultValue(false)]
