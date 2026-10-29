@@ -3,20 +3,20 @@
 
 |||
 |:---|:---|
-| Generated on: | 10/29/2026 - 3:13:16 PM |
-| Coverage date: | 10/29/2026 - 3:12:48 PM - 10/29/2026 - 3:13:05 PM |
+| Generated on: | 10/29/2026 - 3:51:24 PM |
+| Coverage date: | 10/29/2026 - 3:50:57 PM - 10/29/2026 - 3:51:13 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 633 |
 | Files: | 685 |
-| **Line coverage:** | 28.5% (14072 of 49331) |
-| Covered lines: | 14072 |
+| **Line coverage:** | 28.5% (14094 of 49353) |
+| Covered lines: | 14094 |
 | Uncovered lines: | 35259 |
-| Coverable lines: | 49331 |
-| Total lines: | 136576 |
-| **Branch coverage:** | 22.8% (5364 of 23485) |
-| Covered branches: | 5364 |
-| Total branches: | 23485 |
+| Coverable lines: | 49353 |
+| Total lines: | 136614 |
+| **Branch coverage:** | 22.8% (5380 of 23501) |
+| Covered branches: | 5380 |
+| Total branches: | 23501 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
 </details>
@@ -113,12 +113,12 @@
 |Ankh.Settings.SolutionSettings|13%|24.5%|
 
 </details>
-<details><summary>Ankh.Copilot - 29.4%</summary>
+<details><summary>Ankh.Copilot - 30.3%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.Copilot**|**29.4%**|**33.3%**|
-|Ankh.Copilot.VisualStudioCopilot|29.4%|33.3%|
+|**Ankh.Copilot**|**30.3%**|**34.1%**|
+|Ankh.Copilot.VisualStudioCopilot|30.3%|34.1%|
 
 </details>
 <details><summary>Ankh.Diff - 69.4%</summary>
@@ -393,11 +393,11 @@
 |Ankh.VSVersion|10.7%|9.5%|
 
 </details>
-<details><summary>Ankh.UI - 34.4%</summary>
+<details><summary>Ankh.UI - 34.5%</summary>
 
 |**Name**|**Line**|**Branch**|
 |:---|---:|---:|
-|**Ankh.UI**|**34.4%**|**20.3%**|
+|**Ankh.UI**|**34.5%**|**20.4%**|
 |Ankh.UI.AddRepositoryRootDialog|64.4%|18.7%|
 |Ankh.UI.AnkhUIModule|0%||
 |Ankh.UI.Annotate.AnnotateEditorControl|0%|0%|
@@ -519,7 +519,7 @@
 |Ankh.UI.PendingChanges.Conflicts.ConflictListItem|0%|0%|
 |Ankh.UI.PendingChanges.Conflicts.ConflictListView|63.2%|5.5%|
 |Ankh.UI.PendingChanges.Conflicts.PendingConflictLogic|94.8%|95.4%|
-|Ankh.UI.PendingChanges.CopilotCommitMessage|55.2%|55.1%|
+|Ankh.UI.PendingChanges.CopilotCommitMessage|57.2%|57.3%|
 |Ankh.UI.PendingChanges.LogMessageEditor|40%||
 |Ankh.UI.PendingChanges.PCResources|57.7%|100%|
 |Ankh.UI.PendingChanges.PendingActivationPage|70%|50%|
