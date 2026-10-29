@@ -24,7 +24,7 @@ A commit publishes selected working-copy changes as one repository revision. Unt
 
 ## Checking and unchecking changes
 
-Use **Check / uncheck all changes** above the Pending Changes file list to clear every checked item, including items in other changelist groups. A mixed selection is also cleared in one click. Click again to check all eligible changes; items in the `ignore-on-commit` changelist remain unchecked.
+Use **All Changes** above the Pending Changes file list to clear every checked item, including items in other changelist groups. A mixed selection is also cleared in one click. Click again to check all eligible changes; items in the `ignore-on-commit` changelist remain unchecked.
 
 The checkbox reflects individual file selections and is disabled when the list is empty. It is available across the supported Visual Studio versions (2022 and later, including 2026) independently of the list header's theme.
 
