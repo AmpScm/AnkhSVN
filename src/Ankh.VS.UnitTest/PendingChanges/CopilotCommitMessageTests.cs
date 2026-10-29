@@ -22,6 +22,30 @@ namespace AnkhSvn_UnitTestProject.PendingChanges
     [TestFixture]
     public class CopilotCommitMessageTests
     {
+        [TestCase("<final_answer>Fix pending changes</final_answer>")]
+        [TestCase("Planning text\n<final_answer>Fix pending changes</final_answer>")]
+        [TestCase("<FINAL_ANSWER>Fix pending changes</FINAL_ANSWER>")]
+        [TestCase("<final_answer><commit-message>Fix pending changes</commit-message></final_answer>")]
+        [TestCase("<commit-message><final_answer>Fix pending changes</final_answer></commit-message>")]
+        [TestCase("<final_answer>```text\nFix pending changes\n```</final_answer>")]
+        public void NormalizeResponse_ExtractsFinalAnswer(string response)
+        {
+            Assert.That(CopilotCommitMessage.NormalizeResponse(response),
+                Is.EqualTo("Fix pending changes"));
+        }
+
+        [TestCase("<final_answer>")]
+        [TestCase("</final_answer>")]
+        [TestCase("<final_answer>Fix pending changes")]
+        [TestCase("<final_answer> \n </final_answer>")]
+        [TestCase("<commit-message><final_answer></commit-message>")]
+        [TestCase("<final_answer>First</final_answer><final_answer>Second</final_answer>")]
+        public void NormalizeResponse_RejectsIncompleteOrEmptyFinalAnswer(string response)
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+                CopilotCommitMessage.NormalizeResponse(response));
+        }
+
         [Test]
         public void BuildPrompt_TreatsChangesAsDataAndRequestsCommitMessageOnly()
         {

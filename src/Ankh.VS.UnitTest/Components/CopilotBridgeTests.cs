@@ -76,6 +76,43 @@ namespace AnkhSvn_UnitTestProject.Components
                 Is.EqualTo("Final answer"));
         }
 
+        [TestCase("commit-message")]
+        [TestCase("final_answer")]
+        public void ExtractResponseTextReassemblesEnvelopeAcrossVisibleParts(string tag)
+        {
+            var response = new FakeResponse
+            {
+                Content = new object[]
+                {
+                    new FakePart { Content = "Preparing answer", Visibility = FakeVisibility.User },
+                    new FakePart { Content = "<" + tag + ">", Visibility = FakeVisibility.All },
+                    new FakePart { Content = "Fix pending changes", Visibility = FakeVisibility.User },
+                    new FakePart { Content = "private planning", Visibility = FakeVisibility.Model },
+                    new FakePart { Content = "</" + tag + ">", Visibility = FakeVisibility.All }
+                }
+            };
+            string extracted = (string)InvokePrivate("ExtractResponseText", response);
+            Assert.That(Ankh.UI.PendingChanges.CopilotCommitMessage.NormalizeResponse(extracted),
+                Is.EqualTo("Fix pending changes"));
+            Assert.That(extracted, Does.Not.Contain("planning"));
+        }
+
+        [Test]
+        public void ExtractResponseTextDoesNotTurnIncompleteAnswerIntoPlanningFallback()
+        {
+            var response = new FakeResponse
+            {
+                Content = new object[]
+                {
+                    new FakePart { Content = "Preparing answer", Visibility = FakeVisibility.User },
+                    new FakePart { Content = "<final_answer>", Visibility = FakeVisibility.User }
+                }
+            };
+            string extracted = (string)InvokePrivate("ExtractResponseText", response);
+            Assert.Throws<InvalidOperationException>(() =>
+                Ankh.UI.PendingChanges.CopilotCommitMessage.NormalizeResponse(extracted));
+        }
+
         [Test]
         public void ExtractResponseTextReportsStatusWhenNoVisibleTextExists()
         {

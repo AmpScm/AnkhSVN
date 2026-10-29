@@ -473,20 +473,29 @@ namespace Ankh.Copilot
                 }
             }
 
-            // Current VS 2026 Copilot builds can return user-visible planning
-            // as earlier content parts and the actual answer as the final text
-            // part. Prefer an explicitly enveloped part; otherwise prefer the
-            // last user-visible text part instead of concatenating every part.
-            for (int i = visibleTextParts.Count - 1; i >= 0; i--)
+            // Envelopes can span several content parts. Reassemble only visible
+            // parts before extracting one, so a delimiter cannot replace the answer.
+            string combined = string.Join(Environment.NewLine, visibleTextParts);
+            foreach (string tag in new[] { "commit-message", "final_answer" })
             {
-                if (visibleTextParts[i].IndexOf(
-                        "<commit-message>",
-                        StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    return visibleTextParts[i];
-                }
+                string startTag = "<" + tag + ">";
+                string endTag = "</" + tag + ">";
+                int start = combined.LastIndexOf(startTag, StringComparison.OrdinalIgnoreCase);
+                if (start < 0)
+                    continue;
+
+                int end = combined.IndexOf(endTag, start + startTag.Length,
+                    StringComparison.OrdinalIgnoreCase);
+                // Preserve incomplete envelopes for the normalizer to reject;
+                // never fall back to a planning fragment as a commit message.
+                return end < 0 ? combined.Substring(start)
+                    : combined.Substring(start, end + endTag.Length - start);
             }
 
+            // Current VS 2026 Copilot builds can return user-visible planning
+            // as earlier content parts and the actual answer as the final text
+            // part. Without an envelope, prefer the
+            // last user-visible text part instead of concatenating every part.
             if (visibleTextParts.Count > 0)
                 return visibleTextParts[visibleTextParts.Count - 1];
 
