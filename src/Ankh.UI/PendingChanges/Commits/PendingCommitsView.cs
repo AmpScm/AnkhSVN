@@ -250,9 +250,55 @@ namespace Ankh.UI.PendingChanges.Commits
         }
 
         IVsUIShell _shell;
+        bool _settingAllChecks;
+        internal event EventHandler CheckedItemsChanged;
+
+        internal void SetAllItemsChecked(bool check)
+        {
+            BeginUpdate();
+            _settingAllChecks = true;
+            try
+            {
+                foreach (ListViewItem item in Items)
+                    item.Checked = check && IsPartOfSelectAll(item);
+            }
+            finally
+            {
+                _settingAllChecks = false;
+                EndUpdate();
+                OnCheckedItemsChanged();
+                if (_shell != null)
+                    _shell.UpdateCommandUI(0);
+            }
+        }
+
+        internal CheckState AllItemsCheckState
+        {
+            get
+            {
+                bool anyChecked = false;
+                bool anyUnchecked = false;
+                foreach (ListViewItem item in Items)
+                {
+                    anyChecked |= item.Checked;
+                    anyUnchecked |= !item.Checked && IsPartOfSelectAll(item);
+                }
+                return !anyChecked ? CheckState.Unchecked
+                    : anyUnchecked ? CheckState.Indeterminate : CheckState.Checked;
+            }
+        }
+
+        void OnCheckedItemsChanged()
+        {
+            if (CheckedItemsChanged != null)
+                CheckedItemsChanged(this, EventArgs.Empty);
+        }
+
         protected override void OnItemChecked(ItemCheckedEventArgs e)
         {
             base.OnItemChecked(e);
+            if (!_settingAllChecks)
+                OnCheckedItemsChanged();
 
             if (_shell == null)
             {
@@ -263,7 +309,7 @@ namespace Ankh.UI.PendingChanges.Commits
                     _shell = sps.GetService<IVsUIShell>(typeof(SVsUIShell));
                 }
             }
-            if (_shell != null)
+            if (_shell != null && !_settingAllChecks)
                 _shell.UpdateCommandUI(0); // Make sure the toolbar is updated on check actions
         }
 
@@ -381,6 +427,7 @@ namespace Ankh.UI.PendingChanges.Commits
 
                 pci.RefreshText(Context);
                 RefreshGroupsAvailable();
+                OnCheckedItemsChanged();
             }
         }
 
@@ -424,6 +471,7 @@ namespace Ankh.UI.PendingChanges.Commits
                 Items.AddRange(_listItems.ToArray());
                 if (IsHandleCreated)
                     RefreshGroups();
+                OnCheckedItemsChanged();
             }
         }
 
@@ -471,6 +519,7 @@ namespace Ankh.UI.PendingChanges.Commits
             }
 
             this.RefreshGroupsAvailable();
+            OnCheckedItemsChanged();
         }
 
         List<PendingCommitItem> _toAdd;
@@ -493,6 +542,7 @@ namespace Ankh.UI.PendingChanges.Commits
                 finally
                 {
                     EndUpdate();
+                    OnCheckedItemsChanged();
                 }
             }
         }

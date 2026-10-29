@@ -35,6 +35,7 @@ namespace Ankh.UI.PendingChanges
     partial class PendingCommitsPage : PendingChangesPage
     {
         PendingCommitsView pendingCommits;
+        CheckBox selectAllChanges;
         IPendingChangeUI _ui;
         bool _generatingCommitMessage;
 
@@ -80,6 +81,26 @@ namespace Ankh.UI.PendingChanges
             pendingCommitsControl.Location = changeListDummy.Location;
             pendingCommitsControl.Size = changeListDummy.Size;
 
+            // A separate WinForms checkbox remains visible when VS replaces the
+            // native list header (including dark and high-contrast themes).
+            selectAllChanges = new CheckBox
+            {
+                Name = "selectAllChanges",
+                AutoSize = true,
+                AutoCheck = false,
+                ThreeState = true,
+                TabIndex = 0,
+                Dock = DockStyle.Top,
+                Padding = new Padding(4),
+                Text = new System.ComponentModel.ComponentResourceManager(typeof(PendingCommitsPage))
+                    .GetString("selectAllChanges.Text")
+            };
+            selectAllChanges.Click += SelectAllChanges_Click;
+            pendingCommitsControl.TabIndex = 1;
+            pendingCommits.CheckedItemsChanged += UpdateSelectAllChanges;
+            splitContainer.Panel2.Controls.Add(selectAllChanges);
+            UpdateSelectAllChanges(this, EventArgs.Empty);
+
             changeListDummy.Dispose();
             changeListDummy = null;
             this.splitContainer.ResumeLayout(true);
@@ -94,6 +115,19 @@ namespace Ankh.UI.PendingChanges
             {
 
             }
+        }
+
+        void SelectAllChanges_Click(object sender, EventArgs e)
+        {
+            // A mixed selection can be cleared in one click, too.
+            pendingCommits.SetAllItemsChecked(
+                pendingCommits.AllItemsCheckState == CheckState.Unchecked);
+        }
+
+        void UpdateSelectAllChanges(object sender, EventArgs e)
+        {
+            selectAllChanges.Enabled = pendingCommits.Items.Count > 0;
+            selectAllChanges.CheckState = pendingCommits.AllItemsCheckState;
         }
 
         AnkhConfig Config
