@@ -92,6 +92,68 @@ namespace AnkhSvn_UnitTestProject.PendingChanges
         }
 
         [Test]
+        public void AggregateStateSkipsAnItemWithoutANativeIndex()
+        {
+            using (var view = new TestView())
+            {
+                var item = new ListViewItem("temporarily unavailable") { Checked = true };
+                view.Items.Add(item);
+                Assert.That(view.Handle, Is.Not.EqualTo(IntPtr.Zero));
+
+                // Simulate the managed/native mismatch seen during ListView updates.
+                var idField = typeof(ListViewItem).GetField("_id",
+                    BindingFlags.Instance | BindingFlags.NonPublic)
+                    ?? typeof(ListViewItem).GetField("ID",
+                        BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(idField, Is.Not.Null);
+                object originalId = idField.GetValue(item);
+                try
+                {
+                    idField.SetValue(item, int.MaxValue);
+                    Assert.That(item.Index, Is.EqualTo(-1));
+                    Assert.That(view.AllItemsCheckState, Is.EqualTo(CheckState.Unchecked));
+                }
+                finally
+                {
+                    idField.SetValue(item, originalId);
+                }
+                Assert.That(view.AllItemsCheckState, Is.EqualTo(CheckState.Checked));
+            }
+        }
+
+        [Test]
+        public void AggregateStateCanBeReadWhileCheckedItemsAreAddedAndHandleIsRecreated()
+        {
+            using (var view = new TestView())
+            {
+                Assert.That(view.Handle, Is.Not.EqualTo(IntPtr.Zero));
+                int notifications = 0;
+                view.CheckedItemsChanged += (s, e) =>
+                {
+                    var state = view.AllItemsCheckState;
+                    notifications++;
+                };
+
+                view.BeginUpdate();
+                view.Items.AddRange(new[]
+                {
+                    new ListViewItem("a") { Checked = true },
+                    new ListViewItem("b") { Checked = true },
+                    new ListViewItem("c") { Checked = true }
+                });
+                view.EndUpdate();
+                Assert.That(notifications, Is.GreaterThan(0));
+                Assert.That(view.AllItemsCheckState, Is.EqualTo(CheckState.Checked));
+
+                typeof(Control).GetMethod("RecreateHandle",
+                    BindingFlags.Instance | BindingFlags.NonPublic).Invoke(view, null);
+                Assert.That(view.AllItemsCheckState, Is.EqualTo(CheckState.Checked));
+                view.Items.Clear();
+                Assert.That(view.AllItemsCheckState, Is.EqualTo(CheckState.Unchecked));
+            }
+        }
+
+        [Test]
         public void EmptyListAndIndividualChangesKeepAggregateStateAccurate()
         {
             using (var view = new TestView())

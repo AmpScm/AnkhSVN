@@ -280,8 +280,15 @@ namespace Ankh.UI.PendingChanges.Commits
                 bool anyUnchecked = false;
                 foreach (ListViewItem item in Items)
                 {
-                    anyChecked |= item.Checked;
-                    anyUnchecked |= !item.Checked && IsPartOfSelectAll(item);
+                    // Native check notifications can arrive while an item is
+                    // still in Items but has no native index. Reading Checked
+                    // then calls GetItemState(-1) and throws.
+                    if (IsHandleCreated && item.Index < 0)
+                        continue;
+
+                    bool isChecked = item.Checked;
+                    anyChecked |= isChecked;
+                    anyUnchecked |= !isChecked && IsPartOfSelectAll(item);
                 }
                 return !anyChecked ? CheckState.Unchecked
                     : anyUnchecked ? CheckState.Indeterminate : CheckState.Checked;
