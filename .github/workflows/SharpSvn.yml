@@ -1,0 +1,35 @@
+name: Publish pinned SharpSvn
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  packages: write
+
+concurrency:
+  group: publish-sharpsvn-saslfix-1
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'ARMoir/AnkhSVN'
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Verify, version, and publish the tested packages
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./scripts/Publish-SharpSvnPrerelease.ps1 -OutputDirectory "${{ runner.temp }}/sharpsvn-prerelease" -Publish
+
+      - name: Keep release packages and provenance
+        uses: actions/upload-artifact@v6
+        with:
+          name: sharpsvn-1.14005.404-saslfix.1
+          path: ${{ runner.temp }}/sharpsvn-prerelease/out/
+          if-no-files-found: error

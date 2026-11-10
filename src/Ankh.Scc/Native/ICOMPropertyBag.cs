@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using Microsoft.VisualStudio.OLE.Interop;
@@ -22,7 +23,7 @@ using Microsoft.VisualStudio;
 namespace Ankh.Scc.Native
 {
     [CLSCompliant(false)]
-    public sealed class PropertyBag : IPropertyMap
+    public sealed class PropertyBag : IPropertyMap, IDisposable
     {
         readonly IPropertyBag _bag;
         readonly SortedList<string, string> _toWrite = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -51,8 +52,9 @@ namespace Ankh.Scc.Native
                 value = rawValue as string;
                 return value != null;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Trace.TraceError("PropertyBag.TryGetValue failed for property '{0}': {1}", propName, ex);
                 value = null;
                 return false;
             }
@@ -92,8 +94,9 @@ namespace Ankh.Scc.Native
 
         public void SetRawValue(string propName, string value)
         {
-            object var = value;
-            _bag.Write(propName, ref var);
+            // COM IPropertyBag.Write requires a ref object, not a ref string.
+            object propertyValue = value;
+            _bag.Write(propName, ref propertyValue);
         }
 
         public void Flush()

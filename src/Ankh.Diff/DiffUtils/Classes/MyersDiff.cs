@@ -387,6 +387,8 @@ namespace Ankh.Diff.DiffUtils
                 }
                 else if (B.Length > A.Length)
                 {
+                    // SubArray uses 1-based indexing: indices 1 through Length are valid.
+                    // The inclusive upper bound is intentional and includes the final element.
                     for (int i = 1; i <= A.Length; i++)
                     {
                         Output.Add(A[i]);
@@ -394,6 +396,8 @@ namespace Ankh.Diff.DiffUtils
                 }
                 else
                 {
+                    // SubArray uses 1-based indexing: indices 1 through Length are valid.
+                    // The inclusive upper bound is intentional and includes the final element.
                     for (int i = 1; i <= B.Length; i++)
                     {
                         Output.Add(B[i]);

@@ -34,7 +34,7 @@ namespace Ankh.VS.SolutionExplorer
             return Math.Max(
                 1,
                 (int)Math.Round(
-                    logicalSize * dpi / (double)DefaultDpi,
+                    (double)logicalSize * dpi / DefaultDpi,
                     MidpointRounding.AwayFromZero));
         }
 

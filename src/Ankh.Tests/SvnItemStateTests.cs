@@ -343,6 +343,7 @@ namespace Ankh.Tests
                 MockRepository.GenerateStub<ISvnStatusCache>(),
                 @"C:\wc\other.txt",
                 Status(SvnStatus.Normal));
+            SvnItem nullItem = null;
 
             Assert.Multiple(() =>
             {
@@ -351,7 +352,7 @@ namespace Ankh.Tests
                     SvnItem.GetPaths(new[] { one, null, other }));
                 Assert.That(one == samePathDifferentCase, Is.True);
                 Assert.That(one != other, Is.True);
-                Assert.That((SvnItem)null == null, Is.True);
+                Assert.That(nullItem == null, Is.True);
                 Assert.That(one == null, Is.False);
                 Assert.Throws<ArgumentNullException>(() => SvnItem.GetPaths(null));
             });

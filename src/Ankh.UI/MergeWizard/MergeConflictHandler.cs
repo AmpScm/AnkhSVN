@@ -44,7 +44,6 @@ namespace Ankh.UI.MergeWizard
         /// flag (not) to show conflict resolution option dialog for property files
         bool _property_showDialog = true; // prompt for properties initially
 
-        List<string> currentResolutions = new List<string>();
         Dictionary<string, List<SvnConflictType>> _resolvedMergeConflicts = new Dictionary<string, List<SvnConflictType>>();
 
         public MergeConflictHandler(IAnkhServiceProvider context, SvnAccept binaryChoice, SvnAccept textChoice, SvnAccept propChoice)

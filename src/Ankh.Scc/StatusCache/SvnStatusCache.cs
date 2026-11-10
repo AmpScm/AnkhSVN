@@ -636,11 +636,8 @@ namespace Ankh.Scc.StatusCache
 
             lock (_lock)
             {
-                List<string> names = new List<string>();
-
                 foreach (SvnItem v in _map.Values)
                 {
-                    string name = v.FullPath;
                     if (v.IsBelowPath(path))
                     {
                         v.MarkDirty();

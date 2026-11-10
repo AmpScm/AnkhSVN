@@ -163,7 +163,7 @@ namespace Ankh.Tests.Regression
                 Assert.NotNull(dpiField);
                 int dpi = (int)dpiField.GetValue(mapper);
                 Assert.Greater(dpi, 0);
-                int pixels = (int)Math.Round(16 * dpi / 96.0, MidpointRounding.AwayFromZero);
+                int pixels = (int)Math.Round(16.0 * dpi / 96.0, MidpointRounding.AwayFromZero);
                 Assert.AreEqual(new Size(pixels, pixels), images.ImageSize);
             }
             finally

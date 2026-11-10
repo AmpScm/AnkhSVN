@@ -617,7 +617,6 @@ namespace Ankh.Services.PendingChanges
 
         private bool PreCommit_VerifyTargetsVersioned(PendingCommitState state)
         {
-            Queue<string> toAdd = new Queue<string>();
             foreach (PendingChange pc in state.Changes)
             {
                 if (!pc.SvnItem.IsVersioned)

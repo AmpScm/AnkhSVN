@@ -166,7 +166,8 @@ namespace Ankh.Scc
             }
 
             StringBuilder sb = new StringBuilder();
-            string format = (files.Count > 0) ? "{0}: {1}" : "{1}";
+            // Every tooltip entry is generated for a file, so include both its name and status.
+            const string format = "{0}: {1}";
             int i = 0;
             foreach (string file in files)
             {

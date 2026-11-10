@@ -117,7 +117,6 @@ namespace Ankh.UI.SvnLog.Commands
 
             int n = 0;
 
-            HybridCollection<string> changedPaths = new HybridCollection<string>();
             foreach (ISvnLogItem item in e.Selection.GetSelection<ISvnLogItem>())
             {
                 min = Math.Min(min, item.Revision);

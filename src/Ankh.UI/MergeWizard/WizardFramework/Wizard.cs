@@ -14,7 +14,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -334,23 +333,10 @@ namespace Ankh.UI.WizardFramework
         /// <summary>
         /// Handles the clicking of the Finish button.
         /// </summary>
-        /// <para>The wizard framework allows for nested wizards using
-        /// the set Wizard accessor.  Since the current wizard is always
-        /// the last wizard in the stack, it's <code>PerformFinish</code>
-        /// is called manually to allow for cancelation, work and/or state
-        /// management.  Then each nested wizard's <code>PerformFinish</code>
-        /// is called to allow for it do do work and/or save state.</para>
         private void finishButton_Click(object sender, EventArgs e)
         {
             CancelEventArgs ce = new CancelEventArgs();
             OnFinish(ce);
-            if (!ce.Cancel)
-            {
-                for (int i = 0; i < nestedWizards.Count - 1; i++)
-                {
-                    nestedWizards[i].OnFinish(ce);
-                }
-            }
         }
 
         /// <summary>
@@ -360,8 +346,6 @@ namespace Ankh.UI.WizardFramework
         {
             DialogResult = DialogResult.Cancel;
         }
-
-        private List<Wizard> nestedWizards = new List<Wizard>();
 
         #endregion
 

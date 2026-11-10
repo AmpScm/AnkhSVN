@@ -211,7 +211,7 @@ namespace Ankh.VSPackage
 
         public string Name
         {
-            get { return ToString(); }
+            get { return _originalTitle ?? _pane.Caption; }
             set { }
         }
 

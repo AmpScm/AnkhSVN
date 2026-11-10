@@ -538,7 +538,7 @@ namespace Ankh.Diff.DiffUtils.Controls
 
             //Make a starting guess.  Because of tabs and variable width 
             //fonts, this may be nowhere near the right place...
-            int iColumn = (int)((X - GutterWidth + (HScrollPos * CharWidth)) / CharWidthF);
+            int iColumn = (int)((X - GutterWidth + ((double)HScrollPos * CharWidth)) / CharWidthF);
 
             Graphics G = Graphics.FromHwnd(Handle);
 

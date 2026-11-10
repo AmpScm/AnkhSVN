@@ -1,0 +1,10 @@
+services:
+  svn:
+    build: .
+    ports:
+      - "127.0.0.1:13690:3690"
+    healthcheck:
+      test: ["CMD", "svn", "info", "svn://127.0.0.1/sasl", "--username", "tester", "--password", "local-test-only", "--non-interactive", "--no-auth-cache"]
+      interval: 2s
+      timeout: 5s
+      retries: 15

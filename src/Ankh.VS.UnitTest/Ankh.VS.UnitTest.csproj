@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Ankh.VS.UnitTest.snk</AssemblyOriginatorKeyFile>
@@ -54,8 +54,8 @@
       SkipUnchangedFiles="false" />
   </Target>
   <Target Name="UseX64SharpSvnForTests" AfterTargets="Build">
-    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\net40\SharpSvn.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
-    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpSvn-DB44-20-x64.svnDll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
-    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpPlink-x64.svnExe" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\net46\SharpSvn.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\net46\SharpSvn-DB44-20-x64.svnDll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\net46\SharpPlink-x64.svnExe" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
   </Target>
 </Project>

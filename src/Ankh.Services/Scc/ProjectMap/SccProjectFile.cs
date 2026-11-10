@@ -97,8 +97,6 @@ namespace Ankh.Scc.ProjectMap
 
         public IEnumerable<SccProjectFileReference> GetAllReferences()
         {
-            List<SccProjectFileReference> refs = new List<SccProjectFileReference>();
-
             SccProjectFileReference rf = FirstReference;
 
             while (rf != null)

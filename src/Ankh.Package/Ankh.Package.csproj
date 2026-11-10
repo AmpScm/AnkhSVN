@@ -3,7 +3,7 @@
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.props" Condition="('$(VSToolsPath)' != '') And Exists('$(VSToolsPath)\VSSDK\Microsoft.VsSDK.props')" />
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Ankh.Package.snk</AssemblyOriginatorKeyFile>
@@ -118,19 +118,19 @@
   <Target Name="OverrideSharpSvnWithX64" AfterTargets="IncludeNuGetDependenciesInVsix" BeforeTargets="FindSourceVsixManifest;GetVsixSourceItems">
     <ItemGroup>
       <VSIXSourceItem Remove="@(VSIXSourceItem)" Condition="'%(Filename)' == 'SharpSvn' Or '%(Filename)' == 'SharpSvn-DB44-20-win32' Or '%(Filename)' == 'SharpPlink-Win32'" />
-      <VSIXSourceItem Include="$(PkgSharpSvn)\runtimes\win-x64\lib\net40\SharpSvn.dll">
+      <VSIXSourceItem Include="$(PkgSharpSvn)\runtimes\win-x64\lib\net46\SharpSvn.dll">
         <IncludeInVSIX>true</IncludeInVSIX>
       </VSIXSourceItem>
-      <VSIXSourceItem Include="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpSvn-DB44-20-x64.svnDll">
+      <VSIXSourceItem Include="$(PkgSharpSvn)\runtimes\win-x64\lib\net46\SharpSvn-DB44-20-x64.svnDll">
         <IncludeInVSIX>true</IncludeInVSIX>
       </VSIXSourceItem>
-      <VSIXSourceItem Include="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpPlink-x64.svnExe">
+      <VSIXSourceItem Include="$(PkgSharpSvn)\runtimes\win-x64\lib\net46\SharpPlink-x64.svnExe">
         <IncludeInVSIX>true</IncludeInVSIX>
       </VSIXSourceItem>
     </ItemGroup>
-    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\net40\SharpSvn.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
-    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpSvn-DB44-20-x64.svnDll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
-    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\netcoreapp\SharpPlink-x64.svnExe" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\net46\SharpSvn.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\net46\SharpSvn-DB44-20-x64.svnDll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(PkgSharpSvn)\runtimes\win-x64\lib\net46\SharpPlink-x64.svnExe" DestinationFolder="$(OutDir)" SkipUnchangedFiles="false" />
   </Target>
 
   <!-- Import SDK targets and then the VSSDK last -->

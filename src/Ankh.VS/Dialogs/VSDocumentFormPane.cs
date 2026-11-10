@@ -58,7 +58,7 @@ namespace Ankh.VS.Dialogs
 
         public string Name
         {
-            get { return ToString(); }
+            get { return _pane.GetType().Name; }
             set { }
         }
 

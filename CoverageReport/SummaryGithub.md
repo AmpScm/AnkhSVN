@@ -3,19 +3,19 @@
 
 |||
 |:---|:---|
-| Generated on: | 10/30/2026 - 1:40:40 PM |
-| Coverage date: | 10/30/2026 - 1:40:13 PM - 10/30/2026 - 1:40:30 PM |
+| Generated on: | 11/10/2026 - 4:02:53 PM |
+| Coverage date: | 11/10/2026 - 4:02:25 PM - 11/10/2026 - 4:02:42 PM |
 | Parser: | MultiReport (4x Cobertura) |
 | Assemblies: | 11 |
 | Classes: | 633 |
 | Files: | 685 |
-| **Line coverage:** | 28.5% (14096 of 49355) |
-| Covered lines: | 14096 |
-| Uncovered lines: | 35259 |
-| Coverable lines: | 49355 |
-| Total lines: | 136621 |
-| **Branch coverage:** | 22.9% (5384 of 23505) |
-| Covered branches: | 5384 |
+| **Line coverage:** | 28.5% (14093 of 49345) |
+| Covered lines: | 14093 |
+| Uncovered lines: | 35252 |
+| Coverable lines: | 49345 |
+| Total lines: | 136606 |
+| **Branch coverage:** | 22.9% (5383 of 23505) |
+| Covered branches: | 5383 |
 | Total branches: | 23505 |
 | **Method coverage:** | [Feature is only available for sponsors](https://reportgenerator.io/pro) |
 
@@ -38,7 +38,7 @@
 |Ankh.Commands.Cleanup|12.1%|11.1%|
 |Ankh.Commands.CommandBase|50%||
 |Ankh.Commands.CommandStrings|0%|0%|
-|Ankh.Commands.CreatePatch|8.1%|12.5%|
+|Ankh.Commands.CreatePatch|8.1%|11.5%|
 |Ankh.Commands.DiffLocalItem|5.9%|11.2%|
 |Ankh.Commands.DiffLocalItemLogic|96.1%|97.6%|
 |Ankh.Commands.DiffLocalItemSelectionInfo|70.2%|0%|
@@ -266,7 +266,7 @@
 |Ankh.Scc.SettingMap.SccTranslatePathInfo|0%|0%|
 |Ankh.Scc.SolutionExplorerClipboardItem|0%|0%|
 |Ankh.Scc.StatusCache.Commands.FileStatusCleanup|10%|0%|
-|Ankh.Scc.StatusCache.SvnStatusCache|44.5%|38.3%|
+|Ankh.Scc.StatusCache.SvnStatusCache|44.8%|38.3%|
 |Ankh.Scc.SvnConflictArtifactLogic|90.1%|81.5%|
 |Ankh.Scc.SvnSccContext|0%|0%|
 |Ankh.Scc.SvnSccProjectMap|0%|0%|
@@ -512,7 +512,7 @@
 |Ankh.UI.PendingChanges.Commits.PendingCommitItem|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitItemCollection|0%|0%|
 |Ankh.UI.PendingChanges.Commits.PendingCommitsThemeLogic|100%|100%|
-|Ankh.UI.PendingChanges.Commits.PendingCommitsView|48.3%|28.3%|
+|Ankh.UI.PendingChanges.Commits.PendingCommitsView|48.3%|29.4%|
 |Ankh.UI.PendingChanges.CommittedHistory|100%|78.5%|
 |Ankh.UI.PendingChanges.CommittedHistoryEntry|100%||
 |Ankh.UI.PendingChanges.ConfigureRecentChangesPageDialog|0%|0%|
@@ -600,7 +600,7 @@
 |Ankh.UI.SvnLog.Commands.LogOpenIssue|17.3%|16.6%|
 |Ankh.UI.SvnLog.Commands.RevertChanges|6.4%|2.3%|
 |Ankh.UI.SvnLog.Commands.ShowChangedPaths|45.4%|50%|
-|Ankh.UI.SvnLog.Commands.ShowChanges|7%|6.5%|
+|Ankh.UI.SvnLog.Commands.ShowChanges|7.1%|6.5%|
 |Ankh.UI.SvnLog.Commands.ShowLogMessage|45.4%|50%|
 |Ankh.UI.SvnLog.Commands.ShowRevisionProperties|5.2%|6.2%|
 |Ankh.UI.SvnLog.EditLogMessageDialog|94.2%|100%|
@@ -631,7 +631,7 @@
 |Ankh.UI.VSSelectionControls.SmartTreeView|33.5%|28.8%|
 |Ankh.UI.VSSelectionControls.SmartTreeViewThemeLogic|100%|100%|
 |Ankh.UI.VSSelectionControls.TreeViewWithSelection`1|2.2%|0%|
-|Ankh.UI.WizardFramework.Wizard|90.4%|82.7%|
+|Ankh.UI.WizardFramework.Wizard|90.6%|83.1%|
 |Ankh.UI.WizardFramework.WizardMessage|85.7%||
 |Ankh.UI.WizardFramework.WizardPage|81.7%|85.7%|
 |Ankh.UI.WizardFramework.WizardPageChangingEventArgs|100%||

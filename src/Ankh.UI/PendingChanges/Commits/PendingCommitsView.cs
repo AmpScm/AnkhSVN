@@ -280,10 +280,10 @@ namespace Ankh.UI.PendingChanges.Commits
                 bool anyUnchecked = false;
                 foreach (ListViewItem item in Items)
                 {
-                    // Native check notifications can arrive while an item is
-                    // still in Items but has no native index. Reading Checked
-                    // then calls GetItemState(-1) and throws.
-                    if (IsHandleCreated && item.Index < 0)
+                    // Native check notifications can arrive while a row has no
+                    // managed item, or an item has no native index. Reading Checked
+                    // in the latter case calls GetItemState(-1) and throws.
+                    if (item == null || (IsHandleCreated && item.Index < 0))
                         continue;
 
                     bool isChecked = item.Checked;

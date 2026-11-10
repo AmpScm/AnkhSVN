@@ -53,7 +53,7 @@ namespace Ankh.Commands
             IPendingChangesManager pcm = e.GetService<IPendingChangesManager>();
 
             PendingChange.RefreshContext rc = new PendingChange.RefreshContext(e.Context);
-            Dictionary<string, PendingChange> selectedChanges = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
+            HashSet<string> selectedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             List<SvnItem> resources = new List<SvnItem>();
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
@@ -63,8 +63,9 @@ namespace Ankh.Commands
                 {
                     if (!pc.IsNoChangeForPatching())
                     {
-                        selectedChanges.Add(pc.FullPath, pc);
-                        resources.Add(pc.SvnItem);
+                        // Keep each path only once, even if it appears multiple times in the selection.
+                        if (selectedPaths.Add(pc.FullPath))
+                            resources.Add(pc.SvnItem);
                     }
                 }
             }

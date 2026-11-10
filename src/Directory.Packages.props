@@ -2,7 +2,6 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-    <NoWarn>$(NoWarn);NU1507</NoWarn>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">17.0</VisualStudioVersion>
   </PropertyGroup>  
   <ItemGroup>
@@ -14,8 +13,8 @@
     <PackageVersion Include="NUnit" Version="3.13.3" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
     <PackageVersion Include="RhinoMocks" Version="3.6.1" />
-    <PackageVersion Include="SharpSvn" Version="1.14003.272" />
-    <PackageVersion Include="SharpSvn.UI" Version="1.14003.272" />
+    <PackageVersion Include="SharpSvn" Version="[1.14005.404-saslfix.1]" />
+    <PackageVersion Include="SharpSvn.UI" Version="[1.14005.404-saslfix.1]" />
     <PackageVersion Include="System.Resources.Extensions" Version="9.0.0" />
     <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
   </ItemGroup>
