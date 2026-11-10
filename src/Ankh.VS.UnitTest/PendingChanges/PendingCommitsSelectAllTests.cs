@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -88,6 +89,50 @@ namespace AnkhSvn_UnitTestProject.PendingChanges
                     .Invoke(checkbox, new object[] { EventArgs.Empty });
                 Assert.That(view.CheckedItems.Count, Is.Zero);
                 Assert.That(checkbox.CheckState, Is.EqualTo(CheckState.Unchecked));
+            }
+        }
+
+        [Test]
+        public void AggregateStateSkipsMissingManagedItemsDuringCheckNotifications()
+        {
+            using (var view = new TestView())
+            {
+                var missing = new ListViewItem("temporarily unavailable") { Checked = true };
+                var available = new ListViewItem("available");
+                view.Items.AddRange(new[] { missing, available });
+                Assert.That(view.Handle, Is.Not.EqualTo(IntPtr.Zero));
+
+                // Keep the native row while temporarily removing its managed mapping,
+                // as can happen while native notifications interrupt a list update.
+                var tableField = typeof(ListView).GetField("listItemsTable",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(tableField, Is.Not.Null);
+                var table = (IDictionary)tableField.GetValue(view);
+                object key = table.Keys.Cast<object>().Single(k => ReferenceEquals(table[k], missing));
+                CheckState observed = CheckState.Indeterminate;
+                int notifications = 0;
+                view.CheckedItemsChanged += (s, e) =>
+                {
+                    observed = view.AllItemsCheckState;
+                    notifications++;
+                };
+                try
+                {
+                    table.Remove(key);
+                    Assert.That(view.Items.Cast<ListViewItem>().Any(i => i == null), Is.True);
+                    Assert.That(view.AllItemsCheckState, Is.EqualTo(CheckState.Unchecked));
+
+                    available.Checked = true;
+                    Assert.That(notifications, Is.GreaterThan(0));
+                    Assert.That(observed, Is.EqualTo(CheckState.Checked));
+                    available.Checked = false;
+                    Assert.That(observed, Is.EqualTo(CheckState.Unchecked));
+                }
+                finally
+                {
+                    table[key] = missing;
+                }
+                Assert.That(view.AllItemsCheckState, Is.EqualTo(CheckState.Indeterminate));
             }
         }
 
